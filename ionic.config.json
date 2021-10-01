@@ -1,0 +1,7 @@
+{
+  "name": "mentoring-mobile-app",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
