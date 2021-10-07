@@ -2,7 +2,7 @@
 ## Selector: app-dynamic-form
 ##
 #### Usage
-```HTML
+```
 <app-dynamic-form [jsonFormData]="formData" (formSubmitEvent)="submitForm($event)"></app-dynamic-form>
 ```
 #### Supported form fields
@@ -82,7 +82,7 @@
 ```
 
 @Output() formSubmitEvent
-```json
+```javascript
 {
     agreeTerms: true
     comments: "I want to be a mentor"
