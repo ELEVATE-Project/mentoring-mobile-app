@@ -1,10 +1,10 @@
 # DynamicFormComponent
 ## Selector: app-dynamic-form
-
-
 ##
-##
-
+#### Usage
+```HTML
+<app-dynamic-form [jsonFormData]="formData" (formSubmitEvent)="submitForm($event)"></app-dynamic-form>
+```
 #### Supported form fields
 
 - Text(type="text")
@@ -22,7 +22,7 @@
 
 
 @Input() jsonFormData 
-```sh
+```json
 {
   "controls": [
     {
@@ -82,7 +82,7 @@
 ```
 
 @Output() formSubmitEvent
-```sh
+```json
 {
     agreeTerms: true
     comments: "I want to be a mentor"
@@ -93,7 +93,7 @@
 }
 ```
 #### Validators
-| Plugin | README |
+| Type | Job |
 | ------ | ------ |
 | min | Validator that requires the control's value to be greater than or equal to the provided number.|
 | max |Validator that requires the control's value to be less than or equal to the provided number.|
@@ -103,12 +103,7 @@
 | minLength | Validator that requires the length of the control's value to be greater than or equal to the provided minimum length. It is intended to be used only for types that have a numeric length property, such as strings |
 | maxLength | Validator that requires the length of the control's value to be less than or equal to the provided maximum length. It is intended to be used only for types that have a numeric length property, such as strings  |
 | pattern |Validator that requires the control's value to match a regex pattern. |
-| nullValidator | Validator that performs no operation.
-
- |
-
-
-[PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
+| nullValidator | Validator that performs no operation.|
 
 
 
