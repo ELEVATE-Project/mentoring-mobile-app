@@ -2,7 +2,7 @@
 ## Selector: app-dynamic-form
 ##
 #### Usage
-```
+```HTML
 <app-dynamic-form [jsonFormData]="formData" (formSubmitEvent)="submitForm($event)"></app-dynamic-form>
 ```
 #### Supported form fields
