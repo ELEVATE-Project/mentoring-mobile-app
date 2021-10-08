@@ -14,6 +14,8 @@ git clone https://github.com/ELEVATE-Project/mentoring-mobile-app.git
 cd mentoring-mobile-app
 npm i
 npm start
+npm run staging
+npm run dev
 ```
 
 
