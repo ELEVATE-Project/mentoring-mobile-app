@@ -1,0 +1,12 @@
+<ion-card *ngFor ="let session of sessions" (click)="onClickCard(session._id)">
+  <div class="session-card">
+    <img class="card-avatar" src="assets/images/session_card.png">
+    <div class="card-title">
+      <h5>{{session.title}}</h5>
+      <p>{{session.subTitle}}</p>
+    </div>
+  </div>
+  <div class="session-enroll" *ngIf="showEnroll" (click)="$event.stopPropagation();onEnroll(session._id)">
+    Enroll <ion-icon name="caret-forward-outline"></ion-icon>
+  </div>
+</ion-card>

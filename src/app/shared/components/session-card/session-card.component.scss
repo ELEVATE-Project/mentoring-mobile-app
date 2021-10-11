@@ -1,0 +1,28 @@
+.session-card{
+    display: flex;
+    padding: 15px;
+    .card-avatar{
+        height: 70px;
+        max-width: 115px;
+        min-width: 115px;
+    }
+    .card-title{
+    padding-left:15px;
+    h5{
+        margin-bottom: 5px;
+        margin-top: 0px;
+        font-size: 16px;
+        color:#000;
+    }
+    p{
+        margin: 0px;
+    }
+    }
+  
+}
+.session-enroll{
+    text-align: right;
+    margin-top: -20px;
+    padding: 5px 15px 10px 0px;
+    color :#832215;
+    }
