@@ -28,6 +28,12 @@ export class HomePage implements OnInit {
     subTitle: 'Short description ipsum dolor sit amet, consectetur'
   }
 ]
+
+public headerConfig: any = {
+  menu: true,
+  notification: true,
+  headerColor: 'primary',
+};
   constructor(private http: HttpClient) {}
   ngOnInit() {
   }

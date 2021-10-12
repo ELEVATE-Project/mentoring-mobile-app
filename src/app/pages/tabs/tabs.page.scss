@@ -1,11 +1,11 @@
 
 ion-tab-bar{
-    --background: #832215;
+    --background: var(--ion-color-primary);
 }
 
 ion-tab-button {
-    --color: #fff;
-    --color-selected: #fff;
+    --color: var(--white);
+    --color-selected: var(--white);
     --padding-bottom: 8px;
     --padding-top: 8px;
   
@@ -19,6 +19,6 @@ ion-tab-button {
     }
   
     &.tab-selected::before {
-      background-color: #fff;
+      background-color: var(--white);
     }
   }

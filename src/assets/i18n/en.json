@@ -6,6 +6,13 @@
         "MENTORS":"Mentors",
         "PROFILE":"Profile",
         "DASHBOARD":"Dasboard",
-        "ENROLL":"Enroll"
+        "ENROLL":"Enroll",
+        "HOME_SEARCH_PLACEHOLDER":"Search for Mentors, Topics",
+        "CREATED_SESSIONS":"Created Sessions",
+        "EDIT":"Edit",
+        "LANGUAGE":"Language",
+        "SETTINGS":"Settings",
+        "HELP":"Help",
+        "LOGOUT":"Logout"
     }
 }

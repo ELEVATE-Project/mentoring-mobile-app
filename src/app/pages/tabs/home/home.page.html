@@ -1,16 +1,20 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title> Home</ion-title>
-  </ion-toolbar>
-</ion-header>
-
+<app-page-header [config]="headerConfig">
+  <ion-item color="primary" class="header-bottom-border">
+    <ion-row class="ion-padding ion-margin-top">
+      <h3>
+        Welcome Rajat !
+        </h3>
+      <ion-col size="12"
+        >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi,
+        sequi</ion-col
+      >
+      <ion-col size="12" class="ion-no-padding">
+        <ion-searchbar placeholder="{{'LABELS.HOME_SEARCH_PLACEHOLDER' | translate}}"></ion-searchbar>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+</app-page-header>
 <ion-content>
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large"> {{"LABELS.HOME" | translate}}</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div class="page-intro">
     <h5>
       {{"LABELS.ALL_SESSIONS" | translate}}

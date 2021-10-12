@@ -4,7 +4,9 @@
       "name": "firstName",
       "label": "First name:",
       "value": "",
+      "class": "ion-margin",
       "type": "text",
+      "position": "floating",
       "validators": {
         "required": true,
         "minLength": 10
@@ -13,20 +15,35 @@
     {
       "name": "lastName",
       "label": "Last name:",
+      "class": "ion-margin",
       "value": "",
       "type": "text",
+      "position": "floating",
+      "validators": {}
+    },
+    {
+      "name": "date",
+      "label": "Date of birth:",
+      "class": "ion-margin",
+      "value": "",
+      "displayFormat": "DD/MM/YY",
+      "type": "date",
+      "position": "floating",
       "validators": {}
     },
     {
       "name": "comments",
       "label": "Comments",
+      "class": "ion-margin",
       "value": "",
       "type": "textarea",
+      "position": "floating",
       "validators": {}
     },
     {
       "name": "agreeTerms",
       "label": "This is a checkbox?",
+      "class": "ion-margin",
       "value": "false",
       "type": "checkbox",
       "validators": {}
@@ -34,6 +51,7 @@
     {
       "name": "size",
       "label": "",
+      "class": "ion-margin",
       "value": "",
       "type": "range",
       "options": {
@@ -47,9 +65,29 @@
     {
       "name": "lightDark",
       "label": "Do you like toggles?",
+      "class": "ion-margin",
       "value": "false",
       "type": "toggle",
       "validators": {}
+    },
+    {
+      "name": "assessmentType",
+      "label": "Select assessment type",
+      "class": "ion-margin",
+      "value": "",
+      "type": "select",
+      "multiple": true,
+      "validators": {},
+      "options": [
+        {
+          "label": "Observation",
+          "value": "observation"
+        },
+        {
+          "label": "Survey",
+          "value": "survey"
+        }
+      ]
     }
   ]
 }
