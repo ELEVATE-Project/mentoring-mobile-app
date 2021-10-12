@@ -1,9 +1,17 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
+  <h1>Sign Up</h1>
+  <h1></h1>
+  <div class="d-flex">
+    <div>
+      <hr />
+    </div>
+  </div>
 
-<ion-content>
+  <section>
+    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
+  </section>
 
+  <section class="ion-text-center">
+    <ion-button expand="block">SIGN UP</ion-button>
+  </section>
 </ion-content>

@@ -47,10 +47,14 @@ export interface JsonFormData {
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
   public myForm: FormGroup = this.fb.group({});
+  showForm: boolean;
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    this.createForm(this.jsonFormData.controls);
+    setTimeout(() => {
+      this.createForm(this.jsonFormData.controls);
+      this.showForm = true;
+    });
   }
 
   createForm(controls: JsonFormControls[]) {
