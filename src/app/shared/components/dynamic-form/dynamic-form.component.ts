@@ -29,8 +29,10 @@ interface JsonFormControls {
   label: string;
   value: string;
   type: string;
+  class: string;
+  position: string;
   options?: JsonFormControlOptions;
-  required: boolean;
+  required?: boolean;
   validators: JsonFormValidators;
 }
 export interface JsonFormData {
@@ -42,18 +44,14 @@ export interface JsonFormData {
   templateUrl: './dynamic-form.component.html',
   styleUrls: ['./dynamic-form.component.scss'],
 })
-export class DynamicFormComponent implements OnInit, OnChanges {
+export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
   public myForm: FormGroup = this.fb.group({});
   constructor(private fb: FormBuilder) {}
-  ngOnChanges(changes: SimpleChanges) {
-    if (!changes.jsonFormData.firstChange) {
-      console.log(this.jsonFormData);
-      this.createForm(this.jsonFormData.controls);
-    }
-  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.createForm(this.jsonFormData.controls);
+  }
 
   createForm(controls: JsonFormControls[]) {
     for (const control of controls) {
@@ -108,5 +106,8 @@ export class DynamicFormComponent implements OnInit, OnChanges {
   onSubmit() {
     console.log('Form valid: ', this.myForm.valid);
     console.log('Form values: ', this.myForm.value);
+  }
+  reset() {
+    this.myForm.reset();
   }
 }
