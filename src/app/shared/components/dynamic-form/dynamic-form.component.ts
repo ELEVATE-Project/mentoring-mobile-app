@@ -44,19 +44,13 @@ export interface JsonFormData {
   templateUrl: './dynamic-form.component.html',
   styleUrls: ['./dynamic-form.component.scss'],
 })
-export class DynamicFormComponent implements OnInit, OnChanges {
+export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
   public myForm: FormGroup = this.fb.group({});
   constructor(private fb: FormBuilder) {}
-  ngOnChanges(changes: SimpleChanges) {
-    if (!changes.jsonFormData.firstChange) {
-      console.log(this.jsonFormData);
-      this.createForm(this.jsonFormData.controls);
-    }
-  }
 
   ngOnInit() {
-    // console.log(this.jsonFormData);
+    this.createForm(this.jsonFormData.controls);
   }
 
   createForm(controls: JsonFormControls[]) {

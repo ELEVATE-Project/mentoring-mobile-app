@@ -11,22 +11,20 @@ export class LoginPage implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    setTimeout(() => {
-      this.formData = {
-        controls: [
-          {
-            name: 'email',
-            label: 'Email:',
-            value: '',
-            class: 'ion-margin',
-            type: 'text',
-            position: 'floating',
-            validators: {
-              required: true,
-            },
+    this.formData = {
+      controls: [
+        {
+          name: 'email',
+          label: 'Email:',
+          value: '',
+          class: 'ion-margin',
+          type: 'text',
+          position: 'floating',
+          validators: {
+            required: true,
           },
-        ],
-      };
-    });
+        },
+      ],
+    };
   }
 }
