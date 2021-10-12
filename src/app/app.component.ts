@@ -12,6 +12,5 @@ export class AppComponent {
     { title: 'Settings', url: '', icon: 'settings' },
     { title: 'Help', url: '', icon: 'help-circle' }
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
   constructor() {}
 }
