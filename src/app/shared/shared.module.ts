@@ -5,10 +5,10 @@ import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.com
 import { ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { SessionCardComponent } from './components/session-card/session-card.component';
-
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [ExploreContainerComponent, DynamicFormComponent,SessionCardComponent],
-  imports: [CommonModule, ReactiveFormsModule, IonicModule],
+  imports: [CommonModule, ReactiveFormsModule, IonicModule,TranslateModule],
   exports: [ExploreContainerComponent, DynamicFormComponent,SessionCardComponent],
 })
 export class SharedModule {}

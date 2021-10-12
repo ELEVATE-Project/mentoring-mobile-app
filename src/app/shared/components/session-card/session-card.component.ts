@@ -8,19 +8,19 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 export class SessionCardComponent implements OnInit {
 @Input() sessions;
 @Input() showEnroll : boolean = false;
-@Output() onCardSelect = new EventEmitter();
-@Output() onClickEnroll = new EventEmitter();
+@Output() onClickEvent = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {}
 
 
-  onClickCard($event){
-    this.onCardSelect.emit($event);
-  }
-
-  onEnroll($event){
-    this.onClickEnroll.emit($event);
+  onAction($event,type){
+    let event ={
+      event:$event,
+      type:type
+    }
+    console.log(event,"event");
+    this.onClickEvent.emit(event);
   }
 }

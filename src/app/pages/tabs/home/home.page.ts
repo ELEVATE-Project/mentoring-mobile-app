@@ -32,11 +32,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
   }
 
-  enroll(event){
-    console.log(event,"event enroll");
-  }
-
-  onCardSelect(event){
-    console.log(event,"event onCardSelect");
+  eventAction(event){
+    console.log(event,"event");
   }
 }

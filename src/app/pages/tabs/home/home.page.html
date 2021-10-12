@@ -7,20 +7,20 @@
 <ion-content>
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Home</ion-title>
+      <ion-title size="large"> {{"LABELS.HOME" | translate}}</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div class="page-intro">
     <h5>
-      All Sessions
+      {{"LABELS.ALL_SESSIONS" | translate}}
     </h5>
-    <ion-button size="small" shape="round">
-      View More <ion-icon name="caret-forward-outline"></ion-icon>
+    <ion-button color="primary" size="small" shape="round" class="ion-margin-top">
+      {{"LABELS.VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
     </ion-button>
   </div>
   <div>
-    <app-session-card [sessions]="sessions" [showEnroll]=true (onCardSelect)="onCardSelect($event)" (onClickEnroll)="enroll($event)"> </app-session-card>
+    <app-session-card [sessions]="sessions" [showEnroll]=true (onClickEvent)="eventAction($event)"> </app-session-card>
   </div>
   <!-- <div>
     <app-dynamic-form [jsonFormData]="formData"></app-dynamic-form>
