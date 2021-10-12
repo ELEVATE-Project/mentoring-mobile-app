@@ -7,6 +7,7 @@ import { Tab2Page } from './tab2.page';
 
 import { Tab2PageRoutingModule } from './tab2-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     FormsModule,
     Tab2PageRoutingModule,
     SharedModule,
+    HttpClientModule,
   ],
   declarations: [Tab2Page],
 })

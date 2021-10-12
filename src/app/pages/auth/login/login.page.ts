@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 
 @Component({
   selector: 'app-login',
@@ -6,10 +7,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
-  constructor() { }
+  formData: JsonFormData;
+  constructor() {}
 
   ngOnInit() {
+    setTimeout(() => {
+      this.formData = {
+        controls: [
+          {
+            name: 'email',
+            label: 'Email:',
+            value: '',
+            class: 'ion-margin',
+            type: 'text',
+            position: 'floating',
+            validators: {
+              required: true,
+            },
+          },
+        ],
+      };
+    });
   }
-
 }

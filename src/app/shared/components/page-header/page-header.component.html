@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar [color]="config?.headerColor">
+    <ion-buttons slot="start" *ngIf="config?.menu">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref=""
+        *ngIf="config?.backButton"
+        [text]="config?.backButton?.label"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="config?.notification">
+      <ion-icon size="large" name="notifications-outline"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+  <ng-content></ng-content>
+</ion-header>
+
