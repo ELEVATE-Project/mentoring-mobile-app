@@ -2,7 +2,7 @@
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
       <ion-header [translucent]="true" class="ion-no-border">
-        <ion-toolbar>
+        <ion-toolbar class="sub-menu-toolbar">
           <ion-buttons slot="start">
             <ion-button>
               <ion-icon slot="icon-only" name="person-circle"></ion-icon>
@@ -14,8 +14,8 @@
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content fullscreen>
-          <ion-list lines="none">
+      <ion-content fullscreen class="sub-menu-content">
+          <ion-list lines="none" class="sub-menu-list">
             <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
               <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
                 routerLinkActive="selected">
