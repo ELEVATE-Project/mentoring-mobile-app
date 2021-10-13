@@ -1,0 +1,29 @@
+.session-card{
+    padding: 4px 0px 0px 4px;
+    .card-avatar{
+    text-align: center;
+    margin: auto 0px 3px;
+    ion-icon{
+        background: var(--gray);
+        padding: 9px 0px 10px 0px;
+        font-size: 46px;
+        width: 100%;
+    }
+    }
+    h5{
+        margin-bottom: 5px;
+        margin-top: 0px;
+        font-size: 16px;
+        color:var(--black);
+    }
+    p{
+        margin: 6px 0px 0px 0px;
+    }
+  
+}
+.session-enroll{
+    text-align: right;
+    margin-top: -15px;
+    padding: 0px 20px 5px 0px;
+    color: var(--ion-color-primary);
+    }

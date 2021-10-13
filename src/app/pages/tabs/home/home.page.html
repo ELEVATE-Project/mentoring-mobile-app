@@ -1,0 +1,32 @@
+<app-page-header [config]="headerConfig">
+  <ion-item color="primary" class="header-bottom-border">
+    <ion-row class="ion-padding ion-margin-top">
+      <h3>
+        {{'WELCOME' | translate}} Rajat !
+        </h3>
+      <ion-col size="12"
+        >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi,
+        sequi</ion-col
+      >
+      <ion-col size="12" class="ion-no-padding">
+        <ion-searchbar placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"></ion-searchbar>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+</app-page-header>
+<ion-content>
+  <div class="page-intro">
+    <h5>
+      {{"ALL_SESSIONS" | translate}}
+    </h5>
+    <ion-button color="primary" size="small" shape="round" class="ion-margin-top">
+      {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
+    </ion-button>
+  </div>
+  <div>
+    <app-session-card [sessions]="sessions" [showEnroll]=true (onClickEvent)="eventAction($event)"> </app-session-card>
+  </div>
+  <!-- <div>
+    <app-dynamic-form [jsonFormData]="formData"></app-dynamic-form>
+  </div> -->
+</ion-content>

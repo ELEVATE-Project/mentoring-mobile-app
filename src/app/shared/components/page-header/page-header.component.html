@@ -1,7 +1,11 @@
 <ion-header>
   <ion-toolbar [color]="config?.headerColor">
     <ion-buttons slot="start" *ngIf="config?.menu">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button>
+      </ion-menu-button>
+      <p class="menu-label">
+        {{"MENU" | translate}}
+        </p>
     </ion-buttons>
     <ion-buttons slot="start">
       <ion-back-button

@@ -10,7 +10,7 @@
           </ion-buttons>
           <ion-title><strong>Pradeep</strong></ion-title>
           <ion-buttons slot="end">
-            <ion-button expand="full" class="edit-btn">Edit</ion-button>
+            <ion-button expand="full" class="edit-btn">{{"EDIT" | translate}}</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -20,7 +20,7 @@
               <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
                 routerLinkActive="selected">
                 <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-                <ion-label><strong>{{ p.title }}</strong></ion-label>
+                <ion-label><strong>{{ p.title  | translate}}</strong></ion-label>
               </ion-item>
             </ion-menu-toggle>
           </ion-list>
@@ -28,7 +28,7 @@
       <ion-footer class="side-menu-footer">
        <ion-row>
          <ion-col size="12">
-           <h4><strong>Logout</strong></h4>
+           <h4><strong>{{"LOGOUT" | translate}}</strong></h4>
          </ion-col>
        </ion-row>
       </ion-footer>

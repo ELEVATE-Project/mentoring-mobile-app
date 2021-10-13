@@ -48,9 +48,11 @@ export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
   public myForm: FormGroup = this.fb.group({});
   constructor(private fb: FormBuilder) {}
-
+  showForm : boolean = false;
   ngOnInit() {
-    this.createForm(this.jsonFormData.controls);
+    setTimeout(() =>{
+      this.createForm(this.jsonFormData.controls);
+    },0)
   }
 
   createForm(controls: JsonFormControls[]) {
@@ -102,6 +104,7 @@ export class DynamicFormComponent implements OnInit {
         this.fb.control(control.value, validatorsToAdd)
       );
     }
+    this.showForm = true;
   }
   onSubmit() {
     console.log('Form valid: ', this.myForm.valid);

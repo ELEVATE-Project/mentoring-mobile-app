@@ -1,1 +1,24 @@
 
+ion-tab-bar{
+    --background: var(--ion-color-primary);
+}
+
+ion-tab-button {
+    --color: var(--white);
+    --color-selected: var(--white);
+    --padding-bottom: 8px;
+    --padding-top: 8px;
+  
+    &::before {
+        background-color: transparent;
+        display: block;
+        content: "";
+        margin: 0 auto;
+        width: 40px;
+        height: 3px;
+    }
+  
+    &.tab-selected::before {
+      background-color: var(--white);
+    }
+  }
