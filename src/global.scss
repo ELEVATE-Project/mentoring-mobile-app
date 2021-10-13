@@ -27,6 +27,9 @@
 
 :root {
   --ion-color-primary: #832215;
+  --white:#fff;
+  --black:#000;
+  --gray:#ccc;
 }
 
 .d-flex {
@@ -48,4 +51,16 @@
 //margins
 .mx-30 {
   margin: 30px 0;
+}
+
+.header-md::after{
+  background-image:none ;
+}
+
+.header-bottom-border{
+  border-bottom-left-radius: 30px;
+  ion-searchbar{
+    --border-radius: 10px;
+    padding: 5px 0px;
+  }
 }
