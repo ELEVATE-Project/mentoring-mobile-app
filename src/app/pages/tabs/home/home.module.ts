@@ -8,6 +8,8 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { CoreModule } from 'src/app/core/core.module';
+
 @NgModule({
   imports: [
     IonicModule,
@@ -15,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
     FormsModule,
     HomePageRoutingModule,
     SharedModule,
+    CoreModule,
     HttpClientModule,
     TranslateModule
   ],
