@@ -32,6 +32,26 @@
   --gray:#ccc;
 }
 
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-justify-center {
+  justify-content: center;
+}
+
+.flex-justify-start {
+  justify-content: start;
+}
+
+//margins
+.mx-30 {
+  margin: 30px 0;
+}
 
 .header-md::after{
   background-image:none ;
