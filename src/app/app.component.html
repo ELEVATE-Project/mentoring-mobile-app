@@ -14,7 +14,8 @@
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content fullscreen class="sub-menu-content">
+      <ion-content fullscreen >
+        <div class="menu-css">
           <ion-list lines="none" class="sub-menu-list">
             <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
               <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
@@ -24,11 +25,12 @@
               </ion-item>
             </ion-menu-toggle>
           </ion-list>
+          </div>
       </ion-content>
       <ion-footer class="side-menu-footer">
        <ion-row>
          <ion-col size="12">
-           <h4><strong>{{"LOGOUT" | translate}}</strong></h4>
+           <h4><ion-icon name="power" class="ion-margin-end"> </ion-icon> <strong> {{"LOGOUT" | translate}}</strong></h4>
          </ion-col>
        </ion-row>
       </ion-footer>
