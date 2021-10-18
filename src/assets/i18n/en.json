@@ -14,5 +14,7 @@
     "HELP":"Help",
     "LOGOUT":"Logout",
     "WELCOME":"Welcome",
-    "MENU":"Menu"
+    "MENU":"Menu",
+    "DATE":"Date",
+    "JOIN":"Join"
 }

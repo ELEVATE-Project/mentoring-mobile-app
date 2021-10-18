@@ -6,9 +6,12 @@ import { IonicModule } from '@ionic/angular';
 import { SessionCardComponent } from './components/session-card/session-card.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
+import { SessionCardTemplateComponent } from './components/session-card-template/session-card-template.component';
+import { SessionSqrCardComponent } from './components/session-sqr-card/session-sqr-card.component';
+
 @NgModule({
-  declarations: [DynamicFormComponent,SessionCardComponent,PageHeaderComponent],
+  declarations: [DynamicFormComponent,SessionCardComponent,PageHeaderComponent,SessionCardTemplateComponent,SessionSqrCardComponent],
   imports: [CommonModule, ReactiveFormsModule, IonicModule,TranslateModule],
-  exports: [DynamicFormComponent,SessionCardComponent,PageHeaderComponent],
+  exports: [DynamicFormComponent,SessionCardComponent,PageHeaderComponent,SessionCardTemplateComponent,SessionSqrCardComponent],
 })
 export class SharedModule {}

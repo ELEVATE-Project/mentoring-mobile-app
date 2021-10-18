@@ -1,0 +1,16 @@
+    <ion-card class="session-sqr-card" (click)="action(data,'cardSelect')">
+      <ion-card-content>
+        <ion-card-title>
+        {{data.title}}
+        </ion-card-title>
+        <ion-card-subtitle>
+          {{data.description}}
+        </ion-card-subtitle>
+        <ion-card-subtitle>
+          {{'DATE' | translate}} : {{data.date}}
+        </ion-card-subtitle>
+      </ion-card-content>
+        <ion-button color="primary" size="small" shape="round"  class="btn-width-small" (click)="$event.stopPropagation();action(data,'joinAction')">
+          {{'JOIN' | translate}}
+        </ion-button>
+    </ion-card>

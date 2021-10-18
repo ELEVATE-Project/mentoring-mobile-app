@@ -6,8 +6,8 @@ ion-tab-bar{
 ion-tab-button {
     --color: var(--white);
     --color-selected: var(--white);
-    --padding-bottom: 8px;
-    --padding-top: 8px;
+    --padding-bottom: 4px;
+    --padding-top: 4px;
   
     &::before {
         background-color: transparent;
