@@ -21,16 +21,18 @@
       {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
     </ion-button>
   </div>
-  <div>
-    <app-session-card [sessions]="sessions" [showEnroll]=true (onClickEvent)="eventAction($event)"> </app-session-card>
+  <div *ngFor="let session of sessions">
+    <app-session-card [data]="session" [showEnroll]=true (onClickEvent)="eventAction($event)"> </app-session-card>
   </div>
-  <!-- This is only for testing the UI -->
   <div>
-    <app-mentor-card></app-mentor-card>
+    <ion-row>
+      <ion-col size="6"  *ngFor="let session of sessions">
+    <app-session-sqr-card [data]="session" (onClickEvent)="eventAction($event)"> </app-session-sqr-card>
+      </ion-col>
+      </ion-row>
   </div>
-
-  <div>
-    <app-session-sqr-card></app-session-sqr-card>
+  <div *ngFor="let session of sessions">
+    <app-session-card-template [data]="session"  (onClickEvent)="eventAction($event)"> </app-session-card-template>
   </div>
   <!-- <div>
     <app-dynamic-form [jsonFormData]="formData"></app-dynamic-form>

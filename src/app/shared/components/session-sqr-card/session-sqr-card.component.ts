@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-session-sqr-card',
@@ -7,22 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SessionSqrCardComponent implements OnInit {
 
-  sessions =[{
-    title :'Session Name 1',
-    description:'Session Details',
-    date:'20/11/2021'
-  },
-  {
-    title :'Session Name 2',
-    description:'Session Details',
-    date:'20/11/2021'
-  },{
-    title :'Session Name 3',
-    description:'Session Details',
-    date:'20/11/2021'
-  }]
+  @Input() data;
+  @Output() onClickEvent = new EventEmitter();
   constructor() { }
 
   ngOnInit() {}
-
+  action(data,type){
+    let event ={
+      data : data,
+      type:type
+    }
+    this.onClickEvent.emit(event);
+  }
 }

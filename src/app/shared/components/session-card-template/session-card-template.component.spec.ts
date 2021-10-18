@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { MentorCardComponent } from './mentor-card.component';
+import { SessionCardTemplateComponent } from './session-card-template.component';
 
 describe('MentorCardComponent', () => {
-  let component: MentorCardComponent;
-  let fixture: ComponentFixture<MentorCardComponent>;
+  let component: SessionCardTemplateComponent;
+  let fixture: ComponentFixture<SessionCardTemplateComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MentorCardComponent ],
+      declarations: [ SessionCardTemplateComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MentorCardComponent);
+    fixture = TestBed.createComponent(SessionCardTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
