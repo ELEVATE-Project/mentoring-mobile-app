@@ -2,10 +2,16 @@
   <ion-item
     *ngFor="let control of jsonFormData?.controls"
     [class]="control.class"
+    [ngClass]="{
+      'form-invalid':
+        myForm.get(control.name).touched && myForm.get(control.name).invalid
+    }"
   >
-    <ion-label *ngIf="control.label !== ''" [position]="control.position">{{
-      control.label
-    }}</ion-label>
+    <ion-label
+      *ngIf="control.label !== '' && !['chip'].includes(control.type)"
+      [position]="control.position"
+      >{{ control.label }}</ion-label
+    >
     <ion-input
       *ngIf="
         [
@@ -67,5 +73,10 @@
         >{{ option.label }}</ion-select-option
       >
     </ion-select>
+    <app-input-chip
+      *ngIf="control.type === 'chip'"
+      [label]="control.label"
+      [formControlName]="control.name"
+    ></app-input-chip>
   </ion-item>
 </form>

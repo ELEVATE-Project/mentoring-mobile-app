@@ -1,0 +1,16 @@
+<div>
+  <div class="d-flex flex-justify-space-between flex-align-items-center">
+    <ion-label>{{ label }}</ion-label>
+    <ion-toggle [(ngModel)]="_selectAll" (ngModelChange)="selectAll()" ></ion-toggle>
+  </div>
+  <div>
+    <ion-chip
+      (click)="onChipClick(chip.name)"
+      *ngFor="let chip of chips"
+      [color]="selectedChips.has(chip.name) ? 'success' : ''"
+    >
+      <ion-icon name="add" *ngIf="!selectedChips.has(chip.name)"></ion-icon>
+      <ion-label>{{ chip.label }}</ion-label>
+    </ion-chip>
+  </div>
+</div>

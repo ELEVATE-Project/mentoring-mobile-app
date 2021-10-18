@@ -1,0 +1,21 @@
+app-input-chip {
+  width: 100%;
+}
+
+ion-item {
+  --border-width: 0;
+  --border-color: #ffffff00; // transparent
+  border-bottom: 0.5px solid var(--color);
+}
+:host {
+  .item-interactive.ion-invalid {
+    --highlight-background: rgba(255, 255, 255, 0) !important;
+  }
+  .item-interactive.ion-valid {
+    --highlight-background: rgba(255, 255, 255, 0) !important;
+  }
+}
+
+.form-invalid {
+  border-bottom: 1px solid var(--highlight-color-invalid);
+}
