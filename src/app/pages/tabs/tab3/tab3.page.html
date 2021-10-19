@@ -6,17 +6,17 @@
       <div class="field">
         <h6>{{item.key | titlecase}}</h6>
         <div *ngIf="isArray(item.value); else elseBlock">
-          <ion-chip *ngFor="let chip of item.value">
+          <ion-chip class="ion-margin-top" *ngFor="let chip of item.value">
             <ion-label>{{chip}}</ion-label>
           </ion-chip>
         </div>
         <ng-template #elseBlock>
-          <p>{{item.value}}</p>
+          <p class="value">{{item.value}}</p>
         </ng-template>
       </div>
     </div>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">
-  <ion-button expand="full">Edit</ion-button>
+  <ion-button expand="full">{{"EDIT" | translate}}</ion-button>
 </ion-footer>

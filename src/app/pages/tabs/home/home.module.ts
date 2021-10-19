@@ -19,7 +19,6 @@ import { CoreModule } from 'src/app/core/core.module';
     SharedModule,
     CoreModule,
     HttpClientModule,
-    TranslateModule
   ],
   declarations: [HomePage],
 })

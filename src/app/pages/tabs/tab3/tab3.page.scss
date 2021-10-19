@@ -1,7 +1,5 @@
 .main-wrapper{
-    margin-left: 25px;
-    margin-right: 25px;
-    margin-top: 20px;
+    margin : 20px 25px 0px 25px
 }
 .field-wrapper{
     margin-top: 30px;
@@ -10,12 +8,10 @@
     margin-top: 10px;
 }
 ion-chip{
-
-    margin-top: 15px;
     --background: rgb(176, 214, 236);
 }
 
-div p{
+.value{
       font-size: 15px;
   }
   ion-toolbar{

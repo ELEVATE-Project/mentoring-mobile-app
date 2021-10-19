@@ -1,15 +1,15 @@
 <div>
   <div class="d-flex flex-justify-center">
-    <img *ngIf="!profileImageData.profile_image; else Img; let image" class="thumbnail-image"
+    <img *ngIf="!profileImageData?.profile_image; else Img; let image" class="thumbnail-image"
       src="../../../../assets/prof-img/user.png" />
     <ng-template #Img>
-      <img class="thumbnail-image" src="{{profileImageData.profile_image}}" />
+      <img class="thumbnail-image" src="{{profileImageData?.profile_image}}" />
     </ng-template>
   </div>
-  <div *ngIf="profileImageData.name">
-    <h5>{{ profileImageData.name }}</h5>
+  <div *ngIf="profileImageData?.name">
+    <h5>{{ profileImageData?.name }}</h5>
   </div>
-  <div *ngIf="profileImageData.region">
-    <h6>{{ profileImageData.region }}</h6>
+  <div *ngIf="profileImageData?.region">
+    <h6>{{ profileImageData?.region }}</h6>
   </div>
 </div>
