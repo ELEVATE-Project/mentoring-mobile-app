@@ -8,7 +8,6 @@ import { Tab3Page } from './tab3.page';
 import { Tab3PageRoutingModule } from './tab3-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 
-
 @NgModule({
   imports: [
     IonicModule,

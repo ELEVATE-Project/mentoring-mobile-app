@@ -7,7 +7,6 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-import { TranslateModule } from '@ngx-translate/core';
 import { CoreModule } from 'src/app/core/core.module';
 
 @NgModule({
