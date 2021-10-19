@@ -26,6 +26,8 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 :root {
+  --ion-default-font: "NotoSans";
+  --ion-font-family: "NotoSans";
   --ion-color-primary: #832215;
   --white:#fff;
   --black:#000;
@@ -34,6 +36,13 @@
   --dark-gray:#6a6a6a;
 }
 
+
+h5 , h4, h3 {
+  font-weight: 600;
+}
+h2 , h1{
+  font-weight: 800;
+}
 
 .header-md::after{
   background-image:none ;

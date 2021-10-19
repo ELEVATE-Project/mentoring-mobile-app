@@ -18,7 +18,7 @@ export class LocalStorageService {
     
   setLocalData(key, value): Promise<any> {
     return new Promise((resolve, reject) => {
-          this._storage.set(key, value).then((success) => {
+          this._storage?.set(key, value).then((success) => {
             resolve(success);
           });
     });
@@ -26,8 +26,7 @@ export class LocalStorageService {
 
   getLocalData(key): Promise<any> {
     return new Promise((resolve, reject) => {
-      this._storage
-        .get(key)
+      this._storage?.get(key)
         .then((data) => {
           if (data) {
             resolve(data);

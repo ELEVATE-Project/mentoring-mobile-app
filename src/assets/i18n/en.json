@@ -1,10 +1,11 @@
 {
     "ALL_SESSIONS":"All Sessions",
+    "MY_SESSIONS":"My Sessions",
     "HOME":"Home",
     "VIEW_MORE":"View More",
     "MENTORS":"Mentors",
     "PROFILE":"Profile",
-    "DASHBOARD":"Dasboard",
+    "DASHBOARD":"Dashboard",
     "ENROLL":"Enroll",
     "HOME_SEARCH_PLACEHOLDER":"Search for Mentors, Topics",
     "CREATED_SESSIONS":"Created Sessions",
@@ -16,5 +17,6 @@
     "WELCOME":"Welcome",
     "MENU":"Menu",
     "DATE":"Date",
-    "JOIN":"Join"
+    "JOIN":"Join",
+    "NO_ACTIVE_SESSIONS":"There are currently no active session to show. Please check back later."
 }

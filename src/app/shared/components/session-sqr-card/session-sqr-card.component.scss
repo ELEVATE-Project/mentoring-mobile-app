@@ -1,7 +1,17 @@
 .session-sqr-card{
     text-align: center;
-    padding: 12px 2px;
+    padding: 12px 5px;
+    min-height: 180px;
+    max-height: 190px;
+    border-radius: 10px;
     .btn-width-small{
         min-width: 50%;
     }
+}
+
+.ellipsis{
+    min-height: 3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 3em;
 }
