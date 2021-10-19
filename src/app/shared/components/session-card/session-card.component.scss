@@ -10,6 +10,19 @@
         width: 100%;
     }
     }
+    .status-badge{
+        background: var(--ion-color-primary);
+        min-width: 60px;
+        margin: -10px -10px;
+        color: var(--white);
+        padding: 2px 5px;
+        position: absolute;
+        right: 10px;
+        ion-icon{
+            font-size: 10px;
+            padding: 0px 5px;
+        }
+    }
     h5{
         margin-bottom: 5px;
         margin-top: 0px;
@@ -24,6 +37,6 @@
 .session-enroll{
     text-align: right;
     margin-top: -15px;
-    padding: 0px 20px 5px 0px;
+    padding: 0px 35px 5px 0px;
     color: var(--ion-color-primary);
     }

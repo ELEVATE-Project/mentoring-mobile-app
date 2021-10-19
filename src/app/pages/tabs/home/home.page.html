@@ -3,11 +3,9 @@
     <ion-row class="ion-padding ion-margin-top">
       <h3>
         {{'WELCOME' | translate}} Rajat !
-        </h3>
-      <ion-col size="12"
-        >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi,
-        sequi</ion-col
-      >
+      </h3>
+      <ion-col size="12">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi,
+        sequi</ion-col>
       <ion-col size="12" class="ion-no-padding">
         <ion-searchbar placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"></ion-searchbar>
       </ion-col>
@@ -23,8 +21,18 @@
       {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
     </ion-button>
   </div>
+  <div *ngFor="let session of sessions">
+    <app-session-card [data]="session" [showEnroll]=true (onClickEvent)="eventAction($event)"> </app-session-card>
+  </div>
   <div>
-    <app-session-card [sessions]="sessions" [showEnroll]=true (onClickEvent)="eventAction($event)"> </app-session-card>
+    <ion-row>
+      <ion-col size="6"  *ngFor="let session of sessions">
+    <app-session-sqr-card [data]="session" (onClickEvent)="eventAction($event)"> </app-session-sqr-card>
+      </ion-col>
+      </ion-row>
+  </div>
+  <div *ngFor="let session of sessions">
+    <app-session-card-template [data]="session"  (onClickEvent)="eventAction($event)"> </app-session-card-template>
   </div>
   <!-- <div>
     <app-dynamic-form [jsonFormData]="formData"></app-dynamic-form>

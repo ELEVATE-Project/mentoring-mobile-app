@@ -12,20 +12,30 @@ export class HomePage implements OnInit {
   sessions =[{
     _id:1,
     title:'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur'
+    subTitle: 'Short description ipsum dolor sit amet, consectetur',
+    description:'Short description ipsum dolor sit amet, consectetur',
+    date:'20/11/2021',
+    status:'Live'
   },
   {
     _id:2,
     title:'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur'
+    subTitle: 'Short description ipsum dolor sit amet, consectetur',
+    description:'Short description ipsum dolor sit amet, consectetur',
+    date:'20/11/2021',
+    status:'Live'
   },{
     _id:3,
     title:'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur'
+    subTitle: 'Short description ipsum dolor sit amet, consectetur',
+    description:'Short description ipsum dolor sit amet, consectetur',
+    date:'20/11/2021'
   },{
     _id:4,
     title:'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur'
+    subTitle: 'Short description ipsum dolor sit amet, consectetur',
+    description:'Short description ipsum dolor sit amet, consectetur',
+    date:'20/11/2021'
   }
 ]
 

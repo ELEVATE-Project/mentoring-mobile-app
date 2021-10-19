@@ -6,7 +6,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./session-card.component.scss'],
 })
 export class SessionCardComponent implements OnInit {
-@Input() sessions;
+@Input() data;
 @Input() showEnroll : boolean = false;
 @Output() onClickEvent = new EventEmitter();
 
