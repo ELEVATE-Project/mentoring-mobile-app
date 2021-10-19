@@ -31,8 +31,9 @@ interface JsonFormControls {
   type: string;
   class: string;
   position: string;
-  options?: JsonFormControlOptions;
   required?: boolean;
+  disabled?: boolean;
+  options?: JsonFormControlOptions;
   validators: JsonFormValidators;
 }
 export interface JsonFormData {
@@ -47,12 +48,14 @@ export interface JsonFormData {
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
   public myForm: FormGroup = this.fb.group({});
+  showForm = false;
+
   constructor(private fb: FormBuilder) {}
-  showForm : boolean = false;
   ngOnInit() {
-    setTimeout(() =>{
+    setTimeout(() => {
       this.createForm(this.jsonFormData.controls);
-    },0)
+      this.showForm = true;
+    });
   }
 
   createForm(controls: JsonFormControls[]) {
@@ -101,10 +104,12 @@ export class DynamicFormComponent implements OnInit {
       }
       this.myForm.addControl(
         control.name,
-        this.fb.control(control.value, validatorsToAdd)
+        this.fb.control(
+          { value: control.value, disabled: control.disabled },
+          validatorsToAdd
+        )
       );
     }
-    this.showForm = true;
   }
   onSubmit() {
     console.log('Form valid: ', this.myForm.valid);

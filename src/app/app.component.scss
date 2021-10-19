@@ -1,24 +1,28 @@
 .sub-menu-toolbar{
     height: 100px;
     margin-top: 20px;
-    background-color: #fff;
-    color:#6a6a6a;
+    background-color: var(--white);
+    color:--dark-gray;
 }
-
-.sub-menu-content{
-    border-radius:15px;
-    --background: #f4f2f2 !important;
+.menu-css{
+    height: 100%;
+    background:var(--light-gray) !important;
+    border-radius: 0px 35px 0 0;
+    box-shadow: 2px 8px 13px 2px var(--black);
+    -moz-box-shadow:2px 8px 13px 2px var(--black);
+    -webkit-box-shadow: 2px 8px 13px 2px var(--black);
+    margin-top: 8PX;
 }
 
 .sub-menu-list{
-    background:rgba(0,0,0,0) !important;
-
+    background: var(--light-gray) !important;
+    border-radius: 0px 35px 0 0;
     ion-item{
         padding: 14px 6px 6px 6px;
         --background:rgba(0,0,0,0) !important;
-        border-bottom: .5px solid grey;
+        border-bottom: .5px solid var(--gray);
         font-size: 16px;
-        color: #6a6a6a;
+        color: var(--dark-gray);
     }
 }
 
@@ -32,7 +36,7 @@
 
         ion-col{
             padding: 0;
-            color: #fff;
+            color: var(--white);
             text-align: center;
         }
     }
@@ -40,7 +44,7 @@
 
 .edit-btn {
   background-color: var(--ion-color-primary);
-  color: #fff;
+  color: var(--white);;
   border-radius: 10px;
   text-transform: capitalize;
   width:90px

@@ -22,6 +22,33 @@
       "validators": {}
     },
     {
+      "name": "roles",
+      "label": "Select your role",
+      "class": "ion-margin",
+      "value": "",
+      "type": "chip",
+      "position": "",
+      "disabled": false,
+      "showSelectAll": true,
+      "validators": {
+        "required": true
+      },
+      "options": [
+        {
+          "value": "deo",
+          "label": "District education officer"
+        },
+        {
+          "value": "beo",
+          "label": "Block education officer"
+        },
+        {
+          "value": "hm",
+          "label": "Head Master"
+        }
+      ]
+    },
+    {
       "name": "date",
       "label": "Date of birth:",
       "class": "ion-margin",
@@ -29,7 +56,9 @@
       "displayFormat": "DD/MM/YY",
       "type": "date",
       "position": "floating",
-      "validators": {}
+      "validators": {
+        "required": true
+      }
     },
     {
       "name": "comments",
@@ -46,7 +75,9 @@
       "class": "ion-margin",
       "value": "false",
       "type": "checkbox",
-      "validators": {}
+      "validators": {
+        "required": true
+      }
     },
     {
       "name": "size",

@@ -30,16 +30,46 @@
   --white:#fff;
   --black:#000;
   --gray:#ccc;
+  --light-gray:#f4f2f2;
+  --dark-gray:#6a6a6a;
 }
 
-
-.header-md::after{
-  background-image:none ;
+//flex
+.d-flex {
+  display: flex;
 }
 
-.header-bottom-border{
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-justify-center {
+  justify-content: center;
+}
+
+.flex-justify-start {
+  justify-content: start;
+}
+
+.flex-justify-space-between {
+  justify-content: space-between;
+}
+.flex-align-items-center{
+  align-items: center;
+}
+
+//margins
+.mx-30 {
+  margin: 30px 0;
+}
+
+.header-md::after {
+  background-image: none;
+}
+
+.header-bottom-border {
   border-bottom-left-radius: 30px;
-  ion-searchbar{
+  ion-searchbar {
     --border-radius: 10px;
     padding: 5px 0px;
   }

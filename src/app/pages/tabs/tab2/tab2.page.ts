@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { HttpService } from 'src/app/core/services/http.service';
 import {
   DynamicFormComponent,
   JsonFormData,
@@ -24,13 +25,16 @@ export class Tab2Page implements OnInit {
 
   public formData: JsonFormData;
 
-  constructor(private http: HttpClient) {}
-  ngOnInit() {
+  constructor(private http: HttpClient, private api: HttpService) {}
+  async ngOnInit() {
     this.http
       .get('/assets/dummy/dynamic-form.json')
       .subscribe((formData: JsonFormData) => {
         this.formData = formData;
       });
+
+    const res = await this.api.get('https://api.publicapis.org/entries');
+    console.log(res);
   }
 
   onSubmit() {

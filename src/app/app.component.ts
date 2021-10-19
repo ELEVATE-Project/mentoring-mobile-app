@@ -29,6 +29,9 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.languageSetting();
+      setTimeout(() => {
+        document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
+      }, 2000);
     });
   }
   languageSetting() {
