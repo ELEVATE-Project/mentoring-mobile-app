@@ -7,9 +7,9 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ProfileImageComponent implements OnInit {
 
-@Input() profileImageData:Object;
+  @Input() profileImageData: Object;
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
 }

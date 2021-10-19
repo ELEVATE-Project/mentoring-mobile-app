@@ -35,6 +35,7 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
     PageHeaderComponent,
     SessionCardTemplateComponent,
     SessionSqrCardComponent,
+    ProfileImageComponent,
   ],
 })
 export class SharedModule {}
