@@ -1,0 +1,50 @@
+.main-wrapper{
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-top: 20px;
+}
+.field-wrapper{
+    margin-top: 30px;
+}
+#edit-button{
+    background-color: rgb(190, 12, 12);
+    color: white;
+    font-size: 16px;
+}
+#edit{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    background-color: rgb(190, 12, 12);
+    height: 56px;
+    position: fixed;
+    left: 0;
+    bottom: 0px;
+    right: 0;
+}
+.field{
+    margin-top: 10px;
+}
+ion-chip{
+
+    margin-top: 15px;
+    background-color: rgb(176, 214, 236);
+}
+
+.hr {
+    border-bottom: 1px solid rgb(255, 255, 255);
+    box-shadow: 0 3px 4px 0 rgba(82, 87, 82, 0.795);
+    transition: 0.4s;
+    margin: 20px 0;
+    margin-top: 0px;
+    width: 100%;
+  }
+  ion-footer{
+      height: 50px;
+  }
+
+  div p{
+      font-size: 15px;
+  }
+
+  

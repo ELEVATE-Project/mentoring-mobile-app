@@ -6,9 +6,10 @@ import { IonicModule } from '@ionic/angular';
 import { SessionCardComponent } from './components/session-card/session-card.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { PageHeaderComponent } from './components/page-header/page-header.component';
+import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 @NgModule({
-  declarations: [DynamicFormComponent,SessionCardComponent,PageHeaderComponent],
+  declarations: [DynamicFormComponent,SessionCardComponent,PageHeaderComponent,ProfileImageComponent],
   imports: [CommonModule, ReactiveFormsModule, IonicModule,TranslateModule],
-  exports: [DynamicFormComponent,SessionCardComponent,PageHeaderComponent],
+  exports: [DynamicFormComponent,SessionCardComponent,PageHeaderComponent,ProfileImageComponent],
 })
 export class SharedModule {}
