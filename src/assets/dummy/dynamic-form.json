@@ -28,9 +28,25 @@
       "value": "",
       "type": "chip",
       "position": "",
+      "disabled": false,
+      "showSelectAll": true,
       "validators": {
         "required": true
-      }
+      },
+      "options": [
+        {
+          "value": "deo",
+          "label": "District education officer"
+        },
+        {
+          "value": "beo",
+          "label": "Block education officer"
+        },
+        {
+          "value": "hm",
+          "label": "Head Master"
+        }
+      ]
     },
     {
       "name": "date",
@@ -41,7 +57,7 @@
       "type": "date",
       "position": "floating",
       "validators": {
-         "required": true
+        "required": true
       }
     },
     {
@@ -60,7 +76,7 @@
       "value": "false",
       "type": "checkbox",
       "validators": {
-         "required": true
+        "required": true
       }
     },
     {

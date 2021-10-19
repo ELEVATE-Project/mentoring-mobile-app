@@ -21,22 +21,10 @@ import {
 })
 export class InputChipComponent implements OnInit, ControlValueAccessor {
   @Input() label;
+  @Input() chips;
+  @Input() showSelectAll;
+  disabled;
   touched = false;
-  disabled = false;
-  chips = [
-    {
-      name: 'deo',
-      label: 'District education officer',
-    },
-    {
-      name: 'beo',
-      label: 'Block education officer',
-    },
-    {
-      name: 'hm',
-      label: 'Head Master',
-    },
-  ];
   selectedChips;
   _selectAll;
 
@@ -64,6 +52,9 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
       this.touched = true;
     }
   }
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+  }
   onChipClick(chip) {
     this.markAsTouched();
     if (this.disabled) {
@@ -87,10 +78,16 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   }
 
   selectAll() {
+    this.markAsTouched();
     if (this._selectAll) {
       this.chips.map((chip) => this.selectedChips.add(chip.name));
     } else {
       this.selectedChips.clear();
+    }
+    if (!this.selectedChips.size) {
+      this.onChange('');
+    } else {
+      this.onChange([...this.selectedChips]);
     }
   }
 }

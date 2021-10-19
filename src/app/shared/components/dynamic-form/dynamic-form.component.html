@@ -75,8 +75,10 @@
     </ion-select>
     <app-input-chip
       *ngIf="control.type === 'chip'"
-      [label]="control.label"
       [formControlName]="control.name"
+      [label]="control.label"
+      [chips]="control.options"
+      [showSelectAll]="control.showSelectAll"
     ></app-input-chip>
   </ion-item>
 </form>
