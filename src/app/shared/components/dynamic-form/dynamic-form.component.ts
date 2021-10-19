@@ -31,8 +31,9 @@ interface JsonFormControls {
   type: string;
   class: string;
   position: string;
-  options?: JsonFormControlOptions;
   required?: boolean;
+  disabled?: boolean;
+  options?: JsonFormControlOptions;
   validators: JsonFormValidators;
 }
 export interface JsonFormData {
@@ -103,7 +104,10 @@ export class DynamicFormComponent implements OnInit {
       }
       this.myForm.addControl(
         control.name,
-        this.fb.control(control.value, validatorsToAdd)
+        this.fb.control(
+          { value: control.value, disabled: control.disabled },
+          validatorsToAdd
+        )
       );
     }
   }

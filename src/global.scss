@@ -34,6 +34,7 @@
   --dark-gray:#6a6a6a;
 }
 
+//flex
 .d-flex {
   display: flex;
 }
@@ -50,18 +51,25 @@
   justify-content: start;
 }
 
+.flex-justify-space-between {
+  justify-content: space-between;
+}
+.flex-align-items-center{
+  align-items: center;
+}
+
 //margins
 .mx-30 {
   margin: 30px 0;
 }
 
-.header-md::after{
-  background-image:none ;
+.header-md::after {
+  background-image: none;
 }
 
-.header-bottom-border{
+.header-bottom-border {
   border-bottom-left-radius: 30px;
-  ion-searchbar{
+  ion-searchbar {
     --border-radius: 10px;
     padding: 5px 0px;
   }
