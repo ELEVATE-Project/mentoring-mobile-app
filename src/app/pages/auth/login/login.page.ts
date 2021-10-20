@@ -7,24 +7,33 @@ import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-for
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  formData: JsonFormData;
+  formData: JsonFormData = {
+    controls: [
+      {
+        name: 'email',
+        label: 'Email:',
+        value: '',
+        class: 'ion-margin',
+        type: 'text',
+        position: 'floating',
+        validators: {
+          required: true,
+        },
+      },
+      {
+        name: 'password',
+        label: 'Password:',
+        value: '',
+        class: 'ion-margin',
+        type: 'password',
+        position: 'floating',
+        validators: {
+          required: true,
+        },
+      },
+    ],
+  };
   constructor() {}
 
-  ngOnInit() {
-    this.formData = {
-      controls: [
-        {
-          name: 'email',
-          label: 'Email:',
-          value: '',
-          class: 'ion-margin',
-          type: 'text',
-          position: 'floating',
-          validators: {
-            required: true,
-          },
-        },
-      ],
-    };
-  }
+  ngOnInit() {}
 }

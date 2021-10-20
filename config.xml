@@ -98,5 +98,8 @@
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^4.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
+    <plugin name="cordova-plugin-advanced-http" spec="^3.2.1">
+        <variable name="ANDROIDBLACKLISTSECURESOCKETPROTOCOLS" value="SSLv3,TLSv1" />
+    </plugin>
     <engine name="android" spec="^9.0.0" />
 </widget>
