@@ -26,8 +26,8 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 :root {
-  --ion-default-font: "NotoSans";
-  --ion-font-family: "NotoSans";
+  --ion-default-font: "NotoSans-Regular";
+  --ion-font-family: "NotoSans-Regular";
   --ion-color-primary: #832215;
   --white:#fff;
   --black:#000;
@@ -38,10 +38,7 @@
 
 
 h5 , h4, h3 {
-  font-weight: 600;
-}
-h2 , h1{
-  font-weight: 800;
+  font-family: "NotoSans-Bold";
 }
 
 .header-md::after{
@@ -54,4 +51,13 @@ h2 , h1{
     --border-radius: 10px;
     padding: 5px 0px;
   }
+}
+ion-card-title{
+  font-size: 18px;
+}
+.ellipsis{
+  min-height: 3em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 3em;
 }
