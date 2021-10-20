@@ -8,8 +8,12 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    loadChildren: () => import('./pages/auth/auth.module').then( m => m.AuthPageModule)
-  }
+    loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule)
+  },
+  {
+    path: 'sessions',
+    loadChildren: () => import('./pages/sessions/sessions/sessions.module').then(m => m.SessionsPageModule)
+  },
 ];
 @NgModule({
   imports: [
@@ -17,4 +21,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

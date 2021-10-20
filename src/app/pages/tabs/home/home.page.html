@@ -17,7 +17,8 @@
     <h5>
       {{"ALL_SESSIONS" | translate}}
     </h5>
-    <ion-button color="primary" size="small" shape="round" class="ion-margin-top">
+    <ion-button color="primary" size="small" shape="round" class="ion-margin-top" routerLink="/sessions"
+      [queryParams]="{ type: 'all-sessions'}">
       {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
     </ion-button>
   </div>
@@ -26,13 +27,13 @@
   </div>
   <div>
     <ion-row>
-      <ion-col size="6"  *ngFor="let session of sessions">
-    <app-session-sqr-card [data]="session" (onClickEvent)="eventAction($event)"> </app-session-sqr-card>
+      <ion-col size="6" *ngFor="let session of sessions">
+        <app-session-sqr-card [data]="session" (onClickEvent)="eventAction($event)"> </app-session-sqr-card>
       </ion-col>
-      </ion-row>
+    </ion-row>
   </div>
   <div *ngFor="let session of sessions">
-    <app-session-card-template [data]="session"  (onClickEvent)="eventAction($event)"> </app-session-card-template>
+    <app-session-card-template [data]="session" (onClickEvent)="eventAction($event)"> </app-session-card-template>
   </div>
   <!-- <div>
     <app-dynamic-form [jsonFormData]="formData"></app-dynamic-form>

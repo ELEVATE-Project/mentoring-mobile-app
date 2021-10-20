@@ -32,6 +32,7 @@ import { InputChipComponent } from './components/input-chip/input-chip.component
     PageHeaderComponent,
     SessionCardTemplateComponent,
     SessionSqrCardComponent,
+    TranslateModule
   ],
 })
 export class SharedModule {}

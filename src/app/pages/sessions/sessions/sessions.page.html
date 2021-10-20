@@ -1,0 +1,31 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-toolbar>
+    <ion-searchbar class="top-padding" placeholder=""></ion-searchbar>
+    <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
+      <ion-segment-button value="all-sessions">
+        <ion-label>{{ "ALL SESSIONS" | translate }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="my-sessions">
+        <ion-label>{{ "MY SESSIONS" | translate }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <div class="sessions-wrap">
+      <div [ngSwitch]="type">
+        <ion-list *ngSwitchCase="'all-sessions'">
+          <div *ngFor="let session of sessions">
+            <app-session-card [data]="session" [showEnroll]=true></app-session-card>
+          </div>
+        </ion-list>
+        <ion-list *ngSwitchCase="'my-sessions'">
+          <div *ngFor="let session of sessions">
+            <app-session-card-template [data]="session"></app-session-card-template>
+          </div>
+        </ion-list>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-content>
+<ion-footer class="ion-no-border">
+  <ion-button class="load-more-button" expand="full">{{"LOAD MORE" | translate}}</ion-button>
+</ion-footer>

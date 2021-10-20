@@ -47,7 +47,6 @@ public headerConfig: any = {
   constructor(private http: HttpClient) {}
   ngOnInit() {
   }
-
   eventAction(event){
     console.log(event,"event");
   }
