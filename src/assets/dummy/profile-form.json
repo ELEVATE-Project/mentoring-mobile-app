@@ -63,7 +63,7 @@
       "label": "Your Experience in years",
       "value": "",
       "class": "ion-margin",
-      "type": "tel",
+      "type": "number",
       "position": "floating",
       "validators": {
         "required": true
