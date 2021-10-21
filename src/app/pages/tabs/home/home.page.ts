@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +10,7 @@ import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-for
 })
 export class HomePage implements OnInit {
   public formData: JsonFormData;
+  Call_Sessions: string=CommonRoutes.Call_Sessions;
   sessions =[{
     _id:1,
     title:'Topic, Mentor name',

@@ -3,17 +3,15 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-sessions',
-  templateUrl: './sessions.page.html',
-  styleUrls: ['./sessions.page.scss'],
+  templateUrl: './sessions.html',
+  styleUrls: ['./sessions.scss'],
 })
 export class SessionsPage implements OnInit {
   type: string;
   constructor(private activatedRoute: ActivatedRoute) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.type = params.get('type');
-      if (this.type == null) {
-        this.type = "all-sessions";
-      }
+      this.type = this.type ? this.type : "all-sessions";
     });
   }
   public headerConfig: any = {
@@ -26,11 +24,7 @@ export class SessionsPage implements OnInit {
   ngOnInit() {
   }
   public segmentChanged(ev: any) {
-    if (this.type == "all-sessions") {
-      this.type = "my-sessions";
-    } else {
-      this.type = "all-sessions";
-    }
+    this.type = (this.type == "all-sessions") ? "my-sessions" : "all-sessions";
   }
   sessions = [{
     _id: 1,

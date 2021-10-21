@@ -1,12 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SessionsRoutingModule } from './sessions-routing.module';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
+import { SessionsPageRoutingModule } from './sessions-routing.module';
+import { SessionsPage } from './sessions';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
-    SessionsRoutingModule
-  ]
+    FormsModule,
+    IonicModule,
+    SessionsPageRoutingModule,
+    SharedModule,
+  ],
+  declarations: [SessionsPage]
 })
-export class SessionsModule { }
+export class SessionsPageModule {}

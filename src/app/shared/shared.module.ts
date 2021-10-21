@@ -9,6 +9,7 @@ import { PageHeaderComponent } from './components/page-header/page-header.compon
 import { SessionCardTemplateComponent } from './components/session-card-template/session-card-template.component';
 import { SessionSqrCardComponent } from './components/session-sqr-card/session-sqr-card.component';
 import { InputChipComponent } from './components/input-chip/input-chip.component';
+import { CommonRoutes } from 'src/global.routes';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { InputChipComponent } from './components/input-chip/input-chip.component
     PageHeaderComponent,
     SessionCardTemplateComponent,
     SessionSqrCardComponent,
-    TranslateModule
+    TranslateModule,
+    CommonRoutes
   ],
 })
 export class SharedModule {}
