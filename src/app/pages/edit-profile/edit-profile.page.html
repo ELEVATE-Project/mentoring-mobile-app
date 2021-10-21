@@ -1,0 +1,15 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+
+<ion-content [fullscreen]="true">
+  <app-profile-image [profileImageData]='profileImageData'></app-profile-image>
+  <div>
+    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border" submitButton>
+  <ion-toolbar>
+    <ion-button slot="end" (click)="onSubmit()">Submit</ion-button>
+    <ion-button (click)="resetForm()">Reset</ion-button>
+  </ion-toolbar>
+</ion-footer>
