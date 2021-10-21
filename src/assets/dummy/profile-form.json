@@ -1,0 +1,119 @@
+{
+  "controls": [
+    {
+      "name": "firstName",
+      "label": "Your name",
+      "value": "",
+      "class": "ion-margin",
+      "type": "text",
+      "position": "floating",
+      "validators": {
+        "required": true,
+        "minLength": 10
+      }
+    },
+    {
+      "name": "location",
+      "label": "Select your Location",
+      "value": "",
+      "class": "ion-margin",
+      "type": "text",
+      "position": "floating",
+      "validators": {
+        "required": true
+      }
+    },
+    {
+      "name": "roles",
+      "label": "Your role",
+      "class": "ion-margin",
+      "value": "",
+      "type": "chip",
+      "position": "",
+      "disabled": false,
+      "showSelectAll": true,
+      "validators": {
+        "required": true
+      },
+      "options": [
+        {
+          "value": "deo",
+          "label": "District education officer"
+        },
+        {
+          "value": "beo",
+          "label": "Block education officer"
+        },
+        {
+          "value": "hm",
+          "label": "Head Master"
+        },
+        {
+          "value": "TE",
+          "label": "Teacher"
+        },
+        {
+          "value": "CO",
+          "label": "Cluster Officials"
+        }
+      ]
+    },
+    {
+      "name": "experience",
+      "label": "Your Experience in years",
+      "value": "",
+      "class": "ion-margin",
+      "type": "number",
+      "position": "floating",
+      "validators": {
+        "required": true
+      }
+    },
+    {
+      "name": "yourselfs",
+      "label": "Tell us About yourself",
+      "value": "",
+      "class": "ion-margin",
+      "type": "textarea",
+      "position": "floating",
+      "validators": {
+        "required": true
+      }
+    },
+    {
+      "name": "expertise",
+      "label": "Your Expertise",
+      "class": "ion-margin",
+      "value": "",
+      "type": "chip",
+      "position": "",
+      "disabled": false,
+      "showSelectAll": true,
+      "validators": {
+        "required": true
+      },
+      "options": [
+        {
+          "value": "Educational Leadership",
+          "label": "Educational Leadership"
+        },
+        {
+          "value": "School Process",
+          "label": "School Process"
+        },
+        {
+          "value": "Communication",
+          "label": "Communication"
+        },
+        {
+          "value": "SQAA",
+          "label": "SQAA"
+        },
+        {
+          "value": "Professional Development",
+          "label": "Professional Development"
+        }
+      ]
+    }
+  ]
+}

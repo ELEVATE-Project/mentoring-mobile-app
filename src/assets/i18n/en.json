@@ -16,5 +16,7 @@
     "WELCOME":"Welcome",
     "MENU":"Menu",
     "DATE":"Date",
-    "JOIN":"Join"
+    "JOIN":"Join",
+    "SUBMIT":"Submit",
+    "RESET":"Rest"
 }
