@@ -8,11 +8,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
-    path: 'auth',
+    path: CommonRoutes.callAuth,
     loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule)
   },
   {
-    path: CommonRoutes.Call_Sessions,
+    path: CommonRoutes.callSessions,
     loadChildren: () => import('./pages/sessions/sessions.module').then(m => m.SessionsPageModule)
   },
 ];

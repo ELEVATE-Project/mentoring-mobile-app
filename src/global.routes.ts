@@ -1,3 +1,4 @@
 export class CommonRoutes {
-    public static Call_Sessions="sessions";
+    public static callSessions="sessions";
+    public static callAuth="auth";
  }

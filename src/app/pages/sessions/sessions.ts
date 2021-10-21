@@ -24,7 +24,6 @@ export class SessionsPage implements OnInit {
   ngOnInit() {
   }
   public segmentChanged(ev: any) {
-    this.type = (this.type == "all-sessions") ? "my-sessions" : "all-sessions";
   }
   sessions = [{
     _id: 1,

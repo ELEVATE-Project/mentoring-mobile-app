@@ -11,17 +11,15 @@
       </ion-segment-button>
     </ion-segment>
     <div class="sessions-wrap">
-      <div [ngSwitch]="type">
-        <ion-list *ngSwitchCase="'all-sessions'">
-          <div *ngFor="let session of sessions">
+      <div *ngFor="let session of sessions">
+        <div [ngSwitch]="type">
+          <ion-list *ngSwitchCase="'all-sessions'">
             <app-session-card [data]="session" [showEnroll]=true></app-session-card>
-          </div>
-        </ion-list>
-        <ion-list *ngSwitchCase="'my-sessions'">
-          <div *ngFor="let session of sessions">
+          </ion-list>
+          <ion-list *ngSwitchCase="'my-sessions'">
             <app-session-card-template [data]="session"></app-session-card-template>
-          </div>
-        </ion-list>
+          </ion-list>
+        </div>
       </div>
     </div>
   </ion-toolbar>
