@@ -24,6 +24,7 @@ export class SessionsPage implements OnInit {
   ngOnInit() {
   }
   public segmentChanged(ev: any) {
+    this.type = ev.target.value;
   }
   sessions = [{
     _id: 1,

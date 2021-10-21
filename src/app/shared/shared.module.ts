@@ -35,7 +35,7 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
     PageHeaderComponent,
     SessionCardTemplateComponent,
     SessionSqrCardComponent,
-    CommonRoutes
+    CommonRoutes,
     ProfileImageComponent,
     TranslateModule,
   ],
