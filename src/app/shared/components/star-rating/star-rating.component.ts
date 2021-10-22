@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as _ from 'lodash-es';
 
 @Component({
   selector: 'app-star-rating',
@@ -7,10 +8,18 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class StarRatingComponent implements OnInit {
   rate=0;
+  @Input() numberOfStars: any;
   @Output() starRating = new EventEmitter();
+  range: any;
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.range = [];
+    console.log(this.numberOfStars);
+    _.range(0, this.numberOfStars).forEach((range) => {
+      this.range.push(range);
+    });
+  }
 
   onRate(rate) {
     this.rate = rate;

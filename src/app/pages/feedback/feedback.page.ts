@@ -24,14 +24,17 @@ export class FeedbackPage implements OnInit {
     this.formData = [
       {
         label: 'How would you rate the host of the session?',
+        numberOfStars:5,
         value: 0,
       },
       {
         label: 'How would you rate the engagement of the session?',
+        numberOfStars:6,
         value: 0,
       },
       {
         label: 'How would you rate the Audio/Vedio quality?',
+        numberOfStars:7,
         value: 0,
       },
     ];

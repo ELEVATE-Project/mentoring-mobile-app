@@ -13,7 +13,7 @@
         <div class="feedback">
             <strong>{{data.label}}</strong>
             <div class="rating">
-                <app-star-rating (starRating)="getRating($event,data)"></app-star-rating>
+                <app-star-rating [numberOfStars]="data.numberOfStars" (starRating)="getRating($event,data)"></app-star-rating>
             </div>
         </div>
     </div>

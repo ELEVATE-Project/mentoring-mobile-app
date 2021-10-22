@@ -16,7 +16,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/sessions/sessions.module').then(m => m.SessionsPageModule)
   },
   {
-    path: 'feedback',
+    path: CommonRoutes.feedBack,
     loadChildren: () => import('./pages/feedback/feedback.module').then( m => m.FeedbackPageModule)
   }
 ];
