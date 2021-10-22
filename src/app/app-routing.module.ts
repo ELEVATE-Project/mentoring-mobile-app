@@ -8,13 +8,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
-    path: 'auth',
-    loadChildren: () => import('./pages/auth/auth.module').then( m => m.AuthPageModule)
-  },
-  {
-    path: 'feedback',
-    loadChildren: () => import('./pages/feedback/feedback.module').then( m => m.FeedbackPageModule)
-  }
     path: CommonRoutes.callAuth,
     loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule)
   },
@@ -22,6 +15,10 @@ const routes: Routes = [
     path: CommonRoutes.callSessions,
     loadChildren: () => import('./pages/sessions/sessions.module').then(m => m.SessionsPageModule)
   },
+  {
+    path: 'feedback',
+    loadChildren: () => import('./pages/feedback/feedback.module').then( m => m.FeedbackPageModule)
+  }
 ];
 @NgModule({
   imports: [
