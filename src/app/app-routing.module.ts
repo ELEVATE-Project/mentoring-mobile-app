@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { CommonRoutes } from 'src/global.routes';
 
 const routes: Routes = [
   {
@@ -7,8 +8,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
-    path: 'auth',
-    loadChildren: () => import('./pages/auth/auth.module').then( m => m.AuthPageModule)
+    path: CommonRoutes.callAuth,
+    loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule)
+  },
+  {
+    path: CommonRoutes.callSessions,
+    loadChildren: () => import('./pages/sessions/sessions.module').then(m => m.SessionsPageModule)
   },
   {
     path: 'feedback',
@@ -21,4 +26,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
