@@ -18,5 +18,7 @@
     "DATE":"Date",
     "JOIN":"Join",
     "SUBMIT":"Submit",
-    "RESET":"Rest"
+    "RESET":"Reset",
+    "FEEDBACK_HEADER":"Thank you for participating in the session, please rate us on the following to help us improve.",
+    "SUBMIT_FEEDBACK":"Submit Feedback"
 }

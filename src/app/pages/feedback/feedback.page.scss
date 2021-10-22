@@ -1,0 +1,26 @@
+.top-header {
+  margin: 20px;
+  font-size: 17px;
+  letter-spacing: 0.5px;
+}
+
+.feedback {
+  margin: 35px 30px;
+  font-size: 17px;
+  letter-spacing: 0.5px;
+}
+
+.rating{
+    margin-top:15px;
+}
+
+.bottom-line {
+  margin: 25px 15px;
+  border-bottom: 5px solid var(--ion-color-primary);
+  width: 20%;
+}
+
+ion-footer .footer{
+    background:var(--ion-color-primary)
+}
+
