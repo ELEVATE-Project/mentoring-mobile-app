@@ -9,9 +9,9 @@ import { PageHeaderComponent } from './components/page-header/page-header.compon
 import { SessionCardTemplateComponent } from './components/session-card-template/session-card-template.component';
 import { SessionSqrCardComponent } from './components/session-sqr-card/session-sqr-card.component';
 import { InputChipComponent } from './components/input-chip/input-chip.component';
+import { CommonRoutes } from 'src/global.routes';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
-
 
 @NgModule({
   declarations: [
@@ -37,6 +37,7 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
     PageHeaderComponent,
     SessionCardTemplateComponent,
     SessionSqrCardComponent,
+    CommonRoutes,
     ProfileImageComponent,
     TranslateModule,
     StarRatingComponent
