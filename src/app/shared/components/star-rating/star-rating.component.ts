@@ -15,7 +15,6 @@ export class StarRatingComponent implements OnInit {
 
   ngOnInit() {
     this.range = [];
-    console.log(this.numberOfStars);
     _.range(0, this.numberOfStars).forEach((range) => {
       this.range.push(range);
     });
