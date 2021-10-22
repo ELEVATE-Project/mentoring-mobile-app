@@ -1,0 +1,23 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+
+
+<ion-content [fullscreen]="true">
+    <div class="top-header">
+        <strong>Thank you for participating in the session, please rate us on the following to help
+            us improve.</strong>
+    </div>
+
+    <div class="bottom-line"></div>
+
+    <div *ngFor="let data of formData">
+        <div class="feedback">
+            <strong>{{data.label}}</strong>
+            <div class="rating">
+                <app-star-rating (starRating)="getRating($event,data)"></app-star-rating>
+            </div>
+        </div>
+    </div>
+</ion-content>
+<ion-footer class="ion-no-border">
+    <ion-button expand="full" (click)="submit()">{{'SUBMIT_FEEDBACK' | translate}}</ion-button>
+</ion-footer>

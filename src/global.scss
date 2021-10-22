@@ -32,6 +32,7 @@
   --gray:#ccc;
   --light-gray:#f4f2f2;
   --dark-gray:#6a6a6a;
+  --yellow:#ffab00;
 }
 
 //flex
@@ -73,4 +74,8 @@
     --border-radius: 10px;
     padding: 5px 0px;
   }
+}
+
+ion-button{
+  text-transform: capitalize;
 }

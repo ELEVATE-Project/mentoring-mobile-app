@@ -10,6 +10,7 @@ import { SessionCardTemplateComponent } from './components/session-card-template
 import { SessionSqrCardComponent } from './components/session-sqr-card/session-sqr-card.component';
 import { InputChipComponent } from './components/input-chip/input-chip.component';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
+import { StarRatingComponent } from './components/star-rating/star-rating.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
     SessionSqrCardComponent,
     InputChipComponent,
     ProfileImageComponent,
+    StarRatingComponent
   ],
   imports: [
     CommonModule,
@@ -37,6 +39,7 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
     SessionSqrCardComponent,
     ProfileImageComponent,
     TranslateModule,
+    StarRatingComponent
   ],
 })
 export class SharedModule {}

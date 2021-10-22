@@ -24,4 +24,8 @@ export class ProfilePage implements OnInit {
     this.navCtrl.navigateForward('tabs/profile/edit-profile');
   }
 
+  feedback(){
+    this.navCtrl.navigateForward('/feedback');
+  }
+
 }

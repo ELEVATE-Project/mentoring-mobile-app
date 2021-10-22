@@ -18,5 +18,6 @@
     "DATE":"Date",
     "JOIN":"Join",
     "SUBMIT":"Submit",
-    "RESET":"Rest"
+    "RESET":"Reset",
+    "SUBMIT_FEEDBACK":"Submit Feedback"
 }
