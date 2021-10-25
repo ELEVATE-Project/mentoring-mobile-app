@@ -1,3 +1,5 @@
 export const localKeys = {
-    selectedLanguage : 'selectedLanguage'
+    selectedLanguage : 'selectedLanguage',
+    loggedIn: false,
+    access_token:"",
 }
