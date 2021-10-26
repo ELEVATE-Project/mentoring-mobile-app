@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-login',
@@ -33,7 +34,8 @@ export class LoginPage implements OnInit {
       },
     ],
   };
-  constructor() {}
-
-  ngOnInit() {}
+  REGISTER: string = CommonRoutes.REGISTER;
+  AUTH: string = CommonRoutes.AUTH;
+  constructor() { }
+  ngOnInit() { }
 }

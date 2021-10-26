@@ -4,15 +4,15 @@ import { CommonRoutes } from 'src/global.routes';
 
 const routes: Routes = [
   {
-    path: CommonRoutes.callLogin,
+    path: CommonRoutes.LOGIN,
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: CommonRoutes.callRegister,
+    path: CommonRoutes.REGISTER,
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   },
   {
-    path: CommonRoutes.callResetPassword,
+    path: CommonRoutes.RESET_PASSWORD,
     loadChildren: () => import('./reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
   },
   {

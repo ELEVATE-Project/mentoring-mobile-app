@@ -10,7 +10,7 @@ import { CommonRoutes } from 'src/global.routes';
 })
 export class HomePage implements OnInit {
   public formData: JsonFormData;
-  callSessions: string=CommonRoutes.callSessions;
+  SESSIONS: string=CommonRoutes.SESSIONS;
   sessions =[{
     _id:1,
     title:'Topic, Mentor name',

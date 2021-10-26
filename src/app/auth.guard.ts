@@ -12,10 +12,8 @@ export class AuthGuard implements CanActivate {
   async canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<any> {
-    this.localStorage.setLocalData(localKeys.userDetails.access_token, "dsvgseiorgergergergeg");
-    // TODO : remove above line
-    var accessToken: any = await this.localStorage.getLocalData(localKeys.userDetails?.access_token);
-    if (accessToken) {
+    var accessToken: any = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    if (accessToken?.access_token) {
       return true
     } else {
       alert("You are currently not logged in, please provide Login!")
