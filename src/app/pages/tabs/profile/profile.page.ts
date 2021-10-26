@@ -16,7 +16,7 @@ export class ProfilePage implements OnInit {
     notification: true,
     headerColor: 'primary',
   };
-  constructor(public navCtrl: NavController) { }
+  constructor(public navCtrl: NavController) {}
 
   ngOnInit() {
   }
@@ -28,5 +28,4 @@ export class ProfilePage implements OnInit {
   feedback(){
     this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
   }
-
 }
