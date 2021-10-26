@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { ISocialSharing } from '../interface/soical-sharing-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -9,11 +10,13 @@ export class UtilService {
     private socialSharing: SocialSharing
   ) {}
 
-  shareLink(text,subject,link) {
+  shareLink(param:ISocialSharing) {
+    let {text,subject,link} = param;
     this.socialSharing.share(text,subject,null,link);
   }
 
-  shareFile(text,file) {
+  shareFile(param:ISocialSharing) {
+    let {file,text} = param;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
