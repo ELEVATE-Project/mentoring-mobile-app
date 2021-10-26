@@ -12,6 +12,7 @@ import { InputChipComponent } from './components/input-chip/input-chip.component
 import { CommonRoutes } from 'src/global.routes';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
+import { UtilService } from './service/util.service';
 
 @NgModule({
   declarations: [
@@ -42,5 +43,6 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
     TranslateModule,
     StarRatingComponent
   ],
+  providers:[UtilService]
 })
 export class SharedModule {}

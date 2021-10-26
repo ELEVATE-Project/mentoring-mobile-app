@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { UtilService } from 'src/app/shared/service/util.service';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
@@ -16,7 +17,7 @@ export class ProfilePage implements OnInit {
     notification: true,
     headerColor: 'primary',
   };
-  constructor(public navCtrl: NavController) { }
+  constructor(public navCtrl: NavController, private util: UtilService) {}
 
   ngOnInit() {
   }
@@ -29,4 +30,14 @@ export class ProfilePage implements OnInit {
     this.navCtrl.navigateForward([CommonRoutes.feedBack]);
   }
 
+  sharelink() {
+    this.util.shareLink();
+  }
+
+  shareFile(file) {
+    file.click();
+  }
+  Upload(event){
+  this.util.shareFile(event.target.files[0]);
+  }
 }

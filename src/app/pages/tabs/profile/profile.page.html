@@ -3,4 +3,12 @@
 <ion-content>
 <ion-button shape="round" expand="full" (click)="editProfile()">Edit Profile</ion-button>
 <ion-button shape="round" expand="full" (click)="feedback()">Feed Back</ion-button>
+<input
+  id="file-upload"
+  type="file"
+  #file
+  (change)="Upload($event)"
+/>
+<ion-button shape="round" expand="full" (click)="sharelink()">Share link</ion-button>
+<ion-button shape="round" expand="full" (click)="shareFile(file)">Share file</ion-button>
 </ion-content>
