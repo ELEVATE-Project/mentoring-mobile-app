@@ -13,10 +13,11 @@ export class AuthGuard implements CanActivate {
   async canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<any> {
-    this.localStorage.setLocalData(localKeys.access_token, "dsvgseiorgergergergeg");
+    this.localStorage.setLocalData(localKeys.userDetails.access_token, "dsvgseiorgergergergeg");
     // TODO : remove above line
-    var accessToken: any = await this.localStorage.getLocalData(localKeys.access_token).then(d => {
-      if (d == "dsvgseiorgergergergeg") {
+    var accessToken: any = await this.localStorage.getLocalData(localKeys.userDetails.access_token).then(d => {
+      if(d){
+        console.log(d);
         return true;
       } else {
         return false;
@@ -24,14 +25,13 @@ export class AuthGuard implements CanActivate {
     }).catch(error => {
       console.log(error);
     })
-    console.log(accessToken);
     if (accessToken) {
+      console.log(accessToken);
       return true
     } else {
       alert("You are currently not logged in, please provide Login!")
       this.router.navigate(["/auth/login"]);
       return false
-
     }
   }
 }
