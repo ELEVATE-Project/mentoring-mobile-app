@@ -16,6 +16,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CoreModule } from './core/core.module';
 import { Drivers, Storage } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { File } from '@ionic-native/file/ngx';
+
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -42,7 +46,11 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
     }),
   ],
 
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    Deeplinks,
+    SocialSharing,
+    File
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

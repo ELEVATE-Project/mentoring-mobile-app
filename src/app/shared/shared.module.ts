@@ -41,6 +41,6 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
     ProfileImageComponent,
     TranslateModule,
     StarRatingComponent
-  ],
+  ]
 })
 export class SharedModule {}
