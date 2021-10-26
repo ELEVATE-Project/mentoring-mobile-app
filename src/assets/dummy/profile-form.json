@@ -3,7 +3,7 @@
     {
       "name": "firstName",
       "label": "Your name",
-      "value": "",
+      "value": "Pradeep",
       "class": "ion-margin",
       "type": "text",
       "position": "floating",
@@ -15,7 +15,7 @@
     {
       "name": "location",
       "label": "Select your Location",
-      "value": "",
+      "value": "Coimbatore",
       "class": "ion-margin",
       "type": "text",
       "position": "floating",
@@ -27,7 +27,7 @@
       "name": "roles",
       "label": "Your role",
       "class": "ion-margin",
-      "value": "",
+      "value": ["deo"],
       "type": "chip",
       "position": "",
       "disabled": false,
@@ -61,7 +61,7 @@
     {
       "name": "experience",
       "label": "Your Experience in years",
-      "value": "",
+      "value": "3",
       "class": "ion-margin",
       "type": "number",
       "position": "floating",
@@ -72,7 +72,7 @@
     {
       "name": "yourselfs",
       "label": "Tell us About yourself",
-      "value": "",
+      "value": "software developer",
       "class": "ion-margin",
       "type": "textarea",
       "position": "floating",
@@ -84,7 +84,7 @@
       "name": "expertise",
       "label": "Your Expertise",
       "class": "ion-margin",
-      "value": "",
+      "value": ["Educational Leadership"],
       "type": "chip",
       "position": "",
       "disabled": false,

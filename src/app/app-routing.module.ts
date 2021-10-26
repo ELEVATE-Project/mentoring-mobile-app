@@ -15,6 +15,10 @@ const routes: Routes = [
     path: CommonRoutes.callSessions,
     loadChildren: () => import('./pages/sessions/sessions.module').then(m => m.SessionsPageModule)
   },
+  {
+    path: CommonRoutes.feedBack,
+    loadChildren: () => import('./pages/feedback/feedback.module').then( m => m.FeedbackPageModule)
+  }
 ];
 @NgModule({
   imports: [

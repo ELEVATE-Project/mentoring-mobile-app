@@ -12,11 +12,11 @@
   </div>
   <div>
     <ion-chip
-      (click)="onChipClick(chip.value)"
+      (click)="onChipClick(chip)"
       *ngFor="let chip of chips"
-      [color]="selectedChips.has(chip.value) ? 'success' : ''"
+      [color]="selectedChips.has(chip) ? 'success' : ''"
     >
-      <ion-icon name="add" *ngIf="!selectedChips.has(chip.value)"></ion-icon>
+      <ion-icon name="add" *ngIf="!selectedChips.has(chip)"></ion-icon>
       <ion-label>{{ chip.label }}</ion-label>
     </ion-chip>
   </div>

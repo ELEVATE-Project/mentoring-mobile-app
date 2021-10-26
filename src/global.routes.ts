@@ -3,4 +3,5 @@ export class CommonRoutes {
     public static callAuth="auth";
     public static callRegister="register";
     public static callLogin="login";
+    public static feedBack="feedback"
  }
