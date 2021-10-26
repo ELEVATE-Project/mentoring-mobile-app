@@ -63,10 +63,7 @@ public headerConfig: any = {
           }
         });
       }
-      console.log('Successfully routed', match);
     }, (nomatch) => {
-      alert('Unmatched Route '+nomatch)
-      console.warn('Unmatched Route', nomatch);
     });
   }
   eventAction(event){
