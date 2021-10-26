@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { CommonRoutes } from 'src/global.routes';
 
 const routes: Routes = [
   {
-    path: 'login',
+    path: CommonRoutes.callLogin,
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'register',
+    path: CommonRoutes.callRegister,
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   },
   {
-    path: 'reset-password',
+    path: CommonRoutes.callResetPassword,
     loadChildren: () => import('./reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
   },
   {
