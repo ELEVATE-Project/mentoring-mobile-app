@@ -4,25 +4,31 @@
     <ion-searchbar class="top-padding" placeholder=""></ion-searchbar>
     <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
       <ion-segment-button value="all-sessions">
-        <ion-label>{{ "ALL_SESSIONS" | translate }}</ion-label>
+        <ion-label>{{ "UPCOMING" | translate }}</ion-label>
       </ion-segment-button>
       <ion-segment-button value="my-sessions">
-        <ion-label>{{ "MY_SESSIONS" | translate }}</ion-label>
+        <ion-label>{{ "PAST" | translate }}</ion-label>
       </ion-segment-button>
     </ion-segment>
     <div class="sessions-wrap">
-      <div *ngFor="let session of sessions" routerLink="/{{SESSIONS}}/{{SESSIONS_DETAILS}}">
+      <div *ngFor="let session of sessions">
         <div [ngSwitch]="type">
           <ion-list *ngSwitchCase="'all-sessions'">
-            <app-session-card [data]="session" [showEnroll]=true></app-session-card>
+            <app-session-card-template [data]="session" [showEdit]=true></app-session-card-template>
           </ion-list>
           <ion-list *ngSwitchCase="'my-sessions'">
-            <app-session-card-template [data]="session" [showEdit]=true></app-session-card-template>
+            <app-session-card-template [data]="session" [showEdit]=false></app-session-card-template>
           </ion-list>
         </div>
       </div>
     </div>
   </ion-toolbar>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fabs">
+    <ion-fab-button (click)="createSession()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-label>{{"NEW_SESSION"|translate}}</ion-label>
+  </ion-fab>
 </ion-content>
 <ion-footer class="ion-no-border">
   <ion-button class="load-more-button" expand="full">{{"LOAD MORE" | translate}}</ion-button>

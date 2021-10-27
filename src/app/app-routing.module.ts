@@ -22,7 +22,17 @@ const routes: Routes = [
   {
     path: 'session-detail',
     loadChildren: () => import('./pages/session-detail/session-detail.module').then( m => m.SessionDetailPageModule)
+  },
+  {
+    path: CommonRoutes.CREATE_SESSION,
+    loadChildren: () => import('./pages/create-session/create-session.module').then( m => m.CreateSessionPageModule)
+  },
+  {
+    path: CommonRoutes.CREATE_BY_ME,
+    loadChildren: () => import('./pages/created-by-me/created-by-me.module').then( m => m.CreatedByMePageModule)
   }
+
+
 ];
 @NgModule({
   imports: [
