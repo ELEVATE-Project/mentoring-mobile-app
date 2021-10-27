@@ -23,5 +23,9 @@
     "FEEDBACK_HEADER":"Thank you for participating in the session, please rate us on the following to help us improve.",
     "SUBMIT_FEEDBACK":"Submit Feedback",
     "LOGIN_TO_CONNECT,":"Login to Connect,",
-    "SOLVE_&_SHARE":"Solve & Share"
+    "SOLVE_&_SHARE":"Solve & Share",
+    "PUBLISH":"Publish",
+    "UPCOMING":"Upcoming",
+    "PAST":"Past",
+    "NEW_SESSION":"New Session"
 }
