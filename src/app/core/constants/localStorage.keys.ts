@@ -1,3 +1,4 @@
 export const localKeys = {
-    selectedLanguage : 'selectedLanguage'
+    SELECTED_LANGUAGE : 'selectedLanguage',
+    USER_DETAILS: 'userDetails',
 }

@@ -1,5 +1,8 @@
 export class CommonRoutes {
-    public static callSessions="sessions";
-    public static callAuth="auth";
-    public static feedBack="feedback"
+    public static SESSIONS="sessions";
+    public static AUTH="auth";
+    public static REGISTER="register";
+    public static LOGIN="login";
+    public static FEEDBACK="feedback";
+    public static RESET_PASSWORD="reset-password";
  }

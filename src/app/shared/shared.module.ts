@@ -12,6 +12,7 @@ import { InputChipComponent } from './components/input-chip/input-chip.component
 import { CommonRoutes } from 'src/global.routes';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
+import { AuthGuard } from '../auth.guard';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
     SessionSqrCardComponent,
     InputChipComponent,
     ProfileImageComponent,
-    StarRatingComponent
+    StarRatingComponent,
   ],
   imports: [
     CommonModule,
@@ -40,7 +41,8 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
     CommonRoutes,
     ProfileImageComponent,
     TranslateModule,
-    StarRatingComponent
-  ]
+    StarRatingComponent,
+    AuthGuard
+  ],
 })
 export class SharedModule {}
