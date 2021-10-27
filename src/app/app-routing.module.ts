@@ -8,15 +8,15 @@ const routes: Routes = [
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
-    path: CommonRoutes.callAuth,
+    path: CommonRoutes.AUTH,
     loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule)
   },
   {
-    path: CommonRoutes.callSessions,
+    path: CommonRoutes.SESSIONS,
     loadChildren: () => import('./pages/sessions/sessions.module').then(m => m.SessionsPageModule)
   },
   {
-    path: CommonRoutes.feedBack,
+    path: CommonRoutes.FEEDBACK,
     loadChildren: () => import('./pages/feedback/feedback.module').then( m => m.FeedbackPageModule)
   },
   {

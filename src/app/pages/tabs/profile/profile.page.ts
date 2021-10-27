@@ -26,6 +26,6 @@ export class ProfilePage implements OnInit {
   }
 
   feedback(){
-    this.navCtrl.navigateForward([CommonRoutes.feedBack]);
+    this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
   }
 }
