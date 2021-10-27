@@ -12,7 +12,7 @@
           {{data?.subTitle}}
           </ion-card-subtitle>
       </ion-col>
-      <ion-col size=2 class="action-box" >
+      <ion-col size=2 class="action-box" *ngIf="showEdit">
         {{'EDIT' | translate}} <ion-icon name="caret-forward-outline" color="primary" (click)="$event.stopPropagation(); onAction(data,'edit')"></ion-icon>
       </ion-col>
     </ion-row>

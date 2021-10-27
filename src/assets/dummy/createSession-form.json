@@ -1,0 +1,127 @@
+{
+    "controls": [
+      {
+        "name": "title",
+        "label": "Session Title",
+        "value": "",
+        "class": "ion-margin",
+        "type": "text",
+        "position": "floating",
+        "validators": {
+          "required": true,
+          "minLength": 10
+        }
+      },
+      {
+        "name": "description",
+        "label": "Description",
+        "value": "",
+        "class": "ion-margin",
+        "type": "textarea",
+        "position": "floating",
+        "validators": {
+          "required": true
+        }
+      },
+      {
+        "name": "start-date",
+        "label": "Start Date",
+        "class": "ion-margin",
+        "value": "",
+        "displayFormat": "DD/MM/YYYY h:mm a",
+        "type": "date",
+        "position": "floating",
+        "validators": {
+          "required": true
+        }
+      },
+      {
+        "name": "end-date",
+        "label": "End Date",
+        "class": "ion-margin",
+        "value": "",
+        "displayFormat": "DD/MM/YYYY h:mm a",
+        "type": "date",
+        "position": "floating",
+        "validators": {
+          "required": true
+        }
+      },
+      {
+        "name": "recomended",
+        "label": "Recomended For",
+        "class": "ion-margin",
+        "value": "",
+        "type": "chip",
+        "position": "",
+        "disabled": false,
+        "showSelectAll": true,
+        "validators": {
+          "required": true
+        },
+        "optionsUrl":{
+          "url":"roles/search",
+          "method":"POST",
+          "body":{}
+        },
+        "options": [
+          {
+            "value": "deo",
+            "label": "District education officer"
+          },
+          {
+            "value": "beo",
+            "label": "Block education officer"
+          },
+          {
+            "value": "hm",
+            "label": "Head Master"
+          },
+          {
+            "value": "TE",
+            "label": "Teacher"
+          },
+          {
+            "value": "CO",
+            "label": "Cluster Officials"
+          }
+        ]
+      },
+      {
+        "name": "categories",
+        "label": "Categories",
+        "class": "ion-margin",
+        "value": "",
+        "type": "chip",
+        "position": "",
+        "disabled": false,
+        "showSelectAll": true,
+        "validators": {
+          "required": true
+        },
+        "options": [
+          {
+            "value": "Educational Leadership",
+            "label": "Educational Leadership"
+          },
+          {
+            "value": "School Process",
+            "label": "School Process"
+          },
+          {
+            "value": "Communication",
+            "label": "Communication"
+          },
+          {
+            "value": "SQAA",
+            "label": "SQAA"
+          },
+          {
+            "value": "Professional Development",
+            "label": "Professional Development"
+          }
+        ]
+      }
+    ]
+  }
+  

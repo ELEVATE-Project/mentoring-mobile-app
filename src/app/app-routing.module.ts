@@ -18,7 +18,17 @@ const routes: Routes = [
   {
     path: CommonRoutes.feedBack,
     loadChildren: () => import('./pages/feedback/feedback.module').then( m => m.FeedbackPageModule)
+  },
+  {
+    path: CommonRoutes.CreateSession,
+    loadChildren: () => import('./pages/create-session/create-session.module').then( m => m.CreateSessionPageModule)
+  },
+  {
+    path: CommonRoutes.CreateByMe,
+    loadChildren: () => import('./pages/created-by-me/created-by-me.module').then( m => m.CreatedByMePageModule)
   }
+
+
 ];
 @NgModule({
   imports: [

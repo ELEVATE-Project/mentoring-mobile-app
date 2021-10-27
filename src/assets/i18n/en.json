@@ -20,5 +20,9 @@
     "SUBMIT":"Submit",
     "RESET":"Reset",
     "FEEDBACK_HEADER":"Thank you for participating in the session, please rate us on the following to help us improve.",
-    "SUBMIT_FEEDBACK":"Submit Feedback"
+    "SUBMIT_FEEDBACK":"Submit Feedback",
+    "PUBLISH":"Publish",
+    "UPCOMING":"Upcoming",
+    "PAST":"Past",
+    "NEW_SESSION":"New Session"
 }
