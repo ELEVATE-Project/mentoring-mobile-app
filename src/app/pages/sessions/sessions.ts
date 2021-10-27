@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-sessions',
@@ -20,6 +21,8 @@ export class SessionsPage implements OnInit {
     headerColor: 'primary',
     backButton: true
   };
+  SESSIONS_DETAILS:any=CommonRoutes.SESSIONS_DETAILS;
+  SESSIONS:any=CommonRoutes.SESSIONS;
 
   ngOnInit() {
   }

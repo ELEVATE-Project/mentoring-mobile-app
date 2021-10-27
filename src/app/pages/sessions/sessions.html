@@ -11,7 +11,7 @@
       </ion-segment-button>
     </ion-segment>
     <div class="sessions-wrap">
-      <div *ngFor="let session of sessions">
+      <div *ngFor="let session of sessions" routerLink="/{{SESSIONS}}/{{SESSIONS_DETAILS}}">
         <div [ngSwitch]="type">
           <ion-list *ngSwitchCase="'all-sessions'">
             <app-session-card [data]="session" [showEnroll]=true></app-session-card>

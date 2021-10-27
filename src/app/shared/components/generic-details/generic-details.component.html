@@ -1,0 +1,13 @@
+<div class="field-wrapper" *ngFor="let item of sessionData.form">
+  <div class="field">
+    <h6>{{item.title | titlecase}}</h6>
+    <div *ngIf="isArray(sessionData.data[item.key]); else elseBlock">
+      <ion-chip class="ion-margin-top" *ngFor="let chip of sessionData.data[item.key]">
+        <ion-label>{{chip.label}}</ion-label>
+      </ion-chip>
+    </div>
+    <ng-template #elseBlock>
+      <p class="value">{{sessionData.data[item.key]}}</p>
+    </ng-template>
+  </div>
+</div>

@@ -20,6 +20,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/feedback/feedback.module').then( m => m.FeedbackPageModule)
   },
   {
+    path: CommonRoutes.SESSIONS_DETAILS,
+    loadChildren: () => import('./pages/session-detail/session-detail.module').then( m => m.SessionDetailPageModule)
+  },
+  {
     path: CommonRoutes.CREATE_SESSION,
     loadChildren: () => import('./pages/create-session/create-session.module').then( m => m.CreateSessionPageModule)
   },

@@ -13,6 +13,7 @@ import { CommonRoutes } from 'src/global.routes';
 import { ProfileImageComponent } from './components/profile-image/profile-image.component';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { AuthGuard } from '../auth.guard';
+import { GenericDetailsComponent} from './components/generic-details/generic-details.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { AuthGuard } from '../auth.guard';
     InputChipComponent,
     ProfileImageComponent,
     StarRatingComponent,
+    GenericDetailsComponent,
   ],
   imports: [
     CommonModule,
@@ -42,7 +44,8 @@ import { AuthGuard } from '../auth.guard';
     ProfileImageComponent,
     TranslateModule,
     StarRatingComponent,
-    AuthGuard
+    AuthGuard,
+    GenericDetailsComponent,
   ],
 })
 export class SharedModule {}
