@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: CommonRoutes.FEEDBACK,
     loadChildren: () => import('./pages/feedback/feedback.module').then( m => m.FeedbackPageModule)
+  },
+  {
+    path: 'session-detail',
+    loadChildren: () => import('./pages/session-detail/session-detail.module').then( m => m.SessionDetailPageModule)
   }
 ];
 @NgModule({

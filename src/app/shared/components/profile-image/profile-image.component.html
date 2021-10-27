@@ -12,4 +12,7 @@
   <div *ngIf="profileImageData?.region">
     <p class="region">{{ profileImageData?.region }}</p>
   </div>
+  <div class="join-button" *ngIf="profileImageData?.join_button">
+    <ion-button color="dark" shape="round">{{"JOIN" | translate}}</ion-button>
+  </div>
 </div>

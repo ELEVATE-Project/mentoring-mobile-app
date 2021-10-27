@@ -5,4 +5,5 @@ export class CommonRoutes {
     public static LOGIN="login";
     public static FEEDBACK="feedback";
     public static RESET_PASSWORD="reset-password";
+    public static SESSIONS_DETAILS="sessions-details"
  }
