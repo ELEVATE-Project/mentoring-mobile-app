@@ -62,7 +62,7 @@ export class CreatedByMePage implements OnInit {
   }
 
   createSession(){
-    this.navCtrl.navigateForward([CommonRoutes.CreateSession]);
+    this.navCtrl.navigateForward([CommonRoutes.CREATESESSION]);
   }
 
 }

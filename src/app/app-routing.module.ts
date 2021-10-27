@@ -20,11 +20,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/feedback/feedback.module').then( m => m.FeedbackPageModule)
   },
   {
-    path: CommonRoutes.CreateSession,
+    path: CommonRoutes.CREATESESSION,
     loadChildren: () => import('./pages/create-session/create-session.module').then( m => m.CreateSessionPageModule)
   },
   {
-    path: CommonRoutes.CreateByMe,
+    path: CommonRoutes.CREATEBYME,
     loadChildren: () => import('./pages/created-by-me/created-by-me.module').then( m => m.CreatedByMePageModule)
   }
 
