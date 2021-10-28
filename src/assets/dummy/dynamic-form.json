@@ -33,7 +33,7 @@
       "validators": {
         "required": true
       },
-      "showAddOptions": true,
+      "showAddOption": true,
       "options": [
         {
           "value": "deo",

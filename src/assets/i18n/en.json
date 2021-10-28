@@ -28,5 +28,7 @@
     "UPCOMING":"Upcoming",
     "PAST":"Past",
     "NEW_SESSION":"New Session",
-    "ADD":"Add"
+    "ADD":"Add",
+    "CANCEL": "Cancel",
+    "OK": "Ok"
 }

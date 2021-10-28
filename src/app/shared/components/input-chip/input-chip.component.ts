@@ -7,6 +7,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { UUID } from 'angular2-uuid';
 
 @Component({
@@ -25,13 +26,14 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   @Input() label;
   @Input() chips;
   @Input() showSelectAll;
-  @Input() showAddOptions;
+  @Input() showAddOption;
   disabled;
   touched = false;
   selectedChips;
   _selectAll;
 
-  constructor(private alertController: AlertController) { }
+  constructor(private alertController: AlertController, private translateService: TranslateService) {}
+
 
   onChange = (quantity) => { };
 
@@ -93,26 +95,25 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
       this.onChange([...this.selectedChips]);
     }
   }
-  async presentAlertPrompt() {
+  async addNewOption() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: `${this.label}`,
+      header: "Add "+`${this.label}`,
       inputs: [
         {
           name: 'chip',
           type: 'text',
-          placeholder: 'Label'
+          placeholder: 'Enter Expertise'
         }],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.translateService.instant('CANCEL'),
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-            console.log('Confirm Cancel');
           }
         }, {
-          text: 'Ok',
+          text: this.translateService.instant('OK'),
           handler: (alertData) => {
             let obj= {
               label: alertData.chip,
