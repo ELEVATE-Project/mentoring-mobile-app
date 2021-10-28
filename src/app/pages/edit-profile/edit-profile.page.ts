@@ -31,9 +31,6 @@ export class EditProfilePage implements OnInit {
       .subscribe((formData: JsonFormData) => {
         this.formData = formData;
       });
-
-    const res = await this.api.get('https://api.publicapis.org/entries');
-    console.log(res);
   }
 
   onSubmit() {
