@@ -18,5 +18,6 @@
     "MENU":"Menu",
     "DATE":"Date",
     "JOIN":"Join",
-    "NO_ACTIVE_SESSIONS":"There are currently no active session to show. Please check back later."
+    "NO_ACTIVE_SESSIONS":"There are currently no active session to show. Please check back later.",
+    "VIEW_PROFILE":"View Profile"
 }

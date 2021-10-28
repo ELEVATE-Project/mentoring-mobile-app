@@ -15,7 +15,8 @@ export class HomePage implements OnInit {
     subTitle: 'Short description ipsum dolor sit amet, consectetur',
     description:'Short description ipsum dolor sit amet, consectetur',
     date:'20/11/2021',
-    status:'Live'
+    status:'Live',
+    image:'shapes-sharp'
   },
   {
     _id:2,
@@ -23,19 +24,22 @@ export class HomePage implements OnInit {
     subTitle: 'Short description ipsum dolor sit amet, consectetur',
     description:'Short description ipsum dolor sit amet, consectetur',
     date:'20/11/2021',
-    status:'Live'
+    image:'shapes-sharp',
+    status:'Live',
   },{
     _id:3,
     title:'Topic, Mentor name',
     subTitle: 'Short description ipsum dolor sit amet, consectetur',
     description:'Short description ipsum dolor sit amet, consectetur',
-    date:'20/11/2021'
+    date:'20/11/2021',
+    image:'shapes-sharp'
   },{
     _id:4,
     title:'Topic, Mentor name',
     subTitle: 'Short description ipsum dolor sit amet, consectetur',
     description:'Short description ipsum dolor sit amet, consectetur',
-    date:'20/11/2021'
+    date:'20/11/2021',
+    image:'shapes-sharp'
   }
 ]
 

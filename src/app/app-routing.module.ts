@@ -9,6 +9,10 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./pages/auth/auth.module').then( m => m.AuthPageModule)
+  },
+  {
+    path: 'mentor-directory',
+    loadChildren: () => import('./pages/mentor-directory/mentor-directory.module').then( m => m.MentorDirectoryPageModule)
   }
 ];
 @NgModule({

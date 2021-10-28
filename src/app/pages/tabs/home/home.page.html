@@ -13,7 +13,9 @@
   </ion-item>
 </app-page-header>
 <ion-content>
-  
+  <ion-button routerLink="/mentor-directory">
+    Mentor directory
+    </ion-button>
   <div *ngIf="sessions?.length">
     <div class="page-intro">
       <h5>
@@ -24,7 +26,7 @@
       </ion-button>
     </div>
     <div *ngFor="let session of sessions">
-      <app-session-card [data]="session" [showEnroll]=true (onClickEvent)="eventAction($event)"> </app-session-card>
+      <app-session-card [data]="session" [showAction]=true [action]="'ENROLL'" (onClickEvent)="eventAction($event)"> </app-session-card>
     </div>
   </div>
   <div *ngIf="sessions?.length">

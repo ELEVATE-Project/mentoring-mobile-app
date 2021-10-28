@@ -1,0 +1,20 @@
+<app-page-header [config]="headerConfig">
+  <ion-item  class="header-bottom-border" lines="none">
+    <ion-row class="ion-padding">
+      <ion-col size="12" class="ion-no-padding">
+        <ion-searchbar placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"></ion-searchbar>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+</app-page-header>
+
+<ion-content>
+<div *ngFor="let mentor of mentors">
+  <div class="index-label">
+    {{mentor.directoryName}}
+    </div>
+  <div *ngFor="let value of mentor.values">
+  <app-session-card [data]="value"  [showAction]=true [action]="'VIEW_PROFILE'" (onClickEvent)="eventAction($event)"></app-session-card>
+  </div>
+  </div>
+</ion-content>
