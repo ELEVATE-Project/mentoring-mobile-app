@@ -25,16 +25,16 @@ export class Tab2Page implements OnInit {
 
   public formData: JsonFormData;
 
-  constructor(private http: HttpClient, private api: HttpService) {}
-  async ngOnInit() {
+  constructor(private http: HttpClient, private api: HttpService) {
     this.http
       .get('/assets/dummy/dynamic-form.json')
       .subscribe((formData: JsonFormData) => {
         this.formData = formData;
       });
-
-    const res = await this.api.get('https://api.publicapis.org/entries');
-    console.log(res);
+    //const res = this.api.get('https://api.publicapis.org/entries');
+    //console.log(res);
+  }
+  async ngOnInit() {
   }
 
   onSubmit() {

@@ -27,5 +27,6 @@
     "PUBLISH":"Publish",
     "UPCOMING":"Upcoming",
     "PAST":"Past",
-    "NEW_SESSION":"New Session"
+    "NEW_SESSION":"New Session",
+    "ADD":"Add"
 }

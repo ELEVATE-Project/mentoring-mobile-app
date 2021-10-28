@@ -8,7 +8,7 @@ const routes: Routes = [
   {
     path: '',
     component: SessionsPage,
-    canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
   },
   {
     path: CommonRoutes.SESSIONS_DETAILS,

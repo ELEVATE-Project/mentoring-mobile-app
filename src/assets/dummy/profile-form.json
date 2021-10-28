@@ -35,6 +35,7 @@
       "validators": {
         "required": true
       },
+      "showAddOptions": true,
       "options": [
         {
           "value": "deo",
@@ -92,6 +93,7 @@
       "validators": {
         "required": true
       },
+      "showAddOptions": true,
       "options": [
         {
           "value": "Educational Leadership",

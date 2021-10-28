@@ -6,6 +6,8 @@ import {
   NG_VALUE_ACCESSOR,
   ValidationErrors,
 } from '@angular/forms';
+import { AlertController } from '@ionic/angular';
+import { UUID } from 'angular2-uuid';
 
 @Component({
   selector: 'app-input-chip',
@@ -23,18 +25,19 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   @Input() label;
   @Input() chips;
   @Input() showSelectAll;
+  @Input() showAddOptions;
   disabled;
   touched = false;
   selectedChips;
   _selectAll;
 
-  constructor() {}
+  constructor(private alertController: AlertController) { }
 
-  onChange = (quantity) => {};
+  onChange = (quantity) => { };
 
-  onTouched = () => {};
+  onTouched = () => { };
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   writeValue(value: any[]) {
     this.selectedChips = new Set(value);
@@ -89,5 +92,38 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
     } else {
       this.onChange([...this.selectedChips]);
     }
+  }
+  async presentAlertPrompt() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: `${this.label}`,
+      inputs: [
+        {
+          name: 'chip',
+          type: 'text',
+          placeholder: 'Label'
+        }],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Ok',
+          handler: (alertData) => {
+            let obj= {
+              label: alertData.chip,
+              value: UUID.UUID(),
+            }
+            this.chips.push(obj);
+            this.onChipClick(obj);
+          }
+        }
+      ]
+    })
+    await alert.present();
   }
 }
