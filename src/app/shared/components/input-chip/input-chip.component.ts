@@ -80,7 +80,7 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   selectAll() {
     this.markAsTouched();
     if (this._selectAll) {
-      this.chips.map((chip) => this.selectedChips.add(chip.name));
+      this.chips.map((chip) => this.selectedChips.add(chip));
     } else {
       this.selectedChips.clear();
     }

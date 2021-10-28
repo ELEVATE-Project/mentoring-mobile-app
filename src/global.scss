@@ -34,6 +34,7 @@
   --gray:#ccc;
   --light-gray:#f4f2f2;
   --dark-gray:#6a6a6a;
+  --yellow:#ffab00;
 }
 
 //flex
@@ -92,4 +93,7 @@ ion-card-title{
   overflow: hidden;
   text-overflow: ellipsis;
   height: 3em;
+}
+ion-button{
+  text-transform: capitalize;
 }

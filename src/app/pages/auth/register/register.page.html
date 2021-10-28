@@ -1,3 +1,4 @@
+<app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding">
   <h1>Sign Up</h1>
   <h1></h1>
@@ -8,10 +9,10 @@
   </div>
 
   <section>
-    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
+    <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
   </section>
 
   <section class="ion-text-center">
-    <ion-button expand="block">SIGN UP</ion-button>
+    <ion-button routerLink="/{{AUTH}}/{{LOGIN}}" (click)="showToast()" expand="block">SIGN UP</ion-button>
   </section>
 </ion-content>
