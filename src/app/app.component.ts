@@ -28,7 +28,9 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.languageSetting();
+      setTimeout(()=>{
+        this.languageSetting();
+      },1000);
       setTimeout(() => {
         document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
       }, 2000);

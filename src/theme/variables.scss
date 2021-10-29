@@ -234,3 +234,32 @@
     --ion-card-background: #1e1e1e;
   }
 }
+
+// Mentoring app fonts
+@font-face {
+  font-family: 'NotoSans-Bold';
+  font-style: normal;
+  font-weight: bold;
+  src: url('../assets/fonts/noto_Sans/NotoSans-Bold.ttf');
+}
+
+@font-face {
+  font-family: 'NotoSans-Regular';
+  src: url('../assets/fonts/noto_Sans/NotoSans-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NotoSans-Italic';
+  font-style: italic;
+  font-weight: normal;
+  src: url('../assets/fonts/noto_Sans/NotoSans-Italic.ttf');
+}
+
+@font-face {
+  font-family: 'NotoSans-BoldItalic';
+  font-style: italic;
+  font-weight: bold;
+  src: url('../assets/fonts/noto_Sans/NotoSans-BoldItalic.ttf');
+}

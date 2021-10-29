@@ -13,3 +13,10 @@
         color:var(--ion-color-primary);
     }
 }
+
+.ellipsis{
+    min-height: 3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 3em;
+}
