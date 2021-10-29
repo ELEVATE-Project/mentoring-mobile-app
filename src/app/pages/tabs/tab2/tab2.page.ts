@@ -15,7 +15,6 @@ export class Tab2Page implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;
 
   public headerConfig: any = {
-    // menu: true,
     backButton: {
       label: 'Tab1',
     },
@@ -31,8 +30,6 @@ export class Tab2Page implements OnInit {
       .subscribe((formData: JsonFormData) => {
         this.formData = formData;
       });
-    //const res = this.api.get('https://api.publicapis.org/entries');
-    //console.log(res);
   }
   async ngOnInit() {
   }
