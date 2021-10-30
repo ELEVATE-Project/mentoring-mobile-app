@@ -14,6 +14,7 @@ import { ProfileImageComponent } from './components/profile-image/profile-image.
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { AuthGuard } from '../auth.guard';
 import { GenericDetailsComponent} from './components/generic-details/generic-details.component';
+import { SkeletonComponent } from './skeleton/skeleton.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { GenericDetailsComponent} from './components/generic-details/generic-det
     ProfileImageComponent,
     StarRatingComponent,
     GenericDetailsComponent,
+    SkeletonComponent,
   ],
   imports: [
     CommonModule,
@@ -46,6 +48,7 @@ import { GenericDetailsComponent} from './components/generic-details/generic-det
     StarRatingComponent,
     AuthGuard,
     GenericDetailsComponent,
+    SkeletonComponent
   ],
 })
 export class SharedModule {}

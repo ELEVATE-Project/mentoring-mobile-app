@@ -22,20 +22,25 @@
       {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
     </ion-button>
   </div>
-  <div *ngFor="let session of sessions">
-    <app-session-card [data]="session" [showEnroll]=true (onClickEvent)="eventAction($event)"> </app-session-card>
+  <div *ngIf="sessions; else skeleton">
+    <app-session-card *ngFor="let session of sessions" [data]="session" [showEnroll]=true
+      (onClickEvent)="eventAction($event)"> </app-session-card>
   </div>
-  <div>
-    <ion-row>
-      <ion-col size="6" *ngFor="let session of sessions">
-        <app-session-sqr-card [data]="session" (onClickEvent)="eventAction($event)"> </app-session-sqr-card>
-      </ion-col>
-    </ion-row>
+  <div *ngIf="sessions; else skeletonSqrCardTemplate">
+    <app-session-sqr-card *ngFor="let session of sessions" [data]="session" (onClickEvent)="eventAction($event)">
+    </app-session-sqr-card>
   </div>
-  <div *ngFor="let session of sessions">
-    <app-session-card-template [data]="session" (onClickEvent)="eventAction($event)"> </app-session-card-template>
+  <div *ngIf="sessions; else skeletonCardTemplate">
+    <app-session-card-template *ngFor="let session of sessions" [data]="session" [showEnroll]=true
+      (onClickEvent)="eventAction($event)"></app-session-card-template>
   </div>
-  <!-- <div>
-    <app-dynamic-form [jsonFormData]="formData"></app-dynamic-form>
-  </div> -->
+  <ng-template #skeleton>
+    <app-skeleton [type]="SKELETON.SESSION_SKELETON" [repetition]="[1,2,3,4]"></app-skeleton>
+  </ng-template>
+  <ng-template #skeletonCardTemplate>
+    <app-skeleton [type]="SKELETON.SESSION_CARD_SKELETON" [repetition]="[1,2,3,4]"></app-skeleton>
+  </ng-template>
+  <ng-template #skeletonSqrCardTemplate>
+    <app-skeleton [type]="SKELETON.SESSION_SQR_CARD_SKELETON" [repetition]="[1,2,3,4]"></app-skeleton>
+  </ng-template>
 </ion-content>
