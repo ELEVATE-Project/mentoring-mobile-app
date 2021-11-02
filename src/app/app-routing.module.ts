@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
+import { PrivateGuard } from './core/guards/private.guard';
 
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
+    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
+    canActivate:[PrivateGuard]
   },
   {
     path: CommonRoutes.AUTH,
@@ -28,7 +30,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/create-session/create-session.module').then( m => m.CreateSessionPageModule)
   },
   {
-    path: CommonRoutes.CREATE_BY_ME,
+    path: CommonRoutes.CREATED_BY_ME,
     loadChildren: () => import('./pages/created-by-me/created-by-me.module').then( m => m.CreatedByMePageModule)
   }
 

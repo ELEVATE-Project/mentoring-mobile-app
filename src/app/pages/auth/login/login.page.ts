@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AuthService} from 'src/app/core/services';
+import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
@@ -8,6 +9,7 @@ import { CommonRoutes } from 'src/global.routes';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  @ViewChild('form1') form1: DynamicFormComponent;
   formData: JsonFormData = {
     controls: [
       {
@@ -36,6 +38,12 @@ export class LoginPage implements OnInit {
   };
   REGISTER: string = CommonRoutes.REGISTER;
   AUTH: string = CommonRoutes.AUTH;
-  constructor() { }
+  constructor(private authService: AuthService) { }
+  
   ngOnInit() { }
+
+  async onSubmit() {
+    this.form1.onSubmit();
+    this.authService.loginAccount(this.form1.myForm.value);
+  }
 }
