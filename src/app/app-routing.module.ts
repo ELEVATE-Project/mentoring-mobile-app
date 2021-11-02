@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
-import { AuthGuard } from './auth.guard';
+import { PrivateGuard } from './core/guards/private.guard';
 
 const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
-    canActivate:[AuthGuard]
+    canActivate:[PrivateGuard]
   },
   {
     path: CommonRoutes.AUTH,

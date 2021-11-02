@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { ISocialSharing } from '../interface/soical-sharing-interface';
+import { ISocialSharing } from '../../interface/soical-sharing-interface';
 
 @Injectable({
   providedIn: 'root',

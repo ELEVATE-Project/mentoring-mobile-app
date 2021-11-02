@@ -8,4 +8,6 @@ export class CommonRoutes {
     public static SESSIONS_DETAILS="sessions-details"
     public static CREATE_SESSION="create-session";
     public static CREATED_BY_ME="created-by-me";
+    public static TABS="tabs";
+    public static HOME="home";
  }

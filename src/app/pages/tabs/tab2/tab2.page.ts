@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpService } from 'src/app/core/services/http.service';
+import { HttpService } from 'src/app/core/services/http/http.service';
 import {
   DynamicFormComponent,
   JsonFormData,
