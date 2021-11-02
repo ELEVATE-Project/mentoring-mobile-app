@@ -6,7 +6,7 @@
       <ion-col size="8">
         <span class="status-badge" *ngIf="data?.status"> <ion-icon name="ellipse-sharp"></ion-icon> {{data?.status}} </span>
         <h5>{{data?.title}}</h5>
-        <p>{{data?.subTitle}}</p>
+        <p class="ellipsis">{{data?.subTitle}}</p>
       </ion-col>
     </ion-row>
     <div class="session-enroll" *ngIf="showEnroll" (click)="$event.stopPropagation();onAction(data._id,'enroll')">
