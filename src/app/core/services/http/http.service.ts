@@ -30,22 +30,19 @@ export class HttpService {
   }
 
   async post(requestParam: RequestParams) {
-    await this.loaderService.startLoader();
     const headers = await this.setHeaders();
     let body = requestParam.payload ? requestParam.payload : {};
     console.log(headers);
-    let data:any =await this.http.post(this.baseUrl + requestParam.url, body, headers)
-    try {
-      let result: any = JSON.parse(data.data);
-      this.loaderService.stopLoader();
-      if (result.responseCode === "OK") {
-        return result;
-      }
-    }
-    catch (error) {
-      this.loaderService.stopLoader();
-      console.log(error);
-    }
+    return this.http.post(this.baseUrl + requestParam.url, body, headers)
+      .then((data: any) => {
+        let result: any = JSON.parse(data.data);
+        this.loaderService.stopLoader();
+        if (result.responseCode === "OK") {
+          return result;
+        }
+      }, error => {
+        console.log(error);
+      });
   }
 
 }

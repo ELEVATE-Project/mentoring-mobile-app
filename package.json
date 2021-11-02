@@ -31,6 +31,7 @@
     "@ionic/storage-angular": "^3.0.6",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
+    "angular2-uuid": "^1.1.1",
     "cordova-plugin-advanced-http": "^3.2.1",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "^6.0.2",

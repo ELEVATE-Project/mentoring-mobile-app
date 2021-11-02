@@ -9,6 +9,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
+import { LoaderService } from '../loader/loader.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class UserService {
   constructor(
     private localStorage: LocalStorageService,
     private http: HTTP,
-    private router: Router) { 
+    private router: Router,
+    private loaderService: LoaderService) { 
       this.baseUrl = environment.baseUrl;
     }
 
@@ -47,13 +49,9 @@ export class UserService {
       }
       this.userDetail['access_token'] = access_token;
       this.localStorage.setLocalData(localKeys.USER_DETAILS, this.userDetail);
-      let userToken = 'bearer ' + _.get(this.userDetail, 'access_token');
-      return userToken;
     }
-    else {
-      let userToken = 'bearer ' + _.get(this.userDetail, 'access_token');
-      return userToken;
-    }
+    let userToken = 'bearer ' + _.get(this.userDetail, 'access_token');
+    return userToken;
   }
 
   validateToken(token){
@@ -62,26 +60,7 @@ export class UserService {
     const currentTime = moment(Date.now());
     const duration = moment.duration(tokenExpiryTime.diff(currentTime));
     const hourDifference = duration.asHours();
-    if (hourDifference < 2) {
-      return false;
-    }
-    else{
-      return true;
-    }
-  }
-
-  checkTokenValidation() {
-    let token = this.getToken();
-    if (token) {
-      if (!this.validateToken(token)) {
-        this.getAccessToken().then((result) => {
-          return result;
-        });
-      } else {
-        return true;
-      }
-    }
-    return false;
+    return (hourDifference < 2) ? false : true;
   }
 
   async getAccessToken() {
@@ -98,6 +77,7 @@ export class UserService {
   }
 
   async logoutAccount() {
+    await this.loaderService.startLoader();
     let token = await this.getToken();
     const headers = {
       'X-auth-token': token ? token : "",
@@ -106,13 +86,15 @@ export class UserService {
       refreshToken: _.get(this.userDetail, 'refresh_token')
     };
     let url = urlConstants.API_URLS.LOGOUT_ACCOUNT;
-    let data: any = await this.http.post(this.baseUrl + url, body, headers)
+    await this.http.post(this.baseUrl + url, body, headers)
     try {
       this.localStorage.delete(localKeys.USER_DETAILS);
       this.userDetail = [];
+      await this.loaderService.stopLoader();
       this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
     }
     catch (error) {
+      await this.loaderService.stopLoader();
       console.log(error);
     }
   }
