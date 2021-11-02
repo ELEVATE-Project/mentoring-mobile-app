@@ -37,7 +37,7 @@ export class AppComponent {
     });
   }
   languageSetting() {
-    this.localStorage.getLocalData(localKeys.selectedLanguage).then(data =>{
+    this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
       if(data){
         this.translate.use(data);
       }
@@ -47,7 +47,7 @@ export class AppComponent {
   }
 
   setLanguage(lang){
-    this.localStorage.setLocalData(localKeys.selectedLanguage,'lang').then(data =>{
+    this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,'en').then(data =>{
       this.translate.use(lang);
     }).catch(error => {
     })

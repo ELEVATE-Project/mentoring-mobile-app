@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
-
+import { CommonRoutes } from 'src/global.routes';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
+import { NavController } from '@ionic/angular';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -9,6 +11,7 @@ import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-for
 })
 export class HomePage implements OnInit {
   public formData: JsonFormData;
+  SESSIONS: string=CommonRoutes.SESSIONS;
   sessions =[{
     _id:1,
     title:'Topic, Mentor name',
@@ -48,10 +51,25 @@ public headerConfig: any = {
   notification: true,
   headerColor: 'primary',
 };
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private navController: NavController,
+    private deeplinks: Deeplinks) {}
+    
   ngOnInit() {
+    this.deeplinks.routeWithNavController(this.navController, {
+      '/sessions': '',
+    }).subscribe((match) => {
+      if(match.$link.path === '/sessions'){
+        this.navController.navigateForward('/sessions',{
+          queryParams:{
+            type:'all-sessions'
+          }
+        });
+      }
+    }, (nomatch) => {
+    });
   }
-
   eventAction(event){
     console.log(event,"event");
   }

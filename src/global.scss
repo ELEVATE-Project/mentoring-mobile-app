@@ -26,32 +26,74 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 :root {
-  --ion-default-font: "NotoSans";
-  --ion-font-family: "NotoSans";
+  --ion-default-font: "NotoSans-Regular";
+  --ion-font-family: "NotoSans-Regular";
   --ion-color-primary: #832215;
   --white:#fff;
   --black:#000;
   --gray:#ccc;
   --light-gray:#f4f2f2;
   --dark-gray:#6a6a6a;
+  --yellow:#ffab00;
 }
 
-
-h5 , h4, h3 {
-  font-weight: 600;
+//flex
+.d-flex {
+  display: flex;
 }
-h2 , h1{
-  font-weight: 800;
+
+.flex-column {
+  flex-direction: column;
+}
+
+h5 , h4, h3, h2, h1 {
+  font-family: "NotoSans-Bold";
 }
 
 .header-md::after{
   background-image:none ;
 }
+.flex-justify-center {
+  justify-content: center;
 
-.header-bottom-border{
+}
+
+.flex-justify-start {
+  justify-content: start;
+}
+
+.flex-justify-space-between {
+  justify-content: space-between;
+}
+.flex-align-items-center{
+  align-items: center;
+}
+
+//margins
+.mx-30 {
+  margin: 30px 0;
+}
+
+.header-md::after {
+  background-image: none;
+}
+
+.header-bottom-border {
   border-bottom-left-radius: 30px;
-  ion-searchbar{
+  ion-searchbar {
     --border-radius: 10px;
     padding: 5px 0px;
   }
+}
+ion-card-title{
+  font-size: 18px;
+}
+.ellipsis{
+  min-height: 3em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 3em;
+}
+ion-button{
+  text-transform: capitalize;
 }

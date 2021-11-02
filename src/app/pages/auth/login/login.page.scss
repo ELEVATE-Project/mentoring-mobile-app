@@ -3,3 +3,20 @@ hr {
   height: 2px;
   width: 100px;
 }
+
+.or-section {
+  p{
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #c7b9b9;
+    line-height: 0.1em;
+    margin: 10px 0 20px;
+    span {
+      background: #fff;
+      padding: 0 10px;
+    }
+  }
+}
+.text-bold{
+  font-weight: bold;
+}

@@ -13,9 +13,6 @@
   </ion-item>
 </app-page-header>
 <ion-content>
-  <ion-button routerLink="/mentor-directory">
-    Mentor directory
-    </ion-button>
   <div *ngIf="sessions?.length">
     <div class="page-intro">
       <h5>
@@ -44,9 +41,9 @@
       </ion-col>
     </ion-row>
   </div>
-  <div *ngFor="let session of sessions">
+  <!-- <div *ngFor="let session of sessions">
     <app-session-card-template [data]="session" (onClickEvent)="eventAction($event)"> </app-session-card-template>
-  </div>
+  </div> -->
   <!-- <div>
     <app-dynamic-form [jsonFormData]="formData"></app-dynamic-form>
   </div> -->
