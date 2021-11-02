@@ -42,7 +42,7 @@ export class HomePage implements OnInit {
     description:'Short description ipsum dolor sit amet, consectetur',
     date:'20/11/2021'
   }
-]
+];
 
 public headerConfig: any = {
   menu: true,

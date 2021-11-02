@@ -10,10 +10,9 @@ export class SkeletonComponent implements OnInit {
 @Input() type:any;
 @Input() repetition:any;
 SKELETON= SKELETON;
-  constructor() { }
-
+repetitionArray;
+  constructor() {}
   ngOnInit() {
-    console.log(this.type)
-    console.log(this.repetition)
+    this.repetitionArray=new Array(this.repetition);
   }
 }
