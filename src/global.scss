@@ -26,6 +26,8 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 :root {
+  --ion-default-font: "NotoSans-Regular";
+  --ion-font-family: "NotoSans-Regular";
   --ion-color-primary: #832215;
   --white:#fff;
   --black:#000;
@@ -44,8 +46,16 @@
   flex-direction: column;
 }
 
+h5 , h4, h3, h2, h1 {
+  font-family: "NotoSans-Bold";
+}
+
+.header-md::after{
+  background-image:none ;
+}
 .flex-justify-center {
   justify-content: center;
+
 }
 
 .flex-justify-start {
@@ -75,7 +85,15 @@
     padding: 5px 0px;
   }
 }
-
+ion-card-title{
+  font-size: 18px;
+}
+.ellipsis{
+  min-height: 3em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 3em;
+}
 ion-button{
   text-transform: capitalize;
 }

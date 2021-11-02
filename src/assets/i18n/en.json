@@ -5,7 +5,7 @@
     "VIEW_MORE":"View More",
     "MENTORS":"Mentors",
     "PROFILE":"Profile",
-    "DASHBOARD":"Dasboard",
+    "DASHBOARD":"Dashboard",
     "ENROLL":"Enroll",
     "HOME_SEARCH_PLACEHOLDER":"Search for Mentors, Topics",
     "CREATED_SESSIONS":"Created Sessions",
@@ -18,6 +18,7 @@
     "MENU":"Menu",
     "DATE":"Date",
     "JOIN":"Join",
+    "NO_ACTIVE_SESSIONS":"There are currently no active session to show. Please check back later.",
     "SUBMIT":"Submit",
     "RESET":"Reset",
     "FEEDBACK_HEADER":"Thank you for participating in the session, please rate us on the following to help us improve.",
@@ -34,6 +35,8 @@
     "PRIVACY_POLICY":"Privacy Policy & Terms of Seervice",
     "SIGNUP_WITH_EMAIL":"Sign up with Email",
     "FORGOT_PASSWORD":"Forgot Password",
-    "SIGN_UP":"Sign Up"
-
+    "SIGN_UP":"Sign Up",
+    "ADD":"Add",
+    "CANCEL": "Cancel",
+    "OK": "Ok"
 }

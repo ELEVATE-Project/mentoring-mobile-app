@@ -6,6 +6,9 @@ import {
   NG_VALUE_ACCESSOR,
   ValidationErrors,
 } from '@angular/forms';
+import { AlertController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
+import { UUID } from 'angular2-uuid';
 
 @Component({
   selector: 'app-input-chip',
@@ -23,18 +26,20 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   @Input() label;
   @Input() chips;
   @Input() showSelectAll;
+  @Input() showAddOption;
   disabled;
   touched = false;
   selectedChips;
   _selectAll;
 
-  constructor() {}
+  constructor(private alertController: AlertController, private translateService: TranslateService) {}
 
-  onChange = (quantity) => {};
 
-  onTouched = () => {};
+  onChange = (quantity) => { };
 
-  ngOnInit() {}
+  onTouched = () => { };
+
+  ngOnInit() { }
 
   writeValue(value: any[]) {
     this.selectedChips = new Set(value);
@@ -89,5 +94,37 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
     } else {
       this.onChange([...this.selectedChips]);
     }
+  }
+  async addNewOption() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: "Add "+`${this.label}`,
+      inputs: [
+        {
+          name: 'chip',
+          type: 'text',
+          placeholder: 'Enter Expertise'
+        }],
+      buttons: [
+        {
+          text: this.translateService.instant('CANCEL'),
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+          }
+        }, {
+          text: this.translateService.instant('OK'),
+          handler: (alertData) => {
+            let obj= {
+              label: alertData.chip,
+              value: UUID.UUID(),
+            }
+            this.chips.push(obj);
+            this.onChipClick(obj);
+          }
+        }
+      ]
+    })
+    await alert.present();
   }
 }
