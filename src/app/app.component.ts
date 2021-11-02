@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { Platform } from '@ionic/angular';
+import { MenuController, NavController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
 import { LocalStorageService } from './core/services/localstorage.service';
+import * as _ from 'lodash-es';
+import { UserService } from './core/services/user/user.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +22,9 @@ export class AppComponent {
   constructor(
     private translate :TranslateService,
     private platform : Platform,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    public menuCtrl:MenuController,
+    private userService:UserService
   ) {
     this.initializeApp();
   }
@@ -52,4 +56,10 @@ export class AppComponent {
     }).catch(error => {
     })
   }
+
+  logout(){
+    this.menuCtrl.toggle();
+    this.userService.logoutAccount();
+  }
+
 }
