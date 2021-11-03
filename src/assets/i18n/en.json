@@ -43,6 +43,7 @@
     "SHOW_PASSWORD":"Show Password",
     "SEND_OTP":"Send OTP",
     "UPDATE_AND_LOGIN":"Update and Login",
-    "RESET_PASSWORD":"Reset Password"
+    "RESET_PASSWORD":"Reset Password",
+    "RESEND_OTP":"Resend OTP"
 
 }
