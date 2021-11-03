@@ -9,7 +9,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
     canActivate:[PrivateGuard]
   },
- {
+  {
     path: CommonRoutes.AUTH,
     loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule)
   },
