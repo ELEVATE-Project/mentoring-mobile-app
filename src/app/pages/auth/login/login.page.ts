@@ -14,7 +14,7 @@ export class LoginPage implements OnInit {
     controls: [
       {
         name: 'email',
-        label: 'Email:',
+        label: 'Email',
         value: '',
         class: 'ion-margin',
         type: 'text',
@@ -25,7 +25,7 @@ export class LoginPage implements OnInit {
       },
       {
         name: 'password',
-        label: 'Password:',
+        label: 'Password',
         value: '',
         class: 'ion-margin',
         type: 'password',
@@ -38,12 +38,15 @@ export class LoginPage implements OnInit {
   };
   REGISTER: string = CommonRoutes.REGISTER;
   AUTH: string = CommonRoutes.AUTH;
+  RESET_PASSWORD: string = CommonRoutes.RESET_PASSWORD
   constructor(private authService: AuthService) { }
   
   ngOnInit() { }
 
   async onSubmit() {
     this.form1.onSubmit();
+    if(this.form1.myForm.valid){
     this.authService.loginAccount(this.form1.myForm.value);
+    }
   }
 }

@@ -46,7 +46,7 @@ export class RegisterPage implements OnInit {
       },
       {
         name: 're-password',
-        label: 'Re-enter Password',
+        label: 'Password',
         value: '',
         class: 'ion-margin',
         type: 'password',
@@ -57,12 +57,22 @@ export class RegisterPage implements OnInit {
       },
     ],
   };
+  public headerConfig: any = {
+    // menu: true,
+    backButton: {
+      label: '',
+    },
+    notification: false,
+    headerColor: 'white',
+  };
   constructor(private authService: AuthService) {}
   ngOnInit() {}
 
   async onSubmit() {
     this.form1.onSubmit();
+    if(this.form1.myForm.valid){
     this.authService.createAccount(this.form1.myForm.value);
+    }
   }
 
 }

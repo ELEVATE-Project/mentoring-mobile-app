@@ -10,30 +10,33 @@
   <section class="d-flex flex-justify-center ion-text-center">
     <div>
       <h5>{{"ALREADY_HAVE_ACCOUNT"|translate}}</h5>
-      <ion-text color="primary">{{"LOGIN"|translate}}</ion-text>
+      <ion-text color="primary"><strong>{{"LOG_IN"|translate}}</strong></ion-text>
     </div>
   </section>
   <section>
     <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
   </section>
 
-  <section class="ion-text-center" submitButton>
-    <ion-button expand="block" (click)="onSubmit()">LOGIN</ion-button>
-    <p>{{"TERMS_AND_CONDITION"|translate}}</p>
-    <p>{{"PRIVACY_POLICY"|translate}}</p>
+  <section class="ion-text-center btn-section" submitButton>
+    <ion-button expand="block" (click)="onSubmit()">{{"LOGIN"|translate}}</ion-button>
+    <span>
+      <p>{{"TERMS_AND_CONDITION"|translate}}</p>
+      <p>{{"PRIVACY_POLICY"|translate}}</p>
+    </span>
   </section>
   <section class="or-section">
     <p><span>OR</span></p>
   </section>
   <section class="ion-text-center">
-    <div class="mx-30">
-      <ion-text color="medium ion-text-uppercase ion-margin-bottom">
+    <div class="mx-30"  routerLink="/{{AUTH}}/{{RESET_PASSWORD}}">
+      <ion-text class="forgot-section">
         {{"FORGOT_PASSWORD"|translate}}
       </ion-text>
     </div>
-
-    <ion-button expand="block" color="medium ion-text-uppercase ion-margin-top"
-    routerLink="/{{AUTH}}/{{REGISTER}}">{{"SIGNUP_WITH_EMAIL"|translate}}</ion-button
-    >
+    <div class="sign-up-section">
+      <ion-button expand="block" routerLink="/{{AUTH}}/{{REGISTER}}">
+        <ion-icon slot="start" name="mail-outline"></ion-icon> {{"SIGNUP_WITH_EMAIL"|translate}}
+      </ion-button>
+    </div>
   </section>
 </ion-content>

@@ -10,4 +10,5 @@ export class CommonRoutes {
     public static CREATED_BY_ME="created-by-me";
     public static TABS="tabs";
     public static HOME="home";
+    public static OTP="otp";
  }

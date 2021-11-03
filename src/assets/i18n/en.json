@@ -38,5 +38,9 @@
     "SIGN_UP":"Sign Up",
     "ADD":"Add",
     "CANCEL": "Cancel",
-    "OK": "Ok"
+    "OK": "Ok",
+    "LOG_IN":"Log In",
+    "SHOW_PASSWORD":"Show Password",
+    "SEND_OTP":"Send OTP",
+    "UPDATE_AND_LOGIN":"Update and Login"
 }

@@ -6,6 +6,11 @@ ion-item {
   --border-width: 0;
   --border-color: #ffffff00; // transparent
   border-bottom: 1.9px solid var(--color);
+
+  ion-label{
+    font-weight: bold;
+  }
+
 }
 :host {
   .item-interactive.ion-invalid {

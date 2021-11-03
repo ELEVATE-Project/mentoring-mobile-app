@@ -1,0 +1,21 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<ion-content class="ion-padding">
+  <h1>Reset Password</h1>
+  <h1></h1>
+  <div class="d-flex">
+    <div>
+      <hr />
+    </div>
+  </div>
+
+  <section>
+    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
+    <div class="resend-otp">
+      <ion-icon name="refresh-outline" size="large"></ion-icon> Resend OTP
+    </div>
+  </section>
+
+  <section class="ion-text-center btn-section">
+    <ion-button expand="block" routerLink="/{{AUTH}}/{{LOGIN}}">{{'UPDATE_AND_LOGIN'|translate}}</ion-button>
+  </section>
+</ion-content>

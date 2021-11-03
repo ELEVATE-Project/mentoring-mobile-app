@@ -1,22 +1,61 @@
 hr {
   background: var(--ion-color-primary);
-  height: 2px;
-  width: 100px;
+  height: 5px;
+  width: 80px;
+  margin: 15px 0 15px 0;
 }
 
-.or-section {
-  p{
-    width: 100%;
-    text-align: center;
-    border-bottom: 1px solid #c7b9b9;
-    line-height: 0.1em;
-    margin: 10px 0 20px;
-    span {
-      background: #fff;
-      padding: 0 10px;
+.btn-section {
+  margin: 20px 0 10px 0;
+  ion-button {
+    height: 45px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  span {
+    margin: 5px;
+    p {
+      width: 100%;
+      text-align: center;
+      line-height: 5px;
     }
   }
 }
-.text-bold{
+
+.or-section {
+  p {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #000;
+    line-height: 0.1em;
+    margin: 10px 0 20px;
+  }
+
+  p span {
+    background: #fff;
+    padding: 0 10px;
+  }
+}
+
+.text-bold {
   font-weight: bold;
+}
+
+.forgot-section{
+  text-transform: uppercase;
+  color:var(--grey-shade);
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.sign-up-section {
+  ion-button {
+    height: 45px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    --background: var(--quill-grey);
+    --color: var(--black);
+  }
 }

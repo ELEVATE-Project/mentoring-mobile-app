@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
+import * as _ from 'lodash-es';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-reset-password',
@@ -14,7 +16,7 @@ export class ResetPasswordPage implements OnInit {
         label: 'Email',
         value: '',
         class: 'ion-margin',
-        type: 'text',
+        type: 'email',
         position: 'floating',
         validators: {
           required: true,
@@ -22,7 +24,7 @@ export class ResetPasswordPage implements OnInit {
       },
       {
         name: 'password',
-        label: 'Password',
+        label: 'Enter Password',
         value: '',
         class: 'ion-margin',
         type: 'password',
@@ -33,7 +35,7 @@ export class ResetPasswordPage implements OnInit {
       },
       {
         name: 'newPassword',
-        label: 'New Password',
+        label: 'Confirm Password',
         value: '',
         class: 'ion-margin',
         type: 'password',
@@ -45,16 +47,28 @@ export class ResetPasswordPage implements OnInit {
     ],
   };
   showPassword = false;
+  public headerConfig: any = {
+    // menu: true,
+    backButton: {
+      label: '',
+    },
+    notification: false,
+    headerColor: 'white',
+  };
+
+  OTP: string = CommonRoutes.OTP;
+  AUTH: string = CommonRoutes.AUTH;
 
   constructor() {}
 
   ngOnInit() {
   }
   togglePassword() {
-    if (this.showPassword) {
-      this.formData.controls[1].type = 'text';
-    } else {
-      this.formData.controls[1].type = 'password';
-    }
+    let type = this.showPassword ? 'password' : 'text';
+    _.forEach(this.formData.controls, (data) => {
+      if (data.type === type) {
+        data.type = !this.showPassword ? 'password' : 'text';;
+      }
+    });
   }
 }
