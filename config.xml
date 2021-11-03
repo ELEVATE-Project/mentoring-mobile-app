@@ -42,6 +42,7 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <preference name="AndroidXEnabled" value="true" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -101,5 +102,4 @@
     <plugin name="cordova-plugin-advanced-http" spec="^3.2.1">
         <variable name="ANDROIDBLACKLISTSECURESOCKETPROTOCOLS" value="SSLv3,TLSv1" />
     </plugin>
-    <engine name="android" spec="^9.0.0" />
 </widget>
