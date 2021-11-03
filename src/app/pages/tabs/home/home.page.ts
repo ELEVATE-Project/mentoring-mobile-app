@@ -4,6 +4,7 @@ import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-for
 import { CommonRoutes } from 'src/global.routes';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { NavController } from '@ionic/angular';
+import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -12,7 +13,8 @@ import { NavController } from '@ionic/angular';
 export class HomePage implements OnInit {
   public formData: JsonFormData;
   SESSIONS: string=CommonRoutes.SESSIONS;
-  sessions =[{
+  SKELETON=SKELETON;
+  sessions=[{
     _id:1,
     title:'Topic, Mentor name',
     subTitle: 'Short description ipsum dolor sit amet, consectetur',
@@ -44,7 +46,7 @@ export class HomePage implements OnInit {
     date:'20/11/2021',
     image:'shapes-sharp'
   }
-]
+];
 
 public headerConfig: any = {
   menu: true,

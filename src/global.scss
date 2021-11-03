@@ -70,10 +70,19 @@ h5 , h4, h3, h2, h1 {
 }
 
 //margins
-.mx-30 {
+.my-30 {
   margin: 30px 0;
 }
-
+.my-20 {
+  margin: 20 0;
+}
+.my-50 {
+  margin: 50px 0;
+}
+//padding
+.p-20{
+  padding: 20px;
+}
 .header-md::after {
   background-image: none;
 }

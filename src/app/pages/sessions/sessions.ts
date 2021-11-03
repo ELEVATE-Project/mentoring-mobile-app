@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
+import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 
 @Component({
   selector: 'app-sessions',
@@ -9,6 +10,7 @@ import { CommonRoutes } from 'src/global.routes';
 })
 export class SessionsPage implements OnInit {
   type: string;
+  SKELETON = SKELETON;
   constructor(private activatedRoute: ActivatedRoute) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.type = params.get('type');
@@ -21,14 +23,8 @@ export class SessionsPage implements OnInit {
     headerColor: 'primary',
     backButton: true
   };
-  SESSIONS_DETAILS:any=CommonRoutes.SESSIONS_DETAILS;
-  SESSIONS:any=CommonRoutes.SESSIONS;
-
-  ngOnInit() {
-  }
-  public segmentChanged(ev: any) {
-    this.type = ev.target.value;
-  }
+  SESSIONS_DETAILS: any = CommonRoutes.SESSIONS_DETAILS;
+  SESSIONS: any = CommonRoutes.SESSIONS;
   sessions = [{
     _id: 1,
     title: 'Topic, Mentor name',
@@ -57,5 +53,10 @@ export class SessionsPage implements OnInit {
     description: 'Short description ipsum dolor sit amet, consectetur',
     date: '20/11/2021'
   }
-  ]
+  ];
+  ngOnInit() {
+  }
+  public segmentChanged(ev: any) {
+    this.type = ev.target.value;
+  }
 }
