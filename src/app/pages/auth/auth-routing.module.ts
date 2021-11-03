@@ -16,6 +16,10 @@ const routes: Routes = [
     loadChildren: () => import('./reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
   },
   {
+    path: CommonRoutes.OTP,
+    loadChildren: () => import('./otp/otp.module').then( m => m.OtpPageModule)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'

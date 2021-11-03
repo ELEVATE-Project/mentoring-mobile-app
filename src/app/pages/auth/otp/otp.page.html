@@ -1,0 +1,15 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<ion-content class="ion-padding">
+  <app-generic-header [label1]="'RESET_PASSWORD'"></app-generic-header>
+
+  <section class="form-section">
+    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
+    <div class="resend-otp">
+      <ion-icon name="refresh-outline" size="large"></ion-icon>{{"RESEND_OTP"|translate}}
+    </div>
+  </section>
+
+  <section class="ion-text-center btn-section-primary">
+    <ion-button expand="block" (click)="onSubmit()" size="large">{{'UPDATE_AND_LOGIN'|translate}}</ion-button>
+  </section>
+</ion-content>
