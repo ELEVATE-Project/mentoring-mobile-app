@@ -7,6 +7,7 @@ import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 })
 export class SessionCardTemplateComponent implements OnInit {
   @Input() data;
+  @Input() showEnroll;
   @Input() showEdit:boolean;
   @Output() onClickEvent = new EventEmitter();
   constructor() { }
