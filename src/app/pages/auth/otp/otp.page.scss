@@ -1,12 +1,9 @@
-hr {
-    background: var(--ion-color-primary);
-    height: 5px;
-    width: 80px;
-    margin: 15px 0 100px 0;
-  }
+.form-section{
+  margin-top: 20%;
+}
 
-  .resend-otp{
-    margin-top: 40px;
+.resend-otp{
+    margin-top: 10%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,13 +11,7 @@ hr {
     font-size: 18px;
     font-weight: bold;
   }
-  
-  .btn-section {
-    margin-top: 80px;
-    ion-button {
-      height: 45px;
-      font-size: 16px;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-  }
+
+.btn-section-primary{
+  margin-top: 30%;
+}  

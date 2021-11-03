@@ -16,7 +16,8 @@ import {
   SessionCardTemplateComponent,
   SessionSqrCardComponent,
   SkeletonComponent,
-  StarRatingComponent
+  StarRatingComponent,
+  GenericHeaderComponent
 } from './components/index';
 
 @NgModule({
@@ -32,6 +33,7 @@ import {
     GenericDetailsComponent,
     SkeletonComponent,
     NoDataFoundComponent,
+    GenericHeaderComponent
   ],
   imports: [
     CommonModule,
@@ -54,6 +56,7 @@ import {
     GenericDetailsComponent,
     SkeletonComponent,
     NoDataFoundComponent,
+    GenericHeaderComponent
   ],
 })
 export class SharedModule { }

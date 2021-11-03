@@ -16,18 +16,38 @@
       "name": "location",
       "label": "Select your Location",
       "value": "Coimbatore",
-      "class": "ion-margin",
-      "type": "text",
+      "class": [
+        {
+          "label": "Bangalore",
+          "value": "bangalore"
+        }
+      ],
+      "type": "select",
       "position": "floating",
       "validators": {
         "required": true
-      }
+      },
+      "options": [
+        {
+          "label": "Bangalore",
+          "value": "bangalore"
+        },
+        {
+          "label": "Tamil Nadu",
+          "value": "tamilnadu"
+        }
+      ]
     },
     {
       "name": "roles",
       "label": "Your role",
       "class": "ion-margin",
-      "value": ["deo"],
+      "value": [
+        {
+          "value": "deo",
+          "label": "District education officer"
+        }
+      ],
       "type": "chip",
       "position": "",
       "disabled": false,
@@ -85,7 +105,12 @@
       "name": "expertise",
       "label": "Your Expertise",
       "class": "ion-margin",
-      "value": ["Educational Leadership"],
+      "value": [
+        {
+          "value": "Educational Leadership",
+          "label": "Educational Leadership"
+        }
+      ],
       "type": "chip",
       "position": "",
       "disabled": false,

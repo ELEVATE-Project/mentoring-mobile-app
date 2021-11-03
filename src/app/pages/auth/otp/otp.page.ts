@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -32,12 +33,13 @@ export class OtpPage implements OnInit {
     headerColor: 'white',
   };
 
-  LOGIN: string = CommonRoutes.LOGIN;
-  AUTH: string = CommonRoutes.AUTH;
-
-  constructor() { }
+  constructor(private router:Router) { }
 
   ngOnInit() {
+  }
+
+  onSubmit(){
+    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`])
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import * as _ from 'lodash-es';
 import { CommonRoutes } from 'src/global.routes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reset-password',
@@ -55,11 +56,8 @@ export class ResetPasswordPage implements OnInit {
     notification: false,
     headerColor: 'white',
   };
-
-  OTP: string = CommonRoutes.OTP;
-  AUTH: string = CommonRoutes.AUTH;
-
-  constructor() {}
+  
+  constructor(private router:Router) {}
 
   ngOnInit() {
   }
@@ -71,4 +69,9 @@ export class ResetPasswordPage implements OnInit {
       }
     });
   }
+
+  onSubmit(){
+    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`])
+  }
+
 }

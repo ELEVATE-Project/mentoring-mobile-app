@@ -1,24 +1,12 @@
-hr {
-  background: var(--ion-color-primary);
-  height: 5px;
-  width: 80px;
-  margin: 15px 0 15px 0;
-}
-
-.btn-section {
-  margin: 20px 0 10px 0;
-  ion-button {
-    height: 45px;
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-  }
+.btn-section-primary {
+  margin-top: 5%;
   span {
     margin: 5px;
     p {
       width: 100%;
       text-align: center;
       line-height: 5px;
+      font-size: 14px;
     }
   }
 }
@@ -29,7 +17,7 @@ hr {
     text-align: center;
     border-bottom: 1px solid #000;
     line-height: 0.1em;
-    margin: 10px 0 20px;
+    margin: 10px 0 10px;
   }
 
   p span {
@@ -42,20 +30,11 @@ hr {
   font-weight: bold;
 }
 
-.forgot-section{
+.forgot-section {
   text-transform: uppercase;
-  color:var(--grey-shade);
+  color: var(--grey-shade);
   font-weight: bold;
   font-size: 16px;
+  margin-bottom: 10%;
 }
 
-.sign-up-section {
-  ion-button {
-    height: 45px;
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-    --background: var(--quill-grey);
-    --color: var(--black);
-  }
-}
