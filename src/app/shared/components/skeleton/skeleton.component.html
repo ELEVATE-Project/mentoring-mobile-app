@@ -1,0 +1,97 @@
+<div *ngIf="type==SKELETON.SESSION_SKELETON">
+  <ion-card *ngFor="let card of repetitionArray">
+    <ion-row>
+      <ion-col size="4">
+        <ion-skeleton-text class="image" animated></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="8">
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <div class="session-enroll">
+      <ion-skeleton-text style="width: 20%; float: right;" animated></ion-skeleton-text>
+    </div>
+  </ion-card>
+</div>
+<div *ngIf="type==SKELETON.SESSION_CARD_SKELETON">
+  <ion-card *ngFor="let card of repetitionArray" class="p-20">
+    <ion-card-content class="ion-no-padding">
+      <ion-row>
+        <ion-col size=3 class="session-card-margin">
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-col>
+        <ion-col size=6 class="session-card-margin">
+          <ion-card-title>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-card-title>
+          <ion-card-subtitle>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-card-subtitle>
+          <ion-card-subtitle>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-card-subtitle>
+        </ion-col>
+        <ion-col size=3 class="session-card-margin">
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+</div>
+<div *ngIf="type==SKELETON.SESSION_SQR_CARD_SKELETON">
+  <ion-card *ngFor="let card of repetitionArray" class="my-50">
+    <ion-card-content class="ion-no-padding">
+      <ion-row>
+        <ion-col size=1 class="date-box">
+        </ion-col>
+        <ion-col size=10>
+          <ion-card-title class="my-20">
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-card-title>
+          <ion-card-subtitle>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-card-subtitle>
+          <ion-card-subtitle>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-card-subtitle>
+        </ion-col>
+        <ion-col size=1>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+</div>
+
+<div *ngIf="type==SKELETON.HOME_SKELETON">
+  <ion-card *ngFor="let card of repetitionArray">
+    <ion-row>
+      <ion-col size="4">
+        <ion-skeleton-text class="image" animated></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="8">
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <div class="session-enroll">
+      <ion-skeleton-text style="width: 20%; float: right;" animated></ion-skeleton-text>
+    </div>
+  </ion-card>
+  <div>
+    <ion-row>
+      <ion-col size="6" *ngFor="let card of repetitionArray">
+        <ion-card class="my-20 p-20">
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text class="join-button-skeleton" animated></ion-skeleton-text>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </div>
+</div>

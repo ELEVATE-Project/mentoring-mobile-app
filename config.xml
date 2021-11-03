@@ -3,7 +3,7 @@
     <name>mentoring-mobile-app</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://localhost:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -24,6 +24,7 @@
         </edit-config>
         <resource-file src="resources/android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
         <allow-intent href="market:*" />
+        <preference name="AndroidXEnabled" value="true" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
         <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
@@ -102,4 +103,6 @@
     <plugin name="cordova-plugin-advanced-http" spec="^3.2.1">
         <variable name="ANDROIDBLACKLISTSECURESOCKETPROTOCOLS" value="SSLv3,TLSv1" />
     </plugin>
+    <engine name="android" spec="^9.0.0" />
+    <allow-navigation href="http://localhost:8100" sessionid="f91cc887" />
 </widget>

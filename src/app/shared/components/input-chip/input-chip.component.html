@@ -12,12 +12,18 @@
   </div>
   <div>
     <ion-chip
-      (click)="onChipClick(chip.value)"
-      *ngFor="let chip of chips"
-      [color]="selectedChips.has(chip.value) ? 'success' : ''"
+      (click)="onChipClick(chip)"
+      *ngFor="let chip of chips" 
+      [ngClass]="selectedChips.has(chip) ? 'selected-chip' : ''"
     >
-      <ion-icon name="add" *ngIf="!selectedChips.has(chip.value)"></ion-icon>
+      <ion-icon name="add" *ngIf="!selectedChips.has(chip)"></ion-icon>
+      <ion-icon name="close-circle" color="white" *ngIf="selectedChips.has(chip)"></ion-icon>
       <ion-label>{{ chip.label }}</ion-label>
+    </ion-chip>
+    <ion-chip *ngIf="showAddOption" (click)="addNewOption()">
+      <ion-icon name="add" *ngIf="!selectedChips.has(chip)"></ion-icon>
+      <ion-icon name="close-circle" color="white" *ngIf="selectedChips.has(chip)"></ion-icon>
+      <ion-label> {{"ADD" | translate}}</ion-label>
     </ion-chip>
   </div>
 </div>

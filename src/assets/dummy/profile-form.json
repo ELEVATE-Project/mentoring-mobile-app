@@ -3,7 +3,7 @@
     {
       "name": "firstName",
       "label": "Your name",
-      "value": "",
+      "value": "Pradeep",
       "class": "ion-margin",
       "type": "text",
       "position": "floating",
@@ -15,19 +15,39 @@
     {
       "name": "location",
       "label": "Select your Location",
-      "value": "",
-      "class": "ion-margin",
-      "type": "text",
+      "value": "Coimbatore",
+      "class": [
+        {
+          "label": "Bangalore",
+          "value": "bangalore"
+        }
+      ],
+      "type": "select",
       "position": "floating",
       "validators": {
         "required": true
-      }
+      },
+      "options": [
+        {
+          "label": "Bangalore",
+          "value": "bangalore"
+        },
+        {
+          "label": "Tamil Nadu",
+          "value": "tamilnadu"
+        }
+      ]
     },
     {
       "name": "roles",
       "label": "Your role",
       "class": "ion-margin",
-      "value": "",
+      "value": [
+        {
+          "value": "deo",
+          "label": "District education officer"
+        }
+      ],
       "type": "chip",
       "position": "",
       "disabled": false,
@@ -35,6 +55,7 @@
       "validators": {
         "required": true
       },
+      "showAddOption": true,
       "options": [
         {
           "value": "deo",
@@ -61,7 +82,7 @@
     {
       "name": "experience",
       "label": "Your Experience in years",
-      "value": "",
+      "value": "3",
       "class": "ion-margin",
       "type": "number",
       "position": "floating",
@@ -72,7 +93,7 @@
     {
       "name": "yourselfs",
       "label": "Tell us About yourself",
-      "value": "",
+      "value": "software developer",
       "class": "ion-margin",
       "type": "textarea",
       "position": "floating",
@@ -84,7 +105,12 @@
       "name": "expertise",
       "label": "Your Expertise",
       "class": "ion-margin",
-      "value": "",
+      "value": [
+        {
+          "value": "Educational Leadership",
+          "label": "Educational Leadership"
+        }
+      ],
       "type": "chip",
       "position": "",
       "disabled": false,
@@ -92,6 +118,7 @@
       "validators": {
         "required": true
       },
+      "showAddOption": true,
       "options": [
         {
           "value": "Educational Leadership",

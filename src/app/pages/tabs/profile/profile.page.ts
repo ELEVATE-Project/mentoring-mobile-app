@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +16,7 @@ export class ProfilePage implements OnInit {
     notification: true,
     headerColor: 'primary',
   };
-  constructor(public navCtrl: NavController) { }
+  constructor(public navCtrl: NavController) {}
 
   ngOnInit() {
   }
@@ -24,4 +25,7 @@ export class ProfilePage implements OnInit {
     this.navCtrl.navigateForward('tabs/profile/edit-profile');
   }
 
+  feedback(){
+    this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
+  }
 }

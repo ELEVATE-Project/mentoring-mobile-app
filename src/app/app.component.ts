@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { Platform } from '@ionic/angular';
+import { MenuController, NavController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
 import { LocalStorageService } from './core/services/localstorage.service';
+import * as _ from 'lodash-es';
+import { UserService } from './core/services/user/user.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +22,9 @@ export class AppComponent {
   constructor(
     private translate :TranslateService,
     private platform : Platform,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    public menuCtrl:MenuController,
+    private userService:UserService
   ) {
     this.initializeApp();
   }
@@ -28,14 +32,16 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.languageSetting();
+      setTimeout(()=>{
+        this.languageSetting();
+      },1000);
       setTimeout(() => {
         document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
       }, 2000);
     });
   }
   languageSetting() {
-    this.localStorage.getLocalData(localKeys.selectedLanguage).then(data =>{
+    this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
       if(data){
         this.translate.use(data);
       }
@@ -45,9 +51,15 @@ export class AppComponent {
   }
 
   setLanguage(lang){
-    this.localStorage.setLocalData(localKeys.selectedLanguage,'en').then(data =>{
+    this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,'en').then(data =>{
       this.translate.use(lang);
     }).catch(error => {
     })
   }
+
+  logout(){
+    this.menuCtrl.toggle();
+    this.userService.logoutAccount();
+  }
+
 }

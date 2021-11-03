@@ -2,19 +2,7 @@
 <ion-content [fullscreen]="true">
   <div class="main-wrapper">
     <app-profile-image [profileImageData]='profileImageData'></app-profile-image>
-    <div class="field-wrapper" *ngFor="let item of userDetails | keyvalue">
-      <div class="field">
-        <h6>{{item.key | titlecase}}</h6>
-        <div *ngIf="isArray(item.value); else elseBlock">
-          <ion-chip class="ion-margin-top" *ngFor="let chip of item.value">
-            <ion-label>{{chip}}</ion-label>
-          </ion-chip>
-        </div>
-        <ng-template #elseBlock>
-          <p class="value">{{item.value}}</p>
-        </ng-template>
-      </div>
-    </div>
+    <app-generic-details [sessionData]='detailData'></app-generic-details>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">
