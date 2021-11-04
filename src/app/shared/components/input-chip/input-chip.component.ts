@@ -67,7 +67,6 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
     this.disabled = isDisabled;
   }
   onChipClick(chip) {
-    debugger;
     this.markAsTouched();
     if (this.disabled) {
       return;
