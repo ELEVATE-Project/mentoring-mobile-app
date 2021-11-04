@@ -3,14 +3,15 @@ app-input-chip {
 }
 
 ion-item {
+  margin: 0;
   --border-width: 0;
   --border-color: #ffffff00; // transparent
   border-bottom: 1.9px solid var(--color);
 
-  ion-label{
+  ion-label {
     font-weight: bold;
+    color: var(--grey-medium);
   }
-
 }
 :host {
   .item-interactive.ion-invalid {
@@ -23,4 +24,14 @@ ion-item {
 
 .form-invalid {
   border-bottom: 1.9px solid var(--highlight-color-invalid);
+}
+
+.passwordIcon {
+  position: relative;
+  top: 42%;
+}
+
+.error-msg {
+  font-size: 10px;
+  color: var(--ion-color-danger);
 }

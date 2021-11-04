@@ -5,11 +5,16 @@
   <section class="form-section">
     <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
     <div class="resend-otp">
-      <ion-icon name="refresh-outline" size="large"></ion-icon>{{"RESEND_OTP"|translate}}
+      <ion-icon name="refresh-outline" size="large"></ion-icon
+      >{{"RESEND_OTP"|translate}}
     </div>
   </section>
 
-  <section class="ion-text-center btn-section-primary">
-    <ion-button expand="block" (click)="onSubmit()" size="large">{{'UPDATE_AND_LOGIN'|translate}}</ion-button>
+  <section
+    [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}"
+  >
+    <ion-button class="my-50 mx-0" expand="block" (click)="onSubmit()" size="large"
+      >{{'UPDATE_AND_LOGIN'|translate}}</ion-button
+    >
   </section>
 </ion-content>
