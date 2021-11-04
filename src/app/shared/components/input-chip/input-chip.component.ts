@@ -9,6 +9,7 @@ import {
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { UUID } from 'angular2-uuid';
+import * as _ from "lodash-es"
 
 @Component({
   selector: 'app-input-chip',
@@ -32,17 +33,22 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   selectedChips;
   _selectAll;
 
-  constructor(private alertController: AlertController, private translateService: TranslateService) {}
+  constructor(
+    private alertController: AlertController,
+    private translateService: TranslateService
+  ) {}
 
+  onChange = (quantity) => {};
 
-  onChange = (quantity) => { };
+  onTouched = () => {};
 
-  onTouched = () => { };
-
-  ngOnInit() { }
+  ngOnInit() {}
 
   writeValue(value: any[]) {
-    this.selectedChips = new Set(value);
+    this.selectedChips = new Set();
+    this.chips.map((chip) =>
+      _.some(value,chip) ? this.selectedChips.add(chip) : null
+    );
   }
   registerOnChange(onChange: any) {
     this.onChange = onChange;
@@ -61,6 +67,7 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
     this.disabled = isDisabled;
   }
   onChipClick(chip) {
+    debugger;
     this.markAsTouched();
     if (this.disabled) {
       return;
@@ -98,33 +105,34 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   async addNewOption() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: "Add "+`${this.label}`,
+      header: 'Add ' + `${this.label}`,
       inputs: [
         {
           name: 'chip',
           type: 'text',
-          placeholder: 'Enter Expertise'
-        }],
+          placeholder: 'Enter Expertise',
+        },
+      ],
       buttons: [
         {
           text: this.translateService.instant('CANCEL'),
           role: 'cancel',
           cssClass: 'secondary',
-          handler: () => {
-          }
-        }, {
+          handler: () => {},
+        },
+        {
           text: this.translateService.instant('OK'),
           handler: (alertData) => {
-            let obj= {
+            let obj = {
               label: alertData.chip,
               value: UUID.UUID(),
-            }
+            };
             this.chips.push(obj);
             this.onChipClick(obj);
-          }
-        }
-      ]
-    })
+          },
+        },
+      ],
+    });
     await alert.present();
   }
 }
