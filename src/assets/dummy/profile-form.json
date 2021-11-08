@@ -1,7 +1,7 @@
 {
   "controls": [
     {
-      "name": "firstName",
+      "name": "name",
       "label": "Your name",
       "value": "Pradeep",
       "class": "ion-margin",
@@ -15,13 +15,8 @@
     {
       "name": "location",
       "label": "Select your Location",
-      "value": "Coimbatore",
-      "class": [
-        {
-          "label": "Bangalore",
-          "value": "bangalore"
-        }
-      ],
+      "class": "ion-margin",
+      "value": "",
       "type": "select",
       "position": "floating",
       "validators": {
@@ -30,24 +25,15 @@
       "options": [
         {
           "label": "Bangalore",
-          "value": "bangalore"
-        },
-        {
-          "label": "Tamil Nadu",
-          "value": "tamilnadu"
+          "value": "1"
         }
       ]
     },
     {
-      "name": "roles",
+      "name": "designation",
       "label": "Your role",
       "class": "ion-margin",
-      "value": [
-        {
-          "value": "deo",
-          "label": "District education officer"
-        }
-      ],
+      "value": "",
       "type": "chip",
       "position": "",
       "disabled": false,
@@ -58,24 +44,12 @@
       "showAddOption": true,
       "options": [
         {
-          "value": "deo",
-          "label": "District education officer"
-        },
-        {
-          "value": "beo",
-          "label": "Block education officer"
-        },
-        {
-          "value": "hm",
-          "label": "Head Master"
-        },
-        {
-          "value": "TE",
+          "value": "1",
           "label": "Teacher"
         },
         {
-          "value": "CO",
-          "label": "Cluster Officials"
+          "value": "2",
+          "label": "District Official"
         }
       ]
     },
@@ -91,7 +65,7 @@
       }
     },
     {
-      "name": "yourselfs",
+      "name": "about",
       "label": "Tell us About yourself",
       "value": "software developer",
       "class": "ion-margin",
@@ -102,15 +76,10 @@
       }
     },
     {
-      "name": "expertise",
+      "name": "areasOfExpertise",
       "label": "Your Expertise",
       "class": "ion-margin",
-      "value": [
-        {
-          "value": "Educational Leadership",
-          "label": "Educational Leadership"
-        }
-      ],
+      "value": "",
       "type": "chip",
       "position": "",
       "disabled": false,
@@ -121,24 +90,12 @@
       "showAddOption": true,
       "options": [
         {
-          "value": "Educational Leadership",
+          "value": "1",
           "label": "Educational Leadership"
         },
         {
-          "value": "School Process",
-          "label": "School Process"
-        },
-        {
-          "value": "Communication",
-          "label": "Communication"
-        },
-        {
-          "value": "SQAA",
+          "value": "2",
           "label": "SQAA"
-        },
-        {
-          "value": "Professional Development",
-          "label": "Professional Development"
         }
       ]
     }

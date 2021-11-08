@@ -10,7 +10,7 @@
     submitButton
     [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}"
   >
-    <ion-button class="mx-0" (click)="onSubmit()" expand="block" size="large"
+    <ion-button class="mx-0" (click)="onSubmit()" expand="block" size="large" [disabled]="!form1.myForm.valid"
       >{{"SIGN_UP"|translate}}</ion-button
     >
   </section>
