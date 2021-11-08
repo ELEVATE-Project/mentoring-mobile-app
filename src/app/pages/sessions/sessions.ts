@@ -21,7 +21,8 @@ export class SessionsPage implements OnInit {
     menu: false,
     notification: false,
     headerColor: 'primary',
-    backButton: true
+    backButton: true,
+    label:'SESSIONS_PAGE'
   };
   SESSIONS_DETAILS: any = CommonRoutes.SESSIONS_DETAILS;
   SESSIONS: any = CommonRoutes.SESSIONS;

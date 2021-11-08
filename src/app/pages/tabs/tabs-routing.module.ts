@@ -30,14 +30,14 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo:`${CommonRoutes.TABS}`+'/'+`${CommonRoutes.HOME}`,
+        redirectTo:`${CommonRoutes.TABS}/${CommonRoutes.HOME}`,
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: `${CommonRoutes.TABS}`+'/'+`${CommonRoutes.HOME}`,
+    redirectTo: `${CommonRoutes.TABS}/${CommonRoutes.HOME}`,
     pathMatch: 'full'
   }
 

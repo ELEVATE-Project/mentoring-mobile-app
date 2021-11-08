@@ -5,6 +5,8 @@ import { localKeys } from './core/constants/localStorage.keys';
 import { LocalStorageService } from './core/services/localstorage.service';
 import * as _ from 'lodash-es';
 import { UserService } from './core/services/user/user.service';
+import { CommonRoutes } from 'src/global.routes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +16,7 @@ import { UserService } from './core/services/user/user.service';
 export class AppComponent {
  
   public appPages = [
-    { title: 'CREATED_SESSIONS', url: '', icon: 'person-add' },
+    { title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' },
     { title: 'LANGUAGE', url: '', icon: 'language' },
     { title: 'SETTINGS', url: '', icon: 'settings' },
     { title: 'HELP', url: '', icon: 'help-circle' }
@@ -24,12 +26,15 @@ export class AppComponent {
     private platform : Platform,
     private localStorage: LocalStorageService,
     public menuCtrl:MenuController,
-    private userService:UserService
+    private userService:UserService,
+    private router: Router
   ) {
     this.initializeApp();
   }
 
-
+  navigate(url) {
+    this.router.navigate([url]);
+  }
   initializeApp() {
     this.platform.ready().then(() => {
       setTimeout(()=>{

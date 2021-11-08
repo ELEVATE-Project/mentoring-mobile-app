@@ -45,6 +45,9 @@
     "SEND_OTP":"Send OTP",
     "UPDATE_AND_LOGIN":"Update and Login",
     "RESET_PASSWORD":"Reset Password",
-    "RESEND_OTP":"Resend OTP"
+    "RESEND_OTP":"Resend OTP",
+    "SESSIONS_PAGE":"Sessions Page",
+    "SESSIONS_DETAILS":"Session Details",
+    "MENTORS_DIRECTORY":"Mentors Directory"
 
 }
