@@ -1,17 +1,26 @@
 <ion-content class="ion-padding">
-  <app-generic-header [label1]="'LOGIN_TO_CONNECT,'" [label2]="'SOLVE_&_SHARE'"></app-generic-header>
+  <app-generic-header
+    [label1]="'LOGIN_TO_CONNECT,'"
+    [label2]="'SOLVE_&_SHARE'"
+  ></app-generic-header>
   <section class="d-flex flex-justify-center ion-text-center">
-    <div>
-      <h5>{{"ALREADY_HAVE_ACCOUNT"|translate}}</h5>
-      <ion-text color="primary"><strong>{{"LOG_IN"|translate}}</strong></ion-text>
+    <div class="d-flex flex-column sub-heading">
+      <ion-text>{{"ALREADY_HAVE_ACCOUNT"|translate}}</ion-text>
+      <ion-text color="primary"
+        ><strong>{{"LOG_IN"|translate}}</strong></ion-text
+      >
     </div>
   </section>
   <section>
     <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
   </section>
 
-  <section class="btn-section-primary" submitButton>
-    <ion-button expand="block" (click)="onSubmit()" size="large">{{"LOGIN"|translate}}</ion-button>
+  <section
+    [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}"
+  >
+    <ion-button class="mx-0" expand="block" (click)="onSubmit()" size="large"
+      >{{"LOGIN"|translate}}</ion-button
+    >
     <span>
       <p>{{"TERMS_AND_CONDITION"|translate}}</p>
       <p>{{"PRIVACY_POLICY"|translate}}</p>
@@ -26,9 +35,15 @@
         {{"FORGOT_PASSWORD"|translate}}
       </ion-text>
     </div>
-    <div class="btn-section">
-      <ion-button expand="block" (click)="goToSignup()" size="large">
-        <ion-icon slot="start" name="mail-outline"></ion-icon> {{"SIGNUP_WITH_EMAIL"|translate}}
+    <div class="btn-disabled">
+      <ion-button
+        class="mx-0"
+        expand="block"
+        (click)="goToSignup()"
+        size="large"
+      >
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        {{"SIGNUP_WITH_EMAIL"|translate}}
       </ion-button>
     </div>
   </section>

@@ -86,12 +86,17 @@ export class UserService {
       refreshToken: _.get(this.userDetail, 'refresh_token')
     };
     let url = urlConstants.API_URLS.LOGOUT_ACCOUNT;
-    await this.http.post(this.baseUrl + url, body, headers)
     try {
-      this.localStorage.delete(localKeys.USER_DETAILS);
-      this.userDetail = [];
-      await this.loaderService.stopLoader();
-      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
+      let data = await this.http.post(this.baseUrl + url, body, headers)
+      let result: any = JSON.parse(data.data);
+      if (result.responseCode === "OK") {
+        this.localStorage.delete(localKeys.USER_DETAILS);
+        this.userDetail = [];
+        await this.loaderService.stopLoader();
+        this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
+          replaceUrl: true
+        });
+      }
     }
     catch (error) {
       await this.loaderService.stopLoader();

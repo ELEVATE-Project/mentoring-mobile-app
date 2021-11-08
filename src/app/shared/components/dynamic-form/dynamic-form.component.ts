@@ -114,8 +114,19 @@ export class DynamicFormComponent implements OnInit {
   onSubmit() {
     console.log('Form valid: ', this.myForm.valid);
     console.log('Form values: ', this.myForm.value);
+    this.isFormValid();
   }
   reset() {
     this.myForm.reset();
+  }
+
+  isFormValid() {
+    return this.myForm.statusChanges;
+  }
+
+  hideShowPassword(control) {
+    //  this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
+    control.type = control.type === 'text' ? 'password' : 'text';
+    control.showPasswordIcon = true;
   }
 }
