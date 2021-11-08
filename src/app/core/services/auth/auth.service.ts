@@ -54,37 +54,4 @@ export class AuthService {
       this.loaderService.stopLoader();
     }
   }
-
-  async profileUpdate(formData) {
-    await this.loaderService.startLoader();
-    const config = {
-      url: urlConstants.API_URLS.PROFILE_UPDATE,
-      payload: formData
-    };
-    try {
-      let data: any = await this.httpService.post(config);
-      let result = data.result;
-      this.loaderService.stopLoader();
-    }
-    catch (error) {
-      this.loaderService.stopLoader();
-    }
-  }
-
-  async profileDetails(formData) {
-    await this.loaderService.startLoader();
-    const config = {
-      url: urlConstants.API_URLS.PROFILR_DETAILS,
-      payload: formData
-    };
-    try {
-      let data: any = await this.httpService.get(config);
-      let result = data.result;
-      this.loaderService.stopLoader();
-    }
-    catch (error) {
-      this.loaderService.stopLoader();
-    }
-  }
-
 }

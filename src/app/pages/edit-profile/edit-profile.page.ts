@@ -5,6 +5,7 @@ import {
   DynamicFormComponent,
   JsonFormData,
 } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
+import { ProfileService } from 'src/app/shared/services/profile.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -24,7 +25,7 @@ export class EditProfilePage implements OnInit {
   };
 
   public formData: JsonFormData;
-  constructor(private http: HttpClient, private api: HttpService) {}
+  constructor(private http: HttpClient, private api: HttpService, private profileService: ProfileService) { }
   async ngOnInit() {
     this.http
       .get('/assets/dummy/profile-form.json')
@@ -36,6 +37,9 @@ export class EditProfilePage implements OnInit {
 
   onSubmit() {
     this.form1.onSubmit();
+    if(this.form1.myForm.valid){
+      this.profileService.profileUpdate(this.form1.myForm.value);
+    }
   }
 
   resetForm() {

@@ -33,6 +33,7 @@ export class HttpService {
     const headers = await this.setHeaders();
     let body = requestParam.payload ? requestParam.payload : {};
     console.log(headers);
+    this.http.setDataSerializer('json');
     return this.http.post(this.baseUrl + requestParam.url, body, headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
@@ -47,6 +48,7 @@ export class HttpService {
   async get(requestParam: RequestParams) {
     const headers = await this.setHeaders();
     console.log(headers);
+    this.http.setDataSerializer('json');
     return this.http.get(this.baseUrl + requestParam.url, '', headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);

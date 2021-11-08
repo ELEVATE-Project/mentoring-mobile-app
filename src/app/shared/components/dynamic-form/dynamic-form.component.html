@@ -96,6 +96,21 @@
         myForm.get(control.name).touched && myForm.get(control.name).invalid
       "
     >
+      <ion-select-option
+        *ngFor="let option of control.options"
+        [value]="[option]"
+        >{{ option.label }}</ion-select-option
+      >
+    </ion-select>
+    <app-input-chip
+      *ngIf="control.type === 'chip'"
+      [formControlName]="control.name"
+      [label]="control.label"
+      [chips]="control.options"
+      [showSelectAll]="control.showSelectAll"
+      [showAddOption]="control.showAddOption"
+    ></app-input-chip>
+  </ion-item>
       <ion-icon name="alert-circle-outline"></ion-icon>
       <span class="mx-10">Invalid</span>
     </small>
