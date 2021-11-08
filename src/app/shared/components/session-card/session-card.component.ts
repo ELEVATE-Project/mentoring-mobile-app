@@ -7,7 +7,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class SessionCardComponent implements OnInit {
   @Input() data: Array<Object>;
-  @Input() showEnroll: boolean = false;
+  @Input() action;
   @Output() onClickEvent = new EventEmitter();
   constructor() { }
   ngOnInit() { }

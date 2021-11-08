@@ -11,10 +11,9 @@ export class SessionDetailPage implements OnInit {
   ngOnInit() {
   }
   public headerConfig: any = {
-    menu: false,
-    notification: false,
     headerColor: 'primary',
-    backButton: true
+    backButton: true,
+    label:"SESSIONS_DETAILS"
   };
   profileImageData: Object = {
     name: "Session Name",

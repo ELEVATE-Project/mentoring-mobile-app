@@ -18,12 +18,12 @@
       <h5>
         {{"ALL_SESSIONS" | translate}}
       </h5>
-      <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize">
+      <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize" (click)="viewMore()">
         {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
       </ion-button>
     </div>
     <div *ngFor="let session of sessions">
-      <app-session-card [data]="session" [showAction]=true [action]="'ENROLL'" (onClickEvent)="eventAction($event)"> </app-session-card>
+      <app-session-card [data]="session" [action]="'ENROLL'" (onClickEvent)="eventAction($event)"> </app-session-card>
     </div>
     <div>
       <div class="page-intro">

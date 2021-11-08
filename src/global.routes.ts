@@ -13,4 +13,5 @@ export class CommonRoutes {
     public static HOME="home";
     public static PROFILE = "profile"
     public static OTP="otp";
- }
+    public static EDIT_PROFILE = 'edit-profile';
+}

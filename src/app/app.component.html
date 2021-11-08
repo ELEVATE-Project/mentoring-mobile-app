@@ -18,7 +18,7 @@
         <div class="menu-css">
           <ion-list lines="none" class="sub-menu-list">
             <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-              <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+              <ion-item [routerLink]="p.url" lines="none" detail="false"
                 routerLinkActive="selected">
                 <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
                 <ion-label><strong>{{ p.title  | translate}}</strong></ion-label>

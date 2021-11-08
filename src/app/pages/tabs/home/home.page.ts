@@ -5,6 +5,8 @@ import { CommonRoutes } from 'src/global.routes';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { NavController } from '@ionic/angular';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -55,6 +57,7 @@ public headerConfig: any = {
 };
   constructor(
     private http: HttpClient,
+    private router : Router,
     private navController: NavController,
     private deeplinks: Deeplinks) {}
     
@@ -63,7 +66,7 @@ public headerConfig: any = {
       '/sessions': '',
     }).subscribe((match) => {
       if(match.$link.path === '/sessions'){
-        this.navController.navigateForward('/sessions',{
+        this.navController.navigateForward('/sessions', {
           queryParams:{
             type:'all-sessions'
           }
@@ -73,6 +76,12 @@ public headerConfig: any = {
     });
   }
   eventAction(event){
-    console.log(event,"event");
+    switch (event.type) {
+      case 'cardSelect':
+        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}`]);
+    }
+  }
+  viewMore(){
+    this.router.navigate([`/${CommonRoutes.SESSIONS}`]);
   }
 }
