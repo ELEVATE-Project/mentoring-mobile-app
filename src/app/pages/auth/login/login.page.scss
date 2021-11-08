@@ -1,22 +1,45 @@
-hr {
-  background: var(--ion-color-primary);
-  height: 2px;
-  width: 100px;
-}
-
-.or-section {
-  p{
-    width: 100%;
-    text-align: center;
-    border-bottom: 1px solid #c7b9b9;
-    line-height: 0.1em;
-    margin: 10px 0 20px;
-    span {
-      background: #fff;
-      padding: 0 10px;
+.btn-valid,.btn-disabled {
+  margin-top: 5%;
+  span {
+    margin: 5px;
+    p {
+      width: 100%;
+      text-align: center;
+      line-height: 5px;
+      font-size: 14px;
     }
   }
 }
-.text-bold{
+
+.or-section {
+  p {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #000;
+    line-height: 0.1em;
+    margin: 10px 0 10px;
+  }
+
+  p span {
+    background: #fff;
+    padding: 0 10px;
+  }
+}
+
+.text-bold {
   font-weight: bold;
 }
+
+.forgot-section {
+  text-transform: uppercase;
+  color: var(--grey-shade);
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10%;
+}
+
+.sub-heading{
+  font-size: 14px;
+  color: var(--grey-medium);
+}
+

@@ -26,14 +26,13 @@ export class AuthService {
       url: urlConstants.API_URLS.CREATE_ACCOUNT,
       payload: formData
     };
-    await this.httpService.post(config)
     try {
+      await this.httpService.post(config);
       this.loaderService.stopLoader();
-      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
+      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`],{replaceUrl:true});
     }
     catch (error) {
       this.loaderService.stopLoader();
-      console.log(error);
     }
   }
 
@@ -43,16 +42,48 @@ export class AuthService {
       url: urlConstants.API_URLS.ACCOUNT_LOGIN,
       payload: formData
     };
-    let data: any = await this.httpService.post(config);
     try {
+      let data: any = await this.httpService.post(config);
+      console.log(data)
       let result = data.result;
       this.localStorage.setLocalData(localKeys.USER_DETAILS, result);
       this.loaderService.stopLoader();
-      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]);
+      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`],{replaceUrl:true});
     }
     catch (error) {
       this.loaderService.stopLoader();
-      console.log(error);
+    }
+  }
+
+  async profileUpdate(formData) {
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.PROFILE_UPDATE,
+      payload: formData
+    };
+    try {
+      let data: any = await this.httpService.post(config);
+      let result = data.result;
+      this.loaderService.stopLoader();
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+
+  async profileDetails(formData) {
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.PROFILR_DETAILS,
+      payload: formData
+    };
+    try {
+      let data: any = await this.httpService.get(config);
+      let result = data.result;
+      this.loaderService.stopLoader();
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
     }
   }
 

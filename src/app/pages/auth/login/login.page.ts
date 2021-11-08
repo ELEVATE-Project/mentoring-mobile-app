@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService} from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
@@ -14,7 +15,7 @@ export class LoginPage implements OnInit {
     controls: [
       {
         name: 'email',
-        label: 'Email:',
+        label: 'Email',
         value: '',
         class: 'ion-margin',
         type: 'text',
@@ -25,7 +26,7 @@ export class LoginPage implements OnInit {
       },
       {
         name: 'password',
-        label: 'Password:',
+        label: 'Password',
         value: '',
         class: 'ion-margin',
         type: 'password',
@@ -36,14 +37,23 @@ export class LoginPage implements OnInit {
       },
     ],
   };
-  REGISTER: string = CommonRoutes.REGISTER;
-  AUTH: string = CommonRoutes.AUTH;
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,private router:Router) { }
   
   ngOnInit() { }
 
   async onSubmit() {
     this.form1.onSubmit();
+    if(this.form1.myForm.valid){
     this.authService.loginAccount(this.form1.myForm.value);
+    }
   }
+
+  goToForgotPassword(){
+    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.RESET_PASSWORD}`]);
+  }
+
+  goToSignup(){
+    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.REGISTER}`]);
+  }
+
 }
