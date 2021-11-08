@@ -37,6 +37,8 @@
   --yellow:#ffab00;
   --quill-grey:#cac7c1;
   --grey-shade:#686762;
+  --grey-medium:#4a4f57;
+
 }
 
 //flex
@@ -81,6 +83,15 @@ h5 , h4, h3, h2, h1 {
 .my-50 {
   margin: 50px 0;
 }
+
+.mx-10 {
+  margin:0 10px;
+}
+
+.mx-0 {
+  margin-left: 0;
+  margin-right: 0;
+}
 //padding
 .p-20{
   padding: 20px;
@@ -109,22 +120,21 @@ ion-button{
   text-transform: capitalize;
 }
 
-.btn-section-primary {
+.btn-valid {
   ion-button {
     font-size: 16px;
     font-weight: bold;
     text-transform: uppercase;
-    margin: 0 15px;
+    // margin: 0 15px;
   }
 }
 
-.btn-section {
+.btn-disabled {
   ion-button {
     font-size: 16px;
     font-weight: bold;
     text-transform: uppercase;
     --background: var(--quill-grey);
     --color: var(--black);
-    margin: 0 15px;
-  }
+   }
 }

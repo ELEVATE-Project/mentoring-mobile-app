@@ -1,12 +1,17 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding">
   <app-generic-header [label1]="'SIGN_UP'"></app-generic-header>
-  
+
   <section>
     <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
   </section>
 
-  <section class="btn-section" submitButton>
-    <ion-button (click)="onSubmit()" expand="block" size="large">{{"SIGN_UP"|translate}}</ion-button>
+  <section
+    submitButton
+    [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}"
+  >
+    <ion-button class="mx-0" (click)="onSubmit()" expand="block" size="large"
+      >{{"SIGN_UP"|translate}}</ion-button
+    >
   </section>
 </ion-content>

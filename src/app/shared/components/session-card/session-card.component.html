@@ -1,15 +1,15 @@
 <ion-card (click)="onAction(data._id,'cardSelect')" class="session-card">
   <ion-row>
-    <ion-col size="4" class="card-avatar">
-      <ion-icon name="shapes-sharp"></ion-icon>
+    <ion-col size="3" class="card-avatar">
+      <ion-icon name={{data?.image}}></ion-icon>
       </ion-col>
-      <ion-col size="8">
+      <ion-col size="9">
         <span class="status-badge" *ngIf="data?.status"> <ion-icon name="ellipse-sharp"></ion-icon> {{data?.status}} </span>
         <h5>{{data?.title}}</h5>
         <p class="ellipsis">{{data?.subTitle}}</p>
       </ion-col>
     </ion-row>
-    <div class="session-enroll" *ngIf="showEnroll" (click)="$event.stopPropagation();onAction(data._id,'enroll')">
-      {{"ENROLL" | translate}} <ion-icon name="caret-forward-outline"></ion-icon>
+    <div class="session-enroll" *ngIf="showAction" (click)="$event.stopPropagation();onAction(data._id,action)">
+      {{action | translate}} <ion-icon name="caret-forward-outline"></ion-icon>
     </div>
 </ion-card>

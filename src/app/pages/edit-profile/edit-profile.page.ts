@@ -32,6 +32,7 @@ export class EditProfilePage implements OnInit {
       .subscribe((formData: JsonFormData) => {
         this.formData = formData;
       });
+    
   }
 
   onSubmit() {
@@ -44,7 +45,4 @@ export class EditProfilePage implements OnInit {
   resetForm() {
     this.form1.reset();
   }
-
-
 }
-
