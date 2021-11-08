@@ -92,12 +92,14 @@
     </ion-item>
     <small
       class="error-msg d-flex error-msg flex-align-items-center"
-      *ngIf="
-        myForm.get(control.name).touched && myForm.get(control.name).invalid
-      "
     >
+    <div *ngIf="
+        myForm.get(control.name).touched && myForm.get(control.name).invalid
+      ">
       <ion-icon name="alert-circle-outline"></ion-icon>
       <span class="mx-10">Invalid</span>
+    </div>
+    
     </small>
   </div>
 </form>

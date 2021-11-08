@@ -11,11 +11,19 @@
   }
 }
 
+.t-and-c {
+  width: 100%;
+  text-align: center;
+  line-height: 5px;
+  font-size: 14px;
+  margin: 10% 0;
+}
+
 .or-section {
   p {
     width: 100%;
     text-align: center;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid gray;
     line-height: 0.1em;
     margin: 10px 0 10px;
   }
@@ -23,6 +31,7 @@
   p span {
     background: #fff;
     padding: 0 10px;
+    font-weight: 600;
   }
 }
 
