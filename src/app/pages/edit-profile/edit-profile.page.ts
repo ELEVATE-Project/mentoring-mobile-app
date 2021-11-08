@@ -24,13 +24,14 @@ export class EditProfilePage implements OnInit {
   };
 
   public formData: JsonFormData;
-  constructor(private http: HttpClient, private api: HttpService) { }
+  constructor(private http: HttpClient, private api: HttpService) {}
   async ngOnInit() {
     this.http
       .get('/assets/dummy/profile-form.json')
       .subscribe((formData: JsonFormData) => {
         this.formData = formData;
       });
+    
   }
 
   onSubmit() {
@@ -40,7 +41,4 @@ export class EditProfilePage implements OnInit {
   resetForm() {
     this.form1.reset();
   }
-
-
 }
-
