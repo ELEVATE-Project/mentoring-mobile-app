@@ -32,9 +32,6 @@ export class AppComponent {
     this.initializeApp();
   }
 
-  navigate(url) {
-    this.router.navigate([url]);
-  }
   initializeApp() {
     this.platform.ready().then(() => {
       setTimeout(()=>{
