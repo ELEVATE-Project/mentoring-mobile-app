@@ -23,7 +23,7 @@
       </ion-button>
     </div>
     <div *ngFor="let session of sessions">
-      <app-session-card [data]="session" [showEnroll]=true (onClickEvent)="eventAction($event)"> </app-session-card>
+      <app-session-card [data]="session" [showAction]=true [action]="'ENROLL'" (onClickEvent)="eventAction($event)"> </app-session-card>
     </div>
     <div>
       <div class="page-intro">

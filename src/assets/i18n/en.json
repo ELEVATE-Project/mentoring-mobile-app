@@ -19,6 +19,7 @@
     "DATE":"Date",
     "JOIN":"Join",
     "NO_ACTIVE_SESSIONS":"There are currently no active session to show. Please check back later.",
+    "VIEW_PROFILE":"View Profile",
     "SUBMIT":"Submit",
     "RESET":"Reset",
     "FEEDBACK_HEADER":"Thank you for participating in the session, please rate us on the following to help us improve.",
