@@ -5,6 +5,8 @@ import {
   DynamicFormComponent,
   JsonFormData,
 } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
+import { FormService, PROFILE_FORM } from 'src/app/shared/services/form/form.service';
+import * as _ from 'lodash-es';
 
 @Component({
   selector: 'app-edit-profile',
@@ -24,13 +26,11 @@ export class EditProfilePage implements OnInit {
   };
 
   public formData: JsonFormData;
-  constructor(private http: HttpClient, private api: HttpService) {}
+  constructor(private http: HttpClient, private api: HttpService, private form:FormService) {}
   async ngOnInit() {
-    this.http
-      .get('/assets/dummy/profile-form.json')
-      .subscribe((formData: JsonFormData) => {
-        this.formData = formData;
-      });
+    
+    let response = await this.form.getForm(PROFILE_FORM);
+    this.formData = _.get(response, 'result.data.fields');
     
   }
 
