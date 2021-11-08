@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { ProfileService } from 'src/app/shared/services/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
@@ -8,6 +9,9 @@ import { CommonRoutes } from 'src/global.routes';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
+  profileImageData: any;
+  formData: any;
+  data: any;
   public headerConfig: any = {
     // menu: true,
     backButton: {
@@ -16,7 +20,7 @@ export class ProfilePage implements OnInit {
     notification: true,
     headerColor: 'primary',
   };
-  constructor(public navCtrl: NavController) {}
+  constructor(public navCtrl: NavController, private profileService: ProfileService) { }
 
   ngOnInit() {
   }
