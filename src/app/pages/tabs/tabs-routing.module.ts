@@ -5,15 +5,15 @@ import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
   {
-    path: 'tabs',
+    path: CommonRoutes.TABS,
     component: TabsPage,
     children: [
       {
-        path: 'home',
+        path: CommonRoutes.HOME,
         loadChildren: () => import('./home/home.module').then(m => m.Tab1PageModule)
       },
       {
-        path: 'mentor-directory',
+        path: CommonRoutes.MENTOR_DIRECTORY,
         loadChildren: () => import('./mentor-directory/mentor-directory.module').then(m => m.MentorDirectoryPageModule)
       },
       {
@@ -25,19 +25,19 @@ const routes: Routes = [
         loadChildren: () => import('./tab3/tab3.module').then(m => m.Tab3PageModule)
       },
       {
-        path: 'profile',
+        path: CommonRoutes.PROFILE,
         loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
       },
       {
         path: '',
-        redirectTo: '/tabs/home',
+        redirectTo:`${CommonRoutes.TABS}`+'/'+`${CommonRoutes.HOME}`,
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/home',
+    redirectTo: `${CommonRoutes.TABS}`+'/'+`${CommonRoutes.HOME}`,
     pathMatch: 'full'
   }
 
