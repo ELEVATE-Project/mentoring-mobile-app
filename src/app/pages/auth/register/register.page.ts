@@ -79,7 +79,7 @@ export class RegisterPage implements OnInit {
     this.form1.onSubmit();
     let formJson = this.form1.myForm.value;
     if (this.form1.myForm.valid) {
-      if (_.isEqual(formJson.password, formJson.re_password)) {
+      if (_.isEqual(formJson.password, formJson.cPassword)) {
         this.authService.createAccount(this.form1.myForm.value);
       } else {
         this.toastService.showToast('Password Mismatch', 'danger');
