@@ -34,8 +34,8 @@ export class ProfileService {
     };
     try {
       let data: any = await this.httpService.get(config);
-      let result = data.result;
       this.loaderService.stopLoader();
+      return data;
     }
     catch (error) {
       this.loaderService.stopLoader();

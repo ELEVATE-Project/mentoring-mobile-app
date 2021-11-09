@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 import { CommonRoutes } from 'src/global.routes';
+import * as _ from 'lodash-es';
 
 @Component({
   selector: 'app-profile',
@@ -10,7 +11,31 @@ import { CommonRoutes } from 'src/global.routes';
 })
 export class ProfilePage implements OnInit {
   profileImageData: any;
-  formData: any;
+  formData: any= {
+    form: [
+      {
+        title: 'About',
+        key: 'about',
+      },
+      {
+        title: 'Designation',
+        key: 'designation',
+      },
+      {
+        title: 'Year Of Experience',
+        key: 'experience',
+      },
+      {
+        title: "key Areas Of Expertise",
+        key: "areasOfExpertise"
+      },
+      {
+        title: "Languages",
+        key: "languages"
+      }
+    ],
+    data: {},
+  };
   data: any;
   public headerConfig: any = {
     // menu: true,
@@ -23,6 +48,15 @@ export class ProfilePage implements OnInit {
   constructor(public navCtrl: NavController, private profileService: ProfileService) { }
 
   ngOnInit() {
+  }
+  ionViewWillEnter(){
+    this.fetchProfileDetails();
+  }
+
+  async fetchProfileDetails(){
+    var response = await this.profileService.profileDetails();
+    this.formData.data = _.get(response, 'result');
+    this.profileImageData= _.get(response, 'result');
   }
 
   editProfile(){

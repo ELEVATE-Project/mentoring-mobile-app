@@ -9,8 +9,8 @@
   <div *ngIf="profileImageData?.name">
     <p class="username">{{ profileImageData?.name }}</p>
   </div>
-  <div *ngIf="profileImageData?.region">
-    <p class="region">{{ profileImageData?.region }}</p>
+  <div *ngIf="profileImageData?.location">
+    <p class="region">{{ profileImageData?.location[0].label }}</p>
   </div>
   <div class="join-button" *ngIf="profileImageData?.join_button">
     <ion-button color="dark" shape="round">{{"JOIN" | translate}}</ion-button>
