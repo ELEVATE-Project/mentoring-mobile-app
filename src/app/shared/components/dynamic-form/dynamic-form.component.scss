@@ -34,4 +34,7 @@ ion-item {
 .error-msg {
   font-size: 10px;
   color: var(--ion-color-danger);
+  height: 20px;
+  display: flex;
+  align-items: center;
 }

@@ -7,10 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MentorDirectoryPage implements OnInit {
   public headerConfig: any = {
-    // menu: true,
-    backButton: {
-      label: 'Mentors Directory',
-    },
+    menu: true,
+    label: 'MENTORS_DIRECTORY',
     notification: false,
   };
 

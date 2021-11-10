@@ -6,6 +6,8 @@ import { LocalStorageService } from './core/services/localstorage.service';
 import * as _ from 'lodash-es';
 import { UserService } from './core/services/user/user.service';
 import { DbService } from './core/services';
+import { CommonRoutes } from 'src/global.routes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +17,7 @@ import { DbService } from './core/services';
 export class AppComponent {
  
   public appPages = [
-    { title: 'CREATED_SESSIONS', url: '', icon: 'person-add' },
+    { title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' },
     { title: 'LANGUAGE', url: '', icon: 'language' },
     { title: 'SETTINGS', url: '', icon: 'settings' },
     { title: 'HELP', url: '', icon: 'help-circle' }
@@ -26,15 +28,15 @@ export class AppComponent {
     private localStorage: LocalStorageService,
     public menuCtrl:MenuController,
     private userService: UserService,
-    private db:DbService
+    private db:DbService,
+    private router: Router
   ) {
     this.initializeApp();
   }
 
-
   initializeApp() {
     this.platform.ready().then(() => {
-      this.db.init()
+      this.db.init();
       setTimeout(()=>{
         this.languageSetting();
       },1000);

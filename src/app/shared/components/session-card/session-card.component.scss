@@ -1,5 +1,5 @@
 .session-card{
-    padding: 4px 0px 0px 4px;
+    padding: 10px;
     .card-avatar{
     text-align: center;
     margin: auto 0px 3px;
@@ -13,11 +13,11 @@
     .status-badge{
         background: var(--ion-color-primary);
         min-width: 60px;
-        margin: -10px -10px;
         color: var(--white);
-        padding: 2px 5px;
+        padding: 2px;
         position: absolute;
-        right: 10px;
+        right: 0px;
+        top: 0px;
         ion-icon{
             font-size: 10px;
             padding: 0px 5px;
@@ -32,11 +32,12 @@
     p{
         margin: 6px 0px 0px 0px;
     }
-  
+  .session-actions{
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 .session-enroll{
-    text-align: right;
     margin-top: -15px;
-    padding: 0px 35px 5px 0px;
     color: var(--ion-color-primary);
     }

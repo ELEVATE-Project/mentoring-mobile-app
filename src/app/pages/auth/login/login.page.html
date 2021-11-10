@@ -18,13 +18,13 @@
   <section
     [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}"
   >
-    <ion-button class="mx-0" expand="block" (click)="onSubmit()" size="large"
+    <ion-button class="mx-0" expand="block" (click)="onSubmit()" size="large" [disabled]="!form1.myForm.valid"
       >{{"LOGIN"|translate}}</ion-button
     >
-    <span>
+    <div class="t-and-c">
       <p>{{"TERMS_AND_CONDITION"|translate}}</p>
       <p>{{"PRIVACY_POLICY"|translate}}</p>
-    </span>
+    </div>
   </section>
   <section class="or-section">
     <p><span>OR</span></p>
@@ -34,10 +34,11 @@
       <ion-text class="forgot-section">
         {{"FORGOT_PASSWORD"|translate}}
       </ion-text>
+      <ion-ripple-effect></ion-ripple-effect>
     </div>
     <div class="btn-disabled">
       <ion-button
-        class="mx-0"
+        class="mx-0 text-bold"
         expand="block"
         (click)="goToSignup()"
         size="large"

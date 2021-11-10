@@ -8,15 +8,12 @@
         </p>
     </ion-buttons>
     <ion-buttons slot="start">
-      <ion-back-button
-        defaultHref=""
-        *ngIf="config?.backButton"
-        [text]="config?.backButton?.label"
-      ></ion-back-button>
+      <ion-back-button defaultHref="" *ngIf="config?.backButton"></ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="end" *ngIf="config?.notification">
+    <ion-title>{{config?.backButton?.label || config?.label | translate}}</ion-title>
+    <!-- <ion-buttons slot="end" *ngIf="config?.notification">
       <ion-icon size="large" name="notifications-outline"></ion-icon>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-toolbar>
   <ng-content></ng-content>
 </ion-header>
