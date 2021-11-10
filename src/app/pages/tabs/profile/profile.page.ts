@@ -3,6 +3,7 @@ import { NavController } from '@ionic/angular';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-profile',
@@ -11,59 +12,63 @@ import * as _ from 'lodash-es';
 })
 export class ProfilePage implements OnInit {
   profileImageData: any;
-  formData: any= {
+  formData: any = {
     form: [
       {
-        title: 'About',
+        title: 'ABOUT',
         key: 'about',
       },
       {
-        title: 'Designation',
+        title: 'DESIGNATION',
         key: 'designation',
       },
       {
-        title: 'Year Of Experience',
+        title: 'YEAR_OF_EXPERIENCE',
         key: 'experience',
       },
       {
-        title: "key Areas Of Expertise",
+        title: "KEY_AREAS_OF_EXPERTISE",
         key: "areasOfExpertise"
       },
       {
-        title: "Languages",
+        title: "LANGUAGES",
         key: "languages"
       }
     ],
     data: {},
   };
+  showProfileDetails: boolean = false;
+  username: boolean = true;
   data: any;
   public headerConfig: any = {
-    // menu: true,
-    backButton: {
-      label: 'Profile',
-    },
+    menu: true,
     notification: true,
     headerColor: 'primary',
   };
-  constructor(public navCtrl: NavController, private profileService: ProfileService) { }
+  constructor(public navCtrl: NavController, private profileService: ProfileService, private translate :TranslateService,) { }
 
   ngOnInit() {
   }
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.fetchProfileDetails();
   }
 
-  async fetchProfileDetails(){
+  async fetchProfileDetails() {
     var response = await this.profileService.profileDetails();
+    console.log(response);
     this.formData.data = _.get(response, 'result');
-    this.profileImageData= _.get(response, 'result');
+    this.profileImageData = _.get(response, 'result');
+    if (this.formData.data.location) {
+      // TODO: remove the below line later
+      this.showProfileDetails = true;
+    }
   }
 
-  editProfile(){
-    this.navCtrl.navigateForward('tabs/profile/edit-profile');
+  editProfile() {
+    this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE);
   }
 
-  feedback(){
+  feedback() {
     this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
   }
 }

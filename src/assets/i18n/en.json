@@ -48,6 +48,12 @@
     "RESEND_OTP":"Resend OTP",
     "SESSIONS_PAGE":"Sessions Page",
     "SESSIONS_DETAILS":"Session Details",
-    "MENTORS_DIRECTORY":"Mentors Directory"
-
+    "MENTORS_DIRECTORY":"Mentors Directory",
+    "NO_USER_DETAILS_FOUND":"No information found please click on the button below and enter your Profile Details",
+    "USERNAME":"Username",
+    "ABOUT":"About",
+    "DESIGNATION":"Designation",
+    "YEAR_OF_EXPERIENCE":"Year Of Experience",
+    "KEY_AREAS_OF_EXPERTISE":"Key Areas Of Expertise",
+    "LANGUAGES":"Languages"
 }
