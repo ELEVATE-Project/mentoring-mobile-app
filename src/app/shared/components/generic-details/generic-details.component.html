@@ -1,6 +1,6 @@
 <div class="field-wrapper" *ngFor="let item of sessionData.form">
   <div class="field">
-    <h6>{{item.title | titlecase}}</h6>
+    <h6>{{item.title | translate | titlecase}}</h6>
     <div *ngIf="isArray(sessionData.data[item.key]); else elseBlock">
       <ion-chip class="ion-margin-top" *ngFor="let chip of sessionData.data[item.key]">
         <ion-label>{{chip.label}}</ion-label>
