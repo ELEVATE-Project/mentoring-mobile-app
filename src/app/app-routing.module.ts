@@ -32,6 +32,10 @@ const routes: Routes = [
   {
     path: CommonRoutes.CREATED_BY_ME,
     loadChildren: () => import('./pages/created-by-me/created-by-me.module').then( m => m.CreatedByMePageModule)
+  },
+  {
+    path: CommonRoutes.HOME_SEARCH,
+    loadChildren: () => import('./pages/home-search/home-search.module').then( m => m.HomeSearchPageModule)
   }
 
 

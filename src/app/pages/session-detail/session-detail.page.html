@@ -1,4 +1,4 @@
-<app-page-header [config]="headerConfig"></app-page-header>
+<app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
 <ion-content [fullscreen]="true">
   <div class="main-wrapper">
     <app-profile-image [profileImageData]='profileImageData'></app-profile-image>

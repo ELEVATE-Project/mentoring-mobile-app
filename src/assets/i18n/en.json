@@ -48,6 +48,8 @@
     "RESEND_OTP":"Resend OTP",
     "SESSIONS_PAGE":"Sessions Page",
     "SESSIONS_DETAILS":"Session Details",
-    "MENTORS_DIRECTORY":"Mentors Directory"
+    "MENTORS_DIRECTORY":"Mentors Directory",
+    "SEARCH":"Search",
+    "SORRY_NO_RESULTS":"Sorry No results found"
 
 }
