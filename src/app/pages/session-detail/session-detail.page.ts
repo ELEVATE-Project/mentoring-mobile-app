@@ -11,9 +11,10 @@ export class SessionDetailPage implements OnInit {
   ngOnInit() {
   }
   public headerConfig: any = {
-    headerColor: 'primary',
+    headerColor: 'white',
     backButton: true,
-    label:"SESSIONS_DETAILS"
+    label:"SESSIONS_DETAILS",
+    share: true
   };
   profileImageData: Object = {
     name: "Session Name",
@@ -70,4 +71,16 @@ export class SessionDetailPage implements OnInit {
       date: "",
     },
   };
+
+  action(event) {
+    switch (event) {
+      case 'share':
+        this.share();
+        break;
+    }
+  }
+
+  share() {
+    // ToDO implement share feature
+  }
 }

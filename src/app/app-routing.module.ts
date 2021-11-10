@@ -36,6 +36,10 @@ const routes: Routes = [
   {
     path: CommonRoutes.EDIT_PROFILE,
     loadChildren: () => import('./pages/edit-profile/edit-profile.module').then( m => m.EditProfilePageModule)
+  },
+  {
+    path: CommonRoutes.HOME_SEARCH,
+    loadChildren: () => import('./pages/home-search/home-search.module').then( m => m.HomeSearchPageModule)
   }
 
 

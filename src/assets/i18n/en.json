@@ -55,5 +55,8 @@
     "DESIGNATION":"Designation",
     "YEAR_OF_EXPERIENCE":"Year Of Experience",
     "KEY_AREAS_OF_EXPERTISE":"Key Areas Of Expertise",
-    "LANGUAGES":"Languages"
+    "LANGUAGES":"Languages",
+    "SEARCH":"Search",
+    "SORRY_NO_RESULTS":"Sorry No results found"
+
 }
