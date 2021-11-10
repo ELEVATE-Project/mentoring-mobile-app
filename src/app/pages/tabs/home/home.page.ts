@@ -84,4 +84,8 @@ public headerConfig: any = {
   viewMore(){
     this.router.navigate([`/${CommonRoutes.SESSIONS}`]);
   }
+
+  search(){
+    this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
+  }
 }
