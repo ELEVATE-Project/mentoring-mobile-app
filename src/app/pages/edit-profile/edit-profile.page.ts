@@ -10,7 +10,7 @@ import {
   PROFILE_FORM,
 } from 'src/app/shared/services/form/form.service';
 import * as _ from 'lodash-es';
-import { ProfileService } from 'src/app/shared/services/profile.service';
+import { ProfileService } from 'src/app/shared/services/profile/profile.service';
 
 @Component({
   selector: 'app-edit-profile',

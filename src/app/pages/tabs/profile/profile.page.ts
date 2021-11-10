@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { ProfileService } from 'src/app/shared/services/profile.service';
+import { ProfileService } from 'src/app/shared/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({

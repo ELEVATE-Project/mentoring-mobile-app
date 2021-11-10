@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService } from 'src/app/core/services';
+import { DbService, HttpService } from 'src/app/core/services';
+import * as _ from 'lodash-es';
 
 export const PROFILE_FORM = {
   type: 'profile',
@@ -14,13 +15,45 @@ export const PROFILE_FORM = {
   providedIn: 'root',
 })
 export class FormService {
-  constructor(private http: HttpService) {}
+  constructor(private http: HttpService, private db: DbService) {}
 
-  getForm = (formBody) => {
+  getForm = async (formBody) => {
+    //check form in sqlite db with primary_key as UniqueKey
+    const dbForm = await this.db.queryOne(
+      `SELECT * FROM forms where primary_key=?`,
+      [this.getUniqueKey(formBody)]
+    );
+    // check if db form is expired
+    if (dbForm && !this.checkIfexpired(dbForm.ttl)) {
+      console.log(dbForm);
+      return JSON.parse(dbForm.form);
+    }
+    //if db form expired or not present then call api
     const args = {
       url: urlConstants.API_URLS.FORM_READ,
       payload: formBody,
     };
-    return this.http.post(args);
+    const resp = await this.http.post(args);
+    // store api response in db with 24hrs expiryTime
+    if (!_.has(resp, 'result.data.fields')) {
+      return resp; // if form is not present return without storing
+    }
+    this.db
+      .store(
+        `INSERT OR REPLACE INTO forms (primary_key,form,ttl) VALUES(?,?,?);`,
+        [
+          this.getUniqueKey(formBody),
+          JSON.stringify(resp),
+          this.timeToExpire(24),
+        ]
+      )
+      .then((res) => {
+        console.log(res);
+      });
+    return resp;
   };
+
+  getUniqueKey = (object) => Object.values(object).join('_'); // get '_' seperated object values in string format
+  timeToExpire = (h) => new Date(Date.now() + 1000 * 60 * 60 * h).getTime(); //get unix time of expiry by passing hour
+  checkIfexpired = (unix) => unix < Date.now(); // pass unix time to check,true if expired else false
 }
