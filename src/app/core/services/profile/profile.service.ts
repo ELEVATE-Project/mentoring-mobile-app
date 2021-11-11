@@ -1,20 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService, LoaderService, ToastService } from 'src/app/core/services';
+import {
+  HttpService,
+  LoaderService,
+  ToastService,
+} from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProfileService {
-
-  constructor(private httpService: HttpService, private loaderService: LoaderService, private router: Router, private toast: ToastService) { }
+  constructor(
+    private httpService: HttpService,
+    private loaderService: LoaderService,
+    private router: Router,
+    private toast: ToastService
+  ) {}
   async profileUpdate(formData) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.PROFILE_UPDATE,
-      payload: formData
+      payload: formData,
     };
     try {
       let data: any = await this.httpService.post(config);

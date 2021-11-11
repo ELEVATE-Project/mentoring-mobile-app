@@ -5,6 +5,7 @@ import { localKeys } from './core/constants/localStorage.keys';
 import { LocalStorageService } from './core/services/localstorage.service';
 import * as _ from 'lodash-es';
 import { UserService } from './core/services/user/user.service';
+import { DbService } from './core/services';
 import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
 
@@ -26,7 +27,8 @@ export class AppComponent {
     private platform : Platform,
     private localStorage: LocalStorageService,
     public menuCtrl:MenuController,
-    private userService:UserService,
+    private userService: UserService,
+    private db:DbService,
     private router: Router
   ) {
     this.initializeApp();
@@ -34,6 +36,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.db.init();
       setTimeout(()=>{
         this.languageSetting();
       },1000);

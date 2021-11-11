@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { ProfileService } from 'src/app/shared/services/profile.service';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,7 +11,6 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-  profileImageData: any;
   formData: any = {
     form: [
       {
@@ -57,8 +56,7 @@ export class ProfilePage implements OnInit {
     var response = await this.profileService.profileDetails();
     console.log(response);
     this.formData.data = _.get(response, 'result');
-    this.profileImageData = _.get(response, 'result');
-    if (this.formData.data.location) {
+    if (this.formData.data.name) {
       // TODO: remove the below line later
       this.showProfileDetails = true;
     }
