@@ -6,6 +6,8 @@ import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { NavController } from '@ionic/angular';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
+import { UserService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +16,7 @@ import { Router } from '@angular/router';
 })
 export class HomePage implements OnInit {
   public formData: JsonFormData;
+  user;
   SESSIONS: string=CommonRoutes.SESSIONS;
   SKELETON=SKELETON;
   sessions=[{
@@ -54,14 +57,17 @@ public headerConfig: any = {
   menu: true,
   notification: true,
   headerColor: 'primary',
+  label:'MENU'
 };
   constructor(
     private http: HttpClient,
     private router : Router,
     private navController: NavController,
-    private deeplinks: Deeplinks) {}
+    private deeplinks: Deeplinks,
+    private userService :UserService) {}
     
   ngOnInit() {
+    this.getUser();
     this.deeplinks.routeWithNavController(this.navController, {
       '/sessions': '',
     }).subscribe((match) => {
@@ -87,5 +93,10 @@ public headerConfig: any = {
 
   search(){
     this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
+  }
+  getUser() {
+    this.userService.getUserValue().then(user =>{
+      this.user=user;
+    })
   }
 }

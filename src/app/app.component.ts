@@ -5,8 +5,8 @@ import { localKeys } from './core/constants/localStorage.keys';
 import { LocalStorageService } from './core/services/localstorage.service';
 import * as _ from 'lodash-es';
 import { UserService } from './core/services/user/user.service';
+import { UtilService } from './core/services';
 import { CommonRoutes } from 'src/global.routes';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +14,8 @@ import { Router } from '@angular/router';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
- 
+ user;
   public appPages = [
-    { title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' },
     { title: 'LANGUAGE', url: '', icon: 'language' },
     { title: 'SETTINGS', url: '', icon: 'settings' },
     { title: 'HELP', url: '', icon: 'help-circle' }
@@ -27,7 +26,7 @@ export class AppComponent {
     private localStorage: LocalStorageService,
     public menuCtrl:MenuController,
     private userService:UserService,
-    private router: Router
+    private utilService:UtilService
   ) {
     this.initializeApp();
   }
@@ -36,6 +35,7 @@ export class AppComponent {
     this.platform.ready().then(() => {
       setTimeout(()=>{
         this.languageSetting();
+        this.getUser();
       },1000);
       setTimeout(() => {
         document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
@@ -61,7 +61,25 @@ export class AppComponent {
 
   logout(){
     this.menuCtrl.toggle();
-    this.userService.logoutAccount();
+    let msg = {
+      header: 'LOGOUT',
+      message: 'LOGOUT_CONFIRM_MESSAGE',
+      cancel:'CANCEL',
+      submit:'LOGOUT'
+    }
+    this.utilService.alertPopup(msg).then(data => {
+      if(data){
+        this.userService.logoutAccount();
+      }
+    }).catch(error => {})
+  }
+  getUser() {
+    this.userService.getUserValue().then(user => {
+      this.user = user;
+      if (this.user.user.isAMentor) {
+        this.appPages.unshift({ title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' });
+      }
+    })
   }
 
 }

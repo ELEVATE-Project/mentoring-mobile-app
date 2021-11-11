@@ -36,6 +36,10 @@ const routes: Routes = [
   {
     path: CommonRoutes.HOME_SEARCH,
     loadChildren: () => import('./pages/home-search/home-search.module').then( m => m.HomeSearchPageModule)
+  },
+  {
+    path: CommonRoutes.MENTOR_DETAILS,
+    loadChildren: () => import('./pages/mentor-details/mentor-details.module').then( m => m.MentorDetailsPageModule)
   }
 
 
