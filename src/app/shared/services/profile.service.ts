@@ -42,4 +42,38 @@ export class ProfileService {
       this.loaderService.stopLoader();
     }
   }
+  async generateOtp(formData){
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.GENERATE_OTP,
+      payload: formData
+    };
+    try {
+      let data: any = await this.httpService.post(config);
+      console.log(data);
+      this.loaderService.stopLoader();
+      this.toast.showToast(data.message, "success");
+      return data;
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+  async updatePassword(formData){
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.RESET_PASSWORD,
+      payload: formData
+    };
+    try {
+      let data: any = await this.httpService.post(config);
+      console.log(data);
+      this.loaderService.stopLoader();
+      this.toast.showToast(data.message, "success");
+      return data;
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
 }

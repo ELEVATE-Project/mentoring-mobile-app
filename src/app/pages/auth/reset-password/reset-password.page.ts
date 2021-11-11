@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import * as _ from 'lodash-es';
 import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
+import { ProfileService } from 'src/app/shared/services/profile.service';
+import { ToastService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-reset-password',
@@ -10,6 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./reset-password.page.scss'],
 })
 export class ResetPasswordPage implements OnInit {
+  @ViewChild('form1') form1: DynamicFormComponent;
   formData: JsonFormData = {
     controls: [
       {
@@ -21,6 +24,7 @@ export class ResetPasswordPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
+          email: true
         },
       },
       {
@@ -56,8 +60,8 @@ export class ResetPasswordPage implements OnInit {
     notification: false,
     headerColor: 'white',
   };
-  
-  constructor(private router:Router) {}
+
+  constructor(private router: Router, private profileService: ProfileService, private toastService: ToastService) { }
 
   ngOnInit() {
   }
@@ -70,8 +74,18 @@ export class ResetPasswordPage implements OnInit {
     });
   }
 
-  onSubmit(){
-    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`])
+  async onSubmit() {
+    let formJson = this.form1.myForm.value;
+    if (this.form1.myForm.valid) {
+      if (_.isEqual(formJson.password, formJson.newPassword)) {
+        var response = await this.profileService.generateOtp({ email: this.form1.myForm.value.email });
+        console.log(response)
+        if (response) {
+          this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { queryParams: { email: formJson.email, password: formJson.password, newPassword: formJson.newPassword } });
+        }
+      } else {
+        this.toastService.showToast('Password Mismatch', 'danger');
+      }
+    }
   }
-
 }
