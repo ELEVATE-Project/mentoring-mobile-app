@@ -6,6 +6,7 @@ import {
   LoaderService,
   ToastService,
 } from 'src/app/core/services';
+import { CommonRoutes } from 'src/global.routes';
 
 @Injectable({
   providedIn: 'root',
@@ -27,23 +28,25 @@ export class ProfileService {
       let data: any = await this.httpService.post(config);
       console.log(data);
       this.loaderService.stopLoader();
-      this.router.navigate(['tabs/profile'], { queryParams: formData });
-      this.toast.showToast(data.message, 'success');
-    } catch (error) {
+      this.router.navigate([CommonRoutes.TABS+'/'+CommonRoutes.PROFILE], { queryParams: formData });
+      this.toast.showToast(data.message, "success");
+    }
+    catch (error) {
       this.loaderService.stopLoader();
     }
   }
   async profileDetails() {
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.PROFILR_DETAILS,
-      payload: {},
+      url: urlConstants.API_URLS.PROFILE_DETAILS,
+      payload: {}
     };
     try {
       let data: any = await this.httpService.get(config);
-      let result = data.result;
       this.loaderService.stopLoader();
-    } catch (error) {
+      return data;
+    }
+    catch (error) {
       this.loaderService.stopLoader();
     }
   }

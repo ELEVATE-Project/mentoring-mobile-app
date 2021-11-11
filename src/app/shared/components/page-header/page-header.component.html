@@ -5,7 +5,7 @@
       </ion-menu-button>
       <p class="menu-label">
         {{"MENU" | translate}}
-        </p>
+      </p>
     </ion-buttons>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="" *ngIf="config?.backButton"></ion-back-button>
@@ -14,7 +14,9 @@
     <!-- <ion-buttons slot="end" *ngIf="config?.notification">
       <ion-icon size="large" name="notifications-outline"></ion-icon>
     </ion-buttons> -->
+    <ion-buttons slot="end" *ngIf="config?.share" (click)="onAction('share')">
+      <ion-icon name="share-social"></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
   <ng-content></ng-content>
 </ion-header>
-

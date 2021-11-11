@@ -1,18 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CommonRoutes } from 'src/global.routes';
 
-import { ProfilePage } from './profile.page';
+import { HomeSearchPage } from './home-search.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ProfilePage
-  },
+    component: HomeSearchPage
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ProfilePageRoutingModule {}
+export class HomeSearchPageRoutingModule {}

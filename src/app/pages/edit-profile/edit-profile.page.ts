@@ -8,9 +8,9 @@ import {
 import {
   FormService,
   PROFILE_FORM,
-} from 'src/app/shared/services/form/form.service';
+} from 'src/app/core/services/form/form.service';
 import * as _ from 'lodash-es';
-import { ProfileService } from 'src/app/shared/services/profile/profile.service';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 
 @Component({
   selector: 'app-edit-profile',
