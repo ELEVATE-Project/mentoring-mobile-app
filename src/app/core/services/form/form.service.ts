@@ -3,14 +3,6 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { DbService, HttpService } from 'src/app/core/services';
 import * as _ from 'lodash-es';
 
-export const PROFILE_FORM = {
-  type: 'profile',
-  subType: 'createProfile',
-  action: 'formFields',
-  ver: '1.0',
-  templateName: 'defaultTemplate',
-};
-
 @Injectable({
   providedIn: 'root',
 })
@@ -19,10 +11,11 @@ export class FormService {
 
   getForm = async (formBody) => {
     //check form in sqlite db with primary_key as UniqueKey
-    const dbForm = await this.db.queryOne(
+    let dbForm: any = await this.db.query(
       `SELECT * FROM forms where primary_key=?`,
       [this.getUniqueKey(formBody)]
     );
+    dbForm = dbForm[0];
     // check if db form is expired
     if (dbForm && !this.checkIfexpired(dbForm.ttl)) {
       console.log(dbForm);

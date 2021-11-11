@@ -58,7 +58,7 @@ export class ProfilePage implements OnInit {
     console.log(response);
     this.formData.data = _.get(response, 'result');
     this.profileImageData = _.get(response, 'result');
-    if (this.formData.data.location) {
+    if (this.formData?.data?.name) {
       // TODO: remove the below line later
       this.showProfileDetails = true;
     }

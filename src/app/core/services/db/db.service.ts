@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DbService {
-  readonly db_name: string = 'mentoring.db';
+  readonly db_name: string = environment.sqliteDBName;
   private db: SQLiteObject;
 
   constructor(private sqlite: SQLite) {
@@ -30,7 +31,7 @@ export class DbService {
     }
   }
 
-  async queryAll(query, value = []) {
+  async query(query, value = []) {
     const res = await this.db.executeSql(query, value);
     const data = [];
     // CREATE ARRAY OF ALL ROWS
@@ -39,11 +40,6 @@ export class DbService {
       data.push(element);
     }
     return data;
-  }
-
-  async queryOne(query, value = []) {
-    const res = await this.db.executeSql(query, value);
-    return res.rows.item(0);
   }
 
   store(insertQuery, value) {

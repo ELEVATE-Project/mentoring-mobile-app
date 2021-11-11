@@ -7,10 +7,10 @@ import {
 } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import {
   FormService,
-  PROFILE_FORM,
 } from 'src/app/core/services/form/form.service';
 import * as _ from 'lodash-es';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
+import { EDIT_PROFILE_FORM } from 'src/app/core/constants/formConstant';
 
 @Component({
   selector: 'app-edit-profile',
@@ -36,7 +36,7 @@ export class EditProfilePage implements OnInit {
     private profileService: ProfileService
   ) {}
   async ngOnInit() {
-    const response = await this.form.getForm(PROFILE_FORM);
+    const response = await this.form.getForm(EDIT_PROFILE_FORM);
     this.formData = _.get(response, 'result.data.fields');
   }
 
