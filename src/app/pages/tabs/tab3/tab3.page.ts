@@ -6,7 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
+  segment: any = 'mentor';
   constructor() { }
+
+  segmentChanged(ev: any) {
+    console.log('Segment changed', ev);
+    this.segment = ev.detail.value;
+  }
+
   profileImageData: Object = {
     name: "Username",
     region: "Karnataka",
