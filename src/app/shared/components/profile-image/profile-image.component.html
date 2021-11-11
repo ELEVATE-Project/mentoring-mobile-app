@@ -11,7 +11,7 @@
       <p class="username">{{ profileImageData?.name }}</p>
     </div>
     <div *ngIf="profileImageData?.location">
-      <p class="region">{{ profileImageData?.location[0].label }}</p>
+      <p class="region">{{ profileImageData?.location[0]?.label }}</p>
     </div>
   </div>
   <ng-template #elseBlock>
