@@ -11,7 +11,6 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-  profileImageData: any;
   formData: any = {
     form: [
       {
@@ -57,8 +56,7 @@ export class ProfilePage implements OnInit {
     var response = await this.profileService.profileDetails();
     console.log(response);
     this.formData.data = _.get(response, 'result');
-    this.profileImageData = _.get(response, 'result');
-    if (this.formData?.data?.name) {
+    if (this.formData.data.name) {
       // TODO: remove the below line later
       this.showProfileDetails = true;
     }
