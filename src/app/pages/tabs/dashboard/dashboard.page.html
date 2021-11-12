@@ -15,11 +15,11 @@
   <div class="main-wrapper">
     <div [ngSwitch]="segment">
       <div *ngSwitchCase="'mentor'">
-        MENTOR
+        {{'MENTOR' || translate}}
       </div>
 
       <div *ngSwitchCase="'mentee'">
-        MENTEE
+        {{'MENTEE' || translate}}
       </div>
     </div>
   </div>
