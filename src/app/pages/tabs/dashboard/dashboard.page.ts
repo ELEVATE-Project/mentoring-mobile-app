@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: 'dashboard.page.html',
@@ -8,6 +7,21 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class DashboardPage {
   segment: any = 'mentor';
+  dataAvailable = true;
+  data: any = {
+    chart: {
+      data: {
+        labels: ['January', 'February'],
+        datasets: [
+          {
+            data: [61, 39],
+            backgroundColor: ['red', 'blue']
+          }
+        ]
+      }
+    }
+  };
+
   constructor( private translate: TranslateService ) { }
 
   segmentChanged(ev: any) {
@@ -16,7 +30,7 @@ export class DashboardPage {
   }
 
   profileImageData: Object = {
-    name: "Username",
+    name: 'Username',
     region: "Karnataka",
     profile_image: null,
   }

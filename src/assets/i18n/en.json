@@ -60,5 +60,9 @@
     "SORRY_NO_RESULTS":"Sorry No results found",
     "EDIT_PROFILE":"Edit Profile",
     "MENTOR": "Mentor",
-    "MENTEE": "Mentee"
+    "MENTEE": "Mentee",
+    "Session Overview": "Session Overview",
+    "Total Session Attended": "Total Session Attended",
+    "Total Session Enrolled": "Total Session Enrolled"
+
 }
