@@ -9,7 +9,7 @@
       "position": "floating",
       "validators": {
         "required": true,
-        "minLength": 10
+        "minLength": 3
       }
     },
     {

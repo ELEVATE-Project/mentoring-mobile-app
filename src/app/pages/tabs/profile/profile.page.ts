@@ -54,16 +54,15 @@ export class ProfilePage implements OnInit {
 
   async fetchProfileDetails() {
     var response = await this.profileService.profileDetails();
-    console.log(response);
     this.formData.data = _.get(response, 'result');
-    if (this.formData.data.name) {
+    if (this.formData.data.email) {
       // TODO: remove the below line later
       this.showProfileDetails = true;
     }
   }
 
   editProfile() {
-    this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE);
+    this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE, {state: {existingProfileData:this.formData.data}});
   }
 
   feedback() {

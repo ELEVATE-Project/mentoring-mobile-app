@@ -32,6 +32,7 @@ export class AppComponent {
     private router: Router
   ) {
     this.initializeApp();
+    this.router.navigate(["/"]);
   }
 
   initializeApp() {

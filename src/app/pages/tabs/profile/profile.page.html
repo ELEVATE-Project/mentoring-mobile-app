@@ -2,7 +2,7 @@
 <ion-content [fullscreen]="true">
     <div class="main-wrapper" *ngIf="formData && formData.data">
         <app-profile-image [profileImageData]='formData.data' [showProfileDetails]='showProfileDetails' [username]='username'></app-profile-image>
-        <div *ngIf="showProfileDetails; else elseBlock">
+        <div *ngIf="showProfileDetails && formData?.data?.about; else elseBlock">
             <div class="d-flex flex-justify-center">
                 <ion-button shape="round" (click)="editProfile()">{{ "EDIT" | translate }}</ion-button>
             </div>
