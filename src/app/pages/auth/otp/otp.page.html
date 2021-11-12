@@ -4,7 +4,7 @@
 
   <section class="form-section">
     <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
-    <div class="resend-otp">
+    <div class="resend-otp" (click)="resendOtp()">
       <ion-icon name="refresh-outline" size="large"></ion-icon
       >{{"RESEND_OTP"|translate}}
     </div>
