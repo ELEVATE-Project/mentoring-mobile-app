@@ -26,7 +26,6 @@ export class ProfileService {
     };
     try {
       let data: any = await this.httpService.post(config);
-      console.log(data);
       this.loaderService.stopLoader();
       this.router.navigate([CommonRoutes.TABS+'/'+CommonRoutes.PROFILE], { queryParams: formData });
       this.toast.showToast(data.message, "success");
@@ -58,7 +57,6 @@ export class ProfileService {
     };
     try {
       let data: any = await this.httpService.post(config);
-      console.log(data);
       this.loaderService.stopLoader();
       this.toast.showToast(data.message, "success");
       return data;
@@ -75,7 +73,6 @@ export class ProfileService {
     };
     try {
       let data: any = await this.httpService.post(config);
-      console.log(data);
       this.loaderService.stopLoader();
       this.toast.showToast(data.message, "success");
       return data;

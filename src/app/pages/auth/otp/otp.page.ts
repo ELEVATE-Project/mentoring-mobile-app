@@ -50,7 +50,6 @@ export class OtpPage implements OnInit {
   async onSubmit(){
     let formJson = this.form1.myForm.value;
     this.resetPasswordData.otp= formJson.otp;
-    console.log(this.resetPasswordData);
     let response = await this.profileService.updatePassword(this.resetPasswordData);
     let result = response.result;
     this.localStorage.setLocalData(localKeys.USER_DETAILS, result);

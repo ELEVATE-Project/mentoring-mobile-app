@@ -79,7 +79,6 @@ export class ResetPasswordPage implements OnInit {
     if (this.form1.myForm.valid) {
       if (_.isEqual(formJson.password, formJson.newPassword)) {
         var response = await this.profileService.generateOtp({ email: this.form1.myForm.value.email });
-        console.log(response)
         if (response) {
           this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { queryParams: { email: formJson.email, password: formJson.password, newPassword: formJson.newPassword } });
         }
