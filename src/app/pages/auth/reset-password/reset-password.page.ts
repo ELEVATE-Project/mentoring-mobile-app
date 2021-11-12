@@ -3,7 +3,7 @@ import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dy
 import * as _ from 'lodash-es';
 import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
-import { ProfileService } from 'src/app/shared/services/profile.service';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { ToastService } from 'src/app/core/services';
 
 @Component({

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
-import { ProfileService } from 'src/app/shared/services/profile.service';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
