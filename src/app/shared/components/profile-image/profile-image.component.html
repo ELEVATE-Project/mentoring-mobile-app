@@ -6,7 +6,7 @@
       <img class="thumbnail-image" src="{{profileImageData?.profile_image}}" />
     </ng-template>
   </div>
-  <div *ngIf="showProfileDetails; else elseBlock">
+  <div *ngIf="profileImageData;">
     <div *ngIf="profileImageData?.name">
       <p class="username">{{ profileImageData?.name }}</p>
     </div>
@@ -14,9 +14,4 @@
       <p class="region">{{ profileImageData?.location[0]?.label }}</p>
     </div>
   </div>
-  <ng-template #elseBlock>
-    <div *ngIf='username'>
-      <p class="username">{{ "USERNAME" | translate }}</p>
-    </div>
-  </ng-template>
 </div>

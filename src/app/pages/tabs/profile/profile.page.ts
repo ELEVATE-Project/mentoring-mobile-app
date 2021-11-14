@@ -55,7 +55,7 @@ export class ProfilePage implements OnInit {
   async fetchProfileDetails() {
     var response = await this.profileService.profileDetails();
     this.formData.data = _.get(response, 'result');
-    if (this.formData.data.email) {
+    if (this.formData.data.about) {
       // TODO: remove the below line later
       this.showProfileDetails = true;
     }
