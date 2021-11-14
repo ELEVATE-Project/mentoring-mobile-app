@@ -39,7 +39,7 @@ export class EditProfilePage implements OnInit {
     const response = await this.form.getForm(EDIT_PROFILE_FORM);
     this.formData = _.get(response, 'result.data.fields');
     let existingData = window.history.state.existingProfileData;
-    this.preFillData(this.formData, existingData);
+    this.preFillData(existingData);
   }
 
   onSubmit() {
@@ -53,9 +53,9 @@ export class EditProfilePage implements OnInit {
     this.form1.reset();
   }
 
-  preFillData(form, existingData){
-    for (let i = 0; i < form.controls.length; i++) {
-      form.controls[i].value = existingData[form.controls[i].name];
+  preFillData(existingData){
+    for (let i = 0; i < this.formData.controls.length; i++) {
+      this.formData.controls[i].value = existingData[this.formData.controls[i].name];
     }
   }
 }
