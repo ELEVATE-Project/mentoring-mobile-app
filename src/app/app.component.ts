@@ -5,7 +5,7 @@ import { localKeys } from './core/constants/localStorage.keys';
 import { LocalStorageService } from './core/services/localstorage.service';
 import * as _ from 'lodash-es';
 import { UserService } from './core/services/user/user.service';
-import { DbService } from './core/services';
+import { AuthService, DbService, NetworkService } from './core/services';
 import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
 
@@ -22,6 +22,12 @@ export class AppComponent {
     { title: 'SETTINGS', url: '', icon: 'settings' },
     { title: 'HELP', url: '', icon: 'help-circle' }
   ];
+
+  public mentorMenu=[
+    'CREATED_SESSIONS',
+  ]
+
+  isMentor:boolean
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -29,7 +35,9 @@ export class AppComponent {
     public menuCtrl:MenuController,
     private userService: UserService,
     private db:DbService,
-    private router: Router
+    private router: Router,
+    private network:NetworkService,
+    private authService:AuthService
   ) {
     this.initializeApp();
   }
@@ -37,12 +45,19 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.db.init();
+      this.network.netWorkCheck();
       setTimeout(()=>{
         this.languageSetting();
       },1000);
       setTimeout(() => {
         document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
       }, 2000);
+
+      this.userService.getUserValue().then((result) => {
+        console.log(result);
+        this.isMentor = result?.user?.isAMentor;
+      });
+
     });
   }
   languageSetting() {
@@ -64,7 +79,7 @@ export class AppComponent {
 
   logout(){
     this.menuCtrl.toggle();
-    this.userService.logoutAccount();
+    this.authService.logoutAccount();
   }
 
 }

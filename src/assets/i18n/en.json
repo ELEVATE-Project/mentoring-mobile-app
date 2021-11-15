@@ -60,5 +60,7 @@
     "SORRY_NO_RESULTS":"Sorry No results found",
     "EDIT_PROFILE":"Edit Profile",
     "MENTOR": "Mentor",
-    "MENTEE": "Mentee"
+    "MENTEE": "Mentee",
+    "MSG_PLEASE_NETWORK":"Please check your network connection and try again",
+    "PASSWORD_MISMATCH":"Password Mismatch"
 }
