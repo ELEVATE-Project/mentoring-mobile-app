@@ -12,8 +12,12 @@ export class ToastService {
       ) { }
 
       async showToast(msg, color) {
+        let texts;
+        this.translate.get([msg]).subscribe(resp =>{
+          texts = resp;
+        })
         let toast = await this.toastCtrl.create({
-            message: msg,
+            message: texts[msg],
             color:color,
             duration: 2000,
             position: 'top',

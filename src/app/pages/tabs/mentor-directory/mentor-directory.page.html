@@ -18,9 +18,9 @@
     <app-no-data-found [message]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
   </div>
 </ion-content>
-<ion-footer>
+<ion-footer *ngIf="mentors?.length">
   <ion-button class="view-more" expand="block" (click)="loadMore()"
-    *ngIf="mentors?.length && mentorsCount > mentors?.length">
+    *ngIf="mentorsCount > mentors?.length">
     {{ 'LOAD_MORE' | translate }}
   </ion-button>
 </ion-footer>

@@ -65,11 +65,6 @@ export class AttachmentService {
     async selectImage(type) {
         this.translate
             .get([
-                "ADD_PHOTO",
-                "REMOVE_CURRENT_PHOTO",
-                "CHOOSE_FROM_LIBRARY",
-                "TAKE_PHOTO",
-                "CANCEL",
                 "ERROR_WHILE_STORING_FILE",
                 "SUCCESSFULLY_ATTACHED"
             ])

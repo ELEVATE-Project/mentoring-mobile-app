@@ -9,6 +9,8 @@ export const urlConstants = {
         MENTORS_DIRECTORY:"/user/v1/mentors/list?page=",
         FILE_UPLOAD:"/user/v1/cloud-services/file/upload",
         // FORMS
-        FORM_READ:'/mentoring/v1/form/read'
+        FORM_READ:'/mentoring/v1/form/read',
+        GENERATE_OTP:"/user/v1/account/generateOtp",
+        RESET_PASSWORD:"/user/v1/account/resetPassword"
     }
 };

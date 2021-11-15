@@ -33,6 +33,9 @@ export class MentorDirectoryPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    
+  }
+  ionViewWillEnter(){
     this.getMentors();
   }
   onSearch() {
@@ -58,7 +61,6 @@ export class MentorDirectoryPage implements OnInit {
     }
   }
   eventAction(event) {
-    console.log(event, "event");
     switch (event.type) {
       case 'cardSelect':
         this.router.navigate([CommonRoutes.MENTOR_DETAILS]);

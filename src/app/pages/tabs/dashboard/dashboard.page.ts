@@ -1,12 +1,20 @@
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-tab3',
-  templateUrl: 'tab3.page.html',
-  styleUrls: ['tab3.page.scss']
+  selector: 'app-dashboard',
+  templateUrl: 'dashboard.page.html',
+  styleUrls: ['dashboard.page.scss']
 })
-export class Tab3Page {
-  constructor() { }
+export class DashboardPage {
+  segment: any = 'mentor';
+  constructor( private translate: TranslateService ) { }
+
+  segmentChanged(ev: any) {
+    console.log('Segment changed', ev);
+    this.segment = ev.detail.value;
+  }
+
   profileImageData: Object = {
     name: "Username",
     region: "Karnataka",

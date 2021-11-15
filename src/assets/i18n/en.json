@@ -69,5 +69,9 @@
     "ERROR_WHILE_STORING_FILE":"Error while storing.",
     "SUCCESSFULLY_ATTACHED":"Successfully uploaded.",
     "NO_MENTORS_AVAILABLE":"No Mentors available",
-    "LOAD_MORE":"Load more"
+    "LOAD_MORE":"Load more",
+    "MENTOR": "Mentor",
+    "MENTEE": "Mentee",
+    "SIGNUP_MESSAGE":"You have Signed up sucessfully, please use your registered id, password to login"
+
 }

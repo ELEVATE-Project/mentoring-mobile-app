@@ -16,11 +16,7 @@ export class ProfileImageComponent implements OnInit {
     private attachment : AttachmentService
   ) { }
 
-  ngOnInit() {
-    console.log(
-      this.uploadImage,"uploadImage"
-    );
-  }
+  ngOnInit() {}
 uploadPhoto(){
   this.attachment.selectImage(this.profileImageData.type).then(resp =>{
     if(resp.data){
@@ -33,7 +29,6 @@ uploadPhoto(){
 
 upload(data){
   this.attachment.cloudImageUpload(data).then(resp =>{
-    console.log(resp,"resp");
   },error =>{
     console.log(error,"error upload");
   })
