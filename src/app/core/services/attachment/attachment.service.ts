@@ -162,11 +162,11 @@ export class AttachmentService {
                     url: "",
                 };
 
-                this.presentToast(this.texts["FRMELEMNTS_MSG_SUCCESSFULLY_ATTACHED"], "success");
+                this.presentToast(this.texts["SUCCESSFULLY_ATTACHED"], "success");
                 this.actionSheetController.dismiss(data);
             },
             (error) => {
-                this.presentToast(this.texts["FRMELEMNTS_MSG_ERROR_WHILE_STORING_FILE"]);
+                this.presentToast(this.texts["ERROR_WHILE_STORING_FILE"]);
             }
         );
     }
