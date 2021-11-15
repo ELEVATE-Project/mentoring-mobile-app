@@ -8,8 +8,8 @@
 
   <div *ngIf="dataAvailable">
 
-    <ion-toolbar>
-      <ion-segment value="mentor" swipeGesture="true" (ionChange)="segmentChanged($event)">
+    <ion-toolbar *ngIf="isMentor">
+      <ion-segment [value]="segment" swipeGesture="true" (ionChange)="segmentChanged($event)">
         <ion-segment-button value="mentor">
           <ion-label>{{'Mentor' | translate}}</ion-label>
         </ion-segment-button>
@@ -19,9 +19,41 @@
       </ion-segment>
     </ion-toolbar>
 
-    <div class="main-wrapper" style="height: 100%;">
+    <div class="main-wrapper">
       <div [ngSwitch]="segment">
-        <div *ngSwitchCase="'mentor'" style="height: 100%;">
+        <div *ngSwitchCase="'mentor'">
+
+          <ion-row class="stat-row">
+            <ion-col>
+              <p class="dashboard-title">{{'Session Overview' | translate}}</p>
+            </ion-col>
+            <ion-col>
+              <ion-select interface="popover" value="weekly" class="stat-filter">
+                <ion-select-option value="weekly">Weekly</ion-select-option>
+                <ion-select-option value="monthly">Monthly</ion-select-option>
+                <ion-select-option value="quarterly">Quarterly</ion-select-option>
+              </ion-select>
+            </ion-col>
+          </ion-row>
+          <ion-row class="stat-box">
+            <ion-col class="bg-lite">
+                <p class="stat-title">
+                  {{'Total Session Created' | translate}}
+                  <span>10</span>
+                </p>
+            </ion-col>
+            <ion-col class="bg-lite">
+                <p class="stat-title">
+                  {{'Total Session Hosted' | translate}}
+                  <span>5</span>
+                </p>
+            </ion-col>
+          </ion-row>
+
+          <sl-pie-chart [data]="data"></sl-pie-chart>
+        </div>
+
+        <div *ngSwitchCase="'mentee'">
 
           <ion-row class="stat-row">
             <ion-col>
@@ -39,22 +71,18 @@
             <ion-col class="bg-lite">
                 <p class="stat-title">
                   {{'Total Session Enrolled' | translate}}
-                  <span>12</span>
+                  <span class="">4</span>
                 </p>
             </ion-col>
             <ion-col class="bg-lite">
                 <p class="stat-title">
                   {{'Total Session Attended' | translate}}
-                  <span>12</span>
+                  <span>2</span>
                 </p>
 
             </ion-col>
           </ion-row>
 
-          <sl-pie-chart [data]="data"></sl-pie-chart>
-        </div>
-
-        <div *ngSwitchCase="'mentee'" style="height: 100%;">
           <sl-pie-chart [data]="data"></sl-pie-chart>
         </div>
       </div>

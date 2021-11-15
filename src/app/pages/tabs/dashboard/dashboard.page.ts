@@ -6,16 +6,17 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['dashboard.page.scss']
 })
 export class DashboardPage {
-  segment: any = 'mentor';
+  segment: any = 'mentee';
   dataAvailable = true;
+  isMentor = false;
   data: any = {
     chart: {
       data: {
-        labels: ['January', 'February'],
+        labels: ['Total Session Enrolled', 'Total Session Attended'],
         datasets: [
           {
             data: [61, 39],
-            backgroundColor: ['red', 'blue']
+            backgroundColor: ['#ffab00', 'blue']
           }
         ]
       }
@@ -84,8 +85,10 @@ export class DashboardPage {
     },
   };
   public headerConfig: any = {
-    menu: true,
-    notification: true,
-    headerColor: 'primary',
+    menu: false,
+    notification: false,
+    backButton: true,
+    label:'DASHBOARD_PAGE',
+    headerColor: 'white',
   };
 }

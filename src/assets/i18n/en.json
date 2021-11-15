@@ -62,7 +62,10 @@
     "MENTOR": "Mentor",
     "MENTEE": "Mentee",
     "Session Overview": "Session Overview",
+    "Total Session Created": "Total Session Created",
+    "Total Session Hosted": "Total Session Hosted",
     "Total Session Attended": "Total Session Attended",
-    "Total Session Enrolled": "Total Session Enrolled"
+    "Total Session Enrolled": "Total Session Enrolled",
+    "DASHBOARD_PAGE": "Dashboard"
 
 }

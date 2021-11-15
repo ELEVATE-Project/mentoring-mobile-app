@@ -27,6 +27,8 @@
     color: var(--ion-color-primary);
     margin: 0;
     font-size: 13px;
+    display: flex;
+    flex-direction: column;
 }
 
 .bg-lite {
