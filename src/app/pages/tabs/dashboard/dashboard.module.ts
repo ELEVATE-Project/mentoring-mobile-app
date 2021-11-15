@@ -7,7 +7,7 @@ import { DashboardPage } from './dashboard.page';
 
 import { DashboardPageRoutingModule } from './dashboard-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
-
+import  { SlReportsLibraryModule } from 'sl-reports-library';
 @NgModule({
   imports: [
     IonicModule,
@@ -16,6 +16,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     RouterModule.forChild([{ path: '', component: DashboardPage }]),
     DashboardPageRoutingModule,
     SharedModule,
+    SlReportsLibraryModule
   ],
   declarations: [DashboardPage],
 })

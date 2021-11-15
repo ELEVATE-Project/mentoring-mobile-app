@@ -1,3 +1,46 @@
 .main-wrapper{
     margin : 20px 25px 0px 25px
 }
+
+.empty-state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.dashboard-title {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.stat-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.stat-title {
+    color: var(--ion-color-primary);
+    margin: 0;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+}
+
+.bg-lite {
+    background: var(--light-gray);
+}
+
+.stat-box {
+    display: flex;
+    gap: 3%;
+}
+
+.stat-filter {
+    font-size: 14px;
+    padding: 0;
+}
