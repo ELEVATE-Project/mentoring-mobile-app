@@ -2,7 +2,7 @@
 
 <ion-content>
   <app-profile-image [profileImageData]='profileImageData'></app-profile-image>
-  <div *ngIf="formData" class="mx-10">
+  <div *ngIf="showForm" class="mx-10">
     <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
   </div>
 </ion-content>

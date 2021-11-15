@@ -4,6 +4,8 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
 import { TranslateService } from '@ngx-translate/core';
+import { LocalStorageService } from 'src/app/core/services';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
   selector: 'app-profile',
@@ -44,7 +46,7 @@ export class ProfilePage implements OnInit {
     notification: true,
     headerColor: 'primary',
   };
-  constructor(public navCtrl: NavController, private profileService: ProfileService, private translate :TranslateService,) { }
+  constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private localStorage: LocalStorageService) { }
 
   ngOnInit() {
   }
@@ -54,15 +56,25 @@ export class ProfilePage implements OnInit {
 
   async fetchProfileDetails() {
     var response = await this.profileService.profileDetails();
-    this.formData.data = _.get(response, 'result');
-    if (this.formData.data.about) {
+    this.formData.data = _.get(response, 'user');
+    if (this.formData?.data?.about) {
       // TODO: remove the below line later
       this.showProfileDetails = true;
     }
   }
 
+  async doRefresh(event){
+    var res = await this.profileService.getProfileDetailsAPI();
+    this.formData.data = _.get(res, 'result');
+    this.localStorage.getLocalData(localKeys.USER_DETAILS).then(async (data)=>{
+      data.user=this.formData.data;
+      await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
+    })
+    event.target.complete();
+  }
+
   editProfile() {
-    this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE, {state: {existingProfileData:this.formData.data}});
+    this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE);
   }
 
   feedback() {
