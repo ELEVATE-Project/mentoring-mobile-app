@@ -10,3 +10,4 @@ export * from "./session-sqr-card/session-sqr-card.component"
 export * from "./skeleton/skeleton.component"
 export * from "./star-rating/star-rating.component"
 export * from "./generic-header/generic-header.component";
+export * from "./filter/filter.component";
