@@ -10,6 +10,7 @@ import {
 import { CommonRoutes } from 'src/global.routes';
 import { localKeys } from '../../constants/localStorage.keys';
 import * as _ from 'lodash-es';
+import {Location} from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,7 @@ export class ProfileService {
     private router: Router,
     private toast: ToastService,
     private localStorage: LocalStorageService,
+    private _location: Location
   ) { }
   async profileUpdate(formData) {
     await this.loaderService.startLoader();
@@ -31,10 +33,10 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.post(config);
       let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-      userDetails.user= data.user;
+      userDetails.user= null;
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, userDetails);
       this.loaderService.stopLoader();
-      this.router.navigate([CommonRoutes.TABS + '/' + CommonRoutes.PROFILE], { queryParams: formData });
+      this._location.back();
       this.toast.showToast(data.message, "success");
     }
     catch (error) {
@@ -48,6 +50,7 @@ export class ProfileService {
     };
     try {
       let data: any = await this.httpService.get(config);
+      data = _.get(data, 'result');
       return data;
     }
     catch (error) {
@@ -60,14 +63,15 @@ export class ProfileService {
       try {
       this.localStorage.getLocalData(localKeys.USER_DETAILS)
         .then(async (data) => {
-          if (data?.user?.about) {
+          if (data?.user) {
+            data = _.get(data, 'user');
             this.loaderService.stopLoader();
             resolve(data);
           } else {
             var res = await this.getProfileDetailsAPI();
-            let response = _.get(res, 'result');
-            data.user = response;
+            data.user = res;
             await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
+            data = _.get(data, 'user');
             this.loaderService.stopLoader();
             resolve(data);
           }

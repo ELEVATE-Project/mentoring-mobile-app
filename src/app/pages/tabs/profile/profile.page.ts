@@ -56,7 +56,7 @@ export class ProfilePage implements OnInit {
 
   async fetchProfileDetails() {
     var response = await this.profileService.profileDetails();
-    this.formData.data = _.get(response, 'user');
+    this.formData.data = response;
     if (this.formData?.data?.about) {
       // TODO: remove the below line later
       this.showProfileDetails = true;
@@ -64,12 +64,8 @@ export class ProfilePage implements OnInit {
   }
 
   async doRefresh(event){
-    var res = await this.profileService.getProfileDetailsAPI();
-    this.formData.data = _.get(res, 'result');
-    this.localStorage.getLocalData(localKeys.USER_DETAILS).then(async (data)=>{
-      data.user=this.formData.data;
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
-    })
+    var result = await this.profileService.getProfileDetailsAPI();
+    this.formData.data = result;
     event.target.complete();
   }
 
