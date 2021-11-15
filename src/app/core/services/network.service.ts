@@ -25,7 +25,7 @@ export class NetworkService {
 
 
   public getCurrentStatus() {
-    this.isNetworkAvailable = (this.network.type == 'none') ? false : true;
+    this.isNetworkAvailable = (this.network.type === 'none') ? false : true;
   }
 
 }
