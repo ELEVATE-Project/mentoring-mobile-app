@@ -11,6 +11,8 @@ import {
 import * as _ from 'lodash-es';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { EDIT_PROFILE_FORM } from 'src/app/core/constants/formConstant';
+import { LocalStorageService } from 'src/app/core/services';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
   selector: 'app-edit-profile',
@@ -32,14 +34,19 @@ export class EditProfilePage implements OnInit {
   };
 
   public formData: JsonFormData;
+  showForm: any= false;
   constructor(
     private form: FormService,
     private api: HttpService,
-    private profileService: ProfileService
-  ) {}
+    private profileService: ProfileService,
+    private localStorage: LocalStorageService
+  ) { }
   async ngOnInit() {
     const response = await this.form.getForm(EDIT_PROFILE_FORM);
     this.formData = _.get(response, 'result.data.fields');
+    let userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+      let existingData = userDetails.user;
+      this.preFillData(existingData);
   }
 
   onSubmit() {
@@ -51,5 +58,12 @@ export class EditProfilePage implements OnInit {
 
   resetForm() {
     this.form1.reset();
+  }
+
+  preFillData(existingData) {
+    for (let i = 0; i < this.formData.controls.length; i++) {
+      this.formData.controls[i].value = existingData[this.formData.controls[i].name];
+    }
+    this.showForm=true;
   }
 }

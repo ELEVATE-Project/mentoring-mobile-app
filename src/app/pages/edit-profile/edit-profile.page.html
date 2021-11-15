@@ -2,14 +2,15 @@
 
 <ion-content>
   <app-profile-image [profileImageData]='profileImageData' [uploadImage]="true"></app-profile-image>
-  <div *ngIf="formData" class="mx-10">
+  <div *ngIf="showForm" class="mx-10">
     <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
   </div>
 </ion-content>
 
 <ion-footer class="ion-no-border" submitButton>
   <ion-toolbar>
-    <ion-button expand="block" (click)="onSubmit()" >{{'SUBMIT' | translate}}</ion-button>
-    <!-- <ion-button (click)="resetForm()">{{'RESET' | translate}}</ion-button> -->
+    <ion-button expand="full" (click)="onSubmit()"
+      >{{'SUBMIT' | translate}}</ion-button
+    >
   </ion-toolbar>
 </ion-footer>
