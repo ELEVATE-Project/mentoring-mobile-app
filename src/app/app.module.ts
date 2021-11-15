@@ -17,7 +17,10 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { File } from '@ionic-native/file/ngx';
-
+import { Camera } from '@ionic-native/camera/ngx';
+import { FilePath } from '@ionic-native/file-path/ngx';
+import { Chooser } from '@ionic-native/chooser/ngx';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -47,7 +50,12 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Deeplinks,
     SocialSharing,
-    File
+    File,
+    Camera,
+    FilePath,
+    FileTransfer, 
+    FileTransferObject,
+    Chooser,
   ],
   bootstrap: [AppComponent],
 })

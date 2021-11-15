@@ -1,7 +1,7 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 
 <ion-content>
-  <app-profile-image [profileImageData]='profileImageData'></app-profile-image>
+  <app-profile-image [profileImageData]='profileImageData' [uploadImage]="true"></app-profile-image>
   <div *ngIf="formData" class="mx-10">
     <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
   </div>
@@ -9,9 +9,7 @@
 
 <ion-footer class="ion-no-border" submitButton>
   <ion-toolbar>
-    <ion-button slot="end" (click)="onSubmit()"
-      >{{'SUBMIT' | translate}}</ion-button
-    >
-    <ion-button (click)="resetForm()">{{'RESET' | translate}}</ion-button>
+    <ion-button expand="block" (click)="onSubmit()" >{{'SUBMIT' | translate}}</ion-button>
+    <!-- <ion-button (click)="resetForm()">{{'RESET' | translate}}</ion-button> -->
   </ion-toolbar>
 </ion-footer>

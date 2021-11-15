@@ -7,6 +7,7 @@ import * as _ from 'lodash-es';
 import { LoaderService } from '../loader/loader.service';
 import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
+import { ToastService } from '../toast.service';
 import { UserService } from '../user/user.service';
 
 @Injectable({
@@ -19,6 +20,7 @@ export class AuthService {
     private httpService: HttpService,
     private loaderService: LoaderService,
     private router: Router,
+    private toast: ToastService,
     private userService:UserService) {
   }
 
@@ -31,7 +33,8 @@ export class AuthService {
     try {
       await this.httpService.post(config);
       this.loaderService.stopLoader();
-      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`],{replaceUrl:true});
+      this.toast.showToast('SIGNUP_MESSAGE', 'sucess')
+      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { replaceUrl: true });
     }
     catch (error) {
       this.loaderService.stopLoader();
@@ -50,7 +53,7 @@ export class AuthService {
       let result = data.result;
       this.localStorage.setLocalData(localKeys.USER_DETAILS, result);
       this.loaderService.stopLoader();
-      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`],{replaceUrl:true});
+      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
     }
     catch (error) {
       this.loaderService.stopLoader();

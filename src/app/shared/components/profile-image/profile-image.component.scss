@@ -1,8 +1,9 @@
 .thumbnail-image{
     width: 40px;
     height: 40px;
+    border-radius: 50%;
 }
-.username{
+.username, .add-photo {
     font-size: 18px;
     text-align: center;
     margin: 4px;
