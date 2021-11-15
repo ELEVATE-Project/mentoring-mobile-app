@@ -70,4 +70,8 @@
     "SUCCESSFULLY_ATTACHED":"Successfully uploaded.",
     "NO_MENTORS_AVAILABLE":"No Mentors available",
     "LOAD_MORE":"Load more"
+    "EDIT_PROFILE":"Edit Profile",
+    "MENTOR": "Mentor",
+    "MENTEE": "Mentee"
+
 }

@@ -3,9 +3,9 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab3Page } from './tab3.page';
+import { DashboardPage } from './dashboard.page';
 
-import { Tab3PageRoutingModule } from './tab3-routing.module';
+import { DashboardPageRoutingModule } from './dashboard-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
@@ -13,10 +13,10 @@ import { SharedModule } from 'src/app/shared/shared.module';
     IonicModule,
     CommonModule,
     FormsModule,
-    RouterModule.forChild([{ path: '', component: Tab3Page }]),
-    Tab3PageRoutingModule,
+    RouterModule.forChild([{ path: '', component: DashboardPage }]),
+    DashboardPageRoutingModule,
     SharedModule,
   ],
-  declarations: [Tab3Page],
+  declarations: [DashboardPage],
 })
-export class Tab3PageModule {}
+export class DashboardPageModule {}
