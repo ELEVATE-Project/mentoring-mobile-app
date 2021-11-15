@@ -7,10 +7,10 @@ import {
 } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import {
   FormService,
-  PROFILE_FORM,
-} from 'src/app/shared/services/form/form.service';
+} from 'src/app/core/services/form/form.service';
 import * as _ from 'lodash-es';
-import { ProfileService } from 'src/app/shared/services/profile.service';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
+import { EDIT_PROFILE_FORM } from 'src/app/core/constants/formConstant';
 
 @Component({
   selector: 'app-edit-profile',
@@ -19,7 +19,9 @@ import { ProfileService } from 'src/app/shared/services/profile.service';
 })
 export class EditProfilePage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;
-
+  profileImageData ={
+    type :'profile'
+  }
   public headerConfig: any = {
     // menu: true,
     backButton: {
@@ -36,7 +38,7 @@ export class EditProfilePage implements OnInit {
     private profileService: ProfileService
   ) {}
   async ngOnInit() {
-    const response = await this.form.getForm(PROFILE_FORM);
+    const response = await this.form.getForm(EDIT_PROFILE_FORM);
     this.formData = _.get(response, 'result.data.fields');
   }
 

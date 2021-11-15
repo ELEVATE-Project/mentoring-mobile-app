@@ -6,13 +6,18 @@
       <img class="thumbnail-image" src="{{profileImageData?.profile_image}}" />
     </ng-template>
   </div>
-  <div *ngIf="profileImageData?.name">
-    <p class="username">{{ profileImageData?.name }}</p>
+  <p class="add-photo" *ngIf="uploadImage" (click)="uploadPhoto()">{{ "ADD_PHOTO" | translate }}</p>
+  <div *ngIf="showProfileDetails; else elseBlock">
+    <div *ngIf="profileImageData?.name">
+      <p class="username">{{ profileImageData?.name }}</p>
+    </div>
+    <div *ngIf="profileImageData?.location">
+      <p class="region">{{ profileImageData?.location[0]?.label }}</p>
+    </div>
   </div>
-  <div *ngIf="profileImageData?.region">
-    <p class="region">{{ profileImageData?.region }}</p>
-  </div>
-  <div class="join-button" *ngIf="profileImageData?.join_button">
-    <ion-button color="dark" shape="round">{{"JOIN" | translate}}</ion-button>
-  </div>
+  <ng-template #elseBlock>
+    <div *ngIf='username'>
+      <p class="username">{{ "USERNAME" | translate }}</p>
+    </div>
+  </ng-template>
 </div>

@@ -64,4 +64,47 @@ export class UtilService {
       await alert.present();
     });
   }
+
+  getActionSheetButtons(type) {
+    let texts
+    this.translate
+      .get([
+        "ADD_PHOTO",
+        "REMOVE_CURRENT_PHOTO",
+        "CHOOSE_FROM_LIBRARY",
+        "TAKE_PHOTO",
+        "CANCEL",
+        "ERROR_WHILE_STORING_FILE",
+        "SUCCESSFULLY_ATTACHED"
+      ])
+      .subscribe((data) => {
+        texts = data;
+      });
+    let buttons = []
+
+    switch (type) {
+      case 'profile':
+        buttons = [
+          {
+            text: texts["REMOVE_CURRENT_PHOTO"],
+            type: 'remove',
+          },
+          {
+            text: texts["TAKE_PHOTO"],
+            type: 'CAMERA',
+            action: 'camera'
+          }
+        ]
+    }
+    buttons.push({
+      text: texts["CHOOSE_FROM_LIBRARY"],
+      type: 'PHOTOLIBRARY',
+      action: 'camera'
+    })
+    buttons.push({
+      text: texts["CANCEL"],
+      role: "cancel",
+    })
+    return buttons;
+  }
 }

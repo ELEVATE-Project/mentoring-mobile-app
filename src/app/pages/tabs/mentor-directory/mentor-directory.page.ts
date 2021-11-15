@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
+import {
+  HttpService,
+  LoaderService,
+  ToastService
+} from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
@@ -8,65 +14,49 @@ import { CommonRoutes } from 'src/global.routes';
   styleUrls: ['./mentor-directory.page.scss'],
 })
 export class MentorDirectoryPage implements OnInit {
+  page = 1;
+  limit = 10;
+  searchText: string='';
   public headerConfig: any = {
     menu: true,
     label: 'MENTORS_DIRECTORY',
+    headerColor: 'primary',
     notification: false,
   };
 
-  mentors =
-    [
-      {
-        directoryName: 'A',
-        values: [
-          {
-            title: 'Mentor 1',
-            subTitle: 'sub title',
-            image: 'person-circle-outline',
-            _id:1
-          },
-          {
-            title: 'Mentor 2',
-            subTitle: 'sub title',
-            image: 'person-circle-outline',
-            _id:1
-          },
-          {
-            title: 'Mentor 3',
-            subTitle: 'sub title',
-            image: 'person-circle-outline'
-          }]
-      },
-      {
-        directoryName: 'B',
-        values: [
-          {
-            title: 'Mentor 1',
-            subTitle: 'sub title',
-            image: 'person-circle-outline',
-            _id:4
-          },
-          {
-            title: 'Mentor 2',
-            subTitle: 'sub title',
-            image: 'person-circle-outline',
-            _id:3
-          },
-          {
-            title: 'Mentor 3',
-            subTitle: 'sub title',
-            image: 'person-circle-outline',
-            _id:2
-          }]
-      }
-    ]
+  mentors =[];
+  mentorsCount;
   constructor(
-    private router: Router
+    private router: Router,
+    private loaderService: LoaderService,
+    private httpService: HttpService
   ) { }
 
   ngOnInit() {
+    this.getMentors();
+  }
+  onSearch() {
+    this.page = 1;
+    this.getMentors();
+    this.mentors=[];
   }
 
+  async getMentors() {
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY + this.page + '&limit=' + this.limit+'&search='+this.searchText,
+      payload: {}
+    };
+    try {
+      let data: any = await this.httpService.get(config);
+      this.loaderService.stopLoader();
+      this.mentors =  this.mentors.concat(data.result.data);
+      this.mentorsCount =  data.result.count;
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
   eventAction(event) {
     console.log(event, "event");
     switch (event.type) {
@@ -74,5 +64,9 @@ export class MentorDirectoryPage implements OnInit {
         this.router.navigate([CommonRoutes.MENTOR_DETAILS]);
         break;
     }
+  }
+  loadMore(){
+    this.page = this.page + 1;
+    this.getMentors();
   }
 }

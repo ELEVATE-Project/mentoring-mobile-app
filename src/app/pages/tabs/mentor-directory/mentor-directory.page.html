@@ -1,15 +1,26 @@
 <app-page-header [config]="headerConfig">
 </app-page-header>
-<ion-content class="ion-padding"> 
+<ion-content class="ion-padding">
   <ion-toolbar>
-    <ion-searchbar class="top-padding" placeholder="" [(ngModel)]="searchText"></ion-searchbar>
-    </ion-toolbar>
-<div *ngFor="let mentor of mentors">
-  <div class="index-label">
-    {{mentor.directoryName}}
+    <ion-searchbar class="top-padding search-style" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"
+      [(ngModel)]="searchText" (ionChange)="onSearch()"></ion-searchbar>
+  </ion-toolbar>
+  <div *ngFor="let mentor of mentors">
+    <div class="index-label">
+      {{mentor.key}}
     </div>
-  <div *ngFor="let value of mentor.values">
-  <app-session-card [data]="value"  [showAction]=true [action]="'VIEW_PROFILE'" (onClickEvent)="eventAction($event)"></app-session-card>
+    <div *ngFor="let value of mentor.values">
+      <app-session-card [data]="value" [showAction]=true [action]="'VIEW_PROFILE'" (onClickEvent)="eventAction($event)">
+      </app-session-card>
+    </div>
   </div>
+  <div *ngIf="!mentors?.length">
+    <app-no-data-found [message]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
   </div>
 </ion-content>
+<ion-footer>
+  <ion-button class="view-more" expand="block" (click)="loadMore()"
+    *ngIf="mentors?.length && mentorsCount > mentors?.length">
+    {{ 'LOAD_MORE' | translate }}
+  </ion-button>
+</ion-footer>

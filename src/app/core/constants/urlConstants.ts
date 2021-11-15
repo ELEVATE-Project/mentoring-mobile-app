@@ -5,7 +5,9 @@ export const urlConstants = {
         LOGOUT_ACCOUNT:"/user/v1/account/logout",
         REFRESH_TOKEN:"/user/v1/account/generateToken",
         PROFILE_UPDATE:"/user/v1/profile/update",
-        PROFILR_DETAILS: "/user/v1/profile/details",
+        PROFILE_DETAILS: "/user/v1/profile/details",
+        MENTORS_DIRECTORY:"/user/v1/mentors/list?page=",
+        FILE_UPLOAD:"/user/v1/cloud-services/file/upload",
         // FORMS
         FORM_READ:'/mentoring/v1/form/read'
     }

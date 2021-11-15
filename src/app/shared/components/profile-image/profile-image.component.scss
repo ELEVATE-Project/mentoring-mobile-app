@@ -3,16 +3,15 @@
     height: 40px;
     border-radius: 50%;
 }
-.username{
-    margin-top: 10px;
+.username, .add-photo {
     font-size: 18px;
     text-align: center;
+    margin: 4px;
 }
 .region{   
-    margin-top: 5px;
     font-size: 16px;
-    margin-bottom: 50px;
     text-align: center;
+    margin: 4px;
 }
 .join-button{
     display: flex;

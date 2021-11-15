@@ -2,12 +2,10 @@ import { Component } from '@angular/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
-import { LocalStorageService } from './core/services/localstorage.service';
 import * as _ from 'lodash-es';
-import { UserService } from './core/services/user/user.service';
-import { UtilService } from './core/services';
+import { UtilService,DbService,UserService,LocalStorageService } from './core/services';
 import { CommonRoutes } from 'src/global.routes';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -26,13 +24,16 @@ export class AppComponent {
     private localStorage: LocalStorageService,
     public menuCtrl:MenuController,
     private userService:UserService,
-    private utilService:UtilService
+    private utilService:UtilService,
+    private db:DbService,
+    private router: Router
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.db.init();
       setTimeout(()=>{
         this.languageSetting();
         this.getUser();

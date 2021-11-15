@@ -6,3 +6,5 @@ export * from './auth/auth.service';
 export * from './util/util.service';
 export * from './user/user.service';
 export * from './toast.service';
+export * from './db/db.service';
+export * from './attachment/attachment.service';
