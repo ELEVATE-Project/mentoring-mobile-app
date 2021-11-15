@@ -21,16 +21,11 @@ export class NetworkService {
     this.connectSubscription = this.network.onConnect().subscribe(() => {
       this.isNetworkAvailable = true;
     });
-    console.log(this.isNetworkAvailable);
   }
 
 
   public getCurrentStatus() {
-    if (this.network.type == 'none') {
-      this.isNetworkAvailable = false;
-    } else {
-      this.isNetworkAvailable = true;
-    }
+    this.isNetworkAvailable = (this.network.type == 'none') ? false : true;
   }
 
 }
