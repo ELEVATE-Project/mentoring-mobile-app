@@ -1,0 +1,30 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+
+<ion-toolbar>
+  <ion-segment value="mentor" swipeGesture="true" (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="mentor">
+      <ion-label>Mentor</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="mentee">
+      <ion-label>Mentee</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-toolbar>
+
+<ion-content [fullscreen]="true">
+  <div class="main-wrapper">
+    <div [ngSwitch]="segment">
+      <div *ngSwitchCase="'mentor'">
+        {{'MENTOR' | translate}}
+      </div>
+
+      <div *ngSwitchCase="'mentee'">
+        {{'MENTEE' | translate}}
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+
+<ion-footer class="ion-no-border">
+</ion-footer>

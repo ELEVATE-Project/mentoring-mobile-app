@@ -58,5 +58,7 @@
     "LANGUAGES":"Languages",
     "SEARCH":"Search",
     "SORRY_NO_RESULTS":"Sorry No results found",
-    "EDIT_PROFILE":"Edit Profile"
+    "EDIT_PROFILE":"Edit Profile",
+    "MENTOR": "Mentor",
+    "MENTEE": "Mentee"
 }
