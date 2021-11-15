@@ -8,7 +8,7 @@
               <ion-icon slot="icon-only" name="person-circle"></ion-icon>
             </ion-button>
           </ion-buttons>
-          <ion-title><strong>Pradeep</strong></ion-title>
+          <ion-title><strong> {{'WELCOME' | translate}} {{user?.user?.name}}</strong></ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-content fullscreen >
@@ -16,7 +16,7 @@
           <ion-list lines="none" class="sub-menu-list">
             <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
               <ion-item [routerLink]="p.url" lines="none" detail="false"
-                routerLinkActive="selected">
+                routerLinkActive="selected" *ngIf="!mentorMenu.includes(p.title) || (mentorMenu.includes(p.title)&&isMentor) ">
                 <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
                 <ion-label><strong>{{ p.title  | translate}}</strong></ion-label>
               </ion-item>

@@ -21,7 +21,9 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 })
 export class EditProfilePage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;
-
+  profileImageData ={
+    type :'profile'
+  }
   public headerConfig: any = {
     // menu: true,
     backButton: {

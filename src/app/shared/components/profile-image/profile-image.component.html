@@ -6,6 +6,7 @@
       <img class="thumbnail-image" src="{{profileImageData?.profile_image}}" />
     </ng-template>
   </div>
+  <p class="add-photo" *ngIf="uploadImage" (click)="uploadPhoto()">{{ "ADD_PHOTO" | translate }}</p>
   <div *ngIf="profileImageData;">
     <div *ngIf="profileImageData?.name">
       <p class="username">{{ profileImageData?.name }}</p>
