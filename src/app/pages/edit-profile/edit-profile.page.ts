@@ -19,7 +19,9 @@ import { EDIT_PROFILE_FORM } from 'src/app/core/constants/formConstant';
 })
 export class EditProfilePage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;
-
+  profileImageData ={
+    type :'profile'
+  }
   public headerConfig: any = {
     // menu: true,
     backButton: {

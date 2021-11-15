@@ -138,3 +138,11 @@ ion-button{
     --color: var(--black);
    }
 }
+
+.alert-button-group.sc-ion-alert-md{
+  display: flex;
+  justify-content: space-between;
+}
+.alert-wrapper.sc-ion-alert-md{
+  border-radius: 8px;
+}

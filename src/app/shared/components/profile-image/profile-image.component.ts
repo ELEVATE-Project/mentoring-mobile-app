@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AttachmentService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-profile-image',
@@ -7,12 +8,29 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ProfileImageComponent implements OnInit {
 
-  @Input() profileImageData: Object;
+  @Input() profileImageData;
   @Input() showProfileDetails: any;
   @Input() username: any;
-  constructor() { }
+  @Input() uploadImage : boolean = false;
+  constructor(
+    private attachment : AttachmentService
+  ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
+uploadPhoto(){
+  this.attachment.selectImage(this.profileImageData.type).then(resp =>{
+    if(resp.data){
+      this.upload(resp.data)
+    }
+  },error =>{
+    console.log(error,"error");
+  })
+}
 
+upload(data){
+  this.attachment.cloudImageUpload(data).then(resp =>{
+  },error =>{
+    console.log(error,"error upload");
+  })
+}
 }
