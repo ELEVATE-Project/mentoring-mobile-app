@@ -45,6 +45,7 @@ export class ProfilePage implements OnInit {
     menu: true,
     notification: true,
     headerColor: 'primary',
+    label:'PROFILE'
   };
   constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private localStorage: LocalStorageService) { }
 

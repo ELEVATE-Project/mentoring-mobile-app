@@ -15,7 +15,7 @@
         <div *ngFor="let session of sessions" routerLink="/{{SESSIONS}}/{{SESSIONS_DETAILS}}">
           <div [ngSwitch]="type">
             <ion-list *ngSwitchCase="'all-sessions'">
-              <app-session-card [data]="session" [showEnroll]=true></app-session-card>
+              <app-session-card [data]="session" ></app-session-card>
             </ion-list>
             <ion-list *ngSwitchCase="'my-sessions'">
               <app-session-card-template [data]="session" [showEdit]=true></app-session-card-template>
