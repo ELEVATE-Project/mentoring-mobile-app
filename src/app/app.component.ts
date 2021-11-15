@@ -3,7 +3,7 @@ import { MenuController, NavController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
 import * as _ from 'lodash-es';
-import { UtilService,DbService,UserService,LocalStorageService } from './core/services';
+import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService } from './core/services';
 import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
 @Component({
@@ -18,6 +18,12 @@ export class AppComponent {
     { title: 'SETTINGS', url: '', icon: 'settings' },
     { title: 'HELP', url: '', icon: 'help-circle' }
   ];
+
+  public mentorMenu=[
+    'CREATED_SESSIONS',
+  ]
+
+  isMentor:boolean
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -26,7 +32,9 @@ export class AppComponent {
     private userService:UserService,
     private utilService:UtilService,
     private db:DbService,
-    private router: Router
+    private router: Router,
+    private network:NetworkService,
+    private authService:AuthService
   ) {
     this.initializeApp();
   }
@@ -34,6 +42,7 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.db.init();
+      this.network.netWorkCheck();
       setTimeout(()=>{
         this.languageSetting();
         this.getUser();
@@ -41,6 +50,12 @@ export class AppComponent {
       setTimeout(() => {
         document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
       }, 2000);
+
+      this.userService.getUserValue().then((result) => {
+        console.log(result);
+        this.isMentor = result?.user?.isAMentor;
+      });
+
     });
   }
   languageSetting() {

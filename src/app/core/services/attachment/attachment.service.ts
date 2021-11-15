@@ -8,8 +8,6 @@ import { TranslateService } from "@ngx-translate/core";
 import { FILE_EXTENSION_HEADERS } from "../../constants/file-extensions";
 import { UtilService } from "../util/util.service";
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-import { urlConstants } from "../../constants/urlConstants";
-import { environment } from "src/environments/environment";
 
 @Injectable({
     providedIn: 'root'

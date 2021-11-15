@@ -8,6 +8,7 @@ import { LoaderService } from '../loader/loader.service';
 import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { ToastService } from '../toast.service';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,8 @@ export class AuthService {
     private httpService: HttpService,
     private loaderService: LoaderService,
     private router: Router,
-    private toast: ToastService) {
+    private toast: ToastService,
+    private userService:UserService) {
   }
 
   async createAccount(formData) {
@@ -57,4 +59,27 @@ export class AuthService {
       this.loaderService.stopLoader();
     }
   }
+
+  async logoutAccount() {
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.LOGOUT_ACCOUNT,
+      payload: {
+        refreshToken: _.get(this.userService.userDetail, 'refresh_token')
+      }
+    };
+    try {
+      await this.httpService.post(config)
+      this.localStorage.delete(localKeys.USER_DETAILS);
+      this.userService.userDetail = [];
+      await this.loaderService.stopLoader();
+      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
+        replaceUrl: true
+      });
+    }
+    catch (error) {
+      await this.loaderService.stopLoader();
+    }
+  }
+
 }

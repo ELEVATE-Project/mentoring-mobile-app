@@ -72,6 +72,7 @@
     "LOAD_MORE":"Load more",
     "MENTOR": "Mentor",
     "MENTEE": "Mentee",
-    "SIGNUP_MESSAGE":"You have Signed up sucessfully, please use your registered id, password to login"
-
+    "SIGNUP_MESSAGE":"You have Signed up sucessfully, please use your registered id, password to login",
+    "MSG_PLEASE_NETWORK":"Please check your network connection and try again",
+    "PASSWORD_MISMATCH":"Password Mismatch"
 }
