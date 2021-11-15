@@ -83,5 +83,6 @@
     "DASHBOARD_PAGE": "Dashboard",
     "WEEKLY": "Weekly",
     "MONTHLY": "Monthly",
-    "QUARTERLY": "Quarterly"
+    "QUARTERLY": "Quarterly",
+    "NO_DATA_AVAILABLE": "No Data Available"
 }

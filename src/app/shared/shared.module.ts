@@ -17,7 +17,8 @@ import {
   SessionSqrCardComponent,
   SkeletonComponent,
   StarRatingComponent,
-  GenericHeaderComponent
+  GenericHeaderComponent,
+  FilterComponent
 } from './components/index';
 
 @NgModule({
@@ -33,7 +34,8 @@ import {
     GenericDetailsComponent,
     SkeletonComponent,
     NoDataFoundComponent,
-    GenericHeaderComponent
+    GenericHeaderComponent,
+    FilterComponent
   ],
   imports: [
     CommonModule,
@@ -56,7 +58,8 @@ import {
     GenericDetailsComponent,
     SkeletonComponent,
     NoDataFoundComponent,
-    GenericHeaderComponent
+    GenericHeaderComponent,
+    FilterComponent
   ],
 })
 export class SharedModule { }

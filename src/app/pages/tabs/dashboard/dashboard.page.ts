@@ -6,9 +6,23 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['dashboard.page.scss']
 })
 export class DashboardPage {
-  segment: any = 'mentee';
+  segment: any = 'mentor';
   dataAvailable = true;
-  isMentor = false;
+  isMentor = true;
+  filter: any = [
+    {
+      key: 'WEEKLY',
+      value: 'weekly'
+    },
+    {
+      key: 'MONTHLY',
+      value: 'monthly'
+    },
+    {
+      key: 'QUARTERLY',
+      value: 'quarterly'
+    }
+  ];
   data: any = {
     chart: {
       data: {
@@ -28,6 +42,10 @@ export class DashboardPage {
   segmentChanged(ev: any) {
     console.log('Segment changed', ev);
     this.segment = ev.detail.value;
+  }
+
+  filterChangeHandler(event: any) {
+    console.log('Filter changed', event);
   }
 
   profileImageData: Object = {

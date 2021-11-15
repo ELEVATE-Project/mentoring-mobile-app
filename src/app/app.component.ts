@@ -85,7 +85,7 @@ export class AppComponent {
     }
     this.utilService.alertPopup(msg).then(data => {
       if(data){
-        this.userService.logoutAccount();
+        this.authService.logoutAccount();
       }
     }).catch(error => {})
   }

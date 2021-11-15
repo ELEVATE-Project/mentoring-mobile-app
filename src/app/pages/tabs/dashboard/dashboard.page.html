@@ -3,7 +3,7 @@
 
 <ion-content [fullscreen]="true">
   <div class="empty-state-container" *ngIf="!dataAvailable">
-    <app-no-data-found [message]="'No Data Available'"></app-no-data-found>
+    <app-no-data-found [message]="'NO_DATA_AVAILABLE'"></app-no-data-found>
   </div>
 
   <div *ngIf="dataAvailable">
@@ -11,10 +11,10 @@
     <ion-toolbar *ngIf="isMentor">
       <ion-segment [value]="segment" swipeGesture="true" (ionChange)="segmentChanged($event)">
         <ion-segment-button value="mentor">
-          <ion-label>{{'Mentor' | translate}}</ion-label>
+          <ion-label>{{'MENTOR' | translate}}</ion-label>
         </ion-segment-button>
         <ion-segment-button value="mentee">
-          <ion-label>{{'Mentee' | translate}}</ion-label>
+          <ion-label>{{'MENTEE' | translate}}</ion-label>
         </ion-segment-button>
       </ion-segment>
     </ion-toolbar>
@@ -25,26 +25,22 @@
 
           <ion-row class="stat-row">
             <ion-col>
-              <p class="dashboard-title">{{'Session Overview' | translate}}</p>
+              <p class="dashboard-title">{{'SESSION_OVERVIEW' | translate}}</p>
             </ion-col>
             <ion-col>
-              <ion-select interface="popover" value="weekly" class="stat-filter">
-                <ion-select-option value="weekly">Weekly</ion-select-option>
-                <ion-select-option value="monthly">Monthly</ion-select-option>
-                <ion-select-option value="quarterly">Quarterly</ion-select-option>
-              </ion-select>
+              <app-filter [defaultValue]="'weekly'" [filter]="filter" (filterChange)="filterChangeHandler($event)"></app-filter>
             </ion-col>
           </ion-row>
           <ion-row class="stat-box">
             <ion-col class="bg-lite">
                 <p class="stat-title">
-                  {{'Total Session Created' | translate}}
+                  {{'TOTAL_SESSION_CREATED' | translate}}
                   <span>10</span>
                 </p>
             </ion-col>
             <ion-col class="bg-lite">
                 <p class="stat-title">
-                  {{'Total Session Hosted' | translate}}
+                  {{'TOTAL_SESSION_HOSTED' | translate}}
                   <span>5</span>
                 </p>
             </ion-col>
@@ -57,29 +53,24 @@
 
           <ion-row class="stat-row">
             <ion-col>
-              <p class="dashboard-title">{{'Session Overview' | translate}}</p>
+              <p class="dashboard-title">{{'SESSION_OVERVIEW' | translate}}</p>
             </ion-col>
             <ion-col>
-              <ion-select interface="popover" value="weekly" class="stat-filter">
-                <ion-select-option value="weekly">Weekly</ion-select-option>
-                <ion-select-option value="monthly">Monthly</ion-select-option>
-                <ion-select-option value="quarterly">Quarterly</ion-select-option>
-              </ion-select>
+              <app-filter [defaultValue]="'weekly'" [filter]="filter" (filterChange)="filterChangeHandler($event)"></app-filter>
             </ion-col>
           </ion-row>
           <ion-row class="stat-box">
             <ion-col class="bg-lite">
                 <p class="stat-title">
-                  {{'Total Session Enrolled' | translate}}
+                  {{'TOTAL_SESSION_ENROLLED' | translate}}
                   <span class="">4</span>
                 </p>
             </ion-col>
             <ion-col class="bg-lite">
                 <p class="stat-title">
-                  {{'Total Session Attended' | translate}}
+                  {{'TOTAL_SESSION_ATTENDED' | translate}}
                   <span>2</span>
                 </p>
-
             </ion-col>
           </ion-row>
 
