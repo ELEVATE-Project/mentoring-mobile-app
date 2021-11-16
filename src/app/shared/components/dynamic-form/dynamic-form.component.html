@@ -66,6 +66,7 @@
         *ngIf="control.type === 'select'"
         [multiple]="control.multiple"
         [formControlName]="control.name"
+        [compareWith]="compareWith"
       >
         <ion-select-option
           *ngFor="let option of control.options"

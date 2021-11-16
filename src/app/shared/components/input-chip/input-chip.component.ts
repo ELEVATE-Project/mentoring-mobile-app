@@ -9,7 +9,7 @@ import {
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { UUID } from 'angular2-uuid';
-import * as _ from "lodash-es"
+import * as _ from 'lodash-es';
 
 @Component({
   selector: 'app-input-chip',
@@ -49,6 +49,9 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
     this.chips.map((chip) =>
       _.some(value,chip) ? this.selectedChips.add(chip) : null
     );
+    if (this.selectedChips.size === this.chips.length) {
+      this._selectAll = true;
+    }
   }
   registerOnChange(onChange: any) {
     this.onChange = onChange;

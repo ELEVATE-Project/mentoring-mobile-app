@@ -60,9 +60,14 @@ export class EditProfilePage implements OnInit {
     this.form1.reset();
   }
 
-  preFillData(existingData) {
+ preFillData(existingData) {
     for (let i = 0; i < this.formData.controls.length; i++) {
-      this.formData.controls[i].value = existingData[this.formData.controls[i].name];
+      this.formData.controls[i].value =
+        existingData[this.formData.controls[i].name];
+      this.formData.controls[i].options = _.unionBy(
+        this.formData.controls[i].options,
+        this.formData.controls[i].value,'value'
+      );
     }
     this.showForm=true;
   }
