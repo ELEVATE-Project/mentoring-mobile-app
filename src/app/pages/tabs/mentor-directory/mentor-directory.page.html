@@ -10,7 +10,7 @@
       {{mentor.key}}
     </div>
     <div *ngFor="let value of mentor.values">
-      <app-session-card [data]="value" [showAction]=true [action]="'VIEW_PROFILE'" (onClickEvent)="eventAction($event)">
+      <app-session-card [data]="value"  [action]="'VIEW_PROFILE'" (onClickEvent)="eventAction($event)">
       </app-session-card>
     </div>
   </div>

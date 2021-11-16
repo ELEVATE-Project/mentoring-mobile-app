@@ -4,6 +4,8 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
 import { TranslateService } from '@ngx-translate/core';
+import { LocalStorageService } from 'src/app/core/services';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
   selector: 'app-profile',
@@ -43,8 +45,9 @@ export class ProfilePage implements OnInit {
     menu: true,
     notification: true,
     headerColor: 'primary',
+    label:'PROFILE'
   };
-  constructor(public navCtrl: NavController, private profileService: ProfileService, private translate :TranslateService,) { }
+  constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private localStorage: LocalStorageService) { }
 
   ngOnInit() {
   }
@@ -54,12 +57,17 @@ export class ProfilePage implements OnInit {
 
   async fetchProfileDetails() {
     var response = await this.profileService.profileDetails();
-    console.log(response);
-    this.formData.data = _.get(response, 'result');
-    if (this.formData.data.name) {
+    this.formData.data = response;
+    if (this.formData?.data?.about) {
       // TODO: remove the below line later
       this.showProfileDetails = true;
     }
+  }
+
+  async doRefresh(event){
+    var result = await this.profileService.getProfileDetailsAPI();
+    this.formData.data = result;
+    event.target.complete();
   }
 
   editProfile() {

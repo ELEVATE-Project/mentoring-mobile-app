@@ -1,7 +1,10 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content [fullscreen]="true">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
     <div class="main-wrapper" *ngIf="formData && formData.data">
-        <app-profile-image [profileImageData]='formData.data' [showProfileDetails]='showProfileDetails' [username]='username'></app-profile-image>
+        <app-profile-image [profileImageData]='formData.data'></app-profile-image>
         <div *ngIf="showProfileDetails; else elseBlock">
             <div class="d-flex flex-justify-center">
                 <ion-button shape="round" (click)="editProfile()">{{ "EDIT" | translate }}</ion-button>
@@ -15,4 +18,4 @@
             </div>
         </ng-template>
     </div>
-</ion-content>
+  </ion-content>

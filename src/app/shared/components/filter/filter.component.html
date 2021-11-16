@@ -1,0 +1,8 @@
+<ion-select [interface]="interface" [value]="defaultValue" class="stat-filter" (ionChange)="ionChange($event)">
+  <ion-select-option *ngFor="let option of filter" [value]="option.value">
+    {{ option.key | translate }}
+  </ion-select-option>
+  <!-- <ion-select-option value="weekly">{{'WEEKLY' | translate}}</ion-select-option>
+  <ion-select-option value="monthly">{{'MONTHLY' | translate}}</ion-select-option>
+  <ion-select-option value="quarterly">{{'QUARTERLY' | translate}}</ion-select-option> -->
+</ion-select>

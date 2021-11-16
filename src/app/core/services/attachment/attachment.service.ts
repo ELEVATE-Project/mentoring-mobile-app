@@ -147,7 +147,6 @@ export class AttachmentService {
         let correctPath = filePath.substr(0, filePath.lastIndexOf("/") + 1);
         let currentName = filePath.split("/").pop();
         currentName = currentName.split("?")[0];
-        console.log(correctPath, currentName, this.createFileName(currentName),"correctPath, currentName, this.createFileName(currentName)")
         this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName));
     }
 
@@ -212,7 +211,7 @@ export class AttachmentService {
                 httpMethod: "PUT",
               };
               const fileTrans: FileTransferObject = this.fileTransfer.create();
-              fileTrans.upload(this.fileBasePath + fileDetails.name, fileDetails.uploadUrl, options).then(success => {
+              fileTrans.upload(this.fileBasePath + fileDetails.name, urlConstants.API_URLS.FILE_UPLOAD, options).then(success => {
                 resolve(success)
               }).catch(error => {
                 reject(error)

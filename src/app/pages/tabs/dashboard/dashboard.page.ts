@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: 'dashboard.page.html',
@@ -8,6 +7,36 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class DashboardPage {
   segment: any = 'mentor';
+  dataAvailable = true;
+  isMentor = true;
+  filter: any = [
+    {
+      key: 'WEEKLY',
+      value: 'weekly'
+    },
+    {
+      key: 'MONTHLY',
+      value: 'monthly'
+    },
+    {
+      key: 'QUARTERLY',
+      value: 'quarterly'
+    }
+  ];
+  data: any = {
+    chart: {
+      data: {
+        labels: ['Total Session Enrolled', 'Total Session Attended'],
+        datasets: [
+          {
+            data: [61, 39],
+            backgroundColor: ['#ffab00', 'blue']
+          }
+        ]
+      }
+    }
+  };
+
   constructor( private translate: TranslateService ) { }
 
   segmentChanged(ev: any) {
@@ -15,8 +44,12 @@ export class DashboardPage {
     this.segment = ev.detail.value;
   }
 
+  filterChangeHandler(event: any) {
+    console.log('Filter changed', event);
+  }
+
   profileImageData: Object = {
-    name: "Username",
+    name: 'Username',
     region: "Karnataka",
     profile_image: null,
   }
@@ -70,8 +103,10 @@ export class DashboardPage {
     },
   };
   public headerConfig: any = {
-    menu: true,
-    notification: true,
-    headerColor: 'primary',
+    menu: false,
+    notification: false,
+    backButton: true,
+    label:'DASHBOARD_PAGE',
+    headerColor: 'white',
   };
 }

@@ -38,6 +38,7 @@ export class AppComponent {
     private authService:AuthService
   ) {
     this.initializeApp();
+    this.router.navigate(["/"]);
   }
 
   initializeApp() {
