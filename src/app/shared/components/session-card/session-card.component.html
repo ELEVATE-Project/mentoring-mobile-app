@@ -8,7 +8,12 @@
     </ion-col>
     <ion-col size="9">
       <h5>{{data?.name || data?.title}}</h5>
-      <p class="ellipsis">{{data?.reasOfExpertise}}</p>
+      <div *ngIf="data?.areasOfExpertise?.length">
+        <span class="ion-margin-top" *ngFor="let label of data?.areasOfExpertise;  let isLast=last">
+          <ion-label>{{label?.label}}{{isLast ? '' : ', '}} </ion-label>
+        </span>
+      </div>
+      <p class="ellipsis">{{data?.subTitle}}</p>
     </ion-col>
   </ion-row>
   <div class="session-actions">

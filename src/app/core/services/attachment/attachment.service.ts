@@ -6,6 +6,8 @@ import { File } from "@ionic-native/file/ngx";
 import { ActionSheetController, Platform, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { FILE_EXTENSION_HEADERS } from "../../constants/file-extensions";
+import { urlConstants } from "../../constants/urlConstants";
+import { HttpService } from "../http/http.service";
 import { UtilService } from "../util/util.service";
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 
@@ -28,7 +30,8 @@ export class AttachmentService {
         private chooser: Chooser,
         private utils: UtilService,
         private translate: TranslateService,
-        private fileTransfer: FileTransfer
+        private httpService: HttpService,
+        private fileTransfer : FileTransfer
         // private filePickerIOS: IOSFilePicker,
     ) {
         this.isIos = this.platform.is('ios');
@@ -87,10 +90,12 @@ export class AttachmentService {
         this.camera
             .getPicture(options)
             .then((imagePath) => {
+                console.log(imagePath, "imagePath");
                 if (this.platform.is("android") && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
                     this.filePath
                         .resolveNativePath(imagePath)
                         .then((filePath) => {
+                            console.log(filePath, "filePath");
                             this.copyFile(filePath);
                         })
                 } else {
@@ -142,6 +147,7 @@ export class AttachmentService {
         let correctPath = filePath.substr(0, filePath.lastIndexOf("/") + 1);
         let currentName = filePath.split("/").pop();
         currentName = currentName.split("?")[0];
+        console.log(correctPath, currentName, this.createFileName(currentName),"correctPath, currentName, this.createFileName(currentName)")
         this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName));
     }
 
@@ -190,30 +196,30 @@ export class AttachmentService {
 
     cloudImageUpload(fileDetails) {
         return new Promise((resolve, reject) => {
-          this.file.checkFile(this.fileBasePath, fileDetails.name).then(success => {
-            var options = {
-              fileKey: fileDetails.name,
-              fileName: fileDetails.name,
-              chunkedMode: false,
-              mimeType: fileDetails.type,
-              headers: {
-                "Content-Type": "multipart/form-data",
-                "x-ms-blob-type":
-                  fileDetails.cloudStorage === "AZURE"
-                    ? "BlockBlob"
-                    : null,
-              },
-              httpMethod: "PUT",
-            };
-            const fileTrans: FileTransferObject = this.fileTransfer.create();
-            fileTrans.upload(this.fileBasePath + fileDetails.name, fileDetails.uploadUrl, options).then(success => {
-              resolve(success)
+            this.file.checkFile(this.fileBasePath, fileDetails.name).then(success => {
+              var options = {
+                fileKey: fileDetails.name,
+                fileName: fileDetails.name,
+                chunkedMode: false,
+                mimeType: fileDetails.type,
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  "x-ms-blob-type":
+                    fileDetails.cloudStorage === "AZURE"
+                      ? "BlockBlob"
+                      : null,
+                },
+                httpMethod: "PUT",
+              };
+              const fileTrans: FileTransferObject = this.fileTransfer.create();
+              fileTrans.upload(this.fileBasePath + fileDetails.name, fileDetails.uploadUrl, options).then(success => {
+                resolve(success)
+              }).catch(error => {
+                reject(error)
+              })
             }).catch(error => {
               reject(error)
             })
-          }).catch(error => {
-            reject(error)
           })
-        })
-      }
+    }
 }

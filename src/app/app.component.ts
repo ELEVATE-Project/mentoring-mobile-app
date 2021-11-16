@@ -6,6 +6,7 @@ import * as _ from 'lodash-es';
 import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService } from './core/services';
 import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -85,7 +86,7 @@ export class AppComponent {
     }
     this.utilService.alertPopup(msg).then(data => {
       if(data){
-        this.userService.logoutAccount();
+        this.authService.logoutAccount();
       }
     }).catch(error => {})
   }
