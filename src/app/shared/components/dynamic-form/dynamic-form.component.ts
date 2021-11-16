@@ -6,6 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import * as _ from 'lodash-es';
 
 interface JsonFormValidators {
   min?: number;
@@ -110,6 +111,11 @@ export class DynamicFormComponent implements OnInit {
         )
       );
     }
+  }
+  compareWith(a, b) {
+    a = _.flatten([a]);
+    b = _.flatten([b]);
+    return JSON.stringify(a) == JSON.stringify(b);
   }
   onSubmit() {
     console.log('Form valid: ', this.myForm.valid);
