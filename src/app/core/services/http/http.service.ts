@@ -78,7 +78,7 @@ export class HttpService {
   //network check
   checkNetworkAvailability(){
     if(!this.network.isNetworkAvailable){
-      this.toastService.showToast("Please check your network connection and try again",'danger')
+      this.toastService.showToast('MSG_PLEASE_NETWORK','danger')
       return false;
     }
     return true;
@@ -131,13 +131,13 @@ export class HttpService {
       case 400:
       case 406:
       case 422:    
-        this.toastService.showToast(msg ? msg.message : 'Something went wrong', 'danger')
+        this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:
-        this.toastService.showToast('Something went wrong', 'danger')
+        this.toastService.showToast('SOMETHING_WENT_WRONG', 'danger')
         break
       default:
-        this.toastService.showToast(msg ? msg.message : 'Something went wrong', 'danger')
+        this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
     }
     throw Error(result);
   }
