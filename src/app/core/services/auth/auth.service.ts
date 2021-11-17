@@ -52,6 +52,7 @@ export class AuthService {
       console.log(data)
       let result = data.result;
       this.localStorage.setLocalData(localKeys.USER_DETAILS, result);
+      this.userService.getCurrentUser(result.user);
       this.loaderService.stopLoader();
       this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
     }
@@ -72,6 +73,7 @@ export class AuthService {
       await this.httpService.post(config)
       this.localStorage.delete(localKeys.USER_DETAILS);
       this.userService.userDetail = [];
+      this.userService.userEvent.next(null);
       await this.loaderService.stopLoader();
       this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
         replaceUrl: true

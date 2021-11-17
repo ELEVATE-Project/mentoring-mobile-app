@@ -5,6 +5,7 @@ import * as _ from 'lodash-es';
 import jwt_decode from "jwt-decode";
 import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ import { environment } from 'src/environments/environment';
 export class UserService {
   userDetail:any;
   baseUrl:any;
+  userEvent = new Subject<any>();
+  userEventEmitted$ = this.userEvent.asObservable();
   constructor(
     private localStorage: LocalStorageService,
     ) { 
@@ -23,6 +26,7 @@ export class UserService {
       .getLocalData(localKeys.USER_DETAILS)
       .then((data: any) => {
         this.userDetail=data;
+        this.getCurrentUser(data.user);
         return data;
       })
       .catch((error) => { });
@@ -35,6 +39,10 @@ export class UserService {
     const duration = moment.duration(tokenExpiryTime.diff(currentTime));
     const hourDifference = duration.asHours();
     return (hourDifference < 2) ? false : true;
+  }
+
+  getCurrentUser(user){
+    this.userEvent.next(user);
   }
   
 }

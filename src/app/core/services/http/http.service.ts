@@ -60,7 +60,7 @@ export class HttpService {
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     console.log(headers);
     this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(180);
+    this.http.setRequestTimeout(60);
     return this.http.get(this.baseUrl + requestParam.url, '', headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);

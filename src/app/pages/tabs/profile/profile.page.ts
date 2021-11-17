@@ -47,6 +47,7 @@ export class ProfilePage implements OnInit {
     headerColor: 'primary',
     label:'PROFILE'
   };
+  sessionData={}
   constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private localStorage: LocalStorageService) { }
 
   ngOnInit() {

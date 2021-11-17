@@ -52,10 +52,11 @@ export class AppComponent {
         document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
       }, 2000);
 
-      this.userService.getUserValue().then((result) => {
-        console.log(result);
-        this.isMentor = result?.user?.isAMentor;
-      });
+      this.userService.userEventEmitted$.subscribe(data=>{
+        if(data){
+          this.isMentor = data?.isAMentor;
+        }
+      })
 
     });
   }
