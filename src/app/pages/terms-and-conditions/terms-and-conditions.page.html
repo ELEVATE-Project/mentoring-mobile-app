@@ -1,0 +1,20 @@
+<ion-content class="ion-padding">
+  <app-generic-header [label1]="'TERMS_AND'" [label2]="'CONDITIONS'"></app-generic-header>
+  <div *ngFor="let item of items">
+    <app-terms-and-condition-card expandHeight="150px" (click)="expandItem(item)" [item]="item"
+      [expanded]="item.expanded">{{item.value}}</app-terms-and-condition-card>
+  </div>
+  <div>
+    <ion-row>
+      <ion-col class="d-flex flex-align-items-center flex-justify-center" size="3">
+        <ion-checkbox color="danger" (ionChange)="checked()"></ion-checkbox>
+      </ion-col>
+      <ion-col size="9">
+        <ion-label>{{'READ_USER_AGREEMENT_AND_PRIVACY_POLICY' | translate}}</ion-label>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>
+<ion-footer class="side-menu-footer">
+  <ion-button expand="full" (click)="goToHome()" [disabled]="notChecked"> {{'AGREE_AND_CONTINUE' | translate}} </ion-button>
+</ion-footer>
