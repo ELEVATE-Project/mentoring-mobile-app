@@ -43,6 +43,9 @@ export class HttpService {
   }
 
   async post(requestParam: RequestParams) {
+    if(!this.checkNetworkAvailability()){
+      throw Error(null);
+    }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     let body = requestParam.payload ? requestParam.payload : {};
     return this.http.post(this.baseUrl + requestParam.url, body, headers)
@@ -57,6 +60,9 @@ export class HttpService {
   }
 
   async get(requestParam: RequestParams) {
+    if(!this.checkNetworkAvailability()){
+      throw Error(null);
+    }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     return this.http.get(this.baseUrl + requestParam.url, '', headers)
       .then((data: any) => {
@@ -69,6 +75,14 @@ export class HttpService {
       });
   }
 
+  //network check
+  checkNetworkAvailability(){
+    if(!this.network.isNetworkAvailable){
+      this.toastService.showToast("Please check your network connection and try again",'danger')
+      return false;
+    }
+    return true;
+  }
 
   //token validation and logout 
 
