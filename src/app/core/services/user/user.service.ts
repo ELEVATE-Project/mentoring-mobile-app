@@ -26,7 +26,7 @@ export class UserService {
       .getLocalData(localKeys.USER_DETAILS)
       .then((data: any) => {
         this.userDetail=data;
-        this.getCurrentUser(data.user);
+        this.userEvent.next(data.user);
         return data;
       })
       .catch((error) => { });
@@ -39,10 +39,6 @@ export class UserService {
     const duration = moment.duration(tokenExpiryTime.diff(currentTime));
     const hourDifference = duration.asHours();
     return (hourDifference < 2) ? false : true;
-  }
-
-  getCurrentUser(user){
-    this.userEvent.next(user);
   }
   
 }

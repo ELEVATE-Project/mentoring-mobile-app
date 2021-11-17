@@ -52,7 +52,7 @@ export class AuthService {
       console.log(data)
       let result = data.result;
       this.localStorage.setLocalData(localKeys.USER_DETAILS, result);
-      this.userService.getCurrentUser(result.user);
+      this.userService.userEvent.next(result.user);
       this.loaderService.stopLoader();
       this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
     }
