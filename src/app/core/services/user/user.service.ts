@@ -26,7 +26,6 @@ export class UserService {
       .getLocalData(localKeys.USER_DETAILS)
       .then((data: any) => {
         this.userDetail=data;
-        this.userEvent.next(data.user);
         return data;
       })
       .catch((error) => { });
