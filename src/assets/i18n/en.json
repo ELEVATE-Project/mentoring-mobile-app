@@ -88,5 +88,6 @@
     "TERMS_AND": "Terms and",
     "CONDITIONS": "conditions",
     "AGREE_AND_CONTINUE": "Agree & Continue",
-    "READ_USER_AGREEMENT_AND_PRIVACY_POLICY": "I've read and agree to the User Agreement and Privacy Policy"
+    "READ_USER_AGREEMENT_AND_PRIVACY_POLICY": "I've read and agree to the User Agreement and Privacy Policy",
+    "SOMETHING_WENT_WRONG":"Something went wrong"
 }

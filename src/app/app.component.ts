@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class AppComponent {
  user;
   public appPages = [
+    { title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' },
     { title: 'LANGUAGE', url: '', icon: 'language' },
     { title: 'SETTINGS', url: '', icon: 'settings' },
     { title: 'HELP', url: '', icon: 'help-circle' }
@@ -52,10 +53,12 @@ export class AppComponent {
         document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
       }, 2000);
 
-      this.userService.getUserValue().then((result) => {
-        console.log(result);
-        this.isMentor = result?.user?.isAMentor;
-      });
+      this.userService.userEventEmitted$.subscribe(data=>{
+        if(data){
+          this.isMentor = data?.isAMentor;
+          this.user = data;
+        }
+      })
 
     });
   }
@@ -92,9 +95,9 @@ export class AppComponent {
   }
   getUser() {
     this.userService.getUserValue().then(user => {
+      if(user){
       this.user = user;
-      if (this.user.user.isAMentor) {
-        this.appPages.unshift({ title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' });
+      this.isMentor = this.user?.user?.isAMentor;
       }
     })
   }
