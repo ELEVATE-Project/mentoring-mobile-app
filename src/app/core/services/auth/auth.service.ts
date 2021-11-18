@@ -63,10 +63,13 @@ export class AuthService {
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
       this.userService.userEvent.next(userData);
       this.loaderService.stopLoader();
-      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], {
-        replaceUrl: true,
-      });
-    } catch (error) {
+      if(userData?.hasAcceptedTAndC == true){
+        this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
+      } else {
+        this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`]);
+      }
+    }
+    catch (error) {
       this.loaderService.stopLoader();
     }
   }

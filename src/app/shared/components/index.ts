@@ -11,3 +11,4 @@ export * from "./skeleton/skeleton.component"
 export * from "./star-rating/star-rating.component"
 export * from "./generic-header/generic-header.component";
 export * from "./filter/filter.component";
+export * from "./expandable-card/expandable-card.component"
