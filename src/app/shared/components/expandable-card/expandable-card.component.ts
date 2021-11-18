@@ -1,9 +1,9 @@
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-terms-and-condition-card',
-  templateUrl: './terms-and-condition-card.component.html',
-  styleUrls: ['./terms-and-condition-card.component.scss'],
+  selector: 'app-expandable-card',
+  templateUrl: './expandable-card.component.html',
+  styleUrls: ['./expandable-card.component.scss'],
 })
 export class TermsAndConditionCardComponent implements OnInit {
   @ViewChild("expandWrapper", { read: ElementRef }) expandWrapper: ElementRef;

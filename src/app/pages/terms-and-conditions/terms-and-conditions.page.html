@@ -1,8 +1,8 @@
 <ion-content class="ion-padding">
   <app-generic-header [label1]="'TERMS_AND'" [label2]="'CONDITIONS'"></app-generic-header>
   <div *ngFor="let item of items">
-    <app-terms-and-condition-card expandHeight="150px" (click)="expandItem(item)" [item]="item"
-      [expanded]="item.expanded">{{item.value}}</app-terms-and-condition-card>
+    <app-expandable-card expandHeight="150px" (click)="expandItem(item)" [item]="item"
+      [expanded]="item.expanded">{{item.value}}</app-expandable-card>
   </div>
   <div>
     <ion-row>
