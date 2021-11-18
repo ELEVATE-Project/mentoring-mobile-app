@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AttachmentService } from 'src/app/core/services';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
+import { AttachmentService, HttpService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-profile-image',
@@ -13,14 +14,16 @@ export class ProfileImageComponent implements OnInit {
   @Input() username: any;
   @Input() uploadImage : boolean = false;
   constructor(
-    private attachment : AttachmentService
+    private attachment : AttachmentService,
+    private httpService:HttpService
   ) { }
 
   ngOnInit() {}
 uploadPhoto(){
   this.attachment.selectImage(this.profileImageData.type).then(resp =>{
     if(resp.data){
-      this.upload(resp.data)
+      // this.upload(resp.data);
+      this.getImageUploadUrl(resp.data);
     }
   },error =>{
     console.log(error,"error");
@@ -32,5 +35,12 @@ upload(data){
   },error =>{
     console.log(error,"error upload");
   })
+}
+async getImageUploadUrl(file){
+  let config ={
+    url :  urlConstants.API_URLS.GET_IMAGE_UPLOAD_URL+file.name
+  }
+  let data: any = await this.httpService.get(config);
+  console.log(data,"data");
 }
 }

@@ -16,7 +16,7 @@ import { CommonRoutes } from 'src/global.routes';
 export class MentorDirectoryPage implements OnInit {
   page = 1;
   limit = 10;
-  searchText: string='';
+  searchText: string = '';
   public headerConfig: any = {
     menu: true,
     label: 'MENTORS_DIRECTORY',
@@ -24,7 +24,7 @@ export class MentorDirectoryPage implements OnInit {
     notification: false,
   };
 
-  mentors =[];
+  mentors = [];
   mentorsCount;
   constructor(
     private router: Router,
@@ -33,46 +33,47 @@ export class MentorDirectoryPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    
+
   }
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.page = 1;
-    this.mentors=[];
+    this.mentors = [];
     this.searchText = '';
     this.getMentors();
-  }
-  onSearch() {
-    this.page = 1;
-    this.getMentors();
-    this.mentors=[];
   }
 
   async getMentors() {
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.MENTORS_DIRECTORY + this.page + '&limit=' + this.limit+'&search='+this.searchText,
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY + this.page + '&limit=' + this.limit + '&search=' + this.searchText,
       payload: {}
     };
     try {
       let data: any = await this.httpService.get(config);
       this.loaderService.stopLoader();
-      console.log(data.result,"data.result");
-      this.mentors =  this.mentors.concat(data.result.data);
-      this.mentorsCount =  data.result.count;
+      console.log(data.result, "data.result");
+      this.mentors = this.mentors.concat(data.result.data);
+      this.mentorsCount = data.result.count;
     }
     catch (error) {
       this.loaderService.stopLoader();
     }
   }
   eventAction(event) {
+    console.log(event, "event");
     switch (event.type) {
       case 'cardSelect':
-        this.router.navigate([CommonRoutes.MENTOR_DETAILS]);
+        this.router.navigate([CommonRoutes.MENTOR_DETAILS,event.id]);
         break;
     }
   }
-  loadMore(){
+  loadMore() {
     this.page = this.page + 1;
     this.getMentors();
+  }
+  onSearch() {
+    this.page = 1;
+    this.getMentors();
+    this.mentors = [];
   }
 }

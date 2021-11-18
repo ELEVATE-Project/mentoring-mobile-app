@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
+import { HttpService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-mentor-details',
@@ -6,17 +9,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./mentor-details.page.scss'],
 })
 export class MentorDetailsPage implements OnInit {
-
+  mentorId;
   public headerConfig: any = {
     headerColor: 'white',
     backButton: true,
     label: "MENTORS_PROFILE",
   };
-  profileImageData:any = {
-    name: 'Mentor Name',
-    region: 'COnsultant, Karnataka',
-    profile_image:'https://www.whatsappprofiledpimages.com/wp-content/uploads/2021/08/Profile-Photo-Wallpaper.jpg'
-  }
 
   detailData = {
     form: [
@@ -30,47 +28,43 @@ export class MentorDetailsPage implements OnInit {
       },
       {
         title: 'Key  Areas of Expertise',
-        key: 'keyAreasOfExpertise',
+        key: 'areasOfExpertise',
       },
       {
         title: "Languages",
         key: "medium"
+      },
+      {
+        title:"Designation",
+        key:"designation"
       }
     ],
-    data: {
-      about: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-      yearsOfExperience: 6,
-      keyAreasOfExpertise: [
-        {
-          "value": "educationLeadership",
-          "label": "Education Leadership"
-        },
-        {
-          "value": "personalDevelopment",
-          "label": "Personal Development"
-        },
-        {
-          "value": "schoolProcesses",
-          "label": "School Processes"
-        },
-      ],
-      medium: [
-        {
-          "value": "English",
-          "label": "English"
-        },
-        {
-          "value": "Hindi",
-          "label": "Hindi"
-        },
-      ],
-      duration: "",
-      date: "",
-    },
+    data: {},
   };
-  constructor() { }
+  constructor(
+    private routerParams : ActivatedRoute,
+    private httpService :  HttpService
+    ,
+  ) {
+    routerParams.params.subscribe(params =>{
+      this.mentorId = params.id;
+      this.getMentor();
+    })
+   }
 
   ngOnInit() {
   }
-
+  async getMentor(){
+    const config = {
+      url: urlConstants.API_URLS.PROFILE_DETAILS+'/'+this.mentorId,
+      payload: {}
+    };
+    try {
+      let data: any = await this.httpService.get(config);
+      console.log(data,"data");
+      this.detailData.data = data.result;
+    }
+    catch (error) {
+    }
+  }
 }

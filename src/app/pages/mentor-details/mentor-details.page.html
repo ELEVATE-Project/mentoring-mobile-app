@@ -1,7 +1,7 @@
 <app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
 <ion-content class="ion-padding">
   <div>
-    <app-profile-image [profileImageData]='profileImageData'></app-profile-image>
+    <app-profile-image [profileImageData]='detailData.data'></app-profile-image>
     <app-generic-details [sessionData]='detailData'></app-generic-details>
   </div>
 </ion-content>
