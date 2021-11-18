@@ -33,7 +33,6 @@ export class SessionService {
     };
     try {
       let data = await this.httpService.get(config);
-      console.log(data);
       let result = _.get(data, 'result');
       console.log(result);
       this.loaderService.stopLoader();
