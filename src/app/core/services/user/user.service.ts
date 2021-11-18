@@ -5,6 +5,7 @@ import * as _ from 'lodash-es';
 import jwt_decode from "jwt-decode";
 import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ import { environment } from 'src/environments/environment';
 export class UserService {
   userDetail:any;
   baseUrl:any;
+  userEvent = new Subject<any>();
+  userEventEmitted$ = this.userEvent.asObservable();
   constructor(
     private localStorage: LocalStorageService,
     ) { 

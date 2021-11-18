@@ -62,4 +62,9 @@ export class HomeSearchPage implements OnInit {
 
     }
   }
+
+  eventAction(event){
+    
+  }
+
 }

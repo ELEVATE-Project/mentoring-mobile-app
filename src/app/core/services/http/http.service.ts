@@ -29,6 +29,8 @@ export class HttpService {
     private injector: Injector
     ) {
     this.baseUrl=environment.baseUrl;
+    this.http.setDataSerializer('json');
+    this.http.setRequestTimeout(60);
   }
 
   async setHeaders() {
@@ -41,10 +43,11 @@ export class HttpService {
   }
 
   async post(requestParam: RequestParams) {
+    if(!this.checkNetworkAvailability()){
+      throw Error(null);
+    }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     let body = requestParam.payload ? requestParam.payload : {};
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(60);
     return this.http.post(this.baseUrl + requestParam.url, body, headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
@@ -57,10 +60,10 @@ export class HttpService {
   }
 
   async get(requestParam: RequestParams) {
+    if(!this.checkNetworkAvailability()){
+      throw Error(null);
+    }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
-    console.log(headers);
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(180);
     return this.http.get(this.baseUrl + requestParam.url, '', headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
@@ -72,6 +75,14 @@ export class HttpService {
       });
   }
 
+  //network check
+  checkNetworkAvailability(){
+    if(!this.network.isNetworkAvailable){
+      this.toastService.showToast('MSG_PLEASE_NETWORK','danger')
+      return false;
+    }
+    return true;
+  }
 
   //token validation and logout 
 
@@ -120,13 +131,13 @@ export class HttpService {
       case 400:
       case 406:
       case 422:    
-        this.toastService.showToast(msg ? msg.message : 'Something went wrong', 'danger')
+        this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:
-        this.toastService.showToast('Something went wrong', 'danger')
+        this.toastService.showToast('SOMETHING_WENT_WRONG', 'danger')
         break
       default:
-        this.toastService.showToast(msg ? msg.message : 'Something went wrong', 'danger')
+        this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
     }
     throw Error(result);
   }
