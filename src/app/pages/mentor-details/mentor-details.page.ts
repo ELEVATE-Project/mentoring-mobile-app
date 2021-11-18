@@ -73,4 +73,5 @@ export class MentorDetailsPage implements OnInit {
   ngOnInit() {
   }
 
+  action(event){}
 }
