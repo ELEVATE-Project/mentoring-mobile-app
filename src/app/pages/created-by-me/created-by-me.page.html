@@ -2,34 +2,59 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-toolbar>
     <ion-searchbar class="top-padding" placeholder=""></ion-searchbar>
-    <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
-      <ion-segment-button value="all-sessions">
-        <ion-label>{{ "UPCOMING" | translate }}</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="my-sessions">
-        <ion-label>{{ "PAST" | translate }}</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-    <div class="sessions-wrap">
-      <div *ngFor="let session of sessions">
-        <div [ngSwitch]="type">
-          <ion-list *ngSwitchCase="'all-sessions'">
-            <app-session-card-template [data]="session" [showEdit]=true></app-session-card-template>
-          </ion-list>
-          <ion-list *ngSwitchCase="'my-sessions'">
-            <app-session-card-template [data]="session" [showEdit]=false></app-session-card-template>
-          </ion-list>
+    <div *ngIf="sessions?.length; else elseBlock">
+      <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
+        <ion-segment-button value="all-sessions">
+          <ion-label>{{ "UPCOMING" | translate }}</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="my-sessions">
+          <ion-label>{{ "PAST" | translate }}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <div class="sessions-wrap">
+        <div *ngFor="let session of sessions">
+          <div [ngSwitch]="type">
+            <ion-list *ngSwitchCase="'all-sessions'">
+              <app-session-card-template [data]="session" [showEdit]=true></app-session-card-template>
+            </ion-list>
+            <ion-list *ngSwitchCase="'my-sessions'">
+              <app-session-card-template [data]="session" [showEdit]=false></app-session-card-template>
+            </ion-list>
+          </div>
         </div>
       </div>
     </div>
+    <ng-template #elseBlock>
+      <ion-card (click)="createSession()">
+        <ion-card-content>
+          <ion-row>
+            <ion-col size="2">
+              <ion-icon name="add-outline" size="large"></ion-icon>
+            </ion-col>
+            <ion-col size="10">
+              <h5>
+                {{"CREATE_NEW_SESSION" | translate}}
+              </h5>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
   </ion-toolbar>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fabs">
+  <ion-fab *ngIf="sessions?.length;" vertical="bottom" horizontal="end" slot="fixed" class="fabs">
     <ion-fab-button (click)="createSession()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-label>{{"NEW_SESSION"|translate}}</ion-label>
   </ion-fab>
 </ion-content>
-<ion-footer class="ion-no-border">
-  <ion-button class="load-more-button" expand="full">{{"LOAD MORE" | translate}}</ion-button>
-</ion-footer>
+<div *ngIf="sessions?.length;else footerElseBlock">
+  <ion-footer class="ion-no-border">
+    <ion-button class="load-more-button" (click)="loadMore()" expand="full">{{"LOAD MORE" | translate}}</ion-button>
+  </ion-footer>
+</div>
+<ng-template #footerElseBlock>
+  <ion-footer class="ion-no-border">
+    <ion-button *ngIf="mentorsCount > mentors?.length" class="load-more-button" (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>
+  </ion-footer>
+</ng-template>

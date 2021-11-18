@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { TermsAndConditionCardComponent } from './terms-and-condition-card.component';
+import { ExpandableCardComponent } from './expandable-card.component';
 
-describe('TermsAndConditionCardComponent', () => {
-  let component: TermsAndConditionCardComponent;
-  let fixture: ComponentFixture<TermsAndConditionCardComponent>;
+describe('ExpandableCardComponent', () => {
+  let component: ExpandableCardComponent;
+  let fixture: ComponentFixture<ExpandableCardComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TermsAndConditionCardComponent ],
+      declarations: [ ExpandableCardComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TermsAndConditionCardComponent);
+    fixture = TestBed.createComponent(ExpandableCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

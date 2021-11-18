@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-session-detail',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SessionDetailPage implements OnInit {
 
-  constructor() { }
+  constructor(private router:Router) { }
   ngOnInit() {
   }
   public headerConfig: any = {
@@ -82,5 +84,9 @@ export class SessionDetailPage implements OnInit {
 
   share() {
     // ToDO implement share feature
+  }
+
+  editSession(){
+    this.router.navigate([CommonRoutes.CREATE_SESSION]);
   }
 }
