@@ -84,5 +84,6 @@
     "WEEKLY": "Weekly",
     "MONTHLY": "Monthly",
     "QUARTERLY": "Quarterly",
-    "NO_DATA_AVAILABLE": "No Data Available"
+    "NO_DATA_AVAILABLE": "No Data Available",
+    "SOMETHING_WENT_WRONG":"Something went wrong"
 }
