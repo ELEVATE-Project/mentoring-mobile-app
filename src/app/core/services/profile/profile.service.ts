@@ -51,6 +51,7 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
+      this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
       return data;
     }
     catch (error) {
