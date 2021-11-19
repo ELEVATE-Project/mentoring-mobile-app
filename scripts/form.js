@@ -123,7 +123,7 @@ const fetchAllForms = async () => {
       console.log(res.data);
     } catch (error) {
       console.log(error.response.data);
-      if (!error.response.data.message.includes("Form already exists")) {
+      if (!error.response.data.message.includes("Form already exists") && error.response.data.error) {
         // if previous form == current form
         deferral.reject("❌ Form update failed"); // process exits if one form update fails
       }
