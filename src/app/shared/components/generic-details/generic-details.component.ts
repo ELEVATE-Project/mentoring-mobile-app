@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./generic-details.component.scss'],
 })
 export class GenericDetailsComponent implements OnInit {
-  @Input() sessionData: Object;
+  @Input() sessionData: any;
 
   constructor() { }
   public isArray(arr:any ) {

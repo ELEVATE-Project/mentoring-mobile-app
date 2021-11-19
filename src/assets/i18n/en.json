@@ -87,5 +87,6 @@
     "NO_DATA_AVAILABLE": "No Data Available",
     "CONFIRM":"Confirm !",
     "FORM_UNSAVED_DATA":"You have unsaved data, please save your data before closing.",
-    "SAVE":"Save"
+    "SAVE":"Save",
+    "SOMETHING_WENT_WRONG":"Something went wrong"
 }

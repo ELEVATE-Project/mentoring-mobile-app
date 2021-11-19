@@ -44,7 +44,6 @@ export class MentorDetailsPage implements OnInit {
   constructor(
     private routerParams : ActivatedRoute,
     private httpService :  HttpService
-    ,
   ) {
     routerParams.params.subscribe(params =>{
       this.mentorId = params.id;
@@ -61,7 +60,6 @@ export class MentorDetailsPage implements OnInit {
     };
     try {
       let data: any = await this.httpService.get(config);
-      console.log(data,"data");
       this.detailData.data = data.result;
     }
     catch (error) {

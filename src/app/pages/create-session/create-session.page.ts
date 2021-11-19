@@ -22,7 +22,7 @@ export class CreateSessionPage implements OnInit {
     notification: false,
     headerColor: 'white',
   };
-
+  profileImageData:{};
   public formData: JsonFormData;
   constructor(private http: HttpClient, private api: HttpService) { }
   async ngOnInit() {
