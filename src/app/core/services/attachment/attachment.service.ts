@@ -41,7 +41,6 @@ export class AttachmentService {
     getActionSheetButtons(type): any {
         let buttons = [];
         this.utils.getActionSheetButtons(type).forEach(element => {
-            console.log(element, "element");
             let button = {
                 text: element.text,
                 handler: () => {
@@ -90,12 +89,10 @@ export class AttachmentService {
         this.camera
             .getPicture(options)
             .then((imagePath) => {
-                console.log(imagePath, "imagePath");
                 if (this.platform.is("android") && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
                     this.filePath
                         .resolveNativePath(imagePath)
                         .then((filePath) => {
-                            console.log(filePath, "filePath");
                             this.copyFile(filePath);
                         })
                 } else {
@@ -103,7 +100,6 @@ export class AttachmentService {
                 }
             })
             .catch((err) => {
-                console.log(err);
                 if (err !== "No Image Selected") {
                     this.actionSheetController.dismiss();
                     this.presentToast(this.texts["ERROR_WHILE_STORING_FILE"]);
@@ -157,7 +153,6 @@ export class AttachmentService {
                     name: newFileName,
                     type: this.mimeType(newFileName),
                     isUploaded: false,
-                    url: "",
                 };
 
                 this.presentToast(this.texts["SUCCESSFULLY_ATTACHED"], "success");
@@ -211,7 +206,7 @@ export class AttachmentService {
                 httpMethod: "PUT",
               };
               const fileTrans: FileTransferObject = this.fileTransfer.create();
-              fileTrans.upload(this.fileBasePath + fileDetails.name, urlConstants.API_URLS.FILE_UPLOAD, options).then(success => {
+              fileTrans.upload(this.fileBasePath + fileDetails.name, fileDetails.uploadUrl.signedUrl, options).then(success => {
                 resolve(success)
               }).catch(error => {
                 reject(error)

@@ -1,9 +1,9 @@
 <div>
   <div class="d-flex flex-justify-center">
-    <img *ngIf="!profileImageData?.profile_image; else Img; let image" class="thumbnail-image"
+    <img *ngIf="!profileImageData?.image; else Img; let image" class="thumbnail-image"
       src="../../../../assets/prof-img/user.png" />
     <ng-template #Img>
-      <img class="thumbnail-image" src="{{profileImageData?.profile_image}}" />
+      <img class="thumbnail-image" src="{{profileImageData?.image}}" />
     </ng-template>
   </div>
   <p class="add-photo" *ngIf="uploadImage" (click)="uploadPhoto()">{{ "ADD_PHOTO" | translate }}</p>
