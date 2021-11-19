@@ -36,6 +36,9 @@ export class MentorDirectoryPage implements OnInit {
     
   }
   ionViewWillEnter(){
+    this.page = 1;
+    this.mentors=[];
+    this.searchText = '';
     this.getMentors();
   }
   onSearch() {
@@ -53,6 +56,7 @@ export class MentorDirectoryPage implements OnInit {
     try {
       let data: any = await this.httpService.get(config);
       this.loaderService.stopLoader();
+      console.log(data.result,"data.result");
       this.mentors =  this.mentors.concat(data.result.data);
       this.mentorsCount =  data.result.count;
     }

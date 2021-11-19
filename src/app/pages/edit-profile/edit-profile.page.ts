@@ -69,6 +69,6 @@ export class EditProfilePage implements OnInit {
         this.formData.controls[i].value,'value'
       );
     }
-    this.showForm = true;
+    this.showForm=true;
   }
 }
