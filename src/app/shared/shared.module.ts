@@ -17,7 +17,7 @@ import {
   StarRatingComponent,
   GenericHeaderComponent,
   FilterComponent,
-  TermsAndConditionCardComponent
+  // TermsAndConditionCardComponent
 } from './components/index';
 
 @NgModule({
@@ -35,7 +35,7 @@ import {
     NoDataFoundComponent,
     GenericHeaderComponent,
     FilterComponent,
-    TermsAndConditionCardComponent,
+    // TermsAndConditionCardComponent,
   ],
   imports: [
     CommonModule,
@@ -58,7 +58,7 @@ import {
     NoDataFoundComponent,
     GenericHeaderComponent,
     FilterComponent,
-    TermsAndConditionCardComponent,
+    // TermsAndConditionCardComponent,
   ],
 })
 export class SharedModule {}

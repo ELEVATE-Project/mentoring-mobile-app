@@ -44,9 +44,8 @@ export class EditProfilePage implements OnInit {
   async ngOnInit() {
     const response = await this.form.getForm(EDIT_PROFILE_FORM);
     this.formData = _.get(response, 'result.data.fields');
-    let userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-      let existingData = userDetails.user;
-      this.preFillData(existingData);
+    const userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    this.preFillData(userDetails);
   }
 
   onSubmit() {
