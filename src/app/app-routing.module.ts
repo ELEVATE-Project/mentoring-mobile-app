@@ -44,6 +44,10 @@ const routes: Routes = [
   {
     path: `${CommonRoutes.MENTOR_DETAILS}/:id`,
     loadChildren: () => import('./pages/mentor-details/mentor-details.module').then( m => m.MentorDetailsPageModule)
+  },
+  {
+    path: CommonRoutes.TERMS_AND_CONDITIONS,
+    loadChildren: () => import('./pages/terms-and-conditions/terms-and-conditions.module').then( m => m.TermsAndConditionsPageModule)
   }
 
 

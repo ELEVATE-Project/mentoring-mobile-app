@@ -18,7 +18,6 @@ import {AuthService} from '../auth/auth.service';
 })
 export class HttpService {
   baseUrl;
-  userDetail:any={};
   constructor(
     private http: HTTP,
     private userService:UserService,
@@ -87,7 +86,7 @@ export class HttpService {
   //token validation and logout 
 
   async getToken() {
-    let token = _.get(this.userService.userDetail, 'access_token');
+    let token = _.get(this.userService.token, 'access_token');
     if (!token) {
       return null;
     }
@@ -99,10 +98,10 @@ export class HttpService {
         let authService=this.injector.get(AuthService);
         authService.logoutAccount();
       }
-      this.userService.userDetail['access_token'] = access_token;
-      this.localStorage.setLocalData(localKeys.USER_DETAILS, this.userDetail);
+      this.userService.token['access_token'] = access_token;
+      this.localStorage.setLocalData(localKeys.TOKEN, this.userService.token);
     }
-    let userToken = 'bearer ' + _.get(this.userService.userDetail, 'access_token');
+    let userToken = 'bearer ' + _.get(this.userService.token, 'access_token');
     return userToken;
   }
 
@@ -111,7 +110,7 @@ export class HttpService {
     const config = {
       url: urlConstants.API_URLS.REFRESH_TOKEN,
       payload: {
-        refreshToken: _.get(this.userService.userDetail, 'refresh_token')
+        refreshToken: _.get(this.userService.token, 'refresh_token')
       }
     };
     try {

@@ -62,9 +62,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     var result = await this.profileService.getProfileDetailsAPI();
     this.profileImageData.image = result.image
     this.formData = _.get(response, 'result.data.fields');
-    let userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-      let existingData = userDetails.user;
-      this.preFillData(existingData);
+    const userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    this.preFillData(userDetails);
   }
 
   async canPageLeave() {

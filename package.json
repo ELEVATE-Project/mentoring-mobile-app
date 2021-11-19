@@ -137,10 +137,8 @@
       "cordova-plugin-camera": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
-
       "cordova-plugin-filepath": {},
-      "cordova-plugin-file-transfer": {}
-      "cordova-plugin-whitelist": {},
+      "cordova-plugin-file-transfer": {},
       "cordova-plugin-network-information": {}
     },
     "platforms": [

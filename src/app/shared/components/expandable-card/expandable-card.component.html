@@ -1,0 +1,22 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>
+      <ion-row>
+        <ion-col size="10">
+          {{item.key}}
+        </ion-col>
+        <ion-col *ngIf="item.expanded; else elseblock">
+          <ion-icon name="chevron-down-outline"></ion-icon>
+        </ion-col>
+        <ng-template #elseblock>
+          <ion-icon name="chevron-forward"></ion-icon>
+        </ng-template>
+      </ion-row>
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div #expandWrapper class="expand-wrapper" [class.collapsed]="!expanded">
+      <ng-content></ng-content>
+    </div>
+  </ion-card-content>
+</ion-card>
