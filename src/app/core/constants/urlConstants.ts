@@ -13,6 +13,7 @@ export const urlConstants = {
         GENERATE_OTP:"/user/v1/account/generateOtp",
         RESET_PASSWORD:"/user/v1/account/resetPassword",
         CREATE_SESSION:"/mentoring/v1/sessions/update",
-        GET_SESSIONS_LIST:"/mentoring/v1/sessions/list?page="
+        GET_SESSIONS_LIST:"/mentoring/v1/sessions/list?page=",
+        GET_SESSION_DETAILS:"/mentoring/v1/sessions/details/"
     }
 };

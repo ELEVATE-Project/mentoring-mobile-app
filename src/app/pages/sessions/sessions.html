@@ -1,7 +1,8 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-toolbar>
-    <ion-searchbar class="top-padding" placeholder=""></ion-searchbar>
+    <ion-searchbar class="top-padding" debounce="1000" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"
+    [(ngModel)]="searchText" (ionChange)="onSearch()"></ion-searchbar>
     <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
       <ion-segment-button value="all-sessions">
         <ion-label>{{ "ALL_SESSIONS" | translate }}</ion-label>
@@ -12,10 +13,10 @@
     </ion-segment>
     <div class="sessions-wrap">
       <div *ngIf="sessions">
-        <div *ngFor="let session of sessions" routerLink="/{{SESSIONS}}/{{SESSIONS_DETAILS}}">
+        <div *ngFor="let session of sessions">
           <div [ngSwitch]="type">
             <ion-list *ngSwitchCase="'all-sessions'">
-              <app-session-card [data]="session" ></app-session-card>
+              <app-session-card [data]="session" (onClickEvent)="eventAction($event)"></app-session-card>
             </ion-list>
             <ion-list *ngSwitchCase="'my-sessions'">
               <app-session-card-template [data]="session" [showEdit]=true></app-session-card-template>
@@ -32,6 +33,6 @@
     <app-skeleton [type]="SKELETON.SESSION_CARD_SKELETON" [repetition]="4"></app-skeleton>
   </div>
 </ion-content>
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border" *ngIf="!sessions?.length">
   <ion-button class="load-more-button" expand="full">{{"LOAD MORE" | translate}}</ion-button>
 </ion-footer>

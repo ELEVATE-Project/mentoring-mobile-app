@@ -18,17 +18,37 @@ export class SessionService {
     };
     try {
       let result = await this.httpService.post(config);
+      result = _.get(result, 'result');
       this.loaderService.stopLoader();
       this.toast.showToast(result.message, "success");
+      return result;
     }
     catch (error) {
       this.loaderService.stopLoader();
     }
   }
-  async getSessionsAPI(page,limit,status,searchText){
+
+  async getAllSessionsAPI(page,limit,status,searchText){
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.GET_SESSIONS_LIST+page+'&limit='+limit+'&status='+status+'&search='+searchText,
+      payload: {}
+    };
+    try {
+      let data = await this.httpService.get(config);
+      let result = _.get(data, 'result');
+      this.loaderService.stopLoader();
+      return result;
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+
+  async getSessionDetailsAPI(id){
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.GET_SESSION_DETAILS+id,
       payload: {}
     };
     try {

@@ -4,21 +4,27 @@
     <ion-searchbar class="top-padding" placeholder=""></ion-searchbar>
     <div *ngIf="sessions?.length; else elseBlock">
       <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
-        <ion-segment-button value="all-sessions">
+        <ion-segment-button value="1">
           <ion-label>{{ "UPCOMING" | translate }}</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="my-sessions">
+        <ion-segment-button value="2">
           <ion-label>{{ "PAST" | translate }}</ion-label>
         </ion-segment-button>
       </ion-segment>
       <div class="sessions-wrap">
-        <div *ngFor="let session of sessions">
-          <div [ngSwitch]="type">
-            <ion-list *ngSwitchCase="'all-sessions'">
-              <app-session-card-template [data]="session" [showEdit]=true></app-session-card-template>
+        <div [ngSwitch]="type">
+          <div *ngSwitchCase="1">
+            <ion-list>
+              <app-session-card-template *ngFor="let session of sessions" [status]="type" [data]="session" [showStart]=true
+                (onClickEvent)="eventAction($event)">
+              </app-session-card-template>
             </ion-list>
-            <ion-list *ngSwitchCase="'my-sessions'">
-              <app-session-card-template [data]="session" [showEdit]=false></app-session-card-template>
+          </div>
+          <div *ngSwitchCase="2">
+            <ion-list>
+              <app-session-card-template *ngFor="let session of sessions" [status]="type" [data]="session" [showStart]=false
+                (onClickEvent)="eventAction($event)">
+              </app-session-card-template>
             </ion-list>
           </div>
         </div>
@@ -55,6 +61,6 @@
 </div>
 <ng-template #footerElseBlock>
   <ion-footer class="ion-no-border">
-    <ion-button *ngIf="mentorsCount > mentors?.length" class="load-more-button" (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>
+    <ion-button class="load-more-button" (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>
   </ion-footer>
 </ng-template>

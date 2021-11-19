@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  userDetail:any;
+  token;
   baseUrl:any;
   userEvent = new Subject<any>();
   userEventEmitted$ = this.userEvent.asObservable();
@@ -23,9 +23,9 @@ export class UserService {
 
   async getUserValue() {
     return this.localStorage
-      .getLocalData(localKeys.USER_DETAILS)
+      .getLocalData(localKeys.TOKEN)
       .then((data: any) => {
-        this.userDetail=data;
+        this.token=data;
         return data;
       })
       .catch((error) => { });

@@ -8,16 +8,20 @@ import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 export class SessionCardTemplateComponent implements OnInit {
   @Input() data: any;
   @Input() showEnroll;
-  @Input() showEdit:boolean;
+  @Input() showStart:boolean;
+  @Input() showEdit;
+  @Input() status:any;
   @Output() onClickEvent = new EventEmitter();
   constructor() { }
 
   ngOnInit() { }
 
   onAction(data, type) {
+    let showEditButton:boolean = this.status==1 ? true : false;
     let value = {
       data: data,
-      type: type
+      type: type,
+      showEditButton: showEditButton,
     }
     this.onClickEvent.emit(value)
   }

@@ -92,5 +92,7 @@
     "SOMETHING_WENT_WRONG":"Something went wrong",
     "CREATE_NEW_SESSION": "Create new Session",
     "DELETE": "Delete",
-    "START_SESSIONS": "Start Session"
+    "START_SESSIONS": "Start Session",
+    "START": "Start",
+    "DELETE_CONFIRM_MSG":"Are you sure you want to delete this session?"
 }

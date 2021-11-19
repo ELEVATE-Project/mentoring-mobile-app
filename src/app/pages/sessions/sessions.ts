@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 
@@ -11,7 +11,8 @@ import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 export class SessionsPage implements OnInit {
   type: string;
   SKELETON = SKELETON;
-  constructor(private activatedRoute: ActivatedRoute) {
+  constructor(private activatedRoute: ActivatedRoute, 
+    private router : Router) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.type = params.get('type');
       this.type = this.type ? this.type : "all-sessions";
@@ -26,6 +27,8 @@ export class SessionsPage implements OnInit {
   };
   SESSIONS_DETAILS: any = CommonRoutes.SESSIONS_DETAILS;
   SESSIONS: any = CommonRoutes.SESSIONS;
+  page =1;
+  limit =10;
   sessions = [{
     _id: 1,
     title: 'Topic, Mentor name',
@@ -59,5 +62,25 @@ export class SessionsPage implements OnInit {
   }
   public segmentChanged(ev: any) {
     this.type = ev.target.value;
+  }
+  getSessions(){
+    // TODO api call to get sessions
+  }
+  eventAction(event) {
+    console.log(event, "event");
+    switch (event.type) {
+      case 'cardSelect':
+        this.router.navigate([`${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}`]);
+        break;
+    }
+  }
+  loadMore() {
+    this.page = this.page + 1;
+    this.getSessions();
+  }
+  onSearch() {
+    this.page = 1;
+    this.getSessions();
+    this.sessions = [];
   }
 }

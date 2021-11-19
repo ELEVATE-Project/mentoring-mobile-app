@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
+import { config } from 'rxjs';
+import { UtilService } from 'src/app/core/services';
+import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
@@ -8,18 +12,29 @@ import { CommonRoutes } from 'src/global.routes';
   styleUrls: ['./session-detail.page.scss'],
 })
 export class SessionDetailPage implements OnInit {
+  id: any;
+  status: any;
+  showEditButton: any;
 
-  constructor(private router:Router) { }
-  ngOnInit() {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private sessionService: SessionService, private utilService:UtilService,) {
+    this.activatedRoute.queryParamMap.subscribe(params => {
+      this.id = params.get('id');
+      this.status = params.get('status');
+      this.showEditButton = params.get('showEditButton');
+    });
   }
+  ngOnInit() {
+    this.fetchSessionDetails();
+  }
+
   public headerConfig: any = {
     headerColor: 'white',
     backButton: true,
-    label:"SESSIONS_DETAILS",
+    label: "SESSIONS_DETAILS",
     share: true
   };
-  profileImageData: Object = {
-    name: "Session Name",
+  profileImageData: any = {
+    name: "",
     region: null,
     join_button: true,
     session_image: null,
@@ -28,11 +43,11 @@ export class SessionDetailPage implements OnInit {
     form: [
       {
         title: 'Session Details',
-        key: 'sessionDetails',
+        key: 'description',
       },
       {
         title: 'Audience',
-        key: 'audience',
+        key: 'recommendedFor',
       },
       {
         title: 'Medium',
@@ -44,12 +59,12 @@ export class SessionDetailPage implements OnInit {
       },
       {
         title: "Date",
-        key: "date"
+        key: "startDateTime"
       }
     ],
     data: {
-      sessionDetails: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-      audience: [
+      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+      recommendedFor: [
         {
           "value": "Teachers",
           "label": "Teachers"
@@ -70,9 +85,15 @@ export class SessionDetailPage implements OnInit {
         },
       ],
       duration: "",
-      date: "",
+      startDateTime: "",
     },
   };
+
+  async fetchSessionDetails() {
+    var response = await this.sessionService.getSessionDetailsAPI(this.id);
+    this.profileImageData.name = response.title;
+    this.detailData.data = response;
+  }
 
   action(event) {
     switch (event) {
@@ -86,7 +107,21 @@ export class SessionDetailPage implements OnInit {
     // ToDO implement share feature
   }
 
-  editSession(){
+  editSession() {
     this.router.navigate([CommonRoutes.CREATE_SESSION]);
+  }
+
+  onDelete() {
+    let msg = {
+      header: 'DELETE',
+      message: 'DELETE_CONFIRM_MSG',
+      cancel: "Don't delete",
+      submit: 'Yes Delete'
+    }
+    this.utilService.alertPopup(msg).then(data => {
+      if (data) {
+        
+      }
+    }).catch(error => { })
   }
 }

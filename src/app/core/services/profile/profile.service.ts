@@ -63,14 +63,12 @@ export class ProfileService {
       try {
       this.localStorage.getLocalData(localKeys.USER_DETAILS)
         .then(async (data) => {
-          if (data?.user) {
-            data = _.get(data, 'user');
+          if (data) {
             this.loaderService.stopLoader();
             resolve(data);
           } else {
             var res = await this.getProfileDetailsAPI();
-            data.user = res;
-            await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
+            await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
             data = _.get(data, 'user');
             this.loaderService.stopLoader();
             resolve(data);

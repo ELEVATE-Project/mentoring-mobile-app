@@ -12,9 +12,8 @@ import { CommonRoutes } from 'src/global.routes';
 export class CreatedByMePage implements OnInit {
   page = 1;
   limit = 10;
-  status:string ='';
   searchText: string='';
-  type: string;
+  type=1;
   sessions: any;
   mentorsCount;
   public headerConfig: any = {
@@ -28,21 +27,23 @@ export class CreatedByMePage implements OnInit {
   
   constructor(private navCtrl:NavController, private router:Router, private sessionService: SessionService) {}
   ionViewWillEnter() {
-    this.type="all-sessions";
-  }
-
-  ngOnInit() {
     this.fetchSessionDetails();
   }
 
+  ngOnInit() {
+  }
+
   async fetchSessionDetails(){
-    var response = await this.sessionService.getSessionsAPI(this.page,this.limit,this.status,this.searchText);
-    this.mentorsCount =  response[0]?.count;
-    this.sessions=response[0]?.data;
+    const status = this.type==1 ? "published" : "completed";
+    var response = await this.sessionService.getAllSessionsAPI(this.page,this.limit,status,this.searchText);
+    this.mentorsCount =  response?.count;
+    this.sessions=response?.data;
+    console.log(response)
   }
 
   public segmentChanged(ev: any) {
     this.type = ev.target.value;
+    this.fetchSessionDetails();
   }
 
   createSession(){
@@ -56,6 +57,10 @@ export class CreatedByMePage implements OnInit {
   loadMore(){
     this.page = this.page + 1;
     this.fetchSessionDetails();
+  }
+  eventAction(event){
+    console.log(event);
+    this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}`], { queryParams: {id: event.data._id, showEditButton: event.showEditButton}});
   }
 
 }

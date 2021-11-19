@@ -37,11 +37,11 @@ export class CreateSessionPage implements OnInit {
       });
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.form1.onSubmit();
-    let result = this.sessionService.createSession(this.form1.myForm.value);
+    let result = await this.sessionService.createSession(this.form1.myForm.value);
     if(result){
-      this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}`]);
+      this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}`],{queryParams:{id:result._id}});
     }
   }
 
