@@ -8,6 +8,7 @@ export const urlConstants = {
         PROFILE_DETAILS: "/user/v1/profile/details",
         MENTORS_DIRECTORY:"/user/v1/mentors/list?page=",
         FILE_UPLOAD:"/user/v1/cloud-services/file/upload",
+        GET_IMAGE_UPLOAD_URL:'/user/v1/cloud-services/file/getSignedUrl?fileName=',
         // FORMS
         FORM_READ:'/mentoring/v1/form/read',
         GENERATE_OTP:"/user/v1/account/generateOtp",
