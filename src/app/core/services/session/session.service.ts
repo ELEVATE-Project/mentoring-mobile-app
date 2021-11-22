@@ -18,9 +18,10 @@ export class SessionService {
     };
     try {
       let result = await this.httpService.post(config);
+      let msg = result?.message;
       result = _.get(result, 'result');
       this.loaderService.stopLoader();
-      this.toast.showToast(result.message, "success");
+      this.toast.showToast(msg, "success");
       return result;
     }
     catch (error) {
@@ -28,10 +29,10 @@ export class SessionService {
     }
   }
 
-  async getAllSessionsAPI(page,limit,status,searchText){
+  async getAllSessionsAPI(obj){
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.GET_SESSIONS_LIST+page+'&limit='+limit+'&status='+status+'&search='+searchText,
+      url: urlConstants.API_URLS.GET_SESSIONS_LIST+obj.page+'&limit='+obj.limit+'&status='+obj.status+'&search='+obj.searchText,
       payload: {}
     };
     try {
@@ -42,6 +43,8 @@ export class SessionService {
     }
     catch (error) {
       this.loaderService.stopLoader();
+      let res = []
+      return res;
     }
   }
 

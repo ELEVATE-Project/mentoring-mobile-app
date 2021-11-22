@@ -2,28 +2,32 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-toolbar>
     <ion-searchbar class="top-padding" placeholder=""></ion-searchbar>
-    <div *ngIf="sessions?.length; else elseBlock">
-      <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
-        <ion-segment-button value="1">
-          <ion-label>{{ "UPCOMING" | translate }}</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="2">
-          <ion-label>{{ "PAST" | translate }}</ion-label>
-        </ion-segment-button>
-      </ion-segment>
-      <div class="sessions-wrap">
-        <div [ngSwitch]="type">
-          <div *ngSwitchCase="1">
+    <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
+      <ion-segment-button value="published,live">
+        <ion-label>{{ "UPCOMING" | translate }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="completed">
+        <ion-label>{{ "PAST" | translate }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <div class="sessions-wrap">
+      <div [ngSwitch]="type">
+        <div *ngSwitchCase="'published,live'">
+          <p class="session-listing-header">{{"UPCOMING_SESSIONS" | translate}}</p>
+          <div *ngIf="sessions?.length; else elseBlock">
             <ion-list>
-              <app-session-card-template *ngFor="let session of sessions" [status]="type" [data]="session" [showStart]=true
-                (onClickEvent)="eventAction($event)">
+              <app-session-card-template *ngFor="let session of sessions" [buttonConfig]="buttonConfig" [status]="type"
+                [data]="session" [showStart]=true>
               </app-session-card-template>
             </ion-list>
           </div>
-          <div *ngSwitchCase="2">
+        </div>
+        <div *ngSwitchCase="'completed'">
+          <p class="session-listing-header">{{"PAST_SESSIONS" | translate}}</p>
+          <div *ngIf="sessions?.length; else elseBlockTwo">
             <ion-list>
-              <app-session-card-template *ngFor="let session of sessions" [status]="type" [data]="session" [showStart]=false
-                (onClickEvent)="eventAction($event)">
+              <app-session-card-template *ngFor="let session of sessions" [status]="type" [data]="session"
+                [showStart]=false>
               </app-session-card-template>
             </ion-list>
           </div>
@@ -46,6 +50,11 @@
         </ion-card-content>
       </ion-card>
     </ng-template>
+    <ng-template #elseBlockTwo>
+      <div class="main-wrapper">
+        <p class="no-details-message">{{ "NO_PAST_SESSIONS_FOUND" | translate }}</p>
+      </div>
+    </ng-template>
   </ion-toolbar>
   <ion-fab *ngIf="sessions?.length;" vertical="bottom" horizontal="end" slot="fixed" class="fabs">
     <ion-fab-button (click)="createSession()">
@@ -56,7 +65,8 @@
 </ion-content>
 <div *ngIf="sessions?.length;else footerElseBlock">
   <ion-footer class="ion-no-border">
-    <ion-button class="load-more-button" (click)="loadMore()" expand="full">{{"LOAD MORE" | translate}}</ion-button>
+    <ion-button *ngIf="sessionsCount > mentors?.length" class="load-more-button" (click)="loadMore()" expand="full">
+      {{"LOAD MORE" | translate}}</ion-button>
   </ion-footer>
 </div>
 <ng-template #footerElseBlock>

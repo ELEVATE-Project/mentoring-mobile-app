@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { config } from 'rxjs';
-import { UtilService } from 'src/app/core/services';
+import { ToastService, UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -16,11 +16,11 @@ export class SessionDetailPage implements OnInit {
   status: any;
   showEditButton: any;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private sessionService: SessionService, private utilService:UtilService,) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private sessionService: SessionService, private utilService:UtilService, private toast: ToastService) {
     this.activatedRoute.queryParamMap.subscribe(params => {
-      this.id = params.get('id');
-      this.status = params.get('status');
-      this.showEditButton = params.get('showEditButton');
+      this.id = params?.get('id');
+      this.status = params?.get('status');
+      console.log(params);
     });
   }
   ngOnInit() {
@@ -33,7 +33,7 @@ export class SessionDetailPage implements OnInit {
     label: "SESSIONS_DETAILS",
     share: true
   };
-  profileImageData: any = {
+  sessionHeaderData: any = {
     name: "",
     region: null,
     join_button: true,
@@ -91,7 +91,7 @@ export class SessionDetailPage implements OnInit {
 
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
-    this.profileImageData.name = response.title;
+    this.sessionHeaderData.name = response.title;
     this.detailData.data = response;
   }
 
@@ -108,7 +108,7 @@ export class SessionDetailPage implements OnInit {
   }
 
   editSession() {
-    this.router.navigate([CommonRoutes.CREATE_SESSION]);
+    this.router.navigate([CommonRoutes.CREATE_SESSION], {queryParams: {id: this.id}});
   }
 
   onDelete() {
@@ -120,7 +120,7 @@ export class SessionDetailPage implements OnInit {
     }
     this.utilService.alertPopup(msg).then(data => {
       if (data) {
-        
+        this.toast.showToast("Will be implemented soon!!","success")
       }
     }).catch(error => { })
   }

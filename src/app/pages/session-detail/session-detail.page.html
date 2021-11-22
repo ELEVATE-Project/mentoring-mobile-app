@@ -1,14 +1,14 @@
 <app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
 <ion-content [fullscreen]="true">
   <div class="main-wrapper">
-    <app-profile-image [profileImageData]='profileImageData'></app-profile-image>
+    <app-profile-image [profileImageData]='sessionHeaderData'></app-profile-image>
     <div class="d-flex flex-justify-center">
       <ion-button shape="round" (click)="onDelete()">{{ "DELETE" | translate }}</ion-button>
-      <ion-button *ngIf="showEditButton=='true'" shape="round" (click)="editSession()">{{ "EDIT" | translate }}</ion-button>
+      <ion-button *ngIf="status" shape="round" (click)="editSession()">{{ "EDIT" | translate }}</ion-button>
     </div>
     <app-generic-details [sessionData]='detailData'></app-generic-details>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">
-  <ion-button *ngIf="showEditButton=='true'" class="load-more-button" expand="full">{{"START_SESSIONS" | translate}}</ion-button>
+  <ion-button *ngIf="status" class="load-more-button" expand="full">{{"START_SESSIONS" | translate}}</ion-button>
 </ion-footer>
