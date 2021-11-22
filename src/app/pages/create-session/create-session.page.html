@@ -1,9 +1,9 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 
 <ion-content [fullscreen]="true">
-  <app-profile-image [profileImageData]='profileImageData'></app-profile-image>
+  <app-profile-image *ngIf="showForm" [profileImageData]='profileImageData'></app-profile-image>
   <div>
-    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
+    <app-dynamic-form *ngIf="showForm" [jsonFormData]="formData" #form1> </app-dynamic-form>
   </div>
 </ion-content>
 

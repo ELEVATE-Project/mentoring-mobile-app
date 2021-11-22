@@ -7,6 +7,9 @@
       </ion-chip>
     </div>
     <ng-template #elseBlock>
+      <p *ngIf="item?.key=='startDateTime';else elseBlock2" class="value">{{sessionData.data[item.key] | date}}</p>
+    </ng-template>
+    <ng-template #elseBlock2>
       <p class="value">{{sessionData.data[item.key]}}</p>
     </ng-template>
   </div>

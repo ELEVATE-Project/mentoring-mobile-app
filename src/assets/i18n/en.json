@@ -92,5 +92,13 @@
     "CONDITIONS": "conditions",
     "AGREE_AND_CONTINUE": "Agree & Continue",
     "READ_USER_AGREEMENT_AND_PRIVACY_POLICY": "I've read and agree to the User Agreement and Privacy Policy",
-    "SOMETHING_WENT_WRONG":"Something went wrong"
+    "SOMETHING_WENT_WRONG":"Something went wrong",
+    "CREATE_NEW_SESSION": "Create new Session",
+    "DELETE": "Delete",
+    "START_SESSIONS": "Start Session",
+    "START": "Start",
+    "DELETE_CONFIRM_MSG":"Are you sure you want to delete this session?",
+    "UPCOMING_SESSIONS":"Upcoming Sessions",
+    "PAST_SESSIONS":"Past Sessions",
+    "NO_PAST_SESSIONS_FOUND": "No Past Sessions found"
 }
