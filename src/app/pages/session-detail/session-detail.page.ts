@@ -20,10 +20,12 @@ export class SessionDetailPage implements OnInit {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.id = params?.get('id');
       this.status = params?.get('status');
-      console.log(params);
     });
   }
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
     this.fetchSessionDetails();
   }
 

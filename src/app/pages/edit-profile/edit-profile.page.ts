@@ -67,35 +67,36 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   }
 
   async canPageLeave() {
-    if (this.form1.myForm.dirty) {
-      let texts:any;
-      this.translate.get(['FORM_UNSAVED_DATA','CANCEL','SUBMIT']).subscribe(text => {
-        texts = text;
-      })
-      const alert = await this.alert.create({
-        message: texts['FORM_UNSAVED_DATA'],
-        buttons: [
-          {
-            text: texts['CANCEL'],
-            handler: () => {}
-          },
-          {
-            text: texts['SUBMIT'],
-            role: 'cancel',
-            handler: () => {}
-          }
-        ]
-      });
-      await alert.present();
-      let data = await alert.onDidDismiss();
-      if (data.role == 'cancel') {
-        return false;
-      } else {
-        return true;
-      }
-    }else{
-      return true;
-    }
+    // if (this.form1.myForm.dirty) {
+    //   let texts:any;
+    //   this.translate.get(['FORM_UNSAVED_DATA','CANCEL','SUBMIT']).subscribe(text => {
+    //     texts = text;
+    //   })
+    //   const alert = await this.alert.create({
+    //     message: texts['FORM_UNSAVED_DATA'],
+    //     buttons: [
+    //       {
+    //         text: texts['CANCEL'],
+    //         handler: () => {}
+    //       },
+    //       {
+    //         text: texts['SUBMIT'],
+    //         role: 'cancel',
+    //         handler: () => {}
+    //       }
+    //     ]
+    //   });
+    //   await alert.present();
+    //   let data = await alert.onDidDismiss();
+    //   if (data.role == 'cancel') {
+    //     return false;
+    //   } else {
+    //     return true;
+    //   }
+    // }else{
+    //   return true;
+    // }
+    return true
   }
 
   onSubmit() {

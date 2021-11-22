@@ -10,10 +10,10 @@ export class SessionService {
 
   constructor(private loaderService:LoaderService, private httpService: HttpService, private toast: ToastService) { }
 
-  async createSession(formData){
+  async createSession(formData, id?:string){
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.CREATE_SESSION,
+      url: id ? urlConstants.API_URLS.CREATE_UPDATE_SESSION+`/${id}` :urlConstants.API_URLS.CREATE_UPDATE_SESSION,
       payload: formData
     };
     try {

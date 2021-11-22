@@ -1,7 +1,8 @@
-<app-page-header [config]="headerConfig"></app-page-header>
-<ion-content [fullscreen]="true" class="ion-padding">
+<app-page-header [config]="headerConfig">
+  <ion-searchbar class="top-padding" placeholder="Search for Mentors, Topics" debounce="500" (ionChange)="onSearch($event)" ></ion-searchbar>
+</app-page-header>
+<ion-content class="ion-padding">
   <ion-toolbar>
-    <ion-searchbar class="top-padding" placeholder=""></ion-searchbar>
     <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
       <ion-segment-button value="published,live">
         <ion-label>{{ "UPCOMING" | translate }}</ion-label>
@@ -63,7 +64,7 @@
     <ion-label>{{"NEW_SESSION"|translate}}</ion-label>
   </ion-fab>
 </ion-content>
-<div *ngIf="sessions?.length;else footerElseBlock">
+<div *ngIf="showLoadMoreButton;else footerElseBlock">
   <ion-footer class="ion-no-border">
     <ion-button *ngIf="sessionsCount > mentors?.length" class="load-more-button" (click)="loadMore()" expand="full">
       {{"LOAD MORE" | translate}}</ion-button>

@@ -28,8 +28,6 @@ export class HttpService {
     private injector: Injector
     ) {
     this.baseUrl=environment.baseUrl;
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(60);
   }
 
   async setHeaders() {
@@ -47,6 +45,8 @@ export class HttpService {
     }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     let body = requestParam.payload ? requestParam.payload : {};
+    this.http.setDataSerializer('json');
+    this.http.setRequestTimeout(60);
     return this.http.post(this.baseUrl + requestParam.url, body, headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
@@ -63,6 +63,8 @@ export class HttpService {
       throw Error(null);
     }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+    this.http.setDataSerializer('json');
+    this.http.setRequestTimeout(60);
     return this.http.get(this.baseUrl + requestParam.url, '', headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);

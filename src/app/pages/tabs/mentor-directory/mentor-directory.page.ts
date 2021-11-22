@@ -33,13 +33,12 @@ export class MentorDirectoryPage implements OnInit {
   ) { }
 
   ngOnInit() {
-
-  }
-  ionViewWillEnter() {
     this.page = 1;
     this.mentors = [];
     this.searchText = '';
     this.getMentors();
+  }
+  ionViewWillEnter() {
   }
 
   async getMentors() {
