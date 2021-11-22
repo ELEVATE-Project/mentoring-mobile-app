@@ -56,7 +56,6 @@ const login = (userName, password) => {
     })
     .then(async (res) => {
       token = _.get(res, "data.result.access_token");
-      // console.log(token);
       console.log("user-authenticated");
       fetchAllForms(); // initial fn to trigger form-update
     })
