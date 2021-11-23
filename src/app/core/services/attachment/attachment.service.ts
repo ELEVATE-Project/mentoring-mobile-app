@@ -6,6 +6,8 @@ import { File } from "@ionic-native/file/ngx";
 import { ActionSheetController, Platform, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { FILE_EXTENSION_HEADERS } from "../../constants/file-extensions";
+import { urlConstants } from "../../constants/urlConstants";
+import { HttpService } from "../http/http.service";
 import { UtilService } from "../util/util.service";
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 
@@ -28,7 +30,8 @@ export class AttachmentService {
         private chooser: Chooser,
         private utils: UtilService,
         private translate: TranslateService,
-        private fileTransfer: FileTransfer
+        private httpService: HttpService,
+        private fileTransfer : FileTransfer
         // private filePickerIOS: IOSFilePicker,
     ) {
         this.isIos = this.platform.is('ios');
@@ -38,7 +41,6 @@ export class AttachmentService {
     getActionSheetButtons(type): any {
         let buttons = [];
         this.utils.getActionSheetButtons(type).forEach(element => {
-            console.log(element, "element");
             let button = {
                 text: element.text,
                 handler: () => {
@@ -98,7 +100,6 @@ export class AttachmentService {
                 }
             })
             .catch((err) => {
-                console.log(err);
                 if (err !== "No Image Selected") {
                     this.actionSheetController.dismiss();
                     this.presentToast(this.texts["ERROR_WHILE_STORING_FILE"]);
@@ -152,7 +153,6 @@ export class AttachmentService {
                     name: newFileName,
                     type: this.mimeType(newFileName),
                     isUploaded: false,
-                    url: "",
                 };
 
                 this.presentToast(this.texts["SUCCESSFULLY_ATTACHED"], "success");
@@ -190,30 +190,30 @@ export class AttachmentService {
 
     cloudImageUpload(fileDetails) {
         return new Promise((resolve, reject) => {
-          this.file.checkFile(this.fileBasePath, fileDetails.name).then(success => {
-            var options = {
-              fileKey: fileDetails.name,
-              fileName: fileDetails.name,
-              chunkedMode: false,
-              mimeType: fileDetails.type,
-              headers: {
-                "Content-Type": "multipart/form-data",
-                "x-ms-blob-type":
-                  fileDetails.cloudStorage === "AZURE"
-                    ? "BlockBlob"
-                    : null,
-              },
-              httpMethod: "PUT",
-            };
-            const fileTrans: FileTransferObject = this.fileTransfer.create();
-            fileTrans.upload(this.fileBasePath + fileDetails.name, fileDetails.uploadUrl, options).then(success => {
-              resolve(success)
+            this.file.checkFile(this.fileBasePath, fileDetails.name).then(success => {
+              var options = {
+                fileKey: fileDetails.name,
+                fileName: fileDetails.name,
+                chunkedMode: false,
+                mimeType: fileDetails.type,
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  "x-ms-blob-type":
+                    fileDetails.cloudStorage === "AZURE"
+                      ? "BlockBlob"
+                      : null,
+                },
+                httpMethod: "PUT",
+              };
+              const fileTrans: FileTransferObject = this.fileTransfer.create();
+              fileTrans.upload(this.fileBasePath + fileDetails.name, fileDetails.uploadUrl.signedUrl, options).then(success => {
+                resolve(success)
+              }).catch(error => {
+                reject(error)
+              })
             }).catch(error => {
               reject(error)
             })
-          }).catch(error => {
-            reject(error)
           })
-        })
-      }
+    }
 }

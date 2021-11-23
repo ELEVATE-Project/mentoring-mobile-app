@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { CanLeavePageGuard } from 'src/app/core/guards/canDeactive/deactive.guard';
 
 import { EditProfilePage } from './edit-profile.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: EditProfilePage
+    component: EditProfilePage,
+    canDeactivate: [CanLeavePageGuard]
   }
 ];
 

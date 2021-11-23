@@ -24,7 +24,7 @@
         }
       },
       {
-        "name": "start-date",
+        "name": "startDateTime",
         "label": "Start Date",
         "class": "ion-margin",
         "value": "",
@@ -36,7 +36,7 @@
         }
       },
       {
-        "name": "end-date",
+        "name": "endDateTime",
         "label": "End Date",
         "class": "ion-margin",
         "value": "",
@@ -48,7 +48,7 @@
         }
       },
       {
-        "name": "recomended",
+        "name": "recommendedFor",
         "label": "Recomended For",
         "class": "ion-margin",
         "value": "",
@@ -119,6 +119,29 @@
           {
             "value": "Professional Development",
             "label": "Professional Development"
+          }
+        ]
+      },
+      {
+        "name": "medium",
+        "label": "Select medium",
+        "class": "ion-margin",
+        "value": "",
+        "type": "chip",
+        "position": "",
+        "disabled": false,
+        "showSelectAll": true,
+        "validators": {
+          "required": true
+        },
+        "options": [
+          {
+            "label": "English",
+            "value": "1"
+          },
+          {
+            "label": "Hindi",
+            "value": "2"
           }
         ]
       }

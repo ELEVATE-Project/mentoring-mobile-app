@@ -11,12 +11,12 @@ export class SessionCardComponent implements OnInit {
   @Output() onClickEvent = new EventEmitter();
   constructor() { }
   ngOnInit() { }
-  onAction($event, type) {
-    let event = {
-      event: $event,
+  onAction(event, type) {
+    let payload = {
+      id: event,
       type: type
     }
-    console.log(event, "event");
-    this.onClickEvent.emit(event);
+    console.log(payload, "event");
+    this.onClickEvent.emit(payload);
   }
 }

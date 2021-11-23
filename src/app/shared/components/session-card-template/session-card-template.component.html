@@ -1,19 +1,23 @@
-<ion-card class="mentor-card" (click)="onAction(data,'dataSelected')">
+<ion-card class="mentor-card" (click)="onCardClick(data)">
   <ion-card-content class="ion-no-padding">
     <ion-row>
       <ion-col size=2 class="date-box">
         27 Tue
       </ion-col>
-      <ion-col size=8>
-       <ion-card-title>
-         {{data?.title}}
-         </ion-card-title>
-         <ion-card-subtitle class="ellipsis">
-          {{data?.subTitle}}
-          </ion-card-subtitle>
+      <ion-col size=5>
+        <ion-card-title>
+          {{data?.title}}
+        </ion-card-title>
+        <ion-card-subtitle class="ellipsis">
+          {{data?.description}}
+        </ion-card-subtitle>
       </ion-col>
-      <ion-col size=2 class="action-box" *ngIf="showEdit">
-        {{'EDIT' | translate}} <ion-icon name="caret-forward-outline" color="primary" (click)="$event.stopPropagation(); onAction(data,'edit')"></ion-icon>
+      <ion-col size=4 class="action-box" *ngIf="buttonConfig">
+        <ion-button shape="round" (click)="$event.stopPropagation(); onAction(data, 'data selected')">{{buttonConfig?.label | translate}}</ion-button>
+      </ion-col>
+      <ion-col size=1 class="action-box">
+        <ion-icon name="caret-forward-outline" color="primary"
+          (click)="$event.stopPropagation(); onAction(data,'edit')"></ion-icon>
       </ion-col>
     </ion-row>
   </ion-card-content>

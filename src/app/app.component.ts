@@ -6,6 +6,7 @@ import * as _ from 'lodash-es';
 import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService } from './core/services';
 import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
+import { ProfileService } from './core/services/profile/profile.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -35,7 +36,8 @@ export class AppComponent {
     private db:DbService,
     private router: Router,
     private network:NetworkService,
-    private authService:AuthService
+    private authService:AuthService,
+    private profile: ProfileService
   ) {
     this.initializeApp();
     this.router.navigate(["/"]);
@@ -93,12 +95,11 @@ export class AppComponent {
       }
     }).catch(error => {})
   }
+  
   getUser() {
-    this.userService.getUserValue().then(user => {
-      if(user){
-      this.user = user;
-      this.isMentor = this.user?.user?.isAMentor;
-      }
+    this.profile.profileDetails(false).then(profileDetails => {
+      this.user = profileDetails;
+      this.isMentor = this.user?.isAMentor
     })
   }
 

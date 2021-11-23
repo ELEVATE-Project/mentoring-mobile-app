@@ -53,9 +53,9 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
     File,
     Camera,
     FilePath,
-    FileTransfer, 
-    FileTransferObject,
     Chooser,
+    FileTransfer, 
+    FileTransferObject
   ],
   bootstrap: [AppComponent],
 })

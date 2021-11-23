@@ -5,7 +5,7 @@ import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@ang
   templateUrl: './expandable-card.component.html',
   styleUrls: ['./expandable-card.component.scss'],
 })
-export class TermsAndConditionCardComponent implements OnInit {
+export class ExpandableCardComponent implements OnInit {
   @ViewChild("expandWrapper", { read: ElementRef }) expandWrapper: ElementRef;
   @Input("expanded") expanded: boolean;
   @Input("expandHeight") expandHeight: string;
