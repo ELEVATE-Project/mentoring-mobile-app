@@ -32,9 +32,7 @@ export class ProfileService {
     };
     try {
       let data: any = await this.httpService.post(config);
-      let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-      userDetails.user= null;
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, userDetails);
+       await this.localStorage.delete(localKeys.USER_DETAILS);
       this.loaderService.stopLoader();
       this._location.back();
       this.toast.showToast(data.message, "success");
@@ -67,14 +65,15 @@ export class ProfileService {
           if (data) {
             this.loaderService.stopLoader();
             resolve(data);
-          } else {
+          }
+        }).catch (async()=>{
             var res = await this.getProfileDetailsAPI();
             await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
-            data = _.get(data, 'user');
+            // data = _.get(data, 'user');
             this.loaderService.stopLoader();
-            resolve(data);
+            resolve(res);
           }
-        })
+        )
       } catch (error) {
         this.loaderService.stopLoader();
       }
