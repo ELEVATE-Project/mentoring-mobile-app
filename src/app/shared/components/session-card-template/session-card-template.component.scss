@@ -1,22 +1,29 @@
 
 .mentor-card{
     padding: 8px 8px 10px 10px;
+    height: 80px;
     .date-box{
-        font-size: 16px;
+        font-size: 18px;
         text-align: center;
+        justify-content: center;
         font-weight: 800;
-    }
-    ion-col{
-        margin: auto;
     }
     .action-box{
         color:var(--ion-color-primary);
     }
+    .icon-top-margin{
+        margin-top: 10px ;
+    }
 }
 
 .ellipsis{
-    min-height: 3em;
     overflow: hidden;
-    text-overflow: ellipsis;
-    height: 3em;
+    text-overflow:ellipsis;
+    height: 22px;
+    margin: 0px;
+    font-size: large;
+}
+.session-status{
+    margin-top: px;
+    padding: 0px;
 }

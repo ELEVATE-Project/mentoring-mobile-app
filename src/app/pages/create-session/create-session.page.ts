@@ -19,7 +19,7 @@ import { Location } from '@angular/common';
 })
 export class CreateSessionPage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;
-  id: any;
+  id: any=null;
 
   public headerConfig: any = {
     // menu: true,
@@ -33,8 +33,8 @@ export class CreateSessionPage implements OnInit {
   public formData: JsonFormData;
   showForm: boolean = false;
   constructor(
-    private http: HttpClient, 
-    private sessionService: SessionService, 
+    private http: HttpClient,
+    private sessionService: SessionService,
     private toast: ToastService,
     private activatedRoute: ActivatedRoute,
     private location: Location) {
@@ -80,4 +80,7 @@ export class CreateSessionPage implements OnInit {
     this.showForm = true;
   }
 
+  ionViewDidLeave(){
+    this.id=null;
+  }
 }

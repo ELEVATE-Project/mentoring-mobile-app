@@ -12,7 +12,14 @@ ion-chip{
 
 .value{
       font-size: 15px;
+      color: rgb(87, 95, 116);
+      font-weight: 600;
   }
   ion-toolbar{
       --padding-bottom: 0px;
+  }
+  .session-detail-heading{
+      font-size: 16px;
+      color: rgb(87, 95, 116);
+      font-weight: 900;
   }
