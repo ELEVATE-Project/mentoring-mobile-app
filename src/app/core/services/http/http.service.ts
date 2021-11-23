@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { HTTP } from '@ionic-native/http/ngx';
 import { RequestParams } from '../../interface/request-param';
-import {environment} from 'src/environments/environment';
+import { environment } from 'src/environments/environment';
 import * as _ from 'lodash-es';
 import { UserService } from '../user/user.service';
 import { NetworkService } from '../network.service';
@@ -10,7 +10,7 @@ import { LoaderService } from '../loader/loader.service';
 import { LocalStorageService } from '../localstorage.service';
 import { urlConstants } from '../../constants/urlConstants';
 import { localKeys } from '../../constants/localStorage.keys';
-import {AuthService} from '../auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 
 
 @Injectable({
@@ -20,27 +20,27 @@ export class HttpService {
   baseUrl;
   constructor(
     private http: HTTP,
-    private userService:UserService,
-    private network:NetworkService,
-    private toastService:ToastService,
+    private userService: UserService,
+    private network: NetworkService,
+    private toastService: ToastService,
     private loaderService: LoaderService,
     private localStorage: LocalStorageService,
     private injector: Injector
-    ) {
-    this.baseUrl=environment.baseUrl;
+  ) {
+    this.baseUrl = environment.baseUrl;
   }
 
   async setHeaders() {
     let token = await this.getToken();
     const headers = {
-      'X-auth-token':  token ? token : "", 
+      'X-auth-token': token ? token : "",
       'Content-Type': 'application/json',
     }
     return headers;
   }
 
   async post(requestParam: RequestParams) {
-    if(!this.checkNetworkAvailability()){
+    if (!this.checkNetworkAvailability()) {
       throw Error(null);
     }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
@@ -59,7 +59,7 @@ export class HttpService {
   }
 
   async get(requestParam: RequestParams) {
-    if(!this.checkNetworkAvailability()){
+    if (!this.checkNetworkAvailability()) {
       throw Error(null);
     }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
@@ -77,9 +77,9 @@ export class HttpService {
   }
 
   //network check
-  checkNetworkAvailability(){
-    if(!this.network.isNetworkAvailable){
-      this.toastService.showToast('MSG_PLEASE_NETWORK','danger')
+  checkNetworkAvailability() {
+    if (!this.network.isNetworkAvailable) {
+      this.toastService.showToast('MSG_PLEASE_NETWORK', 'danger')
       return false;
     }
     return true;
@@ -95,9 +95,9 @@ export class HttpService {
     let isValidToken = this.userService.validateToken(token);
     if (!isValidToken) {
       let data: any = await this.getAccessToken();
-      let access_token=_.get(data, 'result.access_token');
+      let access_token = _.get(data, 'result.access_token');
       if (!access_token) {
-        let authService=this.injector.get(AuthService);
+        let authService = this.injector.get(AuthService);
         authService.logoutAccount();
       }
       this.userService.token['access_token'] = access_token;
@@ -131,7 +131,7 @@ export class HttpService {
     switch (result.status) {
       case 400:
       case 406:
-      case 422:    
+      case 422:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:

@@ -5,6 +5,7 @@ import { config } from 'rxjs';
 import { ToastService, UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
+import *  as moment from 'moment';
 
 @Component({
   selector: 'app-session-detail',
@@ -16,7 +17,7 @@ export class SessionDetailPage implements OnInit {
   status: any;
   showEditButton: any;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private sessionService: SessionService, private utilService:UtilService, private toast: ToastService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private sessionService: SessionService, private utilService: UtilService, private toast: ToastService) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.id = params?.get('id');
       this.status = params?.get('status');
@@ -48,7 +49,7 @@ export class SessionDetailPage implements OnInit {
         key: 'description',
       },
       {
-        title: 'Audience',
+        title: 'Recommended For',
         key: 'recommendedFor',
       },
       {
@@ -60,9 +61,9 @@ export class SessionDetailPage implements OnInit {
         key: "duration"
       },
       {
-        title: "Date",
-        key: "startDateTime"
-      }
+        title: "Categories",
+        key: "categories"
+      },
     ],
     data: {
       description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
@@ -86,13 +87,38 @@ export class SessionDetailPage implements OnInit {
           "label": "Hindi"
         },
       ],
+      categories: [
+        {
+          "value": "Educational Leadership",
+          "label": "Educational Leadership"
+        },
+        {
+          "value": "School Process",
+          "label": "School Process"
+        },
+        {
+          "value": "Communication",
+          "label": "Communication"
+        },
+        {
+          "value": "SQAA",
+          "label": "SQAA"
+        },
+        {
+          "value": "Professional Development",
+          "label": "Professional Development"
+        },
+      ],
       duration: "",
-      startDateTime: "",
     },
   };
 
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
+    var now = moment(response.startDateTime);
+    var end = moment(response.endDateTime);
+    var minutes = moment.duration(end.diff(now)).asMinutes();
+    response.duration= minutes+" minutes";
     this.sessionHeaderData.name = response.title;
     this.detailData.data = response;
   }
@@ -110,7 +136,7 @@ export class SessionDetailPage implements OnInit {
   }
 
   editSession() {
-    this.router.navigate([CommonRoutes.CREATE_SESSION], {queryParams: {id: this.id}});
+    this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id } });
   }
 
   onDelete() {
@@ -122,7 +148,7 @@ export class SessionDetailPage implements OnInit {
     }
     this.utilService.alertPopup(msg).then(data => {
       if (data) {
-        this.toast.showToast("Will be implemented soon!!","success")
+        this.toast.showToast("Will be implemented soon!!", "success")
       }
     }).catch(error => { })
   }

@@ -3,8 +3,8 @@
   <div class="main-wrapper">
     <app-profile-image [profileImageData]='sessionHeaderData'></app-profile-image>
     <div class="d-flex flex-justify-center">
-      <ion-button shape="round" (click)="onDelete()">{{ "DELETE" | translate }}</ion-button>
-      <ion-button *ngIf="status" shape="round" (click)="editSession()">{{ "EDIT" | translate }}</ion-button>
+      <ion-button class="session-btn" shape="round" (click)="onDelete()">{{ "DELETE" | translate }}</ion-button>
+      <ion-button class="session-btn" *ngIf="status" shape="round" (click)="editSession()">{{ "EDIT" | translate }}</ion-button>
     </div>
     <app-generic-details [sessionData]='detailData'></app-generic-details>
   </div>

@@ -4,10 +4,10 @@
     border-radius: 50%;
 }
 .username, .add-photo {
-    font-size: 18px;
+    font-size: 19px;
     text-align: center;
-    margin: 4px;
-    font-weight: 600;
+    margin: 0px;
+    padding: 0px;
 }
 .region{   
     font-size: 16px;
@@ -17,5 +17,13 @@
 }
 .join-button{
     display: flex;
-    justify-content: center;
+    justify-content: center; 
+}
+.padding{
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+.text-config{
+    color: rgb(87, 95, 116);
+    font-weight: 900;
 }

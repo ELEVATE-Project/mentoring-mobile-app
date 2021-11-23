@@ -13,7 +13,7 @@ export class SessionService {
   async createSession(formData, id?:string){
     await this.loaderService.startLoader();
     const config = {
-      url: id ? urlConstants.API_URLS.CREATE_UPDATE_SESSION+`/${id}` :urlConstants.API_URLS.CREATE_UPDATE_SESSION,
+      url: id==null ? urlConstants.API_URLS.CREATE_SESSION : urlConstants.API_URLS.CREATE_SESSION+`/${id}`,
       payload: formData
     };
     try {

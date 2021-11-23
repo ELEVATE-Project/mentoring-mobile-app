@@ -84,7 +84,7 @@ export class CreatedByMePage implements OnInit {
   }
 
   goToHome() {
-    this._location.back();
+    this.navCtrl.navigateForward([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]);
   }
 
   loadMore() {
