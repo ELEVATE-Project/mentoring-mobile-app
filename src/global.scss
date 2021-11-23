@@ -118,6 +118,11 @@ ion-button{
   text-transform: capitalize;
 }
 
+.flex-box {
+  display: flex;
+  align-items: center;
+}
+
 .btn-valid {
   ion-button {
     font-size: 16px;

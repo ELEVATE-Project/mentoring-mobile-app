@@ -7,7 +7,7 @@ import { NavController } from '@ionic/angular';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import { UserService } from 'src/app/core/services';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 
 @Component({
   selector: 'app-home',
@@ -57,14 +57,14 @@ public headerConfig: any = {
   menu: true,
   notification: true,
   headerColor: 'primary',
-  label:'MENU'
+  // label:'MENU'
 };
   constructor(
     private http: HttpClient,
     private router : Router,
     private navController: NavController,
     private deeplinks: Deeplinks,
-    private userService :UserService) {}
+    private profileService: ProfileService) {}
     
   ngOnInit() {
     this.getUser();
@@ -95,8 +95,8 @@ public headerConfig: any = {
     this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
   }
   getUser() {
-    this.userService.getUserValue().then(user =>{
-      this.user=user;
+    this.profileService.profileDetails(false).then(data => {
+      this.user = data
     })
   }
 }

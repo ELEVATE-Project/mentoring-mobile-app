@@ -7,7 +7,7 @@ import { DashboardPage } from './dashboard.page';
 
 import { DashboardPageRoutingModule } from './dashboard-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
-import  { SlReportsLibraryModule } from 'sl-reports-library';
+import { SlReportsLibraryModule} from '@shikshalokam/sl-reports-library'
 @NgModule({
   imports: [
     IonicModule,

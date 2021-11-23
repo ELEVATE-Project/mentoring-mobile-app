@@ -19,11 +19,23 @@
 .ellipsis{
     overflow: hidden;
     text-overflow:ellipsis;
-    height: 22px;
-    margin: 0px;
     font-size: large;
+    white-space: nowrap;
 }
 .session-status{
     margin-top: px;
     padding: 0px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.container {
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    font-weight: 600;
 }
