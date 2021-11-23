@@ -32,9 +32,9 @@ export class ProfileService {
     };
     try {
       let data: any = await this.httpService.post(config);
-      let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-      userDetails.user= null;
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, userDetails);
+      if (data.responseCode === 'OK') {
+        await this.localStorage.setLocalData(localKeys.USER_DETAILS, formData);
+      }
       this.loaderService.stopLoader();
       this._location.back();
       this.toast.showToast(data.message, "success");
