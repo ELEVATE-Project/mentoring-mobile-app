@@ -110,7 +110,7 @@ export class SessionDetailPage implements OnInit {
           "label": "Professional Development"
         },
       ],
-      duration: "",
+      duration: {hours:null, minutes:null},
     },
   };
 
@@ -118,8 +118,10 @@ export class SessionDetailPage implements OnInit {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     var now = moment(response.startDateTime);
     var end = moment(response.endDateTime);
-    var sessionDuration = moment.duration(end.diff(now));
-    response.duration= sessionDuration.hours()==0 ? sessionDuration.minutes()+" Minutes" : sessionDuration.hours()+" Hours "+sessionDuration.minutes()+" Minutes";
+    console.log(response);
+    var sessionDuration = await moment.duration(end.diff(now));
+    //response.duration= sessionDuration.hours()==0 ? sessionDuration.minutes()+" Minutes" : sessionDuration.hours()+" Hours "+sessionDuration.minutes()+" Minutes";
+    response.duration = {hours:sessionDuration.hours(), minutes:sessionDuration.minutes()};
     this.sessionHeaderData.name = response.title;
     this.detailData.data = response;
   }
@@ -133,7 +135,7 @@ export class SessionDetailPage implements OnInit {
   }
 
   async share() {
-    let url = "/sessions-details/"+this.id;
+    let url = "/sessions/sessions-details/"+this.id;
     let link = await this.utilService.getDeepLink(url);
     let params = {link: link, subject: this.sessionHeaderData?.title, text: "Join this session using the link provided here "}
     this.utilService.shareLink(params);

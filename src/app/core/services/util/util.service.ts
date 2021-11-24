@@ -10,17 +10,14 @@ import { ISocialSharing } from '../../interface/soical-sharing-interface';
   providedIn: 'root',
 })
 export class UtilService {
-  deepLinkUrl;
   constructor(
     private socialSharing: SocialSharing,
     private alert: AlertController,
     private translate: TranslateService
-  ) {
-    this.deepLinkUrl = environment.deepLinkUrl;
-  }
+  ) {}
 
-  async getDeepLink(url){
-    return this.deepLinkUrl+url;
+  getDeepLink(url){
+    return environment.deepLinkUrl+url;
   }
 
   shareLink(param:ISocialSharing) {
