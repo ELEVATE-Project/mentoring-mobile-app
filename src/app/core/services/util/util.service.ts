@@ -3,17 +3,25 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Action } from 'rxjs/internal/scheduler/Action';
+import { environment } from 'src/environments/environment';
 import { ISocialSharing } from '../../interface/soical-sharing-interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
+  deepLinkUrl;
   constructor(
     private socialSharing: SocialSharing,
     private alert: AlertController,
     private translate: TranslateService
-  ) {}
+  ) {
+    this.deepLinkUrl = environment.deepLinkUrl;
+  }
+
+  async getDeepLink(url){
+    return this.deepLinkUrl+url;
+  }
 
   shareLink(param:ISocialSharing) {
     let {text,subject,link} = param;

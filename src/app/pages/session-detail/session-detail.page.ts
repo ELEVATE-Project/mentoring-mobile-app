@@ -24,6 +24,7 @@ export class SessionDetailPage implements OnInit {
     });
   }
   ngOnInit() {
+    this.headerConfig.share = (this.status == "published,live") ? true : false;
   }
 
   ionViewWillEnter() {
@@ -117,8 +118,8 @@ export class SessionDetailPage implements OnInit {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     var now = moment(response.startDateTime);
     var end = moment(response.endDateTime);
-    var minutes = moment.duration(end.diff(now)).asMinutes();
-    response.duration= minutes+" minutes";
+    var sessionDuration = moment.duration(end.diff(now));
+    response.duration= sessionDuration.hours()==0 ? sessionDuration.minutes()+" Minutes" : sessionDuration.hours()+" Hours "+sessionDuration.minutes()+" Minutes";
     this.sessionHeaderData.name = response.title;
     this.detailData.data = response;
   }
@@ -131,8 +132,11 @@ export class SessionDetailPage implements OnInit {
     }
   }
 
-  share() {
-    // ToDO implement share feature
+  async share() {
+    let url = "/sessions-details/"+this.id;
+    let link = await this.utilService.getDeepLink(url);
+    let params = {link: link, subject: this.sessionHeaderData?.title, text: "Join this session using the link provided here "}
+    this.utilService.shareLink(params);
   }
 
   editSession() {
