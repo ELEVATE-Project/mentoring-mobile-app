@@ -34,7 +34,8 @@ export class ProfileService {
       let data: any = await this.httpService.post(config);
       let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
       userDetails.user= null;
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, userDetails);
+      let profileData = await this.getProfileDetailsAPI();
+      await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileData);
       this.loaderService.stopLoader();
       this._location.back();
       this.toast.showToast(data.message, "success");
