@@ -24,7 +24,7 @@
         }
       },
       {
-        "name": "startDateTime",
+        "name": "startDate",
         "label": "Start Date",
         "class": "ion-margin",
         "value": "",
@@ -36,7 +36,7 @@
         }
       },
       {
-        "name": "endDateTime",
+        "name": "endDate",
         "label": "End Date",
         "class": "ion-margin",
         "value": "",

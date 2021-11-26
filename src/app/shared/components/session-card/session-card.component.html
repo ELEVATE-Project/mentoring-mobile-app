@@ -1,5 +1,5 @@
 <ion-card (click)="onAction(data._id,'cardSelect')" class="session-card">
-  <span class="status-badge" *ngIf="data?.status">
+  <span class="status-badge" *ngIf="data?.status == 'live'">
     <ion-icon name="ellipse-sharp"></ion-icon> {{data?.status}}
   </span>
   <ion-row>
@@ -17,7 +17,7 @@
           <ion-label>{{label?.label}}{{isLast ? '' : ', '}} </ion-label>
         </span>
       </div>
-      <p class="ellipsis">{{data?.subTitle}}</p>
+      <p class="ellipsis" *ngIf="data?.description">{{data?.description}}</p>
     </ion-col>
   </ion-row>
   <div class="session-actions">

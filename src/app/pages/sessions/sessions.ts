@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
+import { HttpService, LoaderService } from 'src/app/core/services';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
 
 @Component({
   selector: 'app-sessions',
@@ -10,9 +12,15 @@ import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 })
 export class SessionsPage implements OnInit {
   type: string;
+  sessionsCount = 0;
+  page = 1;
+  limit = 10;
+  searchText: string='';
   SKELETON = SKELETON;
-  constructor(private activatedRoute: ActivatedRoute, 
-    private router : Router) {
+  constructor(private activatedRoute: ActivatedRoute,
+    private httpService: HttpService,
+    private loaderService: LoaderService,
+    private router: Router) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.type = params.get('type');
       this.type = this.type ? this.type : "all-sessions";
@@ -23,48 +31,19 @@ export class SessionsPage implements OnInit {
     notification: false,
     headerColor: 'primary',
     backButton: true,
-    label:'SESSIONS_PAGE'
+    label: 'SESSIONS_PAGE'
   };
   SESSIONS_DETAILS: any = CommonRoutes.SESSIONS_DETAILS;
   SESSIONS: any = CommonRoutes.SESSIONS;
-  page =1;
-  limit =10;
-  sessions = [{
-    _id: 1,
-    title: 'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur',
-    description: 'Short description ipsum dolor sit amet, consectetur',
-    date: '20/11/2021',
-    status: 'Live'
-  },
-  {
-    _id: 2,
-    title: 'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur',
-    description: 'Short description ipsum dolor sit amet, consectetur',
-    date: '20/11/2021',
-    status: 'Live'
-  }, {
-    _id: 3,
-    title: 'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur',
-    description: 'Short description ipsum dolor sit amet, consectetur',
-    date: '20/11/2021'
-  }, {
-    _id: 4,
-    title: 'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur',
-    description: 'Short description ipsum dolor sit amet, consectetur',
-    date: '20/11/2021'
-  }
-  ];
+
+  sessions;
   ngOnInit() {
+  }
+  ionViewWillEnter() {
+    this.getSessions();
   }
   public segmentChanged(ev: any) {
     this.type = ev.target.value;
-  }
-  getSessions(){
-    // TODO api call to get sessions
   }
   eventAction(event) {
     console.log(event, "event");
@@ -82,5 +61,27 @@ export class SessionsPage implements OnInit {
     this.page = 1;
     this.getSessions();
     this.sessions = [];
+  }
+
+  async getSessions() {
+    await this.loaderService.startLoader();
+    let type = this.type == "all-sessions" ? false : true
+    console.log(urlConstants.API_URLS.SESSIONS + type + '&page=' + this.page + '&limit=' + this.limit + '&search=' + this.searchText, "url")
+
+    const config = {
+      //sessions?enrolled=true/false&page=1&limit=5&search=:search
+      url: urlConstants.API_URLS.SESSIONS + type + '&page=' + this.page + '&limit=' + this.limit + '&search=' + this.searchText,
+    };
+    try {
+      let data: any = await this.httpService.get(config);
+      this.loaderService.stopLoader();
+      console.log(data.result, "data.result rrreeww");
+      this.sessions = this.sessions.concat(data.result.data);
+      console.log(this.sessions, "this.sessions rrrr");
+      this.sessionsCount = data.result.count;
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
   }
 }
