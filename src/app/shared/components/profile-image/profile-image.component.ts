@@ -13,6 +13,7 @@ export class ProfileImageComponent implements OnInit {
   @Input() username: any;
   @Input() uploadImage : boolean = false;
   @Output() imageUploadEvent = new EventEmitter();
+  @Output() imageRemoveEvent = new EventEmitter();
   constructor(
     private attachment : AttachmentService
   ) { }
@@ -22,7 +23,7 @@ uploadPhoto(){
   this.attachment.selectImage(this.profileImageData.type).then(resp => {
     if(resp.data){
       // this.upload(resp.data);
-      this.imageUploadEvent.emit(resp.data);
+      resp.data.type == "removeCurrentPhoto" ? this.imageRemoveEvent.emit(resp.data): this.imageUploadEvent.emit(resp.data);
     }
   },error =>{
     console.log(error,"error");

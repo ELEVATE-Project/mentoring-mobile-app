@@ -93,6 +93,7 @@ export class UtilService {
           {
             text: texts["REMOVE_CURRENT_PHOTO"],
             type: 'remove',
+            action: 'remove'
           },
           {
             text: texts["TAKE_PHOTO"],
