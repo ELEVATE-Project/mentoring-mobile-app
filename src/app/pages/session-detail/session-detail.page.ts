@@ -116,12 +116,14 @@ export class SessionDetailPage implements OnInit {
 
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
+    if(response){
     var now = moment(response.startDate);
     var end = moment(response.endDate);
     var sessionDuration = await moment.duration(end.diff(now));
     response.duration = {hours:sessionDuration.hours(), minutes:sessionDuration.minutes()};
     this.sessionHeaderData.name = response.title;
     this.detailData.data = response;
+    }
   }
 
   action(event) {
