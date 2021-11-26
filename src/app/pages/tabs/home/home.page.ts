@@ -90,9 +90,7 @@ public headerConfig: any = {
     this.deeplinks.route({
       '/sessions/details/:id': '',
     }).subscribe(match=>{
-      console.log(match);
       this.zone.run(()=>{
-        console.log(match);
         this.router.navigateByUrl(match.$link.path);
       })  
     })
