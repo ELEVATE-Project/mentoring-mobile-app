@@ -24,7 +24,7 @@
         }
       },
       {
-        "name": "startDateTime",
+        "name": "startDate",
         "label": "Start Date",
         "class": "ion-margin",
         "value": "",
@@ -36,7 +36,7 @@
         }
       },
       {
-        "name": "endDateTime",
+        "name": "endDate",
         "label": "End Date",
         "class": "ion-margin",
         "value": "",
@@ -56,6 +56,7 @@
         "position": "",
         "disabled": false,
         "showSelectAll": true,
+        "showAddOption": true,
         "validators": {
           "required": true
         },
@@ -96,6 +97,7 @@
         "position": "",
         "disabled": false,
         "showSelectAll": true,
+        "showAddOption": true,
         "validators": {
           "required": true
         },
@@ -131,6 +133,7 @@
         "position": "",
         "disabled": false,
         "showSelectAll": true,
+        "showAddOption": true,
         "validators": {
           "required": true
         },

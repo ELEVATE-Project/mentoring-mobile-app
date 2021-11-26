@@ -5,6 +5,10 @@ import { SessionDetailPage } from './session-detail.page';
 
 const routes: Routes = [
   {
+    path: ':id',
+    component: SessionDetailPage
+  },
+  {
     path: '',
     component: SessionDetailPage
   }

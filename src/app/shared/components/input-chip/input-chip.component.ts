@@ -36,18 +36,18 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   constructor(
     private alertController: AlertController,
     private translateService: TranslateService
-  ) {}
+  ) { }
 
-  onChange = (quantity) => {};
+  onChange = (quantity) => { };
 
-  onTouched = () => {};
+  onTouched = () => { };
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   writeValue(value: any[]) {
     this.selectedChips = new Set();
     this.chips.map((chip) =>
-      _.some(value,chip) ? this.selectedChips.add(chip) : null
+      _.some(value, chip) ? this.selectedChips.add(chip) : null
     );
     if (this.selectedChips.size === this.chips.length) {
       this._selectAll = true;
@@ -120,17 +120,19 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
           text: this.translateService.instant('CANCEL'),
           role: 'cancel',
           cssClass: 'secondary',
-          handler: () => {},
+          handler: () => { },
         },
         {
           text: this.translateService.instant('OK'),
           handler: (alertData) => {
-            let obj = {
-              label: alertData.chip,
-              value: UUID.UUID(),
-            };
-            this.chips.push(obj);
-            this.onChipClick(obj);
+            if (alertData?.chip !== "") {
+              let obj = {
+                label: alertData.chip,
+                value: UUID.UUID(),
+              };
+              this.chips.push(obj);
+              this.onChipClick(obj);
+            }
           },
         },
       ],
