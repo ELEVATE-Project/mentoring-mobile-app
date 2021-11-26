@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
@@ -64,22 +64,38 @@ public headerConfig: any = {
     private router : Router,
     private navController: NavController,
     private deeplinks: Deeplinks,
-    private profileService: ProfileService) {}
+    private profileService: ProfileService,
+    private platform: Platform,
+    private zone:NgZone) {}
     
   ngOnInit() {
     this.getUser();
-    this.deeplinks.routeWithNavController(this.navController, {
-      '/sessions': '',
-    }).subscribe((match) => {
-      if(match.$link.path === '/sessions'){
-        this.navController.navigateForward('/sessions', {
-          queryParams:{
-            type:'all-sessions'
-          }
-        });
-      }
-    }, (nomatch) => {
-    });
+    // this.deeplinks.routeWithNavController(this.navController, {
+    //   '/sessions': '',
+    // }).subscribe((match) => {
+    //   if(match.$link.path === '/sessions'){
+    //     this.navController.navigateForward('/sessions', {
+    //       queryParams:{
+    //         type:'all-sessions'
+    //       }
+    //     });
+    //   }
+    // }, (nomatch) => {
+    // });
+  }
+  ionViewWillEnter(){
+    this.setupDeepLinks();
+  }
+  setupDeepLinks() {
+    this.deeplinks.route({
+      '/sessions/details/:id': '',
+    }).subscribe(match=>{
+      console.log(match);
+      this.zone.run(()=>{
+        console.log(match);
+        this.router.navigateByUrl(match.$link.path);
+      })  
+    })
   }
   eventAction(event){
     switch (event.type) {

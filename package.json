@@ -116,11 +116,11 @@
       "ionic-plugin-deeplinks": {
         "URL_SCHEME": "mentoring-mobile-app",
         "DEEPLINK_SCHEME": "https",
-        "DEEPLINK_HOST": "driftycode.com",
+        "DEEPLINK_HOST": "dev-mentoring.shikshalokam.org",
         "ANDROID_PATH_PREFIX": "/sessions",
         "ANDROID_2_PATH_PREFIX": "/tabs/home",
         "ANDROID_3_PATH_PREFIX": "/tabs/profile",
-        "ANDROID_4_PATH_PREFIX": "/",
+        "ANDROID_4_PATH_PREFIX": "/sessions/details",
         "ANDROID_5_PATH_PREFIX": "/",
         "DEEPLINK_2_SCHEME": "https",
         "DEEPLINK_2_HOST": " ",

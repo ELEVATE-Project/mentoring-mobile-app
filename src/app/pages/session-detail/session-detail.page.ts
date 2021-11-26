@@ -21,6 +21,9 @@ export class SessionDetailPage implements OnInit {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.id = params?.get('id');
       this.status = params?.get('status');
+      if(!this.id){
+        this.id = this.activatedRoute.snapshot.paramMap.get('id')
+      }
     });
   }
   ngOnInit() {
@@ -116,9 +119,8 @@ export class SessionDetailPage implements OnInit {
 
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
-    var now = moment(response.startDateTime);
-    var end = moment(response.endDateTime);
-    console.log(response);
+    var now = moment(response.startDate);
+    var end = moment(response.endDate);
     var sessionDuration = await moment.duration(end.diff(now));
     //response.duration= sessionDuration.hours()==0 ? sessionDuration.minutes()+" Minutes" : sessionDuration.hours()+" Hours "+sessionDuration.minutes()+" Minutes";
     response.duration = {hours:sessionDuration.hours(), minutes:sessionDuration.minutes()};
@@ -135,8 +137,10 @@ export class SessionDetailPage implements OnInit {
   }
 
   async share() {
-    let url = "/sessions/sessions-details/"+this.id;
+    let sharableLink = await this.sessionService.getShareSessionId(this.id);
+    let url = "/sessions/details/"+sharableLink.shareLink;
     let link = await this.utilService.getDeepLink(url);
+    console.log(link);
     let params = {link: link, subject: this.sessionHeaderData?.title, text: "Join this session using the link provided here "}
     this.utilService.shareLink(params);
   }
