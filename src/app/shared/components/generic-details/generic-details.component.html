@@ -7,7 +7,7 @@
       </ion-chip>
     </div>
     <ng-template #elseBlock>
-      <p *ngIf="item?.key=='duration';else elseBlock2" class="value">{{sessionData.data.duration.hours}} : {{sessionData.data.duration.minutes}} {{"HOURS" | translate}}</p>
+      <p *ngIf="item?.key=='duration';else elseBlock2" class="value">{{sessionData.data.duration.hours}} {{"HOURS" | translate}} {{sessionData.data.duration.minutes}} {{"MINUTES" | translate}}</p>
     </ng-template>
     <ng-template #elseBlock2>
       <p class="value">{{sessionData.data[item.key]}}</p>
