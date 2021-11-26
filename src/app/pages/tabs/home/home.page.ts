@@ -66,22 +66,9 @@ public headerConfig: any = {
     
   ngOnInit() {
     this.getUser();
-    this.deeplinks.routeWithNavController(this.navController, {
-      '/sessions': '',
-    }).subscribe((match) => {
-      if(match.$link.path === '/sessions'){
-        this.navController.navigateForward('/sessions', {
-          queryParams:{
-            type:'all-sessions'
-          }
-        });
-      }
-    }, (nomatch) => {
-    });
-  }
-  ionViewWillEnter(){
     this.setupDeepLinks();
   }
+
   setupDeepLinks() {
     this.deeplinks.route({
       '/sessions/details/:id': '',
