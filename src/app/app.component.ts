@@ -22,7 +22,7 @@ export class AppComponent {
   ];
 
   public mentorMenu=[
-    'CREATED_SESSIONS',
+  //  'CREATED_SESSIONS',
   ]
 
   isMentor:boolean

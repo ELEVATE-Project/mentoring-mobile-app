@@ -19,12 +19,9 @@ export class SessionDetailPage implements OnInit {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private sessionService: SessionService, private utilService: UtilService, private toast: ToastService) {
     this.activatedRoute.queryParamMap.subscribe(params => {
-      this.id = params?.get('id');
       this.status = params?.get('status');
-      if(!this.id){
-        this.id = this.activatedRoute.snapshot.paramMap.get('id')
-      }
     });
+    this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {
     this.headerConfig.share = (this.status == "published,live") ? true : false;
