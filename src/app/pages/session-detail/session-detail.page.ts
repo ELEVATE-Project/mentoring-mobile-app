@@ -119,7 +119,6 @@ export class SessionDetailPage implements OnInit {
     var now = moment(response.startDate);
     var end = moment(response.endDate);
     var sessionDuration = await moment.duration(end.diff(now));
-    //response.duration= sessionDuration.hours()==0 ? sessionDuration.minutes()+" Minutes" : sessionDuration.hours()+" Hours "+sessionDuration.minutes()+" Minutes";
     response.duration = {hours:sessionDuration.hours(), minutes:sessionDuration.minutes()};
     this.sessionHeaderData.name = response.title;
     this.detailData.data = response;
