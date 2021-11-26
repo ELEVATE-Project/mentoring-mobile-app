@@ -79,8 +79,6 @@ export class SessionService {
     }
     catch (error) {
       this.loaderService.stopLoader();
-      let res = []
-      return res;
     }
   }
 
