@@ -64,4 +64,22 @@ export class SessionService {
       this.loaderService.stopLoader();
     }
   }
+
+  async getShareSessionId(id){
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.GET_SHARE_SESSION_LINK+id,
+      payload: {}
+    };
+    try {
+      let data = await this.httpService.get(config);
+      let result = _.get(data, 'result');
+      this.loaderService.stopLoader();
+      return result;
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+
 }

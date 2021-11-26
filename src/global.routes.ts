@@ -5,7 +5,7 @@ export class CommonRoutes {
     public static LOGIN="login";
     public static FEEDBACK="feedback";
     public static RESET_PASSWORD="reset-password";
-    public static SESSIONS_DETAILS="sessions-details"
+    public static SESSIONS_DETAILS="details"
     public static CREATE_SESSION="create-session";
     public static MENTOR_DIRECTORY="mentor-directory";
     public static CREATED_BY_ME="created-by-me";

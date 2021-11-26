@@ -2,12 +2,12 @@
   <ion-card-content class="ion-no-padding">
     <ion-row class="d-flex flex-justify-center flex-align-items-center">
       <ion-col size=2 class="date-box">
-        <div>{{data.startDateTime | date: 'dd'}}</div>
-        <div>{{data.startDateTime | date: 'ccc'}}</div>
+        <div class="text-colour-black">{{data.startDate | date: 'dd'}}</div>
+        <div class="text-colour-black">{{data.startDate | date: 'ccc'}}</div>
       </ion-col>
       <ion-col size=5>
         <div class="full-width">
-            <div class="ellipsis title">
+            <div class="ellipsis title text-colour-black">
               {{data?.title | titlecase}}
             </div>
           <ion-card-subtitle class="session-status">

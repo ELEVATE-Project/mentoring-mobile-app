@@ -27,6 +27,8 @@
     "LOGIN_TO_CONNECT,":"Login to Connect,",
     "SOLVE_&_SHARE":"Solve & Share.",
     "PUBLISH":"Publish",
+    "HOURS":"hr",
+    "MINUTES":"minutes",
     "UPCOMING":"Upcoming",
     "PAST":"Past",
     "NEW_SESSION":"New Session",
