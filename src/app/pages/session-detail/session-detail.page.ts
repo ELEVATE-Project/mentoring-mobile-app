@@ -138,7 +138,7 @@ export class SessionDetailPage implements OnInit {
 
   async share() {
     let sharableLink = await this.sessionService.getShareSessionId(this.id);
-    let url = "/sessions/details/"+sharableLink.shareLink;
+    let url = CommonRoutes.SESSIONS+"/"+CommonRoutes.SESSIONS_DETAILS+"/"+sharableLink.shareLink;
     let link = await this.utilService.getDeepLink(url);
     console.log(link);
     let params = {link: link, subject: this.sessionHeaderData?.title, text: "Join this session using the link provided here "}
