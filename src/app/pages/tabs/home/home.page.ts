@@ -8,6 +8,8 @@ import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
+import { HttpService, LoaderService } from 'src/app/core/services';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
 
 @Component({
   selector: 'app-home',
@@ -17,37 +19,12 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 export class HomePage implements OnInit {
   public formData: JsonFormData;
   user;
-  SESSIONS: string=CommonRoutes.SESSIONS;
-  SKELETON=SKELETON;
-  sessions=[{
-    _id:1,
-    title:'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur',
-    description:'Short description ipsum dolor sit amet, consectetur',
-    date:'20/11/2021',
-    status:'Live',
-  },
-  {
-    _id:2,
-    title:'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur',
-    description:'Short description ipsum dolor sit amet, consectetur',
-    date:'20/11/2021',
-    status:'Live',
-  },{
-    _id:3,
-    title:'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur',
-    description:'Short description ipsum dolor sit amet, consectetur',
-    date:'20/11/2021',
-  },{
-    _id:4,
-    title:'Topic, Mentor name',
-    subTitle: 'Short description ipsum dolor sit amet, consectetur',
-    description:'Short description ipsum dolor sit amet, consectetur',
-    date:'20/11/2021',
-  }
-];
+  SESSIONS: string = CommonRoutes.SESSIONS;
+  SKELETON = SKELETON;
+  page = 1;
+  limit = 5;
+  sessions;
+  sessionsCount = 0;
 
 public headerConfig: any = {
   menu: true,
@@ -57,10 +34,12 @@ public headerConfig: any = {
 };
   constructor(
     private http: HttpClient,
-    private router : Router,
+    private router: Router,
     private navController: NavController,
     private deeplinks: Deeplinks,
     private profileService: ProfileService,
+    private loaderService: LoaderService,
+    private httpService: HttpService,
     private platform: Platform,
     private zone:NgZone) {}
     
@@ -77,6 +56,9 @@ public headerConfig: any = {
         this.router.navigateByUrl(match.$link.path);
       })  
     })
+  }
+  ionViewWillEnter() {
+    this.getSessions();
   }
   eventAction(event){
     switch (event.type) {
@@ -95,5 +77,20 @@ public headerConfig: any = {
     this.profileService.profileDetails(false).then(data => {
       this.user = data
     })
+  }
+
+  async getSessions() {
+    const config = {
+      url: urlConstants.API_URLS.HOME_SESSION + this.page + '&limit=' + this.limit,
+    };
+    try {
+      let data: any = await this.httpService.get(config);
+      console.log(data.result, "data.result");
+      this.sessions = data.result;
+      console.log(this.sessions, this.sessions.allSessions, "this.sessions");
+      this.sessionsCount = data.result.count;
+    }
+    catch (error) {
+    }
   }
 }
