@@ -1,7 +1,7 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-toolbar>
-    <ion-searchbar class="top-padding" debounce="1000" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"
+    <ion-searchbar class="top-padding" debounce="500" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"
     [(ngModel)]="searchText" (ionChange)="onSearch()"></ion-searchbar>
     <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
       <ion-segment-button value="all-sessions">
@@ -32,7 +32,7 @@
   <div *ngIf="!sessions && type=='my-sessions'">
     <app-skeleton [type]="SKELETON.SESSION_CARD_SKELETON" [repetition]="4"></app-skeleton>
   </div>
-  <div *ngIf="!sessions?.length">
+  <div *ngIf="!sessions?.length && !loading">
     <app-no-data-found [message]="'NO_ACTIVE_MY_SESSIONS'"> </app-no-data-found>
   </div>
 </ion-content>

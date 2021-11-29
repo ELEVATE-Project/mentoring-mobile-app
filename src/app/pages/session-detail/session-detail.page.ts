@@ -19,7 +19,9 @@ export class SessionDetailPage implements OnInit {
   showEditButton: any;
   isCreator: boolean;
 
-  constructor(private localStorage: LocalStorageService, private router: Router, private activatedRoute: ActivatedRoute, private sessionService: SessionService, private utilService: UtilService, private toast: ToastService) {
+  constructor(private localStorage: LocalStorageService, private router: Router, 
+    private activatedRoute: ActivatedRoute, private sessionService: SessionService, 
+    private utilService: UtilService, private toast: ToastService) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {

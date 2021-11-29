@@ -18,14 +18,14 @@ export class SessionsPage implements OnInit {
   searchText: string='';
   SKELETON = SKELETON;
   showLoadMoreButton: boolean = false;
+  loading: boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private httpService: HttpService,
     private loaderService: LoaderService,
     private router: Router) {
     this.activatedRoute.queryParamMap.subscribe(params => {
-      this.type = params.get('type');
-      this.type = this.type ? this.type : "all-sessions";
+      this.type = !this.type ? (params.get('type') || "all-sessions") : this.type;
     });
   }
   public headerConfig: any = {
@@ -62,25 +62,21 @@ export class SessionsPage implements OnInit {
   }
 
   async getSessions() {
-    await this.loaderService.startLoader();
+    this.loading = true;
     let type = this.type == "all-sessions" ? false : true
     const config = {
-      //sessions?enrolled=true/false&page=1&limit=5&search=:search
       url: urlConstants.API_URLS.SESSIONS + type + '&page=' + this.page + '&limit=' + this.limit + '&search=' + this.searchText,
     };
     try {
       let data: any = await this.httpService.get(config);
-      this.loaderService.stopLoader();
+      this.loading = false;
       this.sessions = this.sessions.concat(data?.result[0]?.data);
       this.sessionsCount = data?.result[0]?.count;
       this.showLoadMoreButton = (this.sessions?.length === this.sessionsCount) ? false : true;
     }
     catch (error) {
-      this.loaderService.stopLoader();
+      this.loading = false;
     }
   }
-  ionViewWillLeave(){
-    this.sessionsCount=0;
-    this.sessions=[];
-  }
+
 }
