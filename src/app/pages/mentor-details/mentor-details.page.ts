@@ -65,4 +65,8 @@ export class MentorDetailsPage implements OnInit {
     catch (error) {
     }
   }
+
+  action(e){
+
+  }
 }
