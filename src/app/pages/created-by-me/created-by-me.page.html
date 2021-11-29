@@ -1,5 +1,6 @@
 <app-page-header [config]="headerConfig">
-  <ion-searchbar class="top-padding" placeholder="Search for Mentors, Topics" debounce="500" (ionChange)="onSearch($event)" ></ion-searchbar>
+  <ion-searchbar class="top-padding" placeholder="Search for Mentors, Topics" debounce="500"
+    (ionChange)="onSearch($event)"></ion-searchbar>
 </app-page-header>
 <ion-content>
   <ion-toolbar>
@@ -17,8 +18,8 @@
           <p class="session-listing-header">{{"UPCOMING_SESSIONS" | translate}}</p>
           <div *ngIf="sessions?.length; else elseBlock">
             <ion-list>
-              <app-session-card-template *ngFor="let session of sessions" [buttonConfig]="buttonConfig" [status]="type"
-                [data]="session" [showStart]=true>
+              <app-session-card-template *ngFor="let session of sessions" [buttonConfig]="buttonConfig" [data]="session"
+                [showStart]=true>
               </app-session-card-template>
             </ion-list>
           </div>
@@ -27,8 +28,7 @@
           <p class="session-listing-header">{{"PAST_SESSIONS" | translate}}</p>
           <div *ngIf="sessions?.length; else elseBlockTwo">
             <ion-list>
-              <app-session-card-template *ngFor="let session of sessions" [status]="type" [data]="session"
-                [showStart]=false>
+              <app-session-card-template *ngFor="let session of sessions" [data]="session" [showStart]=false>
               </app-session-card-template>
             </ion-list>
           </div>

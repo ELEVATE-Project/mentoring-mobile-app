@@ -19,6 +19,7 @@
     "DATE":"Date",
     "JOIN":"Join",
     "NO_ACTIVE_SESSIONS":"There are currently no active session to show. Please check back later.",
+    "NO_ACTIVE_MY_SESSIONS": "You have not enrolled for any sessions, please enroll for a session of your choice from the All sessions section.",
     "VIEW_PROFILE":"View Profile",
     "SUBMIT":"Submit",
     "RESET":"Reset",

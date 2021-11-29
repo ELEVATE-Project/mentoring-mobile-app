@@ -1,4 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
+import { ToastService } from 'src/app/core/services';
+import { SessionService } from 'src/app/core/services/session/session.service';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-session-card',
@@ -8,15 +12,17 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 export class SessionCardComponent implements OnInit {
   @Input() data: any;
   @Input() action;
+  @Input() status:any;
   @Output() onClickEvent = new EventEmitter();
-  constructor() { }
+  constructor(private router: Router,private sessionService: SessionService, private toast:ToastService) { }
   ngOnInit() { }
-  onAction(event, type) {
-    let payload = {
-      id: event,
-      type: type
+  onCardClick(data) {
+    this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data._id}`]);
+  }
+  async onEnroll(data){
+    let result = await this.sessionService.enrollSession(data._id);
+    if(result?.result){
+      this.toast.showToast("Enrolled successfully","success");
     }
-    console.log(payload, "event");
-    this.onClickEvent.emit(payload);
   }
 }

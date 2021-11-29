@@ -59,7 +59,6 @@ export class HttpService {
   }
 
   async get(requestParam: RequestParams) {
-    debugger
     if (!this.checkNetworkAvailability()) {
       throw Error(null);
     }

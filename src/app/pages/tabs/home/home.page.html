@@ -17,19 +17,19 @@
       <h5>
         {{"ALL_SESSIONS" | translate}}
       </h5>
-      <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize" (click)="viewMore()">
+      <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize" (click)="viewMore('all-sessions')">
         {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
       </ion-button>
     </div>
     <div *ngFor="let session of sessions?.allSessions">
-      <app-session-card [data]="session" [action]="'ENROLL'" (onClickEvent)="eventAction($event)"> </app-session-card>
+      <app-session-card [data]="session" [action]="'ENROLL'" [status] = "status" (onClickEvent)="eventAction($event)"> </app-session-card>
     </div>
     <div *ngIf="sessions?.mySessions?.length">
       <div class="page-intro">
         <h5>
           {{"MY_SESSIONS" | translate}}
         </h5>
-        <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize">
+        <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize" (click)="viewMore('my-sessions')">
           {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
         </ion-button>
       </div>
