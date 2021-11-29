@@ -43,7 +43,7 @@ export class HttpService {
     if (!this.checkNetworkAvailability()) {
       throw Error(null);
     }
-    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+    const headers =  requestParam.headers ? requestParam.headers : await this.setHeaders();
     let body = requestParam.payload ? requestParam.payload : {};
     this.http.setDataSerializer('json');
     this.http.setRequestTimeout(60);
@@ -59,6 +59,7 @@ export class HttpService {
   }
 
   async get(requestParam: RequestParams) {
+    debugger
     if (!this.checkNetworkAvailability()) {
       throw Error(null);
     }
@@ -95,7 +96,7 @@ export class HttpService {
     let isValidToken = this.userService.validateToken(token);
     if (!isValidToken) {
       let data: any = await this.getAccessToken();
-      let access_token = _.get(data, 'result.access_token');
+      let access_token = _.get(data, 'access_token');
       if (!access_token) {
         let authService = this.injector.get(AuthService);
         authService.logoutAccount();
@@ -113,7 +114,8 @@ export class HttpService {
       url: urlConstants.API_URLS.REFRESH_TOKEN,
       payload: {
         refreshToken: _.get(this.userService.token, 'refresh_token')
-      }
+      },
+      headers: {}
     };
     try {
       let data: any = await this.post(config);

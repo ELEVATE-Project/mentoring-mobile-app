@@ -11,6 +11,8 @@ import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 export class SessionsPage implements OnInit {
   type: string;
   SKELETON = SKELETON;
+  searchText: string;
+  
   constructor(private activatedRoute: ActivatedRoute, 
     private router : Router) {
     this.activatedRoute.queryParamMap.subscribe(params => {
