@@ -25,6 +25,7 @@ export class HomePage implements OnInit {
   limit = 5;
   sessions;
   sessionsCount = 0;
+  status = "published,live";
 
 public headerConfig: any = {
   menu: true,
@@ -85,9 +86,7 @@ public headerConfig: any = {
     };
     try {
       let data: any = await this.httpService.get(config);
-      console.log(data.result, "data.result");
       this.sessions = data.result;
-      console.log(this.sessions, this.sessions.allSessions, "this.sessions");
       this.sessionsCount = data.result.count;
     }
     catch (error) {

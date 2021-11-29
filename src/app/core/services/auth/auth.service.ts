@@ -35,7 +35,7 @@ export class AuthService {
     try {
       await this.httpService.post(config);
       this.loaderService.stopLoader();
-      this.toast.showToast('SIGNUP_MESSAGE', 'sucess')
+      this.toast.showToast('SIGNUP_MESSAGE', 'success')
       this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { replaceUrl: true });
     }
     catch (error) {

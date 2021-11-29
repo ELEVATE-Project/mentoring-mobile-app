@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { config } from 'rxjs';
-import { ToastService, UtilService } from 'src/app/core/services';
+import { LocalStorageService, ToastService, UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 import *  as moment from 'moment';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
   selector: 'app-session-detail',
@@ -16,8 +17,9 @@ export class SessionDetailPage implements OnInit {
   id: any;
   status: any;
   showEditButton: any;
+  isCreator: boolean;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private sessionService: SessionService, private utilService: UtilService, private toast: ToastService) {
+  constructor(private localStorage: LocalStorageService, private router: Router, private activatedRoute: ActivatedRoute, private sessionService: SessionService, private utilService: UtilService, private toast: ToastService) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.status = params?.get('status');
     });
@@ -115,14 +117,16 @@ export class SessionDetailPage implements OnInit {
   };
 
   async fetchSessionDetails() {
+    let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     if(response){
-    var now = moment(response.startDate);
-    var end = moment(response.endDate);
-    var sessionDuration = await moment.duration(end.diff(now));
-    response.duration = {hours:sessionDuration.hours(), minutes:sessionDuration.minutes()};
-    this.sessionHeaderData.name = response.title;
-    this.detailData.data = response;
+      this.isCreator = userDetails._id == response.userId ? true : false;
+      let now = moment(response.startDate);
+      let end = moment(response.endDate);
+      let sessionDuration = await moment.duration(end.diff(now));
+      response.duration = {hours:sessionDuration.hours(), minutes:sessionDuration.minutes()};
+      this.sessionHeaderData.name = response.title;
+      this.detailData.data = response;
     }
   }
 
@@ -162,5 +166,16 @@ export class SessionDetailPage implements OnInit {
         this.toast.showToast("Will be implemented soon!!", "success")
       }
     }).catch(error => { })
+  }
+
+  onJoin(){
+    this.toast.showToast("Will be implemented soon", "success");
+  }
+
+  async onEnroll(){
+    let result = await this.sessionService.enrollSession(this.id);
+    if(result?.result){
+      this.toast.showToast("Enrolled successfully","success");
+    }
   }
 }

@@ -17,6 +17,8 @@ export class SessionsPage implements OnInit {
   limit = 10;
   searchText: string='';
   SKELETON = SKELETON;
+  showLoadMoreButton: boolean = false;
+
   constructor(private activatedRoute: ActivatedRoute,
     private httpService: HttpService,
     private loaderService: LoaderService,
@@ -40,18 +42,14 @@ export class SessionsPage implements OnInit {
   ngOnInit() {
   }
   ionViewWillEnter() {
+    this.sessions = []
     this.getSessions();
   }
   public segmentChanged(ev: any) {
     this.type = ev.target.value;
-  }
-  eventAction(event) {
-    console.log(event, "event");
-    switch (event.type) {
-      case 'cardSelect':
-        this.router.navigate([`${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}`]);
-        break;
-    }
+    this.sessions = [];
+    this.page = 1;
+    this.getSessions();
   }
   loadMore() {
     this.page = this.page + 1;
@@ -59,15 +57,13 @@ export class SessionsPage implements OnInit {
   }
   onSearch() {
     this.page = 1;
-    this.getSessions();
     this.sessions = [];
+    this.getSessions();
   }
 
   async getSessions() {
     await this.loaderService.startLoader();
     let type = this.type == "all-sessions" ? false : true
-    console.log(urlConstants.API_URLS.SESSIONS + type + '&page=' + this.page + '&limit=' + this.limit + '&search=' + this.searchText, "url")
-
     const config = {
       //sessions?enrolled=true/false&page=1&limit=5&search=:search
       url: urlConstants.API_URLS.SESSIONS + type + '&page=' + this.page + '&limit=' + this.limit + '&search=' + this.searchText,
@@ -75,8 +71,9 @@ export class SessionsPage implements OnInit {
     try {
       let data: any = await this.httpService.get(config);
       this.loaderService.stopLoader();
-      this.sessions = this.sessions.concat(data.result[0].data);
-      this.sessionsCount = data.result.count;
+      this.sessions = this.sessions.concat(data?.result[0]?.data);
+      this.sessionsCount = data?.result[0]?.count;
+      this.showLoadMoreButton = (this.sessions?.length === this.sessionsCount) ? false : true;
     }
     catch (error) {
       this.loaderService.stopLoader();

@@ -16,7 +16,7 @@
         <div *ngFor="let session of sessions">
           <div [ngSwitch]="type">
             <ion-list *ngSwitchCase="'all-sessions'">
-              <app-session-card [data]="session" (onClickEvent)="eventAction($event)"></app-session-card>
+              <app-session-card [data]="session" [action]="'ENROLL'"></app-session-card>
             </ion-list>
             <ion-list *ngSwitchCase="'my-sessions'">
               <app-session-card-template [data]="session" [showEdit]=true></app-session-card-template>
@@ -32,7 +32,15 @@
   <div *ngIf="!sessions && type=='my-sessions'">
     <app-skeleton [type]="SKELETON.SESSION_CARD_SKELETON" [repetition]="4"></app-skeleton>
   </div>
+  <div *ngIf="!sessions?.length">
+    <app-no-data-found [message]="'NO_ACTIVE_MY_SESSIONS'"> </app-no-data-found>
+  </div>
 </ion-content>
-<ion-footer class="ion-no-border" *ngIf="!sessions?.length">
-  <ion-button class="load-more-button" expand="full">{{"LOAD MORE" | translate}}</ion-button>
+<ion-footer class="ion-no-border">
+  <div *ngIf="showLoadMoreButton;else footerElseBlock">
+    <ion-footer class="ion-no-border">
+      <ion-button *ngIf="sessionsCount > sessions?.length" class="load-more-button" (click)="loadMore()" expand="full">
+        {{"LOAD MORE" | translate}}</ion-button>
+    </ion-footer>
+  </div>
 </ion-footer>
