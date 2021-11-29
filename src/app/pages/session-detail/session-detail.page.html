@@ -4,7 +4,7 @@
     <app-profile-image [profileImageData]='sessionHeaderData'></app-profile-image>
     <div *ngIf="isCreator; else elseBlock" class="d-flex flex-justify-center">
       <ion-button class="session-btn" shape="round" (click)="onDelete()">{{ "DELETE" | translate }}</ion-button>
-      <ion-button class="session-btn" *ngIf="status" shape="round" (click)="editSession()">{{ "EDIT" | translate }}
+      <ion-button class="session-btn" *ngIf="status=='published' || status=='live'" shape="round" (click)="editSession()">{{ "EDIT" | translate }}
       </ion-button>
     </div>
     <ng-template #elseBlock>
@@ -17,7 +17,7 @@
 </ion-content>
 <ion-footer class="ion-no-border">
   <div *ngIf="isCreator; else elseBlockFooter">
-    <ion-button *ngIf="status" class="load-more-button" expand="full">{{"START_SESSIONS" | translate}}</ion-button>
+    <ion-button *ngIf="status=='published' || status=='live'" class="load-more-button" expand="full">{{"START_SESSIONS" | translate}}</ion-button>
   </div>
   <ng-template #elseBlockFooter>
     <div>

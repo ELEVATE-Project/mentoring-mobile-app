@@ -69,7 +69,6 @@ export class CreatedByMePage implements OnInit {
   }
 
   public refreshPage() {
-    debugger
     this.sessions = [];
     this.page = 1;
     this.fetchSessionDetails();

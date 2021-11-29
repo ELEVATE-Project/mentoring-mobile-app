@@ -37,10 +37,8 @@
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">
-  <div *ngIf="showLoadMoreButton;else footerElseBlock">
-    <ion-footer class="ion-no-border">
+  <div *ngIf="showLoadMoreButton">
       <ion-button *ngIf="sessionsCount > sessions?.length" class="load-more-button" (click)="loadMore()" expand="full">
         {{"LOAD MORE" | translate}}</ion-button>
-    </ion-footer>
   </div>
 </ion-footer>

@@ -37,10 +37,10 @@ export class SessionsPage implements OnInit {
   };
   SESSIONS_DETAILS: any = CommonRoutes.SESSIONS_DETAILS;
   SESSIONS: any = CommonRoutes.SESSIONS;
-
   sessions=[];
-  ngOnInit() {
-  }
+
+  ngOnInit() {}
+
   ionViewWillEnter() {
     this.sessions = []
     this.getSessions();
@@ -78,5 +78,9 @@ export class SessionsPage implements OnInit {
     catch (error) {
       this.loaderService.stopLoader();
     }
+  }
+  ionViewWillLeave(){
+    this.sessionsCount=0;
+    this.sessions=[];
   }
 }

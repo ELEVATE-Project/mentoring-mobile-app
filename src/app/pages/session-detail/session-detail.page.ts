@@ -20,13 +20,11 @@ export class SessionDetailPage implements OnInit {
   isCreator: boolean;
 
   constructor(private localStorage: LocalStorageService, private router: Router, private activatedRoute: ActivatedRoute, private sessionService: SessionService, private utilService: UtilService, private toast: ToastService) {
-    this.activatedRoute.queryParamMap.subscribe(params => {
-      this.status = params?.get('status');
-    });
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {
     this.headerConfig.share = (this.status == "published,live") ? true : false;
+    this.status="";
   }
 
   ionViewWillEnter() {
@@ -121,6 +119,7 @@ export class SessionDetailPage implements OnInit {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     if(response){
       this.isCreator = userDetails._id == response.userId ? true : false;
+      this.status = response.status;
       let now = moment(response.startDate);
       let end = moment(response.endDate);
       let sessionDuration = await moment.duration(end.diff(now));

@@ -13,7 +13,6 @@ export class SessionCardTemplateComponent implements OnInit {
   @Input() showEnroll;
   @Input() showStart:boolean;
   @Input() showEdit;
-  @Input() status:any;
   @Input() buttonConfig:any;
   @Output() onClickEvent = new EventEmitter();
   constructor(private router: Router, private toast:ToastService) { }
@@ -30,6 +29,6 @@ export class SessionCardTemplateComponent implements OnInit {
   }
 
   onCardClick(data){
-    this.status=="completed" ? this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data._id}`]) : this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data._id}`], { queryParams: {status: this.status}})
+    data.sessionId ? this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data.sessionId}`]) : this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data._id}`]);
   }
 }

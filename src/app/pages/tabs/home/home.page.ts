@@ -67,8 +67,8 @@ public headerConfig: any = {
         this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}`]);
     }
   }
-  viewMore(){
-    this.router.navigate([`/${CommonRoutes.SESSIONS}`]);
+  viewMore(data){
+    this.router.navigate([`/${CommonRoutes.SESSIONS}`], {queryParams:{type:data}});
   }
 
   search(){
