@@ -1,5 +1,5 @@
 export interface ISocialSharing {
-  subject: any;
+  subject?: any;
   text?: any;
   image?: any;
   link?: any;

@@ -59,8 +59,11 @@ export class AttachmentService {
         });
         return buttons;
     }
-    removeCurrentPhoto() {
-
+     removeCurrentPhoto() {
+    let data ={
+        type:'removeCurrentPhoto'
+    }
+    this.actionSheetController.dismiss(data);
     }
     async selectImage(type) {
         this.translate

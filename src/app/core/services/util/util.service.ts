@@ -3,6 +3,7 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Action } from 'rxjs/internal/scheduler/Action';
+import { environment } from 'src/environments/environment';
 import { ISocialSharing } from '../../interface/soical-sharing-interface';
 
 @Injectable({
@@ -14,6 +15,10 @@ export class UtilService {
     private alert: AlertController,
     private translate: TranslateService
   ) {}
+
+  getDeepLink(url){
+    return environment.deepLinkUrl+url;
+  }
 
   shareLink(param:ISocialSharing) {
     let {text,subject,link} = param;
@@ -88,6 +93,7 @@ export class UtilService {
           {
             text: texts["REMOVE_CURRENT_PHOTO"],
             type: 'remove',
+            action: 'remove'
           },
           {
             text: texts["TAKE_PHOTO"],

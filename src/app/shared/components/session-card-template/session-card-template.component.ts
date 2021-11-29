@@ -30,6 +30,6 @@ export class SessionCardTemplateComponent implements OnInit {
   }
 
   onCardClick(data){
-    this.status=="completed" ? this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}`], { queryParams: {id: data._id}}) : this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}`], { queryParams: {id: data._id, status: this.status}})
+    this.status=="completed" ? this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data._id}`]) : this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data._id}`], { queryParams: {status: this.status}})
   }
 }

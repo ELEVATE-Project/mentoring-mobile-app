@@ -19,11 +19,12 @@ export class SessionDetailPage implements OnInit {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private sessionService: SessionService, private utilService: UtilService, private toast: ToastService) {
     this.activatedRoute.queryParamMap.subscribe(params => {
-      this.id = params?.get('id');
       this.status = params?.get('status');
     });
+    this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {
+    this.headerConfig.share = (this.status == "published,live") ? true : false;
   }
 
   ionViewWillEnter() {
@@ -109,18 +110,20 @@ export class SessionDetailPage implements OnInit {
           "label": "Professional Development"
         },
       ],
-      duration: "",
+      duration: {hours:null, minutes:null},
     },
   };
 
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
-    var now = moment(response.startDateTime);
-    var end = moment(response.endDateTime);
-    var minutes = moment.duration(end.diff(now)).asMinutes();
-    response.duration= minutes+" minutes";
+    if(response){
+    var now = moment(response.startDate);
+    var end = moment(response.endDate);
+    var sessionDuration = await moment.duration(end.diff(now));
+    response.duration = {hours:sessionDuration.hours(), minutes:sessionDuration.minutes()};
     this.sessionHeaderData.name = response.title;
     this.detailData.data = response;
+    }
   }
 
   action(event) {
@@ -131,8 +134,16 @@ export class SessionDetailPage implements OnInit {
     }
   }
 
-  share() {
-    // ToDO implement share feature
+  async share() {
+    let sharableLink = await this.sessionService.getShareSessionId(this.id);
+    if(sharableLink.shareLink){
+    let url = `/${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
+    let link = await this.utilService.getDeepLink(url);
+    let params = {link: link, subject: this.sessionHeaderData?.title, text: "Join this session using the link provided here "}
+    this.utilService.shareLink(params);
+    } else {
+      this.toast.showToast("No link generated!!!", "danger");
+    }
   }
 
   editSession() {

@@ -78,14 +78,14 @@ export class CreatedByMePage implements OnInit {
   async createSession() {
     let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     if (userDetails?.about) {
-      this.navCtrl.navigateForward([CommonRoutes.CREATE_SESSION]);
+      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]);
     } else {
-      this.navCtrl.navigateForward([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
     }
   }
 
   goToHome() {
-    this.navCtrl.navigateForward([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]);
+    this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]);
   }
 
   loadMore() {
