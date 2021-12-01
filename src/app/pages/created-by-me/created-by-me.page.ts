@@ -6,7 +6,6 @@ import { CommonRoutes } from 'src/global.routes';
 import { Location } from '@angular/common';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService } from 'src/app/core/services';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-created-by-me',
@@ -39,8 +38,7 @@ export class CreatedByMePage implements OnInit {
     private router: Router,
     private sessionService: SessionService,
     private _location: Location,
-    private localStorage: LocalStorageService,
-    private inAppBrowser: InAppBrowser) { }
+    private localStorage: LocalStorageService) { }
 
   ionViewWillEnter() {
     this.sessions = [];
@@ -95,15 +93,6 @@ export class CreatedByMePage implements OnInit {
   }
 
   async eventAction(event){
-    let startSession = await this.sessionService.startSession(event.data._id);
-    console.log(startSession);
-    if(startSession.responseCode == "OK"){
-      let browser = this.inAppBrowser.create(startSession.result.link);
-      browser.on('exit').subscribe(() => {
-        console.log('browser closed');
-      }, err => {
-          console.error(err);
-      });
-    }
+    await this.sessionService.startSession(event.data._id);
   }
 }

@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpService, LoaderService, ToastService } from '..';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
-  constructor(private loaderService:LoaderService, private httpService: HttpService, private toast: ToastService) { }
+  constructor(private loaderService:LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser) { }
 
   async createSession(formData, id?:string){
     await this.loaderService.startLoader();
@@ -107,7 +108,14 @@ export class SessionService {
     try {
       let data = await this.httpService.post(config);
       this.loaderService.stopLoader();
-      return data;
+      if(data.responseCode == "OK"){
+        let browser = this.inAppBrowser.create(data.result.link);
+        browser.on('exit').subscribe(() => {
+          console.log('browser closed');
+        }, err => {
+            console.error(err);
+        });
+      }
     }
     catch (error) {
       this.loaderService.stopLoader();
