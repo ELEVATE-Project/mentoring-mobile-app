@@ -91,4 +91,8 @@ export class CreatedByMePage implements OnInit {
     this.page = this.page + 1;
     this.fetchSessionDetails();
   }
+
+  async eventAction(event){
+    await this.sessionService.startSession(event.data._id);
+  }
 }
