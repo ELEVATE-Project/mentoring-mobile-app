@@ -40,3 +40,9 @@
     margin-top: -15px;
     color: var(--ion-color-primary);
     }
+
+.text-align{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}    

@@ -23,20 +23,16 @@ export class MentorDetailsPage implements OnInit {
         key: 'about',
       },
       {
+        title:"Designation",
+        key:"designation"
+      },
+      {
         title: 'Years of Experience',
         key: 'yearsOfExperience',
       },
       {
         title: 'Key  Areas of Expertise',
         key: 'areasOfExpertise',
-      },
-      {
-        title: "Languages",
-        key: "medium"
-      },
-      {
-        title:"Designation",
-        key:"designation"
       }
     ],
     data: {},
@@ -47,6 +43,7 @@ export class MentorDetailsPage implements OnInit {
   ) {
     routerParams.params.subscribe(params =>{
       this.mentorId = params.id;
+      console.log(this.mentorId);
       this.getMentor();
     })
    }
@@ -60,7 +57,9 @@ export class MentorDetailsPage implements OnInit {
     };
     try {
       let data: any = await this.httpService.get(config);
+      console.log(data);
       this.detailData.data = data.result;
+      console.log(this.detailData);
     }
     catch (error) {
     }

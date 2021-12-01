@@ -17,7 +17,11 @@ export class SessionCardComponent implements OnInit {
   constructor(private router: Router,private sessionService: SessionService, private toast:ToastService) { }
   ngOnInit() { }
   onCardClick(data) {
-    this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data._id}`]);
+    let value = {
+      data: data,
+      type: 'cardSelect',
+    }
+    this.onClickEvent.emit(value)
   }
   async onEnroll(data){
     let result = await this.sessionService.enrollSession(data._id);
