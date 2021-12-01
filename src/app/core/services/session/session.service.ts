@@ -97,4 +97,20 @@ export class SessionService {
       this.loaderService.stopLoader();
     }
   }
+
+  async startSession(id){
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.START_SESSION+id,
+      payload: {}
+    };
+    try {
+      let data = await this.httpService.post(config);
+      this.loaderService.stopLoader();
+      return data;
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
 }

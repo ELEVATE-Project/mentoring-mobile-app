@@ -19,7 +19,7 @@
           <div *ngIf="sessions?.length; else elseBlock">
             <ion-list>
               <app-session-card-template *ngFor="let session of sessions" [buttonConfig]="buttonConfig" [data]="session"
-                [showStart]=true>
+                [showStart]=true (onClickEvent)="eventAction($event)">
               </app-session-card-template>
             </ion-list>
           </div>
