@@ -11,13 +11,13 @@
       </ng-template>
     </ion-col>
     <ion-col size="9">
-      <h5>{{data?.name || data?.title | titlecase}}</h5>
+      <h5 class="text-align">{{data?.name || data?.title | titlecase}}</h5>
       <div *ngIf="data?.areasOfExpertise?.length">
         <span class="ion-margin-top" *ngFor="let label of data?.areasOfExpertise;  let isLast=last">
           <ion-label>{{label?.label}}{{isLast ? '' : ', '}} </ion-label>
         </span>
       </div>
-      <p class="ellipsis" *ngIf="data?.description">{{data?.description}}</p>
+      <p class="text-align" *ngIf="data?.description">{{data?.description}}</p>
     </ion-col>
   </ion-row>
   <div class="session-actions">

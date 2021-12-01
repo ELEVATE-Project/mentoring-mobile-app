@@ -62,7 +62,7 @@ export class MentorDirectoryPage implements OnInit {
     console.log(event, "event");
     switch (event.type) {
       case 'cardSelect':
-        this.router.navigate([CommonRoutes.MENTOR_DETAILS,event.id]);
+        this.router.navigate([CommonRoutes.MENTOR_DETAILS,event?.data?._id]);
         break;
     }
   }
