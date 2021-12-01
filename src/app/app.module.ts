@@ -21,6 +21,7 @@ import { Camera } from '@ionic-native/camera/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -55,7 +56,8 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
     FilePath,
     Chooser,
     FileTransfer, 
-    FileTransferObject
+    FileTransferObject,
+    InAppBrowser,
   ],
   bootstrap: [AppComponent],
 })

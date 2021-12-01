@@ -20,5 +20,6 @@ export const urlConstants = {
         GET_SESSION_DETAILS:"/mentoring/v1/sessions/details/",
         GET_SHARE_SESSION_LINK:"/mentoring/v1/sessions/share/",
         ENROLL_SESSION:"/mentoring/v1/sessions/enroll/",
+        START_SESSION:"/mentoring/v1/sessions/start/",
     }
 };

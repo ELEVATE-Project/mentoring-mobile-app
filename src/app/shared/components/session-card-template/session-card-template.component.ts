@@ -24,8 +24,7 @@ export class SessionCardTemplateComponent implements OnInit {
       data: data,
       type: type,
     }
-    this.toast.showToast("Will be implemented!!","success")
-    // this.onClickEvent.emit(value)
+    this.onClickEvent.emit(value)
   }
 
   onCardClick(data){
