@@ -106,16 +106,55 @@ export class SessionService {
       payload: {}
     };
     try {
-      let data = await this.httpService.post(config);
+      let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if(data.responseCode == "OK"){
-        let browser = this.inAppBrowser.create(data.result.link);
+        let browser = this.inAppBrowser.create(data.result.link,`_system`);
         browser.on('exit').subscribe(() => {
           console.log('browser closed');
         }, err => {
             console.error(err);
         });
       }
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+
+  async joinSession(id){
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.JOIN_SESSION+id,
+      payload: {}
+    };
+    try {
+      let data = await this.httpService.get(config);
+      this.loaderService.stopLoader();
+      if(data.responseCode == "OK"){
+        let browser = this.inAppBrowser.create(data.result.link,"_system");
+        browser.on('exit').subscribe(() => {
+          console.log('browser closed');
+        }, err => {
+            console.error(err);
+        });
+      }
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+
+  async deleteSession(id){
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.CREATE_SESSION+`/${id}`,
+      payload: {}
+    };
+    try {
+      let data = await this.httpService.delete(config);
+      this.loaderService.stopLoader();
+      return data;
     }
     catch (error) {
       this.loaderService.stopLoader();

@@ -64,7 +64,7 @@ public headerConfig: any = {
   eventAction(event){
     switch (event.type) {
       case 'cardSelect':
-        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}`]);
+        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
     }
   }
   viewMore(data){

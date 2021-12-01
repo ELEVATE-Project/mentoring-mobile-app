@@ -17,7 +17,7 @@
 </ion-content>
 <ion-footer class="ion-no-border">
   <div *ngIf="isCreator; else elseBlockFooter">
-    <ion-button *ngIf="status=='published' || status=='live'" class="load-more-button" expand="full">{{"START_SESSIONS" | translate}}</ion-button>
+    <ion-button *ngIf="status=='published' || status=='live'" class="load-more-button" expand="full" (click)="onStart(detailData.data)">{{"START_SESSIONS" | translate}}</ion-button>
   </div>
   <ng-template #elseBlockFooter>
     <div>

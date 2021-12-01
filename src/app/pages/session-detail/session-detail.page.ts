@@ -7,6 +7,7 @@ import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 import *  as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-session-detail',
@@ -21,7 +22,7 @@ export class SessionDetailPage implements OnInit {
 
   constructor(private localStorage: LocalStorageService, private router: Router, 
     private activatedRoute: ActivatedRoute, private sessionService: SessionService, 
-    private utilService: UtilService, private toast: ToastService) {
+    private utilService: UtilService, private toast: ToastService, private _location: Location) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {
@@ -162,15 +163,19 @@ export class SessionDetailPage implements OnInit {
       cancel: "Don't delete",
       submit: 'Yes Delete'
     }
-    this.utilService.alertPopup(msg).then(data => {
+    this.utilService.alertPopup(msg).then(async data => {
       if (data) {
-        this.toast.showToast("Will be implemented soon!!", "success")
+        let result = await this.sessionService.deleteSession(this.id);
+        if(result.responseCode == "OK"){
+          this.toast.showToast("Session deleted succesfully","success");
+          this._location.back();
+        }
       }
     }).catch(error => { })
   }
 
-  onJoin(){
-    this.toast.showToast("Will be implemented soon", "success");
+  async onJoin(){
+    let result = await this.sessionService.joinSession(this.id);
   }
 
   async onEnroll(){
@@ -178,5 +183,9 @@ export class SessionDetailPage implements OnInit {
     if(result?.result){
       this.toast.showToast("Enrolled successfully","success");
     }
+  }
+
+  async onStart(data){
+    let result = await this.sessionService.startSession(data._id);
   }
 }
