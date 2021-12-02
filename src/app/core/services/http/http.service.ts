@@ -76,6 +76,24 @@ export class HttpService {
       });
   }
 
+  async delete(requestParam: RequestParams) {
+    if (!this.checkNetworkAvailability()) {
+      throw Error(null);
+    }
+    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+    this.http.setDataSerializer('json');
+    this.http.setRequestTimeout(60);
+    return this.http.delete(this.baseUrl + requestParam.url, '', headers)
+      .then((data: any) => {
+        let result: any = JSON.parse(data.data);
+        if (result.responseCode === "OK") {
+          return result;
+        }
+      }, error => {
+        return this.handleError(error);
+      });
+  }
+
   //network check
   checkNetworkAvailability() {
     if (!this.network.isNetworkAvailable) {
