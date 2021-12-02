@@ -43,7 +43,6 @@ export class DashboardPage {
   ionViewWillEnter(){
     this.profile.profileDetails(false).then(profileDetails => {
       this.isMentor = profileDetails?.isAMentor;
-      console.log(this.isMentor);
     })
   }
 
