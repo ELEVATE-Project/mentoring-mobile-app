@@ -109,7 +109,7 @@ export class SessionService {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-        this.openBrowser(data);
+        this.openBrowser(data.result.link);
       }
     }
     catch (error) {
@@ -127,7 +127,7 @@ export class SessionService {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-        this.openBrowser(data);
+        this.openBrowser(data.result.link);
       }
     }
     catch (error) {
@@ -151,8 +151,8 @@ export class SessionService {
     }
   }
 
-  openBrowser(data) {
-    let browser = this.inAppBrowser.create(data.result.link, `_system`);
+  openBrowser(link) {
+    let browser = this.inAppBrowser.create(link, `_system`);
     browser.on('exit').subscribe(() => {
       console.log('browser closed');
     }, err => {
