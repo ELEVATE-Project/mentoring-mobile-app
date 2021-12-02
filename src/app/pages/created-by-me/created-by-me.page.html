@@ -18,9 +18,11 @@
           <p class="session-listing-header">{{"UPCOMING_SESSIONS" | translate}}</p>
           <div *ngIf="sessions?.length; else elseBlock">
             <ion-list>
-              <app-session-card-template *ngFor="let session of sessions" [buttonConfig]="buttonConfig" [data]="session"
-                [showStart]=true (onClickEvent)="eventAction($event)">
-              </app-session-card-template>
+              <div class="list">
+                <app-session-card-template *ngFor="let session of sessions" [buttonConfig]="buttonConfig"
+                  [data]="session" [showStart]=true (onClickEvent)="eventAction($event)">
+                </app-session-card-template>
+              </div>
             </ion-list>
           </div>
         </div>
@@ -28,8 +30,10 @@
           <p class="session-listing-header">{{"PAST_SESSIONS" | translate}}</p>
           <div *ngIf="sessions?.length; else elseBlockTwo">
             <ion-list>
-              <app-session-card-template *ngFor="let session of sessions" [data]="session" [showStart]=false>
-              </app-session-card-template>
+              <div class="list">
+                <app-session-card-template *ngFor="let session of sessions" [data]="session" [showStart]=false>
+                </app-session-card-template>
+              </div>
             </ion-list>
           </div>
         </div>
@@ -37,20 +41,20 @@
     </div>
     <ng-template #elseBlock>
       <div *ngIf="!loading">
-      <ion-card class="sessions-wrap" (click)="createSession()">
-        <ion-card-content>
-          <ion-row>
-            <ion-col size="2">
-              <ion-icon name="add-outline" size="large"></ion-icon>
-            </ion-col>
-            <ion-col size="10">
-              <h5>
-                {{"CREATE_NEW_SESSION" | translate}}
-              </h5>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
+        <ion-card class="sessions-wrap" (click)="createSession()">
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="2">
+                <ion-icon name="add-outline" size="large"></ion-icon>
+              </ion-col>
+              <ion-col size="10">
+                <h5>
+                  {{"CREATE_NEW_SESSION" | translate}}
+                </h5>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
       </div>
     </ng-template>
     <ng-template #elseBlockTwo>
