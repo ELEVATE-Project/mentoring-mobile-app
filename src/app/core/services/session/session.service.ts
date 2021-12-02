@@ -9,12 +9,12 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 })
 export class SessionService {
 
-  constructor(private loaderService:LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser) { }
+  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser) { }
 
-  async createSession(formData, id?:string){
+  async createSession(formData, id?: string) {
     await this.loaderService.startLoader();
     const config = {
-      url: id==null ? urlConstants.API_URLS.CREATE_SESSION : urlConstants.API_URLS.CREATE_SESSION+`/${id}`,
+      url: id == null ? urlConstants.API_URLS.CREATE_SESSION : urlConstants.API_URLS.CREATE_SESSION + `/${id}`,
       payload: formData
     };
     try {
@@ -30,10 +30,10 @@ export class SessionService {
     }
   }
 
-  async getAllSessionsAPI(obj){
+  async getAllSessionsAPI(obj) {
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.GET_SESSIONS_LIST+obj.page+'&limit='+obj.limit+'&status='+obj.status+'&search='+obj.searchText,
+      url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj.page + '&limit=' + obj.limit + '&status=' + obj.status + '&search=' + obj.searchText,
       payload: {}
     };
     try {
@@ -49,10 +49,10 @@ export class SessionService {
     }
   }
 
-  async getSessionDetailsAPI(id){
+  async getSessionDetailsAPI(id) {
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.GET_SESSION_DETAILS+id,
+      url: urlConstants.API_URLS.GET_SESSION_DETAILS + id,
       payload: {}
     };
     try {
@@ -66,10 +66,10 @@ export class SessionService {
     }
   }
 
-  async getShareSessionId(id){
+  async getShareSessionId(id) {
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.GET_SHARE_SESSION_LINK+id,
+      url: urlConstants.API_URLS.GET_SHARE_SESSION_LINK + id,
       payload: {}
     };
     try {
@@ -83,10 +83,10 @@ export class SessionService {
     }
   }
 
-  async enrollSession(id){
+  async enrollSession(id) {
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.ENROLL_SESSION+id,
+      url: urlConstants.API_URLS.ENROLL_SESSION + id,
       payload: {}
     };
     try {
@@ -99,22 +99,17 @@ export class SessionService {
     }
   }
 
-  async startSession(id){
+  async startSession(id) {
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.START_SESSION+id,
+      url: urlConstants.API_URLS.START_SESSION + id,
       payload: {}
     };
     try {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
-      if(data.responseCode == "OK"){
-        let browser = this.inAppBrowser.create(data.result.link,`_system`);
-        browser.on('exit').subscribe(() => {
-          console.log('browser closed');
-        }, err => {
-            console.error(err);
-        });
+      if (data.responseCode == "OK") {
+        this.openBrowser(data);
       }
     }
     catch (error) {
@@ -122,22 +117,17 @@ export class SessionService {
     }
   }
 
-  async joinSession(id){
+  async joinSession(id) {
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.JOIN_SESSION+id,
+      url: urlConstants.API_URLS.JOIN_SESSION + id,
       payload: {}
     };
     try {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
-      if(data.responseCode == "OK"){
-        let browser = this.inAppBrowser.create(data.result.link,"_system");
-        browser.on('exit').subscribe(() => {
-          console.log('browser closed');
-        }, err => {
-            console.error(err);
-        });
+      if (data.responseCode == "OK") {
+        this.openBrowser(data);
       }
     }
     catch (error) {
@@ -145,10 +135,10 @@ export class SessionService {
     }
   }
 
-  async deleteSession(id){
+  async deleteSession(id) {
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.CREATE_SESSION+`/${id}`,
+      url: urlConstants.API_URLS.CREATE_SESSION + `/${id}`,
       payload: {}
     };
     try {
@@ -159,5 +149,14 @@ export class SessionService {
     catch (error) {
       this.loaderService.stopLoader();
     }
+  }
+
+  openBrowser(data) {
+    let browser = this.inAppBrowser.create(data.result.link, `_system`);
+    browser.on('exit').subscribe(() => {
+      console.log('browser closed');
+    }, err => {
+      console.error(err);
+    });
   }
 }

@@ -167,7 +167,7 @@ export class SessionDetailPage implements OnInit {
       if (data) {
         let result = await this.sessionService.deleteSession(this.id);
         if(result.responseCode == "OK"){
-          this.toast.showToast("Session deleted succesfully","success");
+          this.toast.showToast(result.message,"success");
           this._location.back();
         }
       }
