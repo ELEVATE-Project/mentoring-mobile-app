@@ -66,7 +66,7 @@ export class AuthService {
       if(userData?.hasAcceptedTAndC == true){
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
       } else {
-        this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`]);
+        this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`], { replaceUrl: true });
       }
     }
     catch (error) {

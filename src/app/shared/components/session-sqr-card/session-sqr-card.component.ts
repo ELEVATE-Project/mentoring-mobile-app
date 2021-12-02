@@ -24,7 +24,6 @@ export class SessionSqrCardComponent implements OnInit {
   }
 
   onCardClick() {
-    console.log(this.data)
     this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.data?.sessionId || this.data?._id}`]);
   }
 }

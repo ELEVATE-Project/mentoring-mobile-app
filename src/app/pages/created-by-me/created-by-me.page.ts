@@ -19,6 +19,7 @@ export class CreatedByMePage implements OnInit {
   type = "published,live";
   sessions = [];
   sessionsCount;
+  loading;
   buttonConfig = {
     label: "START",
     value: "start"
@@ -41,6 +42,7 @@ export class CreatedByMePage implements OnInit {
     private localStorage: LocalStorageService) { }
 
   ionViewWillEnter() {
+    this.loading=true;
     this.sessions = [];
     this.fetchSessionDetails();
   }
@@ -51,6 +53,7 @@ export class CreatedByMePage implements OnInit {
   async fetchSessionDetails() {
     var obj = { page: this.page, limit: this.limit, status: this.type, searchText: this.searchText };
     var response = await this.sessionService.getAllSessionsAPI(obj);
+    this.loading = false;
     if (response?.data) {
       this.sessions = this.sessions.concat(response?.data);
       this.sessionsCount = response?.count;
@@ -64,11 +67,13 @@ export class CreatedByMePage implements OnInit {
   }
 
   public onSearch(ev) {
+    this.loading = true;
     this.searchText = ev.target.value;
     this.refreshPage();
   }
 
   public refreshPage() {
+    this.loading = true;
     this.sessions = [];
     this.page = 1;
     this.fetchSessionDetails();
