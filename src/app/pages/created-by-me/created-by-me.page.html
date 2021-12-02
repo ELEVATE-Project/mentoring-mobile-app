@@ -36,6 +36,7 @@
       </div>
     </div>
     <ng-template #elseBlock>
+      <div *ngIf="!loading">
       <ion-card class="sessions-wrap" (click)="createSession()">
         <ion-card-content>
           <ion-row>
@@ -50,9 +51,10 @@
           </ion-row>
         </ion-card-content>
       </ion-card>
+      </div>
     </ng-template>
     <ng-template #elseBlockTwo>
-      <div class="main-wrapper">
+      <div *ngIf="!loading" class="main-wrapper">
         <p class="no-details-message">{{ "NO_PAST_SESSIONS_FOUND" | translate }}</p>
       </div>
     </ng-template>

@@ -27,7 +27,9 @@
       <ion-footer class="side-menu-footer">
        <ion-row (click)="logout()">
          <ion-col size="12">
-           <h4><ion-icon name="power" class="ion-margin-end"> </ion-icon> <strong> {{"LOGOUT" | translate}}</strong></h4>
+           <div class="d-flex" style="justify-content: center;">
+           <ion-icon name="power" size="large" class="ion-margin-end"> </ion-icon> <strong class="space-bottom"> {{"LOGOUT" | translate}}</strong>
+          </div>
          </ion-col>
        </ion-row>
       </ion-footer>
