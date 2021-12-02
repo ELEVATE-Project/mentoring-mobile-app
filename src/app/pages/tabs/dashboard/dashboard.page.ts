@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: 'dashboard.page.html',
   styleUrls: ['dashboard.page.scss']
 })
 export class DashboardPage {
-  segment: any = 'mentor';
+  segment: any = 'mentee';
   dataAvailable = true;
-  isMentor = true;
+  isMentor:boolean;
   filter: any = [
     {
       key: 'WEEKLY',
@@ -37,7 +38,14 @@ export class DashboardPage {
     }
   };
 
-  constructor( private translate: TranslateService ) { }
+  constructor( private translate: TranslateService,private profile: ProfileService ) { }
+
+  ionViewWillEnter(){
+    this.profile.profileDetails(false).then(profileDetails => {
+      this.isMentor = profileDetails?.isAMentor;
+      console.log(this.isMentor);
+    })
+  }
 
   segmentChanged(ev: any) {
     console.log('Segment changed', ev);

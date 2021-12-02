@@ -4,6 +4,7 @@ export const urlConstants = {
         ACCOUNT_LOGIN:"/user/v1/account/login",
         LOGOUT_ACCOUNT:"/user/v1/account/logout",
         REFRESH_TOKEN:"/user/v1/account/generateToken",
+        TERMS_CONDITIONS:"/user/v1/account/acceptTermsAndCondition",
         PROFILE_UPDATE:"/user/v1/profile/update",
         PROFILE_DETAILS: "/user/v1/profile/details",
         MENTORS_DIRECTORY:"/user/v1/mentors/list?page=",

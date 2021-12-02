@@ -98,4 +98,20 @@ export class AuthService {
     }
   }
 
+  async acceptTermsAndConditions() {
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.TERMS_CONDITIONS,
+      payload: {},
+    };
+    try {
+      let data = await this.httpService.post(config);
+      this.loaderService.stopLoader();
+      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+
 }
