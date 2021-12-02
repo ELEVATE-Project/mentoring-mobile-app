@@ -111,7 +111,6 @@ export class DashboardPage {
   };
   public headerConfig: any = {
     menu: true,
-    notification: true,
     label:'DASHBOARD_PAGE',
     headerColor: 'white',
   };
