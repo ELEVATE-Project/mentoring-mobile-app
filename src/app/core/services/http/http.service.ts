@@ -32,9 +32,11 @@ export class HttpService {
 
   async setHeaders() {
     let token = await this.getToken();
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const headers = {
       'X-auth-token': token ? token : "",
       'Content-Type': 'application/json',
+      'timeZone' : timezone,
     }
     return headers;
   }

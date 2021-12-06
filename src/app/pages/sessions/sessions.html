@@ -32,8 +32,11 @@
   <div *ngIf="!sessions && type=='my-sessions'">
     <app-skeleton [type]="SKELETON.SESSION_CARD_SKELETON" [repetition]="4"></app-skeleton>
   </div>
-  <div *ngIf="!sessions?.length && !loading">
+  <div *ngIf="!sessions?.length && !loading && type=='my-sessions'">
     <app-no-data-found [message]="'NO_ACTIVE_MY_SESSIONS'"> </app-no-data-found>
+  </div>
+  <div *ngIf="!sessions?.length && !loading && type=='all-sessions'">
+    <app-no-data-found [message]="'NO_ACTIVE_ALL_SESSIONS'"> </app-no-data-found>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">

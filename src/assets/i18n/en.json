@@ -42,6 +42,7 @@
     "SIGN_UP":"Sign Up",
     "ADD":"Add",
     "CANCEL": "Cancel",
+    "CANCEL_SESSION":"Cancel Session",
     "OK": "Ok",
     "LOG_IN":"Log In",
     "SHOW_PASSWORD":"Show Password",
@@ -63,6 +64,7 @@
     "SORRY_NO_RESULTS":"Sorry No results found",
     "WELCOME_NOTE":"Connect with industry experts and enhance your learning and problem solving skills",
     "LOGOUT_CONFIRM_MESSAGE":"Are you sure you want to logout?",
+    "CANCEL_CONFIRM_MESSAGE":"Are you sure you want to cancel the session you have enrolled into",
     "MENTORS_PROFILE":"Mentors Profile",
     "EDIT_PROFILE":"Edit Profile",
     "ADD_PHOTO":"Add Photo",
@@ -103,5 +105,7 @@
     "DELETE_CONFIRM_MSG":"Are you sure you want to delete this session?",
     "UPCOMING_SESSIONS":"Upcoming Sessions",
     "PAST_SESSIONS":"Past Sessions",
-    "NO_PAST_SESSIONS_FOUND": "No Past Sessions found"
+    "NO_PAST_SESSIONS_FOUND": "No Past Sessions found",
+    "CLOSE": "Close",
+    "NO_ACTIVE_ALL_SESSIONS":"No active all sessions for now"
 }

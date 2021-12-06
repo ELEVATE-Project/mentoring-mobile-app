@@ -101,6 +101,16 @@ export class UtilService {
             action: 'camera'
           }
         ]
+        break;
+      case 'session':
+        buttons = [
+          {
+            text: texts["TAKE_PHOTO"],
+            type: 'CAMERA',
+            action: 'camera'
+          }
+        ]
+        break;
     }
     buttons.push({
       text: texts["CHOOSE_FROM_LIBRARY"],

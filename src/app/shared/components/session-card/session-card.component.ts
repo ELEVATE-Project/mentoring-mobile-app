@@ -26,7 +26,7 @@ export class SessionCardComponent implements OnInit {
   async onEnroll(data){
     let result = await this.sessionService.enrollSession(data._id);
     if(result?.result){
-      this.toast.showToast("Enrolled successfully","success");
+      this.toast.showToast("You have enrolled successfully","success");
     }
   }
 }
