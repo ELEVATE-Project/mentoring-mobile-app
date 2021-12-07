@@ -42,6 +42,7 @@ export class CreatedByMePage implements OnInit {
     private localStorage: LocalStorageService) { }
 
   ionViewWillEnter() {
+    this.page =1;
     this.loading=true;
     this.sessions = [];
     this.fetchSessionDetails();

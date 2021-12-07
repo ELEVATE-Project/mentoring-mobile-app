@@ -57,6 +57,10 @@ export class SessionDetailPage implements OnInit {
         key: 'medium',
       },
       {
+        title: 'Starting Time',
+        key: 'startDate',
+      },
+      {
         title: "Duration",
         key: "duration"
       },
@@ -110,6 +114,7 @@ export class SessionDetailPage implements OnInit {
         },
       ],
       duration: { hours: null, minutes: null },
+      startDate: null,
     },
   };
 
@@ -118,15 +123,17 @@ export class SessionDetailPage implements OnInit {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     if (response) {
       this.isCreator = userDetails._id == response.userId ? true : false;
-      response.startDate = moment.unix(response.startDate);
-      response.endDate = moment.unix(response.endDate);
-      var hours = response.endDate.diff(response.startDate, "hours");
-      response.startDate.add(hours, "hours");
-      var minutes = response.endDate.diff(response.startDate, "minutes");
-      response.duration = { hours: hours, minutes: minutes };
+      let startDate = moment.unix(response.startDate);
+      let endDate = moment.unix(response.endDate);
+      let readableStartDate = startDate.toLocaleString();
+      let hours = endDate.diff(startDate, 'hours');
+      startDate=startDate.add(hours, 'hours');
+      let minutes = endDate.diff(startDate, 'minutes');
+      response.duration = { hours: hours, minutes: minutes+1 };
       this.sessionHeaderData.name = response.title;
       this.sessionHeaderData.image = response.image;
       this.detailData.data = response;
+      this.detailData.data.startDate = readableStartDate;
     }
   }
 
