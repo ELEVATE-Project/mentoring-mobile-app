@@ -7,7 +7,7 @@ import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 import *  as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-session-detail',
@@ -16,19 +16,15 @@ import {Location} from '@angular/common';
 })
 export class SessionDetailPage implements OnInit {
   id: any;
-  status: any;
   showEditButton: any;
   isCreator: boolean;
 
-  constructor(private localStorage: LocalStorageService, private router: Router, 
-    private activatedRoute: ActivatedRoute, private sessionService: SessionService, 
+  constructor(private localStorage: LocalStorageService, private router: Router,
+    private activatedRoute: ActivatedRoute, private sessionService: SessionService,
     private utilService: UtilService, private toast: ToastService, private _location: Location) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
-  ngOnInit() {
-    this.headerConfig.share = (this.status == "published,live") ? true : false;
-    this.status="";
-  }
+  ngOnInit() {}
 
   ionViewWillEnter() {
     this.fetchSessionDetails();
@@ -44,7 +40,7 @@ export class SessionDetailPage implements OnInit {
     name: "",
     region: null,
     join_button: true,
-    session_image: null,
+    image: null,
   }
   detailData = {
     form: [
@@ -113,21 +109,23 @@ export class SessionDetailPage implements OnInit {
           "label": "Professional Development"
         },
       ],
-      duration: {hours:null, minutes:null},
+      duration: { hours: null, minutes: null },
     },
   };
 
   async fetchSessionDetails() {
     let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
-    if(response){
+    if (response) {
       this.isCreator = userDetails._id == response.userId ? true : false;
-      this.status = response.status;
-      let now = moment(response.startDate);
-      let end = moment(response.endDate);
-      let sessionDuration = await moment.duration(end.diff(now));
-      response.duration = {hours:sessionDuration.hours(), minutes:sessionDuration.minutes()};
+      response.startDate = moment.unix(response.startDate);
+      response.endDate = moment.unix(response.endDate);
+      var hours = response.endDate.diff(response.startDate, "hours");
+      response.startDate.add(hours, "hours");
+      var minutes = response.endDate.diff(response.startDate, "minutes");
+      response.duration = { hours: hours, minutes: minutes };
       this.sessionHeaderData.name = response.title;
+      this.sessionHeaderData.image = response.image;
       this.detailData.data = response;
     }
   }
@@ -142,11 +140,11 @@ export class SessionDetailPage implements OnInit {
 
   async share() {
     let sharableLink = await this.sessionService.getShareSessionId(this.id);
-    if(sharableLink.shareLink){
-    let url = `/${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
-    let link = await this.utilService.getDeepLink(url);
-    let params = {link: link, subject: this.sessionHeaderData?.title, text: "Join this session using the link provided here "}
-    this.utilService.shareLink(params);
+    if (sharableLink.shareLink) {
+      let url = `/${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
+      let link = await this.utilService.getDeepLink(url);
+      let params = { link: link, subject: this.sessionHeaderData?.title, text: "Join this session using the link provided here " }
+      this.utilService.shareLink(params);
     } else {
       this.toast.showToast("No link generated!!!", "danger");
     }
@@ -166,26 +164,45 @@ export class SessionDetailPage implements OnInit {
     this.utilService.alertPopup(msg).then(async data => {
       if (data) {
         let result = await this.sessionService.deleteSession(this.id);
-        if(result.responseCode == "OK"){
-          this.toast.showToast(result.message,"success");
+        if (result.responseCode == "OK") {
+          this.toast.showToast(result.message, "success");
           this._location.back();
         }
       }
     }).catch(error => { })
   }
 
-  async onJoin(){
+  async onJoin() {
     let result = await this.sessionService.joinSession(this.id);
   }
 
-  async onEnroll(){
+  async onEnroll() {
     let result = await this.sessionService.enrollSession(this.id);
-    if(result?.result){
-      this.toast.showToast("Enrolled successfully","success");
+    if (result?.result) {
+      this.toast.showToast("You have enrolled successfully", "success");
     }
+    this.fetchSessionDetails();
   }
 
-  async onStart(data){
+  async onStart(data) {
     let result = await this.sessionService.startSession(data._id);
+  }
+
+  async onCancel() {
+    let msg = {
+      header: 'CANCEL_SESSION',
+      message: 'CANCEL_CONFIRM_MESSAGE',
+      cancel: 'CLOSE',
+      submit: 'CANCEL'
+    }
+    this.utilService.alertPopup(msg).then(async data => {
+      if (data) {
+        let result = await this.sessionService.unEnrollSession(this.id);
+        if (result?.result) {
+          this.toast.showToast("You have unenrolled successfully", "success");
+        }
+        this.fetchSessionDetails();
+      }
+    }).catch(error => { })
   }
 }

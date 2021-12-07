@@ -1,16 +1,16 @@
 <app-page-header [config]="headerConfig"></app-page-header>
-
 <ion-content>
-  <app-profile-image [profileImageData]='profileImageData' [uploadImage]="true" (imageRemoveEvent)="removeCurrentPhoto($event)" (imageUploadEvent)="imageUploadEvent($event)"></app-profile-image>
-  <div *ngIf="showForm" class="mx-10">
-    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
+  <div class="main-wrapper">
+    <app-profile-image [profileImageData]='profileImageData' [uploadImage]="true"
+      (imageRemoveEvent)="removeCurrentPhoto($event)" (imageUploadEvent)="imageUploadEvent($event)"></app-profile-image>
+    <div *ngIf="showForm" class="mx-10">
+      <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
+    </div>
   </div>
 </ion-content>
 
 <ion-footer class="ion-no-border" submitButton>
   <ion-toolbar>
-    <ion-button expand="full" (click)="onSubmit()"
-      >{{'SUBMIT' | translate}}</ion-button
-    >
+    <ion-button expand="full" (click)="onSubmit()">{{'SUBMIT' | translate}}</ion-button>
   </ion-toolbar>
 </ion-footer>

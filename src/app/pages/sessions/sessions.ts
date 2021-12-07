@@ -19,13 +19,16 @@ export class SessionsPage implements OnInit {
   SKELETON = SKELETON;
   showLoadMoreButton: boolean = false;
   loading: boolean = false;
+  emptyMessage;
 
   constructor(private activatedRoute: ActivatedRoute,
     private httpService: HttpService,
     private loaderService: LoaderService,
     private router: Router) {
     this.activatedRoute.queryParamMap.subscribe(params => {
+      console.log(params);
       this.type = !this.type ? (params.get('type') || "all-sessions") : this.type;
+      this.emptyMessage = this.type=='my-sessions' ? 'NO_ACTIVE_MY_SESSIONS' : 'NO_ACTIVE_ALL_SESSIONS';
     });
   }
   public headerConfig: any = {
@@ -47,6 +50,7 @@ export class SessionsPage implements OnInit {
   }
   public segmentChanged(ev: any) {
     this.type = ev.target.value;
+    this.emptyMessage = this.type=='my-sessions' ? 'NO_ACTIVE_MY_SESSIONS' : 'NO_ACTIVE_ALL_SESSIONS';
     this.sessions = [];
     this.page = 1;
     this.getSessions();
@@ -77,6 +81,11 @@ export class SessionsPage implements OnInit {
     catch (error) {
       this.loading = false;
     }
+  }
+
+  onAction(event){
+    console.log(event);
+    this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
   }
 
 }

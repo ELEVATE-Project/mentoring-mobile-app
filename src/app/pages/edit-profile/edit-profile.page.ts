@@ -11,7 +11,7 @@ import {
 import * as _ from 'lodash-es';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { EDIT_PROFILE_FORM } from 'src/app/core/constants/formConstant';
-import { AttachmentService, LoaderService, LocalStorageService } from 'src/app/core/services';
+import { AttachmentService, LoaderService, LocalStorageService, ToastService } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { AlertController, Platform } from '@ionic/angular';
@@ -53,7 +53,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     private file: File,
     private loaderService: LoaderService,
     private alert: AlertController,
-    private translate :TranslateService
+    private translate :TranslateService,
+    private toast : ToastService,
   ) {
     this.path = this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory;
   }
@@ -109,6 +110,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
         this.form1.myForm.markAsPristine();
         this.profileService.profileUpdate(this.form1.myForm.value);
       }
+    } else {
+      this.toast.showToast("Invalid data","danger");
     }
   }
 

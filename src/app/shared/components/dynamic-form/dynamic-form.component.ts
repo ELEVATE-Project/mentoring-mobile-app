@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash-es';
+import * as moment from 'moment';
 
 interface JsonFormValidators {
   min?: number;
@@ -118,6 +119,10 @@ export class DynamicFormComponent implements OnInit {
     return JSON.stringify(a) == JSON.stringify(b);
   }
   onSubmit() {
+    if(this.myForm.value.startDate){
+    this.myForm.value.startDate = Math.floor(new Date(this.myForm.value.startDate).getTime()/1000.0);
+    this.myForm.value.endDate = Math.floor(new Date(this.myForm.value.endDate).getTime()/1000.0);
+    }
     console.log('Form valid: ', this.myForm.valid);
     console.log('Form values: ', this.myForm.value);
     this.isFormValid();

@@ -16,7 +16,7 @@
         <div *ngFor="let session of sessions">
           <div [ngSwitch]="type">
             <ion-list *ngSwitchCase="'all-sessions'">
-              <app-session-card [data]="session" [action]="'ENROLL'"></app-session-card>
+              <app-session-card [data]="session" (onClickEvent)="onAction($event)" [action]="'ENROLL'"></app-session-card>
             </ion-list>
             <ion-list *ngSwitchCase="'my-sessions'">
               <app-session-card-template [data]="session" [showEdit]=true></app-session-card-template>
@@ -33,7 +33,7 @@
     <app-skeleton [type]="SKELETON.SESSION_CARD_SKELETON" [repetition]="4"></app-skeleton>
   </div>
   <div *ngIf="!sessions?.length && !loading">
-    <app-no-data-found [message]="'NO_ACTIVE_MY_SESSIONS'"> </app-no-data-found>
+    <app-no-data-found [message]="emptyMessage"> </app-no-data-found>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">
