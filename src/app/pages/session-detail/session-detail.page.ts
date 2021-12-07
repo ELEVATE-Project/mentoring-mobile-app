@@ -16,7 +16,6 @@ import { Location } from '@angular/common';
 })
 export class SessionDetailPage implements OnInit {
   id: any;
-  status: any;
   showEditButton: any;
   isCreator: boolean;
 
@@ -25,10 +24,7 @@ export class SessionDetailPage implements OnInit {
     private utilService: UtilService, private toast: ToastService, private _location: Location) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
-  ngOnInit() {
-    this.headerConfig.share = (this.status == "published,live") ? true : false;
-    this.status = "";
-  }
+  ngOnInit() {}
 
   ionViewWillEnter() {
     this.fetchSessionDetails();
@@ -44,7 +40,7 @@ export class SessionDetailPage implements OnInit {
     name: "",
     region: null,
     join_button: true,
-    session_image: null,
+    image: null,
   }
   detailData = {
     form: [
@@ -122,7 +118,6 @@ export class SessionDetailPage implements OnInit {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     if (response) {
       this.isCreator = userDetails._id == response.userId ? true : false;
-      this.status = response.status;
       response.startDate = moment.unix(response.startDate);
       response.endDate = moment.unix(response.endDate);
       var hours = response.endDate.diff(response.startDate, "hours");
@@ -130,6 +125,7 @@ export class SessionDetailPage implements OnInit {
       var minutes = response.endDate.diff(response.startDate, "minutes");
       response.duration = { hours: hours, minutes: minutes };
       this.sessionHeaderData.name = response.title;
+      this.sessionHeaderData.image = response.image;
       this.detailData.data = response;
     }
   }

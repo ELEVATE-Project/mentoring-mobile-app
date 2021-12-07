@@ -4,26 +4,21 @@
     <app-profile-image [profileImageData]='sessionHeaderData'></app-profile-image>
     <div *ngIf="isCreator; else elseBlock" class="d-flex flex-justify-center">
       <ion-button class="session-btn" shape="round" (click)="onDelete()">{{ "DELETE" | translate }}</ion-button>
-      <ion-button class="session-btn" *ngIf="status=='published' || status=='live'" shape="round"
+      <ion-button class="session-btn" *ngIf="detailData.data.status=='published' || detailData.data.status=='live'" shape="round"
         (click)="editSession()">{{ "EDIT" | translate }}
       </ion-button>
     </div>
     <ng-template #elseBlock>
-      <div *ngIf="detailData.data.isEnrolled; else disableJoin;" class="d-flex flex-justify-center">
-        <ion-button class="session-btn" shape="round" (click)="onJoin()">{{ "JOIN" | translate }}</ion-button>
+      <div class="d-flex flex-justify-center">
+        <ion-button [disabled]="!detailData.data.isEnrolled" class="session-btn" shape="round" (click)="onJoin()">{{ "JOIN" | translate }}</ion-button>
       </div>
-      <ng-template #disableJoin>
-        <div class="d-flex flex-justify-center">
-          <ion-button class="session-btn" color="medium" shape="round" disabled="true">{{ "JOIN" | translate }}</ion-button>
-        </div>
-      </ng-template>
     </ng-template>
     <app-generic-details [sessionData]='detailData'></app-generic-details>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">
   <div *ngIf="isCreator; else elseBlockFooter">
-    <ion-button *ngIf="status=='published' || status=='live'" class="load-more-button" expand="full"
+    <ion-button *ngIf="detailData.data.status=='published' || detailData.data.status=='live'" class="load-more-button" expand="full"
       (click)="onStart(detailData.data)">{{"START_SESSIONS" | translate}}</ion-button>
   </div>
   <ng-template #elseBlockFooter>

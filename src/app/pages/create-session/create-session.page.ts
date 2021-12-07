@@ -109,8 +109,8 @@ export class CreateSessionPage implements OnInit {
   upload(data) {
     this.loaderService.startLoader();
     this.attachment.cloudImageUpload(data).then(resp => {
-      this.profileImageData.image = data.uploadUrl.signedUrl;
-      this.form1.myForm.value.image = data.uploadUrl.signedUrl;
+      this.profileImageData.image = data.uploadUrl.destFilePath;
+      this.form1.myForm.value.image = [data.uploadUrl.destFilePath];
       this.profileImageData.isUploaded = true;
       this.loaderService.stopLoader();
       this.onSubmit();
@@ -139,9 +139,5 @@ export class CreateSessionPage implements OnInit {
     this.localImage = event;
     this.profileImageData.image = this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
     this.profileImageData.isUploaded = false;
-  }
-
-  ionViewDidLeave() {
-    this.id = null;
   }
 }

@@ -84,34 +84,28 @@ export class SessionService {
   }
 
   async enrollSession(id) {
-    await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.ENROLL_SESSION + id,
       payload: {}
     };
     try {
       let data = await this.httpService.post(config);
-      this.loaderService.stopLoader();
       return data;
     }
     catch (error) {
-      this.loaderService.stopLoader();
     }
   }
 
   async unEnrollSession(id) {
-    await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.UNENROLL_SESSION + id,
       payload: {}
     };
     try {
       let data = await this.httpService.post(config);
-      this.loaderService.stopLoader();
       return data;
     }
     catch (error) {
-      this.loaderService.stopLoader();
     }
   }
 
