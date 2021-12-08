@@ -5,7 +5,7 @@
   <section>
     <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
     <div class="mentor-signup d-flex flex-justify-center">
-      <ion-checkbox (ionChange)="signUpAsMentor()" class="check-box" color="danger"></ion-checkbox>
+      <ion-checkbox [(ngModel)]=isChecked  (ngModelChange)="signUpAsMentor($event)" class="check-box" color="danger" name="isChecked"></ion-checkbox>
       <ion-label class="label">Sign up as a Mentor</ion-label>
     </div>
 

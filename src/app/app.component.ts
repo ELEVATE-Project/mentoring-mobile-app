@@ -16,7 +16,6 @@ export class AppComponent {
  user;
   public appPages = [
     { title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' },
-    { title: 'LANGUAGE', url: '', icon: 'language' },
     { title: 'SETTINGS', url: '', icon: 'settings' },
     { title: 'HELP', url: '', icon: 'help-circle' }
   ];

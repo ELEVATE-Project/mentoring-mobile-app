@@ -110,9 +110,8 @@ export class RegisterPage implements OnInit {
       this.toastService.showToast('Password Mismatch', 'danger');
     }
   }
-
-  signUpAsMentor() {
+  signUpAsMentor(event) {
     this.secretCode = "";
-    this.isChecked = this.isChecked ? false : true;
+    this.isChecked = event?true:false;
   }
 }
