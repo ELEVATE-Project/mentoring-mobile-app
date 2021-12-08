@@ -45,4 +45,13 @@
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
-}    
+}  
+.ellipsis{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    font-size: small;
+    white-space: nowrap;
+}
+.margin-btm-10{
+    margin-bottom: 10px;  
+}

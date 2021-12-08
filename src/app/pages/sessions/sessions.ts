@@ -45,6 +45,7 @@ export class SessionsPage implements OnInit {
   ngOnInit() {}
 
   ionViewWillEnter() {
+    this.page =1;
     this.sessions = []
     this.getSessions();
   }

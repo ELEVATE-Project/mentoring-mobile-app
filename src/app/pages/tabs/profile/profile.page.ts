@@ -31,10 +31,6 @@ export class ProfilePage implements OnInit {
         title: "KEY_AREAS_OF_EXPERTISE",
         key: "areasOfExpertise"
       },
-      {
-        title: "LANGUAGES",
-        key: "languages"
-      }
     ],
     data: {},
   };
