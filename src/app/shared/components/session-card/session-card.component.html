@@ -1,6 +1,6 @@
 <ion-card (click)="onCardClick(data)" class="session-card">
   <span class="status-badge" *ngIf="data?.status == 'live'">
-    <ion-icon name="ellipse-sharp"></ion-icon> {{data?.status}}
+    <ion-icon name="ellipse-sharp"></ion-icon> {{data?.status | titlecase}}
   </span>
   <ion-row>
     <ion-col size="3" class="card-avatar">

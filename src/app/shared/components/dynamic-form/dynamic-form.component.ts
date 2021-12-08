@@ -51,12 +51,14 @@ export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
+  toEpochFormat: boolean; //To be removed
 
   constructor(private fb: FormBuilder) {}
   ngOnInit() {
     setTimeout(() => {
       this.createForm(this.jsonFormData.controls);
       this.showForm = true;
+      this.toEpochFormat = true; //To be removed
     });
   }
 
@@ -119,9 +121,10 @@ export class DynamicFormComponent implements OnInit {
     return JSON.stringify(a) == JSON.stringify(b);
   }
   onSubmit() {
-    if(this.myForm.value.startDate){
+    if(this.myForm.value.startDate && this.toEpochFormat){ //to be removed: this.toEpochFormat
     this.myForm.value.startDate = Math.floor(new Date(this.myForm.value.startDate).getTime()/1000.0);
     this.myForm.value.endDate = Math.floor(new Date(this.myForm.value.endDate).getTime()/1000.0);
+    this.toEpochFormat = false;  //To be removed
     }
     console.log('Form valid: ', this.myForm.valid);
     console.log('Form values: ', this.myForm.value);

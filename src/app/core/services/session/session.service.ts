@@ -162,7 +162,7 @@ export class SessionService {
   }
 
   openBrowser(link) {
-    let browser = this.inAppBrowser.create(link, `_system`);
+    let browser = this.inAppBrowser.create(link, `_blank`);
     browser.on('exit').subscribe(() => {
       console.log('browser closed');
     }, err => {
