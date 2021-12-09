@@ -69,21 +69,49 @@ export class RegisterPage implements OnInit {
     notification: false,
     headerColor: 'white',
   };
+
+  //to be removed
+  secretCode: string="";
+  isChecked: any;
+
   constructor(
     private authService: AuthService,
     private toastService: ToastService
-  ) {}
-  ngOnInit() {}
+  ) { }
+  ngOnInit() { }
+
+  ionViewWillEnter() {
+    this.isChecked = false;
+  }
 
   async onSubmit() {
     this.form1.onSubmit();
-    let formJson = this.form1.myForm.value;
-    if (this.form1.myForm.valid) {
-      if (_.isEqual(formJson.password, formJson.cPassword)) {
-        this.authService.createAccount(this.form1.myForm.value);
+
+    //to be removed
+    if (this.secretCode !== "" && this.isChecked == true) {
+      this.form1.myForm.value.isAMentor = this.isChecked;
+      this.form1.myForm.value.secretCode = this.secretCode;
+      if(this.secretCode == "4567" && this.form1.myForm.valid){
+        this.createUser();
       } else {
-        this.toastService.showToast('Password Mismatch', 'danger');
+        this.toastService.showToast("Please enter the correct secret code", "danger");
       }
+    } else if(this.isChecked==true && this.secretCode == ""){
+      this.toastService.showToast("Please enter the secret code", "danger");
+    } else {
+      this.createUser();
     }
+  }
+  createUser(){
+    let formJson = this.form1.myForm.value;
+    if (_.isEqual(formJson.password, formJson.cPassword)) {
+      this.authService.createAccount(this.form1.myForm.value);
+    } else {
+      this.toastService.showToast('Password Mismatch', 'danger');
+    }
+  }
+  signUpAsMentor(event) {
+    this.secretCode = "";
+    this.isChecked = event?true:false;
   }
 }

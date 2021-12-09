@@ -129,7 +129,7 @@ export class SessionDetailPage implements OnInit {
       let hours = endDate.diff(startDate, 'hours');
       startDate=startDate.add(hours, 'hours');
       let minutes = endDate.diff(startDate, 'minutes');
-      response.duration = { hours: hours, minutes: minutes+1 };
+      response.duration = { hours: hours, minutes: minutes };
       this.sessionHeaderData.name = response.title;
       this.sessionHeaderData.image = response.image;
       this.detailData.data = response;
