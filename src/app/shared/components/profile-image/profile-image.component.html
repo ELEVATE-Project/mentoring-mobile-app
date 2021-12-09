@@ -9,7 +9,7 @@
   <p class="add-photo" *ngIf="uploadImage" (click)="uploadPhoto()">{{ "ADD_PHOTO" | translate }}</p>
   <div class="padding" *ngIf="profileImageData;">
     <div *ngIf="profileImageData?.name">
-      <p class="padding text-config username">{{ profileImageData?.name }}</p>
+      <p class="padding text-config username">{{ profileImageData?.name | titlecase }}</p>
     </div>
     <div *ngIf="profileImageData?.location">
       <p class="region text-config">{{ profileImageData?.location[0]?.label }}</p>

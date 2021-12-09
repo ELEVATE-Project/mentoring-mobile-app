@@ -29,7 +29,7 @@ export class MentorDirectoryPage implements OnInit {
   constructor(
     private router: Router,
     private loaderService: LoaderService,
-    private httpService: HttpService
+    private httpService: HttpService,
   ) { }
 
   ngOnInit() {
@@ -37,8 +37,6 @@ export class MentorDirectoryPage implements OnInit {
     this.mentors = [];
     this.searchText = '';
     this.getMentors();
-  }
-  ionViewWillEnter() {
   }
 
   async getMentors() {

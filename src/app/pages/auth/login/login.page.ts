@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 import { AuthService} from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
@@ -37,7 +38,9 @@ export class LoginPage implements OnInit {
       },
     ],
   };
-  constructor(private authService: AuthService,private router:Router) { }
+  constructor(private authService: AuthService,private router:Router, private menuCtrl:MenuController) {
+      this.menuCtrl.enable(false);
+   }
   
   ngOnInit() { }
 
@@ -45,6 +48,7 @@ export class LoginPage implements OnInit {
     this.form1.onSubmit();
     if(this.form1.myForm.valid){
     this.authService.loginAccount(this.form1.myForm.value);
+    this.menuCtrl.enable(true);
     }
   }
 

@@ -101,5 +101,9 @@ export class AppComponent {
       this.isMentor = this.user?.isAMentor
     })
   }
+  goToProfilePage(){
+    this.menuCtrl.close();
+    this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+  }
 
 }

@@ -10,6 +10,7 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { HttpService, LoaderService } from 'src/app/core/services';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
+import { SessionService } from 'src/app/core/services/session/session.service';
 
 @Component({
   selector: 'app-home',
@@ -42,7 +43,8 @@ public headerConfig: any = {
     private loaderService: LoaderService,
     private httpService: HttpService,
     private platform: Platform,
-    private zone:NgZone) {}
+    private zone:NgZone,
+    private sessionService: SessionService) {}
     
   ngOnInit() {
     this.getUser();
@@ -65,6 +67,11 @@ public headerConfig: any = {
     switch (event.type) {
       case 'cardSelect':
         this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
+        break;
+
+      case 'joinAction':
+        this.sessionService.joinSession(event.data.sessionId);
+        break;
     }
   }
   viewMore(data){
