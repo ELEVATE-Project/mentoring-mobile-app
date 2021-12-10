@@ -4,14 +4,20 @@
 
   <section>
     <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
+    <div class="mentor-signup d-flex flex-justify-center">
+      <ion-checkbox [(ngModel)]=isChecked  (ngModelChange)="signUpAsMentor($event)" class="check-box" color="danger" name="isChecked"></ion-checkbox>
+      <ion-label class="label">Sign up as a Mentor</ion-label>
+    </div>
+
+    <!-- to be removed -->
+    <div *ngIf="isChecked">
+      <ion-input class="text" placeholder="Secret code" [(ngModel)]="secretCode"></ion-input>
+    </div>
+    
   </section>
 
-  <section
-    submitButton
-    [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}"
-  >
-    <ion-button class="mx-0" (click)="onSubmit()" expand="block" size="large" [disabled]="!form1.myForm.valid"
-      >{{"SIGN_UP"|translate}}</ion-button
-    >
+  <section submitButton [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}">
+    <ion-button class="mx-0" (click)="onSubmit()" expand="block" size="large" [disabled]="!form1.myForm.valid">
+      {{"SIGN_UP"|translate}}</ion-button>
   </section>
 </ion-content>

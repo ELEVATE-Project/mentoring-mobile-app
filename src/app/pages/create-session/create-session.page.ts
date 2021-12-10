@@ -40,6 +40,7 @@ export class CreateSessionPage implements OnInit {
   }
   public formData: JsonFormData;
   showForm: boolean = false;
+  isSubmited: boolean;
   constructor(
     private http: HttpClient,
     private sessionService: SessionService,
@@ -74,21 +75,27 @@ export class CreateSessionPage implements OnInit {
     } else {
       this.showForm = true;
     }
+    this.isSubmited =false; //to be removed
   }
 
   async onSubmit() {
+    if(!this.isSubmited){
     this.form1.onSubmit();
+    this.isSubmited = true;
+    }
     if (this.form1.myForm.valid) {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
         this.getImageUploadUrl(this.localImage);
       } else {
-        this.form1.myForm.markAsPristine();
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        this.form1.myForm.value.timeZone = timezone;
-        let result = await this.sessionService.createSession(this.form1.myForm.value, this.id);
-        if (result) {
-          this.location.back()
-        }
+        this.form1.myForm.value.startDate = Math.floor(new Date(this.form1.myForm.value.startDate).getTime() / 1000.0);
+          this.form1.myForm.value.endDate = Math.floor(new Date(this.form1.myForm.value.endDate).getTime() / 1000.0);
+          this.form1.myForm.markAsPristine();
+          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          this.form1.myForm.value.timeZone = timezone;
+          let result = await this.sessionService.createSession(this.form1.myForm.value, this.id);
+          if (result) {
+            this.location.back()
+          }
       }
     } else {
       this.toast.showToast("Invalid data","danger");
