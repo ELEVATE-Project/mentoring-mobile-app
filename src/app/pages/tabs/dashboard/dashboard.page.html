@@ -13,7 +13,7 @@
         </ion-segment-button>
       </ion-segment>
     </ion-toolbar>
-    <div class="empty-state-container" *ngIf="!dataAvailable">
+    <div class="empty-state-container" *ngIf="!dataAvailable && !loading">
       <app-no-data-found [message]="'NO_DATA_AVAILABLE'"></app-no-data-found>
     </div>
     <div *ngIf="dataAvailable" class="main-wrapper">
