@@ -73,8 +73,9 @@
                 </p>
             </ion-col>
           </ion-row>
-
-          <sl-pie-chart [data]="data"></sl-pie-chart>
+          <div *ngIf="chartData">
+            <sl-pie-chart [data]="chartData"></sl-pie-chart>
+          </div>
         </div>
       </div>
     </div>

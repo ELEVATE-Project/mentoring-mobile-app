@@ -26,5 +26,7 @@ export const urlConstants = {
         UNENROLL_SESSION:"/mentoring/v1/sessions/unEnroll/",
         START_SESSION:"/mentoring/v1/sessions/start/",
         JOIN_SESSION:"/mentoring/v1/mentees/joinSession/",
+        MENTOR_REPORTS:"/mentoring/v1/mentors/reports?filterType=",
+        MENTEE_REPORTS:"/mentoring/v1/mentees/reports?filterType="
     }
 };
