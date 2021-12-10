@@ -122,6 +122,7 @@ export class SessionDetailPage implements OnInit {
     let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     if (response) {
+      this.id = response._id;
       this.isCreator = userDetails._id == response.userId ? true : false;
       let startDate = moment.unix(response.startDate);
       let endDate = moment.unix(response.endDate);
