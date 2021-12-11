@@ -2,24 +2,21 @@
 
 
 <ion-content [fullscreen]="true">
-  <div class="empty-state-container" *ngIf="!dataAvailable">
-    <app-no-data-found [message]="'NO_DATA_AVAILABLE'"></app-no-data-found>
-  </div>
-
-  <div *ngIf="dataAvailable">
-
+  <div>
     <ion-toolbar *ngIf="isMentor">
       <ion-segment [value]="segment" swipeGesture="true" (ionChange)="segmentChanged($event)">
-        <ion-segment-button value="mentee">
-          <ion-label>{{'MENTEE' | translate}}</ion-label>
-        </ion-segment-button>
         <ion-segment-button value="mentor">
           <ion-label>{{'MENTOR' | translate}}</ion-label>
         </ion-segment-button>
+        <ion-segment-button value="mentee">
+          <ion-label>{{'MENTEE' | translate}}</ion-label>
+        </ion-segment-button>
       </ion-segment>
     </ion-toolbar>
-
-    <div class="main-wrapper">
+    <div class="empty-state-container" *ngIf="!dataAvailable && !loading">
+      <app-no-data-found [message]="'NO_DATA_AVAILABLE'"></app-no-data-found>
+    </div>
+    <div *ngIf="dataAvailable" class="main-wrapper">
       <div [ngSwitch]="segment">
         <div *ngSwitchCase="'mentor'">
 
@@ -28,25 +25,27 @@
               <p class="dashboard-title">{{'SESSION_OVERVIEW' | translate}}</p>
             </ion-col>
             <ion-col>
-              <app-filter [defaultValue]="'weekly'" [filter]="filter" (filterChange)="filterChangeHandler($event)"></app-filter>
+              <app-filter [defaultValue]="'WEEKLY'" [filter]="filter" (filterChange)="filterChangeHandler($event)"></app-filter>
             </ion-col>
           </ion-row>
           <ion-row class="stat-box">
             <ion-col class="bg-lite">
                 <p class="stat-title">
                   {{'TOTAL_SESSION_CREATED' | translate}}
-                  <span>10</span>
+                  <span>{{chartData.chart.data.datasets[0].data[0]}}</span>
                 </p>
+            </ion-col>
+            <ion-col size=".5">
             </ion-col>
             <ion-col class="bg-lite">
                 <p class="stat-title">
                   {{'TOTAL_SESSION_HOSTED' | translate}}
-                  <span>5</span>
+                  <span>{{chartData.chart.data.datasets[0].data[1]}}</span>
                 </p>
             </ion-col>
           </ion-row>
 
-          <sl-pie-chart [data]="data"></sl-pie-chart>
+          <sl-pie-chart [data]="chartData"></sl-pie-chart>
         </div>
 
         <div *ngSwitchCase="'mentee'">
@@ -56,20 +55,22 @@
               <p class="dashboard-title">{{'SESSION_OVERVIEW' | translate}}</p>
             </ion-col>
             <ion-col>
-              <app-filter [defaultValue]="'weekly'" [filter]="filter" (filterChange)="filterChangeHandler($event)"></app-filter>
+              <app-filter [defaultValue]="'WEEKLY'" [filter]="filter" (filterChange)="filterChangeHandler($event)"></app-filter>
             </ion-col>
           </ion-row>
           <ion-row class="stat-box">
             <ion-col class="bg-lite">
                 <p class="stat-title">
                   {{'TOTAL_SESSION_ENROLLED' | translate}}
-                  <span class="">4</span>
+                  <span>{{chartData.chart.data.datasets[0].data[0]}}</span>
                 </p>
+            </ion-col>
+            <ion-col size=".5">
             </ion-col>
             <ion-col class="bg-lite">
                 <p class="stat-title">
                   {{'TOTAL_SESSION_ATTENDED' | translate}}
-                  <span>2</span>
+                  <span>{{chartData.chart.data.datasets[0].data[1]}}</span>
                 </p>
             </ion-col>
           </ion-row>
