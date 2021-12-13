@@ -14,8 +14,8 @@ import { CommonRoutes } from 'src/global.routes';
   styleUrls: ['./mentor-directory.page.scss'],
 })
 export class MentorDirectoryPage implements OnInit {
-  page = 1;
-  limit = 10;
+  page = 1; //todo: Enable pagenation
+  limit = 100;
   searchText: string = '';
   public headerConfig: any = {
     menu: true,
@@ -33,12 +33,13 @@ export class MentorDirectoryPage implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
     this.page = 1;
     this.mentors = [];
     this.searchText = '';
     this.getMentors();
-  }
-  ionViewWillEnter() {
   }
 
   async getMentors() {
