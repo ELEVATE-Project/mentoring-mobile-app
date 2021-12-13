@@ -19,7 +19,7 @@
               <app-session-card [data]="session" (onClickEvent)="onAction($event)" [action]="'ENROLL'"></app-session-card>
             </ion-list>
             <ion-list *ngSwitchCase="'my-sessions'">
-              <app-session-card-template [data]="session" [showEdit]=true></app-session-card-template>
+              <app-session-card-template [data]="session" [buttonConfig]="buttonConfig" (onClickEvent)="onJoin($event)"></app-session-card-template>
             </ion-list>
           </div>
         </div>
