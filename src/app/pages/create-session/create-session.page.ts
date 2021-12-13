@@ -97,6 +97,8 @@ export class CreateSessionPage implements OnInit {
             this.location.back()
           }
       }
+    } else if(this.form1.myForm.value.title.length < 5) {
+      this.toast.showToast("Session title is too small","danger")
     } else {
       this.toast.showToast("Invalid data","danger");
     }
@@ -108,13 +110,11 @@ export class CreateSessionPage implements OnInit {
       url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name
     }
     let data: any = await this.api.get(config);
-    this.loaderService.stopLoader();
     file.uploadUrl = data.result;
     this.upload(file);
   }
 
   upload(data) {
-    this.loaderService.startLoader();
     this.attachment.cloudImageUpload(data).then(resp => {
       this.profileImageData.image = data.uploadUrl.destFilePath;
       this.form1.myForm.value.image = [data.uploadUrl.destFilePath];

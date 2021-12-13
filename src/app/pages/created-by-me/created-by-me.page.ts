@@ -57,8 +57,10 @@ export class CreatedByMePage implements OnInit {
     this.loading = false;
     if (response?.data) {
       this.sessions = this.sessions.concat(response?.data);
-      this.sessionsCount = response?.count;
-      this.showLoadMoreButton = (this.sessions?.length === this.sessionsCount) ? false : true;
+      if (response?.count) {
+        this.sessionsCount = response?.count;
+        this.showLoadMoreButton = (this.sessions?.length === this.sessionsCount) ? false : true;
+      }
     }
   }
 
@@ -98,7 +100,7 @@ export class CreatedByMePage implements OnInit {
     this.fetchSessionDetails();
   }
 
-  async eventAction(event){
+  async eventAction(event) {
     await this.sessionService.startSession(event.data._id);
   }
 }
