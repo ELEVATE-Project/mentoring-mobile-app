@@ -29,7 +29,7 @@ export class MentorDetailsPage implements OnInit {
       },
       {
         title: 'Years of Experience',
-        key: 'yearsOfExperience',
+        key: 'experience',
       },
       {
         title: 'Key  Areas of Expertise',
