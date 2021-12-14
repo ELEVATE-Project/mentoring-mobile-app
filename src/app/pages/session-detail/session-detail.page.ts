@@ -117,6 +117,8 @@ export class SessionDetailPage implements OnInit {
       duration: { hours: null, minutes: null },
       startDate: null,
       mentorName: null,
+      status:null,
+      isEnrolled:null,
     },
   };
 
@@ -202,6 +204,7 @@ export class SessionDetailPage implements OnInit {
 
   async onStart(data) {
     let result = await this.sessionService.startSession(data._id);
+    console.log(result);
   }
 
   async onCancel() {

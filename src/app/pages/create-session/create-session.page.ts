@@ -97,10 +97,8 @@ export class CreateSessionPage implements OnInit {
             this.location.back()
           }
       }
-    } else if(this.form1.myForm.value.title.length < 5) {
-      this.toast.showToast("Session title is too small","danger")
     } else {
-      this.toast.showToast("Invalid data","danger");
+      this.toast.showToast("Please fill all the mandatory fields","danger");
     }
   }
 

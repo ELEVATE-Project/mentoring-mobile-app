@@ -2,8 +2,8 @@
 
 <ion-content class="ion-padding">
   <app-profile-image *ngIf="showForm" [profileImageData]='profileImageData' [uploadImage]="true" (imageUploadEvent)="imageUploadEvent($event)"></app-profile-image>
-  <div>
-    <app-dynamic-form *ngIf="showForm" [jsonFormData]="formData" #form1> </app-dynamic-form>
+  <div *ngIf="formData && showForm">
+    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
   </div>
 </ion-content>
 
