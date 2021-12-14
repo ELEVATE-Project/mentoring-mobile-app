@@ -72,12 +72,12 @@
 </ion-content>
 <div *ngIf="showLoadMoreButton;else footerElseBlock">
   <ion-footer class="ion-no-border">
-    <ion-button class="load-more-button" (click)="loadMore()" expand="full">
+    <ion-button (click)="loadMore()" expand="full">
       {{"LOAD MORE" | translate}}</ion-button>
   </ion-footer>
 </div>
 <ng-template #footerElseBlock>
   <ion-footer class="ion-no-border">
-    <ion-button class="load-more-button" (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>
+    <ion-button (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>
   </ion-footer>
 </ng-template>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService } from 'src/app/core/services';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-mentor-details',
@@ -39,7 +40,8 @@ export class MentorDetailsPage implements OnInit {
   };
   constructor(
     private routerParams : ActivatedRoute,
-    private httpService :  HttpService
+    private httpService :  HttpService,
+    private router: Router,
   ) {
     routerParams.params.subscribe(params =>{
       this.mentorId = params.id;
@@ -63,6 +65,10 @@ export class MentorDetailsPage implements OnInit {
     }
     catch (error) {
     }
+  }
+
+  goToHome(){
+    this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]);
   }
 
   action(e){

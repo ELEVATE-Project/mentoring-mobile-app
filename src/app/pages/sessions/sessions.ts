@@ -4,6 +4,7 @@ import { CommonRoutes } from 'src/global.routes';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { HttpService, LoaderService } from 'src/app/core/services';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
+import { SessionService } from 'src/app/core/services/session/session.service';
 
 @Component({
   selector: 'app-sessions',
@@ -24,7 +25,8 @@ export class SessionsPage implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
     private httpService: HttpService,
     private loaderService: LoaderService,
-    private router: Router) {
+    private router: Router,
+    private sessionService: SessionService) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       console.log(params);
       this.type = !this.type ? (params.get('type') || "all-sessions") : this.type;
@@ -38,6 +40,11 @@ export class SessionsPage implements OnInit {
     backButton: true,
     label: 'SESSIONS_PAGE'
   };
+
+  public buttonConfig: any = {
+    label: "JOIN"
+  };
+
   SESSIONS_DETAILS: any = CommonRoutes.SESSIONS_DETAILS;
   SESSIONS: any = CommonRoutes.SESSIONS;
   sessions=[];
@@ -89,4 +96,8 @@ export class SessionsPage implements OnInit {
     this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
   }
 
+  async onJoin(event){
+    console.log(event);
+    await this.sessionService.joinSession(event.data.sessionId);
+  }
 }

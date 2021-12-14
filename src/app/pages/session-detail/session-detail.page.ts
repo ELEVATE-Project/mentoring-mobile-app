@@ -7,7 +7,8 @@ import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 import *  as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import { Location } from '@angular/common';
+import { Location, TitleCasePipe} from '@angular/common';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 
 @Component({
   selector: 'app-session-detail',
@@ -21,7 +22,7 @@ export class SessionDetailPage implements OnInit {
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
-    private utilService: UtilService, private toast: ToastService, private _location: Location) {
+    private utilService: UtilService, private toast: ToastService, private _location: Location, private profileService: ProfileService, private titleCasePipe: TitleCasePipe) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {}
@@ -115,6 +116,7 @@ export class SessionDetailPage implements OnInit {
       ],
       duration: { hours: null, minutes: null },
       startDate: null,
+      mentorName: null,
     },
   };
 
@@ -151,11 +153,17 @@ export class SessionDetailPage implements OnInit {
     if (sharableLink.shareLink) {
       let url = `/${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
       let link = await this.utilService.getDeepLink(url);
-      let params = { link: link, subject: this.sessionHeaderData?.title, text: "Join this session using the link provided here " }
+      this.detailData.data.mentorName = this.tranformTextToUpperCase(this.detailData.data.mentorName);
+      this.sessionHeaderData.name = this.tranformTextToUpperCase(this.sessionHeaderData.name);
+      let params = { link: link, subject: this.sessionHeaderData?.title, text: "Join an expert session on "+`${this.sessionHeaderData.name} `+"hosted by "+`${this.detailData.data.mentorName}`+" using the link" }
       this.utilService.shareLink(params);
     } else {
       this.toast.showToast("No link generated!!!", "danger");
     }
+  }
+
+  tranformTextToUpperCase(text){
+    return this.titleCasePipe.transform(text)
   }
 
   editSession() {
@@ -181,7 +189,7 @@ export class SessionDetailPage implements OnInit {
   }
 
   async onJoin() {
-    let result = await this.sessionService.joinSession(this.id);
+    await this.sessionService.joinSession(this.id);
   }
 
   async onEnroll() {

@@ -13,7 +13,6 @@ export class SessionCardTemplateComponent implements OnInit {
   @Input() data: any;
   @Input() showEnroll;
   @Input() showStart:boolean;
-  @Input() showEdit;
   @Input() buttonConfig:any;
   @Output() onClickEvent = new EventEmitter();
   constructor(private router: Router, private toast:ToastService) { }
