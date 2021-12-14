@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash-es';
+import { ToastService } from 'src/app/core/services';
+import { SessionService } from 'src/app/core/services/session/session.service';
 
 @Component({
   selector: 'app-feedback',
@@ -15,29 +18,24 @@ export class FeedbackPage implements OnInit {
     notification: false,
     headerColor: 'white',
   };
-  formData: any=[];
-  constructor() {}
+  formData=[];
+  id;
+  constructor(private sessionService: SessionService, private activatedRoute: ActivatedRoute, private toast: ToastService, private router: Router) {
+    this.activatedRoute.queryParamMap.subscribe(params => {
+      this.id = params.get('id');
+    });
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.fetchFeedbackForm();
+  }
 
-  ionViewWillEnter() {
-    this.formData = [
-      {
-        label: 'How would you rate the host of the session?',
-        numberOfStars:5,
-        value: 0,
-      },
-      {
-        label: 'How would you rate the engagement of the session?',
-        numberOfStars:6,
-        value: 0,
-      },
-      {
-        label: 'How would you rate the Audio/Vedio quality?',
-        numberOfStars:7,
-        value: 0,
-      },
-    ];
+  async fetchFeedbackForm(){
+    let questionSet = await this.sessionService.getFeedbackQuestionSet();
+    questionSet?.questions.forEach(async element => {
+      let result = await this.sessionService.feedbackQuestion(element);
+      this.formData.push({label: result?.question[0], numberOfStars: result?.noOfstars, value: result?.value, id: result?._id});
+    });
   }
 
   getRating(ev, data) {
@@ -47,8 +45,14 @@ export class FeedbackPage implements OnInit {
     }
   }
 
-  submit(){
-    console.log(this.formData);
+  async submit(){
+    let feedbackData={ 
+      feedbacks: this.formData,
+    }
+    let result = await this.sessionService.submitFeedback(feedbackData,this.id);
+    if(result){
+    this.toast.showToast(result?.message, "success");
+    }
+    this.router.navigate(["/"]);
   }
-
 }

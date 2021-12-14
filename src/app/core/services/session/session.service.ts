@@ -1,15 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HttpService, LoaderService, ToastService } from '..';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Router } from '@angular/router';
+import { CommonRoutes } from 'src/global.routes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
-  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser) { }
+  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser, private router: Router, private ngZone: NgZone) { }
+
+  isMentor = false;
 
   async createSession(formData, id?: string) {
     await this.loaderService.startLoader();
@@ -119,7 +123,8 @@ export class SessionService {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-        this.openBrowser(data.result.link);
+        this.isMentor = true;
+        this.openBrowser(data.result.link, id);
       }
     }
     catch (error) {
@@ -137,7 +142,8 @@ export class SessionService {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-        this.openBrowser(data.result.link);
+        this.isMentor = false;
+        this.openBrowser(data.result.link, id);
       }
     }
     catch (error) {
@@ -161,12 +167,65 @@ export class SessionService {
     }
   }
 
-  openBrowser(link) {
+  openBrowser(link, id) {
     let browser = this.inAppBrowser.create(link, `_blank`);
     browser.on('exit').subscribe(() => {
-      console.log('browser closed');
+      this.ngZone.run(() => {
+        this.router.navigate([`/${CommonRoutes.FEEDBACK}`], { queryParams: { id: id } });
+      })
     }, err => {
       console.error(err);
     });
   }
+
+  async getFeedbackQuestionSet() {
+    await this.loaderService.startLoader();
+    const config = {
+      url: this.isMentor ? urlConstants.API_URLS.MENTOR_FEEDBACK_QUESTION_SET : urlConstants.API_URLS.MENTEE_FEEDBACK_QUESTIONS_SET,
+      payload: {}
+    };
+    try {
+      let data = await this.httpService.get(config);
+      if (data?.responseCode === "OK") {
+        return data?.result;
+      }
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+
+  async feedbackQuestion(id) {
+    const config = {
+      url: urlConstants.API_URLS.GET_FEEDBACK_QUESTION + `${id}`,
+      payload: {}
+    };
+    try {
+      let data = await this.httpService.get(config);
+      this.loaderService.stopLoader();
+      if (data?.responseCode === "OK") {
+        return data?.result;
+      }
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+  
+  async submitFeedback(feedbackData, sessionId) {
+    const config = {
+      url: urlConstants.API_URLS.SUBMIT_FEEDBACK + sessionId,
+      payload: feedbackData
+    };
+    try {
+      console.log(config);
+      let data = await this.httpService.post(config);
+      this.loaderService.stopLoader();
+      return data;
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+
 }

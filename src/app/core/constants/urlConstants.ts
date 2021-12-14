@@ -13,6 +13,7 @@ export const urlConstants = {
         HOME_SESSION:"/mentoring/v1/mentees/homeFeed?page=", ///v1/mentees/homefeed?page=1&limit=4
         GET_IMAGE_UPLOAD_URL:'/user/v1/cloud-services/file/getSignedUrl?fileName=',
         GET_SESSION_IMAGE_UPLOAD_URL:"/mentoring/v1/cloud-services/getSignedUrl?fileName=",
+        SUBMIT_FEEDBACK:"/mentoring/v1/feedback/submit/",
         
         // FORMS
         FORM_READ:'/mentoring/v1/form/read',
@@ -27,6 +28,9 @@ export const urlConstants = {
         START_SESSION:"/mentoring/v1/sessions/start/",
         JOIN_SESSION:"/mentoring/v1/mentees/joinSession/",
         MENTOR_REPORTS:"/mentoring/v1/mentors/reports?filterType=",
-        MENTEE_REPORTS:"/mentoring/v1/mentees/reports?filterType="
+        MENTEE_REPORTS:"/mentoring/v1/mentees/reports?filterType=",
+        MENTOR_FEEDBACK_QUESTION_SET:"/mentoring/v1/questionsSet/read/61b867df5201107b3c2fb435",
+        MENTEE_FEEDBACK_QUESTIONS_SET:"/mentoring/v1/questionsSet/read/61b8656fed665f7b5470a9f1",
+        GET_FEEDBACK_QUESTION:"/mentoring/v1/questions/read/", 
     }
 };

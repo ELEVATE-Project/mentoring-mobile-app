@@ -3,7 +3,7 @@
 
 <ion-content [fullscreen]="true">
     <div class="top-header">
-        <strong>{{"FEEDBACK_HEADER" | translate}}</strong>
+        <strong>{{"MENTOR_FEEDBACK_HEADER" | translate}}</strong>
     </div>
 
     <div class="bottom-line"></div>
@@ -12,10 +12,12 @@
         <div class="feedback">
             <strong>{{data.label}}</strong>
             <div class="rating">
-                <app-star-rating [numberOfStars]="data.numberOfStars" (starRating)="getRating($event,data)"></app-star-rating>
+                <app-star-rating [numberOfStars]="data.numberOfStars" (starRating)="getRating($event,data)">
+                </app-star-rating>
             </div>
         </div>
     </div>
+
 </ion-content>
 <ion-footer class="ion-no-border">
     <ion-button expand="full" (click)="submit()">{{'SUBMIT_FEEDBACK' | translate}}</ion-button>
