@@ -117,6 +117,8 @@ export class SessionDetailPage implements OnInit {
       duration: { hours: null, minutes: null },
       startDate: null,
       mentorName: null,
+      status:null,
+      isEnrolled:null,
     },
   };
 

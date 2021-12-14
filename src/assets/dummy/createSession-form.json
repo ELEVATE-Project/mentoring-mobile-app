@@ -8,8 +8,7 @@
         "type": "text",
         "position": "floating",
         "validators": {
-          "required": true,
-          "minLength": 5
+          "required": true
         }
       },
       {

@@ -111,7 +111,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
         this.profileService.profileUpdate(this.form1.myForm.value);
       }
     } else {
-      this.toast.showToast("Invalid data","danger");
+      this.toast.showToast("Please fill all the mandatory fields","danger");
     }
   }
 
