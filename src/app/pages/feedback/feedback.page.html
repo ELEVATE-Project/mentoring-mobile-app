@@ -2,8 +2,11 @@
 
 
 <ion-content [fullscreen]="true">
-    <div class="top-header">
+    <div *ngIf="isMentor=='true'" class="top-header">
         <strong>{{"MENTOR_FEEDBACK_HEADER" | translate}}</strong>
+    </div>
+    <div *ngIf="isMentor=='false'" class="top-header">
+        <strong>{{"MENTEE_FEEDBACK_HEADER" | translate}}</strong>
     </div>
 
     <div class="bottom-line"></div>

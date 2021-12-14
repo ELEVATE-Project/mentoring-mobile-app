@@ -171,7 +171,7 @@ export class SessionService {
     let browser = this.inAppBrowser.create(link, `_blank`);
     browser.on('exit').subscribe(() => {
       this.ngZone.run(() => {
-        this.router.navigate([`/${CommonRoutes.FEEDBACK}`], { queryParams: { id: id } });
+        this.router.navigate([`/${CommonRoutes.FEEDBACK}`], { queryParams: { id: id, isMentor:this.isMentor } });
       })
     }, err => {
       console.error(err);
@@ -211,7 +211,7 @@ export class SessionService {
       this.loaderService.stopLoader();
     }
   }
-  
+
   async submitFeedback(feedbackData, sessionId) {
     const config = {
       url: urlConstants.API_URLS.SUBMIT_FEEDBACK + sessionId,

@@ -20,9 +20,11 @@ export class FeedbackPage implements OnInit {
   };
   formData=[];
   id;
+  isMentor: string;
   constructor(private sessionService: SessionService, private activatedRoute: ActivatedRoute, private toast: ToastService, private router: Router) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.id = params.get('id');
+      this.isMentor = params.get('isMentor');
     });
   }
 
