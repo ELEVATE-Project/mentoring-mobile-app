@@ -1,17 +1,16 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpService, LoaderService, ToastService } from '..';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Router } from '@angular/router';
-import { CommonRoutes } from 'src/global.routes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
-  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser, private router: Router, private ngZone: NgZone) { }
+  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser, private router: Router) { }
 
 
   async createSession(formData, id?: string) {
@@ -167,9 +166,7 @@ export class SessionService {
   openBrowser(link, id) {
     let browser = this.inAppBrowser.create(link, `_blank`);
     browser.on('exit').subscribe(() => {
-      this.ngZone.run(() => {
         console.log("browser closed");
-      })
     }, err => {
       console.error(err);
     });
