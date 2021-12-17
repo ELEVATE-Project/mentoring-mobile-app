@@ -5,10 +5,6 @@ import { FeedbackPage } from './feedback.page';
 
 const routes: Routes = [
   {
-    path: ':id',
-    component: FeedbackPage
-  },
-  {
     path: '',
     component: FeedbackPage
   }
