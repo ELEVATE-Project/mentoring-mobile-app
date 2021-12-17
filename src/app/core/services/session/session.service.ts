@@ -13,7 +13,6 @@ export class SessionService {
 
   constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser, private router: Router, private ngZone: NgZone) { }
 
-  isMentor = false;
 
   async createSession(formData, id?: string) {
     await this.loaderService.startLoader();
@@ -123,7 +122,6 @@ export class SessionService {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-        this.isMentor = true;
         this.openBrowser(data.result.link, id);
       }
     }
@@ -142,7 +140,6 @@ export class SessionService {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-        this.isMentor = false;
         this.openBrowser(data.result.link, id);
       }
     }
@@ -171,17 +168,16 @@ export class SessionService {
     let browser = this.inAppBrowser.create(link, `_blank`);
     browser.on('exit').subscribe(() => {
       this.ngZone.run(() => {
-        this.router.navigate([`/${CommonRoutes.FEEDBACK}`], { queryParams: { id: id, isMentor:this.isMentor } });
+        console.log("browser closed");
       })
     }, err => {
       console.error(err);
     });
   }
 
-  async getFeedbackQuestionSet() {
-    await this.loaderService.startLoader();
+  async getFeedbackQuestionSet(isMentor) {
     const config = {
-      url: this.isMentor ? urlConstants.API_URLS.MENTOR_FEEDBACK_QUESTION_SET : urlConstants.API_URLS.MENTEE_FEEDBACK_QUESTIONS_SET,
+      url: isMentor ? urlConstants.API_URLS.MENTOR_FEEDBACK_QUESTION_SET : urlConstants.API_URLS.MENTEE_FEEDBACK_QUESTIONS_SET,
       payload: {}
     };
     try {
@@ -191,7 +187,6 @@ export class SessionService {
       }
     }
     catch (error) {
-      this.loaderService.stopLoader();
     }
   }
 
@@ -202,13 +197,11 @@ export class SessionService {
     };
     try {
       let data = await this.httpService.get(config);
-      this.loaderService.stopLoader();
       if (data?.responseCode === "OK") {
         return data?.result;
       }
     }
     catch (error) {
-      this.loaderService.stopLoader();
     }
   }
 
@@ -218,7 +211,6 @@ export class SessionService {
       payload: feedbackData
     };
     try {
-      console.log(config);
       let data = await this.httpService.post(config);
       this.loaderService.stopLoader();
       return data;

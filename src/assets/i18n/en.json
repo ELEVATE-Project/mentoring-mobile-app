@@ -23,8 +23,8 @@
     "VIEW_PROFILE":"View Profile",
     "SUBMIT":"Submit",
     "RESET":"Reset",
-    "MENTEE_FEEDBACK_HEADER":"Thank you for participating in the session, please rate us on the following to help us improve.",
-    "MENTOR_FEEDBACK_HEADER":"Thank you for hosting the session, please rate us on the following to help us improve.",
+    "MENTEE_FEEDBACK_HEADER":"Thank you for participating in the session, please rate us on the following to help us improve:",
+    "MENTOR_FEEDBACK_HEADER":"Thank you for hosting the session, please rate us on the following to help us improve:",
     "SUBMIT_FEEDBACK":"Submit Feedback",
     "LOGIN_TO_CONNECT,":"Login to Connect,",
     "SOLVE_&_SHARE":"Solve & Share.",
@@ -108,5 +108,6 @@
     "PAST_SESSIONS":"Past Sessions",
     "NO_PAST_SESSIONS_FOUND": "No Past Sessions found",
     "CLOSE": "Close",
-    "NO_ACTIVE_ALL_SESSIONS":"No active all sessions for now"
+    "NO_ACTIVE_ALL_SESSIONS":"No active all sessions for now",
+    "EXIT_CONFIRM_MESSAGE":"Are you sure you want to exit the app?"
 }

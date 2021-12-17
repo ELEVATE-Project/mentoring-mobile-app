@@ -4,12 +4,6 @@
   letter-spacing: 0.5px;
 }
 
-.feedback {
-  margin: 35px 30px;
-  font-size: 17px;
-  letter-spacing: 0.5px;
-}
-
 .rating{
     margin-top:15px;
 }
@@ -24,3 +18,11 @@ ion-footer .footer{
     background:var(--ion-color-primary)
 }
 
+.top-header{
+  color: rgb(37, 44, 43);
+}
+
+ion-icon{
+  color: black;
+  padding-left: 10px;
+}

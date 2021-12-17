@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { ModalController, NavParams } from '@ionic/angular';
 import * as _ from 'lodash-es';
-import { ToastService } from 'src/app/core/services';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
+import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
+import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 
 @Component({
   selector: 'app-feedback',
@@ -10,51 +13,78 @@ import { SessionService } from 'src/app/core/services/session/session.service';
   styleUrls: ['./feedback.page.scss'],
 })
 export class FeedbackPage implements OnInit {
-  public headerConfig: any = {
-    // menu: true,
-    backButton: {
-      label: '',
-    },
-    notification: false,
-    headerColor: 'white',
+  @ViewChild('form1') form1: DynamicFormComponent;
+
+  formData: JsonFormData = {
+    controls: [],
   };
-  formData=[];
+  feedbackData = {
+    feedbacks: [],
+  };
   id;
-  isMentor: string;
-  constructor(private sessionService: SessionService, private activatedRoute: ActivatedRoute, private toast: ToastService, private router: Router) {
-    this.activatedRoute.queryParamMap.subscribe(params => {
-      this.id = params.get('id');
-      this.isMentor = params.get('isMentor');
-    });
+  isMentor: boolean;
+  questionCount;
+  constructor(private sessionService: SessionService,
+    private toast: ToastService,
+    private router: Router,
+    private modalController: ModalController,
+    private navParams: NavParams,
+    private localStorage: LocalStorageService) {
+    let sessionData = this.navParams?.data?.data;
+    this.id = sessionData._id;
   }
 
   ngOnInit() {
     this.fetchFeedbackForm();
   }
 
-  async fetchFeedbackForm(){
-    let questionSet = await this.sessionService.getFeedbackQuestionSet();
+  async fetchFeedbackForm() {
+    let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    var response = await this.sessionService.getSessionDetailsAPI(this.id);
+    this.isMentor = userDetails._id == response.userId ? true : false;
+    let questionSet = await this.sessionService.getFeedbackQuestionSet(this.isMentor);
+    this.questionCount = questionSet?.questions.length;
+    this.formData.controls = this.getQuestions(questionSet);
+  }
+  
+  getQuestions(questionSet: any) {
+    let controls=[];
     questionSet?.questions.forEach(async element => {
       let result = await this.sessionService.feedbackQuestion(element);
-      this.formData.push({label: result?.question[0], numberOfStars: result?.noOfstars, value: result?.value, id: result?._id});
+      controls.push({
+        name: result?._id,
+        label: "",
+        heading: result?.question[0],
+        value: "",
+        numberOfStars: result?.noOfstars,
+        type: "starRating",
+        class: "ion-margin",
+        position: "floating",
+        validators: {
+          required: false
+        }
+      })
+    })
+    return controls;
+  }
+
+  async submit() {
+    this.form1.onSubmit();
+    let feedbackId = Object.keys(this.form1.myForm.value);
+    feedbackId.forEach((key, index) => {
+      if (this.form1.myForm.value[key] != "") {
+        this.feedbackData.feedbacks.push(this.form1.myForm.value[key]);
+      }
     });
+    let skippedFeedback=true;
+    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.id):await this.sessionService.submitFeedback({skippedFeedback: skippedFeedback}, this.id);
+    if (result) {
+      this.toast.showToast(result?.message, "success");
+    }
+    this.closeModal();
   }
 
-  getRating(ev, data) {
-    data.value = ev;
-    if (!_.includes(this.formData, data)) {
-      this.formData.push(data);
-    }
-  }
-
-  async submit(){
-    let feedbackData={ 
-      feedbacks: this.formData,
-    }
-    let result = await this.sessionService.submitFeedback(feedbackData,this.id);
-    if(result){
-    this.toast.showToast(result?.message, "success");
-    }
-    this.router.navigate(["/"]);
+  async closeModal() {
+    await this.modalController.dismiss();
   }
 }

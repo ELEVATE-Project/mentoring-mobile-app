@@ -90,6 +90,13 @@
         class="passwordIcon"
         (click)="hideShowPassword(control)"
       ></ion-icon>
+      <app-star-rating
+        *ngIf="control.type === 'starRating'"
+        [label]="control.heading"
+        [id]="control.name"
+        [numberOfStars]="control.numberOfStars"
+        (starRating)="getRating($event)"
+      ></app-star-rating>
     </ion-item>
     <small class="error-msg d-flex error-msg flex-align-items-center" >
       <div *ngIf="myForm.get(control.name).touched && myForm.get(control.name).invalid ">

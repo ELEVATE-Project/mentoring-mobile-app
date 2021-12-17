@@ -11,6 +11,8 @@ import { LocalStorageService } from '../localstorage.service';
 import { urlConstants } from '../../constants/urlConstants';
 import { localKeys } from '../../constants/localStorage.keys';
 import { AuthService } from '../auth/auth.service';
+import { ModalController } from '@ionic/angular';
+import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
 
 
 @Injectable({
@@ -25,7 +27,8 @@ export class HttpService {
     private toastService: ToastService,
     private loaderService: LoaderService,
     private localStorage: LocalStorageService,
-    private injector: Injector
+    private injector: Injector,
+    private modalController: ModalController,
   ) {
     this.baseUrl = environment.baseUrl;
   }
@@ -70,6 +73,9 @@ export class HttpService {
     return this.http.get(this.baseUrl + requestParam.url, '', headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
+        if(result?.meta?.data?.length){
+          this.openModal(result?.meta?.data[0]);
+        }
         if (result.responseCode === "OK") {
           return result;
         }
@@ -164,4 +170,14 @@ export class HttpService {
     throw Error(result);
   }
 
+  async openModal(sessionData) {
+    console.log("open modal")
+    const modal = await this.modalController.create({
+      component: FeedbackPage,
+      componentProps: {
+        data: sessionData,
+      }
+    });
+    return await modal.present();
+  }
 }

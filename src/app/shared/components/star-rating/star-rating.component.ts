@@ -9,6 +9,8 @@ import * as _ from 'lodash-es';
 export class StarRatingComponent implements OnInit {
   rate=0;
   @Input() numberOfStars: any;
+  @Input() label: any;
+  @Input() id: any;
   @Output() starRating = new EventEmitter();
   range: any;
   constructor() { }
@@ -22,7 +24,8 @@ export class StarRatingComponent implements OnInit {
 
   onRate(rate) {
     this.rate = rate;
-    this.starRating.emit(this.rate);
+    let rating = {questionId:this.id, value:rate, label:this.label};
+    this.starRating.emit(rating);;
   }
 
 }

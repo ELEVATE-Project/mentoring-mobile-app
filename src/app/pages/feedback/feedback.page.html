@@ -1,25 +1,23 @@
-<app-page-header [config]="headerConfig"></app-page-header>
-
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start" (click)="closeModal()">
+        <ion-icon size="large" name="arrow-back-outline"></ion-icon>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
 
 <ion-content [fullscreen]="true">
-    <div *ngIf="isMentor=='true'" class="top-header">
+    <div *ngIf="isMentor&&formData?.controls?.length==questionCount" class="top-header">
         <strong>{{"MENTOR_FEEDBACK_HEADER" | translate}}</strong>
     </div>
-    <div *ngIf="isMentor=='false'" class="top-header">
+    <div *ngIf="!isMentor&&formData?.controls?.length==questionCount" class="top-header">
         <strong>{{"MENTEE_FEEDBACK_HEADER" | translate}}</strong>
     </div>
 
     <div class="bottom-line"></div>
-
-    <div *ngFor="let data of formData">
-        <div class="feedback">
-            <strong>{{data.label}}</strong>
-            <div class="rating">
-                <app-star-rating [numberOfStars]="data.numberOfStars" (starRating)="getRating($event,data)">
-                </app-star-rating>
+            <div *ngIf="formData?.controls?.length==questionCount" class="rating">
+                <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
             </div>
-        </div>
-    </div>
 
 </ion-content>
 <ion-footer class="ion-no-border">

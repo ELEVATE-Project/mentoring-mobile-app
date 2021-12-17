@@ -1,4 +1,7 @@
-<div class="star-align">
+<div class="feedback-question">
+  <strong>{{label}}</strong>
+</div>
+<div class="star-align" >
   <div *ngFor="let star of range;let i=index">
     <ion-icon class="star" [name]=" i>=rate ? 'star-outline':'star'" (click)="onRate(i+1)"></ion-icon>
   </div>
