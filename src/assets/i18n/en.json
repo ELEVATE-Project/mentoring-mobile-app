@@ -109,5 +109,6 @@
     "NO_PAST_SESSIONS_FOUND": "No Past Sessions found",
     "CLOSE": "Close",
     "NO_ACTIVE_ALL_SESSIONS":"No active all sessions for now",
-    "EXIT_CONFIRM_MESSAGE":"Are you sure you want to exit the app?"
+    "EXIT_CONFIRM_MESSAGE":"Are you sure you want to exit the app?",
+    "MENTOR_PROFILE": "Mentor Profile"
 }

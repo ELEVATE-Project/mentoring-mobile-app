@@ -74,12 +74,13 @@ export class DashboardPage implements OnInit {
   filterChangeHandler(event: any) {
     console.log('Filter changed', event);
     this.selectedFilter = event.target.value;
+    this.getReports();
   }
 
   public headerConfig: any = {
     menu: true,
     label:'DASHBOARD_PAGE',
-    headerColor: 'white',
+    headerColor: 'primary',
   };
 
   getReports() {

@@ -51,6 +51,18 @@ export class SessionService {
     }
   }
 
+async getSessionsList(obj) {
+  const config = {
+    url: urlConstants.API_URLS.SESSIONS + obj?.type + '&page=' + obj?.page + '&limit=' + obj?.limit + '&search=' + obj?.searchText,
+  };
+  try {
+    let data: any = await this.httpService.get(config);
+    return data;
+  }
+  catch (error) {
+  }
+}
+
   async getSessionDetailsAPI(id) {
     await this.loaderService.startLoader();
     const config = {

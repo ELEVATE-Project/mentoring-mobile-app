@@ -76,19 +76,17 @@ export class SessionsPage implements OnInit {
   async getSessions() {
     this.loading = true;
     let type = this.type == "all-sessions" ? false : true
-    const config = {
-      url: urlConstants.API_URLS.SESSIONS + type + '&page=' + this.page + '&limit=' + this.limit + '&search=' + this.searchText,
-    };
-    try {
-      let data: any = await this.httpService.get(config);
-      this.loading = false;
-      this.sessions = this.sessions.concat(data?.result[0]?.data);
-      this.sessionsCount = data?.result[0]?.count;
-      this.showLoadMoreButton = (this.sessions?.length === this.sessionsCount) ? false : true;
+    let obj = {
+      type: type,
+      page:this.page,
+      limit: this.limit,
+      searchText: this.searchText,
     }
-    catch (error) {
-      this.loading = false;
-    }
+    let data = await this.sessionService.getSessionsList(obj);
+    this.sessions = this.sessions.concat(data?.result[0]?.data);
+    this.sessionsCount = data?.result[0]?.count;
+    this.showLoadMoreButton = (this.sessions?.length === this.sessionsCount) ? false : true;
+    this.loading = false;
   }
 
   onAction(event){
