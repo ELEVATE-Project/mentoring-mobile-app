@@ -32,12 +32,6 @@
   <div *ngIf="noResults && !searching">
     <app-no-data-found [message]="'SORRY_NO_RESULTS'"> </app-no-data-found>
   </div>
-  <!-- <div *ngFor="let result of results">
-    <app-session-card [data]="result" [action]="result.type=='session' ? 'ENROLL' : 'VIEW_PROFILE'" (onClickEvent)="eventAction($event)"> </app-session-card>
-  </div>
-  <div *ngIf="noResults">
-    <app-no-data-found [message]="'SORRY_NO_RESULTS'"> </app-no-data-found>
-  </div> -->
 </ion-content>
 <ion-footer class="ion-no-border">
   <ion-button expand="full" (click)="search()">

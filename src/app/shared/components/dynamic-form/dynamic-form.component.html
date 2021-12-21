@@ -8,7 +8,7 @@
       }"
     >
       <ion-label
-        *ngIf="control.label !== '' && !['chip'].includes(control.type)"
+        *ngIf="control.label !== '' && !['chip'].includes(control.type) && !['rating'].includes(control.type)"
         [position]="control.position"
         >{{ control.label }}</ion-label
       >
@@ -90,13 +90,11 @@
         class="passwordIcon"
         (click)="hideShowPassword(control)"
       ></ion-icon>
-      <!-- TODO: Star rating component fixes -->
       <app-star-rating
-        *ngIf="control.type === 'starRating'"
-        [label]="control.heading"
-        [id]="control.name"
-        [numberOfStars]="control.numberOfStars"
-        (starRating)="getRating($event)"
+        *ngIf="control.type === 'rating'"
+        [formControlName]="control.name"
+        [label]="control.label"
+        [numberOfStars]="control.noOfstars"
       ></app-star-rating>
     </ion-item>
     <small class="error-msg d-flex error-msg flex-align-items-center" >

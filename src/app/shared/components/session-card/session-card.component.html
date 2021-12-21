@@ -21,7 +21,12 @@
     </ion-col>
   </ion-row>
   <div class="session-actions">
-    <div class="session-enroll" *ngIf="action" (click)="$event.stopPropagation(); onEnroll(data)">
+    <div class="session-enroll" *ngIf="action=='ENROLL'" (click)="$event.stopPropagation(); onEnroll(data)">
+      <ion-label>
+        {{action | translate}} <ion-icon name="caret-forward-outline"></ion-icon>
+      </ion-label>
+    </div>
+    <div class="session-enroll" *ngIf="action=='VIEW_PROFILE'" (click)="$event.stopPropagation(); onCardClick(data)">
       <ion-label>
         {{action | translate}} <ion-icon name="caret-forward-outline"></ion-icon>
       </ion-label>

@@ -38,8 +38,6 @@ interface JsonFormControls {
   options?: JsonFormControlOptions;
   validators: JsonFormValidators;
   numberOfStars?:number;
-  id?:string;
-  heading?:string;
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
@@ -138,9 +136,5 @@ export class DynamicFormComponent implements OnInit {
     //  this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
     control.type = control.type === 'text' ? 'password' : 'text';
     control.showPasswordIcon = true;
-  }
-
-  getRating(ev) {
-    this.myForm.value[ev.questionId]=ev;
   }
 }

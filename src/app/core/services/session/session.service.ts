@@ -184,36 +184,6 @@ async getSessionsList(obj) {
     });
   }
 
-  async getFeedbackQuestionSet(isMentor) {
-    const config = {
-      url: isMentor ? urlConstants.API_URLS.MENTOR_FEEDBACK_QUESTION_SET : urlConstants.API_URLS.MENTEE_FEEDBACK_QUESTIONS_SET,
-      payload: {}
-    };
-    try {
-      let data = await this.httpService.get(config);
-      if (data?.responseCode === "OK") {
-        return data?.result;
-      }
-    }
-    catch (error) {
-    }
-  }
-
-  async feedbackQuestion(id) {
-    const config = {
-      url: urlConstants.API_URLS.GET_FEEDBACK_QUESTION + `${id}`,
-      payload: {}
-    };
-    try {
-      let data = await this.httpService.get(config);
-      if (data?.responseCode === "OK") {
-        return data?.result;
-      }
-    }
-    catch (error) {
-    }
-  }
-
   async submitFeedback(feedbackData, sessionId) {
     const config = {
       url: urlConstants.API_URLS.SUBMIT_FEEDBACK + sessionId,
@@ -221,11 +191,9 @@ async getSessionsList(obj) {
     };
     try {
       let data = await this.httpService.post(config);
-      this.loaderService.stopLoader();
       return data;
     }
     catch (error) {
-      this.loaderService.stopLoader();
     }
   }
 

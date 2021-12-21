@@ -21,63 +21,44 @@ export class FeedbackPage implements OnInit {
   feedbackData = {
     feedbacks: [],
   };
-  id;
+  sessionData: any;
   isMentor: boolean;
-  questionCount;
   constructor(private sessionService: SessionService,
     private toast: ToastService,
     private router: Router,
     private modalController: ModalController,
     private navParams: NavParams,
     private localStorage: LocalStorageService) {
-    let sessionData = this.navParams?.data?.data;
-    this.id = sessionData._id;
+    this.sessionData = this.navParams?.data?.data;
   }
 
   ngOnInit() {
-    this.fetchFeedbackForm();
+    this.isMentorChecking();
   }
-
-  async fetchFeedbackForm() {
+  async isMentorChecking() {
     let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    var response = await this.sessionService.getSessionDetailsAPI(this.id);
+    var response = await this.sessionService.getSessionDetailsAPI(this.sessionData._id);
     this.isMentor = userDetails._id == response.userId ? true : false;
-    let questionSet = await this.sessionService.getFeedbackQuestionSet(this.isMentor);
-    this.questionCount = questionSet?.questions.length;
-    this.formData.controls = this.getQuestions(questionSet);
-  }
-  
-  getQuestions(questionSet: any) {
-    let controls=[];
-    questionSet?.questions.forEach(async element => {
-      let result = await this.sessionService.feedbackQuestion(element);
-      controls.push({
-        name: result?._id,
-        label: "",
-        heading: result?.question[0],
-        value: "",
-        numberOfStars: result?.noOfstars,
-        type: "starRating",
-        class: "ion-margin",
-        position: "floating",
-        validators: {
-          required: false
-        }
-      })
-    })
-    return controls;
+    this.formData.controls= this.sessionData.form;
   }
 
   async submit() {
     this.form1.onSubmit();
-    let feedbackId = Object.keys(this.form1.myForm.value);
-    feedbackId.forEach((key, index) => {
-      if (this.form1.myForm.value[key] != "") {
-        this.feedbackData.feedbacks.push(this.form1.myForm.value[key]);
+    let feedbackKey = Object.keys(this.form1.myForm.value);
+    feedbackKey.forEach((key)=>{
+      if(this.form1.myForm.value[key]!=""){
+        let data;
+        this.formData.controls.some((element)=>{
+          if(element.name === key){
+            data = element;
+            return element;
+          }
+        });
+        let feedback = {questionId: data._id, value: this.form1.myForm.value[key], label: data.label};
+        this.feedbackData.feedbacks.push(feedback);
       }
-    });
-    let skippedFeedback=true;
-    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.id):await this.sessionService.submitFeedback({skippedFeedback: skippedFeedback}, this.id);
+    })
+    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.sessionData._id):await this.sessionService.submitFeedback({skippedFeedback: true}, this.sessionData._id);
     if (result) {
       this.toast.showToast(result?.message, "success");
     }
