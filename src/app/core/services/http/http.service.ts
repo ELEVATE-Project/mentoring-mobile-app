@@ -171,7 +171,6 @@ export class HttpService {
   }
 
   async openModal(sessionData) {
-    console.log("open modal")
     const modal = await this.modalController.create({
       component: FeedbackPage,
       componentProps: {
