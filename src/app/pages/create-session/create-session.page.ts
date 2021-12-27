@@ -78,6 +78,7 @@ export class CreateSessionPage implements OnInit {
       this.showForm = true;
     }
     this.isSubmited =false; //to be removed
+    this.profileImageData.isUploaded = true;
   }
 
   async canPageLeave() {
@@ -125,7 +126,6 @@ export class CreateSessionPage implements OnInit {
       } else {
         this.form1.myForm.value.startDate = Math.floor(new Date(this.form1.myForm.value.startDate).getTime() / 1000.0);
           this.form1.myForm.value.endDate = Math.floor(new Date(this.form1.myForm.value.endDate).getTime() / 1000.0);
-          this.form1.myForm.markAsPristine();
           const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
           this.form1.myForm.value.timeZone = timezone;
           this.form1.myForm.markAsPristine();
