@@ -119,7 +119,8 @@ export class UtilService {
     })
     buttons.push({
       text: texts["CANCEL"],
-      role: "cancel",
+      type: 'CANCEL',
+      action: "cancel",
     })
     return buttons;
   }

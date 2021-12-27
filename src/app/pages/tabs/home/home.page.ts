@@ -8,9 +8,10 @@ import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
-import { HttpService, LoaderService } from 'src/app/core/services';
+import { HttpService, LoaderService, UtilService } from 'src/app/core/services';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -44,7 +45,31 @@ public headerConfig: any = {
     private httpService: HttpService,
     private platform: Platform,
     private zone:NgZone,
-    private sessionService: SessionService) {}
+    private sessionService: SessionService,
+    private location: Location,
+    private utilService: UtilService) {
+      this.platform.backButton.subscribeWithPriority(10, () => {
+        console.log(location.path());
+        if (this.location.isCurrentPathEqualTo(`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`)) {
+
+          // Show Exit Alert!
+          let msg = {
+            header: 'EXIT',
+            message: 'EXIT_CONFIRM_MESSAGE',
+            cancel:'CANCEL',
+            submit:'EXIT'
+          }
+          this.utilService.alertPopup(msg).then(data => {
+            if(data){
+              console.log("close app");
+            }
+          }).catch(error => {})
+          
+        } else {
+          this.location.back();
+        }
+      });
+    }
     
   ngOnInit() {
     this.getUser();

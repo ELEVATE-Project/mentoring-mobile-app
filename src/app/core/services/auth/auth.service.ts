@@ -24,7 +24,7 @@ export class AuthService {
     private toast: ToastService,
     private userService: UserService,
     private profileService: ProfileService
-  ) {}
+  ) { }
 
   async createAccount(formData) {
     await this.loaderService.startLoader();
@@ -52,7 +52,7 @@ export class AuthService {
     try {
       const data: any = await this.httpService.post(config);
       const result = _.pick(data.result, ['refresh_token', 'access_token']);
-      if (!result.access_token) { throw Error();};
+      if (!result.access_token) { throw Error(); };
       this.userService.token = result;
       await this.localStorage.setLocalData(localKeys.TOKEN, result);
       const userData = await this.profileService.getProfileDetailsAPI();
@@ -63,10 +63,10 @@ export class AuthService {
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
       this.userService.userEvent.next(userData);
       this.loaderService.stopLoader();
-      if(userData?.hasAcceptedTAndC == true){
+      if (userData?.hasAcceptedTAndC == true) {
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
       } else {
-        this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`], { replaceUrl: true });
+        this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`]);
       }
     }
     catch (error) {
@@ -74,7 +74,7 @@ export class AuthService {
     }
   }
 
-  async logoutAccount() {
+  async logoutAccount(skipApiCall?:boolean) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.LOGOUT_ACCOUNT,
@@ -83,7 +83,9 @@ export class AuthService {
       },
     };
     try {
-      await this.httpService.post(config);
+      if(!skipApiCall){
+        await this.httpService.post(config);
+      }
       this.localStorage.delete(localKeys.USER_DETAILS);
       this.localStorage.delete(localKeys.TOKEN);
       this.userService.token = null;

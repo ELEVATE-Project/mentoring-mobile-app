@@ -11,10 +11,11 @@ import {
 import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
 import { Location } from '@angular/common';
-import { Platform } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { File } from "@ionic-native/file/ngx";
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-create-session',
@@ -52,7 +53,8 @@ export class CreateSessionPage implements OnInit {
     private file: File,
     private api: HttpService,
     private loaderService: LoaderService,
-
+    private translate :TranslateService,
+    private alert: AlertController,
   ) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.id = params?.get('id');
@@ -78,6 +80,40 @@ export class CreateSessionPage implements OnInit {
     this.isSubmited =false; //to be removed
   }
 
+  async canPageLeave() {
+    if (!this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
+      let texts: any;
+      this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'BACK']).subscribe(text => {
+        texts = text;
+      })
+      const alert = await this.alert.create({
+        message: texts['SESSION_FORM_UNSAVED_DATA'],
+        buttons: [
+          {
+            text: texts['EXIT'],
+            handler: () => { }
+          },
+          {
+            text: texts['BACK'],
+            role: 'cancel',
+            handler: () => { }
+          }
+        ]
+      });
+      await alert.present();
+      let data = await alert.onDidDismiss();
+      if (data.role == 'cancel') {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+    return true
+  }
+
+
   async onSubmit() {
     if(!this.isSubmited){
     this.form1.onSubmit();
@@ -92,6 +128,7 @@ export class CreateSessionPage implements OnInit {
           this.form1.myForm.markAsPristine();
           const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
           this.form1.myForm.value.timeZone = timezone;
+          this.form1.myForm.markAsPristine();
           let result = await this.sessionService.createSession(this.form1.myForm.value, this.id);
           if (result) {
             this.location.back()

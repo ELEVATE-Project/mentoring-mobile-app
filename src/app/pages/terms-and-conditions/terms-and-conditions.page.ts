@@ -12,6 +12,12 @@ import { CommonRoutes } from 'src/global.routes';
 export class TermsAndConditionsPage implements OnInit {
   items: any;
   notChecked: boolean=true;
+  public headerConfig: any = {
+    menu: false,
+    notification: false,
+    headerColor: 'white',
+    backButton: true,
+  };
   constructor(private router: Router, private profileService: ProfileService,
     private authService: AuthService) {
     this.items = [

@@ -55,6 +55,7 @@ export class HttpService {
     return this.http.post(this.baseUrl + requestParam.url, body, headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
+        console.log(result);
         if (result.responseCode === "OK") {
           return result;
         }
@@ -73,6 +74,7 @@ export class HttpService {
     return this.http.get(this.baseUrl + requestParam.url, '', headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
+        console.log(result);
         if(result?.meta?.data?.length){
           this.openModal(result?.meta?.data[0]);
         }
@@ -162,7 +164,10 @@ export class HttpService {
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:
-        this.toastService.showToast('SOMETHING_WENT_WRONG', 'danger')
+        this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
+          let auth = this.injector.get(AuthService);
+          let skipApiCall = true;
+          auth.logoutAccount(skipApiCall);
         break
       default:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')

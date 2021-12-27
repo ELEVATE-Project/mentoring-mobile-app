@@ -93,6 +93,7 @@
     "NO_DATA_AVAILABLE": "No Data Available",
     "CONFIRM":"Confirm !",
     "FORM_UNSAVED_DATA":"You have unsaved data, please save your data before closing.",
+    "SESSION_FORM_UNSAVED_DATA": "Are you sure you want to exit? You will lose all data if leave this page.",
     "SAVE":"Save",
     "TERMS_AND": "Terms and",
     "CONDITIONS": "conditions",
@@ -110,5 +111,10 @@
     "CLOSE": "Close",
     "NO_ACTIVE_ALL_SESSIONS":"No active all sessions for now",
     "EXIT_CONFIRM_MESSAGE":"Are you sure you want to exit the app?",
-    "MENTOR_PROFILE": "Mentor Profile"
+    "MENTOR_PROFILE": "Mentor Profile",
+    "TERMS_AND_CONDITIONS_MENTOR_ED": "The Terms and Conditions constitute a legally binding agreement made between you and Shikshalokam, concerning your access to and use of our mobile application MentorED.",
+    "AGREE_TO_TERMS_AND_CONDITIONS": "By creating an account, you have read, understood, and agree to the",
+    "TERMS_OF_USE": "Terms of Use ",
+    "PRIVACY_POLICY_": "Privacy Policy.",
+    "AND": "and "
 }
