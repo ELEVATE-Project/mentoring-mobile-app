@@ -45,9 +45,7 @@ public headerConfig: any = {
     private httpService: HttpService,
     private platform: Platform,
     private zone:NgZone,
-    private sessionService: SessionService,
-    private location: Location,
-    private utilService: UtilService) {}
+    private sessionService: SessionService) {}
     
   ngOnInit() {
     this.getUser();
