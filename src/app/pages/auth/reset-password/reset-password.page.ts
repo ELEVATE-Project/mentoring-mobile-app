@@ -58,7 +58,6 @@ export class ResetPasswordPage implements OnInit {
       label: '',
     },
     notification: false,
-    headerColor: 'white',
   };
 
   constructor(private router: Router, private profileService: ProfileService, private toastService: ToastService) { }

@@ -35,7 +35,6 @@ export class OtpPage implements OnInit {
       label: '',
     },
     notification: false,
-    headerColor: 'white',
   };
 
   constructor(private router:Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService){ 

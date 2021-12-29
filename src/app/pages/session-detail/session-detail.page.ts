@@ -32,7 +32,6 @@ export class SessionDetailPage implements OnInit {
   }
 
   public headerConfig: any = {
-    headerColor: 'white',
     backButton: true,
     label: "SESSIONS_DETAILS",
     share: true
@@ -195,11 +194,16 @@ export class SessionDetailPage implements OnInit {
   }
 
   async onEnroll() {
-    let result = await this.sessionService.enrollSession(this.id);
-    if (result?.result) {
-      this.toast.showToast("You have enrolled successfully", "success");
+    let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    if (userDetails?.about) {
+      let result = await this.sessionService.enrollSession(this.id);
+      if (result?.result) {
+        this.toast.showToast("You have enrolled successfully", "success");
+      }
+      this.fetchSessionDetails();
+    } else {
+      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
     }
-    this.fetchSessionDetails();
   }
 
   async onStart(data) {

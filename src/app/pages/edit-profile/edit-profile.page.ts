@@ -37,7 +37,6 @@ export class EditProfilePage implements OnInit, isDeactivatable {
       label: 'Profile Details',
     },
     notification: false,
-    headerColor: 'white',
   };
   path;
   localImage;
@@ -71,7 +70,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   async canPageLeave() {
     if (!this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
       let texts: any;
-      this.translate.get(['FORM_UNSAVED_DATA', 'CANCEL', 'SUBMIT']).subscribe(text => {
+      this.translate.get(['FORM_UNSAVED_DATA', 'CANCEL', 'OK']).subscribe(text => {
         texts = text;
       })
       const alert = await this.alert.create({
@@ -82,7 +81,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
             handler: () => { }
           },
           {
-            text: texts['SUBMIT'],
+            text: texts['OK'],
             role: 'cancel',
             handler: () => { }
           }

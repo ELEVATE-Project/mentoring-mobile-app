@@ -52,9 +52,11 @@ export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
+  date: any;
 
   constructor(private fb: FormBuilder) {}
   ngOnInit() {
+    this.date = moment().format();
     setTimeout(() => {
       this.createForm(this.jsonFormData.controls);
       this.showForm = true;

@@ -16,6 +16,8 @@ import { File } from "@ionic-native/file/ngx";
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
+import { CREATE_SESSION_FORM } from 'src/app/core/constants/formConstant';
+import { FormService } from 'src/app/core/services/form/form.service';
 
 @Component({
   selector: 'app-create-session',
@@ -34,7 +36,6 @@ export class CreateSessionPage implements OnInit {
       label: 'Create Session',
     },
     notification: false,
-    headerColor: 'white',
   };
   profileImageData: any = {
     type: 'session'
@@ -55,6 +56,7 @@ export class CreateSessionPage implements OnInit {
     private loaderService: LoaderService,
     private translate :TranslateService,
     private alert: AlertController,
+    private form: FormService
   ) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.id = params?.get('id');
@@ -62,11 +64,8 @@ export class CreateSessionPage implements OnInit {
     });
   }
   async ngOnInit() {
-    this.http
-      .get('/assets/dummy/createSession-form.json')
-      .subscribe((formData: JsonFormData) => {
-        this.formData = formData;
-      });
+    const response = await this.form.getForm(CREATE_SESSION_FORM);
+    this.formData = _.get(response, 'result.data.fields');
     if (this.id) {
       let response = await this.sessionService.getSessionDetailsAPI(this.id);
       this.profileImageData.image = response.image;
@@ -124,7 +123,10 @@ export class CreateSessionPage implements OnInit {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
         this.getImageUploadUrl(this.localImage);
       } else {
-        this.form1.myForm.value.startDate = Math.floor(new Date(this.form1.myForm.value.startDate).getTime() / 1000.0);
+        let startDate = moment(this.form1.myForm.value.startDate);
+        let endDate = moment(this.form1.myForm.value.endDate);
+        if(startDate.isBefore(endDate)){
+          this.form1.myForm.value.startDate = Math.floor(new Date(this.form1.myForm.value.startDate).getTime() / 1000.0);
           this.form1.myForm.value.endDate = Math.floor(new Date(this.form1.myForm.value.endDate).getTime() / 1000.0);
           const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
           this.form1.myForm.value.timeZone = timezone;
@@ -133,6 +135,9 @@ export class CreateSessionPage implements OnInit {
           if (result) {
             this.location.back()
           }
+        } else {
+          this.toast.showToast("Please check the end date of the session!","danger")
+        }
       }
     } else {
       this.toast.showToast("Please fill all the mandatory fields","danger");

@@ -15,7 +15,6 @@ export class TermsAndConditionsPage implements OnInit {
   public headerConfig: any = {
     menu: false,
     notification: false,
-    headerColor: 'white',
     backButton: true,
   };
   constructor(private router: Router, private profileService: ProfileService,

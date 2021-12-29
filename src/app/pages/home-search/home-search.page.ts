@@ -12,7 +12,6 @@ import { CommonRoutes } from 'src/global.routes';
 })
 export class HomeSearchPage implements OnInit {
   public headerConfig: any = {
-    headerColor: 'white',
     backButton: true,
     label: "SEARCH",
   };

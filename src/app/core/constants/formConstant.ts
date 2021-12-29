@@ -7,3 +7,11 @@ export const EDIT_PROFILE_FORM: IFORM = {
   ver: '1.0',
   templateName: 'defaultTemplate',
 };
+
+export const CREATE_SESSION_FORM: IFORM = {
+	"type": "session",
+	"subType": "sessionForm",
+	"action": "sessionFields",
+	"ver": "1.0",
+	"templateName": "defaultTemplate"
+}

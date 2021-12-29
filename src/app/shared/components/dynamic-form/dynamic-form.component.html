@@ -60,6 +60,7 @@
         [displayFormat]="control.displayFormat"
         *ngIf="control.type === 'date'"
         [formControlName]="control.name"
+        [min]="date"
         [value]="control.value"
       ></ion-datetime>
       <ion-select
