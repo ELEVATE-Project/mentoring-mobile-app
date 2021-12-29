@@ -47,29 +47,7 @@ public headerConfig: any = {
     private zone:NgZone,
     private sessionService: SessionService,
     private location: Location,
-    private utilService: UtilService) {
-      // this.platform.backButton.subscribeWithPriority(10, () => {
-      //   console.log(location.path());
-      //   if (this.location.isCurrentPathEqualTo(`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`)) {
-
-      //     // Show Exit Alert!
-      //     let msg = {
-      //       header: 'EXIT',
-      //       message: 'EXIT_CONFIRM_MESSAGE',
-      //       cancel:'CANCEL',
-      //       submit:'EXIT'
-      //     }
-      //     this.utilService.alertPopup(msg).then(data => {
-      //       if(data){
-      //         console.log("close app");
-      //       }
-      //     }).catch(error => {})
-          
-      //   } else {
-      //     this.location.back();
-      //   }
-      // });
-    }
+    private utilService: UtilService) {}
     
   ngOnInit() {
     this.getUser();

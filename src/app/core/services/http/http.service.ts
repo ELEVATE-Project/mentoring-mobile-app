@@ -164,8 +164,7 @@ export class HttpService {
       case 401:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
           let auth = this.injector.get(AuthService);
-          let skipApiCall = true;
-          auth.logoutAccount(skipApiCall);
+          auth.logoutAccount(true);
         break
       default:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
