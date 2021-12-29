@@ -8,9 +8,10 @@ import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
-import { HttpService, LoaderService } from 'src/app/core/services';
+import { HttpService, LoaderService, UtilService } from 'src/app/core/services';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -42,7 +43,6 @@ public headerConfig: any = {
     private profileService: ProfileService,
     private loaderService: LoaderService,
     private httpService: HttpService,
-    private platform: Platform,
     private zone:NgZone,
     private sessionService: SessionService) {}
     

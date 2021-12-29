@@ -27,7 +27,6 @@ export class CreatedByMePage implements OnInit {
   public headerConfig: any = {
     menu: false,
     notification: false,
-    headerColor: 'white',
     backButton: {
       label: 'Created by me',
     },

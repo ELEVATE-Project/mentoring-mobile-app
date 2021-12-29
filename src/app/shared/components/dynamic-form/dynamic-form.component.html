@@ -8,7 +8,7 @@
       }"
     >
       <ion-label
-        *ngIf="control.label !== '' && !['chip'].includes(control.type)"
+        *ngIf="control.label !== '' && !['chip'].includes(control.type) && !['rating'].includes(control.type)"
         [position]="control.position"
         >{{ control.label }}</ion-label
       >
@@ -60,6 +60,7 @@
         [displayFormat]="control.displayFormat"
         *ngIf="control.type === 'date'"
         [formControlName]="control.name"
+        [min]="date"
         [value]="control.value"
       ></ion-datetime>
       <ion-select
@@ -90,6 +91,12 @@
         class="passwordIcon"
         (click)="hideShowPassword(control)"
       ></ion-icon>
+      <app-star-rating
+        *ngIf="control.type === 'rating'"
+        [formControlName]="control.name"
+        [label]="control.label"
+        [numberOfStars]="control.noOfstars"
+      ></app-star-rating>
     </ion-item>
     <small class="error-msg d-flex error-msg flex-align-items-center" >
       <div *ngIf="myForm.get(control.name).touched && myForm.get(control.name).invalid ">

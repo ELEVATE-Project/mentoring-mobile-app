@@ -23,6 +23,7 @@ import { Chooser } from '@ionic-native/chooser/ngx';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { TitleCasePipe } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -47,6 +48,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
         deps: [HttpClient],
       },
     }),
+    ReactiveFormsModule,
   ],
 
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

@@ -3,13 +3,15 @@ import { HttpService, LoaderService, ToastService } from '..';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
-  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser) { }
+  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser, private router: Router) { }
+
 
   async createSession(formData, id?: string) {
     await this.loaderService.startLoader();
@@ -48,6 +50,18 @@ export class SessionService {
       return res;
     }
   }
+
+async getSessionsList(obj) {
+  const config = {
+    url: urlConstants.API_URLS.SESSIONS + obj?.type + '&page=' + obj?.page + '&limit=' + obj?.limit + '&search=' + obj?.searchText,
+  };
+  try {
+    let data: any = await this.httpService.get(config);
+    return data;
+  }
+  catch (error) {
+  }
+}
 
   async getSessionDetailsAPI(id) {
     await this.loaderService.startLoader();
@@ -164,9 +178,23 @@ export class SessionService {
   openBrowser(link) {
     let browser = this.inAppBrowser.create(link, `_blank`);
     browser.on('exit').subscribe(() => {
-      console.log('browser closed');
+        console.log("browser closed");
     }, err => {
       console.error(err);
     });
   }
+
+  async submitFeedback(feedbackData, sessionId) {
+    const config = {
+      url: urlConstants.API_URLS.SUBMIT_FEEDBACK + sessionId,
+      payload: feedbackData
+    };
+    try {
+      let data = await this.httpService.post(config);
+      return data;
+    }
+    catch (error) {
+    }
+  }
+
 }

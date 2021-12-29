@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
+import { HttpService, LoaderService } from 'src/app/core/services';
+import { SessionService } from 'src/app/core/services/session/session.service';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-home-search',
@@ -7,64 +12,72 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeSearchPage implements OnInit {
   public headerConfig: any = {
-    headerColor: 'white',
     backButton: true,
     label: "SEARCH",
   };
   noResults : boolean =  false;
-  searchText:string;
-  results;
-  constructor() { }
+  searchText:string="";
+  results=[];
+  type:any;
+  searching=true;
+  constructor(private sessionService:SessionService, private loaderService: LoaderService,private httpService: HttpService, private router: Router) { }
 
   ngOnInit() {
+    this.type='all-sessions';
   }
-
-  search(){
-    this.results =
-      [{
-        _id:1,
-        title:'Topic, Mentor name',
-        subTitle: 'Short description ipsum dolor sit amet, consectetur',
-        description:'Short description ipsum dolor sit amet, consectetur',
-        date:'20/11/2021',
-        status:'Live',
-        image:'shapes-sharp',
-        type:'session'
-      },
-      {
-        _id:2,
-        title:'Topic, Mentor name',
-        subTitle: 'Short description ipsum dolor sit amet, consectetur',
-        description:'Short description ipsum dolor sit amet, consectetur',
-        date:'20/11/2021',
-        image:'shapes-sharp',
-        status:'Live',
-        type:'session'
-      },{
-        _id:3,
-        title:'Topic, Mentor name',
-        subTitle: 'Short description ipsum dolor sit amet, consectetur',
-        description:'Short description ipsum dolor sit amet, consectetur',
-        date:'20/11/2021',
-        image:'shapes-sharp'
-      },{
-        _id:4,
-        title:'Topic, Mentor name',
-        subTitle: 'Short description ipsum dolor sit amet, consectetur',
-        description:'Short description ipsum dolor sit amet, consectetur',
-        date:'20/11/2021',
-        image:'shapes-sharp'
-      }
-    ];
-
-    if(!this.results){
-      this.noResults = true;
-
+  async getMentorList() {
+    const config = {
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY+'&search=' + this.searchText,
+      payload: {}
+    };
+    try {
+      let data: any = await this.httpService.get(config);
+      this.results = data?.result?.data;
+      this.noResults = (this.results.length)?false:true;
+      this.searching = false;
+    }
+    catch (error) {
     }
   }
 
-  eventAction(event){
-    
+  async getSessionsList() {
+    let obj={
+      page: "",
+      limit: "",
+      type: "",
+      searchText : this.searchText,
+    }
+    let data = await this.sessionService.getSessionsList(obj);
+    this.results = data?.result[0]?.data;
+    this.noResults = (this.results.length)?false:true;
+    this.searching = false;
+  }
+
+  search(){
+    if(this.searchText!=""){
+      switch(this.type) {
+        case 'all-sessions':
+          this.getSessionsList();
+          break;
+        case 'mentor-profile':
+          this.getMentorList();
+          break;
+      }
+    }
+  }
+
+  segmentChanged(event){
+    this.results=[]
+    this.type = event.target.value;
+    this.search();
+  }
+
+  onSessionAction(event){
+    this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`])
+  }
+
+  onMentorAction(event){
+    this.router.navigate([CommonRoutes.MENTOR_DETAILS,event.data._id]);
   }
 
 }

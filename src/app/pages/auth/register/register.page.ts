@@ -67,7 +67,6 @@ export class RegisterPage implements OnInit {
       label: '',
     },
     notification: false,
-    headerColor: 'white',
   };
 
   //to be removed

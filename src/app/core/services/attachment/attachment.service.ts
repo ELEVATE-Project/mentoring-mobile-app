@@ -50,6 +50,9 @@ export class AttachmentService {
                     } else if (element.action == 'remove') {
                         this.removeCurrentPhoto();
                         return false;
+                    } else if (element.action == 'cancel') {
+                        this.actionSheetController.dismiss();
+                        return false;
                     } else {
                         return false;
                     }

@@ -1,12 +1,35 @@
 <app-page-header [config]="headerConfig"></app-page-header>
-<ion-content  class="ion-padding">
+<ion-content class="ion-padding">
   <ion-toolbar>
     <ion-searchbar class="top-padding" placeholder="" [(ngModel)]="searchText"></ion-searchbar>
-    </ion-toolbar>
-  <div *ngFor="let result of results">
-    <app-session-card [data]="result" [action]="result.type=='session' ? 'ENROLL' : 'VIEW_PROFILE'" (onClickEvent)="eventAction($event)"> </app-session-card>
+  </ion-toolbar>
+  <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
+    <ion-segment-button value="all-sessions">
+      <ion-label>{{ "ALL_SESSIONS" | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="mentor-profile">
+      <ion-label>{{ "MENTOR_PROFILE" | translate }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <div *ngIf="results">
+    <div [ngSwitch]="type">
+      <ion-list *ngSwitchCase="'all-sessions'">
+        <div *ngFor="let result of results">
+          <app-session-card [data]="result" (onClickEvent)="onSessionAction($event)" [action]="'ENROLL'">
+          </app-session-card>
+        </div>
+      </ion-list>
+      <ion-list *ngSwitchCase="'mentor-profile'">
+        <div *ngFor="let result of results">
+          <div *ngFor="let value of result.values">
+            <app-session-card [data]="value" [action]="'VIEW_PROFILE'" (onClickEvent)="onMentorAction($event)">
+            </app-session-card>
+          </div>
+        </div>
+      </ion-list>
+    </div>
   </div>
-  <div *ngIf="noResults">
+  <div *ngIf="noResults && !searching">
     <app-no-data-found [message]="'SORRY_NO_RESULTS'"> </app-no-data-found>
   </div>
 </ion-content>

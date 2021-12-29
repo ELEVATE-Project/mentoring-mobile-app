@@ -12,7 +12,6 @@ import { CommonRoutes } from 'src/global.routes';
 export class MentorDetailsPage implements OnInit {
   mentorId;
   public headerConfig: any = {
-    headerColor: 'white',
     backButton: true,
     label: "MENTORS_PROFILE",
   };

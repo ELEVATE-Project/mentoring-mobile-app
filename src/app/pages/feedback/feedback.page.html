@@ -1,22 +1,25 @@
-<app-page-header [config]="headerConfig"></app-page-header>
-
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" (click)="closeModal()">
+      <ion-icon size="large" name="arrow-back-outline"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content [fullscreen]="true">
-    <div class="top-header">
-        <strong>{{"FEEDBACK_HEADER" | translate}}</strong>
-    </div>
+  <div *ngIf="isMentor" class="top-header">
+    <strong>{{"MENTOR_FEEDBACK_HEADER" | translate}}</strong>
+  </div>
+  <div *ngIf="!isMentor" class="top-header">
+    <strong>{{"MENTEE_FEEDBACK_HEADER" | translate}}</strong>
+  </div>
 
-    <div class="bottom-line"></div>
+  <div class="bottom-line"></div>
+  <div *ngIf="formData?.controls?.length" class="rating">
+    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
+  </div>
 
-    <div *ngFor="let data of formData">
-        <div class="feedback">
-            <strong>{{data.label}}</strong>
-            <div class="rating">
-                <app-star-rating [numberOfStars]="data.numberOfStars" (starRating)="getRating($event,data)"></app-star-rating>
-            </div>
-        </div>
-    </div>
 </ion-content>
 <ion-footer class="ion-no-border">
-    <ion-button expand="full" (click)="submit()">{{'SUBMIT_FEEDBACK' | translate}}</ion-button>
+  <ion-button expand="full" (click)="submit()">{{'SUBMIT_FEEDBACK' | translate}}</ion-button>
 </ion-footer>
