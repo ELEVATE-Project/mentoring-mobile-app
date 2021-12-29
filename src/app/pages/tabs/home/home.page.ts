@@ -43,7 +43,6 @@ public headerConfig: any = {
     private profileService: ProfileService,
     private loaderService: LoaderService,
     private httpService: HttpService,
-    private platform: Platform,
     private zone:NgZone,
     private sessionService: SessionService) {}
     
