@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PrivateGuard } from 'src/app/core/guards/private.guard';
 import { CommonRoutes } from 'src/global.routes';
 import { TabsPage } from './tabs.page';
 
@@ -7,6 +8,7 @@ const routes: Routes = [
   {
     path: CommonRoutes.TABS,
     component: TabsPage,
+    canActivate:[PrivateGuard],
     children: [
       {
         path: CommonRoutes.HOME,

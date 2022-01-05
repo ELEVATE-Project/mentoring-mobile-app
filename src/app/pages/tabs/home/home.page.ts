@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
@@ -39,27 +39,15 @@ public headerConfig: any = {
     private http: HttpClient,
     private router: Router,
     private navController: NavController,
-    private deeplinks: Deeplinks,
     private profileService: ProfileService,
     private loaderService: LoaderService,
     private httpService: HttpService,
-    private zone:NgZone,
     private sessionService: SessionService) {}
     
   ngOnInit() {
     this.getUser();
-    this.setupDeepLinks();
   }
 
-  setupDeepLinks() {
-    this.deeplinks.route({
-      '/sessions/details/:id': '',
-    }).subscribe(match=>{
-      this.zone.run(()=>{
-        this.router.navigateByUrl(match.$link.path);
-      })  
-    })
-  }
   ionViewWillEnter() {
     this.getSessions();
   }
