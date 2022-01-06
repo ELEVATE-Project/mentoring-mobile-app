@@ -31,7 +31,7 @@ export class LocalStorageService {
           if (data) {
             resolve(data);
           } else {
-            reject(null);
+            resolve(null);
           }
         })
         .catch((error) => {

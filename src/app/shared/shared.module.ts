@@ -19,6 +19,7 @@ import {
   FilterComponent,
   ExpandableCardComponent
 } from './components/index';
+import { SafeHtmlPipe } from './safe-html.pipe';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import {
     GenericHeaderComponent,
     FilterComponent,
     ExpandableCardComponent,
+    SafeHtmlPipe,
   ],
   imports: [
     CommonModule,
@@ -59,6 +61,7 @@ import {
     GenericHeaderComponent,
     FilterComponent,
     ExpandableCardComponent,
+    SafeHtmlPipe
   ],
 })
 export class SharedModule {}

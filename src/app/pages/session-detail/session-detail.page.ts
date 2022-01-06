@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
-import { config } from 'rxjs';
-import { LocalStorageService, ToastService, UtilService } from 'src/app/core/services';
+import { LocalStorageService, ToastService, UserService, UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 import *  as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import { Location, TitleCasePipe} from '@angular/common';
+import { Location, TitleCasePipe } from '@angular/common';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 
 @Component({
@@ -18,16 +16,19 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 export class SessionDetailPage implements OnInit {
   id: any;
   showEditButton: any;
-  isCreator: boolean;
+  isCreator: boolean=false;
+  userDetails: any;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
-    private utilService: UtilService, private toast: ToastService, private _location: Location, private profileService: ProfileService, private titleCasePipe: TitleCasePipe) {
+    private utilService: UtilService, private toast: ToastService, private _location: Location, private profileService: ProfileService, private titleCasePipe: TitleCasePipe, private user: UserService) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {}
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
+    await this.user.getUserValue();
+    this.userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     this.fetchSessionDetails();
   }
 
@@ -122,11 +123,12 @@ export class SessionDetailPage implements OnInit {
   };
 
   async fetchSessionDetails() {
-    let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     if (response) {
       this.id = response._id;
-      this.isCreator = userDetails._id == response.userId ? true : false;
+      if(this.userDetails){
+        this.isCreator = this.userDetails._id == response.userId ? true : false;
+      }
       let startDate = moment.unix(response.startDate);
       let endDate = moment.unix(response.endDate);
       let readableStartDate = startDate.toLocaleString();
@@ -150,20 +152,24 @@ export class SessionDetailPage implements OnInit {
   }
 
   async share() {
-    let sharableLink = await this.sessionService.getShareSessionId(this.id);
-    if (sharableLink.shareLink) {
-      let url = `/${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
-      let link = await this.utilService.getDeepLink(url);
-      this.detailData.data.mentorName = this.tranformTextToUpperCase(this.detailData.data.mentorName);
-      this.sessionHeaderData.name = this.tranformTextToUpperCase(this.sessionHeaderData.name);
-      let params = { link: link, subject: this.sessionHeaderData?.title, text: "Join an expert session on "+`${this.sessionHeaderData.name} `+"hosted by "+`${this.detailData.data.mentorName}`+" using the link" }
-      this.utilService.shareLink(params);
+    if(this.userDetails){
+      let sharableLink = await this.sessionService.getShareSessionId(this.id);
+      if (sharableLink.shareLink) {
+        let url = `/${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
+        let link = await this.utilService.getDeepLink(url);
+        this.detailData.data.mentorName = this.tranformTextToUpperCase(this.detailData.data.mentorName);
+        this.sessionHeaderData.name = this.tranformTextToUpperCase(this.sessionHeaderData.name);
+        let params = { link: link, subject: this.sessionHeaderData?.title, text: "Join an expert session on " + `${this.sessionHeaderData.name} ` + "hosted by " + `${this.detailData.data.mentorName}` + " using the link" }
+        this.utilService.shareLink(params);
+      } else {
+        this.toast.showToast("No link generated!!!", "danger");
+      }
     } else {
-      this.toast.showToast("No link generated!!!", "danger");
+      this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
     }
   }
 
-  tranformTextToUpperCase(text){
+  tranformTextToUpperCase(text) {
     return this.titleCasePipe.transform(text)
   }
 
@@ -194,15 +200,18 @@ export class SessionDetailPage implements OnInit {
   }
 
   async onEnroll() {
-    let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    if (userDetails?.about) {
-      let result = await this.sessionService.enrollSession(this.id);
-      if (result?.result) {
-        this.toast.showToast("You have enrolled successfully", "success");
+    if (this.userDetails) {
+      if (this.userDetails?.about) {
+        let result = await this.sessionService.enrollSession(this.id);
+        if (result?.result) {
+          this.toast.showToast("You have enrolled successfully", "success");
+        }
+        this.fetchSessionDetails();
+      } else {
+        this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
       }
-      this.fetchSessionDetails();
     } else {
-      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
     }
   }
 

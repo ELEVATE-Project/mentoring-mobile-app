@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { MenuController, NavController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
@@ -7,6 +7,7 @@ import { UtilService,DbService,UserService,LocalStorageService,AuthService,Netwo
 import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -36,19 +37,23 @@ export class AppComponent {
     private router: Router,
     private network:NetworkService,
     private authService:AuthService,
-    private profile: ProfileService
+    private profile: ProfileService,
+    private zone:NgZone,
+    private deeplinks: Deeplinks,
   ) {
     this.initializeApp();
-    this.router.navigate(["/"]);
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
       this.db.init();
       this.network.netWorkCheck();
-      setTimeout(()=>{
+      setTimeout(async ()=>{
         this.languageSetting();
-        this.getUser();
+        const userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+        if(userDetails){
+          this.getUser();
+        }
       },1000);
       setTimeout(() => {
         document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
@@ -59,6 +64,13 @@ export class AppComponent {
           this.isMentor = data?.isAMentor;
           this.user = data;
         }
+      })
+      this.deeplinks.route({
+        '/sessions/details/:id': '',
+      }).subscribe(match=>{
+        this.zone.run(()=>{
+          this.router.navigateByUrl(match.$link.path);
+        })  
       })
 
     });
