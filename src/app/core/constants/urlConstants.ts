@@ -14,7 +14,8 @@ export const urlConstants = {
         GET_IMAGE_UPLOAD_URL:'/user/v1/cloud-services/file/getSignedUrl?fileName=',
         GET_SESSION_IMAGE_UPLOAD_URL:"/mentoring/v1/cloud-services/getSignedUrl?fileName=",
         SUBMIT_FEEDBACK:"/mentoring/v1/feedback/submit/",
-        
+        TERMS_OF_USE: "https://shikshalokam.org/mentoring/term-of-use",
+        PRIVACY_POLICY: "https://shikshalokam.org/mentoring/privacy-policy",
         // FORMS
         FORM_READ:'/mentoring/v1/form/read',
         GENERATE_OTP:"/user/v1/account/generateOtp",
