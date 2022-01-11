@@ -1,5 +1,6 @@
 import { Component, OnInit,Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
@@ -13,7 +14,10 @@ export class SessionSqrCardComponent implements OnInit {
   @Output() onClickEvent = new EventEmitter();
   constructor(private router: Router) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    let startDate = moment.unix(this.data.startDate);
+    this.data.startDate = startDate.toLocaleString();
+  }
 
   action(data,type){
     let event ={

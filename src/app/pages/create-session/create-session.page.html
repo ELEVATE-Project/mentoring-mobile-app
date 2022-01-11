@@ -1,7 +1,7 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 
 <ion-content class="ion-padding">
-  <app-profile-image *ngIf="showForm" [profileImageData]='profileImageData' [uploadImage]="true" (imageUploadEvent)="imageUploadEvent($event)"></app-profile-image>
+  <app-profile-image *ngIf="showForm" [profileImageData]='profileImageData' [uploadImage]="true" (imageUploadEvent)="imageUploadEvent($event)" (imageRemoveEvent)="imageRemoveEvent($event)"></app-profile-image>
   <div *ngIf="formData && showForm">
     <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
   </div>

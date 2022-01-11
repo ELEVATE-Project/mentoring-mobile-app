@@ -1,16 +1,21 @@
-    <ion-card class="session-sqr-card" (click)="onCardClick()">
-      <ion-card-content>
-        <ion-card-title>
+<ion-card class="session-sqr-card" (click)="onCardClick()">
+  <ion-card-content>
+    <ion-card-title>
+      <div class="ellipsis">
         {{data.title | titlecase}}
-        </ion-card-title>
-        <ion-card-subtitle class="ellipsis">
-          {{data.description}}
-        </ion-card-subtitle>
-        <ion-card-subtitle>
-          {{'DATE' | translate}} : {{data.date}}
-        </ion-card-subtitle>
-      </ion-card-content>
-        <ion-button color="primary" size="small" shape="round"  class="btn-width-small ion-text-capitalize" (click)="$event.stopPropagation();action(data,'joinAction')">
-          {{'JOIN' | translate}}
-        </ion-button>
-    </ion-card>
+      </div>
+    </ion-card-title>
+    <ion-card-subtitle>
+      <div class="ellipsis">
+        {{data.description}}
+      </div>
+    </ion-card-subtitle>
+    <ion-card-subtitle>
+      {{'DATE' | translate}} : {{data?.startDate | date: 'dd mm yyyy'}}
+    </ion-card-subtitle>
+  </ion-card-content>
+  <ion-button color="primary" size="small" shape="round" class="btn-width-small ion-text-capitalize"
+    (click)="$event.stopPropagation();action(data,'joinAction')">
+    {{'JOIN' | translate}}
+  </ion-button>
+</ion-card>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonTabs } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { IonTabs, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-tabs',
@@ -8,12 +9,14 @@ import { IonTabs } from '@ionic/angular';
 })
 export class TabsPage {
   private activeTab?: HTMLElement;
-  constructor() { }
+  subscription: any;
+  constructor(private platform: Platform, private router: Router) { }
   tabChange(tabsRef: IonTabs) {
     this.activeTab = tabsRef.outlet.activatedView.element;
   }
   ionViewWillLeave() {
     this.propagateToActiveTab('ionViewWillLeave');
+    this.subscription.unsubscribe();
   }
 
   ionViewDidLeave() {
@@ -26,6 +29,9 @@ export class TabsPage {
 
   ionViewDidEnter() {
     this.propagateToActiveTab('ionViewDidEnter');
+    this.subscription = this.platform.backButton.subscribeWithPriority(9999, () => {
+      this.router.navigate(["/"]);
+    })
   }
   private propagateToActiveTab(eventName: string) {
     if (this.activeTab) {

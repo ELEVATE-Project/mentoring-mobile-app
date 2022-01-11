@@ -41,7 +41,7 @@ export class SessionDetailPage implements OnInit {
     name: "",
     region: null,
     join_button: true,
-    image: null,
+    image: '',
   }
   detailData = {
     form: [
@@ -125,6 +125,7 @@ export class SessionDetailPage implements OnInit {
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     if (response) {
+      console.log(response);
       this.id = response._id;
       if(this.userDetails){
         this.isCreator = this.userDetails._id == response.userId ? true : false;

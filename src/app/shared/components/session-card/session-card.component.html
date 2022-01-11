@@ -4,7 +4,7 @@
   </span>
   <ion-row>
     <ion-col size="3" class="card-avatar">
-      <img *ngIf="!data?.image?.length; else Img; let image" class="thumbnail-image"
+      <img *ngIf="!data?.image || data?.image==''; else Img; let image" class="thumbnail-image"
         src="../../../../assets/prof-img/user.png" />
       <ng-template #Img>
         <img class="thumbnail-image" src="{{data?.image}}" />
