@@ -1,28 +1,21 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding">
   <app-generic-header [label1]="'TERMS_AND'" [label2]="'CONDITIONS'"></app-generic-header>
-  <!-- <div *ngFor="let item of items">
-    <app-expandable-card expandHeight="150px" (click)="expandItem(item)" [item]="item"
-      [expanded]="item.expanded">{{item.value}}</app-expandable-card>
-  </div> -->
-  <div class="wrapper">
-    <p>{{"TERMS_AND_CONDITIONS_MENTOR_ED" | translate}}</p>
-    <p>{{"AGREE_TO_TERMS_AND_CONDITIONS" | translate}}</p>
-    <p class="terms-and-privacy"><span class="text-color">{{"TERMS_OF_USE" | translate}}</span>{{"AND" | translate}}<span
-        class="text-color">{{"PRIVACY_POLICY_" | translate}}</span></p>
-  </div>
-  <div>
-    <ion-row>
-      <ion-col class="d-flex flex-align-items-center flex-justify-center" size="2">
-        <ion-checkbox color="danger" (ionChange)="checked()"></ion-checkbox>
+  <div *ngIf="items" class="text-config" [innerHtml]="items.controls[0].label | safeHtml"></div>
+  <div class="check-box">
+    <ion-row class="d-flex, flex-align-items-center check-box-row">
+      <ion-col class='d-flex flex-align-items-center flex-justify-start' size="2">
+        <ion-checkbox color='danger' (ionChange)='checked()'></ion-checkbox>
       </ion-col>
-      <ion-col size="10">
-        <ion-label>{{'READ_USER_AGREEMENT_AND_PRIVACY_POLICY' | translate}}</ion-label>
+      <ion-col class='d-flex flex-align-items-center' size="10">
+        <div>
+          <ion-label *ngIf="items" [innerHtml]="items.controls[0].value"></ion-label>
+        </div>
       </ion-col>
     </ion-row>
   </div>
 </ion-content>
 <ion-footer class="side-menu-footer">
-  <ion-button expand="full" (click)="goToHome()" [disabled]="notChecked"> {{'AGREE_AND_CONTINUE' | translate}}
+  <ion-button expand="full" (click)="goToHome()" [disabled]="notChecked"> Agree & Continue
   </ion-button>
 </ion-footer>

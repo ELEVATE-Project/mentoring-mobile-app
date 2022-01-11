@@ -28,7 +28,6 @@ export class SessionsPage implements OnInit {
     private router: Router,
     private sessionService: SessionService) {
     this.activatedRoute.queryParamMap.subscribe(params => {
-      console.log(params);
       this.type = !this.type ? (params.get('type') || "all-sessions") : this.type;
       this.emptyMessage = this.type=='my-sessions' ? 'NO_ACTIVE_MY_SESSIONS' : 'NO_ACTIVE_ALL_SESSIONS';
     });
@@ -90,12 +89,10 @@ export class SessionsPage implements OnInit {
   }
 
   onAction(event){
-    console.log(event);
     this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
   }
 
   async onJoin(event){
-    console.log(event);
     await this.sessionService.joinSession(event.data.sessionId);
   }
 }

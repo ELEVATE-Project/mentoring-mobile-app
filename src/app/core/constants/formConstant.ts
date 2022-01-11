@@ -15,3 +15,11 @@ export const CREATE_SESSION_FORM: IFORM = {
 	"ver": "1.0",
 	"templateName": "defaultTemplate"
 }
+
+export const TERMS_AND_CONDITIONS_FORM: IFORM = {
+	type: "termsAndConditions",
+	subType: "termsAndConditionsForm",
+	action: "termsAndConditionsFields",
+	ver: "1.0",
+	templateName: "defaultTemplate"
+}
