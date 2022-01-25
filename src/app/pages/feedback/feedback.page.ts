@@ -62,10 +62,11 @@ export class FeedbackPage implements OnInit {
     if (result) {
       this.toast.showToast(result?.message, "success");
     }
-    this.closeModal();
+    await this.modalController.dismiss();
   }
 
   async closeModal() {
+    await this.sessionService.submitFeedback({skippedFeedback: true}, this.sessionData._id);
     await this.modalController.dismiss();
   }
 }

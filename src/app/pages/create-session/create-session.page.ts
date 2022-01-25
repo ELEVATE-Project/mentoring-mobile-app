@@ -187,4 +187,11 @@ export class CreateSessionPage implements OnInit {
     this.profileImageData.image = this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
     this.profileImageData.isUploaded = false;
   }
+
+  imageRemoveEvent(event){
+    this.profileImageData.image = '';
+    this.form1.myForm.value.image ='';
+    this.form1.myForm.markAsDirty();
+    this.profileImageData.isUploaded = true;
+  }
 }

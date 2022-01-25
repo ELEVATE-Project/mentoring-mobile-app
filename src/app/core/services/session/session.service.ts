@@ -176,7 +176,7 @@ async getSessionsList(obj) {
   }
 
   openBrowser(link) {
-    let browser = this.inAppBrowser.create(link, `_blank`);
+    let browser = this.inAppBrowser.create(link, `_system`);
     browser.on('exit').subscribe(() => {
         console.log("browser closed");
     }, err => {

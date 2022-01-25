@@ -1,12 +1,14 @@
-.text-color{
-    color: blue;
-}
-.wrapper{
-    margin-left: 10px;
-}
 ion-label{
-    font-size: small;
+    font-size: 13px;
+    margin-left: 0px;
 }
-.terms-and-privacy{
-    margin-top: -16px;
+.text-config{
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+.check-box{
+    margin-left: 5px;
+}
+.check-box-row{
+    justify-content: space-evenly;
 }

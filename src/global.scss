@@ -149,3 +149,15 @@ ion-button{
 .alert-wrapper.sc-ion-alert-md{
   border-radius: 8px;
 }
+
+.links{
+  text-decoration: none;
+  color: blue !important;
+}
+
+.ellipsis{
+  overflow: hidden;
+  text-overflow:ellipsis;
+  font-size: large;
+  white-space: nowrap;
+}

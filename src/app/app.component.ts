@@ -42,6 +42,7 @@ export class AppComponent {
     private deeplinks: Deeplinks,
   ) {
     this.initializeApp();
+    this.router.navigate(["/"]);
   }
 
   initializeApp() {
@@ -79,6 +80,8 @@ export class AppComponent {
     this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
       if(data){
         this.translate.use(data);
+      } else {
+      this.setLanguage('en');
       }
     }).catch(error => {
       this.setLanguage('en');

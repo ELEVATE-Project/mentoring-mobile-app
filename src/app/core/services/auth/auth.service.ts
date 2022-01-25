@@ -63,18 +63,15 @@ export class AuthService {
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
       this.userService.userEvent.next(userData);
       this.loaderService.stopLoader();
-      if (userData?.hasAcceptedTAndC == true) {
-        this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
-      } else {
-        this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`]);
-      }
+      return userData
     }
     catch (error) {
       this.loaderService.stopLoader();
+      return null;
     }
   }
 
-  async logoutAccount(skipApiCall?:boolean) {
+  async logoutAccount(skipApiCall?: boolean) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.LOGOUT_ACCOUNT,
@@ -101,18 +98,14 @@ export class AuthService {
   }
 
   async acceptTermsAndConditions() {
-    await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.TERMS_CONDITIONS,
       payload: {},
     };
     try {
       let data = await this.httpService.post(config);
-      this.loaderService.stopLoader();
-      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
     }
     catch (error) {
-      this.loaderService.stopLoader();
     }
   }
 

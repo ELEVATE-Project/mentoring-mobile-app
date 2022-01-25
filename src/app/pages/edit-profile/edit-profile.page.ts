@@ -119,8 +119,9 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   }
   removeCurrentPhoto(event){
     this.form1.myForm.value.image ='';
-    this.profileImageData.image=''
-    this.profileImageData.isUploaded = false;
+    this.profileImageData.image='';
+    this.form1.myForm.markAsDirty();
+    this.profileImageData.isUploaded = true;
   }
   imageUploadEvent(event) {
     this.localImage = event;

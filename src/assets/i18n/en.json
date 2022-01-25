@@ -37,7 +37,8 @@
     "ALREADY_HAVE_ACCOUNT":"Already have an account?",
     "LOGIN":"Login",
     "TERMS_AND_CONDITION":"By continuing, you agree to accept our",
-    "PRIVACY_POLICY":"Privacy Policy & Terms of Service",
+    "PRIVACY_POLICY":"Privacy Policy",
+    "TERMS_OF_SERVICE": "Terms of Service",
     "SIGNUP_WITH_EMAIL":"Sign up with Email",
     "FORGOT_PASSWORD":"Forgot Password",
     "SIGN_UP":"Sign Up",
@@ -97,8 +98,6 @@
     "SAVE":"Save",
     "TERMS_AND": "Terms and",
     "CONDITIONS": "conditions",
-    "AGREE_AND_CONTINUE": "Agree & Continue",
-    "READ_USER_AGREEMENT_AND_PRIVACY_POLICY": "I've read and agree to the User Agreement and Privacy Policy",
     "SOMETHING_WENT_WRONG":"Something went wrong",
     "CREATE_NEW_SESSION": "Create new Session",
     "DELETE": "Delete",
@@ -111,10 +110,5 @@
     "CLOSE": "Close",
     "NO_ACTIVE_ALL_SESSIONS":"No active all sessions for now",
     "EXIT_CONFIRM_MESSAGE":"Are you sure you want to exit the app?",
-    "MENTOR_PROFILE": "Mentor Profile",
-    "TERMS_AND_CONDITIONS_MENTOR_ED": "The Terms and Conditions constitute a legally binding agreement made between you and Shikshalokam, concerning your access to and use of our mobile application MentorED.",
-    "AGREE_TO_TERMS_AND_CONDITIONS": "By creating an account, you have read, understood, and agree to the",
-    "TERMS_OF_USE": "Terms of Use ",
-    "PRIVACY_POLICY_": "Privacy Policy.",
-    "AND": "and "
+    "MENTOR_PROFILE": "Mentor Profile"
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
-import { AuthService} from 'src/app/core/services';
+import { AuthService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -38,17 +38,40 @@ export class LoginPage implements OnInit {
       },
     ],
   };
-  constructor(private authService: AuthService,private router:Router, private menuCtrl:MenuController) {
-      this.menuCtrl.enable(false);
-   }
-  
+  id: any;
+  userDetails: any;
+  constructor(private authService: AuthService, private router: Router, private menuCtrl: MenuController, private activatedRoute: ActivatedRoute) {
+    this.menuCtrl.enable(false);
+  }
+
   ngOnInit() { }
+
+  ionViewWillEnter() {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.id = params.sessionId ? params.sessionId : this.id;
+    });
+  }
 
   async onSubmit() {
     this.form1.onSubmit();
-    if(this.form1.myForm.valid){
-    this.authService.loginAccount(this.form1.myForm.value);
-    this.menuCtrl.enable(true);
+    if (this.form1.myForm.valid) {
+      this.userDetails = await this.authService.loginAccount(this.form1.myForm.value);
+      if (this.userDetails !== null) {
+        if (this.id) {
+          if (this.userDetails?.hasAcceptedTAndC) {
+            this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
+          } else {
+            this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`], { queryParams:{sessionId : this.id}});
+          }
+        } else {
+          if (this.userDetails?.hasAcceptedTAndC) {
+            this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
+          } else {
+            this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`]);
+          }
+        }
+      }
+      this.menuCtrl.enable(true);
     }
   }
 

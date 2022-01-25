@@ -41,7 +41,7 @@ export class SessionDetailPage implements OnInit {
     name: "",
     region: null,
     join_button: true,
-    image: null,
+    image: '',
   }
   detailData = {
     form: [
@@ -165,7 +165,7 @@ export class SessionDetailPage implements OnInit {
         this.toast.showToast("No link generated!!!", "danger");
       }
     } else {
-      this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
+      this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id}});
     }
   }
 
@@ -200,7 +200,7 @@ export class SessionDetailPage implements OnInit {
   }
 
   async onEnroll() {
-    if (this.userDetails) {
+    if (this.userDetails && this.userDetails.hasAcceptedTAndC) {
       if (this.userDetails?.about) {
         let result = await this.sessionService.enrollSession(this.id);
         if (result?.result) {
@@ -210,8 +210,10 @@ export class SessionDetailPage implements OnInit {
       } else {
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
       }
+    } else if(this.userDetails && !this.userDetails.hasAcceptedTAndC){
+      this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`], { queryParams:{sessionId: this.id}});
     } else {
-      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
+      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id}});
     }
   }
 
@@ -230,7 +232,7 @@ export class SessionDetailPage implements OnInit {
       if (data) {
         let result = await this.sessionService.unEnrollSession(this.id);
         if (result?.result) {
-          this.toast.showToast("You have unenrolled successfully", "success");
+          this.toast.showToast(result?.message, "success");
         }
         this.fetchSessionDetails();
       }

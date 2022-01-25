@@ -56,6 +56,12 @@ export class DynamicFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {}
   ngOnInit() {
+    this.jsonFormData.controls.find((element, index) => {
+      if(element.type == "select"){
+        console.log(element, index);
+        this.jsonFormData.controls[index].options = _.sortBy(this.jsonFormData.controls[index].options, ['label']);
+      }
+    });
     this.date = moment().format();
     setTimeout(() => {
       this.createForm(this.jsonFormData.controls);
