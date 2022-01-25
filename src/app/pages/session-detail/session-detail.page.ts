@@ -125,7 +125,6 @@ export class SessionDetailPage implements OnInit {
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     if (response) {
-      console.log(response);
       this.id = response._id;
       if(this.userDetails){
         this.isCreator = this.userDetails._id == response.userId ? true : false;
@@ -233,7 +232,7 @@ export class SessionDetailPage implements OnInit {
       if (data) {
         let result = await this.sessionService.unEnrollSession(this.id);
         if (result?.result) {
-          this.toast.showToast("You have unenrolled successfully", "success");
+          this.toast.showToast(result?.message, "success");
         }
         this.fetchSessionDetails();
       }

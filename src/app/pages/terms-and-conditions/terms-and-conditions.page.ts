@@ -64,7 +64,7 @@ export class TermsAndConditionsPage implements OnInit {
       await this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
     } else {
       await this.authService.acceptTermsAndConditions();
-      console.log("replaced");
+      await this.setLocalStorage();
       this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
     }
   }

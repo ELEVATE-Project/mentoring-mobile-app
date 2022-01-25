@@ -11,6 +11,7 @@ import { CommonRoutes } from 'src/global.routes';
 import { localKeys } from '../../constants/localStorage.keys';
 import * as _ from 'lodash-es';
 import {Location} from '@angular/common';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,8 @@ export class ProfileService {
     private router: Router,
     private toast: ToastService,
     private localStorage: LocalStorageService,
-    private _location: Location
+    private _location: Location,
+    private userService: UserService,
   ) { }
   async profileUpdate(formData) {
     await this.loaderService.startLoader();
@@ -36,6 +38,7 @@ export class ProfileService {
       userDetails.user= null;
       let profileData = await this.getProfileDetailsAPI();
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileData);
+      this.userService.userEvent.next(profileData);
       this.loaderService.stopLoader();
       this._location.back();
       this.toast.showToast(data.message, "success");
