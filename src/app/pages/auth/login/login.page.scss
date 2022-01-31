@@ -13,26 +13,8 @@
 
 .t-and-c {
   width: 100%;
-  text-align: center;
-  line-height: 5px;
-  font-size: 14px;
-  margin: 10% 0;
-}
-
-.or-section {
-  p {
-    width: 100%;
-    text-align: center;
-    border-bottom: 1px solid gray;
-    line-height: 0.1em;
-    margin: 10px 0 10px;
-  }
-
-  p span {
-    background: #fff;
-    padding: 0 10px;
-    font-weight: 600;
-  }
+  text-align: left;
+  font-size: 13px;
 }
 
 .text-bold {
@@ -40,8 +22,7 @@
 }
 
 .forgot-section {
-  text-transform: uppercase;
-  color: var(--grey-shade);
+  color: var(--ion-color-primary);
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 10%;

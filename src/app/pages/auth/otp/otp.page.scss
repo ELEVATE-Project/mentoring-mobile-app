@@ -1,17 +1,28 @@
-.form-section{
-  margin-top: 20%;
-}
-
 .resend-otp{
-    margin-top: 10%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
     font-size: 14px;
     font-weight: bold;
+    margin-top: 10px;
   }
-
-.btn-section-primary{
-  margin-top: 30%;
-}  
+.hint-message{
+  font-size:small;
+  margin-top: 20px;
+}
+.star{
+  color: red;
+}
+ion-button{
+  width: 80%;
+  height: 45px;
+  font-weight: bold;
+}
+.form-section{
+  margin-top: 10px;
+}
+.underline{
+  text-decoration: underline;
+  text-decoration-color: rgb(83, 83, 163);
+  color: rgb(83, 83, 163);
+}
+.disabled{
+  --background: rgb(49, 49, 51);
+}

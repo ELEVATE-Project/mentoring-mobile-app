@@ -1,0 +1,27 @@
+<ion-content class="ion-padding">
+  <div class="landing-header">
+  <app-generic-header
+    [label1]="'CREATE_ACCOUNT'"
+    [label3]="'TO_CONNECT_SOLVE'"
+    [label4]="'&_SHARE'"
+  ></app-generic-header>
+</div>
+  <section>
+    <div class="d-flex flex-justify-center">
+      <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large"
+        >{{"SIGN_UP"|translate}}</ion-button
+      >
+    </div>
+  </section>
+  <section class="section-config or-section">
+    <p><span>OR</span></p>
+  </section>
+  <section class="section-config">
+    <p class="text-config">{{"ALREADY_HAVE_ACCOUNT"|translate}}</p>
+    <div class="d-flex flex-justify-center">
+      <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onLogin()"
+        >{{"LOGIN"|translate}}</ion-button
+      >
+    </div>
+  </section>
+  </ion-content>

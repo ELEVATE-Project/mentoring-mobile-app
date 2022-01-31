@@ -40,6 +40,14 @@ export class LoginPage implements OnInit {
   };
   id: any;
   userDetails: any;
+  public headerConfig: any = {
+    backButton: {
+      label: '',
+      color: 'primary'
+    },
+    notification: false,
+    signupButton: true
+  };
   constructor(private authService: AuthService, private router: Router, private menuCtrl: MenuController, private activatedRoute: ActivatedRoute) {
     this.menuCtrl.enable(false);
   }
@@ -72,6 +80,14 @@ export class LoginPage implements OnInit {
         }
       }
       this.menuCtrl.enable(true);
+    }
+  }
+
+  action(event) {
+    switch (event) {
+      case 'signup':
+        this.goToSignup();
+        break;
     }
   }
 

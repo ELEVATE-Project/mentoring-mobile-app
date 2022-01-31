@@ -1,10 +1,22 @@
 hr {
     background: var(--ion-color-primary);
     height: 5px;
-    width: 80px;
-    margin: 15px 0 20px 0;
+    width: 138px;
+    margin: 5px 0 20px 0;
   }
 
  .bottom-margin {
    margin-bottom: 10%;
  } 
+ .text-config{
+   display:inline-block;
+ }
+ .text-green{
+   color: green;
+ }
+ .margin-0{
+   margin: 0px;
+ }
+ .align-text{
+   margin-top: 0px;
+ }

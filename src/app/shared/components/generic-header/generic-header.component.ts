@@ -8,6 +8,8 @@ import { Component, Input, OnInit } from '@angular/core';
 export class GenericHeaderComponent implements OnInit {
   @Input() label1:any;
   @Input() label2:any;
+  @Input() label3:any;
+  @Input() label4:any;
   constructor() { }
 
   ngOnInit() {
