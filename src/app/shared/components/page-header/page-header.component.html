@@ -17,6 +17,9 @@
     <ion-buttons slot="end" *ngIf="config?.share" (click)="onAction('share')">
       <ion-icon size="large" name="share-social"></ion-icon>
     </ion-buttons>
+    <ion-buttons slot="end" *ngIf="config?.signupButton" (click)="onAction('signup')">
+      <ion-label class="align-right" color="primary" *ngIf="config?.signupButton">{{"SIGN_UP" | translate}}</ion-label>
+    </ion-buttons>
   </ion-toolbar>
   <ng-content></ng-content>
 </ion-header>

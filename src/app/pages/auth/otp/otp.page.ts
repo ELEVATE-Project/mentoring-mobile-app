@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService } from 'src/app/core/services';
-import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -12,23 +11,17 @@ import { CommonRoutes } from 'src/global.routes';
   styleUrls: ['./otp.page.scss'],
 })
 export class OtpPage implements OnInit {
-  @ViewChild('form1') form1: DynamicFormComponent;
+  @ViewChild('ngOtpInput', { static: false }) ngOtpInputRef: any;
+  config = {
+    allowNumbersOnly: true,
+    length: 6,
+    inputStyles: {
+      'width': '50px',
+      'height': '50px',
+      'border-radius': '10px'
+    }
+  };
   resetPasswordData: any;
-  formData: JsonFormData = {
-    controls: [
-      {
-        name: 'otp',
-        label: 'Enter OTP',
-        value: '',
-        class: 'ion-margin',
-        type: 'number',
-        position: 'floating',
-        validators: {
-          required: true,
-        },
-      },
-    ]
-  };  
   public headerConfig: any = {
     // menu: true,
     backButton: {
@@ -36,6 +29,8 @@ export class OtpPage implements OnInit {
     },
     notification: false,
   };
+  otp: any;
+  isEnabled:boolean=false;
 
   constructor(private router:Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService){ 
     this.activatedRoute.queryParamMap.subscribe(params => {
@@ -47,8 +42,7 @@ export class OtpPage implements OnInit {
   }
 
   async onSubmit(){
-    let formJson = this.form1.myForm.value;
-    this.resetPasswordData.otp= formJson.otp;
+    this.resetPasswordData.otp= this.otp;
     let response = await this.profileService.updatePassword(this.resetPasswordData);
     let result = response.result;
     this.localStorage.setLocalData(localKeys.USER_DETAILS, result);
@@ -56,5 +50,10 @@ export class OtpPage implements OnInit {
   }
   async resendOtp(){
     var response = await this.profileService.generateOtp({ email: this.resetPasswordData.email });
+  }
+
+  onOtpChange(otp) {
+    this.otp = otp;
+    this.isEnabled= this.otp.length==6?true:false;
   }
 }

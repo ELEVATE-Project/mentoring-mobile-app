@@ -1,0 +1,28 @@
+.landing-header{
+    margin-top: 30%;
+    padding-left: 33px;
+}
+.or-section {
+    display: flex;
+    justify-content: center;
+    p {
+      width: 85%;
+      text-align: center;
+      border-bottom: 2px solid gray;
+      line-height: 0.1em;
+      margin: 10px 0 10px;
+    }
+  
+    p span {
+      background: #fff;
+      padding: 0 10px;
+      font-weight: 600;
+    }
+}
+.section-config{
+    margin-top: 50px;
+
+}
+.text-config{
+    text-align: center;
+}

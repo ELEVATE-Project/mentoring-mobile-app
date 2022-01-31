@@ -9,6 +9,7 @@ import { OtpPageRoutingModule } from './otp-routing.module';
 import { OtpPage } from './otp.page';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CoreModule } from 'src/app/core/core.module';
+import { NgOtpInputModule } from 'ng-otp-input';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { CoreModule } from 'src/app/core/core.module';
     IonicModule,
     OtpPageRoutingModule,
     SharedModule,
-    CoreModule
+    CoreModule,
+    NgOtpInputModule
   ],
   declarations: [OtpPage]
 })

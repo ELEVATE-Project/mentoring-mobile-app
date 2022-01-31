@@ -1,16 +1,9 @@
+<app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
 <ion-content class="ion-padding">
   <app-generic-header
-    [label1]="'LOGIN_TO_CONNECT,'"
-    [label2]="'SOLVE_&_SHARE'"
+    [label1]="'LOGIN_TO_MENTOR'"
+    [label2]="'ED'"
   ></app-generic-header>
-  <section class="d-flex flex-justify-center ion-text-center">
-    <div class="d-flex flex-column sub-heading">
-      <ion-text class="text-bold">{{"ALREADY_HAVE_ACCOUNT"|translate}}</ion-text>
-      <ion-text color="primary"
-        ><strong>{{"LOG_IN"|translate}}</strong></ion-text
-      >
-    </div>
-  </section>
   <section>
     <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
   </section>
@@ -18,34 +11,22 @@
   <section
     [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}"
   >
-    <ion-button class="mx-0" expand="block" (click)="onSubmit()" size="large" [disabled]="!form1.myForm.valid"
+  <div class="d-flex flex-justify-center">
+    <ion-button class="mx-0 onboard-button" expand="block" shape="round" (click)="onSubmit()" size="large" [disabled]="!form1.myForm.valid"
       >{{"LOGIN"|translate}}</ion-button
     >
+  </div>
+    <section class="ion-text-center">
+      <div class="my-30">
+        <ion-text class="forgot-section" (click)="goToForgotPassword()">
+          {{"FORGOT_PASSWORD"|translate}}
+        </ion-text>
+        <ion-ripple-effect></ion-ripple-effect>
+      </div>
+    </section>
     <div class="t-and-c">
-      <p>{{"TERMS_AND_CONDITION"|translate}}</p>
-      <p><a class='link' href='https://shikshalokam.org/mentoring/privacy-policy'>{{"PRIVACY_POLICY"|translate}}</a> & <a class='link' href='https://shikshalokam.org/mentoring/term-of-use'>{{"TERMS_OF_SERVICE"|translate}}</a></p>
-    </div>
-  </section>
-  <section class="or-section">
-    <p><span>OR</span></p>
-  </section>
-  <section class="ion-text-center">
-    <div class="my-30" (click)="goToForgotPassword()">
-      <ion-text class="forgot-section">
-        {{"FORGOT_PASSWORD"|translate}}
-      </ion-text>
-      <ion-ripple-effect></ion-ripple-effect>
-    </div>
-    <div class="btn-disabled">
-      <ion-button
-        class="mx-0 text-bold"
-        expand="block"
-        (click)="goToSignup()"
-        size="large"
-      >
-        <ion-icon slot="start" name="mail-outline"></ion-icon>
-        {{"SIGNUP_WITH_EMAIL"|translate}}
-      </ion-button>
+      <p>{{"TERMS_AND_CONDITION"|translate}}
+      <a class='links' href='https://shikshalokam.org/mentoring/privacy-policy'>{{"PRIVACY_POLICY"|translate}}</a> & <a class='links' href='https://shikshalokam.org/mentoring/term-of-use'>{{"TERMS_OF_SERVICE"|translate}}</a></p>
     </div>
   </section>
 </ion-content>

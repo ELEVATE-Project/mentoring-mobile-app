@@ -74,6 +74,9 @@ h6, h5 , h4, h3, h2, h1 {
 }
 
 //margins
+.my-10 {
+  margin: 10px 0;
+}
 .my-30 {
   margin: 30px 0;
 }
@@ -160,4 +163,10 @@ ion-button{
   text-overflow:ellipsis;
   font-size: large;
   white-space: nowrap;
+}
+
+.onboard-button{
+  width: 80%;
+  height: 43px;
+  font-size: 15px;
 }
