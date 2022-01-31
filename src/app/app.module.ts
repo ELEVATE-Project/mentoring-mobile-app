@@ -24,7 +24,6 @@ import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ng
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { TitleCasePipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgOtpInputModule } from  'ng-otp-input';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -50,7 +49,6 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
       },
     }),
     ReactiveFormsModule,
-    NgOtpInputModule,
   ],
 
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
