@@ -96,7 +96,7 @@ export class LoginPage implements OnInit {
   }
 
   goToSignup(){
-    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.REGISTER}`]);
+    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.PERSONA_SELECTION}`]);
   }
 
 }

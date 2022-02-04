@@ -29,8 +29,12 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'landing',
+    path: CommonRoutes.LANDING_PAGE,
     loadChildren: () => import('./landing/landing.module').then( m => m.LandingPageModule)
+  },
+  {
+    path: CommonRoutes.PERSONA_SELECTION,
+    loadChildren: () => import('./persona-selection/persona-selection.module').then( m => m.PersonaSelectionPageModule)
   }
 ];
 

@@ -1,7 +1,7 @@
 hr {
     background: var(--ion-color-primary);
     height: 5px;
-    width: 138px;
+    width: 72%;
     margin: 5px 0 20px 0;
   }
 
@@ -9,14 +9,28 @@ hr {
    margin-bottom: 10%;
  } 
  .text-config{
-   display:inline-block;
+  display:inline-block;
+  font-family: Noto Sans;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 36px;
+  letter-spacing: 0em;
+  text-align: left;
  }
  .text-green{
-   color: green;
+   color: rgb(58, 199, 15);
  }
  .margin-0{
    margin: 0px;
  }
  .align-text{
-   margin-top: 0px;
+  margin-top: 0px;
+  font-family: Noto Sans;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 36px;
+  letter-spacing: 0em;
+  text-align: left;
  }

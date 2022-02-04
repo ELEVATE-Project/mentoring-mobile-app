@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
@@ -16,6 +15,9 @@ export class LandingPage implements OnInit {
   }
   onLogin(){
     this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
+  }
+  onSignup(){
+    this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.PERSONA_SELECTION}`])
   }
 
 }

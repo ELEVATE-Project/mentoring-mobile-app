@@ -31,10 +31,12 @@ export class OtpPage implements OnInit {
   };
   otp: any;
   isEnabled:boolean=false;
+  actionType;
 
   constructor(private router:Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService){ 
     this.activatedRoute.queryParamMap.subscribe(params => {
-      this.resetPasswordData = {email:params.get('email'), password: params.get('password'), otp: Number}
+      this.resetPasswordData = {email:params.get('email'), password: params.get('password'), otp: Number};
+      this.actionType = params.get('type');
     });
   }
 
@@ -42,11 +44,15 @@ export class OtpPage implements OnInit {
   }
 
   async onSubmit(){
+    if(this.actionType!="signup"){
     this.resetPasswordData.otp= this.otp;
     let response = await this.profileService.updatePassword(this.resetPasswordData);
     let result = response.result;
     this.localStorage.setLocalData(localKeys.USER_DETAILS, result);
-    this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`],{replaceUrl:true});
+    this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`],{replaceUrl:true});
+    } else {
+      this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`],{replaceUrl:true});
+    }
   }
   async resendOtp(){
     var response = await this.profileService.generateOtp({ email: this.resetPasswordData.email });

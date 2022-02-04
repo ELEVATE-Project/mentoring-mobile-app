@@ -8,8 +8,8 @@
 </div>
   <section>
     <div class="d-flex flex-justify-center">
-      <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large"
-        >{{"SIGN_UP"|translate}}</ion-button
+      <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onSignup()"
+        ><ion-icon class="button-icon" name="mail-outline"></ion-icon>{{"SIGN_UP"|translate}}</ion-button
       >
     </div>
   </section>
@@ -20,7 +20,7 @@
     <p class="text-config">{{"ALREADY_HAVE_ACCOUNT"|translate}}</p>
     <div class="d-flex flex-justify-center">
       <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onLogin()"
-        >{{"LOGIN"|translate}}</ion-button
+        ><ion-icon class="button-icon" name="mail-outline"></ion-icon>{{"LOGIN"|translate}}</ion-button
       >
     </div>
   </section>

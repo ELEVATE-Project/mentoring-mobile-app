@@ -1,0 +1,23 @@
+.text-config{
+    color: var(--ion-color-primary);
+    font-weight: bolder !important;
+    font-size:larger;
+    margin-top: 11px;
+}
+.or{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 22px;
+}
+ion-radio{
+    --color-checked:rgb(50, 99, 206);
+    margin-left: 18px;
+}
+img{
+    width: 20%;
+    height: 20%;
+}
+.selection-row{
+    margin-right: 22px;
+}
