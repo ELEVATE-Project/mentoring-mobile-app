@@ -2,13 +2,12 @@
     font-size: 14px;
     font-weight: bold;
     margin-top: 10px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
   }
 .hint-message{
   font-size:small;
   margin-top: 20px;
-}
-.star{
-  color: red;
 }
 ion-button{
   width: 80%;
@@ -20,9 +19,17 @@ ion-button{
 }
 .underline{
   text-decoration: underline;
-  text-decoration-color: rgb(83, 83, 163);
-  color: rgb(83, 83, 163);
+  text-decoration-color: rgb(108, 147, 206);
+  color: rgb(108, 147, 206);
+  text-align: center;
 }
 .disabled{
   --background: rgb(49, 49, 51);
+}
+.label{
+  margin-top: -3px !important;
+  padding-top: 0px !important;
+  text-decoration: underline;
+  text-align: center;
+  font-size: 13px;
 }

@@ -1,10 +1,16 @@
-<div class="margin-0"><h1 class="text-config" *ngIf="label1">{{ label1 | translate }}</h1>
-<h1 class="text-config text-green margin-0" *ngIf="label2">{{ label2 | translate }}</h1>
-</div>
-<h1 class="align-text" *ngIf="label3">{{ label3 | translate }}</h1>
-<h1 class="margin-0" *ngIf="label4">{{ label4 | translate }}</h1>
-<div class="d-flex bottom-margin">
-  <div>
-    <hr />
+<div style="width: fit-content;" class="margin-0">
+  <h1 class="text-config" *ngIf="label1">{{ label1 | translate }}</h1>
+  <h1 class="text-config text-green margin-0" *ngIf="label2">{{ label2 | translate }}</h1>
+  <h1 class="align-text" *ngIf="label3">{{ label3 | translate }}</h1>
+  <div *ngIf="label4; else elseBlock;" style="width: fit-content;">
+    <h1 class="margin-0">{{ label4 | translate }}</h1>
+    <div class="d-flex bottom-margin">
+      <hr />
+    </div>
   </div>
+  <ng-template #elseBlock>
+    <div class="d-flex bottom-margin">
+      <hr />
+    </div>
+  </ng-template>
 </div>

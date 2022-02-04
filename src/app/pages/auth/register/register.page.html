@@ -1,23 +1,17 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding">
-  <app-generic-header [label1]="'SIGN_UP'"></app-generic-header>
-
+  <app-generic-header [label1]="'SIGN_UP_TO_MENTOR'" [label2]="'ED'"></app-generic-header>
   <section>
     <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
-    <div class="mentor-signup d-flex flex-justify-center">
-      <ion-checkbox [(ngModel)]=isChecked  (ngModelChange)="signUpAsMentor($event)" class="check-box" color="danger" name="isChecked"></ion-checkbox>
-      <ion-label class="label">Sign up as a Mentor</ion-label>
-    </div>
-
-    <!-- to be removed -->
-    <div class="mentor-input" *ngIf="isChecked">
-      <ion-input class="text" placeholder="Secret code" [(ngModel)]="secretCode"></ion-input>
-    </div>
     
   </section>
 
   <section submitButton [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}">
-    <ion-button class="mx-0" (click)="onSubmit()" expand="block" size="large" [disabled]="!form1.myForm.valid">
-      {{"SIGN_UP"|translate}}</ion-button>
+    <div class="d-flex flex-justify-center btn-section">
+    <ion-button *ngIf="isAMentor" class="mx-0 onboard-button" shape="round" (click)="onSubmit()" expand="block" size="large" [disabled]="!form1.myForm.valid">
+      {{"SIGN_UP_AS_MENTOR"|translate}}</ion-button>
+    <ion-button *ngIf="!isAMentor" class="mx-0 onboard-button" shape="round" (click)="onSubmit()" expand="block" size="large" [disabled]="!form1.myForm.valid">
+      {{"SIGN_UP_AS_MENTEE"|translate}}</ion-button>
+    </div>
   </section>
 </ion-content>

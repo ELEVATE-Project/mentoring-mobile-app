@@ -17,11 +17,6 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 export class TermsAndConditionsPage implements OnInit {
   items: any;
   notChecked: boolean=true;
-  public headerConfig: any = {
-    menu: false,
-    notification: false,
-    backButton: true,
-  };
   id: any;
   constructor(private router: Router, private profileService: ProfileService,
     private authService: AuthService, private form: FormService, private elementRef: ElementRef, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService) {

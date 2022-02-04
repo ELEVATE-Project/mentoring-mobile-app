@@ -10,7 +10,7 @@
       <ion-label
         *ngIf="control.label !== '' && !['chip'].includes(control.type) && !['rating'].includes(control.type)"
         [position]="control.position"
-        >{{ control.label }}</ion-label
+        ><ion-icon *ngIf="control?.validators['required']==true" class="color-red" name="star"></ion-icon> {{ control.label }}</ion-label
       >
       <ion-input
         *ngIf="
@@ -97,7 +97,7 @@
         [label]="control.label"
         [numberOfStars]="control.noOfstars"
       ></app-star-rating>
-      <ion-input *ngIf="control.type == 'secretCode'" class="text"></ion-input>
+      <ion-input *ngIf="control.type == 'secretCode'" [formControlName]="control.name" class="text"></ion-input>
     </ion-item>
     <small class="error-msg d-flex error-msg flex-align-items-center" >
       <div *ngIf="myForm.get(control.name).touched && myForm.get(control.name).invalid ">

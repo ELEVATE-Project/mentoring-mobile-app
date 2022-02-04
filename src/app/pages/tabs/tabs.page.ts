@@ -29,9 +29,6 @@ export class TabsPage {
 
   ionViewDidEnter() {
     this.propagateToActiveTab('ionViewDidEnter');
-    this.subscription = this.platform.backButton.subscribeWithPriority(9999, () => {
-      this.router.navigate(["/"]);
-    })
   }
   private propagateToActiveTab(eventName: string) {
     if (this.activeTab) {
