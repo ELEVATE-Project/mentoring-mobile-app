@@ -88,8 +88,16 @@
         slot="end"
         [name]="control.type === 'password' ? 'eye-off' : 'eye'"
         *ngIf="control.type === 'password' || control.showPasswordIcon"
-        class="passwordIcon"
+        class="icon"
         (click)="hideShowPassword(control)"
+      ></ion-icon>
+      <ion-icon 
+      slot="end"
+      size="small"
+      name="information-circle"
+      *ngIf="control.type === 'secretCode'"
+      class="icon"
+      (click)="alertToast()"
       ></ion-icon>
       <app-star-rating
         *ngIf="control.type === 'rating'"

@@ -8,6 +8,7 @@ import {
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash-es';
 import * as moment from 'moment';
+import { ToastService } from 'src/app/core/services';
 
 interface JsonFormValidators {
   min?: number;
@@ -54,7 +55,7 @@ export class DynamicFormComponent implements OnInit {
   showForm = false;
   date: any;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private toast: ToastService) {}
   ngOnInit() {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){
@@ -144,5 +145,8 @@ export class DynamicFormComponent implements OnInit {
     //  this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
     control.type = control.type === 'text' ? 'password' : 'text';
     control.showPasswordIcon = true;
+  }
+  alertToast(){
+    this.toast.showToast("Please refer to the on-boarding email for your secret code", "success")
   }
 }
