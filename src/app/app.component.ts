@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { MenuController, NavController, Platform } from '@ionic/angular';
+import { AlertController, MenuController, NavController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
 import * as _ from 'lodash-es';
@@ -8,6 +8,7 @@ import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -40,9 +41,42 @@ export class AppComponent {
     private profile: ProfileService,
     private zone:NgZone,
     private deeplinks: Deeplinks,
+    private _location: Location,
+    private alert: AlertController,
   ) {
     this.initializeApp();
     this.router.navigate(["/"]);
+    this.subscribeBackButton();
+  }
+  subscribeBackButton() {
+    this.platform.backButton.subscribe(async () => {
+      if (this._location.isCurrentPathEqualTo("/tabs/home") || this._location.isCurrentPathEqualTo("/tabs/profile") || this._location.isCurrentPathEqualTo("/tabs/dashboard") || this._location.isCurrentPathEqualTo("/tabs/mentor-directory")) {
+        let texts: any;
+        this.translate.get(['EXIT_CONFIRM_MESSAGE', 'CANCEL', 'CONFIRM']).subscribe(text => {
+          texts = text;
+        })
+        const alert = await this.alert.create({
+          message: texts['EXIT_CONFIRM_MESSAGE'],
+          buttons: [
+            {
+              text: texts['CANCEL'],
+              role: 'cancel',
+              handler: () => { }
+            },
+            {
+              text: texts['CONFIRM'],
+              role: 'confirm',
+              handler: () => { 
+                navigator['app'].exitApp();
+              }
+            }
+          ]
+        });
+        await alert.present();
+      } else {
+        this._location.back();
+      }
+    });
   }
 
   initializeApp() {
