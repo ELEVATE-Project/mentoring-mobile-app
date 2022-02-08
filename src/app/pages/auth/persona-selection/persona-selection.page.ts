@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
@@ -25,11 +26,26 @@ export class PersonaSelectionPage implements OnInit {
     },
   };
   userType:any;
+  labels=["CHOOSE_YOUR_ROLE"];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private translateService: TranslateService) { }
 
   ngOnInit() {
+    this.translateText();
   }
+
+  async translateText() {
+    this.translateService.get(this.labels).subscribe(translatedLabel => {
+      let labelKeys = Object.keys(translatedLabel);
+      labelKeys.forEach((key)=>{
+        let index = this.labels.findIndex(
+          (label) => label === key
+        )
+        this.labels[index]=translatedLabel[key];
+      })
+    })
+  }
+
   onAction(event) {
     this.userType=event.name;
   }

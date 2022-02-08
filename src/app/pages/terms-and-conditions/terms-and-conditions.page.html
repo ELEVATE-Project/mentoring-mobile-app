@@ -1,5 +1,5 @@
 <ion-content class="ion-padding">
-  <app-generic-header [label1]="'TERMS_AND'" [label2]="'CONDITIONS'"></app-generic-header>
+  <app-generic-header [labels]="labels"></app-generic-header>
   <div *ngIf="items" class="text-config" [innerHtml]="items.controls[0].label | safeHtml"></div>
   <div class="check-box">
     <ion-row class="d-flex, flex-align-items-center check-box-row">

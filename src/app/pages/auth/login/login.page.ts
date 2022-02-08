@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
@@ -48,11 +49,26 @@ export class LoginPage implements OnInit {
     notification: false,
     signupButton: true
   };
-  constructor(private authService: AuthService, private router: Router, private menuCtrl: MenuController, private activatedRoute: ActivatedRoute) {
+  labels=["LOGIN_TO_MENTOR_ED"];
+  constructor(private authService: AuthService, private router: Router, private menuCtrl: MenuController, private activatedRoute: ActivatedRoute, private translateService: TranslateService) {
     this.menuCtrl.enable(false);
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.translateText();
+  }
+
+  async translateText() {
+    this.translateService.get(this.labels).subscribe(translatedLabel => {
+      let labelKeys = Object.keys(translatedLabel);
+      labelKeys.forEach((key)=>{
+        let index = this.labels.findIndex(
+          (label) => label === key
+        )
+        this.labels[index]=translatedLabel[key];
+      })
+    })
+  }
 
   ionViewWillEnter() {
     this.activatedRoute.queryParams.subscribe(params => {

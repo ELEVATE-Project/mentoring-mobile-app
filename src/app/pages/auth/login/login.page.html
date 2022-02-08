@@ -1,8 +1,7 @@
 <app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
 <ion-content class="ion-padding">
   <app-generic-header
-    [label1]="'LOGIN_TO_MENTOR'"
-    [label2]="'ED'"
+    [labels]="labels"
   ></app-generic-header>
   <section>
     <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>

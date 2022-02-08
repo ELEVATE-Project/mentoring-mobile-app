@@ -5,6 +5,7 @@ import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { ToastService } from 'src/app/core/services';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reset-password',
@@ -59,10 +60,23 @@ export class ResetPasswordPage implements OnInit {
     },
     notification: false,
   };
+  labels = ["RESET_PASSWORD"]
 
-  constructor(private router: Router, private profileService: ProfileService, private toastService: ToastService) { }
+  constructor(private router: Router, private profileService: ProfileService, private toastService: ToastService, private translateService: TranslateService) { }
 
   ngOnInit() {
+    this.translateText();
+  }
+  async translateText() {
+    this.translateService.get(this.labels).subscribe(translatedLabel => {
+      let labelKeys = Object.keys(translatedLabel);
+      labelKeys.forEach((key)=>{
+        let index = this.labels.findIndex(
+          (label) => label === key
+        )
+        this.labels[index]=translatedLabel[key];
+      })
+    })
   }
   togglePassword() {
     let type = this.showPassword ? 'password' : 'text';

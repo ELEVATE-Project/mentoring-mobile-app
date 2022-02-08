@@ -1,12 +1,10 @@
 <ion-content class="ion-padding">
   <div class="landing-header">
   <app-generic-header
-    [label1]="'CREATE_ACCOUNT'"
-    [label3]="'TO_CONNECT_SOLVE'"
-    [label4]="'&_SHARE'"
+    [labels]="labels"
   ></app-generic-header>
-</div>
-  <section>
+  </div>
+  <section class="section-config">
     <div class="d-flex flex-justify-center">
       <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onSignup()"
         ><ion-icon class="button-icon" name="mail-outline"></ion-icon>{{"SIGN_UP"|translate}}</ion-button

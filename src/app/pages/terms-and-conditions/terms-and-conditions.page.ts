@@ -8,6 +8,7 @@ import * as _ from 'lodash-es';
 import { CommonRoutes } from 'src/global.routes';
 import { LocalStorageService } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-terms-and-conditions',
@@ -18,8 +19,9 @@ export class TermsAndConditionsPage implements OnInit {
   items: any;
   notChecked: boolean=true;
   id: any;
+  labels=["TERMS_AND","CONDITIONS"]
   constructor(private router: Router, private profileService: ProfileService,
-    private authService: AuthService, private form: FormService, private elementRef: ElementRef, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService) {
+    private authService: AuthService, private form: FormService, private elementRef: ElementRef, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService) {
       this.fetchForm();
   }
 
@@ -35,7 +37,20 @@ export class TermsAndConditionsPage implements OnInit {
     console.log(response);
     this.items = _.get(response, 'result.data.fields');  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.translateText();
+  }
+  async translateText() {
+    this.translateService.get(this.labels).subscribe(translatedLabel => {
+      let labelKeys = Object.keys(translatedLabel);
+      labelKeys.forEach((key)=>{
+        let index = this.labels.findIndex(
+          (label) => label === key
+        )
+        this.labels[index]=translatedLabel[key];
+      })
+    })
+  }
 
   // expandItem(item): void {
   //   if (item.expanded) {

@@ -6,13 +6,17 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./generic-header.component.scss'],
 })
 export class GenericHeaderComponent implements OnInit {
-  @Input() label1:any;
-  @Input() label2:any;
-  @Input() label3:any;
-  @Input() label4:any;
+  @Input() labels;
   constructor() { }
 
   ngOnInit() {
+    const match = this.labels.find(element => {
+      if (element.includes("MentorED")) {
+        let breakPoint = element.indexOf("ED");
+        const leftPart = element.substr(0, breakPoint);
+        const rightPart = element.substr(breakPoint);
+        this.labels[this.labels.indexOf(element)] = leftPart+"<span class='text-green'>"+rightPart+"</span>" 
+      }
+    });
   }
-
 }

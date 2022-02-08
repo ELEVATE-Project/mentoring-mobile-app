@@ -1,7 +1,6 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding">
-  <app-generic-header *ngIf="actionType=='signup'" [label1]="'VERIFY_ACCOUNT'"></app-generic-header>
-  <app-generic-header *ngIf="actionType!='signup'" [label1]="'ENTER_OTP'"></app-generic-header>
+  <app-generic-header *ngIf="actionType=='signup'" [labels]="labels"></app-generic-header>
   <section>
     <div class="d-flex flex-justify-center flex-align-items-center">
       <ng-otp-input (onInputChange)="onOtpChange($event)" [config]="config" #ngOtpInput></ng-otp-input>

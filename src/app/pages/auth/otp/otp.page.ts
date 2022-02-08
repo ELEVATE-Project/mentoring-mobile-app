@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService } from 'src/app/core/services';
@@ -36,8 +37,9 @@ export class OtpPage implements OnInit {
   enableResendOtp: boolean =false;
   timeLimit=60;
   countDownTimer;
+  labels;
 
-  constructor(private router:Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService){ 
+  constructor(private router:Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService){ 
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.resetPasswordData = {email:params.get('email'), password: params.get('password'), otp: Number};
       this.actionType = params.get('type');
@@ -45,7 +47,21 @@ export class OtpPage implements OnInit {
   }
 
   ngOnInit() {
+    this.labels = this.actionType=='signup'?['VERIFY_ACCOUNT']:['ENTER_OTP'];
+    this.translateText();
     this.startCountdown();
+  }
+
+  async translateText() {
+    this.translateService.get(this.labels).subscribe(translatedLabel => {
+      let labelKeys = Object.keys(translatedLabel);
+      labelKeys.forEach((key)=>{
+        let index = this.labels.findIndex(
+          (label) => label === key
+        )
+        this.labels[index]=translatedLabel[key];
+      })
+    })
   }
 
   startCountdown() {
