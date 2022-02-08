@@ -122,5 +122,7 @@
     "CHOOSE_YOUR_ROLE":"Choose your role",
     "CONTINUE": "Continue",
     "VERIFY_ACCOUNT": "Verify account",
-    "IF_YOU_DIDNT_RECIEVED_OTP": "If you didn't recieved the OTP!"
+    "IF_YOU_DIDNT_RECIEVED_OTP": "If you didn't recieved the OTP!",
+    "TRY_AGAIN_AFTER": "Try again after",
+    "SECONDS": "seconds"
 }

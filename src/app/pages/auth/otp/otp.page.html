@@ -2,21 +2,24 @@
 <ion-content class="ion-padding">
   <app-generic-header *ngIf="actionType=='signup'" [label1]="'VERIFY_ACCOUNT'"></app-generic-header>
   <app-generic-header *ngIf="actionType!='signup'" [label1]="'ENTER_OTP'"></app-generic-header>
-  <section class="form-section">
+  <section>
     <div class="d-flex flex-justify-center flex-align-items-center">
       <ng-otp-input (onInputChange)="onOtpChange($event)" [config]="config" #ngOtpInput></ng-otp-input>
     </div>
     <p class="hint-message"> {{"YOU_WILL_RECIEVE_OTP_IN_YOUR_EMAIL" | translate}}</p>
   </section>
-  <section class="form-section">
+  <section>
     <div class="d-flex flex-justify-center flex-align-items-center">
-      <ion-button [ngClass]="{'my-10': true, 'disabled': !isEnabled, 'onboard-button':true}" [disabled]="!isEnabled" (click)="onSubmit()" shape="round">
+      <ion-button [ngClass]="{'my-10': true, 'disabled': !isEnabled, 'onboard-button':true}" [disabled]="!isEnabled"
+        (click)="onSubmit()" shape="round">
         {{'VERIFY_AND_LOGIN'|translate}}
       </ion-button>
     </div>
   </section>
-  <div class="d-flex flex-justify-center flex-align-items-center resend-otp" (click)="resendOtp()">
-    <p class="underline">{{"RESEND_OTP"|translate}}</p>
+  <div class="d-flex flex-justify-center flex-align-items-center resend-otp">
+    <div class="counter" *ngIf="countDownTimer">{{'TRY_AGAIN_AFTER'|translate}} {{countDownTimer}}
+      {{'SECONDS'|translate}}</div>
+    <p class="underline" (click)="enableResendOtp && resendOtp()">{{"RESEND_OTP"|translate}}</p>
   </div>
   <p class="label">{{"IF_YOU_DIDNT_RECIEVED_OTP"|translate}}</p>
 </ion-content>

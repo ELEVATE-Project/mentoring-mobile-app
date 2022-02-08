@@ -1,4 +1,6 @@
 .resend-otp{
+    display: flex;
+    flex-direction: column;
     font-size: 14px;
     font-weight: bold;
     margin-top: 10px;
@@ -7,15 +9,12 @@
   }
 .hint-message{
   font-size:small;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 ion-button{
   width: 80%;
   height: 45px;
   font-weight: bold;
-}
-.form-section{
-  margin-top: 10px;
 }
 .underline{
   text-decoration: underline;
@@ -27,9 +26,12 @@ ion-button{
   --background: rgb(49, 49, 51);
 }
 .label{
-  margin-top: -3px !important;
+  margin-top: 0px !important;
   padding-top: 0px !important;
   text-decoration: underline;
   text-align: center;
   font-size: 13px;
+}
+.counter{
+  text-align: center;
 }

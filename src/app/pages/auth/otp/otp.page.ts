@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService } from 'src/app/core/services';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
@@ -32,6 +33,9 @@ export class OtpPage implements OnInit {
   otp: any;
   isEnabled:boolean=false;
   actionType;
+  enableResendOtp: boolean =false;
+  timeLimit=60;
+  countDownTimer;
 
   constructor(private router:Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService){ 
     this.activatedRoute.queryParamMap.subscribe(params => {
@@ -41,6 +45,21 @@ export class OtpPage implements OnInit {
   }
 
   ngOnInit() {
+    this.startCountdown();
+  }
+
+  startCountdown() {
+    this.countDownTimer= this.timeLimit;
+    let counter=0;
+    const interval = setInterval(() => {
+      this.countDownTimer--;
+      counter++;
+      if (counter==this.timeLimit) {
+        clearInterval(interval);
+        this.countDownTimer=null;
+        this.enableResendOtp=true;
+      }
+    }, 1000);
   }
 
   async onSubmit(){
@@ -55,7 +74,9 @@ export class OtpPage implements OnInit {
     }
   }
   async resendOtp(){
-    var response = await this.profileService.generateOtp({ email: this.resetPasswordData.email });
+    this.enableResendOtp=false;
+    //var response = await this.profileService.generateOtp({ email: this.resetPasswordData.email });
+    this.startCountdown();
   }
 
   onOtpChange(otp) {
