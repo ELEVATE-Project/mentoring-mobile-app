@@ -1,10 +1,23 @@
 hr {
     background: var(--ion-color-primary);
     height: 5px;
-    width: 80px;
-    margin: 15px 0 20px 0;
+    width: 72%;
+    margin: 5px 0 20px 0;
   }
 
  .bottom-margin {
    margin-bottom: 10%;
  } 
+ .text-config{
+  display:inline-block;
+  font-family: Noto Sans;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 36px;
+  letter-spacing: 0em;
+  text-align: left;
+ }
+ .margin-0{
+   margin: 0px;
+ }

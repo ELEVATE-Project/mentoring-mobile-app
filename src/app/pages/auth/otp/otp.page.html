@@ -1,20 +1,24 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding">
-  <app-generic-header [label1]="'RESET_PASSWORD'"></app-generic-header>
-
-  <section class="form-section">
-    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
-    <div class="resend-otp" (click)="resendOtp()">
-      <ion-icon name="refresh-outline" size="large"></ion-icon
-      >{{"RESEND_OTP"|translate}}
+  <app-generic-header *ngIf="actionType=='signup'" [labels]="labels"></app-generic-header>
+  <section>
+    <div class="d-flex flex-justify-center flex-align-items-center">
+      <ng-otp-input (onInputChange)="onOtpChange($event)" [config]="config" #ngOtpInput></ng-otp-input>
+    </div>
+    <p class="hint-message"> {{"YOU_WILL_RECIEVE_OTP_IN_YOUR_EMAIL" | translate}}</p>
+  </section>
+  <section>
+    <div class="d-flex flex-justify-center flex-align-items-center">
+      <ion-button [ngClass]="{'my-10': true, 'disabled': !isEnabled, 'onboard-button':true}" [disabled]="!isEnabled"
+        (click)="onSubmit()" shape="round">
+        {{'VERIFY_AND_LOGIN'|translate}}
+      </ion-button>
     </div>
   </section>
-
-  <section
-    [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}"
-  >
-    <ion-button class="my-50 mx-0" expand="block" (click)="onSubmit()" size="large"
-      >{{'UPDATE_AND_LOGIN'|translate}}</ion-button
-    >
-  </section>
+  <div class="d-flex flex-justify-center flex-align-items-center resend-otp">
+    <div class="counter" *ngIf="countDownTimer">{{'TRY_AGAIN_AFTER'|translate}} {{countDownTimer}}
+      {{'SECONDS'|translate}}</div>
+    <p class="underline" (click)="enableResendOtp && resendOtp()">{{"RESEND_OTP"|translate}}</p>
+  </div>
+  <p class="label">{{"IF_YOU_DIDNT_RECIEVED_OTP"|translate}}</p>
 </ion-content>

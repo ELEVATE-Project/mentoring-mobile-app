@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
@@ -40,11 +41,34 @@ export class LoginPage implements OnInit {
   };
   id: any;
   userDetails: any;
-  constructor(private authService: AuthService, private router: Router, private menuCtrl: MenuController, private activatedRoute: ActivatedRoute) {
+  public headerConfig: any = {
+    backButton: {
+      label: '',
+      color: 'primary'
+    },
+    notification: false,
+    signupButton: true
+  };
+  labels=["LOGIN_TO_MENTOR_ED"];
+  constructor(private authService: AuthService, private router: Router, private menuCtrl: MenuController, private activatedRoute: ActivatedRoute, private translateService: TranslateService) {
     this.menuCtrl.enable(false);
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.translateText();
+  }
+
+  async translateText() {
+    this.translateService.get(this.labels).subscribe(translatedLabel => {
+      let labelKeys = Object.keys(translatedLabel);
+      labelKeys.forEach((key)=>{
+        let index = this.labels.findIndex(
+          (label) => label === key
+        )
+        this.labels[index]=translatedLabel[key];
+      })
+    })
+  }
 
   ionViewWillEnter() {
     this.activatedRoute.queryParams.subscribe(params => {
@@ -75,12 +99,20 @@ export class LoginPage implements OnInit {
     }
   }
 
+  action(event) {
+    switch (event) {
+      case 'signup':
+        this.goToSignup();
+        break;
+    }
+  }
+
   goToForgotPassword(){
     this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.RESET_PASSWORD}`]);
   }
 
   goToSignup(){
-    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.REGISTER}`]);
+    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.PERSONA_SELECTION}`]);
   }
 
 }

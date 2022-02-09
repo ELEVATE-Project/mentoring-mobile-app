@@ -33,10 +33,10 @@ export class AuthService {
       payload: formData,
     };
     try {
-      await this.httpService.post(config);
+      let result = await this.httpService.post(config);
       this.loaderService.stopLoader();
       this.toast.showToast('SIGNUP_MESSAGE', 'success')
-      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { replaceUrl: true });
+      return result;
     }
     catch (error) {
       this.loaderService.stopLoader();

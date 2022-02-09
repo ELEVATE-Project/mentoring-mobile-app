@@ -1,7 +1,6 @@
-<h1 class="text-bold" *ngIf="label1">{{ label1 | translate }}</h1>
-<h1 class="text-bold" *ngIf="label2">{{ label2 | translate }}</h1>
-<div class="d-flex bottom-margin">
-  <div>
+<div *ngFor="let label of labels; let i=index;">
+  <div class="text-config" [innerHtml]="label"></div>
+  <div *ngIf="i==labels.length-1" class="d-flex bottom-margin">
     <hr />
   </div>
 </div>

@@ -10,7 +10,7 @@
       <ion-label
         *ngIf="control.label !== '' && !['chip'].includes(control.type) && !['rating'].includes(control.type)"
         [position]="control.position"
-        >{{ control.label }}</ion-label
+        ><ion-icon *ngIf="control?.validators['required']==true" class="color-red" name="star"></ion-icon> {{ control.label }}</ion-label
       >
       <ion-input
         *ngIf="
@@ -21,7 +21,8 @@
             'number',
             'search',
             'tel',
-            'url'
+            'url',
+            'secretCode'
           ].includes(control.type)
         "
         [type]="control.type"
@@ -88,8 +89,16 @@
         slot="end"
         [name]="control.type === 'password' ? 'eye-off' : 'eye'"
         *ngIf="control.type === 'password' || control.showPasswordIcon"
-        class="passwordIcon"
+        class="icon"
         (click)="hideShowPassword(control)"
+      ></ion-icon>
+      <ion-icon 
+      slot="end"
+      size="small"
+      name="information-circle"
+      *ngIf="control.type === 'secretCode'"
+      class="icon"
+      (click)="alertToast()"
       ></ion-icon>
       <app-star-rating
         *ngIf="control.type === 'rating'"

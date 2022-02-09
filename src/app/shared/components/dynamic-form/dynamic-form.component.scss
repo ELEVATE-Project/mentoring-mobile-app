@@ -26,7 +26,7 @@ ion-item {
   border-bottom: 1.9px solid var(--highlight-color-invalid);
 }
 
-.passwordIcon {
+.icon {
   position: relative;
   top: 42%;
 }
@@ -37,4 +37,9 @@ ion-item {
   height: 20px;
   display: flex;
   align-items: center;
+}
+ion-icon.color-red{
+  color: red;
+  font-size: 8px;
+  margin-bottom: 5px;
 }

@@ -5,6 +5,9 @@ import {
   JsonFormData,
 } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import * as _ from 'lodash-es';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonRoutes } from 'src/global.routes';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
@@ -57,9 +60,21 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
-        },
-      },
-    ],
+        }
+      }
+    ]
+  };
+
+  secretCodeControl = {
+    name: 'secretCode',
+    label: 'Secret code',
+    value: '',
+    class: 'ion-margin',
+    type: 'secretCode',
+    position: 'floating',
+    validators: {
+      required: true,
+    },
   };
   public headerConfig: any = {
     // menu: true,
@@ -70,47 +85,70 @@ export class RegisterPage implements OnInit {
   };
 
   //to be removed
-  secretCode: string="";
-  isChecked: any;
+  secretCode: string = "";
+  userType: any;
+  isAMentor: boolean;
+  labels = ["SIGN_UP_TO_MENTOR_ED"]
 
   constructor(
     private authService: AuthService,
-    private toastService: ToastService
-  ) { }
-  ngOnInit() { }
+    private toastService: ToastService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private translateService: TranslateService
+  ) {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.userType = params.userType;
+      if(this.userType=="mentor"){
+      this.formData.controls.push(this.secretCodeControl);
+      this.isAMentor=true;
+      }
+    });
+  }
+  ngOnInit() {
+    this.translateText();
+   }
+
+   async translateText() {
+    this.translateService.get(this.labels).subscribe(translatedLabel => {
+      let labelKeys = Object.keys(translatedLabel);
+      labelKeys.forEach((key)=>{
+        let index = this.labels.findIndex(
+          (label) => label === key
+        )
+        this.labels[index]=translatedLabel[key];
+      })
+    })
+  }
 
   ionViewWillEnter() {
-    this.isChecked = false;
   }
 
   async onSubmit() {
     this.form1.onSubmit();
-
-    //to be removed
-    if (this.secretCode !== "" && this.isChecked == true) {
-      this.form1.myForm.value.isAMentor = this.isChecked;
-      this.form1.myForm.value.secretCode = this.secretCode;
-      if(this.secretCode == "4567" && this.form1.myForm.valid){
-        this.createUser();
+    if(this.userType=="mentor"){
+      if(this.form1.myForm.value.secretCode!=="4567"){
+        this.toastService.showToast("Incorrect code. Please try again", "danger");
       } else {
-        this.toastService.showToast("Please enter the correct secret code", "danger");
+        this.createUser();
       }
-    } else if(this.isChecked==true && this.secretCode == ""){
-      this.toastService.showToast("Please enter the secret code", "danger");
     } else {
       this.createUser();
     }
   }
-  createUser(){
+
+  async createUser() {
     let formJson = this.form1.myForm.value;
     if (_.isEqual(formJson.password, formJson.cPassword)) {
-      this.authService.createAccount(this.form1.myForm.value);
+      //let result = await this.authService.createAccount(this.form1.myForm.value);
+      //if(result){
+      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], {queryParams:{type:"signup"}});
+      //}
     } else {
       this.toastService.showToast('Password Mismatch', 'danger');
     }
   }
-  signUpAsMentor(event) {
-    this.secretCode = "";
-    this.isChecked = event?true:false;
+  ionViewDidLeave() {
+    this.formData.controls.pop();
   }
 }

@@ -17,4 +17,6 @@ export class CommonRoutes {
     public static HOME_SEARCH ='home-search';
     public static MENTOR_DETAILS='mentor-details';
     public static TERMS_AND_CONDITIONS='terms-and-conditions';
+    public static LANDING_PAGE='landing';
+    public static PERSONA_SELECTION='persona-selection';
 }

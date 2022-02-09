@@ -61,7 +61,6 @@ h6, h5 , h4, h3, h2, h1 {
   justify-content: center;
 
 }
-
 .flex-justify-start {
   justify-content: start;
 }
@@ -72,8 +71,14 @@ h6, h5 , h4, h3, h2, h1 {
 .flex-align-items-center{
   align-items: center;
 }
+.flex-align-items-flex-start{
+  align-items:flex-start;
+}
 
 //margins
+.my-10 {
+  margin: 10px 0;
+}
 .my-30 {
   margin: 30px 0;
 }
@@ -127,7 +132,7 @@ ion-button{
   ion-button {
     font-size: 16px;
     font-weight: bold;
-    text-transform: uppercase;
+    text-transform: none;
     // margin: 0 15px;
   }
 }
@@ -136,7 +141,7 @@ ion-button{
   ion-button {
     font-size: 16px;
     font-weight: bold;
-    text-transform: uppercase;
+    text-transform: none;
     --background: var(--quill-grey);
     --color: var(--black);
    }
@@ -160,4 +165,16 @@ ion-button{
   text-overflow:ellipsis;
   font-size: large;
   white-space: nowrap;
+}
+
+.onboard-button{
+  width: 80%;
+  height: 46px;
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: none;
+}
+
+.text-green{
+  color: rgb(58, 199, 15);
 }

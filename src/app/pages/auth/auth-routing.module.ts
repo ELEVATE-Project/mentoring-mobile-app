@@ -4,6 +4,10 @@ import { CommonRoutes } from 'src/global.routes';
 
 const routes: Routes = [
   {
+    path: CommonRoutes.LANDING_PAGE,
+    loadChildren: () => import('./landing/landing.module').then( m => m.LandingPageModule)
+  },
+  {
     path: CommonRoutes.LOGIN,
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
@@ -23,6 +27,14 @@ const routes: Routes = [
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
+  },
+  {
+    path: CommonRoutes.LANDING_PAGE,
+    loadChildren: () => import('./landing/landing.module').then( m => m.LandingPageModule)
+  },
+  {
+    path: CommonRoutes.PERSONA_SELECTION,
+    loadChildren: () => import('./persona-selection/persona-selection.module').then( m => m.PersonaSelectionPageModule)
   }
 ];
 

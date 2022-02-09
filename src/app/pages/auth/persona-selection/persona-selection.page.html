@@ -1,0 +1,18 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<ion-content class="ion-padding">
+  <div class="header">
+  <app-generic-header
+    [labels]="labels"
+  ></app-generic-header>
+  </div>
+  <section>
+    <div class="persona-card d-flex flex-justify-center">
+    <app-persona-selection-card [personaList]="personaList" (onClickEvent)="onAction($event)"></app-persona-selection-card>
+    </div>
+    <div class="d-flex flex-justify-center btn-continue">
+      <ion-button class="mx-0 onboard-button" [disabled]="!userType" expand="block" shape="round" size="large" (click)="goToSignup()"
+        >{{"CONTINUE"|translate}}</ion-button
+      >
+    </div>
+  </section>
+  </ion-content>
