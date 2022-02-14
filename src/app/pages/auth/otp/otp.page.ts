@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
@@ -40,11 +41,12 @@ export class OtpPage implements OnInit {
   labels;
   signupData: any;
 
-  constructor(private router: Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService) {
+  constructor(private router: Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService, private menuCtrl: MenuController) {
     this.actionType = window.history.state.type;
     this.resetPasswordData.email = this.actionType == "reset-password" ? window.history.state.email : null;
     this.resetPasswordData.password = this.actionType == "reset-password" ? window.history.state.password : null;
     this.signupData = this.actionType == "signup" ? window.history.state.formData : null;
+    this.menuCtrl.enable(false);
   }
 
   ngOnInit() {
@@ -93,6 +95,7 @@ export class OtpPage implements OnInit {
         this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })
       }
     }
+    this.menuCtrl.enable(true);
   }
 
   async resendOtp() {
