@@ -33,10 +33,20 @@ export class AuthService {
       payload: formData,
     };
     try {
-      let result = await this.httpService.post(config);
+      let data: any = await this.httpService.post(config);
+      const result = _.pick(data.result, ['refresh_token', 'access_token']);
+      if (!result.access_token) { throw Error(); };
+      this.userService.token = result;
+      await this.localStorage.setLocalData(localKeys.TOKEN, result);
+      const userData = await this.profileService.getProfileDetailsAPI();
+      if (!userData) {
+        this.localStorage.delete(localKeys.TOKEN);
+        throw Error();
+      }
+      await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
+      this.userService.userEvent.next(userData);
       this.loaderService.stopLoader();
-      this.toast.showToast('SIGNUP_MESSAGE', 'success')
-      return result;
+      return userData;
     }
     catch (error) {
       this.loaderService.stopLoader();
@@ -80,7 +90,7 @@ export class AuthService {
       },
     };
     try {
-      if(!skipApiCall){
+      if (!skipApiCall) {
         await this.httpService.post(config);
       }
       this.localStorage.delete(localKeys.USER_DETAILS);

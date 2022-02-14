@@ -20,6 +20,7 @@ export class FeedbackPage implements OnInit {
   };
   feedbackData = {
     feedbacks: [],
+    feedbackAs: null
   };
   sessionData: any;
   isMentor: boolean;
@@ -39,26 +40,27 @@ export class FeedbackPage implements OnInit {
     let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     var response = await this.sessionService.getSessionDetailsAPI(this.sessionData._id);
     this.isMentor = userDetails._id == response.userId ? true : false;
-    this.formData.controls= this.sessionData.form;
+    this.formData.controls = this.sessionData.form;
+    this.feedbackData.feedbackAs = this.isMentor ? "mentor" : "mentee";
   }
 
   async submit() {
     this.form1.onSubmit();
     let feedbackKey = Object.keys(this.form1.myForm.value);
-    feedbackKey.forEach((key)=>{
-      if(this.form1.myForm.value[key]!=""){
+    feedbackKey.forEach((key) => {
+      if (this.form1.myForm.value[key] != "") {
         let data;
-        this.formData.controls.some((element)=>{
-          if(element.name === key){
+        this.formData.controls.some((element) => {
+          if (element.name === key) {
             data = element;
             return element;
           }
         });
-        let feedback = {questionId: data._id, value: this.form1.myForm.value[key], label: data.label};
+        let feedback = { questionId: data._id, value: this.form1.myForm.value[key], label: data.label };
         this.feedbackData.feedbacks.push(feedback);
       }
     })
-    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.sessionData._id):await this.sessionService.submitFeedback({skippedFeedback: true}, this.sessionData._id);
+    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.sessionData._id) : await this.sessionService.submitFeedback({ skippedFeedback: true }, this.sessionData._id);
     if (result) {
       this.toast.showToast(result?.message, "success");
     }
@@ -66,7 +68,7 @@ export class FeedbackPage implements OnInit {
   }
 
   async closeModal() {
-    await this.sessionService.submitFeedback({skippedFeedback: true}, this.sessionData._id);
+    await this.sessionService.submitFeedback({ skippedFeedback: true }, this.sessionData._id);
     await this.modalController.dismiss();
   }
 }

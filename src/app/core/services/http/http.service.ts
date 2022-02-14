@@ -39,7 +39,7 @@ export class HttpService {
     const headers = {
       'X-auth-token': token ? token : "",
       'Content-Type': 'application/json',
-      'timeZone' : timezone,
+      'timeZone': timezone,
     }
     return headers;
   }
@@ -48,7 +48,7 @@ export class HttpService {
     if (!this.checkNetworkAvailability()) {
       throw Error(null);
     }
-    const headers =  requestParam.headers ? requestParam.headers : await this.setHeaders();
+    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     let body = requestParam.payload ? requestParam.payload : {};
     this.http.setDataSerializer('json');
     this.http.setRequestTimeout(60);
@@ -73,9 +73,6 @@ export class HttpService {
     return this.http.get(this.baseUrl + requestParam.url, '', headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
-        if(result?.meta?.data?.length){
-          this.openModal(result?.meta?.data[0]);
-        }
         if (result.responseCode === "OK") {
           return result;
         }
@@ -163,22 +160,12 @@ export class HttpService {
         break
       case 401:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
-          let auth = this.injector.get(AuthService);
-          auth.logoutAccount(true);
+        let auth = this.injector.get(AuthService);
+        auth.logoutAccount(true);
         break
       default:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
     }
     throw Error(result);
-  }
-
-  async openModal(sessionData) {
-    const modal = await this.modalController.create({
-      component: FeedbackPage,
-      componentProps: {
-        data: sessionData,
-      }
-    });
-    return await modal.present();
   }
 }

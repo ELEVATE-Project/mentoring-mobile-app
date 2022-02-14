@@ -10,7 +10,7 @@ import {
 import { CommonRoutes } from 'src/global.routes';
 import { localKeys } from '../../constants/localStorage.keys';
 import * as _ from 'lodash-es';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 import { UserService } from '../user/user.service';
 
 @Injectable({
@@ -35,7 +35,7 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.post(config);
       let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-      userDetails.user= null;
+      userDetails.user = null;
       let profileData = await this.getProfileDetailsAPI();
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileData);
       this.userService.userEvent.next(profileData);
@@ -66,19 +66,19 @@ export class ProfileService {
     showLoader ? await this.loaderService.startLoader() : null;
     return new Promise((resolve) => {
       try {
-      this.localStorage.getLocalData(localKeys.USER_DETAILS)
-        .then(async (data) => {
-          if (data) {
-            showLoader ? this.loaderService.stopLoader() : null;
-            resolve(data);
-          } else {
-            var res = await this.getProfileDetailsAPI();
-            await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
-            data = _.get(data, 'user');
-            showLoader ? this.loaderService.stopLoader() : null;
-            resolve(data);
-          }
-        })
+        this.localStorage.getLocalData(localKeys.USER_DETAILS)
+          .then(async (data) => {
+            if (data) {
+              showLoader ? this.loaderService.stopLoader() : null;
+              resolve(data);
+            } else {
+              var res = await this.getProfileDetailsAPI();
+              await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
+              data = _.get(data, 'user');
+              showLoader ? this.loaderService.stopLoader() : null;
+              resolve(data);
+            }
+          })
       } catch (error) {
         showLoader ? this.loaderService.stopLoader() : showLoader;
       }
@@ -109,9 +109,35 @@ export class ProfileService {
     };
     try {
       let data: any = await this.httpService.post(config);
+      const result = _.pick(data.result, ['refresh_token', 'access_token']);
+      if (!result.access_token) { throw Error(); };
+      this.userService.token = result;
+      await this.localStorage.setLocalData(localKeys.TOKEN, result);
+      const userData = await this.getProfileDetailsAPI();
+      if (!userData) {
+        this.localStorage.delete(localKeys.TOKEN);
+        throw Error();
+      }
+      await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
+      this.userService.userEvent.next(userData);
       this.loaderService.stopLoader();
       this.toast.showToast(data.message, "success");
       return data;
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+  async registrationOtp(formData) {
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.REGISTRATION_OTP,
+      payload: formData
+    };
+    try {
+      let data: any = await this.httpService.post(config);
+      this.loaderService.stopLoader();
+      return true;
     }
     catch (error) {
       this.loaderService.stopLoader();

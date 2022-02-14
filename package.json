@@ -54,6 +54,7 @@
     "jwt-decode": "^3.1.2",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.1",
+    "ng-otp-input": "^1.8.1",
     "ng2-semantic-ui-v9": "0.0.6",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",

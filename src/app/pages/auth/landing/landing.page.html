@@ -1,14 +1,12 @@
 <ion-content class="ion-padding">
   <div class="landing-header">
-  <app-generic-header
-    [labels]="labels"
-  ></app-generic-header>
+    <app-generic-header [labels]="labels"></app-generic-header>
   </div>
   <section class="section-config">
     <div class="d-flex flex-justify-center">
-      <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onSignup()"
-        ><ion-icon class="button-icon" name="mail-outline"></ion-icon>{{"SIGN_UP"|translate}}</ion-button
-      >
+      <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onSignup()">
+        <ion-icon class="button-icon" name="mail-outline"></ion-icon>{{"SIGN_UP"|translate}}
+      </ion-button>
     </div>
   </section>
   <section class="section-config or-section">
@@ -17,9 +15,9 @@
   <section class="section-config">
     <p class="text-config">{{"ALREADY_HAVE_ACCOUNT"|translate}}</p>
     <div class="d-flex flex-justify-center">
-      <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onLogin()"
-        ><ion-icon class="button-icon" name="mail-outline"></ion-icon>{{"LOGIN"|translate}}</ion-button
-      >
+      <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onLogin()">
+        <ion-icon class="button-icon" name="mail-outline"></ion-icon>{{"LOGIN"|translate}}
+      </ion-button>
     </div>
   </section>
-  </ion-content>
+</ion-content>

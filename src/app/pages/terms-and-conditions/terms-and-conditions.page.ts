@@ -9,6 +9,7 @@ import { CommonRoutes } from 'src/global.routes';
 import { LocalStorageService } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { TranslateService } from '@ngx-translate/core';
+import { ModalController, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-terms-and-conditions',
@@ -17,25 +18,25 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class TermsAndConditionsPage implements OnInit {
   items: any;
-  notChecked: boolean=true;
+  notChecked: boolean = true;
   id: any;
-  labels=["TERMS_AND","CONDITIONS"]
+  labels = ["TERMS_OF_USE"]
   constructor(private router: Router, private profileService: ProfileService,
-    private authService: AuthService, private form: FormService, private elementRef: ElementRef, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService) {
-      this.fetchForm();
+    private authService: AuthService, private form: FormService, private elementRef: ElementRef, private activatedRoute: ActivatedRoute,
+    private localStorage: LocalStorageService, private translateService: TranslateService, private modalController: ModalController, private platform: Platform) {
+    this.fetchForm();
   }
 
   ionViewWillEnter() {
     this.activatedRoute.queryParams.subscribe(params => {
       this.id = params.sessionId ? params.sessionId : this.id;
-      console.log(this.id);
     });
   }
 
   async fetchForm() {
     const response = await this.form.getForm(TERMS_AND_CONDITIONS_FORM);
-    console.log(response);
-    this.items = _.get(response, 'result.data.fields');  }
+    this.items = _.get(response, 'result.data.fields');
+  }
 
   ngOnInit() {
     this.translateText();
@@ -43,11 +44,11 @@ export class TermsAndConditionsPage implements OnInit {
   async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {
       let labelKeys = Object.keys(translatedLabel);
-      labelKeys.forEach((key)=>{
+      labelKeys.forEach((key) => {
         let index = this.labels.findIndex(
           (label) => label === key
         )
-        this.labels[index]=translatedLabel[key];
+        this.labels[index] = translatedLabel[key];
       })
     })
   }
@@ -67,16 +68,10 @@ export class TermsAndConditionsPage implements OnInit {
   //   }
   // }
 
-  async goToHome(){
-    if(this.id){
-      await this.authService.acceptTermsAndConditions();
-      await this.setLocalStorage();
-      await this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
-    } else {
-      await this.authService.acceptTermsAndConditions();
-      await this.setLocalStorage();
-      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
-    }
+  async goToHome() {
+    await this.authService.acceptTermsAndConditions();
+    await this.setLocalStorage();
+    await this.modalController.dismiss();
   }
   async setLocalStorage() {
     const userData = await this.profileService.getProfileDetailsAPI();
@@ -84,7 +79,7 @@ export class TermsAndConditionsPage implements OnInit {
     await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
   }
 
-  checked(){
+  checked() {
     this.notChecked = (this.notChecked == true) ? false : true;
   }
 }

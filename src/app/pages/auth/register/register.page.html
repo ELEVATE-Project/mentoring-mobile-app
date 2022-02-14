@@ -1,5 +1,6 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding">
+  <div class="mx-10">
   <app-generic-header [labels]="labels"></app-generic-header>
   <section>
     <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
@@ -14,4 +15,5 @@
       {{"SIGN_UP_AS_MENTEE"|translate}}</ion-button>
     </div>
   </section>
+  </div>
 </ion-content>
