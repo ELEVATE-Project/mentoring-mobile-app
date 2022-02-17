@@ -34,17 +34,7 @@ export class AuthService {
     };
     try {
       let data: any = await this.httpService.post(config);
-      const result = _.pick(data.result, ['refresh_token', 'access_token']);
-      if (!result.access_token) { throw Error(); };
-      this.userService.token = result;
-      await this.localStorage.setLocalData(localKeys.TOKEN, result);
-      const userData = await this.profileService.getProfileDetailsAPI();
-      if (!userData) {
-        this.localStorage.delete(localKeys.TOKEN);
-        throw Error();
-      }
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
-      this.userService.userEvent.next(userData);
+      let userData = this.setUserInLocal(data);
       this.loaderService.stopLoader();
       return userData;
     }
@@ -61,7 +51,17 @@ export class AuthService {
     };
     try {
       const data: any = await this.httpService.post(config);
-      const result = _.pick(data.result, ['refresh_token', 'access_token']);
+      let userData = this.setUserInLocal(data);
+      this.loaderService.stopLoader();
+      return userData
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+      return null;
+    }
+  }
+  async setUserInLocal(data) {
+    const result = _.pick(data.result, ['refresh_token', 'access_token']);
       if (!result.access_token) { throw Error(); };
       this.userService.token = result;
       await this.localStorage.setLocalData(localKeys.TOKEN, result);
@@ -72,13 +72,7 @@ export class AuthService {
       }
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
       this.userService.userEvent.next(userData);
-      this.loaderService.stopLoader();
-      return userData
-    }
-    catch (error) {
-      this.loaderService.stopLoader();
-      return null;
-    }
+      return userData;
   }
 
   async logoutAccount(skipApiCall?: boolean) {

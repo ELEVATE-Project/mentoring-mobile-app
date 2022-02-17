@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import {
@@ -12,6 +12,7 @@ import { localKeys } from '../../constants/localStorage.keys';
 import * as _ from 'lodash-es';
 import { Location } from '@angular/common';
 import { UserService } from '../user/user.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,7 @@ export class ProfileService {
     private localStorage: LocalStorageService,
     private _location: Location,
     private userService: UserService,
+    private injector: Injector
   ) { }
   async profileUpdate(formData) {
     await this.loaderService.startLoader();
@@ -109,20 +111,11 @@ export class ProfileService {
     };
     try {
       let data: any = await this.httpService.post(config);
-      const result = _.pick(data.result, ['refresh_token', 'access_token']);
-      if (!result.access_token) { throw Error(); };
-      this.userService.token = result;
-      await this.localStorage.setLocalData(localKeys.TOKEN, result);
-      const userData = await this.getProfileDetailsAPI();
-      if (!userData) {
-        this.localStorage.delete(localKeys.TOKEN);
-        throw Error();
-      }
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
-      this.userService.userEvent.next(userData);
+      let authService = this.injector.get(AuthService);
+      let userData = authService.setUserInLocal(data);
       this.loaderService.stopLoader();
       this.toast.showToast(data.message, "success");
-      return data;
+      return userData;
     }
     catch (error) {
       this.loaderService.stopLoader();
@@ -137,7 +130,7 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.post(config);
       this.loaderService.stopLoader();
-      return true;
+      return data;
     }
     catch (error) {
       this.loaderService.stopLoader();

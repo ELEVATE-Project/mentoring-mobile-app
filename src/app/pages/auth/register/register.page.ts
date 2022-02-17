@@ -50,6 +50,7 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
+          minLength: 8,
         },
       },
       {
@@ -61,6 +62,7 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
+          minLength: 8,
         }
       }
     ]
@@ -125,15 +127,7 @@ export class RegisterPage implements OnInit {
 
   async onSubmit() {
     this.form1.onSubmit();
-    if (this.userType == "mentor") {
-      if (this.form1.myForm.value.secretCode !== "4567") {
-        this.toastService.showToast("Incorrect code. Please try again", "danger");
-      } else {
-        this.createUser();
-      }
-    } else {
-      this.createUser();
-    }
+    this.createUser();
   }
 
   async createUser() {
@@ -142,6 +136,7 @@ export class RegisterPage implements OnInit {
     if (_.isEqual(formJson.password, formJson.cPassword)) {
       let result = await this.profileService.registrationOtp({ email: formJson.email });
       if (result) {
+        this.toastService.showToast(result.message, "success")
         this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { state: { type: "signup", formData: formJson } });
       }
     } else {
@@ -149,6 +144,8 @@ export class RegisterPage implements OnInit {
     }
   }
   ionViewDidLeave() {
-    this.formData.controls.pop();
+    if (this.userType == "mentor") {
+      this.formData.controls.pop();
+    }
   }
 }

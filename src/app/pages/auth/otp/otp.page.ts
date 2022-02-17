@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
@@ -19,9 +19,9 @@ export class OtpPage implements OnInit {
     allowNumbersOnly: true,
     length: 6,
     inputStyles: {
-      'width': '50px',
-      'height': '50px',
-      'border-radius': '10px'
+      'width': '46px',
+      'height': '46px',
+      'border-radius': '8px'
     }
   };
   resetPasswordData = { email: null, password: null, otp: null };
@@ -41,11 +41,11 @@ export class OtpPage implements OnInit {
   labels;
   signupData: any;
 
-  constructor(private router: Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService, private menuCtrl: MenuController) {
-    this.actionType = window.history.state.type;
-    this.resetPasswordData.email = this.actionType == "reset-password" ? window.history.state.email : null;
-    this.resetPasswordData.password = this.actionType == "reset-password" ? window.history.state.password : null;
-    this.signupData = this.actionType == "signup" ? window.history.state.formData : null;
+  constructor(private router: Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService, private menuCtrl: MenuController, private nav: NavController) {
+    this.actionType=this.router.getCurrentNavigation().extras.state?.type;
+    this.resetPasswordData.email = this.actionType == "reset-password" ? this.router.getCurrentNavigation().extras.state?.email : null;
+    this.resetPasswordData.password = this.actionType == "reset-password" ? this.router.getCurrentNavigation().extras.state?.password : null;
+    this.signupData = this.actionType == "signup" ? this.router.getCurrentNavigation().extras.state?.formData : null;
     this.menuCtrl.enable(false);
   }
 
