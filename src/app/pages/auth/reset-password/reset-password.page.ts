@@ -37,6 +37,7 @@ export class ResetPasswordPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
+          minLength: 8,
         },
       },
       {
@@ -48,6 +49,7 @@ export class ResetPasswordPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
+          minLength: 8,
         },
       },
     ],

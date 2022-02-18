@@ -8,8 +8,9 @@
     padding-bottom: 0px;
   }
 .hint-message{
-  font-size:small;
+  font-size: 12px;
   margin-top: 15px;
+  margin-left: 5px;
 }
 ion-button{
   width: 80%;
@@ -34,4 +35,8 @@ ion-button{
 }
 .counter{
   text-align: center;
+}
+.otp-field{
+  display: flex !important;
+  justify-content: center;
 }
