@@ -125,7 +125,8 @@ export class CreateSessionPage implements OnInit {
       } else {
         let startDate = moment(this.form1.myForm.value.startDate);
         let endDate = moment(this.form1.myForm.value.endDate);
-        if(startDate.isBefore(endDate)){
+        var duration = moment.duration(endDate.diff(startDate)).asMinutes();
+        if(duration>=30){
           this.form1.myForm.value.startDate = Math.floor(new Date(this.form1.myForm.value.startDate).getTime() / 1000.0);
           this.form1.myForm.value.endDate = Math.floor(new Date(this.form1.myForm.value.endDate).getTime() / 1000.0);
           const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -136,7 +137,7 @@ export class CreateSessionPage implements OnInit {
             this.location.back()
           }
         } else {
-          this.toast.showToast("Please check the end date of the session!","danger")
+          this.toast.showToast("Please check the end date of the session. A session must be atleast 30 minutes long!","danger")
         }
       }
     } else {

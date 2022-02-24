@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService, LoaderService } from 'src/app/core/services';
+import { HttpService, LoaderService, ToastService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -20,7 +20,7 @@ export class HomeSearchPage implements OnInit {
   results=[];
   type:any;
   searching=true;
-  constructor(private sessionService:SessionService, private loaderService: LoaderService,private httpService: HttpService, private router: Router) { }
+  constructor(private sessionService:SessionService, private loaderService: LoaderService,private httpService: HttpService, private router: Router, private toast: ToastService) { }
 
   ngOnInit() {
     this.type='all-sessions';
@@ -53,6 +53,10 @@ export class HomeSearchPage implements OnInit {
     this.searching = false;
   }
 
+  checkInput(event){
+    this.searchText = event.detail.data.trim();
+  }
+
   search(){
     if(this.searchText!=""){
       switch(this.type) {
@@ -63,6 +67,8 @@ export class HomeSearchPage implements OnInit {
           this.getMentorList();
           break;
       }
+    } else {
+      this.toast.showToast("Please provide a valid text for search","danger")
     }
   }
 

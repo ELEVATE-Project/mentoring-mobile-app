@@ -10,7 +10,7 @@
     </div>
     <ng-template #elseBlock>
       <div class="d-flex flex-justify-center">
-        <ion-button [disabled]="this.detailData?.data?.status!='live' || !this.detailData?.data?.isEnrolled" class="session-btn" shape="round" (click)="onJoin()">{{ "JOIN" | translate }}</ion-button>
+        <ion-button [disabled]="!this.detailData?.data?.isEnrolled" class="session-btn" shape="round" (click)="onJoin()">{{ "JOIN" | translate }}</ion-button>
       </div>
     </ng-template>
     <app-generic-details [sessionData]='detailData'></app-generic-details>

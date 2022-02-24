@@ -38,6 +38,21 @@
   --quill-grey:#cac7c1;
   --grey-shade:#686762;
   --grey-medium:#4a4f57;
+  input:-webkit-autofill {
+    height: 0px;
+    -webkit-box-shadow:0 0 0 10px white inset;
+    box-shadow: 0 0 0 10px white inset;
+    -webkit-text-fill-color: black;
+    font-weight: 500px;
+}
+
+input:-webkit-autofill:focus {
+    height: 0px;
+    -webkit-box-shadow: 0 0 0 10px white inset;
+    box-shadow: 0 0 0 10px white inset;
+    -webkit-text-fill-color: black;
+    font-weight: 500px;
+} 
 
 }
 

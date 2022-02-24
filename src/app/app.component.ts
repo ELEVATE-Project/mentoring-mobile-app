@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { AlertController, MenuController, NavController, Platform } from '@ionic/angular';
+import { AlertController, MenuController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
 import * as _ from 'lodash-es';
@@ -46,11 +46,10 @@ export class AppComponent {
   ) {
     this.initializeApp();
     this.router.navigate(["/"]);
-    this.subscribeBackButton();
   }
   subscribeBackButton() {
-    this.platform.backButton.subscribe(async () => {
-      if (this._location.isCurrentPathEqualTo("/tabs/home") || this._location.isCurrentPathEqualTo("/tabs/profile") || this._location.isCurrentPathEqualTo("/tabs/dashboard") || this._location.isCurrentPathEqualTo("/tabs/mentor-directory")) {
+    this.platform.backButton.subscribeWithPriority(10,async () => {
+      if (this._location.isCurrentPathEqualTo("/tabs/home")){
         let texts: any;
         this.translate.get(['EXIT_CONFIRM_MESSAGE', 'CANCEL', 'CONFIRM']).subscribe(text => {
           texts = text;
@@ -109,6 +108,7 @@ export class AppComponent {
       })
 
     });
+    this.subscribeBackButton();
   }
   languageSetting() {
     this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
