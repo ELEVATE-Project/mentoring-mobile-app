@@ -70,11 +70,11 @@ export class ResetPasswordPage implements OnInit {
   async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {
       let labelKeys = Object.keys(translatedLabel);
-      labelKeys.forEach((key)=>{
+      labelKeys.forEach((key) => {
         let index = this.labels.findIndex(
           (label) => label === key
         )
-        this.labels[index]=translatedLabel[key];
+        this.labels[index] = translatedLabel[key];
       })
     })
   }
@@ -93,7 +93,7 @@ export class ResetPasswordPage implements OnInit {
       if (_.isEqual(formJson.password, formJson.newPassword)) {
         var response = await this.profileService.generateOtp({ email: this.form1.myForm.value.email });
         if (response) {
-          this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { queryParams: { email: formJson.email, password: formJson.password, newPassword: formJson.newPassword } });
+          this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { state: { type: "reset-password", email: formJson.email, password: formJson.password } });
         }
       } else {
         this.toastService.showToast('Password Mismatch', 'danger');

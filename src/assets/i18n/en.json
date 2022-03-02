@@ -98,8 +98,7 @@
     "FORM_UNSAVED_DATA":"You have unsaved data, please save your data before closing.",
     "SESSION_FORM_UNSAVED_DATA": "Are you sure you want to exit? You will lose all data if leave this page.",
     "SAVE":"Save",
-    "TERMS_AND": "Terms and",
-    "CONDITIONS": "conditions",
+    "TERMS_OF_USE": "Terms of Use",
     "SOMETHING_WENT_WRONG":"Something went wrong",
     "CREATE_NEW_SESSION": "Create new Session",
     "DELETE": "Delete",
@@ -124,5 +123,6 @@
     "VERIFY_ACCOUNT": "Verify account",
     "IF_YOU_DIDNT_RECIEVED_OTP": "If you didn't recieved the OTP!",
     "TRY_AGAIN_AFTER": "Try again after",
-    "SECONDS": "seconds."
+    "SECONDS": "seconds.",
+    "PROCEED":"Proceed"
 }

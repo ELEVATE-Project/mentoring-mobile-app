@@ -8,6 +8,7 @@ import * as _ from 'lodash-es';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { TranslateService } from '@ngx-translate/core';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 
 @Component({
   selector: 'app-register',
@@ -49,6 +50,7 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
+          minLength: 8,
         },
       },
       {
@@ -60,6 +62,7 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
+          minLength: 8,
         }
       }
     ]
@@ -95,60 +98,54 @@ export class RegisterPage implements OnInit {
     private toastService: ToastService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private profileService: ProfileService
   ) {
     this.activatedRoute.queryParams.subscribe(params => {
       this.userType = params.userType;
-      if(this.userType=="mentor"){
-      this.formData.controls.push(this.secretCodeControl);
-      this.isAMentor=true;
+      if (this.userType == "mentor") {
+        this.formData.controls.push(this.secretCodeControl);
+        this.isAMentor = true;
       }
     });
   }
   ngOnInit() {
     this.translateText();
-   }
+  }
 
-   async translateText() {
+  async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {
       let labelKeys = Object.keys(translatedLabel);
-      labelKeys.forEach((key)=>{
+      labelKeys.forEach((key) => {
         let index = this.labels.findIndex(
           (label) => label === key
         )
-        this.labels[index]=translatedLabel[key];
+        this.labels[index] = translatedLabel[key];
       })
     })
   }
 
-  ionViewWillEnter() {
-  }
-
   async onSubmit() {
     this.form1.onSubmit();
-    if(this.userType=="mentor"){
-      if(this.form1.myForm.value.secretCode!=="4567"){
-        this.toastService.showToast("Incorrect code. Please try again", "danger");
-      } else {
-        this.createUser();
-      }
-    } else {
-      this.createUser();
-    }
+    this.createUser();
   }
 
   async createUser() {
     let formJson = this.form1.myForm.value;
+    formJson.isAMentor = this.isAMentor ? this.isAMentor : false;
     if (_.isEqual(formJson.password, formJson.cPassword)) {
-      //let result = await this.authService.createAccount(this.form1.myForm.value);
-      //if(result){
-      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], {queryParams:{type:"signup"}});
-      //}
+      let result = await this.profileService.registrationOtp({ email: formJson.email });
+      if (result) {
+        this.toastService.showToast(result.message, "success")
+        this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { state: { type: "signup", formData: formJson } });
+      }
     } else {
       this.toastService.showToast('Password Mismatch', 'danger');
     }
   }
   ionViewDidLeave() {
-    this.formData.controls.pop();
+    if (this.userType == "mentor") {
+      this.formData.controls.pop();
+    }
   }
 }

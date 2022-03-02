@@ -49,23 +49,23 @@ export class LoginPage implements OnInit {
     notification: false,
     signupButton: true
   };
-  labels=["LOGIN_TO_MENTOR_ED"];
+  labels = ["LOGIN_TO_MENTOR_ED"];
   constructor(private authService: AuthService, private router: Router, private menuCtrl: MenuController, private activatedRoute: ActivatedRoute, private translateService: TranslateService) {
     this.menuCtrl.enable(false);
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.translateText();
   }
 
   async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {
       let labelKeys = Object.keys(translatedLabel);
-      labelKeys.forEach((key)=>{
+      labelKeys.forEach((key) => {
         let index = this.labels.findIndex(
           (label) => label === key
         )
-        this.labels[index]=translatedLabel[key];
+        this.labels[index] = translatedLabel[key];
       })
     })
   }
@@ -82,17 +82,9 @@ export class LoginPage implements OnInit {
       this.userDetails = await this.authService.loginAccount(this.form1.myForm.value);
       if (this.userDetails !== null) {
         if (this.id) {
-          if (this.userDetails?.hasAcceptedTAndC) {
-            this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
-          } else {
-            this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`], { queryParams:{sessionId : this.id}});
-          }
+          this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
         } else {
-          if (this.userDetails?.hasAcceptedTAndC) {
-            this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
-          } else {
-            this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`]);
-          }
+          this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
         }
       }
       this.menuCtrl.enable(true);
@@ -107,11 +99,11 @@ export class LoginPage implements OnInit {
     }
   }
 
-  goToForgotPassword(){
+  goToForgotPassword() {
     this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.RESET_PASSWORD}`]);
   }
 
-  goToSignup(){
+  goToSignup() {
     this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.PERSONA_SELECTION}`]);
   }
 

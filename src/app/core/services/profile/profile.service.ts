@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import {
@@ -10,8 +10,9 @@ import {
 import { CommonRoutes } from 'src/global.routes';
 import { localKeys } from '../../constants/localStorage.keys';
 import * as _ from 'lodash-es';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 import { UserService } from '../user/user.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,7 @@ export class ProfileService {
     private localStorage: LocalStorageService,
     private _location: Location,
     private userService: UserService,
+    private injector: Injector
   ) { }
   async profileUpdate(formData) {
     await this.loaderService.startLoader();
@@ -35,7 +37,7 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.post(config);
       let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-      userDetails.user= null;
+      userDetails.user = null;
       let profileData = await this.getProfileDetailsAPI();
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileData);
       this.userService.userEvent.next(profileData);
@@ -66,19 +68,19 @@ export class ProfileService {
     showLoader ? await this.loaderService.startLoader() : null;
     return new Promise((resolve) => {
       try {
-      this.localStorage.getLocalData(localKeys.USER_DETAILS)
-        .then(async (data) => {
-          if (data) {
-            showLoader ? this.loaderService.stopLoader() : null;
-            resolve(data);
-          } else {
-            var res = await this.getProfileDetailsAPI();
-            await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
-            data = _.get(data, 'user');
-            showLoader ? this.loaderService.stopLoader() : null;
-            resolve(data);
-          }
-        })
+        this.localStorage.getLocalData(localKeys.USER_DETAILS)
+          .then(async (data) => {
+            if (data) {
+              showLoader ? this.loaderService.stopLoader() : null;
+              resolve(data);
+            } else {
+              var res = await this.getProfileDetailsAPI();
+              await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
+              data = _.get(data, 'user');
+              showLoader ? this.loaderService.stopLoader() : null;
+              resolve(data);
+            }
+          })
       } catch (error) {
         showLoader ? this.loaderService.stopLoader() : showLoader;
       }
@@ -109,8 +111,25 @@ export class ProfileService {
     };
     try {
       let data: any = await this.httpService.post(config);
+      let authService = this.injector.get(AuthService);
+      let userData = authService.setUserInLocal(data);
       this.loaderService.stopLoader();
       this.toast.showToast(data.message, "success");
+      return userData;
+    }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+  async registrationOtp(formData) {
+    await this.loaderService.startLoader();
+    const config = {
+      url: urlConstants.API_URLS.REGISTRATION_OTP,
+      payload: formData
+    };
+    try {
+      let data: any = await this.httpService.post(config);
+      this.loaderService.stopLoader();
       return data;
     }
     catch (error) {

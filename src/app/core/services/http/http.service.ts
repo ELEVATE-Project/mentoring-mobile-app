@@ -39,7 +39,7 @@ export class HttpService {
     const headers = {
       'X-auth-token': token ? token : "",
       'Content-Type': 'application/json',
-      'timeZone' : timezone,
+      'timeZone': timezone,
     }
     return headers;
   }
@@ -48,7 +48,7 @@ export class HttpService {
     if (!this.checkNetworkAvailability()) {
       throw Error(null);
     }
-    const headers =  requestParam.headers ? requestParam.headers : await this.setHeaders();
+    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     let body = requestParam.payload ? requestParam.payload : {};
     this.http.setDataSerializer('json');
     this.http.setRequestTimeout(60);
@@ -163,8 +163,8 @@ export class HttpService {
         break
       case 401:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
-          let auth = this.injector.get(AuthService);
-          auth.logoutAccount(true);
+        let auth = this.injector.get(AuthService);
+        auth.logoutAccount(true);
         break
       default:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')

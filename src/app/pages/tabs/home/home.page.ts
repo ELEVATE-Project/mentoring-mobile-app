@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
-import { NavController, Platform } from '@ionic/angular';
+import { ModalController, NavController, Platform } from '@ionic/angular';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
@@ -12,6 +12,7 @@ import { HttpService, LoaderService, UtilService } from 'src/app/core/services';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { Location } from '@angular/common';
+import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-conditions.page';
 
 @Component({
   selector: 'app-home',
@@ -29,12 +30,12 @@ export class HomePage implements OnInit {
   sessionsCount = 0;
   status = "published,live";
 
-public headerConfig: any = {
-  menu: true,
-  notification: true,
-  headerColor: 'primary',
-  // label:'MENU'
-};
+  public headerConfig: any = {
+    menu: true,
+    notification: true,
+    headerColor: 'primary',
+    // label:'MENU'
+  };
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -42,8 +43,9 @@ public headerConfig: any = {
     private profileService: ProfileService,
     private loaderService: LoaderService,
     private httpService: HttpService,
-    private sessionService: SessionService) {}
-    
+    private sessionService: SessionService,
+    public modalController: ModalController) { }
+
   ngOnInit() {
     this.getUser();
   }
@@ -51,7 +53,7 @@ public headerConfig: any = {
   ionViewWillEnter() {
     this.getSessions();
   }
-  eventAction(event){
+  eventAction(event) {
     switch (event.type) {
       case 'cardSelect':
         this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
@@ -62,16 +64,19 @@ public headerConfig: any = {
         break;
     }
   }
-  viewMore(data){
-    this.router.navigate([`/${CommonRoutes.SESSIONS}`], {queryParams:{type:data}});
+  viewMore(data) {
+    this.router.navigate([`/${CommonRoutes.SESSIONS}`], { queryParams: { type: data } });
   }
 
-  search(){
+  search() {
     this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
   }
   getUser() {
     this.profileService.profileDetails(false).then(data => {
       this.user = data
+      if (!this.user?.hasAcceptedTAndC) {
+        this.openModal();
+      }
     })
   }
 
@@ -86,5 +91,13 @@ public headerConfig: any = {
     }
     catch (error) {
     }
+  }
+  async openModal() {
+    const modal = await this.modalController.create({
+      component: TermsAndConditionsPage,
+      backdropDismiss: false,
+      swipeToClose: false
+    });
+    return await modal.present();
   }
 }

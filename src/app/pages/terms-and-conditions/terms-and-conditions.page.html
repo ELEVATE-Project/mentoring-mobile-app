@@ -1,20 +1,24 @@
 <ion-content class="ion-padding">
-  <app-generic-header [labels]="labels"></app-generic-header>
-  <div *ngIf="items" class="text-config" [innerHtml]="items.controls[0].label | safeHtml"></div>
-  <div class="check-box">
-    <ion-row class="d-flex, flex-align-items-center check-box-row">
-      <ion-col class='d-flex flex-align-items-center flex-justify-start' size="2">
-        <ion-checkbox color='danger' (ionChange)='checked()'></ion-checkbox>
-      </ion-col>
-      <ion-col class='d-flex flex-align-items-center' size="10">
-        <div>
-          <ion-label *ngIf="items" [innerHtml]="items.controls[0].value"></ion-label>
-        </div>
-      </ion-col>
-    </ion-row>
+  <div class="mx-10">
+    <div class="header">
+      <app-generic-header [labels]="labels"></app-generic-header>
+    </div>
+    <div *ngIf="items" class="text-config" [innerHtml]="items.controls[0].label | safeHtml"></div>
+    <div>
+      <ion-row class="d-flex, flex-align-items-center check-box-row">
+        <ion-col class='d-flex flex-align-items-center flex-justify-start' size="1">
+          <ion-checkbox color='danger' (ionChange)='checked()'></ion-checkbox>
+        </ion-col>
+        <ion-col class='d-flex flex-align-items-center' size="11">
+          <div>
+            <ion-label *ngIf="items" [innerHtml]="items.controls[0].value"></ion-label>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+  <div class="header d-flex flex-justify-center">
+    <ion-button class="mx-0 onboard-button" shape="round" expand="block" (click)="goToHome()" [disabled]="notChecked">{{"PROCEED"|translate}}
+    </ion-button>
   </div>
 </ion-content>
-<ion-footer class="side-menu-footer">
-  <ion-button expand="full" (click)="goToHome()" [disabled]="notChecked"> Agree & Continue
-  </ion-button>
-</ion-footer>
