@@ -6,10 +6,10 @@
     <ion-toolbar *ngIf="isMentor">
       <ion-segment [value]="segment" swipeGesture="true" (ionChange)="segmentChanged($event)">
         <ion-segment-button value="mentor">
-          <ion-label>{{'MENTOR' | translate}}</ion-label>
+          <ion-label class="segment-label">{{'MENTOR' | translate}}</ion-label>
         </ion-segment-button>
         <ion-segment-button value="mentee">
-          <ion-label>{{'MENTEE' | translate}}</ion-label>
+          <ion-label class="segment-label">{{'MENTEE' | translate}}</ion-label>
         </ion-segment-button>
       </ion-segment>
     </ion-toolbar>
@@ -25,23 +25,26 @@
               <p class="dashboard-title">{{'SESSION_OVERVIEW' | translate}}</p>
             </ion-col>
             <ion-col>
-              <app-filter [defaultValue]="'WEEKLY'" [filter]="filter" (filterChange)="filterChangeHandler($event)"></app-filter>
+              <div class="filter">
+                <app-filter [defaultValue]="'WEEKLY'" [filter]="filter" (filterChange)="filterChangeHandler($event)">
+                </app-filter>
+              </div>
             </ion-col>
           </ion-row>
           <ion-row class="stat-box">
             <ion-col class="bg-lite">
-                <p class="stat-title">
-                  {{'TOTAL_SESSION_CREATED' | translate}}
-                  <span>{{chartData.chart.data.datasets[0].data[0]}}</span>
-                </p>
+              <p class="stat-title">
+                {{'TOTAL_SESSION_CREATED' | translate}}
+                <span>{{chartData.chart.data.datasets[0].data[0]}}</span>
+              </p>
             </ion-col>
             <ion-col size=".5">
             </ion-col>
             <ion-col class="bg-lite">
-                <p class="stat-title">
-                  {{'TOTAL_SESSION_HOSTED' | translate}}
-                  <span>{{chartData.chart.data.datasets[0].data[1]}}</span>
-                </p>
+              <p class="stat-title">
+                {{'TOTAL_SESSION_HOSTED' | translate}}
+                <span>{{chartData.chart.data.datasets[0].data[1]}}</span>
+              </p>
             </ion-col>
           </ion-row>
 
@@ -55,23 +58,26 @@
               <p class="dashboard-title">{{'SESSION_OVERVIEW' | translate}}</p>
             </ion-col>
             <ion-col>
-              <app-filter [defaultValue]="'WEEKLY'" [filter]="filter" (filterChange)="filterChangeHandler($event)"></app-filter>
+              <div class="filter">
+                <app-filter [defaultValue]="'WEEKLY'" [filter]="filter" (filterChange)="filterChangeHandler($event)">
+                </app-filter>
+              </div>
             </ion-col>
           </ion-row>
           <ion-row class="stat-box">
             <ion-col class="bg-lite">
-                <p class="stat-title">
-                  {{'TOTAL_SESSION_ENROLLED' | translate}}
-                  <span>{{chartData.chart.data.datasets[0].data[0]}}</span>
-                </p>
+              <p class="stat-title">
+                {{'TOTAL_SESSION_ENROLLED' | translate}}
+                <span>{{chartData.chart.data.datasets[0].data[0]}}</span>
+              </p>
             </ion-col>
             <ion-col size=".5">
             </ion-col>
             <ion-col class="bg-lite">
-                <p class="stat-title">
-                  {{'TOTAL_SESSION_ATTENDED' | translate}}
-                  <span>{{chartData.chart.data.datasets[0].data[1]}}</span>
-                </p>
+              <p class="stat-title">
+                {{'TOTAL_SESSION_ATTENDED' | translate}}
+                <span>{{chartData.chart.data.datasets[0].data[1]}}</span>
+              </p>
             </ion-col>
           </ion-row>
           <div *ngIf="chartData">

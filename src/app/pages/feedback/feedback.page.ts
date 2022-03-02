@@ -39,7 +39,7 @@ export class FeedbackPage implements OnInit {
   async isMentorChecking() {
     let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     var response = await this.sessionService.getSessionDetailsAPI(this.sessionData._id);
-    this.isMentor = userDetails._id == response.userId ? true : false;
+    this.isMentor = userDetails?._id == response?.userId ? true : false;
     this.formData.controls = this.sessionData.form;
     this.feedbackData.feedbackAs = this.isMentor ? "mentor" : "mentee";
   }

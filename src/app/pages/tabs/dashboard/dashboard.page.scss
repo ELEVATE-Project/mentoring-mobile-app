@@ -11,8 +11,8 @@
 }
 .dashboard-title {
     margin: 0;
-    font-size: 13px;
-    font-weight: 800;
+    font-size: 15px;
+    font-weight: 900;
 }
 
 .stat-row {
@@ -43,4 +43,14 @@
 .stat-filter {
     font-size: 14px;
     padding: 0;
+}
+
+.segment-label{
+    font-weight: bold;
+}
+.filter{
+  margin-left: 18%;
+  margin-right: 5%;
+  border: 1px solid rgb(182, 177, 177);
+  border-radius: 7px;
 }
