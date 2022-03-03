@@ -4,7 +4,7 @@
   <app-generic-header [labels]="labels"></app-generic-header>
   </div>
   <section>
-    <div class="d-flex flex-justify-center flex-align-items-center">
+    <div class="otp-field">
       <ng-otp-input (onInputChange)="onOtpChange($event)" [config]="config" #ngOtpInput></ng-otp-input>
     </div>
     <p class="hint-message"> {{"YOU_WILL_RECIEVE_OTP_IN_YOUR_EMAIL" | translate}}</p>

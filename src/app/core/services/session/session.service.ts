@@ -134,10 +134,14 @@ async getSessionsList(obj) {
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
         this.openBrowser(data.result.link);
+        return true;
+      } else {
+        return false;
       }
     }
     catch (error) {
       this.loaderService.stopLoader();
+      return false;
     }
   }
 

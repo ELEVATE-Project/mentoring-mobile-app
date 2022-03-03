@@ -19,4 +19,5 @@ export class CommonRoutes {
     public static TERMS_AND_CONDITIONS='terms-and-conditions';
     public static LANDING_PAGE='landing';
     public static PERSONA_SELECTION='persona-selection';
+    public static DASHBOARD='dashboard';
 }

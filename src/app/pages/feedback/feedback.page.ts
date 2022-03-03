@@ -39,7 +39,7 @@ export class FeedbackPage implements OnInit {
   async isMentorChecking() {
     let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     var response = await this.sessionService.getSessionDetailsAPI(this.sessionData._id);
-    this.isMentor = userDetails._id == response.userId ? true : false;
+    this.isMentor = userDetails?._id == response?.userId ? true : false;
     this.formData.controls = this.sessionData.form;
     this.feedbackData.feedbackAs = this.isMentor ? "mentor" : "mentee";
   }
@@ -60,7 +60,7 @@ export class FeedbackPage implements OnInit {
         this.feedbackData.feedbacks.push(feedback);
       }
     })
-    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.sessionData._id) : await this.sessionService.submitFeedback({ skippedFeedback: true }, this.sessionData._id);
+    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.sessionData._id) : await this.sessionService.submitFeedback({ skippedFeedback: true, feedbackAs: this.feedbackData.feedbackAs }, this.sessionData._id);
     if (result) {
       this.toast.showToast(result?.message, "success");
     }
@@ -68,7 +68,7 @@ export class FeedbackPage implements OnInit {
   }
 
   async closeModal() {
-    await this.sessionService.submitFeedback({ skippedFeedback: true }, this.sessionData._id);
+    await this.sessionService.submitFeedback({ skippedFeedback: true, feedbackAs: this.feedbackData.feedbackAs }, this.sessionData._id);
     await this.modalController.dismiss();
   }
 }

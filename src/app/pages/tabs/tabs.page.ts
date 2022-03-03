@@ -16,7 +16,6 @@ export class TabsPage {
   }
   ionViewWillLeave() {
     this.propagateToActiveTab('ionViewWillLeave');
-    this.subscription.unsubscribe();
   }
 
   ionViewDidLeave() {

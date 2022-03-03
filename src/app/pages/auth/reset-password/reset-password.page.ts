@@ -37,6 +37,8 @@ export class ResetPasswordPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
+          minLength: 8,
+          pattern: '^[a-zA-Z0-9]*$'
         },
       },
       {
@@ -48,6 +50,8 @@ export class ResetPasswordPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
+          minLength: 8,
+          pattern: '^[a-zA-Z0-9]*$'
         },
       },
     ],
@@ -96,7 +100,7 @@ export class ResetPasswordPage implements OnInit {
           this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { state: { type: "reset-password", email: formJson.email, password: formJson.password } });
         }
       } else {
-        this.toastService.showToast('Password Mismatch', 'danger');
+        this.toastService.showToast('Please enter the same password', 'danger');
       }
     }
   }

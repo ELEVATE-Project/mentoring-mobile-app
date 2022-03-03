@@ -28,6 +28,7 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
+          pattern:'^[a-zA-Z0-9 ]*$',
         },
       },
       {
@@ -134,7 +135,7 @@ export class RegisterPage implements OnInit {
     let formJson = this.form1.myForm.value;
     formJson.isAMentor = this.isAMentor ? this.isAMentor : false;
     if (_.isEqual(formJson.password, formJson.cPassword)) {
-      let result = await this.profileService.registrationOtp({ email: formJson.email });
+      let result = await this.profileService.registrationOtp(formJson);
       if (result) {
         this.toastService.showToast(result.message, "success")
         this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { state: { type: "signup", formData: formJson } });

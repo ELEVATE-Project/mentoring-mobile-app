@@ -204,7 +204,7 @@ export class SessionDetailPage implements OnInit {
       if (this.userDetails?.about) {
         let result = await this.sessionService.enrollSession(this.id);
         if (result?.result) {
-          this.toast.showToast("You have enrolled successfully", "success");
+          this.toast.showToast(result?.message, "success");
         }
         this.fetchSessionDetails();
       } else {
@@ -219,6 +219,7 @@ export class SessionDetailPage implements OnInit {
 
   async onStart(data) {
     let result = await this.sessionService.startSession(data._id);
+    result?this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]):null;
   }
 
   async onCancel() {

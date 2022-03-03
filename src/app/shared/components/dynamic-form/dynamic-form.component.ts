@@ -16,8 +16,8 @@ interface JsonFormValidators {
   required?: boolean;
   requiredTrue?: boolean;
   email?: boolean;
-  minLength?: boolean;
-  maxLength?: boolean;
+  minLength?: number;
+  maxLength?: number;
   pattern?: string;
   nullValidator?: boolean;
 }

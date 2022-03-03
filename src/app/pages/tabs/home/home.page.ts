@@ -8,7 +8,7 @@ import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
-import { HttpService, LoaderService, UtilService } from 'src/app/core/services';
+import { HttpService, LoaderService, UserService, UtilService } from 'src/app/core/services';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { Location } from '@angular/common';
@@ -44,10 +44,16 @@ export class HomePage implements OnInit {
     private loaderService: LoaderService,
     private httpService: HttpService,
     private sessionService: SessionService,
-    public modalController: ModalController) { }
+    private modalController: ModalController,
+    private userService: UserService ) { }
 
   ngOnInit() {
     this.getUser();
+    this.userService.userEventEmitted$.subscribe(data=>{
+      if(data){
+        this.user = data;
+      }
+    })
   }
 
   ionViewWillEnter() {
