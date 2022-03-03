@@ -54,7 +54,7 @@ export class CreateSessionPage implements OnInit {
     private file: File,
     private api: HttpService,
     private loaderService: LoaderService,
-    private translate :TranslateService,
+    private translate: TranslateService,
     private alert: AlertController,
     private form: FormService
   ) {
@@ -76,7 +76,7 @@ export class CreateSessionPage implements OnInit {
     } else {
       this.showForm = true;
     }
-    this.isSubmited =false; //to be removed
+    this.isSubmited = false; //to be removed
     this.profileImageData.isUploaded = true;
   }
 
@@ -116,32 +116,26 @@ export class CreateSessionPage implements OnInit {
 
   async onSubmit() {
     if(!this.isSubmited){
-    this.form1.onSubmit();
-    this.isSubmited = true;
+      this.form1.onSubmit();
+      this.isSubmited = true;
     }
     if (this.form1.myForm.valid) {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
         this.getImageUploadUrl(this.localImage);
       } else {
-        let startDate = moment(this.form1.myForm.value.startDate);
-        let endDate = moment(this.form1.myForm.value.endDate);
-        var duration = moment.duration(endDate.diff(startDate)).asMinutes();
-        if(duration>=30){
-          this.form1.myForm.value.startDate = Math.floor(new Date(this.form1.myForm.value.startDate).getTime() / 1000.0);
-          this.form1.myForm.value.endDate = Math.floor(new Date(this.form1.myForm.value.endDate).getTime() / 1000.0);
-          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-          this.form1.myForm.value.timeZone = timezone;
-          this.form1.myForm.markAsPristine();
-          let result = await this.sessionService.createSession(this.form1.myForm.value, this.id);
-          if (result) {
-            this.location.back()
-          }
-        } else {
-          this.toast.showToast("Please check the end date of the session. A session must be atleast 30 minutes long!","danger")
+        this.form1.myForm.value.startDate = new Date(this.form1.myForm.value.startDate).getTime() / 1000.0;
+        this.form1.myForm.value.endDate = new Date(this.form1.myForm.value.endDate).getTime() / 1000.0;
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.form1.myForm.value.timeZone = timezone;
+        this.form1.myForm.markAsPristine();
+        let result = await this.sessionService.createSession(this.form1.myForm.value, this.id);
+        if (result) {
+          this.location.back()
         }
+
       }
     } else {
-      this.toast.showToast("Please fill all the mandatory fields","danger");
+      this.toast.showToast("Please fill all the mandatory fields", "danger");
     }
   }
 

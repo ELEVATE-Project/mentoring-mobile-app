@@ -219,6 +219,7 @@ export class SessionDetailPage implements OnInit {
 
   async onStart(data) {
     let result = await this.sessionService.startSession(data._id);
+    result?this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]):null;
   }
 
   async onCancel() {

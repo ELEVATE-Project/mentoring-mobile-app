@@ -29,7 +29,7 @@ export class SessionCardComponent implements OnInit {
     if (userDetails?.about) {
       let result = await this.sessionService.enrollSession(data._id);
       if(result?.result){
-        this.toast.showToast("You have enrolled successfully","success");
+        this.toast.showToast(result?.message,"success");
       }
     } else {
       this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);

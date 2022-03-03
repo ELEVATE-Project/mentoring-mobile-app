@@ -28,7 +28,7 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
-          pattern:'^[a-zA-Z0-9_]*$',
+          pattern:'^[a-zA-Z0-9 ]*$',
         },
       },
       {
@@ -52,7 +52,6 @@ export class RegisterPage implements OnInit {
         validators: {
           required: true,
           minLength: 8,
-          pattern: '^[a-zA-Z0-9]*$'
         },
       },
       {
@@ -65,7 +64,6 @@ export class RegisterPage implements OnInit {
         validators: {
           required: true,
           minLength: 8,
-          pattern: '^[a-zA-Z0-9]*$'
         }
       }
     ]
