@@ -48,7 +48,7 @@
             </ion-col>
           </ion-row>
 
-          <sl-pie-chart [data]="chartData"></sl-pie-chart>
+          <sl-pie-chart *ngIf="!loading" [data]="chartData"></sl-pie-chart>
         </div>
 
         <div *ngSwitchCase="'mentee'">
@@ -81,7 +81,7 @@
             </ion-col>
           </ion-row>
           <div *ngIf="chartData">
-            <sl-pie-chart [data]="chartData"></sl-pie-chart>
+            <sl-pie-chart *ngIf="!loading" [data]="chartData"></sl-pie-chart>
           </div>
         </div>
       </div>
