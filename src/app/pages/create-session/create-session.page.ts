@@ -123,16 +123,16 @@ export class CreateSessionPage implements OnInit {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
         this.getImageUploadUrl(this.localImage);
       } else {
-        this.form1.myForm.value.startDate = new Date(this.form1.myForm.value.startDate).getTime() / 1000.0;
-        this.form1.myForm.value.endDate = new Date(this.form1.myForm.value.endDate).getTime() / 1000.0;
+        const form = Object.assign({}, this.form1.myForm.value);
+        form.startDate = new Date(form.startDate).getTime() / 1000.0;
+        form.endDate = new Date(form.endDate).getTime() / 1000.0;
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        this.form1.myForm.value.timeZone = timezone;
+        form.timeZone = timezone;
         this.form1.myForm.markAsPristine();
-        let result = await this.sessionService.createSession(this.form1.myForm.value, this.id);
+        let result = await this.sessionService.createSession(form, this.id);
         if (result) {
           this.location.back()
         }
-
       }
     } else {
       this.toast.showToast("Please fill all the mandatory fields", "danger");
