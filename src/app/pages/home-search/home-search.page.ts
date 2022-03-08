@@ -54,7 +54,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   checkInput(event){
-    this.searchText = event.detail.data.trim();
+    this.searchText = event.detail?.data?.trim();
   }
 
   search(){
@@ -75,6 +75,7 @@ export class HomeSearchPage implements OnInit {
   segmentChanged(event){
     this.results=[]
     this.type = event.target.value;
+    if(this.searchText !== "")
     this.search();
   }
 

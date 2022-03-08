@@ -10,7 +10,7 @@
       <ion-label
         *ngIf="control.label !== '' && !['chip'].includes(control.type) && !['rating'].includes(control.type)"
         [position]="control.position"
-        ><ion-icon *ngIf="control?.validators['required']==true" class="color-red" name="star"></ion-icon> {{ control.label }}</ion-label
+        ><ion-icon *ngIf="control?.validators['required']==true" class="star-icon-red" name="star"></ion-icon> {{ control.label }}</ion-label
       >
       <ion-input
         *ngIf="
@@ -83,6 +83,7 @@
         [chips]="control.options"
         [showSelectAll]="control.showSelectAll"
         [showAddOption]="control.showAddOption"
+        [validators]="control.validators"
       ></app-input-chip>
       <ion-icon
         size="small"

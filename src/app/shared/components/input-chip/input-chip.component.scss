@@ -2,3 +2,15 @@
     --background:var(--ion-color-primary);
     --color:var(--white);
 }
+.toggle{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.head-label{
+    overflow: visible !important;
+    margin-left: 5px;
+}
+.icon{
+    font-size: smaller;
+}
