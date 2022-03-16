@@ -38,9 +38,12 @@ export class TermsAndConditionsPage implements OnInit {
     this.items = _.get(response, 'result.data.fields');
   }
 
-  ngOnInit() {
+  ngOnInit() { 
+    let lang = this.translateService.getDefaultLang();
+    lang?this.translateService.setDefaultLang(lang):this.translateService.setDefaultLang("en");
     this.translateText();
   }
+
   async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {
       let labelKeys = Object.keys(translatedLabel);
@@ -51,6 +54,7 @@ export class TermsAndConditionsPage implements OnInit {
         this.labels[index] = translatedLabel[key];
       })
     })
+    console.log(this.labels)
   }
 
   // expandItem(item): void {

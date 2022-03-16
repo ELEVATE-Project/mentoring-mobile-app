@@ -3,8 +3,7 @@
     class="d-flex flex-align-items-center"
     *ngIf="showSelectAll"
   >
-    <ion-icon *ngIf="validators['required']==true" class="star-icon-red icon" name="star"></ion-icon>
-    <ion-label class="head-label">{{ label }}</ion-label>
+    <ion-label class="head-label">{{ label }} <span *ngIf="validators['required']==true" class="star-icon-red">*</span></ion-label>
     <div class="toggle">
     <ion-toggle
       [(ngModel)]="_selectAll"
