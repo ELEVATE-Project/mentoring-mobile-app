@@ -1,14 +1,16 @@
 <div>
   <div
-    class="d-flex flex-justify-space-between flex-align-items-center"
+    class="d-flex flex-align-items-center"
     *ngIf="showSelectAll"
   >
-    <ion-label>{{ label }}</ion-label>
+    <ion-label class="head-label">{{ label }} <span *ngIf="validators['required']==true" class="star-icon-red">*</span></ion-label>
+    <div class="toggle">
     <ion-toggle
       [(ngModel)]="_selectAll"
       (ngModelChange)="selectAll()"
       [disabled]="disabled"
     ></ion-toggle>
+    </div>
   </div>
   <div>
     <ion-chip

@@ -28,6 +28,7 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   @Input() chips;
   @Input() showSelectAll;
   @Input() showAddOption;
+  @Input() validators;
   disabled;
   touched = false;
   selectedChips;
