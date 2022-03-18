@@ -4,8 +4,10 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { IonDatetime } from '@ionic/angular';
 import * as _ from 'lodash-es';
 import * as moment from 'moment';
 import { ToastService } from 'src/app/core/services';
@@ -51,6 +53,7 @@ export interface JsonFormData {
 })
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
+  @ViewChild(IonDatetime) datetime: IonDatetime;
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
   date: any;
@@ -148,5 +151,14 @@ export class DynamicFormComponent implements OnInit {
   }
   alertToast(){
     this.toast.showToast("Please refer to the on-boarding email for your secret code", "success")
+  }
+  confirm() {
+    this.datetime.confirm(true);
+  }
+  resetCalendar() {
+    this.datetime.reset();
+  }
+  format(value){
+    return moment().format(value);
   }
 }

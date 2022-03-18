@@ -57,13 +57,33 @@
         ></ion-icon>
         <ion-icon slot="end" [name]="control.options.icon"></ion-icon>
       </ion-range>
-      <ion-datetime
-        [displayFormat]="control.displayFormat"
+      <ion-input
+        *ngIf="control.type === 'date'"
+        [value]="control.value"
+        [id]="control.name"
+      ></ion-input>
+      <ion-popover *ngIf="control.type === 'date'" [trigger]="control.name" size="cover" show-backdrop="false">
+        <ng-template>
+          <ion-datetime
+            #popoverCalendar
+            presentation="time-date"
+            [formControlName]="control.name"
+            [min]="date"
+            [value]="control.value"
+            (ionChange)="control.value = format(popoverCalendar?.value)"
+          ><ion-buttons slot="buttons">
+              <ion-button (click)="confirm()">{{"CONFIRM"|translate}}</ion-button>
+              <ion-button (click)="resetCalendar()">{{"RESET"|translate}}</ion-button>
+            </ion-buttons>
+          </ion-datetime>
+        </ng-template>
+      </ion-popover>
+      <!-- <ion-datetime
         *ngIf="control.type === 'date'"
         [formControlName]="control.name"
         [min]="date"
         [value]="control.value"
-      ></ion-datetime>
+      ></ion-datetime> -->
       <ion-select
         *ngIf="control.type === 'select'"
         [multiple]="control.multiple"
