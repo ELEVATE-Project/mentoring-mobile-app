@@ -42,6 +42,7 @@ export class SessionDetailPage implements OnInit {
     region: null,
     join_button: true,
     image: '',
+    mentorName:''
   }
   detailData = {
     form: [
@@ -138,6 +139,7 @@ export class SessionDetailPage implements OnInit {
       response.duration = { hours: hours, minutes: minutes };
       this.sessionHeaderData.name = response.title;
       this.sessionHeaderData.image = response.image;
+      this.sessionHeaderData.mentorName = response.mentorName;
       this.detailData.data = response;
       this.detailData.data.startDate = readableStartDate;
     }

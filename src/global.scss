@@ -121,10 +121,15 @@ h6, h5 , h4, h3, h2, h1 {
 }
 
 .header-bottom-border {
+  background-color: var( --ion-color-primary);
+  color: white;
+  margin-top: 0;
   border-bottom-left-radius: 30px;
-  ion-searchbar {
-    --border-radius: 10px;
-    padding: 5px 0px;
+  ion-item{
+    ion-searchbar {
+      --border-radius: 10px;
+      padding: 5px 0px;
+    }
   }
 }
 ion-card-title{
@@ -199,4 +204,12 @@ ion-button{
 .star-icon-red{
   color: red;
   font-size: 13px;
+}
+ion-modal.stack-modal {
+  --background: rgba(0, 0, 0, 0.5) !important;
+  .ion-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

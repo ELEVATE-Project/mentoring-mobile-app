@@ -53,10 +53,11 @@ export interface JsonFormData {
 })
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
-  @ViewChild(IonDatetime) datetime: IonDatetime;
+  @ViewChild(IonDatetime) datetime
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
-  date: any;
+  date: any =  moment().format();
+  maxDate: any = moment(this.date).add(5, 'years').format();
 
   constructor(private fb: FormBuilder, private toast: ToastService) {}
   ngOnInit() {
@@ -66,7 +67,6 @@ export class DynamicFormComponent implements OnInit {
         this.jsonFormData.controls[index].options = _.sortBy(this.jsonFormData.controls[index].options, ['label']);
       }
     });
-    this.date = moment().format();
     setTimeout(() => {
       this.createForm(this.jsonFormData.controls);
       this.showForm = true;

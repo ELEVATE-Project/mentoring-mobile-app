@@ -8,7 +8,7 @@
       }"
     >
       <ion-label
-        *ngIf="control.label !== '' && !['chip'].includes(control.type) && !['rating'].includes(control.type)"
+        *ngIf="control.label !== '' && !['rating'].includes(control.type)"
         [position]="control.position"
         >{{ control.label }} <span *ngIf="control?.validators['required']==true" class="star-icon-red">*</span></ion-label
       >
@@ -59,25 +59,27 @@
       </ion-range>
       <ion-input
         *ngIf="control.type === 'date'"
-        [value]="control.value"
-        [id]="control.name"
+        [value]="control.value | date:'dd/MM/yy, h:mm a'"
+        [id]="control?.name"
       ></ion-input>
-      <ion-popover *ngIf="control.type === 'date'" [trigger]="control.name" size="cover" show-backdrop="false">
+      <ion-modal class="stack-modal" [trigger]="control?.name">
         <ng-template>
-          <ion-datetime
-            #popoverCalendar
-            presentation="time-date"
-            [formControlName]="control.name"
-            [min]="date"
-            [value]="control.value"
-            (ionChange)="control.value = format(popoverCalendar?.value)"
-          ><ion-buttons slot="buttons">
-              <ion-button (click)="confirm()">{{"CONFIRM"|translate}}</ion-button>
-              <ion-button (click)="resetCalendar()">{{"RESET"|translate}}</ion-button>
-            </ion-buttons>
-          </ion-datetime>
+            <ion-datetime
+                #popoverCalendar
+                presentation="time-date"
+                [formControlName]="control.name"
+                hour-cycle="h12"
+                [min]="date"
+                [max]="maxDate"
+                [value]="control.value"
+                (ionChange)="control.value = format(popoverCalendar?.value)">
+              <ion-buttons slot="buttons">
+                <ion-button (click)="confirm()">{{"CONFIRM"|translate}}</ion-button>
+                <ion-button (click)="resetCalendar()">{{"RESET"|translate}}</ion-button>
+              </ion-buttons>
+            </ion-datetime>
         </ng-template>
-      </ion-popover>
+      </ion-modal>
       <!-- <ion-datetime
         *ngIf="control.type === 'date'"
         [formControlName]="control.name"
@@ -131,8 +133,8 @@
     <small class="error-msg d-flex error-msg flex-align-items-center" >
       <div *ngIf="myForm.get(control.name).touched && myForm.get(control.name).invalid ">
         <ion-icon name="alert-circle-outline"></ion-icon>
-        <span *ngIf="control.errorLabel" class="mx-10">Invalid {{control?.errorLabel}}</span>
-        <span *ngIf="!control.errorLabel" class="mx-10">Invalid {{control?.label}}</span>
+        <span *ngIf="control.errorLabel" class="mx-10">Enter {{control?.errorLabel}}</span>
+        <span *ngIf="!control.errorLabel" class="mx-10">Enter {{control?.label}}</span>
       </div>
     </small>
   </div>

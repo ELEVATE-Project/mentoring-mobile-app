@@ -14,5 +14,8 @@
     <div *ngIf="profileImageData?.location">
       <p class="region text-config">{{ profileImageData?.location[0]?.label }}</p>
     </div>
+    <div *ngIf="profileImageData?.mentorName">
+      <p class="region text-config">{{ profileImageData?.mentorName }}</p>
+    </div>
   </div>
 </div>
