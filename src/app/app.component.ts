@@ -18,8 +18,6 @@ export class AppComponent {
  user;
   public appPages = [
     { title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' },
-    { title: 'SETTINGS', url: '', icon: 'settings' },
-    { title: 'HELP', url: '', icon: 'help-circle' }
   ];
 
   public mentorMenu=[
@@ -80,10 +78,12 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      setTimeout(async ()=>{
+        this.languageSetting();
+      },0)
       this.db.init();
       this.network.netWorkCheck();
       setTimeout(async ()=>{
-        this.languageSetting();
         const userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
         if(userDetails){
           this.getUser();
@@ -123,9 +123,10 @@ export class AppComponent {
   }
 
   setLanguage(lang){
-    this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,'en').then(data =>{
+    this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,lang).then(data =>{
       this.translate.use(lang);
     }).catch(error => {
+      this.translate.use(lang)
     })
   }
 

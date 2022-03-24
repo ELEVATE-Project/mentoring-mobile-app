@@ -107,8 +107,9 @@ export class HttpService {
     if (!this.network.isNetworkAvailable) {
       this.toastService.showToast('MSG_PLEASE_NETWORK', 'danger')
       return false;
-    }
+    } else {
     return true;
+    }
   }
 
   //token validation and logout 

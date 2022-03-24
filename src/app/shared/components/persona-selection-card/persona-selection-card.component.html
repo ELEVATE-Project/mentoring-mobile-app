@@ -1,17 +1,17 @@
-<div *ngFor="let persona of personaList;let i=index">
-  <div>
-    <ion-row class="d-flex flex-justify-center">
-      <img *ngIf="persona?.name=='mentor'" src="../../../../assets/prof-img/mentor.png">
-      <img *ngIf="persona?.name=='mentee'" src="../../../../assets/prof-img/mentee.png">
-    </ion-row>
-    <ion-row class="d-flex flex-justify-center flex-align-items-flex-start selection-row">
-      <ion-radio-group [(ngModel)]="userType">
+<ion-radio-group>
+  <div *ngFor="let persona of personaList;let i=index">
+    <div>
+      <ion-row class="d-flex flex-justify-center">
+        <img *ngIf="persona?.name=='mentor'" src="../../../../assets/prof-img/mentor.png">
+        <img *ngIf="persona?.name=='mentee'" src="../../../../assets/prof-img/mentee.png">
+      </ion-row>
+      <ion-row class="d-flex flex-justify-center flex-align-items-flex-start selection-row">
         <ion-item lines="none" class="ion-no-padding ion-no-margin">
           <ion-radio value="{{persona?.name}}" (ionFocus)="onSelect(persona)"></ion-radio>
         </ion-item>
-      </ion-radio-group>
-      <h3 class="text-config">{{persona?.value}}</h3>
-    </ion-row>
+        <h3 class="text-config">{{persona?.value}}</h3>
+      </ion-row>
+    </div>
+    <p *ngIf="i!=personaListCount" class="or">OR</p>
   </div>
-  <p *ngIf="i!=personaListCount" class="or">OR</p>
-</div>
+</ion-radio-group>

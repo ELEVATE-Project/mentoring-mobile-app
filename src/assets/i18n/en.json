@@ -57,7 +57,7 @@
     "SESSIONS_PAGE":"Sessions Page",
     "SESSIONS_DETAILS":"Session Details",
     "MENTORS_DIRECTORY":"Mentors Directory",
-    "NO_USER_DETAILS_FOUND":"No information found please click on the button below and enter your Profile Details",
+    "NO_USER_DETAILS_FOUND":"No information found. Please click on 'Edit Profile' to update your profile.",
     "USERNAME":"Username",
     "ABOUT":"About",
     "DESIGNATION":"Designation",
@@ -66,7 +66,7 @@
     "LANGUAGES":"Languages",
     "SEARCH":"Search",
     "SORRY_NO_RESULTS":"Sorry No results found",
-    "WELCOME_NOTE":"Connect with industry experts and enhance your learning and problem solving skills",
+    "WELCOME_NOTE":"Search for top Mentors, enroll for live masterclass and enhance your learning.",
     "LOGOUT_CONFIRM_MESSAGE":"Are you sure you want to logout?",
     "CANCEL_CONFIRM_MESSAGE":"Are you sure you want to cancel the session you have enrolled into",
     "MENTORS_PROFILE":"Mentors Profile",
@@ -82,7 +82,7 @@
     "MENTOR": "Mentor",
     "MENTEE": "Mentee",
     "SIGNUP_MESSAGE":"You have Signed up sucessfully, please use your registered id, password to login",
-    "MSG_PLEASE_NETWORK":"Please check your network connection and try again",
+    "MSG_PLEASE_NETWORK":"You are offline. Please connect to WiFi or mobile data.",
     "PASSWORD_MISMATCH":"Password Mismatch",
     "SESSION_OVERVIEW": "Session Overview",
     "TOTAL_SESSION_CREATED": "Total Session Created",
@@ -93,7 +93,7 @@
     "WEEKLY": "Weekly",
     "MONTHLY": "Monthly",
     "QUARTERLY": "Quarterly",
-    "NO_DATA_AVAILABLE": "No Data Available",
+    "NO_DATA_AVAILABLE": "No data available",
     "CONFIRM":"Confirm",
     "FORM_UNSAVED_DATA":"You have unsaved data, please save your data before closing.",
     "SESSION_FORM_UNSAVED_DATA": "Are you sure you want to exit? You will lose all data if leave this page.",
@@ -124,5 +124,6 @@
     "IF_YOU_DIDNT_RECIEVED_OTP": "If you didn't recieved the OTP!",
     "TRY_AGAIN_AFTER": "Try again after",
     "SECONDS": "seconds.",
-    "PROCEED":"Proceed"
+    "PROCEED":"Proceed",
+    "SEARCH_SESSIONS": "Search session"
 }

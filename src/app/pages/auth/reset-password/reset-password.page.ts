@@ -22,6 +22,7 @@ export class ResetPasswordPage implements OnInit {
         value: '',
         class: 'ion-margin',
         type: 'email',
+        errorMessage:'Enter Email',
         position: 'floating',
         validators: {
           required: true,
@@ -30,28 +31,28 @@ export class ResetPasswordPage implements OnInit {
       },
       {
         name: 'password',
-        label: 'Enter Password',
+        label: 'Enter New Password',
         value: '',
         class: 'ion-margin',
         type: 'password',
+        errorMessage:'Enter New Password',
         position: 'floating',
         validators: {
           required: true,
           minLength: 8,
-          pattern: '^[a-zA-Z0-9]*$'
         },
       },
       {
         name: 'newPassword',
-        label: 'Confirm Password',
+        label: 'Confirm New Password',
         value: '',
         class: 'ion-margin',
         type: 'password',
+        errorMessage:'Confirm New Password',
         position: 'floating',
         validators: {
           required: true,
           minLength: 8,
-          pattern: '^[a-zA-Z0-9]*$'
         },
       },
     ],

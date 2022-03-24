@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AttachmentService, LoaderService, ToastService } from 'src/app/core/services';
 import { HttpService } from 'src/app/core/services/http/http.service';
@@ -56,7 +56,8 @@ export class CreateSessionPage implements OnInit {
     private loaderService: LoaderService,
     private translate: TranslateService,
     private alert: AlertController,
-    private form: FormService
+    private form: FormService,
+    private changeDetRef: ChangeDetectorRef
   ) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.id = params?.get('id');
@@ -70,14 +71,15 @@ export class CreateSessionPage implements OnInit {
       let response = await this.sessionService.getSessionDetailsAPI(this.id);
       this.profileImageData.image = response.image;
       this.profileImageData.isUploaded = true;
-      response.startDate = moment.unix(response.startDate).toISOString();
-      response.endDate = moment.unix(response.endDate).toISOString();
+      response.startDate = moment.unix(response.startDate).format();
+      response.endDate = moment.unix(response.endDate).format();
       this.preFillData(response);
     } else {
       this.showForm = true;
     }
     this.isSubmited = false; //to be removed
     this.profileImageData.isUploaded = true;
+    this.changeDetRef.detectChanges();
   }
 
   async canPageLeave() {

@@ -4,8 +4,10 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { IonDatetime } from '@ionic/angular';
 import * as _ from 'lodash-es';
 import * as moment from 'moment';
 import { ToastService } from 'src/app/core/services';
@@ -39,6 +41,8 @@ interface JsonFormControls {
   options?: JsonFormControlOptions;
   validators: JsonFormValidators;
   numberOfStars?:number;
+  errorMessage?:string;
+  dependentKey?:string;
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
@@ -51,9 +55,11 @@ export interface JsonFormData {
 })
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
+  @ViewChild(IonDatetime) datetime
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
-  date: any;
+  currentDate = moment().format();
+  maxDate = moment(this.currentDate).add(10, "years").format();
 
   constructor(private fb: FormBuilder, private toast: ToastService) {}
   ngOnInit() {
@@ -63,7 +69,6 @@ export class DynamicFormComponent implements OnInit {
         this.jsonFormData.controls[index].options = _.sortBy(this.jsonFormData.controls[index].options, ['label']);
       }
     });
-    this.date = moment().format();
     setTimeout(() => {
       this.createForm(this.jsonFormData.controls);
       this.showForm = true;
@@ -148,5 +153,14 @@ export class DynamicFormComponent implements OnInit {
   }
   alertToast(){
     this.toast.showToast("Please refer to the on-boarding email for your secret code", "success")
+  }
+  confirm() {
+    this.datetime.confirm(true);
+  }
+  resetCalendar() {
+    this.datetime.reset();
+  }
+  format(value){
+    return moment().format(value);
   }
 }

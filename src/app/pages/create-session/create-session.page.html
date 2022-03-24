@@ -6,7 +6,10 @@
     <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
   </div>
 </ion-content>
-
-<ion-footer class="ion-no-border" submitButton>
-  <ion-button expand="full" (click)="onSubmit()">{{'PUBLISH' | translate}}</ion-button>
-</ion-footer>
+<section
+    [ngClass]="{'btn-disabled': form1?.myForm.invalid , 'btn-valid':form1?.myForm.valid}"
+  >
+  <div class="ion-no-border" submitButton>
+    <ion-button expand="full" (click)="onSubmit()">{{'PUBLISH' | translate}}</ion-button>
+  </div>
+</section>

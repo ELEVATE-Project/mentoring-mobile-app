@@ -1,5 +1,5 @@
 <app-page-header [config]="headerConfig">
-  <ion-searchbar class="top-padding" placeholder="Search for Mentors, Topics" debounce="500"
+  <ion-searchbar class="top-padding" placeholder="Search session" debounce="500"
     (ionChange)="onSearch($event)"></ion-searchbar>
 </app-page-header>
 <ion-content>
@@ -8,7 +8,7 @@
       <ion-segment-button value="published,live">
         <ion-label>{{ "UPCOMING" | translate }}</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="completed">
+      <ion-segment-button value="published,live,completed">
         <ion-label>{{ "PAST" | translate }}</ion-label>
       </ion-segment-button>
     </ion-segment>

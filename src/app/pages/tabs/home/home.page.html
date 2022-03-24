@@ -1,17 +1,17 @@
 <app-page-header [config]="headerConfig">
-  <ion-item color="primary" class="header-bottom-border">
-    <ion-row class="ion-padding ion-margin-top">
-      <h3>
-        {{'WELCOME' | translate}} {{user?.name | titlecase}} !
-      </h3>
-      <ion-col size="12">{{'WELCOME_NOTE' | translate}}</ion-col>
-      <ion-col size="12" class="ion-no-padding">
-        <div>
+  <ion-row class="header-bottom-border ion-padding ion-margin-top">
+    <h3>
+      {{user?.name | titlecase}}
+    </h3>
+    <ion-col size="12">{{'WELCOME_NOTE' | translate}}</ion-col>
+    <ion-col size="12" class="ion-no-padding">
+      <div>
+        <ion-item lines="none" color="primary">
           <ion-searchbar placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}" (click)="search()"></ion-searchbar>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-item>
+        </ion-item>
+      </div>
+    </ion-col>
+  </ion-row>
 </app-page-header>
 <ion-content>
   <div *ngIf="sessions">
@@ -19,19 +19,22 @@
       <h5>
         {{"ALL_SESSIONS" | translate}}
       </h5>
-      <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize" (click)="viewMore('all-sessions')">
+      <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize"
+        (click)="viewMore('all-sessions')">
         {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
       </ion-button>
     </div>
     <div *ngFor="let session of sessions?.allSessions">
-      <app-session-card [data]="session" [action]="'ENROLL'" [status] = "status" (onClickEvent)="eventAction($event)"> </app-session-card>
+      <app-session-card [data]="session" [action]="'ENROLL'" [status]="status" (onClickEvent)="eventAction($event)">
+      </app-session-card>
     </div>
     <div *ngIf="sessions?.mySessions?.length">
       <div class="page-intro">
         <h5>
           {{"MY_SESSIONS" | translate}}
         </h5>
-        <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize" (click)="viewMore('my-sessions')">
+        <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize"
+          (click)="viewMore('my-sessions')">
           {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
         </ion-button>
       </div>
