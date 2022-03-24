@@ -41,6 +41,8 @@ interface JsonFormControls {
   options?: JsonFormControlOptions;
   validators: JsonFormValidators;
   numberOfStars?:number;
+  errorMessage?:string;
+  dependentKey?:string;
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
@@ -56,8 +58,8 @@ export class DynamicFormComponent implements OnInit {
   @ViewChild(IonDatetime) datetime
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
-  date: any =  moment().format();
-  maxDate: any = moment(this.date).add(5, 'years').format();
+  currentDate = moment().format();
+  maxDate = moment(this.currentDate).add(10, "years").format();
 
   constructor(private fb: FormBuilder, private toast: ToastService) {}
   ngOnInit() {

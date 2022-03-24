@@ -62,14 +62,14 @@
         [value]="control.value | date:'dd/MM/yy, h:mm a'"
         [id]="control?.name"
       ></ion-input>
-      <ion-modal class="stack-modal" [trigger]="control?.name">
+      <ion-modal *ngIf="control.type === 'date'" class="stack-modal" [trigger]="control?.name">
         <ng-template>
             <ion-datetime
                 #popoverCalendar
                 presentation="time-date"
                 [formControlName]="control.name"
                 hour-cycle="h12"
-                [min]="date"
+                [min]="currentDate"
                 [max]="maxDate"
                 [value]="control.value"
                 (ionChange)="control.value = format(popoverCalendar?.value)">
@@ -133,8 +133,8 @@
     <small class="error-msg d-flex error-msg flex-align-items-center" >
       <div *ngIf="myForm.get(control.name).touched && myForm.get(control.name).invalid ">
         <ion-icon name="alert-circle-outline"></ion-icon>
-        <span *ngIf="control.errorLabel" class="mx-10">Enter {{control?.errorLabel}}</span>
-        <span *ngIf="!control.errorLabel" class="mx-10">Enter {{control?.label}}</span>
+        <span *ngIf="control.errorMessage" class="mx-10">{{control?.errorMessage}}</span>
+        <span *ngIf="!control.errorMessage" class="mx-10">Enter {{control?.label}}</span>
       </div>
     </small>
   </div>
