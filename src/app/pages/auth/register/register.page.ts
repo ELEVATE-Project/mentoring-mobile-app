@@ -141,7 +141,7 @@ export class RegisterPage implements OnInit {
         this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { state: { type: "signup", formData: formJson } });
       }
     } else {
-      this.toastService.showToast('Password Mismatch', 'danger');
+      this.toastService.showToast('Password does not match.', 'danger');
     }
   }
   ionViewDidLeave() {

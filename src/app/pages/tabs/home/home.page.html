@@ -1,7 +1,7 @@
 <app-page-header [config]="headerConfig">
   <ion-row class="header-bottom-border ion-padding ion-margin-top">
     <h3>
-      {{user?.name | titlecase}}
+      {{'WELCOME'| translate}} {{ user?.name | titlecase}}
     </h3>
     <ion-col size="12">{{'WELCOME_NOTE' | translate}}</ion-col>
     <ion-col size="12" class="ion-no-padding">

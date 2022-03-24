@@ -42,8 +42,8 @@
     "SIGNUP_WITH_EMAIL":"Sign up with Email",
     "FORGOT_PASSWORD":"Forgot Password",
     "SIGN_UP":"Sign up",
-    "SIGN_UP_AS_MENTOR":"Sign up as mentor",
-    "SIGN_UP_AS_MENTEE":"Sign up as mentee",
+    "SIGN_UP_AS_MENTOR":"Sign up as a mentor",
+    "SIGN_UP_AS_MENTEE":"Sign up as a mentee",
     "SIGN_UP_TO_MENTOR_ED":"Sign up to MentorED",
     "ADD":"Add",
     "CANCEL": "Cancel",
@@ -125,5 +125,6 @@
     "TRY_AGAIN_AFTER": "Try again after",
     "SECONDS": "seconds.",
     "PROCEED":"Proceed",
-    "SEARCH_SESSIONS": "Search session"
+    "SEARCH_SESSIONS": "Search session",
+    "MENTOR_SEARCH_PLACEHOLDER":"Search for Mentors"
 }
