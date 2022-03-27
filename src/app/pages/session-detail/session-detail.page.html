@@ -10,7 +10,7 @@
     </div>
     <ng-template #elseBlock>
       <div class="d-flex flex-justify-center">
-        <ion-button [disabled]="!this.detailData?.data?.isEnrolled" class="session-btn" shape="round" (click)="onJoin()">{{ "JOIN" | translate }}</ion-button>
+        <ion-button [disabled]="!detailData?.data?.isEnrolled || detailData?.data?.status==='completed'" class="session-btn" shape="round" (click)="onJoin()">{{ "JOIN" | translate }}</ion-button>
       </div>
     </ng-template>
     <app-generic-details [sessionData]='detailData'></app-generic-details>
@@ -22,11 +22,12 @@
       (click)="onStart(detailData?.data)">{{"START_SESSIONS" | translate}}</ion-button>
   </div>
   <ng-template #elseBlockFooter>
-    <div *ngIf="!detailData?.data?.isEnrolled; else cancel">
+    <div *ngIf="!detailData?.data?.isEnrolled && detailData?.data?.status==='published'">
       <ion-button class="load-more-button" expand="full" (click)="onEnroll()">{{"ENROLL" | translate}}</ion-button>
     </div>
-    <ng-template #cancel>
+    
+    <div *ngIf="detailData?.data?.isEnrolled && detailData?.data?.status==='published'">
       <ion-button class="load-more-button" expand="full" (click)="onCancel()">{{"CANCEL" | translate}}</ion-button>
-    </ng-template>
+    </div>
   </ng-template>
 </ion-footer>

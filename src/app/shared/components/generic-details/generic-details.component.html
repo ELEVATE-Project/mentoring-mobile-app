@@ -10,7 +10,7 @@
       <p *ngIf="item?.key=='duration';else elseBlock2" class="value">{{sessionData.data.duration.hours}} {{"HOURS" | translate}} {{sessionData.data.duration.minutes}} {{"MINUTES" | translate}}</p>
     </ng-template>
     <ng-template #elseBlock2>
-      <p *ngIf="item?.key=='startDate';else elseBlock3" class="value">{{sessionData.data[item.key] | date:'MMM d, y, h:mm a'}}</p>
+      <p *ngIf="item?.key=='startDate' || item?.key=='endDate';else elseBlock3" class="value">{{sessionData.data[item.key] | date:'MMM d, y, h:mm a'}}</p>
     </ng-template>
     <ng-template #elseBlock3>
       <p class="value">{{sessionData.data[item.key]}}</p>
