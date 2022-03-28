@@ -62,7 +62,7 @@ export class DynamicFormComponent implements OnInit {
   currentDate = moment().format();
   maxDate = moment(this.currentDate).add(10, "years").format();
   dependedChild: any;
-  dependedDate: any;
+  dependedDate= moment().format();
 
   constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
   ngOnInit() {
@@ -160,18 +160,21 @@ export class DynamicFormComponent implements OnInit {
   confirm() {
     this.datetime.confirm(true);
   }
-  resetCalendar() {
-    this.datetime.reset();
+  resetCalendar(control) {
+    this.currentDate=moment().format();
+    control.value=this.currentDate;
   }
   format(value){
-    return moment().format(value);
+    return moment(value).format();
   }
   isDepended(control){
-    console.log(moment(this.myForm.value.startDate).format());
-    this.dependedDate = moment(this.myForm.value.startDate).format();
-    console.log(this.dependedDate);
+    this.currentDate = moment().format()
     if(control.dependedChild){
       this.dependedChild=control.dependedChild;
     }
+  }
+  onDateChange(control){
+    this.dependedDate = moment(control.value).format();
+    this.changeDetRef.detectChanges()
   }
 }
