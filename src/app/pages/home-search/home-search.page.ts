@@ -53,8 +53,8 @@ export class HomeSearchPage implements OnInit {
     this.searching = false;
   }
 
-  checkInput(event){
-    this.searchText = event.detail?.data?.trim();
+  checkInput(){
+    this.searchText=this.searchText.replace(/^ +/gm, '')
   }
 
   search(){

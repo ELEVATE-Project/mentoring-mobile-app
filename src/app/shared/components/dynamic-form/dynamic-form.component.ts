@@ -173,8 +173,10 @@ export class DynamicFormComponent implements OnInit {
       this.dependedChild=control.dependedChild;
     }
   }
-  onDateChange(control){
-    this.dependedDate = moment(control.value).format();
-    this.changeDetRef.detectChanges()
+  onDateChange(event, control){
+    if(control.name=="startDate"){
+      this.dependedDate = moment(control.value).format();
+      this.changeDetRef.detectChanges();
+    }
   }
 }

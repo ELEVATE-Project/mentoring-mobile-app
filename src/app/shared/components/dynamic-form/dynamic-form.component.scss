@@ -8,6 +8,14 @@ ion-item {
   --border-color: #ffffff00; // transparent
   border-bottom: 1.9px solid var(--color);
 
+  ion-input {
+    caret-color: black !important;
+  }
+
+  ion-textarea {
+    caret-color: black !important;
+  }
+
   ion-label {
     font-weight: bold;
     color: var(--grey-medium);

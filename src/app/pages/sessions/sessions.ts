@@ -21,6 +21,7 @@ export class SessionsPage implements OnInit {
   showLoadMoreButton: boolean = false;
   loading: boolean = false;
   emptyMessage;
+  emptyMessageOnSearch: string="NO_DATA_AVAILABLE";
 
   constructor(private activatedRoute: ActivatedRoute,
     private httpService: HttpService,

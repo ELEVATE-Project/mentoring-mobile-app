@@ -28,7 +28,7 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         validators: {
           required: true,
-          pattern:'^[a-zA-Z0-9 ]*$',
+          pattern:'^[a-zA-Z ]*$',
         },
       },
       {
