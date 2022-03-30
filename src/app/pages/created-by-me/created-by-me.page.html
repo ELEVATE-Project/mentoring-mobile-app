@@ -26,7 +26,7 @@
             </ion-list>
           </div>
         </div>
-        <div *ngSwitchCase="'completed'">
+        <div *ngSwitchCase="'published,live,completed'">
           <p class="session-listing-header">{{"PAST_SESSIONS" | translate}}</p>
           <div *ngIf="sessions?.length; else elseBlockTwo">
             <ion-list>

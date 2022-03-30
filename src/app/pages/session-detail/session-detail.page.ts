@@ -164,8 +164,8 @@ export class SessionDetailPage implements OnInit {
       if (sharableLink.shareLink) {
         let url = `/${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
         let link = await this.utilService.getDeepLink(url);
-        this.detailData.data.mentorName = this.tranformTextToUpperCase(this.detailData.data.mentorName);
-        this.sessionHeaderData.name = this.tranformTextToUpperCase(this.sessionHeaderData.name);
+        this.detailData.data.mentorName = this.tranformTextToUpperCase(this.detailData.data.mentorName).trim();
+        this.sessionHeaderData.name = this.tranformTextToUpperCase(this.sessionHeaderData.name).trim();
         let params = { link: link, subject: this.sessionHeaderData?.title, text: "Join an expert session on " + `${this.sessionHeaderData.name} ` + "hosted by " + `${this.detailData.data.mentorName}` + " using the link" }
         this.utilService.shareLink(params);
       } else {

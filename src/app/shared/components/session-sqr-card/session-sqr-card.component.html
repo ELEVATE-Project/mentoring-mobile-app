@@ -15,6 +15,7 @@
     </ion-card-subtitle>
   </ion-card-content>
   <ion-button color="primary" size="small" shape="round" class="btn-width-small ion-text-capitalize"
+    [disabled]="data.status=='completed'"
     (click)="$event.stopPropagation();action(data,'joinAction')">
     {{'JOIN' | translate}}
   </ion-button>

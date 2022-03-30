@@ -59,8 +59,10 @@
       </ion-range>
       <ion-input
         *ngIf="control.type === 'date'"
-        [value]="control.value | date:'dd/MM/yy, h:mm a'"
+        [value]="control.value | date: 'M/d/y hh:mm:ss a'"
         [id]="control?.name"
+        (ionChange)="onDateChange($event, control)"
+        [formControlName]="control.name"
         (click)="isDepended(control)"
       ></ion-input>
       <ion-modal *ngIf="control.type === 'date'" class="stack-modal" [trigger]="control?.name">
@@ -68,25 +70,18 @@
             <ion-datetime
                 #popoverCalendar
                 presentation="date-time"
-                [formControlName]="control.name"
                 hour-cycle="h12"
+                [value]="control.value?control.value:currentDate"
                 [min]="dependedChild===control.name?dependedDate:currentDate"
                 [max]="maxDate"
-                [value]="control.value"
                 (ionChange)="control.value = format(popoverCalendar?.value)">
               <ion-buttons slot="buttons">
                 <ion-button (click)="confirm()">{{"CONFIRM"|translate}}</ion-button>
-                <ion-button (click)="resetCalendar()">{{"RESET"|translate}}</ion-button>
+                <ion-button (click)="resetCalendar(control)">{{"RESET"|translate}}</ion-button>
               </ion-buttons>
             </ion-datetime>
         </ng-template>
       </ion-modal>
-      <!-- <ion-datetime
-        *ngIf="control.type === 'date'"
-        [formControlName]="control.name"
-        [min]="date"
-        [value]="control.value"
-      ></ion-datetime> -->
       <ion-select
         *ngIf="control.type === 'select'"
         [multiple]="control.multiple"

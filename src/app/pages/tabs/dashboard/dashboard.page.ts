@@ -36,7 +36,7 @@ export class DashboardPage implements OnInit {
         datasets: [
           {
             data: [],
-            backgroundColor: ['#ffab00', 'blue']
+            backgroundColor: ['#ffab00', '#BEBEBE']
           }
         ]
       }
@@ -91,6 +91,7 @@ export class DashboardPage implements OnInit {
     };
     this.apiService.get(config).then(success => {
       let chartObj;
+      console.log(success)
         this.chartData.chart.data.labels.length = 0;
         this.chartData.chart.data.datasets[0].data.length = 0;
       if(this.segment === 'mentor'){
