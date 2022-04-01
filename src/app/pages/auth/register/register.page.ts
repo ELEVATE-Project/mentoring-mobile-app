@@ -26,6 +26,7 @@ export class RegisterPage implements OnInit {
         class: 'ion-margin',
         type: 'text',
         position: 'floating',
+        errorMessage:"This field can only contain alphabets",
         validators: {
           required: true,
           pattern:'^[a-zA-Z ]*$',
@@ -52,6 +53,7 @@ export class RegisterPage implements OnInit {
         validators: {
           required: true,
           minLength: 8,
+          pattern: "[a-zA-Z0-9%*#]*$",
         },
       },
       {
@@ -64,6 +66,7 @@ export class RegisterPage implements OnInit {
         validators: {
           required: true,
           minLength: 8,
+          pattern: "[a-zA-Z0-9%*#]*$",
         }
       }
     ]

@@ -1,12 +1,14 @@
 <div>
   <div class="d-flex flex-justify-center">
     <img *ngIf="!profileImageData?.image || profileImageData?.image==''; else Img; let image" class="thumbnail-image"
-      src="../../../../assets/prof-img/user.png" />
+      src="../../../../assets/prof-img/user.png" (click)="uploadPhoto()"/>
     <ng-template #Img>
-      <img class="thumbnail-image" src="{{profileImageData?.image}}" />
+      <img class="thumbnail-image" src="{{profileImageData?.image}}" (click)="uploadPhoto()"/>
     </ng-template>
   </div>
-  <p class="add-photo" *ngIf="uploadImage" (click)="uploadPhoto()">{{ "ADD_PHOTO" | translate }}</p>
+  <div class="d-flex flex-justify-center">
+    <ion-button fill="clear" expand="block" class="add-image-button" *ngIf="uploadImage" (click)="uploadPhoto()">{{ "ADD_PHOTO" | translate }}</ion-button>
+  </div>
   <div class="padding" *ngIf="profileImageData;">
     <div *ngIf="profileImageData?.name">
       <p class="padding text-config username">{{ profileImageData?.name | titlecase }}</p>

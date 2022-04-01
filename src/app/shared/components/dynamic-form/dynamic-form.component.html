@@ -67,11 +67,15 @@
       ></ion-input>
       <ion-modal *ngIf="control.type === 'date'" class="stack-modal" [trigger]="control?.name">
         <ng-template>
+            <ion-buttons class="close-button">
+              <ion-button shape="round" (click)="confirm()" color="light"><ion-icon name="close-outline" size="large"></ion-icon>
+              </ion-button>
+            </ion-buttons>
             <ion-datetime
                 #popoverCalendar
                 presentation="date-time"
                 hour-cycle="h12"
-                [value]="control.value?control.value:currentDate"
+                [value]="dependedChild===control.name?dependedDate:currentDate"
                 [min]="dependedChild===control.name?dependedDate:currentDate"
                 [max]="maxDate"
                 (ionChange)="control.value = format(popoverCalendar?.value)">
