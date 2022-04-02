@@ -3,7 +3,7 @@
     height: 40px;
     border-radius: 50%;
 }
-.username, .add-photo {
+.username {
     font-size: 19px;
     text-align: center;
     margin: 0px;
@@ -26,4 +26,10 @@
 .text-config{
     color: rgb(87, 95, 116);
     font-weight: 900;
+}
+.add-image-button{
+    display: flex;
+    justify-self: center;
+    width: 50%;
+    color: black;
 }

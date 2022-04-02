@@ -186,7 +186,7 @@ export class SessionDetailPage implements OnInit {
 
   onDelete() {
     let msg = {
-      header: 'DELETE',
+      header: 'DELETE_SESSION',
       message: 'DELETE_CONFIRM_MSG',
       cancel: "Don't delete",
       submit: 'Yes Delete'

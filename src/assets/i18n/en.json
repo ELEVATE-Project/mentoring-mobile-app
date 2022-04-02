@@ -126,5 +126,6 @@
     "SECONDS": "seconds.",
     "PROCEED":"Proceed",
     "SEARCH_SESSIONS": "Search session",
-    "MENTOR_SEARCH_PLACEHOLDER":"Search for Mentors"
+    "MENTOR_SEARCH_PLACEHOLDER":"Search for Mentors",
+    "DELETE_SESSION":"Delete Session"
 }
