@@ -53,7 +53,7 @@ export class RegisterPage implements OnInit {
         validators: {
           required: true,
           minLength: 8,
-          pattern: "[a-zA-Z0-9%*#]*$",
+          pattern: "^[a-zA-Z0-9!@#$&()\\-`.+,/\"]*$",
         },
       },
       {
@@ -66,7 +66,7 @@ export class RegisterPage implements OnInit {
         validators: {
           required: true,
           minLength: 8,
-          pattern: "[a-zA-Z0-9%*#]*$",
+          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         }
       }
     ]
