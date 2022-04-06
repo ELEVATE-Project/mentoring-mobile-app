@@ -100,7 +100,7 @@ export class OtpPage implements OnInit {
 
   async resendOtp() {
     this.enableResendOtp = false;
-    var response = this.actionType == "signup" ? await this.profileService.registrationOtp(this.signupData) : await this.profileService.generateOtp({ email: this.resetPasswordData.email });
+    var response = this.actionType == "signup" ? await this.profileService.registrationOtp(this.signupData) : await this.profileService.generateOtp({ email: this.resetPasswordData.email, password:  this.resetPasswordData.password});
     if (response) {
       this.toast.showToast(response.message, "success");
       this.startCountdown();

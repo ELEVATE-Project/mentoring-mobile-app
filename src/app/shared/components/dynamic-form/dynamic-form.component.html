@@ -59,7 +59,7 @@
       </ion-range>
       <ion-input
         *ngIf="control.type === 'date'"
-        [value]="control.value | date: 'M/d/y hh:mm:ss a'"
+        [value]="control.value | date: 'M/d/y hh:mm a'"
         [id]="control?.name"
         (ionChange)="onDateChange($event, control)"
         [formControlName]="control.name"
@@ -74,7 +74,7 @@
             <ion-datetime
                 #popoverCalendar
                 presentation="date-time"
-                hour-cycle="h12"
+                hourCycle="h12"
                 [value]="dependedChild===control.name?dependedDate:currentDate"
                 [min]="dependedChild===control.name?dependedDate:currentDate"
                 [max]="maxDate"
@@ -91,6 +91,7 @@
         [multiple]="control.multiple"
         [formControlName]="control.name"
         [compareWith]="compareWith"
+        [value]="control.value[0]"
       >
         <ion-select-option
           *ngFor="let option of control.options"
