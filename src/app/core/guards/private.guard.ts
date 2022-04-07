@@ -22,6 +22,9 @@ export class PrivateGuard implements CanActivate {
         this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LANDING_PAGE}`]);
         return false;
       }
+    }).catch(error => {
+      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LANDING_PAGE}`]);
+        return false;
     });
   
   }
