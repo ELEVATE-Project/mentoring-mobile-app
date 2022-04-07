@@ -1,9 +1,9 @@
 <div>
   <div class="d-flex flex-justify-center">
     <img *ngIf="!profileImageData?.image || profileImageData?.image==''; else Img; let image" class="thumbnail-image"
-      src="../../../../assets/prof-img/user.png" (click)="uploadPhoto()"/>
+      src="../../../../assets/prof-img/user.png"/>
     <ng-template #Img>
-      <img class="thumbnail-image" src="{{profileImageData?.image}}" (click)="uploadPhoto()"/>
+      <img class="thumbnail-image" src="{{profileImageData?.image}}"/>
     </ng-template>
   </div>
   <div class="d-flex flex-justify-center">
@@ -11,7 +11,7 @@
   </div>
   <div class="padding" *ngIf="profileImageData;">
     <div *ngIf="profileImageData?.name">
-      <p class="padding text-config username">{{ profileImageData?.name | titlecase }}</p>
+      <p class="padding text-config username">{{ profileImageData?.name }}</p>
     </div>
     <div *ngIf="profileImageData?.location">
       <p class="region text-config">{{ profileImageData?.location[0]?.label }}</p>
