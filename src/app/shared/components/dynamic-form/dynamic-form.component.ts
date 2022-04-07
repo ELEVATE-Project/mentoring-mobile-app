@@ -59,10 +59,11 @@ export class DynamicFormComponent implements OnInit {
   @ViewChild(IonDatetime) datetime
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
-  currentDate = moment().format();
-  maxDate = moment(this.currentDate).add(10, "years").format();
+  currentDate = moment().format("YYYY-MM-DDTHH:mm:ssZ");
+  maxDate = moment(this.currentDate).add(10, "years").format("YYYY-MM-DDTHH:mm:ssZ");
   dependedChild: any;
-  dependedDate= moment().format();
+  dependedDate;
+  dependedParent: any;
 
   constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
   ngOnInit() {
@@ -160,23 +161,31 @@ export class DynamicFormComponent implements OnInit {
   confirm() {
     this.datetime.confirm(true);
   }
-  resetCalendar(control) {
-    this.currentDate=moment().format();
-    control.value=this.currentDate;
-  }
   format(value){
-    return moment(value).format();
+    return moment(value).format("YYYY-MM-DDTHH:mm:ssZ");
   }
   isDepended(control){
-    this.currentDate = moment().format()
+    this.currentDate = moment().format("YYYY-MM-DDTHH:mm:ssZ")
     if(control.dependedChild){
       this.dependedChild=control.dependedChild;
+      this.dependedParent=control;
     }
   }
-  onDateChange(event, control){
-    if(control.name=="startDate"){
-      this.dependedDate = moment(control.value).format();
+  onDateChange(control){
+    if(control.value<=this.currentDate){
+      this.toast.showToast("SELECT_VALID_START_TIME","danger");
+      control.value="";
+    }
+    if(control.dependedChild){
+      this.dependedDate = control.value;
       this.changeDetRef.detectChanges();
     }
+    if(control.name===this.dependedChild){
+      if(control.value<=this.dependedDate){
+        this.toast.showToast("SELECT_VALID_END_TIME","danger");
+        control.value="";
+      }
+    }
+    this.changeDetRef.detectChanges();
   }
 }

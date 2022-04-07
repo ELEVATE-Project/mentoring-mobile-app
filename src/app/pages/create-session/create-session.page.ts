@@ -65,14 +65,14 @@ export class CreateSessionPage implements OnInit {
     });
   }
   async ngOnInit() {
-    const response = await this.form.getForm(CREATE_SESSION_FORM);
-    this.formData = _.get(response, 'result.data.fields');
+    const result = await this.form.getForm(CREATE_SESSION_FORM);
+    this.formData = _.get(result, 'result.data.fields');
     if (this.id) {
       let response = await this.sessionService.getSessionDetailsAPI(this.id);
       this.profileImageData.image = response.image;
       this.profileImageData.isUploaded = true;
-      response.startDate = moment.unix(response.startDate).format();
-      response.endDate = moment.unix(response.endDate).format();
+      response.startDate = moment.unix(response.startDate).format('M/d/y hh:mm a');
+      response.endDate = moment.unix(response.endDate).format('M/d/y hh:mm a');
       this.preFillData(response);
     } else {
       this.showForm = true;

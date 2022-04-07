@@ -22,6 +22,7 @@ export class LoginPage implements OnInit {
         class: 'ion-margin',
         type: 'text',
         position: 'floating',
+        errorMessage:'Please enter registered email ID',
         validators: {
           required: true,
         },
@@ -33,8 +34,10 @@ export class LoginPage implements OnInit {
         class: 'ion-margin',
         type: 'password',
         position: 'floating',
+        errorMessage:'Please enter password',
         validators: {
           required: true,
+          minLength: 8,
         },
       },
     ],

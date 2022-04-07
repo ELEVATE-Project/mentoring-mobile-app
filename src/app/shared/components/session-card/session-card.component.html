@@ -1,5 +1,5 @@
 <ion-card (click)="onCardClick(data)" class="session-card">
-  <span class="status-badge" *ngIf="data?.status == 'live'">
+  <span class="status-badge " *ngIf="data?.status == 'live'">
     <ion-icon name="ellipse-sharp"></ion-icon> {{data?.status | titlecase}}
   </span>
   <ion-row>
@@ -11,7 +11,7 @@
       </ng-template>
     </ion-col>
     <ion-col size="9">
-      <h5 class="text-align">{{data?.name || data?.title | titlecase}}</h5>
+      <h5 class="text-align">{{data?.name || data?.title}}</h5>
       <div class="margin-btm-10" *ngIf="data?.areasOfExpertise?.length">
         <span class="ion-margin-top" *ngFor="let label of data?.areasOfExpertise;  let isLast=last">
           <ion-label>{{label?.label}}{{isLast ? '' : ', '}} </ion-label>
@@ -21,7 +21,7 @@
     </ion-col>
   </ion-row>
   <div class="session-actions">
-    <div class="session-enroll" *ngIf="action=='ENROLL'" (click)="$event.stopPropagation(); onEnroll(data)">
+    <div class="session-enroll" *ngIf="action=='ENROLL' && data.status!='live'" (click)="$event.stopPropagation(); onEnroll(data)">
       <ion-label>
         {{action | translate}} <ion-icon name="caret-forward-outline"></ion-icon>
       </ion-label>

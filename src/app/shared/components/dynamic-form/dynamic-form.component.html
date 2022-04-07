@@ -61,7 +61,7 @@
         *ngIf="control.type === 'date'"
         [value]="control.value | date: 'M/d/y hh:mm a'"
         [id]="control?.name"
-        (ionChange)="onDateChange($event, control)"
+        (ionChange)="onDateChange(control)"
         [formControlName]="control.name"
         (click)="isDepended(control)"
       ></ion-input>
@@ -75,13 +75,10 @@
                 #popoverCalendar
                 presentation="date-time"
                 hourCycle="h12"
-                [value]="dependedChild===control.name?dependedDate:currentDate"
-                [min]="dependedChild===control.name?dependedDate:currentDate"
-                [max]="maxDate"
+                [value]="(control.value || currentDate)"
                 (ionChange)="control.value = format(popoverCalendar?.value)">
               <ion-buttons slot="buttons">
                 <ion-button (click)="confirm()">{{"CONFIRM"|translate}}</ion-button>
-                <ion-button (click)="resetCalendar(control)">{{"RESET"|translate}}</ion-button>
               </ion-buttons>
             </ion-datetime>
         </ng-template>
