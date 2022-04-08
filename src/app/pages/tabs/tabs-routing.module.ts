@@ -12,7 +12,8 @@ const routes: Routes = [
     children: [
       {
         path: CommonRoutes.HOME,
-        loadChildren: () => import('./home/home.module').then(m => m.Tab1PageModule)
+        loadChildren: () => import('./home/home.module').then(m => m.Tab1PageModule),
+        canActivate:[PrivateGuard]
       },
       {
         path: CommonRoutes.MENTOR_DIRECTORY,
