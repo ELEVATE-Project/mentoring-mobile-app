@@ -172,20 +172,28 @@ export class DynamicFormComponent implements OnInit {
     }
   }
   onDateChange(control){
-    if(control.value<=this.currentDate){
+    if(control.value!="" && control.value<=this.currentDate && !control.name===this.dependedChild){
       this.toast.showToast("SELECT_VALID_START_TIME","danger");
       control.value="";
-    }
-    if(control.dependedChild){
+    } else if(control.dependedChild){
+      let dependedControl = this.searchControls(control.dependedChild,this.jsonFormData.controls);
+      dependedControl.value = "";
       this.dependedDate = control.value;
-      this.changeDetRef.detectChanges();
-    }
-    if(control.name===this.dependedChild){
-      if(control.value<=this.dependedDate){
-        this.toast.showToast("SELECT_VALID_END_TIME","danger");
-        control.value="";
+    } else {
+      if(control.value!="" && control.name===this.dependedChild ){
+        if(control.value<=this.dependedDate){
+          this.toast.showToast("SELECT_VALID_END_TIME","danger");
+          control.value="";
+        }
       }
     }
     this.changeDetRef.detectChanges();
   }
+  searchControls(key, array){
+    for (var i=0; i < array.length; i++) {
+        if (array[i].name === key) {
+            return array[i];
+        }
+    }
+}
 }

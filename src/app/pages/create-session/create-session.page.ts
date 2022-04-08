@@ -71,8 +71,8 @@ export class CreateSessionPage implements OnInit {
       let response = await this.sessionService.getSessionDetailsAPI(this.id);
       this.profileImageData.image = response.image;
       this.profileImageData.isUploaded = true;
-      response.startDate = moment.unix(response.startDate).format('M/d/y hh:mm a');
-      response.endDate = moment.unix(response.endDate).format('M/d/y hh:mm a');
+      response.startDate = moment.unix(response.startDate).format();
+      response.endDate = moment.unix(response.endDate).format();
       this.preFillData(response);
     } else {
       this.showForm = true;
