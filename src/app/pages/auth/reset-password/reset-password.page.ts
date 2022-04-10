@@ -22,7 +22,7 @@ export class ResetPasswordPage implements OnInit {
         value: '',
         class: 'ion-margin',
         type: 'email',
-        errorMessage:'Enter Email',
+        errorMessage:'Please enter registered email ID',
         position: 'floating',
         validators: {
           required: true,
@@ -35,11 +35,12 @@ export class ResetPasswordPage implements OnInit {
         value: '',
         class: 'ion-margin',
         type: 'password',
-        errorMessage:'Enter New Password',
+        errorMessage:'Please enter minimum 8 characters.',
         position: 'floating',
         validators: {
           required: true,
           minLength: 8,
+          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
       {
@@ -48,11 +49,12 @@ export class ResetPasswordPage implements OnInit {
         value: '',
         class: 'ion-margin',
         type: 'password',
-        errorMessage:'Confirm New Password',
+        errorMessage:'Please enter minimum 8 characters.',
         position: 'floating',
         validators: {
           required: true,
           minLength: 8,
+          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
     ],

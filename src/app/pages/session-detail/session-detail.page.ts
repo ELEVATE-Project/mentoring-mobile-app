@@ -5,8 +5,7 @@ import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 import *  as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import { Location, TitleCasePipe } from '@angular/common';
-import { ProfileService } from 'src/app/core/services/profile/profile.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-session-detail',
@@ -21,7 +20,7 @@ export class SessionDetailPage implements OnInit {
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
-    private utilService: UtilService, private toast: ToastService, private _location: Location, private profileService: ProfileService, private titleCasePipe: TitleCasePipe, private user: UserService) {
+    private utilService: UtilService, private toast: ToastService, private _location: Location, private user: UserService) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {}
@@ -145,7 +144,7 @@ export class SessionDetailPage implements OnInit {
       this.sessionHeaderData.name = response.title;
       this.sessionHeaderData.image = response.image;
       this.sessionHeaderData.mentorName = response.mentorName;
-      this.detailData.data = response;
+      this.detailData.data = Object.assign({}, response);
       this.detailData.data.startDate = readableStartDate;
     }
   }
@@ -164,8 +163,8 @@ export class SessionDetailPage implements OnInit {
       if (sharableLink.shareLink) {
         let url = `/${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
         let link = await this.utilService.getDeepLink(url);
-        this.detailData.data.mentorName = this.tranformTextToUpperCase(this.detailData.data.mentorName).trim();
-        this.sessionHeaderData.name = this.tranformTextToUpperCase(this.sessionHeaderData.name).trim();
+        this.detailData.data.mentorName = this.detailData.data.mentorName.trim();
+        this.sessionHeaderData.name = this.sessionHeaderData.name.trim();
         let params = { link: link, subject: this.sessionHeaderData?.title, text: "Join an expert session on " + `${this.sessionHeaderData.name} ` + "hosted by " + `${this.detailData.data.mentorName}` + " using the link" }
         this.utilService.shareLink(params);
       } else {
@@ -174,10 +173,6 @@ export class SessionDetailPage implements OnInit {
     } else {
       this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id}});
     }
-  }
-
-  tranformTextToUpperCase(text) {
-    return this.titleCasePipe.transform(text)
   }
 
   editSession() {
