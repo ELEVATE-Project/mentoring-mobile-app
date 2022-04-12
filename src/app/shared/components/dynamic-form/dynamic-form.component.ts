@@ -60,10 +60,11 @@ export class DynamicFormComponent implements OnInit {
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
   currentDate = moment().format("YYYY-MM-DDTHH:mm:ssZ");
-  maxDate = moment(this.currentDate).add(10, "years").format("YYYY-MM-DDTHH:mm:ssZ");
+  maxDate = moment(this.currentDate).add(10, "years").format("YYYY-MM-DD");
   dependedChild: any;
   dependedDate;
   dependedParent: any;
+  date = moment().format("YYYY-MM-DD");
 
   constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
   ngOnInit() {
@@ -172,7 +173,7 @@ export class DynamicFormComponent implements OnInit {
     }
   }
   onDateChange(control){
-    if(control.value!="" && control.value<=this.currentDate && !control.name===this.dependedChild){
+    if(control.value!="" && control.value<this.currentDate && control.name!=this.dependedChild){
       this.toast.showToast("SELECT_VALID_START_TIME","danger");
       control.value="";
     } else if(control.dependedChild){

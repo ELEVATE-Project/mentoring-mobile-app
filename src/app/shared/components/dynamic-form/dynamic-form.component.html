@@ -59,7 +59,7 @@
       </ion-range>
       <ion-input
         *ngIf="control.type === 'date'"
-        [value]="control.value | date: 'M/d/y hh:mm a'"
+        [value]="control.value | date: 'short'"
         [id]="control?.name"
         (ionChange)="onDateChange(control)"
         [formControlName]="control.name"
@@ -75,6 +75,8 @@
                 #popoverCalendar
                 presentation="date-time"
                 hourCycle="h12"
+                [min]="date"
+                [max]="maxDate"
                 [value]="(control.value || currentDate)"
                 (ionChange)="control.value = format(popoverCalendar?.value)">
               <ion-buttons slot="buttons">
