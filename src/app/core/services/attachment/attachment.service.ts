@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Camera, CameraOptions, PictureSourceType } from "@ionic-native/camera/ngx";
+import { Camera, CameraOptions, PictureSourceType } from "@awesome-cordova-plugins/camera/ngx";
 import { Chooser } from "@ionic-native/chooser/ngx";
 import { FilePath } from "@ionic-native/file-path/ngx";
 import { File } from "@ionic-native/file/ngx";
