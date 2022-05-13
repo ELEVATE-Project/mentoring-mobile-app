@@ -8,7 +8,7 @@ import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
-import { HttpService, LoaderService, UserService, UtilService } from 'src/app/core/services';
+import { HttpService, LoaderService, LocalStorageService, UserService, UtilService } from 'src/app/core/services';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { Location } from '@angular/common';
@@ -45,7 +45,8 @@ export class HomePage implements OnInit {
     private httpService: HttpService,
     private sessionService: SessionService,
     private modalController: ModalController,
-    private userService: UserService ) { }
+    private userService: UserService,
+    private localStorage: LocalStorageService ) { }
 
   ngOnInit() {
     this.getUser();
@@ -78,7 +79,7 @@ export class HomePage implements OnInit {
     this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
   }
   getUser() {
-    this.profileService.profileDetails(false).then(data => {
+    this.profileService.profileDetails().then(data => {
       this.user = data
       if (!this.user?.hasAcceptedTAndC) {
         this.openModal();
