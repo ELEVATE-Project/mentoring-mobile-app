@@ -135,7 +135,6 @@ export class HttpService {
   }
 
   async getAccessToken() {
-    await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.REFRESH_TOKEN,
       payload: {
@@ -149,7 +148,6 @@ export class HttpService {
       return result;
     }
     catch (error) {
-      await this.loaderService.stopLoader();
     }
   }
 

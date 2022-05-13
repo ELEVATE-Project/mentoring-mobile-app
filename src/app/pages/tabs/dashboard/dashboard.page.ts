@@ -55,7 +55,7 @@ export class DashboardPage implements OnInit {
   ionViewWillEnter(){
     this.dataAvailable = false;
     if(typeof this.isMentor === "undefined"){
-      this.profile.profileDetails(false).then(profileDetails => {
+      this.profile.profileDetails().then(profileDetails => {
         this.isMentor = profileDetails?.isAMentor;
         this.segment= this.isMentor ? "mentor":"mentee";
         this.getReports();
