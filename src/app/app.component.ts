@@ -146,7 +146,7 @@ export class AppComponent {
   }
   
   getUser() {
-    this.profile.profileDetails().then(profileDetails => {
+    this.profile.profileDetails(false).then(profileDetails => {
       this.user = profileDetails;
       this.isMentor = this.user?.isAMentor
     })
