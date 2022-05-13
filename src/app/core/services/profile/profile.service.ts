@@ -65,24 +65,24 @@ export class ProfileService {
   }
 
   async profileDetails(showLoader = true): Promise<any> {
-    showLoader ? await this.loaderService.startLoader():null;
+    showLoader ? await this.loaderService.startLoader() : null;
     return new Promise((resolve) => {
       try {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
             if (data) {
-              showLoader ? this.loaderService.stopLoader():null;
+              showLoader ? this.loaderService.stopLoader() : null;
               resolve(data);
             } else {
               var res = await this.getProfileDetailsAPI();
               await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
               data = _.get(data, 'user');
-              showLoader ? this.loaderService.stopLoader():null;
+              showLoader ? this.loaderService.stopLoader() : null;
               resolve(data);
             }
           })
       } catch (error) {
-        showLoader ? this.loaderService.startLoader():showLoader;
+        showLoader ? this.loaderService.startLoader() : showLoader;
       }
     });
   }
