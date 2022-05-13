@@ -82,7 +82,7 @@ export class ProfileService {
             }
           })
       } catch (error) {
-        showLoader ? this.loaderService.startLoader() : showLoader;
+        showLoader ? this.loaderService.stopLoader() : showLoader;
       }
     });
   }
