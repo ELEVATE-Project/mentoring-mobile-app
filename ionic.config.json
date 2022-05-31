@@ -1,7 +1,8 @@
 {
   "name": "mentoring-mobile-app",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular"
 }
