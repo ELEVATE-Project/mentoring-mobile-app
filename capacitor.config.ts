@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'org.elevate.mentoring',
   appName: 'mentoring-mobile-app',
   webDir: 'www',
   bundledWebRuntime: false,
