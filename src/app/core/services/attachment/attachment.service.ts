@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Camera, CameraOptions, PictureSourceType } from "@awesome-cordova-plugins/camera/ngx";
-import { Chooser } from "@ionic-native/chooser/ngx";
-import { FilePath } from "@ionic-native/file-path/ngx";
+import { Chooser } from "@awesome-cordova-plugins/chooser/ngx";
+import { FilePath } from "@awesome-cordova-plugins/file-path/ngx";
 import { File } from "@ionic-native/file/ngx";
 import { ActionSheetController, Platform, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
@@ -9,7 +9,7 @@ import { FILE_EXTENSION_HEADERS } from "../../constants/file-extensions";
 import { urlConstants } from "../../constants/urlConstants";
 import { HttpService } from "../http/http.service";
 import { UtilService } from "../util/util.service";
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 
 @Injectable({
     providedIn: 'root'

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpService, LoaderService, ToastService } from '..';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { Router } from '@angular/router';
 
 @Injectable({

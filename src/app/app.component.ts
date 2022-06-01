@@ -7,7 +7,7 @@ import { UtilService,DbService,UserService,LocalStorageService,AuthService,Netwo
 import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
-import { Deeplinks } from '@ionic-native/deeplinks/ngx';
+import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
 import { Location } from '@angular/common';
 @Component({
   selector: 'app-root',

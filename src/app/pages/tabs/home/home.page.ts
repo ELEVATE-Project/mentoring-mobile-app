@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
-import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { ModalController, NavController, Platform } from '@ionic/angular';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
