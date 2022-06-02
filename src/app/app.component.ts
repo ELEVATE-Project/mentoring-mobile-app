@@ -18,6 +18,7 @@ export class AppComponent {
  user;
   public appPages = [
     { title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' },
+    { title: 'LANGUAGES', icon: 'language' }
   ];
 
   public mentorMenu=[
@@ -156,4 +157,35 @@ export class AppComponent {
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
   }
 
+  async selectLanguage(page){
+    const alert = await this.alert.create({
+      header: 'Select language',
+      inputs: [
+        {
+          name: 'en',
+          type: 'radio',
+          label: 'English',
+          value: 'en',
+          checked: true
+        },
+        {
+          name: 'hi',
+          type: 'radio',
+          label: 'Hindi',
+          value: 'hi'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Ok',
+          handler: async (data) => {
+            await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, data);
+            this.languageSetting();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
 }

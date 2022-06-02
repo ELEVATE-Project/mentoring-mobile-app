@@ -20,8 +20,8 @@
         <div class="menu-css">
           <ion-list lines="none" class="sub-menu-list">
             <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-              <ion-item [routerLink]="p.url" lines="none" detail="false" routerLinkActive="selected"
-                *ngIf="!mentorMenu.includes(p.title) || (mentorMenu.includes(p.title)&&isMentor) ">
+              <ion-item [routerLink]="p?.url" lines="none" detail="false" routerLinkActive="selected"
+                *ngIf="!mentorMenu.includes(p.title) || (mentorMenu.includes(p.title)&&isMentor) " (click)="p.title=='LANGUAGES'?selectLanguage(p):null;">
                 <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
                 <ion-label><strong>{{ p.title | translate}}</strong></ion-label>
               </ion-item>
