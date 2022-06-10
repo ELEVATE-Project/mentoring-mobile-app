@@ -84,7 +84,6 @@ BUILD APK
 
 - To check attached devices do adb devices
 - Run ionic build (Make sure you have attached device)
-- Run npx cap sync
 - Run ionic cap sync
 - Run ionic capacitor run android --prod
 - Apk location project_folder/platforms/android/app/build/outputs/apk/debug/apk_name.apk
