@@ -20,7 +20,7 @@ export class AppComponent {
  user;
   public appPages = [
     { title: 'CREATED_SESSIONS', icon: 'person-add' },
-    { title: 'LANGUAGES', action: "selectLanguage" }
+    { title: 'LANGUAGES', action: "selectLanguage", icon: 'language' }
   ];
 
   public mentorMenu=[

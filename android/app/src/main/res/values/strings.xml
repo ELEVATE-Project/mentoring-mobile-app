@@ -3,5 +3,5 @@
     <string name="app_name">MentorED</string>
     <string name="title_activity_main">MentorED</string>
     <string name="package_name">mentoring.shikshalokam.org</string>
-    <string name="custom_url_scheme">mentoring</string>
+    <string name="custom_url_scheme">org.elevate.mentoring</string>
 </resources>

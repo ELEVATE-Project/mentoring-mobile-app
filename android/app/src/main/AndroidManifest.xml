@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="mentoring.shikshalokam.org">
+    package="org.elevate.mentoring">
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +11,7 @@
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-            android:name="mentoring.shikshalokam.org.MainActivity"
+            android:name="org.elevate.mentoring.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleInstance">
 
@@ -24,14 +24,14 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="mentoring.shikshalokam.org"/>
+                <data android:scheme="org.elevate.mentoring"/>
             </intent-filter>
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="mentoring.shikshalokam.org" android:pathPrefix="/" android:scheme="https" />
+                <data android:host="org.elevate.mentoring" android:pathPrefix="/" android:scheme="https" />
                 <data android:host=" " android:pathPrefix="/" android:scheme=" " />
                 <data android:host=" " android:pathPrefix="/" android:scheme=" " />
                 <data android:host=" " android:pathPrefix="/" android:scheme=" " />

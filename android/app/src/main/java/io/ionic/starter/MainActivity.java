@@ -1,4 +1,4 @@
-package mentoring.shikshalokam.org;
+package org.elevate.mentoring;
 
 import com.getcapacitor.BridgeActivity;
 
