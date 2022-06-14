@@ -7,8 +7,10 @@ import { UtilService,DbService,UserService,LocalStorageService,AuthService,Netwo
 import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
-import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { Location } from '@angular/common';
+import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -17,7 +19,8 @@ import { Location } from '@angular/common';
 export class AppComponent {
  user;
   public appPages = [
-    { title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' },
+    { title: 'CREATED_SESSIONS', icon: 'person-add' },
+    { title: 'LANGUAGES', action: "selectLanguage", icon: 'language' }
   ];
 
   public mentorMenu=[
@@ -25,6 +28,7 @@ export class AppComponent {
   ]
 
   isMentor:boolean
+  showAlertBox = false;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -35,12 +39,12 @@ export class AppComponent {
     private db:DbService,
     private router: Router,
     private network:NetworkService,
+    private deeplinks: Deeplinks,
     private authService:AuthService,
     private profile: ProfileService,
     private zone:NgZone,
-    private deeplinks: Deeplinks,
     private _location: Location,
-    private alert: AlertController,
+    private alert: AlertController
   ) {
     this.initializeApp();
     this.router.navigate(["/"]);
@@ -103,10 +107,10 @@ export class AppComponent {
         '/sessions/details/:id': '',
       }).subscribe(match=>{
         this.zone.run(()=>{
+          console.log(match)
           this.router.navigateByUrl(match.$link.path);
         })  
       })
-
     });
     this.subscribeBackButton();
   }
@@ -154,6 +158,25 @@ export class AppComponent {
   goToProfilePage(){
     this.menuCtrl.close();
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+  }
+
+  async menuItemAction(menu) {
+    switch (menu.title) {
+      case 'LANGUAGE': {
+        this.alert.create({
+          
+        })
+        break;
+      }
+      case 'CREATED_SESSIONS': {
+        this.router.navigate([`${CommonRoutes.CREATED_BY_ME}`]);
+        break;
+      }
+    }
+  }
+
+  async showAlert(alertData){
+    
   }
 
 }

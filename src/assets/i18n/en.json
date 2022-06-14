@@ -129,5 +129,6 @@
     "MENTOR_SEARCH_PLACEHOLDER":"Search for Mentors",
     "DELETE_SESSION":"Delete Session",
     "SELECT_VALID_START_TIME":"Please select an upcoming time",
-    "SELECT_VALID_END_TIME":"Please select a time greater than start time"
+    "SELECT_VALID_END_TIME":"Please select a time greater than start time",
+    "CHOOSE_YOUR_LANGUAGE":"Choose your language"
 }
