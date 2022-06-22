@@ -18,7 +18,8 @@ import {
   GenericHeaderComponent,
   FilterComponent,
   ExpandableCardComponent,
-  PersonaSelectionCardComponent
+  PersonaSelectionCardComponent,
+  GenericProfileHeaderComponent
 } from './components/index';
 import { SafeHtmlPipe } from './safe-html.pipe';
 
@@ -39,7 +40,8 @@ import { SafeHtmlPipe } from './safe-html.pipe';
     FilterComponent,
     ExpandableCardComponent,
     SafeHtmlPipe,
-    PersonaSelectionCardComponent
+    PersonaSelectionCardComponent,
+    GenericProfileHeaderComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +66,8 @@ import { SafeHtmlPipe } from './safe-html.pipe';
     FilterComponent,
     ExpandableCardComponent,
     SafeHtmlPipe,
-    PersonaSelectionCardComponent
+    PersonaSelectionCardComponent,
+    GenericProfileHeaderComponent
   ],
 })
 export class SharedModule {}

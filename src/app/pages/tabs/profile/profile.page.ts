@@ -31,6 +31,14 @@ export class ProfilePage implements OnInit {
         title: "KEY_AREAS_OF_EXPERTISE",
         key: "areasOfExpertise"
       },
+      {
+        title: "EDUCATION_QUALIFICATION",
+        key: "educationQualification"
+      },
+      {
+        title: "EMAIL_ID",
+        key: "emailId"
+      },
     ],
     data: {},
   };
@@ -65,10 +73,6 @@ export class ProfilePage implements OnInit {
     var result = await this.profileService.getProfileDetailsAPI();
     this.formData.data = result;
     event.target.complete();
-  }
-
-  editProfile() {
-    this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE);
   }
 
   feedback() {

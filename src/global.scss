@@ -61,6 +61,10 @@ input:-webkit-autofill:focus {
   display: flex;
 }
 
+.d-inline-flex{
+  display: inline-flex;
+}
+
 .flex-column {
   flex-direction: column;
 }
@@ -74,7 +78,6 @@ h6, h5 , h4, h3, h2, h1 {
 }
 .flex-justify-center {
   justify-content: center;
-
 }
 .flex-justify-start {
   justify-content: start;
@@ -82,6 +85,9 @@ h6, h5 , h4, h3, h2, h1 {
 
 .flex-justify-space-between {
   justify-content: space-between;
+}
+.flex-justify-space-around {
+  justify-content: space-around;
 }
 .flex-align-items-center{
   align-items: center;
@@ -91,6 +97,9 @@ h6, h5 , h4, h3, h2, h1 {
 }
 
 //margins
+.my-4 {
+  margin: 4px 0;
+}
 .my-10 {
   margin: 10px 0;
 }
@@ -145,7 +154,7 @@ ion-card-title{
   text-overflow: ellipsis;
 }
 ion-button{
-  text-transform: capitalize;
+  text-transform:none;
 }
 
 .flex-box {

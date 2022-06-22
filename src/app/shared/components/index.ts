@@ -13,3 +13,4 @@ export * from "./generic-header/generic-header.component";
 export * from "./filter/filter.component";
 export * from "./expandable-card/expandable-card.component"
 export * from "./persona-selection-card/persona-selection-card.component"
+export * from "./generic-profile-header/generic-profile-header.component"
