@@ -1,13 +1,13 @@
 
 ion-tab-bar{
-    --background: var(--ion-color-primary);
+  --background: var(--white);
 }
 
 ion-tab-button {
-    --color: var(--white);
-    --color-selected: var(--white);
+  --color: var(--black);
+  --color-selected: var(--ion-color-primary);
     --padding-bottom: 4px;
-    --padding-top: 4px;
+    --padding-top: 2px;
   
     &::before {
         background-color: transparent;
