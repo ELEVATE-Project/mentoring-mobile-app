@@ -5,13 +5,13 @@
     margin-top: 10px;
 }
 ion-chip{
-    --background: #ffffff;
+    --background: var(--white);
     margin-top: 6px;
 }
 
 .value{
       font-size: 14px;
-      color: #484b53;
+      color: var(--grey-medium);
       margin-top: 5px;
 }
   ion-toolbar{
@@ -20,6 +20,6 @@ ion-chip{
   .session-detail-heading{
       font-size: 14px;
       font-weight: bold;
-      color: rgb(49, 52, 59);
+      color: var(--dark-grey);
       margin-bottom: 5px;
   }

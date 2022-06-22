@@ -6,7 +6,7 @@
     <div *ngIf="formData && formData.data">
         <app-generic-profile-header [headerData]='formData.data' [showEdit]="true"></app-generic-profile-header>
         <div class="ion-margin" *ngIf="showProfileDetails; else elseBlock">
-            <ion-card class="card-wrapper">
+            <ion-card *ngIf="formData?.data?.isAMentor" class="card-wrapper">
                 <ion-card-content>
                     <ion-row>
                         <ion-col class="d-flex flex-justify-center card-header-config">{{"SESSIONS_CONDUCTED"|translate}}</ion-col>

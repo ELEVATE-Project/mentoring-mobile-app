@@ -6,12 +6,12 @@
 .card-header-config{
     font-size: 14px;
     font-weight: bold;
-    color: rgb(49, 52, 59);
+    color: var( --grey-medium)
 }
 .card-value-config{
     font-size: 18px;
     font-weight: bold;
-    color: rgb(49, 52, 59);
+    color: var( --grey-medium)
 }
 ion-card{
     border-radius: 7px;
