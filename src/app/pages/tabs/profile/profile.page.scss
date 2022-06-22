@@ -1,8 +1,23 @@
-.main-wrapper{
-    margin : 20px 25px 10px 25px
-}
 .no-details-message{
     color: red;
     font-size:larger;
     text-align: center;
+}
+.card-header-config{
+    font-size: 14px;
+    font-weight: bold;
+    color: var( --grey-medium)
+}
+.card-value-config{
+    font-size: 18px;
+    font-weight: bold;
+    color: var( --grey-medium)
+}
+ion-card{
+    border-radius: 7px;
+    margin: 20px;
+}
+.card-wrapper{
+    margin-top: 7%;
+    margin-bottom: 10%;
 }

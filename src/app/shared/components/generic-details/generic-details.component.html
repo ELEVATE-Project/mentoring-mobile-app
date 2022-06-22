@@ -1,9 +1,9 @@
 <div class="field-wrapper" *ngFor="let item of sessionData.form">
   <div class="field">
-    <p class="session-detail-heading">{{item.title | translate | titlecase}}</p>
+    <p class="session-detail-heading">{{item.title | translate }}</p>
     <div *ngIf="isArray(sessionData.data[item.key]); else elseBlock">
-      <ion-chip class="ion-margin-top" *ngFor="let chip of sessionData.data[item.key]">
-        <ion-label>{{chip.label | titlecase}}</ion-label>
+      <ion-chip outline="true" class="ion-margin-top" *ngFor="let chip of sessionData.data[item.key]">
+        <ion-label>{{chip.label}}</ion-label>
       </ion-chip>
     </div>
     <ng-template #elseBlock>
@@ -13,7 +13,8 @@
       <p *ngIf="item?.key=='startDate' || item?.key=='endDate';else elseBlock3" class="value">{{sessionData.data[item.key] | date:'MMM d, y, h:mm a'}}</p>
     </ng-template>
     <ng-template #elseBlock3>
-      <p class="value">{{sessionData.data[item.key]}}</p>
+      <p *ngIf="item?.key=='experience'" class="value">{{sessionData.data[item.key]}} {{"YEARS"|translate}}</p>
+      <p *ngIf="item?.key!='experience'" class="value">{{sessionData.data[item.key]}}</p>
     </ng-template>
   </div>
 </div>
