@@ -156,4 +156,7 @@ export class RegisterPage implements OnInit {
       this.formData.controls.pop();
     }
   }
+  onLogin(){
+    this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
+  }
 }
