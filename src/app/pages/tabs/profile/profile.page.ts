@@ -67,7 +67,6 @@ export class ProfilePage implements OnInit {
   async fetchProfileDetails() {
     var response = await this.profileService.profileDetails();
     this.formData.data = response;
-    // (!this.formData?.data?.isAMentor)?this.formData.form.unshift():null;
     if (this.formData?.data?.about) {
       // TODO: remove the below line later
       this.showProfileDetails = true;
