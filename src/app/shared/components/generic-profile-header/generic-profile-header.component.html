@@ -14,7 +14,7 @@
         <ion-label *ngIf="headerData?.isAMentor" class="role ellipsis">({{"MENTOR"|translate}})</ion-label>
         <ion-label *ngIf="!headerData?.isAMentor" class="role ellipsis">({{"MENTEE"|translate}})</ion-label>
       </div>
-      <div class="d-inline-flex flex-align-items-center my-4" *ngIf="headerData?.location">
+      <div class="d-inline-flex flex-align-items-center my-4" *ngIf="headerData?.location?.length">
         <ion-icon name="location"></ion-icon>
         <ion-label class="location">{{headerData?.location[0]?.label}}</ion-label>
       </div>

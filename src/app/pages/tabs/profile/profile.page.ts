@@ -15,6 +15,9 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 export class ProfilePage implements OnInit {
   formData: any = {
     form: [
+      { title: 'SESSIONS_ATTENDED',
+        key: 'sessionsAttended',
+      },
       {
         title: 'ABOUT',
         key: 'about',
@@ -40,6 +43,7 @@ export class ProfilePage implements OnInit {
         key: "emailId"
       },
     ],
+    menteeForm:['SESSIONS_ATTENDED'],
     data: {},
   };
   showProfileDetails: boolean = false;
