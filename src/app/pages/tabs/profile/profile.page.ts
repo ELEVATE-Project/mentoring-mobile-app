@@ -15,6 +15,9 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 export class ProfilePage implements OnInit {
   formData: any = {
     form: [
+      { title: 'SESSIONS_ATTENDED',
+        key: 'sessionsAttended',
+      },
       {
         title: 'ABOUT',
         key: 'about',
@@ -40,6 +43,7 @@ export class ProfilePage implements OnInit {
         key: "emailId"
       },
     ],
+    menteeForm:['SESSIONS_ATTENDED'],
     data: {},
   };
   showProfileDetails: boolean = false;
@@ -63,6 +67,7 @@ export class ProfilePage implements OnInit {
   async fetchProfileDetails() {
     var response = await this.profileService.profileDetails();
     this.formData.data = response;
+    // (!this.formData?.data?.isAMentor)?this.formData.form.unshift():null;
     if (this.formData?.data?.about) {
       // TODO: remove the below line later
       this.showProfileDetails = true;

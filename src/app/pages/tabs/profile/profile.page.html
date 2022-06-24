@@ -18,7 +18,9 @@
                     </ion-row>
                 </ion-card-content>
             </ion-card>
-            <app-generic-details [sessionData]='formData'></app-generic-details>
+            <div class="details-wrapper">
+                <app-generic-details [sessionData]='formData'></app-generic-details>
+            </div>
         </div>
         <ng-template #elseBlock>
             <p class="no-details-message">{{ "NO_USER_DETAILS_FOUND" | translate }}</p>

@@ -135,5 +135,6 @@
     "EMAIL_ID":"Email id",
     "YEARS":"years",
     "SESSIONS_CONDUCTED":"Sessions conducted",
-    "RATING":"Rating"
+    "RATING":"Rating",
+    "SESSIONS_ATTENDED":"Sessions attended"
 }
