@@ -46,6 +46,11 @@ export class ProfilePage implements OnInit {
     menteeForm:['SESSIONS_ATTENDED'],
     data: {},
   };
+  public buttonConfig = {
+    label: "EDIT_PROFILE",
+    action: "edit"
+    
+  }
   showProfileDetails: boolean = false;
   username: boolean = true;
   data: any;

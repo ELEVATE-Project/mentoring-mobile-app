@@ -13,8 +13,14 @@ export class MentorDetailsPage implements OnInit {
   mentorId;
   public headerConfig: any = {
     backButton: true,
-    label: "MENTORS_PROFILE",
+    headerColor: "primary"
   };
+
+  public buttonConfig = {
+    label: "SHARE_PROFILE",
+    action: "share"
+    
+  }
 
   detailData = {
     form: [
@@ -33,10 +39,15 @@ export class MentorDetailsPage implements OnInit {
       {
         title: 'Key  Areas of Expertise',
         key: 'areasOfExpertise',
+      },
+      {
+        title: "EDUCATION_QUALIFICATION",
+        key: "educationQualification"
       }
     ],
     data: {},
   };
+  segmentValue="about";
   constructor(
     private routerParams : ActivatedRoute,
     private httpService :  HttpService,
@@ -44,7 +55,6 @@ export class MentorDetailsPage implements OnInit {
   ) {
     routerParams.params.subscribe(params =>{
       this.mentorId = params.id;
-      console.log(this.mentorId);
       this.getMentor();
     })
    }
@@ -58,9 +68,7 @@ export class MentorDetailsPage implements OnInit {
     };
     try {
       let data: any = await this.httpService.get(config);
-      console.log(data);
       this.detailData.data = data.result;
-      console.log(this.detailData);
     }
     catch (error) {
     }
@@ -70,6 +78,10 @@ export class MentorDetailsPage implements OnInit {
     this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]);
   }
 
+  segmentChanged(ev: any) {
+    this.segmentValue=ev.detail.value;
+    //UPCOMING SESSIONS API CALL IMPLEMENTATION : TODO
+  }
   action(e){
 
   }
