@@ -9,15 +9,16 @@ import { CommonRoutes } from 'src/global.routes';
 })
 export class GenericProfileHeaderComponent implements OnInit {
   @Input() headerData:any;
-  @Input() showEdit:any
+  @Input() buttonConfig:any;
+  @Input() showRole:any;
 
   constructor(private navCtrl:NavController) { }
 
   ngOnInit() {
   }
 
-  editProfile() {
-    this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE);
+  action(event) {
+    (event==="edit")?this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE):console.log(event.action);
   }
 
 }
