@@ -16,9 +16,12 @@
 ion-card{
     border-radius: 7px;
     margin: 20px;
+    ion-card-content{
+        padding: 6px;
+    }
 }
 .card-wrapper{
-    margin-top: 7%;
+    margin-top: 5%;
 }
 .details-wrapper{
     margin-top: 10%;
