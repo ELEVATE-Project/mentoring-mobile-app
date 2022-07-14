@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService } from 'src/app/core/services';
+import { HttpService, LocalStorageService, UserService } from 'src/app/core/services';
+import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
@@ -19,7 +21,7 @@ export class MentorDetailsPage implements OnInit {
   public buttonConfig = {
     label: "SHARE_PROFILE",
     action: "share"
-    
+
   }
 
   detailData = {
@@ -29,8 +31,8 @@ export class MentorDetailsPage implements OnInit {
         key: 'about',
       },
       {
-        title:"Designation",
-        key:"designation"
+        title: "Designation",
+        key: "designation"
       },
       {
         title: 'Years of Experience',
@@ -47,23 +49,35 @@ export class MentorDetailsPage implements OnInit {
     ],
     data: {},
   };
-  segmentValue="about";
+  segmentValue = "about";
+  upcomingSessions;
   constructor(
-    private routerParams : ActivatedRoute,
-    private httpService :  HttpService,
+    private routerParams: ActivatedRoute,
+    private httpService: HttpService,
     private router: Router,
+    private sessionService: SessionService,
+    private userService: UserService,
+    private localStorage:LocalStorageService
   ) {
-    routerParams.params.subscribe(params =>{
+    routerParams.params.subscribe(params => {
       this.mentorId = params.id;
-      this.getMentor();
+      this.userService.getUserValue().then(async (result) => {
+        if (result) {
+          this.getMentor();
+        } else {
+          this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams: { mentorId: this.mentorId } })
+        }
+      })
     })
-   }
+  }
 
   ngOnInit() {
   }
-  async getMentor(){
+  async getMentor() {
+    let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    this.mentorId=user._id;
     const config = {
-      url: urlConstants.API_URLS.PROFILE_DETAILS+'/'+this.mentorId,
+      url: urlConstants.API_URLS.MENTOR_PROFILE_DETAILS + this.mentorId,
       payload: {}
     };
     try {
@@ -74,13 +88,13 @@ export class MentorDetailsPage implements OnInit {
     }
   }
 
-  goToHome(){
+  goToHome() {
     this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]);
   }
 
-  segmentChanged(ev: any) {
-    this.segmentValue=ev.detail.value;
-    //UPCOMING SESSIONS API CALL IMPLEMENTATION : TODO
+  async segmentChanged(ev: any) {
+    this.segmentValue = ev.detail.value;
+    this.upcomingSessions = (this.segmentValue == "upcoming") ? await this.sessionService.getUpcomingSessions(this.mentorId) : [];
   }
   action(e){
 

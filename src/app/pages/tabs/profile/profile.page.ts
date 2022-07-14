@@ -6,6 +6,7 @@ import * as _ from 'lodash-es';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalStorageService } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -61,21 +62,24 @@ export class ProfilePage implements OnInit {
     label:'PROFILE'
   };
   sessionData={}
-  constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private localStorage: LocalStorageService) { }
+  user: any;
+  constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private router: Router, private localStorage:LocalStorageService) { }
 
   ngOnInit() {
   }
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
+    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchProfileDetails();
   }
 
   async fetchProfileDetails() {
-    var response = await this.profileService.profileDetails();
+    var response = await this.profileService.getProfileDetailsFromAPI(this.user.isAMentor,this.user._id);
     this.formData.data = response;
     this.formData.data.emailId = response.email.address;
     if (this.formData?.data?.about) {
-      // TODO: remove the below line later
       this.showProfileDetails = true;
+    } else {
+      this.router.navigate([CommonRoutes.EDIT_PROFILE]);
     }
   }
 

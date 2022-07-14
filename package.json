@@ -22,7 +22,7 @@
     "@awesome-cordova-plugins/camera": "^5.41.0",
     "@awesome-cordova-plugins/chooser": "^5.41.0",
     "@awesome-cordova-plugins/core": "^5.41.0",
-    "@awesome-cordova-plugins/deeplinks": "^5.41.0",
+    "@awesome-cordova-plugins/deeplinks": "^5.44.0",
     "@awesome-cordova-plugins/file": "^5.41.0",
     "@awesome-cordova-plugins/file-path": "^5.41.0",
     "@awesome-cordova-plugins/file-transfer": "^5.41.0",

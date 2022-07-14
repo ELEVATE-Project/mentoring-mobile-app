@@ -22,6 +22,7 @@ import {
   GenericProfileHeaderComponent
 } from './components/index';
 import { SafeHtmlPipe } from './safe-html.pipe';
+import { MentorCardComponent } from './components/mentor-card/mentor-card.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { SafeHtmlPipe } from './safe-html.pipe';
     ExpandableCardComponent,
     SafeHtmlPipe,
     PersonaSelectionCardComponent,
-    GenericProfileHeaderComponent
+    GenericProfileHeaderComponent,
+    MentorCardComponent
   ],
   imports: [
     CommonModule,
@@ -67,7 +69,8 @@ import { SafeHtmlPipe } from './safe-html.pipe';
     ExpandableCardComponent,
     SafeHtmlPipe,
     PersonaSelectionCardComponent,
-    GenericProfileHeaderComponent
+    GenericProfileHeaderComponent,
+    MentorCardComponent
   ],
 })
 export class SharedModule {}
