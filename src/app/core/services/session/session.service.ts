@@ -33,7 +33,7 @@ export class SessionService {
   }
 
   async getAllSessionsAPI(obj) {
-    await this.loaderService.startLoader();
+    //await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj.page + '&limit=' + obj.limit + '&status=' + obj.status + '&search=' + obj.searchText,
       payload: {}
@@ -41,11 +41,11 @@ export class SessionService {
     try {
       let data = await this.httpService.get(config);
       let result = _.get(data, 'result');
-      this.loaderService.stopLoader();
+      //this.loaderService.stopLoader();
       return result;
     }
     catch (error) {
-      this.loaderService.stopLoader();
+     // this.loaderService.stopLoader();
       let res = []
       return res;
     }
@@ -64,7 +64,7 @@ async getSessionsList(obj) {
 }
 
   async getSessionDetailsAPI(id) {
-    await this.loaderService.startLoader();
+    //await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.GET_SESSION_DETAILS + id,
       payload: {}
@@ -72,11 +72,11 @@ async getSessionsList(obj) {
     try {
       let data = await this.httpService.get(config);
       let result = _.get(data, 'result');
-      this.loaderService.stopLoader();
+      //this.loaderService.stopLoader();
       return result;
     }
     catch (error) {
-      this.loaderService.stopLoader();
+      //this.loaderService.stopLoader();
     }
   }
 
@@ -182,7 +182,6 @@ async getSessionsList(obj) {
   openBrowser(link) {
     let browser = this.inAppBrowser.create(link, `_system`);
     browser.on('exit').subscribe(() => {
-        console.log("browser closed");
     }, err => {
       console.error(err);
     });
@@ -196,6 +195,19 @@ async getSessionsList(obj) {
     try {
       let data = await this.httpService.post(config);
       return data;
+    }
+    catch (error) {
+    }
+  }
+
+  async getUpcomingSessions(id){
+    const config = {
+      url: urlConstants.API_URLS.UPCOMING_SESSIONS + id + "?page=1&limit=2",
+      payload: {}
+    };
+    try {
+      let data = await this.httpService.post(config);
+      return data.result[0].data;
     }
     catch (error) {
     }

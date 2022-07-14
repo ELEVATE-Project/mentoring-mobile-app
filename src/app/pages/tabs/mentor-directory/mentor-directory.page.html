@@ -10,12 +10,12 @@
       {{mentor.key}}
     </div>
     <div *ngFor="let value of mentor.values">
-      <app-session-card [data]="value"  [action]="'VIEW_PROFILE'" (onClickEvent)="eventAction($event)">
-      </app-session-card>
+      <app-mentor-card [data]="value" (onClickEvent)="eventAction($event)">
+      </app-mentor-card>
     </div>
   </div>
   <div *ngIf="!mentors?.length">
-    <app-no-data-found [message]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
+    <app-no-data-found [messageHeader]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
   </div>
 </ion-content>
 <!-- <ion-footer *ngIf="mentors?.length">

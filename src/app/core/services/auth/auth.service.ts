@@ -51,7 +51,7 @@ export class AuthService {
     };
     try {
       const data: any = await this.httpService.post(config);
-      let userData = this.setUserInLocal(data);
+      let userData = await this.setUserInLocal(data);
       this.loaderService.stopLoader();
       return userData
     }

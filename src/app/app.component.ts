@@ -3,7 +3,7 @@ import { AlertController, MenuController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
 import * as _ from 'lodash-es';
-import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService } from './core/services';
+import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService, ToastService } from './core/services';
 import { CommonRoutes } from 'src/global.routes';
 import { Router } from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
@@ -19,13 +19,11 @@ import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
 export class AppComponent {
  user;
   public appPages = [
-    { title: 'CREATED_SESSIONS', icon: 'person-add' },
-    { title: 'LANGUAGES', action: "selectLanguage", icon: 'language' }
+    { title: 'HELP', action: "help", icon: 'help-circle' },
+    { title: 'FAQ', action: "faq", icon: 'information-circle' },
+    { title: 'HELP_VIDEOS', action: "helpVideos", icon: 'videocam' },
+    { title: 'LANGUAGE', action: "selectLanguage", icon: 'language' }
   ];
-
-  public mentorMenu=[
-    'CREATED_SESSIONS',
-  ]
 
   isMentor:boolean
   showAlertBox = false;
@@ -44,7 +42,7 @@ export class AppComponent {
     private profile: ProfileService,
     private zone:NgZone,
     private _location: Location,
-    private alert: AlertController
+    private alert: AlertController,
   ) {
     this.initializeApp();
     this.router.navigate(["/"]);
@@ -105,9 +103,9 @@ export class AppComponent {
       })
       this.deeplinks.route({
         '/sessions/details/:id': '',
+        '/mentor-details/:id': '',
       }).subscribe(match=>{
         this.zone.run(()=>{
-          console.log(match)
           this.router.navigateByUrl(match.$link.path);
         })  
       })
@@ -168,7 +166,7 @@ export class AppComponent {
         })
         break;
       }
-      case 'CREATED_SESSIONS': {
+      case 'CREATED_BY_ME': {
         this.router.navigate([`${CommonRoutes.CREATED_BY_ME}`]);
         break;
       }

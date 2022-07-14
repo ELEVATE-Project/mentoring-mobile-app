@@ -6,7 +6,8 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./no-data-found.component.scss'],
 })
 export class NoDataFoundComponent implements OnInit {
-@Input() message;
+@Input() messageHeader;
+@Input() messageDescription;
   constructor() { }
 
   ngOnInit() {}

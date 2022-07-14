@@ -53,6 +53,7 @@ export class LoginPage implements OnInit {
     signupButton: true
   };
   labels = ["LOGIN_TO_MENTOR_ED"];
+  mentorId: any;
   constructor(private authService: AuthService, private router: Router, private menuCtrl: MenuController, private activatedRoute: ActivatedRoute, private translateService: TranslateService) {
     this.menuCtrl.enable(false);
   }
@@ -76,6 +77,7 @@ export class LoginPage implements OnInit {
   ionViewWillEnter() {
     this.activatedRoute.queryParams.subscribe(params => {
       this.id = params.sessionId ? params.sessionId : this.id;
+      this.mentorId = params.mentorId? params.mentorId:this.mentorId;
     });
   }
 
@@ -86,6 +88,8 @@ export class LoginPage implements OnInit {
       if (this.userDetails !== null) {
         if (this.id) {
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
+        }else if(this.mentorId){
+          this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`], { replaceUrl: true });
         } else {
           this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
         }

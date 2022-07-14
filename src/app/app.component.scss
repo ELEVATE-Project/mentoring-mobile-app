@@ -20,9 +20,11 @@
     ion-item{
         padding: 14px 6px 6px 6px;
         --background:rgba(0,0,0,0) !important;
-        border-bottom: .5px solid var(--gray);
         font-size: 16px;
         color: var(--dark-gray);
+        ion-icon{
+            color: var(--ion-color-primary);
+        }
     }
 }
 

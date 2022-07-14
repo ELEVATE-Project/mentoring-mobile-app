@@ -24,7 +24,7 @@ export class HomePage implements OnInit {
   SESSIONS: string = CommonRoutes.SESSIONS;
   SKELETON = SKELETON;
   page = 1;
-  limit = 5;
+  limit = 100;
   sessions;
   sessionsCount = 0;
   status = "published,live";
@@ -35,6 +35,10 @@ export class HomePage implements OnInit {
     headerColor: 'primary',
     // label:'MENU'
   };
+  public segmentButtons = [{ name: "all-sessions", label: "ALL_SESSIONS" }, { name: "created-sessions", label: "CREATED_SESSIONS" }, { name: "my-sessions", label: "ENROLLED_SESSIONS" }]
+  public mentorSegmentButton = ["created-sessions"]
+  selectedSegment = "all-sessions";
+  createdSessions: any;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -45,28 +49,41 @@ export class HomePage implements OnInit {
     private sessionService: SessionService,
     private modalController: ModalController,
     private userService: UserService,
-    private localStorage: LocalStorageService ) { }
+    private localStorage: LocalStorageService) { }
 
   ngOnInit() {
     this.getUser();
-    this.userService.userEventEmitted$.subscribe(data=>{
-      if(data){
+    this.userService.userEventEmitted$.subscribe(data => {
+      if (data) {
         this.user = data;
       }
     })
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     this.getSessions();
+    var obj = { page: this.page, limit: this.limit, status: "published,live", searchText: "" };
+    this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
   }
-  eventAction(event) {
+  async eventAction(event) {
     switch (event.type) {
       case 'cardSelect':
         this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
         break;
 
       case 'joinAction':
-        this.sessionService.joinSession(event.data.sessionId);
+        await this.sessionService.joinSession(event.data._id);
+        this.getSessions();
+        break;
+
+      case 'enrollAction':
+        await this.sessionService.enrollSession(event.data._id);
+        this.getSessions();
+        break;
+
+      case 'startAction':
+        this.sessionService.startSession(event.data._id);
+        this.getSessions();
         break;
     }
   }
@@ -105,5 +122,16 @@ export class HomePage implements OnInit {
       swipeToClose: false
     });
     return await modal.present();
+  }
+  async segmentChanged(event) {
+    this.selectedSegment = event.name;
+  }
+  async createSession() {
+    let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    if (userDetails?.about) {
+      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]);
+    } else {
+      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+    }
   }
 }
