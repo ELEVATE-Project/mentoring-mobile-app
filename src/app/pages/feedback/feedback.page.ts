@@ -69,6 +69,6 @@ export class FeedbackPage implements OnInit {
 
   async closeModal() {
     await this.sessionService.submitFeedback({ skippedFeedback: true, feedbackAs: this.feedbackData.feedbackAs }, this.sessionData._id);
-    await this.modalController.dismiss();
+    await this.modalController.dismiss()
   }
 }
