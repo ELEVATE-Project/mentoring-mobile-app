@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService, LocalStorageService, UserService } from 'src/app/core/services';
+import { HttpService, LocalStorageService, ToastService, UserService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -57,7 +57,8 @@ export class MentorDetailsPage implements OnInit {
     private router: Router,
     private sessionService: SessionService,
     private userService: UserService,
-    private localStorage:LocalStorageService
+    private localStorage:LocalStorageService,
+    private toastService:ToastService
   ) {
     routerParams.params.subscribe(params => {
       this.mentorId = params.id;
@@ -75,7 +76,7 @@ export class MentorDetailsPage implements OnInit {
   }
   async getMentor() {
     let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    this.mentorId=user._id;
+    // this.mentorId=user._id;
     const config = {
       url: urlConstants.API_URLS.MENTOR_PROFILE_DETAILS + this.mentorId,
       payload: {}
@@ -95,6 +96,9 @@ export class MentorDetailsPage implements OnInit {
   async segmentChanged(ev: any) {
     this.segmentValue = ev.detail.value;
     this.upcomingSessions = (this.segmentValue == "upcoming") ? await this.sessionService.getUpcomingSessions(this.mentorId) : [];
+    if(!this.upcomingSessions.length){
+      this.toastService.showToast("NO_UPCOMING_SESSIONS", 'danger')
+    }
   }
   action(e){
 

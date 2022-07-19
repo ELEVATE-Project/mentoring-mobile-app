@@ -7,7 +7,7 @@
     "PROFILE":"Profile",
     "DASHBOARD":"Dashboard",
     "ENROLL":"Enroll",
-    "HOME_SEARCH_PLACEHOLDER":"Search for sessions, Mentor Profile)",
+    "HOME_SEARCH_PLACEHOLDER":"Search for sessions, Mentor Profile",
     "CREATED_BY_ME":"Created by me",
     "EDIT":"Edit",
     "LANGUAGE":"Language",
@@ -145,5 +145,6 @@
     "START_CREATE_SESSION":"Start creating your sessions now",
     "CREATE_SESSION":"Create session",
     "START_CREATING_SESSION":"Start creating sessions now to share your knowledge with other people",
-    "CHECK_ALLSESSION_TO_ENROLL":"Check out All sessions tab to start enrolling in the sessions taken by professional mentors now"
+    "CHECK_ALLSESSION_TO_ENROLL":"Check out All sessions tab to start enrolling in the sessions taken by professional mentors now",
+    "NO_UPCOMING_SESSIONS":"There are no upcoming sessions scheduled"
 }
