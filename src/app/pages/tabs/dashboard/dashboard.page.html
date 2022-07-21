@@ -6,10 +6,10 @@
     <ion-toolbar *ngIf="isMentor">
       <ion-segment [value]="segment" swipeGesture="true" (ionChange)="segmentChanged($event)">
         <ion-segment-button value="mentor">
-          <ion-label class="segment-label">{{'MENTOR' | translate}}</ion-label>
+          <ion-label class="segment-label">{{'AS_A_MENTOR' | translate}}</ion-label>
         </ion-segment-button>
         <ion-segment-button value="mentee">
-          <ion-label class="segment-label">{{'MENTEE' | translate}}</ion-label>
+          <ion-label class="segment-label">{{'AS_A_MENTEE' | translate}}</ion-label>
         </ion-segment-button>
       </ion-segment>
     </ion-toolbar>

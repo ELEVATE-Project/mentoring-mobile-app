@@ -17,6 +17,7 @@ export class SessionDetailPage implements OnInit {
   showEditButton: any;
   isCreator: boolean=false;
   userDetails: any;
+  isEnabled: boolean;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -140,6 +141,8 @@ export class SessionDetailPage implements OnInit {
       startDate=startDate.add(hours, 'hours');
       let minutes = endDate.diff(startDate, 'minutes');
       response.duration = { hours: hours, minutes: minutes };
+      let currentTimeInSeconds=Math.floor(Date.now()/1000);
+      this.isEnabled = (response.startDate-currentTimeInSeconds<300)?true:false;
       this.sessionHeaderData.name = response.title;
       this.sessionHeaderData.image = response.image;
       this.sessionHeaderData.mentorName = response.mentorName;
