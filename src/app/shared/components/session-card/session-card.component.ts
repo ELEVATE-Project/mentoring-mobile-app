@@ -22,19 +22,17 @@ export class SessionCardComponent implements OnInit {
   async ngOnInit() {
     this.isCreator = await this.checkIfCreator();
     this.setButtonConfig(this.isCreator);
-    if(this.data.startDate>0){//check later
-      this.startDate = moment.unix(this.data.startDate).toLocaleString();
-    }
+    this.startDate = (this.data.startDate>0)?moment.unix(this.data.startDate).toLocaleString():this.startDate;
   }
  
   setButtonConfig(isCreator: boolean) {
     if(isCreator){
       this.buttonConfig={label:"START",type:"startAction"};
-    } else if(!isCreator&&this.data.isEnrolled || !isCreator&&this.data.sessionId){
-      this.buttonConfig={label:"JOIN",type:"joinAction"};
     } else {
-      this.buttonConfig={label:"ENROLL",type:"enrollAction"};
+      this.buttonConfig=(!isCreator&&this.data.isEnrolled || !isCreator&&this.data.sessionId)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
     }
+    let currentTimeInSeconds=Math.floor(Date.now()/1000);
+    this.buttonConfig.isEnabled = (this.data.startDate-currentTimeInSeconds<300)?true:false;
   }
 
   async checkIfCreator() {
