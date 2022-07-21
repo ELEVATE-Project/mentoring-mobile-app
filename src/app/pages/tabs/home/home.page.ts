@@ -64,7 +64,6 @@ export class HomePage implements OnInit {
     this.getSessions();
     var obj = { page: this.page, limit: this.limit, status: "published,live,completed", searchText: "" };
     this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
-    console.log(this.createdSessions)
   }
   async eventAction(event) {
     switch (event.type) {
