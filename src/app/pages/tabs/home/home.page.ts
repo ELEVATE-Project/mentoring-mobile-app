@@ -62,8 +62,9 @@ export class HomePage implements OnInit {
 
   async ionViewWillEnter() {
     this.getSessions();
-    var obj = { page: this.page, limit: this.limit, status: "published,live", searchText: "" };
+    var obj = { page: this.page, limit: this.limit, status: "published,live,completed", searchText: "" };
     this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+    console.log(this.createdSessions)
   }
   async eventAction(event) {
     switch (event.type) {

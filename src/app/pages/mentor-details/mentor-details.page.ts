@@ -96,9 +96,6 @@ export class MentorDetailsPage implements OnInit {
   async segmentChanged(ev: any) {
     this.segmentValue = ev.detail.value;
     this.upcomingSessions = (this.segmentValue == "upcoming") ? await this.sessionService.getUpcomingSessions(this.mentorId) : [];
-    if(!this.upcomingSessions.length){
-      this.toastService.showToast("NO_UPCOMING_SESSIONS", 'danger')
-    }
   }
   action(e){
 

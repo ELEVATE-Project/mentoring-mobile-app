@@ -27,6 +27,9 @@
     <div [ngSwitch]="segmentValue">
       <app-generic-details *ngSwitchCase="'about'" [sessionData]='detailData'></app-generic-details>
       <ion-list *ngSwitchCase="'upcoming'">
+        <div *ngIf="!upcomingSessions?.length">
+          <p class="no-details-message">{{ "NO_UPCOMING_SESSIONS" | translate }}</p>
+        </div>
         <app-session-card *ngFor="let data of upcomingSessions" [data]="data"></app-session-card>
       </ion-list>
     </div>

@@ -113,7 +113,7 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
         {
           name: 'chip',
           type: 'text',
-          placeholder: 'Enter Expertise',
+          placeholder: 'Enter ' + `${this.label}`,
         },
       ],
       buttons: [
