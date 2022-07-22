@@ -86,7 +86,7 @@
     "PASSWORD_MISMATCH":"Password Mismatch",
     "SESSION_OVERVIEW": "Session Overview",
     "TOTAL_SESSION_CREATED": "Total Sessions Created",
-    "TOTAL_SESSION_HOSTED": "Total Sessions Hosted",
+    "TOTAL_SESSION_CONDUCTED": "Total Sessions Conducted",
     "TOTAL_SESSION_ENROLLED": "Total Sessions Enrolled",
     "TOTAL_SESSION_ATTENDED": "Total Sessions Attended",
     "DASHBOARD_PAGE": "Dashboard",

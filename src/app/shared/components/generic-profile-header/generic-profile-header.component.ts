@@ -28,7 +28,7 @@ export class GenericProfileHeaderComponent implements OnInit {
         let url = `/${CommonRoutes.MENTOR_DETAILS}/${shareLink.shareLink}`;
         let link = await this.utilService.getDeepLink(url);
         this.headerData.name = this.headerData.name.trim();
-        let params = { link: link, subject: this.headerData?.name, text: " Check out Mentor " + `${this.headerData.name} ` + "'s profile on MentorED. Explore the sessions planned by him. Click on the Link" }
+        let params = { link: link, subject: this.headerData?.name, text: " Check out Mentor " + `${this.headerData.name} ` + "'s profile on MentorED. Explore the sessions planned by them. Click on the Link" }
         this.utilService.shareLink(params);
       } else {
         this.toast.showToast("No link generated!!!", "danger");
