@@ -86,7 +86,7 @@
     "PASSWORD_MISMATCH":"Password Mismatch",
     "SESSION_OVERVIEW": "Session Overview",
     "TOTAL_SESSION_CREATED": "Total Sessions Created",
-    "TOTAL_SESSION_HOSTED": "Total Sessions Hosted",
+    "TOTAL_SESSION_CONDUCTED": "Total Sessions Conducted",
     "TOTAL_SESSION_ENROLLED": "Total Sessions Enrolled",
     "TOTAL_SESSION_ATTENDED": "Total Sessions Attended",
     "DASHBOARD_PAGE": "Dashboard",
@@ -148,5 +148,7 @@
     "CHECK_ALLSESSION_TO_ENROLL":"Find and enroll for sessions by professional mentors in the 'All sessions' tab",
     "NO_UPCOMING_SESSIONS":"There are no upcoming sessions scheduled",
     "AS_A_MENTOR":"As a mentor",
-    "AS_A_MENTEE":"As a mentee"
+    "AS_A_MENTEE":"As a mentee",
+    "CHECK_OUT_MENTOR":"Check out Mentor",
+    "PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS":"'s profile on MentorED. Explore the sessions planned by them. Click on the Link"
 }

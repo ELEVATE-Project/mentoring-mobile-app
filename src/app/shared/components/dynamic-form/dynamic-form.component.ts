@@ -173,7 +173,7 @@ export class DynamicFormComponent implements OnInit {
     }
   }
   onDateChange(control){
-    if(control.value!="" && control.value<this.currentDate && control.name!=this.dependedChild){
+    if(control.value!="" && control.value<=this.currentDate && control.name!=this.dependedChild){
       this.toast.showToast("SELECT_VALID_START_TIME","danger");
       control.value="";
     } else if(control.dependedChild){
@@ -181,7 +181,7 @@ export class DynamicFormComponent implements OnInit {
       dependedControl.value = "";
       this.dependedDate = control.value;
     } else {
-      if(control.value!="" && control.name===this.dependedChild ){
+      if(control.value!="" && control.name==this.dependedChild ){
         if(control.value<=this.dependedDate){
           this.toast.showToast("SELECT_VALID_END_TIME","danger");
           control.value="";

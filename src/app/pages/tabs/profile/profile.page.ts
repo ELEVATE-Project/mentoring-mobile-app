@@ -84,7 +84,7 @@ export class ProfilePage implements OnInit {
   }
 
   async doRefresh(event){
-    var result = await this.profileService.getProfileDetailsAPI();
+    var result = await this.profileService.getProfileDetailsFromAPI(this.user.isAMentor,this.user._id);
     this.formData.data = result;
     event.target.complete();
   }
