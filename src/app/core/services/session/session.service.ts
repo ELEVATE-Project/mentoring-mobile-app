@@ -34,8 +34,14 @@ export class SessionService {
 
   async getAllSessionsAPI(obj) {
     //await this.loaderService.startLoader();
+    let params;
+   if(obj.status){
+     params ='&status=' + obj.status + '&search=' + obj.searchText
+    }else{
+      params ='&search=' + obj.searchText
+    }
     const config = {
-      url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj.page + '&limit=' + obj.limit + '&status=' + obj.status + '&search=' + obj.searchText,
+      url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj.page + '&limit=' + obj.limit +params,
       payload: {}
     };
     try {

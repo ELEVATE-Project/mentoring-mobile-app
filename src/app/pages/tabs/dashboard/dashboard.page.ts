@@ -95,7 +95,7 @@ export class DashboardPage implements OnInit {
         this.chartData.chart.data.labels.length = 0;
         this.chartData.chart.data.datasets[0].data.length = 0;
       if(this.segment === 'mentor'){
-        this.chartData.chart.data.labels.push("Total Sessions Created", "Total Sessions Hosted")
+        this.chartData.chart.data.labels.push("Total Sessions Created", "Total Sessions Conducted")
         this.chartData.chart.data.datasets[0].data.push(success.result.totalSessionCreated || 0, success.result.totalsessionHosted || 0);
       } else {
         this.chartData.chart.data.labels.push("Total Sessions Enrolled", "Total Sessions Attended")
