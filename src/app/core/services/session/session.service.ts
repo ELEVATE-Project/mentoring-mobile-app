@@ -208,7 +208,7 @@ async getSessionsList(obj) {
 
   async getUpcomingSessions(id){
     const config = {
-      url: urlConstants.API_URLS.UPCOMING_SESSIONS + id + "?page=1&limit=2",
+      url: urlConstants.API_URLS.UPCOMING_SESSIONS + id + "?page=1&limit=100",
       payload: {}
     };
     try {
