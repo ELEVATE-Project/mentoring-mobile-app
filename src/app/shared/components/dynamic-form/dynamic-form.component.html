@@ -63,12 +63,12 @@
         [id]="control?.name"
         (ionChange)="onDateChange(control)"
         [formControlName]="control.name"
-        (click)="isDepended(control)"
+        (click)="setCurrentTime(control)"
       ></ion-input>
       <ion-modal *ngIf="control.type === 'date'" class="stack-modal" [trigger]="control?.name">
         <ng-template>
             <ion-buttons class="close-button">
-              <ion-button shape="round" (click)="confirm()" color="light"><ion-icon name="close-outline" size="large"></ion-icon>
+              <ion-button shape="round" (click)="cancel()" color="light"><ion-icon name="close-outline" size="large"></ion-icon>
               </ion-button>
             </ion-buttons>
             <ion-datetime
