@@ -159,13 +159,16 @@ export class DynamicFormComponent implements OnInit {
   alertToast(){
     this.toast.showToast("Please refer to the on-boarding email for your secret code", "success")
   }
+  cancel(){
+    this.datetime.cancel(true);
+  }
   confirm() {
     this.datetime.confirm(true);
   }
   format(value){
     return moment(value).format("YYYY-MM-DDTHH:mm:ssZ");
   }
-  isDepended(control){
+  setCurrentTime(control){
     this.currentDate = moment().format("YYYY-MM-DDTHH:mm:ssZ")
     if(control.dependedChild){
       this.dependedChild=control.dependedChild;
@@ -173,7 +176,7 @@ export class DynamicFormComponent implements OnInit {
     }
   }
   onDateChange(control){
-    if(control.value!="" && control.value<this.currentDate && control.name!=this.dependedChild){
+    if(control.value!="" && control.value<=this.currentDate){
       this.toast.showToast("SELECT_VALID_START_TIME","danger");
       control.value="";
     } else if(control.dependedChild){
@@ -181,7 +184,7 @@ export class DynamicFormComponent implements OnInit {
       dependedControl.value = "";
       this.dependedDate = control.value;
     } else {
-      if(control.value!="" && control.name===this.dependedChild ){
+      if(control.value!="" && control.name==this.dependedChild ){
         if(control.value<=this.dependedDate){
           this.toast.showToast("SELECT_VALID_END_TIME","danger");
           control.value="";

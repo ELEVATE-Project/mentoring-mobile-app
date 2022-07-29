@@ -5,10 +5,7 @@ ion-tab-bar{
 
 ion-tab-button {
   --color: var(--black);
-  --color-selected: var(--ion-color-primary);
-    --padding-bottom: 4px;
-    --padding-top: 2px;
-  
+  --color-selected: var(--ion-color-primary);  
     &::before {
         background-color: transparent;
         display: block;

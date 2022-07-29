@@ -9,11 +9,9 @@
 }
 .head-label{
     overflow: visible !important;
-    margin-left: 5px;
-    font-size: 14px;
-    font-weight: normal;
-    text-transform: none;
-}
+    font-weight: bold;
+    color: var(--grey-medium);
+ }
 .icon{
     font-size: smaller;
 }
