@@ -15,15 +15,15 @@
     <div [ngSwitch]="type">
       <ion-list *ngSwitchCase="'all-sessions'">
         <div *ngFor="let result of results">
-          <app-session-card [data]="result" (onClickEvent)="onSessionAction($event)" [action]="'ENROLL'">
+          <app-session-card [data]="result" (onClickEvent)="onSessionAction($event)">
           </app-session-card>
         </div>
       </ion-list>
       <ion-list *ngSwitchCase="'mentor-profile'">
         <div *ngFor="let result of results">
           <div *ngFor="let value of result.values">
-            <app-session-card [data]="value" [action]="'VIEW_PROFILE'" (onClickEvent)="onMentorAction($event)">
-            </app-session-card>
+            <app-mentor-card [data]="value" (onClickEvent)="eventAction($event)">
+            </app-mentor-card>
           </div>
         </div>
       </ion-list>

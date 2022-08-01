@@ -80,11 +80,11 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.network.netWorkCheck();
       setTimeout(async ()=>{
         this.languageSetting();
       },0)
       this.db.init();
-      this.network.netWorkCheck();
       setTimeout(async ()=>{
         const userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
         if(userDetails){

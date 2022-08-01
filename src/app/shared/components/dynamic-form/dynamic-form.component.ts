@@ -44,6 +44,7 @@ interface JsonFormControls {
   numberOfStars?:number;
   errorMessage?:string;
   dependentKey?:string;
+  isNumberOnly?: boolean;
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
@@ -176,7 +177,7 @@ export class DynamicFormComponent implements OnInit {
     }
   }
   onDateChange(control){
-    if(control.value!="" && control.value<=this.currentDate){
+    if(control.value!="" && control.value<this.currentDate){
       this.toast.showToast("SELECT_VALID_START_TIME","danger");
       control.value="";
     } else if(control.dependedChild){

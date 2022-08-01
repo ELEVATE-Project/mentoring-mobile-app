@@ -63,9 +63,11 @@ export class ProfilePage implements OnInit {
   };
   sessionData={}
   user: any;
+  visited:boolean;
   constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private router: Router, private localStorage:LocalStorageService) { }
 
   ngOnInit() {
+    this.visited = false;
   }
   async ionViewWillEnter() {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
@@ -79,13 +81,17 @@ export class ProfilePage implements OnInit {
     if (this.formData?.data?.about) {
       this.showProfileDetails = true;
     } else {
-      this.router.navigate([CommonRoutes.EDIT_PROFILE]);
+      (!this.visited)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
+      this.visited=true;
     }
   }
 
   async doRefresh(event){
     var result = await this.profileService.getProfileDetailsFromAPI(this.user.isAMentor,this.user._id);
-    this.formData.data = result;
+    if(result){
+      this.formData.data = result;
+      this.formData.data.emailId = result.email.address;
+    }
     event.target.complete();
   }
 
