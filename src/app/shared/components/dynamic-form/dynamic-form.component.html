@@ -44,6 +44,7 @@
         *ngIf="control.type === 'textarea'"
         [formControlName]="control.name"
         [value]="control.value"
+        [maxlength]="control?.validators?.maxLength"
       ></ion-textarea>
       <ion-checkbox
         *ngIf="control.type === 'checkbox'"
