@@ -130,6 +130,10 @@ export class SessionDetailPage implements OnInit {
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     if (response) {
+      if (response.status == 'completed'){
+        this.headerConfig.share = false;
+      }
+      console.log('Response :',response);
       this.id = response._id;
       if(this.userDetails){
         this.isCreator = this.userDetails._id == response.userId ? true : false;
