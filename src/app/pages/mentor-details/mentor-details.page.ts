@@ -74,6 +74,9 @@ export class MentorDetailsPage implements OnInit {
 
   ngOnInit() {
   }
+  async ionViewWillEnter(){
+    this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+  }
   async getMentor() {
     let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     // this.mentorId=user._id;
@@ -97,7 +100,21 @@ export class MentorDetailsPage implements OnInit {
     this.segmentValue = ev.detail.value;
     this.upcomingSessions = (this.segmentValue == "upcoming") ? await this.sessionService.getUpcomingSessions(this.mentorId) : [];
   }
-  action(e){
+  async onAction(event){
+    switch (event.type) {
+      case 'cardSelect':
+        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
+        break;
 
+      case 'joinAction':
+        await this.sessionService.joinSession(event.data._id);
+        this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+        break;
+
+      case 'enrollAction':
+        await this.sessionService.enrollSession(event.data._id);
+        this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+        break;
+    }
   }
 }
