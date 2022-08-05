@@ -8,9 +8,10 @@
     justify-content: flex-end;
 }
 .head-label{
-    overflow: visible !important;
     font-weight: bold;
     color: var(--grey-medium);
+    font-size: 14px !important;
+    overflow: visible !important;
  }
 .icon{
     font-size: smaller;

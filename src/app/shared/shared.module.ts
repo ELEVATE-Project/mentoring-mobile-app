@@ -23,6 +23,7 @@ import {
 } from './components/index';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { MentorCardComponent } from './components/mentor-card/mentor-card.component';
+import { NumberOnlyDirective } from './directive/onlyNumbers';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { MentorCardComponent } from './components/mentor-card/mentor-card.compon
     SafeHtmlPipe,
     PersonaSelectionCardComponent,
     GenericProfileHeaderComponent,
-    MentorCardComponent
+    MentorCardComponent,
+    NumberOnlyDirective
   ],
   imports: [
     CommonModule,

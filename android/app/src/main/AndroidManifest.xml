@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="mentoring.shikshalokam.org">
+    package="org.elevate.mentoring">
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +11,7 @@
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-            android:name="mentoring.shikshalokam.org.MainActivity"
+            android:name="org.elevate.mentoring.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleInstance">
 

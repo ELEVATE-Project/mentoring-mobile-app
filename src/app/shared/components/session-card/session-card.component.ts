@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-session-card',
@@ -16,6 +17,7 @@ export class SessionCardComponent implements OnInit {
   startDate: string;
   isCreator: boolean;
   buttonConfig;
+  userData: any;
   
   constructor(private router: Router, private sessionService: SessionService, private toast: ToastService, private localStorage: LocalStorageService) { }
   
@@ -36,8 +38,8 @@ export class SessionCardComponent implements OnInit {
   }
 
   async checkIfCreator() {
-    let userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    return (this.data.userId == userData._id) ?true : false;
+    this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    return (this.data.userId == this.userData._id) ?true : false;
   }
  
   onCardClick(data) {
@@ -53,6 +55,6 @@ export class SessionCardComponent implements OnInit {
       data: data,
       type:type
     }
-    this.onClickEvent.emit(value);
+    this.userData.about?this.onClickEvent.emit(value):this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
   }
 }

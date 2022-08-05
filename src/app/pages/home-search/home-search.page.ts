@@ -83,7 +83,7 @@ export class HomeSearchPage implements OnInit {
     this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`])
   }
 
-  onMentorAction(event){
+  eventAction(event){
     this.router.navigate([CommonRoutes.MENTOR_DETAILS,event.data._id]);
   }
 

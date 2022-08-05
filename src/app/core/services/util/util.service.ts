@@ -54,12 +54,13 @@ export class UtilService {
           {
             text: texts[msg.cancel],
             role: 'cancel',
-            cssClass: 'secondary',
+            cssClass: 'alert-button',
             handler: (blah) => {
               resolve(false);
             }
           }, {
             text: texts[msg.submit],
+            cssClass: 'alert-button',
             handler: () => {
               resolve(true);
             }

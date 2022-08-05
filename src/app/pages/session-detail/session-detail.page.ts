@@ -130,6 +130,7 @@ export class SessionDetailPage implements OnInit {
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     if (response) {
+      this.headerConfig.share = response.status=="completed"?false:true;
       this.id = response._id;
       if(this.userDetails){
         this.isCreator = this.userDetails._id == response.userId ? true : false;
@@ -186,7 +187,7 @@ export class SessionDetailPage implements OnInit {
       header: 'DELETE_SESSION',
       message: 'DELETE_CONFIRM_MSG',
       cancel: "Don't delete",
-      submit: 'Yes Delete'
+      submit: 'Yes delete'
     }
     this.utilService.alertPopup(msg).then(async data => {
       if (data) {
