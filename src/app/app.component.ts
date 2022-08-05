@@ -60,11 +60,13 @@ export class AppComponent {
             {
               text: texts['CANCEL'],
               role: 'cancel',
+              cssClass: "alert-button",
               handler: () => { }
             },
             {
               text: texts['CONFIRM'],
               role: 'confirm',
+              cssClass: "alert-button",
               handler: () => { 
                 navigator['app'].exitApp();
               }

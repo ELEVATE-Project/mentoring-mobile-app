@@ -47,7 +47,12 @@ export class MentorDetailsPage implements OnInit {
         key: "educationQualification"
       }
     ],
-    data: {},
+    data: {
+      rating: {
+        average:0
+      },
+      sessionsHosted:0 
+    },
   };
   segmentValue = "about";
   upcomingSessions;

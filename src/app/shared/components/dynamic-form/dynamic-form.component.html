@@ -1,15 +1,16 @@
 <form [formGroup]="myForm" *ngIf="showForm">
-  <div *ngFor="let control of jsonFormData?.controls">
+  <div class="fields" *ngFor="let control of jsonFormData?.controls">
     <ion-item
+      class="ion-no-padding"
       [class]="control.class"
       [ngClass]="{
         'form-invalid':
           myForm.get(control.name).touched && myForm.get(control.name).invalid
       }"
     >
-      <ion-label
-        *ngIf="control.label !== '' && !['rating'].includes(control.type)"
-        [position]="control.position"
+    <ion-label
+        position="stacked"
+        *ngIf="control.label !== '' && !['rating'].includes(control.type) && !['chip'].includes(control.type)" 
         >{{ control.label }} <span *ngIf="control?.validators['required']==true" class="star-icon-red">*</span></ion-label
       >
       <ion-input
