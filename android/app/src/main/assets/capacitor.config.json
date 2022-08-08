@@ -1,5 +1,5 @@
 {
-	"appId": "mentoring.shikshalokam.org",
+	"appId": "org.elevate.mentoring",
 	"appName": "MentorED",
 	"webDir": "www",
 	"bundledWebRuntime": false,

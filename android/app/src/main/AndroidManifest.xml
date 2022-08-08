@@ -24,14 +24,14 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="mentoring.shikshalokam.org"/>
+                <data android:scheme="org.elevate.mentoring"/>
             </intent-filter>
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="mentoring.shikshalokam.org" android:pathPrefix="/" android:scheme="https" />
+                <data android:host="org.elevate.mentoring" android:pathPrefix="/" android:scheme="https" />
                 <data android:host=" " android:pathPrefix="/" android:scheme=" " />
                 <data android:host=" " android:pathPrefix="/" android:scheme=" " />
                 <data android:host=" " android:pathPrefix="/" android:scheme=" " />
