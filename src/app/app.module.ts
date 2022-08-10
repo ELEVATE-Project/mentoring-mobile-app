@@ -24,6 +24,7 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { TitleCasePipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
+import { Network } from '@awesome-cordova-plugins/network/ngx';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -62,6 +63,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
     FileTransferObject,
     InAppBrowser,
     TitleCasePipe,
+    Network
   ],
   bootstrap: [AppComponent],
 })

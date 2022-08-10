@@ -29,6 +29,7 @@
   --ion-default-font: "NotoSans-Regular";
   --ion-font-family: "NotoSans-Regular";
   --ion-color-primary: #832215;
+  --red: rgb(255, 0, 0);
   --white:#fff;
   --black:#000;
   --gray:#ccc;
@@ -193,7 +194,9 @@ ion-button{
 .alert-wrapper.sc-ion-alert-md{
   border-radius: 8px;
 }
-
+.alert-button{
+  text-transform: none !important;
+}
 .links{
   text-decoration: none;
   color: blue !important;

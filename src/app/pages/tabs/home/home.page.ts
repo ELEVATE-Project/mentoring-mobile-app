@@ -7,7 +7,7 @@ import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
-import { HttpService, LoaderService, LocalStorageService, UserService, UtilService } from 'src/app/core/services';
+import { HttpService, LoaderService, LocalStorageService, ToastService, UserService, UtilService } from 'src/app/core/services';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { Location } from '@angular/common';
@@ -49,7 +49,8 @@ export class HomePage implements OnInit {
     private sessionService: SessionService,
     private modalController: ModalController,
     private userService: UserService,
-    private localStorage: LocalStorageService) { }
+    private localStorage: LocalStorageService,
+    private toast:ToastService) { }
 
   ngOnInit() {
     this.getUser();
@@ -72,13 +73,16 @@ export class HomePage implements OnInit {
         break;
 
       case 'joinAction':
-        await this.sessionService.joinSession(event.data._id);
+        (event.data.sessionId)?await this.sessionService.joinSession(event.data.sessionId):await this.sessionService.joinSession(event.data._id);
         this.getSessions();
         break;
 
       case 'enrollAction':
-        await this.sessionService.enrollSession(event.data._id);
-        this.getSessions();
+        let enrollResult = await this.sessionService.enrollSession(event.data._id);
+        if(enrollResult.result){
+          this.toast.showToast(enrollResult.message, "success")
+          this.getSessions();
+        }
         break;
 
       case 'startAction':
