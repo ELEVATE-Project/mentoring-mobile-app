@@ -19,10 +19,10 @@ import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
 export class AppComponent {
  user;
   public appPages = [
-    // { title: 'HELP', action: "help", icon: 'help-circle' },
-    // { title: 'FAQ', action: "faq", icon: 'information-circle' },
-    // { title: 'HELP_VIDEOS', action: "helpVideos", icon: 'videocam' },
-    // { title: 'LANGUAGE', action: "selectLanguage", icon: 'language' }
+    { title: 'HELP', action: "help", icon: 'help-circle' },
+    { title: 'FAQ', action: "faq", icon: 'alert-circle' },
+    { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam' },
+    { title: 'LANGUAGE', action: "language", icon: 'language' },
   ];
 
   isMentor:boolean
@@ -156,6 +156,9 @@ export class AppComponent {
   goToProfilePage(){
     this.menuCtrl.close();
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+  }
+  backtoHome(){
+    this.menuCtrl.close();
   }
 
   async menuItemAction(menu) {
