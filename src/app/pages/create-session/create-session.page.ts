@@ -93,10 +93,12 @@ export class CreateSessionPage implements OnInit {
         buttons: [
           {
             text: texts['EXIT'],
+            cssClass: "alert-button",
             handler: () => { }
           },
           {
             text: texts['BACK'],
+            cssClass: "alert-button",
             role: 'cancel',
             handler: () => { }
           }

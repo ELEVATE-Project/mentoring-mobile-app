@@ -19,7 +19,7 @@ export class LoginPage implements OnInit {
         name: 'email',
         label: 'Email',
         value: '',
-        class: 'ion-margin',
+        class: 'ion-no-margin',
         type: 'text',
         position: 'floating',
         errorMessage:'Please enter registered email ID',

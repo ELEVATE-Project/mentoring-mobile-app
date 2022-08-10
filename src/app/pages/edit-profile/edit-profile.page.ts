@@ -78,11 +78,13 @@ export class EditProfilePage implements OnInit, isDeactivatable {
         buttons: [
           {
             text: texts['CANCEL'],
+            cssClass: "alert-button",
             handler: () => { }
           },
           {
             text: texts['OK'],
             role: 'cancel',
+            cssClass: "alert-button",
             handler: () => { }
           }
         ]
