@@ -60,7 +60,7 @@ export class RegisterPage implements OnInit {
       },
       {
         name: 'cPassword',
-        label: 'Confirm Password',
+        label: 'Confirm password',
         value: '',
         class: 'ion-margin',
         type: 'password',
