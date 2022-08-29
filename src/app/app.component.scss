@@ -8,16 +8,9 @@
 .menu-css{
     height: 100%;
     margin-left: 20px;
-    // background:var(--light-gray) !important;
-    // border-radius: 0px 35px 0 0;
-    // box-shadow: 2px 8px 13px 2px var(--black);
-    // -moz-box-shadow:2px 8px 13px 2px var(--black);
-    // -webkit-box-shadow: 2px 8px 13px 2px var(--black);
-    // margin-top: 8PX; 
 }
 
 .sub-menu-list{
-    // background: var(--light-gray) !important;
     border-radius: 0px 35px 0 0;
     ion-item{
         padding: 14px 6px 6px 6px;
@@ -69,6 +62,12 @@
     border: solid 2px var(--ion-color-primary);
     margin: 0px 20px 0px 10px;
 }
+.no-image-icon{
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    margin: 0px 20px 0px 10px;
+}
 .usr-div{
     display: grid;
     height: fit-content;
@@ -90,4 +89,7 @@
     text-overflow: ellipsis;
     font-size: larger;
     font-weight: bolder;
+}
+.side-menu-icon{
+    font-size: xx-large;
 }

@@ -8,7 +8,7 @@
                 <img class="profile-image" src="{{user?.image}}">
               </div>
               <ng-template #elseBlock>
-                <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+                <ion-icon (click)="goToProfilePage()" slot="icon-only" name="person-circle" class="no-image-icon"></ion-icon>
               </ng-template>
           </div >
           <div class="usr-div">
@@ -22,8 +22,8 @@
         <div class="menu-css">
           <ion-list lines="none" class="sub-menu-list">
             <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-              <ion-item lines="none" detail="false" (click)="menuItemAction(p)">
-                <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
+              <ion-item [routerLink]="p.url" lines="none" detail="false" (click)="menuItemAction(p)">
+                <ion-icon class="side-menu-icon" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
                 <ion-label class="sub-menu-list-label"><strong>{{ p.title | translate}}</strong></ion-label>
               </ion-item>
             </ion-menu-toggle>

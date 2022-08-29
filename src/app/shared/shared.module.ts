@@ -52,7 +52,7 @@ import { NumberOnlyDirective } from './directive/onlyNumbers';
     ReactiveFormsModule,
     IonicModule,
     TranslateModule,
-    FormsModule,
+    FormsModule
   ],
   exports: [
     DynamicFormComponent,
