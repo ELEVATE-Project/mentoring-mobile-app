@@ -1,8 +1,8 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding header">
-  <ion-label><strong>Report an issue</strong></ion-label>
+  <ion-label><strong>{{"REPORT_ISSUE" | translate}}</strong></ion-label>
   <div class="field">
-    <ion-label class="field-spacing">Tell us more about the problem you faced</ion-label>
+    <ion-label class="field-spacing">{{"TELL_US_MORE_ABOUT_ISSUE" | translate}}</ion-label>
     <app-dynamic-form [jsonFormData]="formData" #form1 class="dynamic-form"></app-dynamic-form>
   </div>
 </ion-content>

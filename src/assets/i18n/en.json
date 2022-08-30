@@ -154,5 +154,7 @@
     "HELP_VIDEOS":"Help videos",
     "FAQ":"FAQ",
     "EXIT":"Exit",
-    "BACK":"Back"
+    "BACK":"Back",
+    "REPORT_ISSUE":"Report an issue",
+    "TELL_US_MORE_ABOUT_ISSUE":"Tell us more about the problem you faced"
 }
