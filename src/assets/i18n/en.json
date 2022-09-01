@@ -156,5 +156,6 @@
     "EXIT":"Exit",
     "BACK":"Back",
     "REPORT_ISSUE":"Report an issue",
-    "TELL_US_MORE_ABOUT_ISSUE":"Tell us more about the problem you faced"
+    "TELL_US_MORE_ABOUT_ISSUE":"Tell us more about the problem you faced",
+    "VISIT_PROFILE":"Visit profile"
 }

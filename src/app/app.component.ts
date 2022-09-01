@@ -5,7 +5,7 @@ import { localKeys } from './core/constants/localStorage.keys';
 import * as _ from 'lodash-es';
 import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService, ToastService } from './core/services';
 import { CommonRoutes } from 'src/global.routes';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
 import { Location } from '@angular/common';
 import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
