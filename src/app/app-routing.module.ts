@@ -50,6 +50,10 @@ const routes: Routes = [
   {
     path: CommonRoutes.HELP,
     loadChildren: () => import('./pages/help/help.module').then( m => m.HelpPageModule)
+  },
+  {
+    path: CommonRoutes.LANGUAGE,
+    loadChildren: () => import('./pages/language/language.module').then( m => m.LanguagePageModule)
   }
 
 

@@ -20,5 +20,6 @@ export class CommonRoutes {
     public static LANDING_PAGE='landing';
     public static PERSONA_SELECTION='persona-selection';
     public static DASHBOARD='dashboard';
+    public static LANGUAGE="language";
     public static HELP='help';
 }

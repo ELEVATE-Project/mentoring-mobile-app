@@ -21,7 +21,7 @@ export class AppComponent {
     { title: 'HELP', action: "help", icon: 'help-circle', url: 'help'},
     { title: 'FAQ', action: "faq", icon: 'alert-circle' },
     { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam' },
-    { title: 'LANGUAGE', action: "language", icon: 'language' },
+    { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: 'language' },
   ];
 
   isMentor:boolean

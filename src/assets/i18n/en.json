@@ -130,7 +130,7 @@
     "DELETE_SESSION":"Delete Session",
     "SELECT_VALID_START_TIME":"Please select an upcoming time",
     "SELECT_VALID_END_TIME":"Please select a time greater than start time",
-    "CHOOSE_YOUR_LANGUAGE":"Choose your language",
+    "CHOOSE_YOUR_LANGUAGE":"Choose your preferred language",
     "EDUCATION_QUALIFICATION":"Education qualification",
     "EMAIL_ID":"Email id",
     "YEARS":"years",
@@ -156,5 +156,7 @@
     "HELP_VIDEOS":"Help video",
     "VISIT_PROFILE":"Visit profile",
     "REPORT_AN_ISSUE":"Report an issue",
-    "TELL_US_THE_PROBLEM":"Tell us the problem you faced"
+    "TELL_US_THE_PROBLEM":"Tell us more about the problem you faced",
+    "ENGLISH":"English",
+    "HINDI":"Hindi"
 }
