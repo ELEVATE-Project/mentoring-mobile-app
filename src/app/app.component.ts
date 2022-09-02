@@ -3,11 +3,10 @@ import { AlertController, MenuController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
 import * as _ from 'lodash-es';
-import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService, ToastService } from './core/services';
+import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService} from './core/services';
 import { CommonRoutes } from 'src/global.routes';
-import { Router } from '@angular/router';
+import { Router} from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
-import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { Location } from '@angular/common';
 import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
 
@@ -19,9 +18,9 @@ import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
 export class AppComponent {
  user;
   public appPages = [
-    // { title: 'HELP', action: "help", icon: 'help-circle' },
-    // { title: 'FAQ', action: "faq", icon: 'information-circle' },
-    // { title: 'HELP_VIDEOS', action: "helpVideos", icon: 'videocam' },
+    { title: 'HELP', action: "help", icon: 'help-circle', url: 'help' },
+    { title: 'FAQ', action: "faq", icon: 'information-circle' },
+    { title: 'HELP_VIDEOS', action: "helpVideos", icon: 'videocam' },
     { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: "language" }
   ];
 
