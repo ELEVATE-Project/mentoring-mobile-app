@@ -154,5 +154,7 @@
     "EXIT":"Exit",
     "BACK":"Back",
     "HELP_VIDEOS":"Help video",
-    "VISIT_PROFILE":"Visit profile"
+    "VISIT_PROFILE":"Visit profile",
+    "REPORT_AN_ISSUE":"Report an issue",
+    "TELL_US_THE_PROBLEM":"Tell us the problem you faced"
 }
