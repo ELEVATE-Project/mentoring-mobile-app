@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthService } from 'src/app/core/services';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
+import { AuthService, LocalStorageService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -54,7 +55,9 @@ export class LoginPage implements OnInit {
   };
   labels = ["LOGIN_TO_MENTOR_ED"];
   mentorId: any;
-  constructor(private authService: AuthService, private router: Router, private menuCtrl: MenuController, private activatedRoute: ActivatedRoute, private translateService: TranslateService) {
+  constructor(private authService: AuthService, private router: Router,
+              private menuCtrl: MenuController, private activatedRoute: ActivatedRoute,
+              private translateService: TranslateService, private localStorage: LocalStorageService) {
     this.menuCtrl.enable(false);
   }
 
@@ -85,6 +88,7 @@ export class LoginPage implements OnInit {
     this.form1.onSubmit();
     if (this.form1.myForm.valid) {
       this.userDetails = await this.authService.loginAccount(this.form1.myForm.value);
+      this.userDetails.preferredLanguage?this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,this.userDetails.preferredLanguage):this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,"en");
       if (this.userDetails !== null) {
         if (this.id) {
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
