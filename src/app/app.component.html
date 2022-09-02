@@ -4,11 +4,11 @@
       <ion-header [translucent]="true" class="ion-no-border">
         <div class="sub-menu-toolbar">
           <div slot="start" class="img-mainDiv">
-              <div class="image-div" *ngIf="user?.image; else elseBlock" (click)="goToProfilePage()">
+              <div class="image-div" *ngIf="user?.image; else elseBlock">
                 <img class="profile-image" src="{{user?.image}}">
               </div>
               <ng-template #elseBlock>
-                <ion-icon (click)="goToProfilePage()" slot="icon-only" name="person-circle" class="no-image-icon"></ion-icon>
+                <ion-icon slot="icon-only" name="person-circle" class="no-image-icon"></ion-icon>
               </ng-template>
           </div >
           <div class="usr-div">
