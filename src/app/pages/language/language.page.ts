@@ -47,7 +47,8 @@ export class LanguagePage implements OnInit {
   }
 
   ngOnDestroy(){
-    this.profile.profileUpdate({preferredLanguage:this.selectedLanguage});
+    //TODO: call profile update API
+    //this.profile.profileUpdate({preferredLanguage:this.selectedLanguage});
   }
 
 }
