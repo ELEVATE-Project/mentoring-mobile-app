@@ -130,7 +130,7 @@
     "DELETE_SESSION":"Delete Session",
     "SELECT_VALID_START_TIME":"Please select an upcoming time",
     "SELECT_VALID_END_TIME":"Please select a time greater than start time",
-    "CHOOSE_YOUR_LANGUAGE":"Choose your language",
+    "CHOOSE_YOUR_LANGUAGE":"Choose your preferred language",
     "EDUCATION_QUALIFICATION":"Education qualification",
     "EMAIL_ID":"Email id",
     "YEARS":"years",
@@ -152,5 +152,7 @@
     "CHECK_OUT_MENTOR":"Check out Mentor",
     "PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS":"'s profile on MentorED. Explore the sessions planned by them. Click on the Link",
     "EXIT":"Exit",
-    "BACK":"Back"
+    "BACK":"Back",
+    "ENGLISH":"English",
+    "HINDI":"Hindi"
 }

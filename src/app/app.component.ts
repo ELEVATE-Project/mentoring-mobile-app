@@ -22,7 +22,7 @@ export class AppComponent {
     // { title: 'HELP', action: "help", icon: 'help-circle' },
     // { title: 'FAQ', action: "faq", icon: 'information-circle' },
     // { title: 'HELP_VIDEOS', action: "helpVideos", icon: 'videocam' },
-    // { title: 'LANGUAGE', action: "selectLanguage", icon: 'language' }
+    { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: "language" }
   ];
 
   isMentor:boolean
