@@ -46,6 +46,10 @@ const routes: Routes = [
   {
     path: CommonRoutes.TERMS_AND_CONDITIONS,
     loadChildren: () => import('./pages/terms-and-conditions/terms-and-conditions.module').then( m => m.TermsAndConditionsPageModule)
+  },
+  {
+    path: CommonRoutes.HELP,
+    loadChildren: () => import('./pages/help/help.module').then( m => m.HelpPageModule)
   }
 
 

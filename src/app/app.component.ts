@@ -18,7 +18,7 @@ import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
 export class AppComponent {
  user;
   public appPages = [
-    { title: 'HELP', action: "help", icon: 'help-circle', url: ''},
+    { title: 'HELP', action: "help", icon: 'help-circle', url: 'help'},
     { title: 'FAQ', action: "faq", icon: 'alert-circle' },
     { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam' },
     { title: 'LANGUAGE', action: "language", icon: 'language' },
