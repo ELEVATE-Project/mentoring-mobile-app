@@ -21,4 +21,5 @@ export class CommonRoutes {
     public static PERSONA_SELECTION='persona-selection';
     public static DASHBOARD='dashboard';
     public static HELP='help';
+    public static FAQ='faq';
 }

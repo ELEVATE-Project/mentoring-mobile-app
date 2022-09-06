@@ -238,3 +238,11 @@ ion-modal.stack-modal {
 .card-shadow-bottom{
   box-shadow: 2px 2px 10px 2px var(--gray);    
 }
+ion-accordion-group{
+  ion-accordion {
+      .ion-accordion-toggle-icon {
+          font-size: 30px;
+          color: grey;
+      }
+  }
+}

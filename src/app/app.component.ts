@@ -19,7 +19,7 @@ export class AppComponent {
  user;
   public appPages = [
     { title: 'HELP', action: "help", icon: 'help-circle', url: 'help'},
-    { title: 'FAQ', action: "faq", icon: 'alert-circle' },
+    { title: 'FAQ', action: "faq", icon: 'alert-circle', url: 'faq'},
     { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam' },
     { title: 'LANGUAGE', action: "language", icon: 'language' },
   ];
