@@ -22,4 +22,6 @@ export class CommonRoutes {
     public static DASHBOARD='dashboard';
     public static LANGUAGE="language";
     public static HELP='help';
+    public static FAQ='faq';
+    static HELP_VIDEOS: 'help-videos';
 }

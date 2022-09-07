@@ -17,12 +17,13 @@ import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
 })
 export class AppComponent {
  user;
-  public appPages = [
-    { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP},
-    { title: 'FAQ', action: "faq", icon: 'alert-circle' },
-    { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
-    { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
-  ];
+ public appPages = [
+  { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP},
+  { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ},
+  { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
+  { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
+];
+
 
   isMentor:boolean
   showAlertBox = false;
