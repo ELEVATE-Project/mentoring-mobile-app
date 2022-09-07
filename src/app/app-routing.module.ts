@@ -54,6 +54,10 @@ const routes: Routes = [
   {
     path: CommonRoutes.FAQ,
     loadChildren: () => import('./pages/faq/faq.module').then( m => m.FaqPageModule)
+  },
+  {
+    path: CommonRoutes.LANGUAGE,
+    loadChildren: () => import('./pages/language/language.module').then( m => m.LanguagePageModule)
   }
 
 
