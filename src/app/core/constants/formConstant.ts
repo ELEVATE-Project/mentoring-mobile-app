@@ -23,3 +23,11 @@ export const TERMS_AND_CONDITIONS_FORM: IFORM = {
 	ver: "1.0",
 	templateName: "defaultTemplate"
 }
+
+export const FAQ: IFORM = {
+	"type": "faq",
+	"subType": "faqPage",
+	"action": "formFields",
+	"ver": "1",
+	"templateName":"defaultTemplate"
+}

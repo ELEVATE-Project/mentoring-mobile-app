@@ -58,6 +58,10 @@ const routes: Routes = [
   {
     path: CommonRoutes.LANGUAGE,
     loadChildren: () => import('./pages/language/language.module').then( m => m.LanguagePageModule)
+  },
+  {
+    path: CommonRoutes.HELP_VIDEOS,
+    loadChildren: () => import('./pages/help-video/help-video.module').then( m => m.HelpVideoPageModule)
   }
 
 

@@ -23,5 +23,5 @@ export class CommonRoutes {
     public static LANGUAGE="language";
     public static HELP='help';
     public static FAQ='faq';
-    static HELP_VIDEOS: 'help-videos';
+    public static HELP_VIDEOS= 'help-videos';
 }
