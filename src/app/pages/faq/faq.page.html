@@ -6,9 +6,9 @@
     *ngFor="let faq of faqArray"
   >
     <ion-item slot="header" color="white" lines="none">
-      <ion-label class="ion-text-wrap">{{faq?.question}}</ion-label>
+      <ion-label class="ion-text-wrap">{{faq?.label}}</ion-label>
     </ion-item>
-    <div class="ion-padding" slot="content">{{faq?.answer}}</div>
+    <div *ngFor="let option of faq.options" class="ion-padding" slot="content">{{option}}</div>
   </ion-accordion>
 </ion-accordion-group>
 <ion-footer class="ion-no-border">
