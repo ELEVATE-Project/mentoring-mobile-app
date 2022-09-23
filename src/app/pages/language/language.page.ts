@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import { LocalStorageService } from 'src/app/core/services';
+import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { languagesList } from 'src/app/core/constants/languageConstant';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 
@@ -25,7 +25,7 @@ export class LanguagePage implements OnInit {
 
   constructor(private localStorage: LocalStorageService,
               private translate: TranslateService,
-              private profile: ProfileService) { }
+              private toast: ToastService) { }
 
   ngOnInit() {
     this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
@@ -35,20 +35,19 @@ export class LanguagePage implements OnInit {
 
   onCardClick(event){
     this.selectedLanguage=event.value;
-    this.setLanguage(event.value)
+  }
+
+  onSubmit(){
+    this.setLanguage(this.selectedLanguage);
+    this.toast.showToast("LANGUAGE_CHANGED_SUCCESSFULLY","success");
   }
 
   setLanguage(lang){
     this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,lang).then(() =>{
       this.translate.use(lang);
     }).catch(error => {
-      this.translate.use("en")
+      this.toast.showToast("ERROR_LANGUAGE_CHANGE","danger");
     })
-  }
-
-  ngOnDestroy(){
-    //TODO: call profile update API
-    //this.profile.profileUpdate({preferredLanguage:this.selectedLanguage});
   }
 
 }
