@@ -18,6 +18,7 @@ export const urlConstants = {
         SUBMIT_FEEDBACK:"/mentoring/v1/feedback/submit/",
         UPCOMING_SESSIONS:"/mentoring/v1/mentors/upcomingSessions/",
         SHARE_MENTOR_PROFILE:"/mentoring/v1/mentors/share/",
+        REPORT_ISSUE:"/mentoring/v1/issues/create",
         
         // FORMS
         FORM_READ:'/mentoring/v1/form/read',
