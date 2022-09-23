@@ -88,7 +88,6 @@ export class LoginPage implements OnInit {
     this.form1.onSubmit();
     if (this.form1.myForm.valid) {
       this.userDetails = await this.authService.loginAccount(this.form1.myForm.value);
-      this.userDetails.preferredLanguage?this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,this.userDetails.preferredLanguage):this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,"en");
       if (this.userDetails !== null) {
         if (this.id) {
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { HELP_VIDEOS } from 'src/app/core/constants/formConstant';
+import { FormService } from 'src/app/core/services/form/form.service';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-help-video',
@@ -13,29 +16,17 @@ export class HelpVideoPage implements OnInit {
     label: "Help videos"
   };
 
-  items = [
-    { content : 'How to start creating sessions', 
-      video : 'https://www.youtube.com/watch?v=hV3lR31quOI',
-      href : 'https://i.picsum.photos/id/0/5616/3744.jpg?hmac=3GAAioiQziMGEtLbfrdbcoenXoWAW-zlyEAMkfEdBzQ'},
-    { content : 'How to search for mentors',
-      href : 'https://i.picsum.photos/id/0/5616/3744.jpg?hmac=3GAAioiQziMGEtLbfrdbcoenXoWAW-zlyEAMkfEdBzQ'},
-    { content : 'How to enroll a session' ,
-      href : 'https://i.picsum.photos/id/0/5616/3744.jpg?hmac=3GAAioiQziMGEtLbfrdbcoenXoWAW-zlyEAMkfEdBzQ'},
-    { content : 'How to join the session' ,
-      href : 'https://i.picsum.photos/id/0/5616/3744.jpg?hmac=3GAAioiQziMGEtLbfrdbcoenXoWAW-zlyEAMkfEdBzQ'},
-    { content : 'How to enroll a session' ,
-      href : 'https://i.picsum.photos/id/0/5616/3744.jpg?hmac=3GAAioiQziMGEtLbfrdbcoenXoWAW-zlyEAMkfEdBzQ'},
-    { content : 'How to join the session' ,
-      href : 'https://i.picsum.photos/id/0/5616/3744.jpg?hmac=3GAAioiQziMGEtLbfrdbcoenXoWAW-zlyEAMkfEdBzQ'},
-  ]
+  items = []
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private form: FormService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    let result = await this.form.getForm(HELP_VIDEOS);
+    this.items = result.result.data.fields.controls;
   }
 
   goToHome() {
-    this.router?.navigate([``]);
+    this.router?.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`]);
   }
 
 }

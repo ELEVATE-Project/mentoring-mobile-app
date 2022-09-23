@@ -3,12 +3,12 @@
   <ion-grid>
     <ion-row>
       <ion-col *ngFor="let item of items">
-      <ion-card [href]="item.video" class="ion-text-center card-content">
+      <ion-card [href]="item?.value" class="ion-text-center card-content">
           <div>
-            <img [src]="item.href" class="image-responsive image-content">
+            <img [src]="item?.options[0]" class="image-responsive image-content">
           </div>
         <ion-card-content>
-          {{item?.content}}
+          {{item?.label}}
         </ion-card-content>
       </ion-card>
     </ion-col>
