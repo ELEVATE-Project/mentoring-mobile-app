@@ -45,6 +45,7 @@ interface JsonFormControls {
   errorMessage?:string;
   dependentKey?:string;
   isNumberOnly?: boolean;
+  alertLabel?: string;
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
@@ -57,15 +58,14 @@ export interface JsonFormData {
 })
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
-  @ViewChild(IonDatetime) datetime
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
-  currentDate = moment().format("YYYY-MM-DDTHH:mm:ss");
-  maxDate = moment(this.currentDate).add(10, "years").format("YYYY-MM-DD");
+  currentDate = moment().format("YYYY-MM-DDTHH:mm");
+  maxDate = moment(this.currentDate).add(10, "years").format("YYYY-MM-DDTHH:mm");
   dependedChild: any;
-  dependedDate="";
+  dependedChildDate="";
   dependedParent: any;
-  date = moment().format("YYYY-MM-DD");
+  dependedParentDate: any;
 
   constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
   ngOnInit() {
@@ -160,51 +160,14 @@ export class DynamicFormComponent implements OnInit {
   alertToast(){
     this.toast.showToast("Please refer to the on-boarding email for your secret code", "success")
   }
-  cancel(){
-    this.datetime.cancel(true);
-  }
-  confirm() {
-    this.datetime.confirm(true);
-  }
-  format(value){
-    return moment(value).format("YYYY-MM-DDTHH:mm:ss");
-  }
-  setCurrentTime(control){
-    this.currentDate = moment().format("YYYY-MM-DDTHH:mm:ss")
+
+  dateSelected(event, control){
     if(control.dependedChild){
-      this.dependedChild=control.dependedChild;
-      this.dependedParent=control;
-    }
-  }
-  onDateChange(control){
-    if(control.value!="" && control.value<=this.currentDate && control.name!=this.dependedChild){
-      this.toast.showToast("SELECT_VALID_START_TIME","danger");
-      control.value="";
-    } else if(control.dependedChild){
-      let dependedControl = this.searchControls(control.dependedChild,this.jsonFormData.controls);
-      dependedControl.value = "";
-      this.dependedDate = control.value;
-    } else if(control.value!="" && control.value<=this.currentDate && control.name==this.dependedChild) {
-        if(this.dependedDate==""){
-          this.toast.showToast("SELECT_VALID_START_TIME","danger");
-          control.value=""
-        }else{
-          this.toast.showToast("SELECT_VALID_END_TIME","danger");
-          control.value=""
-        }
+      this.dependedChild = control.dependedChild;
+      this.dependedChildDate = event.detail.value;
     } else {
-      if(control.value!="" && control.value<=this.dependedDate){
-        this.toast.showToast("SELECT_VALID_END_TIME","danger");
-        control.value=""
-      }
+      this.dependedParent = control.dependedParent
+      this.dependedParentDate = event.detail.value;
     }
-    this.changeDetRef.detectChanges();
   }
-  searchControls(key, array){
-    for (var i=0; i < array.length; i++) {
-        if (array[i].name === key) {
-            return array[i];
-        }
-    }
-}
 }
