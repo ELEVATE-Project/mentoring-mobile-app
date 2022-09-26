@@ -33,6 +33,7 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   touched = false;
   selectedChips;
   _selectAll;
+  lowerCaseLabel;
 
   constructor(
     private alertController: AlertController,
@@ -43,7 +44,9 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
 
   onTouched = () => { };
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.lowerCaseLabel = this.label.toLowerCase();
+  }
 
   writeValue(value: any[]) {
     this.selectedChips = new Set();
@@ -108,12 +111,12 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   async addNewOption() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Add ' + `${this.label}`,
+      header: 'Add ' + `${this.lowerCaseLabel}`,
       inputs: [
         {
           name: 'chip',
           type: 'text',
-          placeholder: 'Enter ' + `${this.label}`,
+          placeholder: 'Enter ' + `${this.lowerCaseLabel}`,
         },
       ],
       buttons: [

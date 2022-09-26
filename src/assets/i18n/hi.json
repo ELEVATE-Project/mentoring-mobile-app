@@ -129,7 +129,5 @@
     "PROCEED":"आगे बढ़ें", 
     "SEARCH_SESSIONS": "सत्र ढूँढ़ें", 
     "MENTOR_SEARCH_PLACEHOLDER":"मेंटर्स ढूँढ़ें",   
-    "DELETE_SESSION":"सत्र मिटाएँ", 
-    "SELECT_VALID_START_TIME":"आगामी समय चुनें।", 
-    "SELECT_VALID_END_TIME":"शुरुआती समय के बाद का समय चुनें।" 
+    "DELETE_SESSION":"सत्र मिटाएँ"
 }

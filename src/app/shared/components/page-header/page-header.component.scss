@@ -1,13 +1,11 @@
 ion-back-button{
     text-transform: none;
-    font-size: 16px;
-    font-weight: 800;
+    --icon-font-size:26px;
+    --icon-font-weight: 800;
 }
 ion-title{
     font-weight: bold;
-}
-ion-icon{
-    color: rgb(165, 157, 157);
+    text-transform: none;
 }
 .align-right{
     align-self: right;
@@ -17,5 +15,23 @@ ion-menu-button{
     font-size: 40px;
 }
 ion-toolbar{
-    padding: 10px 0px;
+    padding: 10px 10px 0px 0px;
+}
+.icon{
+    font-size: 22px;
+}
+.label-small{
+    font-size: 12px;
+}
+ion-grid{
+    float: right;
+    margin-top: 5px;
+    padding-bottom: 0px;
+}
+ion-col{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin: 0px 15px 0px 15px;
+    padding: 1px 0px 1px 4px;
 }

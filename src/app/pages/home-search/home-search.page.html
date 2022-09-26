@@ -5,10 +5,10 @@
   </ion-toolbar>
   <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
     <ion-segment-button value="all-sessions">
-      <ion-label>{{ "ALL_SESSIONS" | translate }}</ion-label>
+      <ion-label class="segment-label">{{ "ALL_SESSIONS" | translate }}</ion-label>
     </ion-segment-button>
     <ion-segment-button value="mentor-profile">
-      <ion-label>{{ "MENTOR_PROFILE" | translate }}</ion-label>
+      <ion-label class="segment-label">{{ "MENTOR_PROFILE" | translate }}</ion-label>
     </ion-segment-button>
   </ion-segment>
   <div *ngIf="results">

@@ -33,7 +33,7 @@ export class CreateSessionPage implements OnInit {
   public headerConfig: any = {
     // menu: true,
     backButton: {
-      label: 'Create Session',
+      label: 'CREATE_SESSION',
     },
     notification: false,
   };
@@ -71,8 +71,8 @@ export class CreateSessionPage implements OnInit {
       let response = await this.sessionService.getSessionDetailsAPI(this.id);
       this.profileImageData.image = response.image;
       this.profileImageData.isUploaded = true;
-      response.startDate = moment.unix(response.startDate).format();
-      response.endDate = moment.unix(response.endDate).format();
+      response.startDate = moment.unix(response.startDate).format("YYYY-MM-DDTHH:mm");
+      response.endDate = moment.unix(response.endDate).format("YYYY-MM-DDTHH:mm");
       this.preFillData(response);
     } else {
       this.showForm = true;

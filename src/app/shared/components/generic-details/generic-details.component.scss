@@ -1,24 +1,22 @@
 .field-wrapper{
-    margin : 20px 25px 10px 25px
-}
-.field{
-    margin-top: 10px;
+    margin : 20px 25px 10px 15px
 }
 ion-chip{
     --background: var(--white);
+    color: var(--dark-gray);
     margin-top: 6px;
 }
 
 .value{
       font-size: 14px;
-      color: var(--grey-medium);
+      color: var(--dark-gray);
       margin-top: 5px;
 }
   ion-toolbar{
       --padding-bottom: 0px;
   }
   .session-detail-heading{
-      font-size: 14px;
+      font-size: 16px;
       font-weight: bold;
       color: var(--dark-grey);
       margin-bottom: 5px;

@@ -1,5 +1,5 @@
 <div class="field-wrapper" *ngFor="let item of sessionData.form">
-  <div *ngIf="!sessionData?.menteeForm?.includes(item.title) || (sessionData?.menteeForm?.includes(item.title)&&!sessionData.data.isAMentor)" class="field">
+  <div *ngIf="!sessionData?.menteeForm?.includes(item.title) || (sessionData?.menteeForm?.includes(item.title)&&!sessionData.data.isAMentor)">
     <p class="session-detail-heading">{{item.title | translate }}</p>
     <div *ngIf="isArray(sessionData.data[item.key]); else elseBlock">
       <ion-chip outline="true" class="ion-margin-top" *ngFor="let chip of sessionData.data[item.key]">

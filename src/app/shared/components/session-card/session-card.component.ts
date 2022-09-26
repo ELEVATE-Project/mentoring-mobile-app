@@ -18,6 +18,7 @@ export class SessionCardComponent implements OnInit {
   isCreator: boolean;
   buttonConfig;
   userData: any;
+  endDate: string;
   
   constructor(private router: Router, private sessionService: SessionService, private toast: ToastService, private localStorage: LocalStorageService) { }
   
@@ -25,6 +26,7 @@ export class SessionCardComponent implements OnInit {
     this.isCreator = await this.checkIfCreator();
     this.setButtonConfig(this.isCreator);
     this.startDate = (this.data.startDate>0)?moment.unix(this.data.startDate).toLocaleString():this.startDate;
+    this.endDate = (this.data.endDate>0)?moment.unix(this.data.endDate).toLocaleString():this.endDate;
   }
  
   setButtonConfig(isCreator: boolean) {
