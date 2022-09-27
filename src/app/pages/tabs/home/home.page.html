@@ -21,13 +21,6 @@
         fill="outline" (click)="segmentChanged(segment)">{{segment?.label|translate}}</ion-button>
     </div>
   </div>
-  <!-- <h5>
-      {{"ALL_SESSIONS" | translate}}
-    </h5>
-    <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize"
-      (click)="viewMore('all-sessions')">
-      {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
-    </ion-button> -->
 </div>
 <ion-content>
   <div *ngIf="sessions&&(selectedSegment=='all-sessions')">
@@ -35,22 +28,6 @@
       <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
       </app-session-card>
     </div>
-    <!-- <div *ngIf="sessions?.mySessions?.length">
-      <div class="page-intro">
-        <h5>
-          {{"MY_SESSIONS" | translate}}
-        </h5>
-        <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize"
-          (click)="viewMore('my-sessions')">
-          {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
-        </ion-button>
-      </div>
-      <ion-row>
-        <ion-col size="6" *ngFor="let session of sessions?.mySessions">
-          <app-session-sqr-card [data]="session" (onClickEvent)="eventAction($event)"> </app-session-sqr-card>
-        </ion-col>
-      </ion-row>
-    </div> -->
   </div>
   <div *ngIf="(selectedSegment=='created-sessions')&&user?.isAMentor">
     <ion-card *ngIf="createdSessions?.data?.length" class="session-sqr-card">

@@ -28,7 +28,7 @@ export class ProfileService {
     private userService: UserService,
     private injector: Injector
   ) { }
-  async profileUpdate(formData) {
+  async profileUpdate(formData, showToast=true) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.PROFILE_UPDATE,
@@ -43,7 +43,7 @@ export class ProfileService {
       this.userService.userEvent.next(profileData);
       this.loaderService.stopLoader();
       this._location.back();
-      this.toast.showToast(data.message, "success");
+      (showToast)?this.toast.showToast(data.message, "success"):null;
     }
     catch (error) {
       this.loaderService.stopLoader();

@@ -13,7 +13,7 @@ export class HelpVideoPage implements OnInit {
 
   public headerConfig: any = {
     backButton: true,
-    label: "Help videos"
+    label: "HELP_VIDEOS"
   };
 
   items = []

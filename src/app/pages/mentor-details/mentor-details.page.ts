@@ -27,19 +27,19 @@ export class MentorDetailsPage implements OnInit {
   detailData = {
     form: [
       {
-        title: 'About',
+        title: 'ABOUT',
         key: 'about',
       },
       {
-        title: "Designation",
+        title: "DESIGNATION",
         key: "designation"
       },
       {
-        title: 'Years of Experience',
+        title: 'YEAR_OF_EXPERIENCE',
         key: 'experience',
       },
       {
-        title: 'Key  Areas of Expertise',
+        title: 'KEY_AREAS_OF_EXPERTISE',
         key: 'areasOfExpertise',
       },
       {

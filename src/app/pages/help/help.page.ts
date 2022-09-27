@@ -15,7 +15,7 @@ export class HelpPage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;
   public headerConfig: any = {
     backButton: true,
-    label: "Help"
+    label: "HELP"
   };
   formData: JsonFormData = {
     controls: [

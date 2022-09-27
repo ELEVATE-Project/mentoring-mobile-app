@@ -142,8 +142,10 @@ export class AppComponent {
       cancel:'CANCEL',
       submit:'LOGOUT'
     }
-    this.utilService.alertPopup(msg).then(data => {
+    this.utilService.alertPopup(msg).then(async (data) => {
       if(data){
+        await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, "en");
+        this.translate.use("en")
         this.authService.logoutAccount();
       }
     }).catch(error => {})

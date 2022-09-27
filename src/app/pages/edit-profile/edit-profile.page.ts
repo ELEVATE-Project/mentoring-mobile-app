@@ -34,7 +34,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   public headerConfig: any = {
     // menu: true,
     backButton: {
-      label: 'Profile Details',
+      label: 'PROFILE_DETAILS',
     },
     notification: false,
   };
