@@ -89,19 +89,23 @@ export class DashboardPage implements OnInit {
     const config = {
       url: url+this.selectedFilter.toUpperCase(),
     };
+    let texts: any;
+    this.translate.get(['TOTAL_SESSION_CREATED', 'TOTAL_SESSION_CONDUCTED', 'TOTAL_SESSION_ENROLLED', 'TOTAL_SESSION_ATTENDED']).subscribe(text => {
+      texts = text;
+    })
     this.apiService.get(config).then(success => {
       let chartObj;
       console.log(success)
         this.chartData.chart.data.labels.length = 0;
         this.chartData.chart.data.datasets[0].data.length = 0;
       if(this.segment === 'mentor'){
-        this.chartData.chart.data.labels.push("Total sessions created", "Total sessions conducted")
+        this.chartData.chart.data.labels.push(texts['TOTAL_SESSION_CREATED'], texts['TOTAL_SESSION_CONDUCTED'])
         this.chartData.chart.data.datasets[0].data.push(success.result.totalSessionCreated || 0, success.result.totalsessionHosted || 0);
       } else {
-        this.chartData.chart.data.labels.push("Total sessions enrolled", "Total sessions attended")
+        this.chartData.chart.data.labels.push(texts['TOTAL_SESSION_ENROLLED'], texts['TOTAL_SESSION_ATTENDED'])
         this.chartData.chart.data.datasets[0].data.push(success.result.totalSessionEnrolled || 0, success.result.totalsessionsAttended || 0);
       }
-      this.dataAvailable=(this.chartData.chart.data.datasets[0].data[0]==0&&this.chartData.chart.data.datasets[0].data[1]==0) ? false:true;
+      this.dataAvailable=(this.chartData.chart.data.datasets[0].data[0]===0&&this.chartData.chart.data.datasets[0].data[1]===0) ? false:true;
       this.loading = false;
     }).catch(error => {
       this.loading = false;

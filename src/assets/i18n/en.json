@@ -160,6 +160,11 @@
     "COMPLETED_ON":"Completed on",
     "SHARE":"Share",
     "STARTED_ON":"Started on",
-    "LANGUAGE_CHANGED_SUCCESSFULLY": "Language changed successfully",
-    "ERROR_LANGUAGE_CHANGE":"An error occured while changing the language"
+    "LANGUAGE_CHANGED_SUCCESSFULLY": "Your language is changed successfully",
+    "ERROR_LANGUAGE_CHANGE":"Choosen language cannot be selected",
+    "FAQ": "FAQ",
+    "PROFILE_DETAILS": "Profile details",
+    "RECOMMENDED_FOR": "Recommended for",
+    "CATEGORIES": "Categories",
+    "MEDIUM": "Medium"
 }

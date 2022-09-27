@@ -25,7 +25,8 @@ export class LanguagePage implements OnInit {
 
   constructor(private localStorage: LocalStorageService,
               private translate: TranslateService,
-              private toast: ToastService) { }
+              private toast: ToastService,
+              private profile: ProfileService) { }
 
   ngOnInit() {
     this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
@@ -39,7 +40,10 @@ export class LanguagePage implements OnInit {
 
   onSubmit(){
     this.setLanguage(this.selectedLanguage);
-    this.toast.showToast("LANGUAGE_CHANGED_SUCCESSFULLY","success");
+    let showProfileUpdateToast = false;
+    this.profile.profileUpdate({preferredLanguage:this.selectedLanguage}, showProfileUpdateToast).then(()=>{
+      this.toast.showToast("LANGUAGE_CHANGED_SUCCESSFULLY","success");
+    })
   }
 
   setLanguage(lang){

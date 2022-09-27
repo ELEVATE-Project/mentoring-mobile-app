@@ -42,15 +42,15 @@ export class SessionDetailPage implements OnInit {
   detailData = {
     form: [
       {
-        title: 'Recommended for',
+        title: 'RECOMMENDED_FOR',
         key: 'recommendedFor',
       },
       {
-        title: "Categories",
+        title: "CATEGORIES",
         key: "categories"
       },
       {
-        title: 'Medium',
+        title: 'MEDIUM',
         key: 'medium',
       }
     ],
