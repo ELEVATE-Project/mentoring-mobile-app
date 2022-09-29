@@ -187,6 +187,37 @@ ion-button{
    }
 }
 
+.alert-button-role-cancel{
+    text-transform: none !important;
+    border: 1px solid #b8b8b8;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 6px 21px;
+}
+
+.alert-button.sc-ion-alert-md{
+  text-transform: none !important;
+  background-color: var(--ion-color-primary);
+  color: white;
+  border: 1px solid #b8b8b8;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 6px 21px;
+}
+
+.alert-button-role-cancel.sc-ion-alert-md {
+  text-transform: none !important;
+  background-color: var(--white);
+  border: 1px solid #b8b8b8;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 6px 21px;
+  color: var(--ion-color-primary);
+}
+
 .alert-button-group.sc-ion-alert-md{
   display: flex;
 }
