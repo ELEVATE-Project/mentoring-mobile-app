@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonContent } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService } from 'src/app/core/services';
@@ -10,6 +11,7 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
   styleUrls: ['dashboard.page.scss']
 })
 export class DashboardPage implements OnInit {
+  @ViewChild(IonContent) content: IonContent;
   segment: any;
   dataAvailable;
   isMentor:boolean;
@@ -53,6 +55,7 @@ export class DashboardPage implements OnInit {
     }
 
   ionViewWillEnter(){
+    this.gotToTop();
     this.dataAvailable = false;
     if(typeof this.isMentor === "undefined"){
       this.profile.profileDetails().then(profileDetails => {
@@ -63,6 +66,10 @@ export class DashboardPage implements OnInit {
     } else {
       this.getReports();
     }
+  }
+
+  gotToTop() {
+    this.content.scrollToTop(1000);
   }
 
   segmentChanged(ev: any) {
