@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { IonContent, NavController } from '@ionic/angular';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
+  @ViewChild(IonContent) content: IonContent;
   formData: any = {
     form: [
       { title: 'SESSIONS_ATTENDED',
@@ -72,6 +73,11 @@ export class ProfilePage implements OnInit {
   async ionViewWillEnter() {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchProfileDetails();
+    this.gotToTop();
+  }
+
+  gotToTop() {
+    this.content.scrollToTop(1000);
   }
 
   async fetchProfileDetails() {

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
-import { ModalController, NavController, Platform } from '@ionic/angular';
+import { ModalController, NavController, Platform, IonContent } from '@ionic/angular';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
@@ -28,6 +28,7 @@ export class HomePage implements OnInit {
   sessions;
   sessionsCount = 0;
   status = "published,live";
+  @ViewChild(IonContent) content: IonContent;
 
   public headerConfig: any = {
     menu: true,
@@ -60,9 +61,13 @@ export class HomePage implements OnInit {
       }
     })
   }
+  gotToTop() {
+    this.content.scrollToTop(1000);
+  }
 
   async ionViewWillEnter() {
     this.getSessions();
+    this.gotToTop();
     var obj = { page: this.page, limit: this.limit, searchText: "" };
     this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
   }
