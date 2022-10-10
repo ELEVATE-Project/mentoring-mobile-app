@@ -23,12 +23,12 @@
       <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="1">
         <ion-icon name="calendar-number-outline"></ion-icon>
       </ion-col>
-      <ion-col class="d-flex flex-align-items-center" size="7.5">
+      <ion-col class="d-flex flex-align-items-center" size="7">
         <ion-label *ngIf="startDate && data?.status=='published'" class="date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
         <ion-label *ngIf="startDate && data?.status=='live'" class="date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
         <ion-label *ngIf="endDate && data?.status=='completed'" class="date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
       </ion-col>
-      <ion-col class="d-flex flex-justify-flex-end flex-align-items-center" size="3.5">
+      <ion-col class="d-flex flex-justify-flex-end flex-align-items-center" size="4">
         <ion-button *ngIf="data?.status!='completed'" class="button" [disabled]="!buttonConfig?.isEnabled&&(buttonConfig?.type=='joinAction')" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
       </ion-col>
     </ion-row>
