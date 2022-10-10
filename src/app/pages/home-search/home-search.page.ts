@@ -27,7 +27,7 @@ export class HomeSearchPage implements OnInit {
   }
   async getMentorList() {
     const config = {
-      url: urlConstants.API_URLS.MENTORS_DIRECTORY+'&search=' + this.searchText,
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY+'&search=' + btoa(this.searchText),
       payload: {}
     };
     try {
