@@ -79,8 +79,31 @@ export class HomeSearchPage implements OnInit {
     this.search();
   }
 
-  onSessionAction(event){
-    this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`])
+  async onSessionAction(event){
+    switch (event.type) {
+      case 'cardSelect':
+        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`])
+        break;
+
+      case 'joinAction':
+        (event.data.sessionId)?await this.sessionService.joinSession(event.data.sessionId):await this.sessionService.joinSession(event.data._id);
+        this.search();
+        break;
+
+      case 'enrollAction':
+        console.log("enrolled")
+        let enrollResult = await this.sessionService.enrollSession(event.data._id);
+        if(enrollResult.result){
+          this.toast.showToast(enrollResult.message, "success")
+          this.search();
+        }
+        break;
+
+      case 'startAction':
+        this.sessionService.startSession(event.data._id);
+        this.search();
+        break;
+    }
   }
 
   eventAction(event){
