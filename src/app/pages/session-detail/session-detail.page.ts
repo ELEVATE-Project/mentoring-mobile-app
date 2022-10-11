@@ -167,8 +167,8 @@ export class SessionDetailPage implements OnInit {
     let msg = {
       header: 'DELETE_SESSION',
       message: 'DELETE_CONFIRM_MSG',
-      cancel: "Don't delete",
-      submit: 'Yes delete'
+      cancel: "DON'T_DELETE",
+      submit: 'YES_DELETE'
     }
     this.utilService.alertPopup(msg).then(async data => {
       if (data) {

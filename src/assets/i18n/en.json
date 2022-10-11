@@ -166,5 +166,7 @@
     "PROFILE_DETAILS": "Profile details",
     "RECOMMENDED_FOR": "Recommended for",
     "CATEGORIES": "Categories",
-    "MEDIUM": "Medium"
+    "MEDIUM": "Medium",
+    "DON'T_DELETE": "Don't delete",
+    "YES_DELETE": "Yes delete"
 }

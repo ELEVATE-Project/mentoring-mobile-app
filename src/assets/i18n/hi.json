@@ -168,5 +168,8 @@
     "NO_SESSIONS_ENROLLED": "अभी तक कोई सत्र नामांकित नहीं है",
     "RECOMMENDED_FOR": "जिनके लिए उपयुक्त है",
     "CATEGORIES": "श्रेणियाँ",
-    "MEDIUM": "माध्यम"
+    "MEDIUM": "माध्यम",
+    "NO_SESSIONS_CREATED":"अभी तक कोई सत्र नहीं बनाया गया",
+    "DON'T_DELETE": "मिटाएं नहीं",
+    "YES_DELETE": "हाँ हटाएं"
 }
