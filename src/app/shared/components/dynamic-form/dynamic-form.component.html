@@ -85,7 +85,8 @@
         [formControlName]="control.name"
         [compareWith]="compareWith"
         [value]="control.value[0]"
-        okText="Ok"
+        [okText]="'OK' | translate"
+        [cancelText]="'CANCEL' | translate"
       >
         <ion-select-option
           *ngFor="let option of control.options"
