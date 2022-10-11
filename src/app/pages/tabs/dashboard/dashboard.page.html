@@ -20,7 +20,7 @@
         </ion-col>
         <ion-col>
           <div class="filter">
-            <app-filter [defaultValue]="'WEEKLY'" [filter]="filter" (filterChange)="filterChangeHandler($event)">
+            <app-filter [defaultValue]="selectedFilter" [filter]="filter" (filterChange)="filterChangeHandler($event)">
             </app-filter>
           </div>
         </ion-col>
