@@ -8,12 +8,16 @@
     justify-content: flex-end;
 }
 .head-label{
-    // text-transform: capitalize;
     font-weight: bold;
     color: var(--grey-medium);
     font-size: 14px !important;
     overflow: visible !important;
  }
+
+.head-label::first-letter{
+    text-transform: capitalize;
+ }
+ 
 .icon{
     font-size: smaller;
 }
