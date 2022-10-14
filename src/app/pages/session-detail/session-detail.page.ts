@@ -55,6 +55,8 @@ export class SessionDetailPage implements OnInit {
       }
     ],
     data: {
+      image: [],
+      description: '',
       recommendedFor: [
         {
           "value": "Teachers",
