@@ -109,7 +109,7 @@ export class SessionDetailPage implements OnInit {
 
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
-    if (response && this.userDetails) {
+    if (response) {
       this.setPageHeader(response);
       let readableStartDate = moment.unix(response.startDate).toLocaleString();
       let currentTimeInSeconds=Math.floor(Date.now()/1000);
@@ -124,7 +124,9 @@ export class SessionDetailPage implements OnInit {
   setPageHeader(response) {
       this.headerConfig.share = response.status=="completed"?false:true;
       this.id = response._id;
-      this.isCreator = this.userDetails._id == response.userId ? true : false;
+      if(this.userDetails){
+        this.isCreator = this.userDetails._id == response.userId ? true : false;
+      }
       this.headerConfig.edit = (this.isCreator && response.status=="published")?true:null;
       this.headerConfig.delete = (this.isCreator)?true:null;
   }
