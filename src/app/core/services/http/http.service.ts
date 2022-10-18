@@ -163,7 +163,6 @@ export class HttpService {
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:
-        this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
         let auth = this.injector.get(AuthService);
         auth.logoutAccount(true);
         break
