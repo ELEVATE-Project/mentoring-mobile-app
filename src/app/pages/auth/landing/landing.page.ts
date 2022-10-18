@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -11,7 +12,13 @@ import { CommonRoutes } from 'src/global.routes';
 export class LandingPage implements OnInit {
   labels=["CREATE_ACCOUNT","TO_CONNECT_SOLVE","&_SHARE"];
 
-  constructor(private router: Router, private translateService: TranslateService) { }
+  constructor(
+    private router: Router,
+    private translateService: TranslateService,
+    private menuCtrl: MenuController
+  ) {
+    this.menuCtrl.enable(false);
+  }
 
   ngOnInit() {
     this.translateText();
