@@ -136,6 +136,7 @@ export class CreateSessionPage implements OnInit {
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
         if (result) {
+          this.profileImageData.isUploaded = true;
           this.location.back()
         }else {
           this.profileImageData.image = this.lastUploadedImage;
