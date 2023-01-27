@@ -113,7 +113,7 @@ export class SessionDetailPage implements OnInit {
       this.setPageHeader(response);
       let readableStartDate = moment.unix(response.startDate).toLocaleString();
       let currentTimeInSeconds=Math.floor(Date.now()/1000);
-      this.isEnabled = (response.startDate-currentTimeInSeconds<300)?true:false;
+      this.isEnabled = ((response.startDate-currentTimeInSeconds)<300 || response.status=='live')?true:false;
       this.detailData.data = Object.assign({}, response);
       this.detailData.data.startDate = readableStartDate;
       this.startDate = (response.startDate>0)?moment.unix(response.startDate).toLocaleString():this.startDate;

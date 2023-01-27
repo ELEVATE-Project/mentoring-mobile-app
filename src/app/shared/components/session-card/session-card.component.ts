@@ -36,7 +36,7 @@ export class SessionCardComponent implements OnInit {
       this.buttonConfig=(!isCreator&&this.data.isEnrolled || !isCreator&&this.data.sessionId)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
     }
     let currentTimeInSeconds=Math.floor(Date.now()/1000);
-    this.buttonConfig.isEnabled = (this.data.startDate-currentTimeInSeconds<300)?true:false;
+    this.buttonConfig.isEnabled = ((this.data.startDate-currentTimeInSeconds)<300 || this.data.status=='live')?true:false;
   }
 
   async checkIfCreator() {
