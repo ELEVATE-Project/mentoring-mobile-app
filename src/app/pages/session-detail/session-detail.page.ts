@@ -128,7 +128,7 @@ export class SessionDetailPage implements OnInit {
         this.isCreator = this.userDetails._id == response.userId ? true : false;
       }
       this.headerConfig.edit = (this.isCreator && response.status=="published")?true:null;
-      this.headerConfig.delete = (this.isCreator)?true:null;
+      this.headerConfig.delete = (this.isCreator && response.status=="published")?true:null;
   }
 
   action(event) {
