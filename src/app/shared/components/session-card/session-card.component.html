@@ -29,7 +29,7 @@
         <ion-label *ngIf="endDate && data?.status=='completed'" class="date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
       </ion-col>
       <ion-col class="d-flex flex-justify-flex-end flex-align-items-center" size="4">
-        <ion-button *ngIf="data?.status!='completed'" class="button" [disabled]="!buttonConfig?.isEnabled&&(buttonConfig?.type=='joinAction')" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
+        <ion-button *ngIf="data?.status!='completed'" class="button" [disabled]="!buttonConfig?.isEnabled&&(buttonConfig?.type!='enrollAction')" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
