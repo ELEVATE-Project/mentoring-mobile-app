@@ -113,7 +113,7 @@ export class SessionDetailPage implements OnInit {
       this.setPageHeader(response);
       let readableStartDate = moment.unix(response.startDate).toLocaleString();
       let currentTimeInSeconds=Math.floor(Date.now()/1000);
-      this.isEnabled = ((response.startDate-currentTimeInSeconds)<300 || response.status=='live')?true:false;
+      this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='live')?true:false;
       this.detailData.data = Object.assign({}, response);
       this.detailData.data.startDate = readableStartDate;
       this.startDate = (response.startDate>0)?moment.unix(response.startDate).toLocaleString():this.startDate;
@@ -122,13 +122,15 @@ export class SessionDetailPage implements OnInit {
   }
 
   setPageHeader(response) {
+    let currentTimeInSeconds=Math.floor(Date.now()/1000);
+    this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='live')?true:false;
       this.headerConfig.share = response.status=="completed"?false:true;
       this.id = response._id;
       if(this.userDetails){
         this.isCreator = this.userDetails._id == response.userId ? true : false;
       }
       this.headerConfig.edit = (this.isCreator && response.status=="published")?true:null;
-      this.headerConfig.delete = (this.isCreator)?true:null;
+      this.headerConfig.delete = (this.isCreator && response.status=="published" && !this.isEnabled)?true:null;
   }
 
   action(event) {
