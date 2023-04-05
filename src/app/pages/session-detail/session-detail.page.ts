@@ -149,7 +149,7 @@ export class SessionDetailPage implements OnInit {
     if(this.userDetails){
       let sharableLink = await this.sessionService.getShareSessionId(this.id);
       if (sharableLink.shareLink) {
-        let url = `/${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
+        let url = `/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
         let link = await this.utilService.getDeepLink(url);
         this.detailData.data.mentorName = this.detailData.data.mentorName.trim();
         this.detailData.data.title = this.detailData.data.title.trim();

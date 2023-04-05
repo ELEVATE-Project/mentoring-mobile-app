@@ -25,10 +25,9 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="mentoring.shikshalokam.org" android:pathPattern="/sessions/..*" android:scheme="https" />
-                <data android:host="mentoring.shikshalokam.org" android:pathPattern="/mentor-details/..*" android:scheme="https" />
-                <data android:host="org.elevate.mentoring" android:pathPattern="/sessions/..*" android:scheme="https" />
-                <data android:host="org.elevate.mentoring" android:pathPattern="/mentor-details/..*" android:scheme="https" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="dev.elevate-mentoring.shikshalokam.org" />
             </intent-filter>
 
 
