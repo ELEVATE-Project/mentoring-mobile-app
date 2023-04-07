@@ -9,6 +9,7 @@ import { Router} from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
 import { Location } from '@angular/common';
 import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 @Component({
   selector: 'app-root',
@@ -43,9 +44,11 @@ export class AppComponent {
     private zone:NgZone,
     private _location: Location,
     private alert: AlertController,
+    private screenOrientation: ScreenOrientation,
   ) {
     this.initializeApp();
     this.router.navigate(["/"]);
+    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
   }
   subscribeBackButton() {
     this.platform.backButton.subscribeWithPriority(10,async () => {
