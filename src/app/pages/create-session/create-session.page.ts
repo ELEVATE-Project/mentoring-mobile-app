@@ -58,7 +58,8 @@ export class CreateSessionPage implements OnInit {
     private translate: TranslateService,
     private alert: AlertController,
     private form: FormService,
-    private changeDetRef: ChangeDetectorRef
+    private changeDetRef: ChangeDetectorRef,
+    private router: Router
   ) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.id = params?.get('id');
@@ -136,8 +137,8 @@ export class CreateSessionPage implements OnInit {
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
         if (result) {
-          this.location.back()
-        }else {
+          this.id ? this.location.back() : this.router.navigate([`${CommonRoutes.SESSIONS_DETAILS}/`+result._id],{replaceUrl:true})
+        } else {
           this.profileImageData.image = this.lastUploadedImage;
           this.profileImageData.isUploaded = false;
         }
