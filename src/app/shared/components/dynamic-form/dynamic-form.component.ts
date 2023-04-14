@@ -170,4 +170,9 @@ export class DynamicFormComponent implements OnInit {
       this.dependedParentDate = event.detail.value;
     }
   }
+  removeSpace(event: any){
+    if(event.target.selectionStart === 0 && event.code === "Space"){
+      event.preventDefault();
+    }
+  }
 }
