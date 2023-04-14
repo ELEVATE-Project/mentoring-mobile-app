@@ -21,6 +21,7 @@
         [formControlName]="control.name"
         [value]="control.value"
         [maxlength]="control?.validators?.maxLength"
+        (keydown)="removeSpace($event)"
         numberOnly
       ></ion-input>
       <ion-input
