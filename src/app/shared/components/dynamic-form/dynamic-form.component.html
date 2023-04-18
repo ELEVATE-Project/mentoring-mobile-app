@@ -43,13 +43,13 @@
         [maxlength]="control?.validators?.maxLength"
         (ionChange)="removeSpace($event)"
       ></ion-input>
-      <textarea
+      <ion-textarea
         *ngIf="control.type === 'textarea'"
         [formControlName]="control.name"
         [value]="control.value"
         [maxlength]="control?.validators?.maxLength"
         (ionChange)="removeSpace($event)"
-      ></textarea>
+      ></ion-textarea>
       <ion-checkbox
         *ngIf="control.type === 'checkbox'"
         [formControlName]="control.name"
