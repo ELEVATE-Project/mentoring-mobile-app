@@ -31,7 +31,7 @@ export class ResetPasswordPage implements OnInit {
       },
       {
         name: 'password',
-        label: 'Enter New Password',
+        label: 'Enter new password',
         value: '',
         class: 'ion-margin',
         type: 'password',
@@ -45,7 +45,7 @@ export class ResetPasswordPage implements OnInit {
       },
       {
         name: 'newPassword',
-        label: 'Confirm New Password',
+        label: 'Confirm new password',
         value: '',
         class: 'ion-margin',
         type: 'password',

@@ -1,0 +1,20 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<ion-content fullscreen>
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let item of items">
+      <ion-card [href]="item?.value" class="ion-text-center card-content">
+          <div>
+            <img [src]="item?.options[0]" class="image-responsive image-content">
+          </div>
+        <ion-card-content>
+          {{item?.label}}
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer class="ion-no-border">
+  <ion-button (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>
+</ion-footer>

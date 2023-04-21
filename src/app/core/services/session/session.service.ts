@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpService, LoaderService, ToastService } from '..';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -33,19 +33,25 @@ export class SessionService {
   }
 
   async getAllSessionsAPI(obj) {
-    await this.loaderService.startLoader();
+    //await this.loaderService.startLoader();
+    let params;
+   if(obj.status){
+     params ='&status=' + obj.status + '&search=' + obj.searchText
+    }else{
+      params ='&search=' + obj.searchText
+    }
     const config = {
-      url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj.page + '&limit=' + obj.limit + '&status=' + obj.status + '&search=' + obj.searchText,
+      url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj.page + '&limit=' + obj.limit +params,
       payload: {}
     };
     try {
       let data = await this.httpService.get(config);
       let result = _.get(data, 'result');
-      this.loaderService.stopLoader();
+      //this.loaderService.stopLoader();
       return result;
     }
     catch (error) {
-      this.loaderService.stopLoader();
+     // this.loaderService.stopLoader();
       let res = []
       return res;
     }
@@ -53,7 +59,7 @@ export class SessionService {
 
 async getSessionsList(obj) {
   const config = {
-    url: urlConstants.API_URLS.SESSIONS + obj?.type + '&page=' + obj?.page + '&limit=' + obj?.limit + '&search=' + obj?.searchText,
+    url: urlConstants.API_URLS.SESSIONS + obj?.type + '&page=' + obj?.page + '&limit=' + obj?.limit + '&search=' + btoa(obj?.searchText),
   };
   try {
     let data: any = await this.httpService.get(config);
@@ -64,7 +70,7 @@ async getSessionsList(obj) {
 }
 
   async getSessionDetailsAPI(id) {
-    await this.loaderService.startLoader();
+    //await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.GET_SESSION_DETAILS + id,
       payload: {}
@@ -72,11 +78,11 @@ async getSessionsList(obj) {
     try {
       let data = await this.httpService.get(config);
       let result = _.get(data, 'result');
-      this.loaderService.stopLoader();
+      //this.loaderService.stopLoader();
       return result;
     }
     catch (error) {
-      this.loaderService.stopLoader();
+      //this.loaderService.stopLoader();
     }
   }
 
@@ -182,7 +188,6 @@ async getSessionsList(obj) {
   openBrowser(link) {
     let browser = this.inAppBrowser.create(link, `_system`);
     browser.on('exit').subscribe(() => {
-        console.log("browser closed");
     }, err => {
       console.error(err);
     });
@@ -196,6 +201,19 @@ async getSessionsList(obj) {
     try {
       let data = await this.httpService.post(config);
       return data;
+    }
+    catch (error) {
+    }
+  }
+
+  async getUpcomingSessions(id){
+    const config = {
+      url: urlConstants.API_URLS.UPCOMING_SESSIONS + id + "?page=1&limit=100",
+      payload: {}
+    };
+    try {
+      let data = await this.httpService.post(config);
+      return data.result[0].data;
     }
     catch (error) {
     }

@@ -27,7 +27,7 @@ export class HomeSearchPage implements OnInit {
   }
   async getMentorList() {
     const config = {
-      url: urlConstants.API_URLS.MENTORS_DIRECTORY+'&search=' + this.searchText,
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY+'&search=' + btoa(this.searchText),
       payload: {}
     };
     try {
@@ -79,11 +79,34 @@ export class HomeSearchPage implements OnInit {
     this.search();
   }
 
-  onSessionAction(event){
-    this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`])
+  async onSessionAction(event){
+    switch (event.type) {
+      case 'cardSelect':
+        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`])
+        break;
+
+      case 'joinAction':
+        (event.data.sessionId)?await this.sessionService.joinSession(event.data.sessionId):await this.sessionService.joinSession(event.data._id);
+        this.search();
+        break;
+
+      case 'enrollAction':
+        console.log("enrolled")
+        let enrollResult = await this.sessionService.enrollSession(event.data._id);
+        if(enrollResult.result){
+          this.toast.showToast(enrollResult.message, "success")
+          this.search();
+        }
+        break;
+
+      case 'startAction':
+        this.sessionService.startSession(event.data._id);
+        this.search();
+        break;
+    }
   }
 
-  onMentorAction(event){
+  eventAction(event){
     this.router.navigate([CommonRoutes.MENTOR_DETAILS,event.data._id]);
   }
 

@@ -60,7 +60,7 @@ export class RegisterPage implements OnInit {
       },
       {
         name: 'cPassword',
-        label: 'Confirm Password',
+        label: 'Confirm password',
         value: '',
         class: 'ion-margin',
         type: 'password',
@@ -155,5 +155,8 @@ export class RegisterPage implements OnInit {
     if (this.userType == "mentor") {
       this.formData.controls.pop();
     }
+  }
+  onLogin(){
+    this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
   }
 }

@@ -1,9 +1,9 @@
 .btn-section{
-    margin-top: 10%;
+    margin-top: 5%;
 }
-.check-box{
-   margin-right: 30px;
-}
+// .check-box{
+//    margin-right: 30px;
+// }
 .label{
     font-size: large;
 }
@@ -12,6 +12,15 @@
     --placeholder-opacity: 1;
     color: rgb(77, 72, 72);
 }
-.mentor-input{
-    margin-bottom: 30px;
+.text-config{
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 2px !important;
+    margin-top: unset;
+}
+.underline{
+    text-decoration: underline;
+    text-decoration-color: rgb(187, 3, 3);
+    color:  rgb(187, 3, 3);
+    margin-top: 2px;
 }

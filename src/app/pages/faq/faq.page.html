@@ -1,0 +1,18 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<ion-content>
+  <ion-accordion-group class="container">
+    <ion-accordion
+      class="accordion-container"
+      toggleIcon="caret-down"
+      *ngFor="let faq of faqArray"
+    >
+      <ion-item slot="header" color="white" lines="none">
+        <ion-label class="ion-text-wrap">{{faq?.label}}</ion-label>
+      </ion-item>
+      <div *ngFor="let option of faq.options" class="ion-padding content" slot="content">{{option}}</div>
+    </ion-accordion>
+  </ion-accordion-group>
+</ion-content>
+<ion-footer class="ion-no-border">
+  <ion-button (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>
+</ion-footer>

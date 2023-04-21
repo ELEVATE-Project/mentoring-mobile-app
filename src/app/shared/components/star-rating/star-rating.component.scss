@@ -1,11 +1,12 @@
 .star {
+  font-size: 30px;
+  margin-right: 6px;
   color: var(--yellow);
 }
 
-ion-icon {
-    font-size: 30px;
-    margin-right: 6px;
-  }
+.star-small {
+  color: var(--yellow);
+}
 
 .star-align{
   display: flex;
@@ -19,4 +20,11 @@ ion-icon {
   font-size: 17px;
   letter-spacing: 0.5px;
   color: rgb(37, 44, 43);
+}
+.disable{
+  pointer-events: none;
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+  margin-bottom: 20px;
 }

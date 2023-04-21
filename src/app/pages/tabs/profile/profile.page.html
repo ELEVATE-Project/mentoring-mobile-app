@@ -2,20 +2,28 @@
 <ion-content [fullscreen]="true">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
-      </ion-refresher>
-    <div class="main-wrapper" *ngIf="formData && formData.data">
-        <app-profile-image [profileImageData]='formData.data'></app-profile-image>
+    </ion-refresher>
+    <div *ngIf="formData && formData.data">
+        <app-generic-profile-header [headerData]='formData.data'[buttonConfig]="buttonConfig" [showRole]="true"></app-generic-profile-header>
         <div *ngIf="showProfileDetails; else elseBlock">
-            <div class="d-flex flex-justify-center">
-                <ion-button shape="round" (click)="editProfile()">{{ "EDIT" | translate }}</ion-button>
+            <ion-card *ngIf="formData?.data?.isAMentor" class="card-wrapper">
+                <ion-card-content class="padding-top-10">
+                    <ion-row>
+                        <ion-col class="d-flex flex-justify-center card-header-config">{{"SESSIONS_CONDUCTED"|translate}}</ion-col>
+                        <ion-col class="d-flex flex-justify-center card-header-config">{{"RATING"|translate}}</ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col class="d-flex flex-justify-center card-value-config">{{formData?.data?.sessionsHosted}}</ion-col>
+                        <ion-col class="d-flex flex-justify-center card-value-config"><app-star-rating [numberOfStars]="5" [rate]="formData?.data?.rating?.average" [isDisabled]="true"></app-star-rating></ion-col>
+                    </ion-row>
+                </ion-card-content>
+            </ion-card>
+            <div class="details-wrapper">
+                <app-generic-details [sessionData]='formData'></app-generic-details>
             </div>
-            <app-generic-details [sessionData]='formData'></app-generic-details>
         </div>
         <ng-template #elseBlock>
             <p class="no-details-message">{{ "NO_USER_DETAILS_FOUND" | translate }}</p>
-            <div class="d-flex flex-justify-center">
-                <ion-button shape="round" (click)="editProfile()">{{ "EDIT_PROFILE" | translate }}</ion-button>
-            </div>
         </ng-template>
     </div>
-  </ion-content>
+</ion-content>

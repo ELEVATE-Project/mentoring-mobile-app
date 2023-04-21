@@ -1,58 +1,55 @@
-.session-card{
-    padding: 10px;
-    .card-avatar{
-    text-align: center;
-    margin: auto 0px 3px;
-    .thumbnail-image{
-        width: 50px;
-        height: 50px;
+.session-card {
+    padding: 8px 6px;
+    border-radius: 10px;
+    .thumbnail-image {
+        width: 57px;
+        height: 57px;
         border-radius: 50%;
     }
-    }
-    .status-badge{
-        background: var(--ion-color-primary);
+    .status-badge {
+        background: var(--green);
         min-width: 60px;
+        height: 16px;
         color: var(--white);
-        padding: 2px;
+        padding: 1px;
         position: absolute;
         right: 0px;
         top: 0px;
-        ion-icon{
-            font-size: 10px;
-            padding: 0px 5px;
-        }
+        border-bottom-left-radius: 10px;
+        font-size: 10px;
     }
-    h5{
+    h5 {
         margin-bottom: 5px;
         margin-top: 0px;
         font-size: 16px;
-        color:var(--black);
     }
-    p{
+    p {
         margin: 6px 0px 0px 0px;
     }
-  .session-actions{
-    display: flex;
-    justify-content: flex-end;
-  }
 }
-.session-enroll{
-    margin-top: -15px;
-    color: var(--ion-color-primary);
-    }
+.text-align {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: rgb(41, 41, 41);
+}
+.margin-btm-10 {
+    margin-bottom: 10px;
+}
 
-.text-align{
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-    width: 80%;
-}  
-.ellipsis{
-    overflow: hidden;
-    text-overflow:ellipsis;
-    font-size: small;
-    white-space: nowrap;
+.button{
+    --border-radius: 10px;
+    flex:1;
 }
-.margin-btm-10{
-    margin-bottom: 10px;  
+ion-icon{
+    font-size: 20px;
+    color: black;
+}
+.date-label{
+    margin-left: 8px;
+    font-size: 12px;
+    color: rgb(41, 41, 41);
+}
+.header{
+    margin-top: 10px;
 }

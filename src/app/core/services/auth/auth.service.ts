@@ -10,6 +10,7 @@ import { CommonRoutes } from 'src/global.routes';
 import { ToastService } from '../toast.service';
 import { UserService } from '../user/user.service';
 import { ProfileService } from '../profile/profile.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +24,8 @@ export class AuthService {
     private router: Router,
     private toast: ToastService,
     private userService: UserService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private translate: TranslateService
   ) { }
 
   async createAccount(formData) {
@@ -51,7 +53,7 @@ export class AuthService {
     };
     try {
       const data: any = await this.httpService.post(config);
-      let userData = this.setUserInLocal(data);
+      let userData = await this.setUserInLocal(data);
       this.loaderService.stopLoader();
       return userData
     }
@@ -62,17 +64,21 @@ export class AuthService {
   }
   async setUserInLocal(data) {
     const result = _.pick(data.result, ['refresh_token', 'access_token']);
-      if (!result.access_token) { throw Error(); };
-      this.userService.token = result;
-      await this.localStorage.setLocalData(localKeys.TOKEN, result);
-      const userData = await this.profileService.getProfileDetailsAPI();
-      if (!userData) {
-        this.localStorage.delete(localKeys.TOKEN);
-        throw Error();
-      }
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
-      this.userService.userEvent.next(userData);
-      return userData;
+    if (!result.access_token) { throw Error(); };
+    this.userService.token = result;
+    await this.localStorage.setLocalData(localKeys.TOKEN, result);
+    const userData = await this.profileService.getProfileDetailsAPI();
+    if (!userData) {
+      this.localStorage.delete(localKeys.TOKEN);
+      throw Error();
+    }
+    await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
+    if(userData.preferredLanguage){
+      await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, userData.preferredLanguage);
+      this.translate.use(userData.preferredLanguage)
+    }
+    this.userService.userEvent.next(userData);
+    return userData;
   }
 
   async logoutAccount(skipApiCall?: boolean) {

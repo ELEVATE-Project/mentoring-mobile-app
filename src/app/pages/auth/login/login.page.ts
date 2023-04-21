@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthService } from 'src/app/core/services';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
+import { AuthService, LocalStorageService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -19,7 +20,7 @@ export class LoginPage implements OnInit {
         name: 'email',
         label: 'Email',
         value: '',
-        class: 'ion-margin',
+        class: 'ion-no-margin',
         type: 'text',
         position: 'floating',
         errorMessage:'Please enter registered email ID',
@@ -53,7 +54,10 @@ export class LoginPage implements OnInit {
     signupButton: true
   };
   labels = ["LOGIN_TO_MENTOR_ED"];
-  constructor(private authService: AuthService, private router: Router, private menuCtrl: MenuController, private activatedRoute: ActivatedRoute, private translateService: TranslateService) {
+  mentorId: any;
+  constructor(private authService: AuthService, private router: Router,
+              private menuCtrl: MenuController, private activatedRoute: ActivatedRoute,
+              private translateService: TranslateService, private localStorage: LocalStorageService) {
     this.menuCtrl.enable(false);
   }
 
@@ -76,6 +80,7 @@ export class LoginPage implements OnInit {
   ionViewWillEnter() {
     this.activatedRoute.queryParams.subscribe(params => {
       this.id = params.sessionId ? params.sessionId : this.id;
+      this.mentorId = params.mentorId? params.mentorId:this.mentorId;
     });
   }
 
@@ -86,6 +91,8 @@ export class LoginPage implements OnInit {
       if (this.userDetails !== null) {
         if (this.id) {
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
+        }else if(this.mentorId){
+          this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`], { replaceUrl: true });
         } else {
           this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
         }

@@ -18,9 +18,12 @@ import {
   GenericHeaderComponent,
   FilterComponent,
   ExpandableCardComponent,
-  PersonaSelectionCardComponent
+  PersonaSelectionCardComponent,
+  GenericProfileHeaderComponent
 } from './components/index';
 import { SafeHtmlPipe } from './safe-html.pipe';
+import { MentorCardComponent } from './components/mentor-card/mentor-card.component';
+import { NumberOnlyDirective } from './directive/onlyNumbers';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,10 @@ import { SafeHtmlPipe } from './safe-html.pipe';
     FilterComponent,
     ExpandableCardComponent,
     SafeHtmlPipe,
-    PersonaSelectionCardComponent
+    PersonaSelectionCardComponent,
+    GenericProfileHeaderComponent,
+    MentorCardComponent,
+    NumberOnlyDirective
   ],
   imports: [
     CommonModule,
@@ -64,7 +70,9 @@ import { SafeHtmlPipe } from './safe-html.pipe';
     FilterComponent,
     ExpandableCardComponent,
     SafeHtmlPipe,
-    PersonaSelectionCardComponent
+    PersonaSelectionCardComponent,
+    GenericProfileHeaderComponent,
+    MentorCardComponent
   ],
 })
 export class SharedModule {}

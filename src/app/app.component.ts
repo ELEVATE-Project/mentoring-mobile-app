@@ -3,12 +3,16 @@ import { AlertController, MenuController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
 import * as _ from 'lodash-es';
-import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService } from './core/services';
+import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService} from './core/services';
 import { CommonRoutes } from 'src/global.routes';
-import { Router } from '@angular/router';
+import { Router} from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
-import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { Location } from '@angular/common';
+import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -16,15 +20,16 @@ import { Location } from '@angular/common';
 })
 export class AppComponent {
  user;
-  public appPages = [
-    { title: 'CREATED_SESSIONS', url: `${CommonRoutes.CREATED_BY_ME}`, icon: 'person-add' },
-  ];
+ public appPages = [
+  { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP},
+  { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ},
+  { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
+  { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
+];
 
-  public mentorMenu=[
-    'CREATED_SESSIONS',
-  ]
 
   isMentor:boolean
+  showAlertBox = false;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -35,15 +40,17 @@ export class AppComponent {
     private db:DbService,
     private router: Router,
     private network:NetworkService,
+    private deeplinks: Deeplinks,
     private authService:AuthService,
     private profile: ProfileService,
     private zone:NgZone,
-    private deeplinks: Deeplinks,
     private _location: Location,
     private alert: AlertController,
+    private screenOrientation: ScreenOrientation,
   ) {
     this.initializeApp();
     this.router.navigate(["/"]);
+    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
   }
   subscribeBackButton() {
     this.platform.backButton.subscribeWithPriority(10,async () => {
@@ -58,11 +65,13 @@ export class AppComponent {
             {
               text: texts['CANCEL'],
               role: 'cancel',
+              cssClass: "alert-button",
               handler: () => { }
             },
             {
               text: texts['CONFIRM'],
               role: 'confirm',
+              cssClass: "alert-button",
               handler: () => { 
                 navigator['app'].exitApp();
               }
@@ -78,11 +87,11 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.network.netWorkCheck();
       setTimeout(async ()=>{
         this.languageSetting();
       },0)
       this.db.init();
-      this.network.netWorkCheck();
       setTimeout(async ()=>{
         const userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
         if(userDetails){
@@ -99,14 +108,15 @@ export class AppComponent {
           this.user = data;
         }
       })
-      this.deeplinks.route({
-        '/sessions/details/:id': '',
-      }).subscribe(match=>{
-        this.zone.run(()=>{
-          this.router.navigateByUrl(match.$link.path);
-        })  
-      })
-
+      App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+        this.zone.run(() => {
+          const domain = environment.deepLinkUrl
+          const slug = event.url.split(domain).pop();
+          if (slug) {
+            this.router.navigateByUrl(slug);
+          }
+        });
+    });
     });
     this.subscribeBackButton();
   }
@@ -138,8 +148,10 @@ export class AppComponent {
       cancel:'CANCEL',
       submit:'LOGOUT'
     }
-    this.utilService.alertPopup(msg).then(data => {
+    this.utilService.alertPopup(msg).then(async (data) => {
       if(data){
+        await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, "en");
+        this.translate.use("en")
         this.authService.logoutAccount();
       }
     }).catch(error => {})
@@ -154,6 +166,25 @@ export class AppComponent {
   goToProfilePage(){
     this.menuCtrl.close();
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+  }
+
+  async menuItemAction(menu) {
+    switch (menu.title) {
+      case 'LANGUAGE': {
+        this.alert.create({
+          
+        })
+        break;
+      }
+      case 'CREATED_BY_ME': {
+        this.router.navigate([`${CommonRoutes.CREATED_BY_ME}`]);
+        break;
+      }
+    }
+  }
+
+  async showAlert(alertData){
+    
   }
 
 }

@@ -1,17 +1,29 @@
 <form [formGroup]="myForm" *ngIf="showForm">
-  <div *ngFor="let control of jsonFormData?.controls">
+  <div class="fields" *ngFor="let control of jsonFormData?.controls">
     <ion-item
+      class="ion-no-padding"
       [class]="control.class"
       [ngClass]="{
         'form-invalid':
           myForm.get(control.name).touched && myForm.get(control.name).invalid
       }"
     >
-      <ion-label
-        *ngIf="control.label !== '' && !['rating'].includes(control.type)"
-        [position]="control.position"
+    <ion-label
+        position="stacked"
+        *ngIf="control.label !== '' && !['rating'].includes(control.type) && !['chip'].includes(control.type)" 
         >{{ control.label }} <span *ngIf="control?.validators['required']==true" class="star-icon-red">*</span></ion-label
       >
+      <ion-input
+        *ngIf="
+          control.type==='text' && control?.isNumberOnly
+        "
+        [type]="control.type"
+        [formControlName]="control.name"
+        [value]="control.value"
+        [maxlength]="control?.validators?.maxLength"
+        (keydown)="removeSpace($event)"
+        numberOnly
+      ></ion-input>
       <ion-input
         *ngIf="
           [
@@ -23,17 +35,21 @@
             'tel',
             'url',
             'secretCode'
-          ].includes(control.type)
+          ].includes(control.type) && !control?.isNumberOnly
         "
         [type]="control.type"
         [formControlName]="control.name"
         [value]="control.value"
+        [maxlength]="control?.validators?.maxLength"
+        (keydown)="removeSpace($event)"
       ></ion-input>
-      <ion-textarea
+      <textarea
         *ngIf="control.type === 'textarea'"
         [formControlName]="control.name"
         [value]="control.value"
-      ></ion-textarea>
+        [maxlength]="control?.validators?.maxLength"
+        (keydown)="removeSpace($event)"
+      ></textarea>
       <ion-checkbox
         *ngIf="control.type === 'checkbox'"
         [formControlName]="control.name"
@@ -59,38 +75,21 @@
       </ion-range>
       <ion-input
         *ngIf="control.type === 'date'"
-        [value]="control.value | date: 'short'"
-        [id]="control?.name"
-        (ionChange)="onDateChange(control)"
+        type="datetime-local"
         [formControlName]="control.name"
-        (click)="isDepended(control)"
+        [value]="control.value"
+        [min]="(control.name === dependedChild)?dependedChildDate:currentDate"
+        [max]="(dependedParentDate && control.name === dependedParent)?dependedParentDate:maxDate"
+        (ionChange)="dateSelected($event, control)"
       ></ion-input>
-      <ion-modal *ngIf="control.type === 'date'" class="stack-modal" [trigger]="control?.name">
-        <ng-template>
-            <ion-buttons class="close-button">
-              <ion-button shape="round" (click)="confirm()" color="light"><ion-icon name="close-outline" size="large"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-            <ion-datetime
-                #popoverCalendar
-                presentation="date-time"
-                hourCycle="h12"
-                [min]="date"
-                [max]="maxDate"
-                [value]="(control.value || currentDate)"
-                (ionChange)="control.value = format(popoverCalendar?.value)">
-              <ion-buttons slot="buttons">
-                <ion-button (click)="confirm()">{{"CONFIRM"|translate}}</ion-button>
-              </ion-buttons>
-            </ion-datetime>
-        </ng-template>
-      </ion-modal>
       <ion-select
         *ngIf="control.type === 'select'"
         [multiple]="control.multiple"
         [formControlName]="control.name"
         [compareWith]="compareWith"
         [value]="control.value[0]"
+        [okText]="'OK' | translate"
+        [cancelText]="'CANCEL' | translate"
       >
         <ion-select-option
           *ngFor="let option of control.options"
@@ -101,7 +100,7 @@
       <app-input-chip
         *ngIf="control.type === 'chip'"
         [formControlName]="control.name"
-        [label]="control.label"
+        [label]="control.alertLabel?control.alertLabel:control.label"
         [chips]="control.options"
         [showSelectAll]="control.showSelectAll"
         [showAddOption]="control.showAddOption"

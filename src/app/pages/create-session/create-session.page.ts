@@ -25,6 +25,7 @@ import { FormService } from 'src/app/core/services/form/form.service';
   styleUrls: ['./create-session.page.scss'],
 })
 export class CreateSessionPage implements OnInit {
+  lastUploadedImage: boolean;
   private win: any = window;
   @ViewChild('form1') form1: DynamicFormComponent;
   id: any = null;
@@ -33,7 +34,7 @@ export class CreateSessionPage implements OnInit {
   public headerConfig: any = {
     // menu: true,
     backButton: {
-      label: 'Create Session',
+      label: 'CREATE_SESSION',
     },
     notification: false,
   };
@@ -57,7 +58,8 @@ export class CreateSessionPage implements OnInit {
     private translate: TranslateService,
     private alert: AlertController,
     private form: FormService,
-    private changeDetRef: ChangeDetectorRef
+    private changeDetRef: ChangeDetectorRef,
+    private router: Router
   ) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.id = params?.get('id');
@@ -71,8 +73,8 @@ export class CreateSessionPage implements OnInit {
       let response = await this.sessionService.getSessionDetailsAPI(this.id);
       this.profileImageData.image = response.image;
       this.profileImageData.isUploaded = true;
-      response.startDate = moment.unix(response.startDate).format();
-      response.endDate = moment.unix(response.endDate).format();
+      response.startDate = moment.unix(response.startDate).format("YYYY-MM-DDTHH:mm");
+      response.endDate = moment.unix(response.endDate).format("YYYY-MM-DDTHH:mm");
       this.preFillData(response);
     } else {
       this.showForm = true;
@@ -93,10 +95,12 @@ export class CreateSessionPage implements OnInit {
         buttons: [
           {
             text: texts['EXIT'],
+            cssClass: "alert-button",
             handler: () => { }
           },
           {
             text: texts['BACK'],
+            cssClass: "alert-button",
             role: 'cancel',
             handler: () => { }
           }
@@ -133,7 +137,10 @@ export class CreateSessionPage implements OnInit {
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
         if (result) {
-          this.location.back()
+          this.id ? this.location.back() : this.router.navigate([`${CommonRoutes.SESSIONS_DETAILS}/`+result._id],{replaceUrl:true})
+        } else {
+          this.profileImageData.image = this.lastUploadedImage;
+          this.profileImageData.isUploaded = false;
         }
       }
     } else {
@@ -181,8 +188,9 @@ export class CreateSessionPage implements OnInit {
 
   imageUploadEvent(event) {
     this.localImage = event;
-    this.profileImageData.image = this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
+    this.profileImageData.image = this.lastUploadedImage =  this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
     this.profileImageData.isUploaded = false;
+  
   }
 
   imageRemoveEvent(event){

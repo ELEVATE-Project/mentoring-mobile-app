@@ -1,29 +1,32 @@
 .sub-menu-toolbar{
     height: 100px;
-    margin-top: 20px;
+    margin: 50px 5px 0px 10px;
     background-color: var(--white);
     color:--dark-gray;
+    display: flex;
 }
 .menu-css{
     height: 100%;
-    background:var(--light-gray) !important;
-    border-radius: 0px 35px 0 0;
-    box-shadow: 2px 8px 13px 2px var(--black);
-    -moz-box-shadow:2px 8px 13px 2px var(--black);
-    -webkit-box-shadow: 2px 8px 13px 2px var(--black);
-    margin-top: 8PX;
+    margin-left: 20px;
 }
 
 .sub-menu-list{
-    background: var(--light-gray) !important;
     border-radius: 0px 35px 0 0;
+    margin-top: 20px;
     ion-item{
-        padding: 14px 6px 6px 6px;
+        padding: 5px 3px 3px 3px;
         --background:rgba(0,0,0,0) !important;
-        border-bottom: .5px solid var(--gray);
         font-size: 16px;
         color: var(--dark-gray);
+        ion-icon{
+            color: var(--ion-color-primary);
+        }
     }
+}
+.sub-menu-list-label{
+    color: rgb(0, 0, 0);
+    font-size: larger;
+    font-weight: bolder;
 }
 
 .side-menu-footer{
@@ -55,6 +58,39 @@
 }
 .profile-image{
     border-radius: 50%;
-    height: 25px;
-    width: 36px;
+    width: 90px;
+    height: 90px;
+    border: solid 2px var(--ion-color-primary);
+    margin: 0px 20px 0px 10px;
+}
+.no-image-icon{
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    margin: 0px 20px 0px 10px;
+}
+.usr-div{
+    display: grid;
+    height: fit-content;
+    margin-top: 20px;
+}
+.usr-div a {
+    background-color: transparent;
+    color: var(--ion-color-primary, #3880ff);
+    font-weight: bolder;
+    font-size: small;
+    letter-spacing: 1pt;
+
+}
+.username {
+    color: black;
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: larger;
+    font-weight: bolder;
+}
+.side-menu-icon{
+    font-size: xx-large;
 }

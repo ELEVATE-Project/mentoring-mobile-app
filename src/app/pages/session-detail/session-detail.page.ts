@@ -17,6 +17,9 @@ export class SessionDetailPage implements OnInit {
   showEditButton: any;
   isCreator: boolean=false;
   userDetails: any;
+  isEnabled: boolean;
+  startDate: any;
+  endDate: any;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -33,49 +36,27 @@ export class SessionDetailPage implements OnInit {
 
   public headerConfig: any = {
     backButton: true,
-    label: "SESSIONS_DETAILS",
-    share: true
+    label: "",
+    share: false
   };
-  sessionHeaderData: any = {
-    name: "",
-    region: null,
-    join_button: true,
-    image: '',
-    mentorName:''
-  }
   detailData = {
     form: [
       {
-        title: 'Session Details',
-        key: 'description',
-      },
-      {
-        title: 'Recommended For',
+        title: 'RECOMMENDED_FOR',
         key: 'recommendedFor',
       },
       {
-        title: "Mentor Name",
-        key:'mentorName'
-      },
-      {
-        title: 'Medium',
-        key: 'medium',
-      },
-      {
-        title: 'Starting Time',
-        key: 'startDate',
-      },
-      {
-        title: "Duration",
-        key: "duration"
-      },
-      {
-        title: "Categories",
+        title: "CATEGORIES",
         key: "categories"
       },
+      {
+        title: 'MEDIUM',
+        key: 'medium',
+      }
     ],
     data: {
-      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+      image: [],
+      description: '',
       recommendedFor: [
         {
           "value": "Teachers",
@@ -118,41 +99,50 @@ export class SessionDetailPage implements OnInit {
           "label": "Professional Development"
         },
       ],
-      duration: { hours: null, minutes: null },
-      startDate: null,
       mentorName: null,
       status:null,
       isEnrolled:null,
+      title:"",
+      startDate:""
     },
   };
 
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     if (response) {
-      console.log(response)
+      this.setPageHeader(response);
+      let readableStartDate = moment.unix(response.startDate).toLocaleString();
+      let currentTimeInSeconds=Math.floor(Date.now()/1000);
+      this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='live')?true:false;
+      this.detailData.data = Object.assign({}, response);
+      this.detailData.data.startDate = readableStartDate;
+      this.startDate = (response.startDate>0)?moment.unix(response.startDate).toLocaleString():this.startDate;
+      this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
+    }
+  }
+
+  setPageHeader(response) {
+    let currentTimeInSeconds=Math.floor(Date.now()/1000);
+    this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='live')?true:false;
+      this.headerConfig.share = response.status=="completed"?false:true;
       this.id = response._id;
       if(this.userDetails){
         this.isCreator = this.userDetails._id == response.userId ? true : false;
       }
-      let startDate = moment.unix(response.startDate);
-      let endDate = moment.unix(response.endDate);
-      let readableStartDate = startDate.toLocaleString();
-      let hours = endDate.diff(startDate, 'hours');
-      startDate=startDate.add(hours, 'hours');
-      let minutes = endDate.diff(startDate, 'minutes');
-      response.duration = { hours: hours, minutes: minutes };
-      this.sessionHeaderData.name = response.title;
-      this.sessionHeaderData.image = response.image;
-      this.sessionHeaderData.mentorName = response.mentorName;
-      this.detailData.data = Object.assign({}, response);
-      this.detailData.data.startDate = readableStartDate;
-    }
+      this.headerConfig.edit = (this.isCreator && response.status=="published")?true:null;
+      this.headerConfig.delete = (this.isCreator && response.status=="published" && !this.isEnabled)?true:null;
   }
 
   action(event) {
     switch (event) {
       case 'share':
         this.share();
+        break;
+      case 'edit':
+        this.editSession()
+        break;
+      case 'delete':
+        this.deleteSession()
         break;
     }
   }
@@ -161,17 +151,17 @@ export class SessionDetailPage implements OnInit {
     if(this.userDetails){
       let sharableLink = await this.sessionService.getShareSessionId(this.id);
       if (sharableLink.shareLink) {
-        let url = `/${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
+        let url = `/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
         let link = await this.utilService.getDeepLink(url);
         this.detailData.data.mentorName = this.detailData.data.mentorName.trim();
-        this.sessionHeaderData.name = this.sessionHeaderData.name.trim();
-        let params = { link: link, subject: this.sessionHeaderData?.title, text: "Join an expert session on " + `${this.sessionHeaderData.name} ` + "hosted by " + `${this.detailData.data.mentorName}` + " using the link" }
+        this.detailData.data.title = this.detailData.data.title.trim();
+        let params = { link: link, subject: this.detailData.data.title, text: "Join an expert session on " + `${this.detailData.data.title} ` + "hosted by " + `${this.detailData.data.mentorName}` + " using the link" }
         this.utilService.shareLink(params);
       } else {
         this.toast.showToast("No link generated!!!", "danger");
       }
     } else {
-      this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id}});
+      this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id, isMentor:false}});
     }
   }
 
@@ -179,12 +169,12 @@ export class SessionDetailPage implements OnInit {
     this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id } });
   }
 
-  onDelete() {
+  deleteSession() {
     let msg = {
       header: 'DELETE_SESSION',
       message: 'DELETE_CONFIRM_MSG',
-      cancel: "Don't delete",
-      submit: 'Yes Delete'
+      cancel: "DON'T_DELETE",
+      submit: 'YES_DELETE'
     }
     this.utilService.alertPopup(msg).then(async data => {
       if (data) {

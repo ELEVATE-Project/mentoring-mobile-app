@@ -1,0 +1,34 @@
+ion-card{
+    border-radius: 7px;
+    margin: 20px;
+    ion-card-content{
+        padding: 6px;
+    }
+}
+.card-wrapper{
+    margin-top: 5%;
+}
+.card-header-config{
+    font-size: 14px;
+    font-weight: bold;
+    color: var( --grey-medium)
+}
+.card-value-config{
+    font-size: 18px;
+    font-weight: bold;
+    color: var( --grey-medium)
+}
+.segment-lbl{
+    color: black;
+    font-weight: bold;
+    text-transform: none;
+}
+ion-segment-button{
+    width: 50%;
+}
+.no-details-message{
+    color: red;
+    font-size:larger;
+    text-align: center;
+    margin: 20px;
+}

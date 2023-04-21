@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { IonContent } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import {
   HttpService,
@@ -14,6 +15,7 @@ import { CommonRoutes } from 'src/global.routes';
   styleUrls: ['./mentor-directory.page.scss'],
 })
 export class MentorDirectoryPage implements OnInit {
+  @ViewChild(IonContent) content: IonContent;
   page = 1; //todo: Enable pagenation
   limit = 100;
   searchText: string = '';
@@ -40,12 +42,17 @@ export class MentorDirectoryPage implements OnInit {
     this.mentors = [];
     this.searchText = '';
     this.getMentors();
+    this.gotToTop();
+  }
+
+  gotToTop() {
+    this.content.scrollToTop(1000);
   }
 
   async getMentors() {
     await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.MENTORS_DIRECTORY + this.page + '&limit=' + this.limit + '&search=' + this.searchText,
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText),
       payload: {}
     };
     try {

@@ -1,0 +1,24 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<ion-content class="ion-padding mx-10">
+    <div class="section">
+        <p class="header-label">{{"CHOOSE_YOUR_LANGUAGE"|translate}}</p>
+        <ion-grid>
+            <ion-row>
+                <ion-col size="6" *ngFor="let language of languagesList">
+                    <ion-card 
+                        [ngClass]="{'card-selected': language.value==selectedLanguage , 'card': language.value!=selectedLanguage}" 
+                        class="d-flex flex-justify-center flex-align-items-center"
+                        (click)="onCardClick(language)">
+                        <ion-card-content
+                            [ngClass]="{'text-white': language.value==selectedLanguage , 'text-black': language.value!=selectedLanguage}">
+                            {{language?.label | translate}}
+                        </ion-card-content>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+</ion-content>
+<ion-footer class="ion-no-border">
+    <ion-button expand="full" (click)="onSubmit()">{{"SUBMIT" | translate}}</ion-button>
+</ion-footer>

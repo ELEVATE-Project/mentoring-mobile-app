@@ -1,0 +1,21 @@
+<ion-card (click)="onCardClick(data)" class="session-card">
+  <ion-row>
+    <ion-col size="3" class="card-avatar">
+      <img *ngIf="!data?.image || data?.image==''; else Img; let image" class="thumbnail-image"
+        src="../../../../assets/prof-img/user.png" />
+      <ng-template #Img>
+        <img class="thumbnail-image" src="{{data?.image}}" />
+      </ng-template>
+    </ion-col>
+    <ion-col size="9">
+      <h5 class="text-align">{{data?.name || data?.title}}</h5>
+      <div class="margin-btm-10" *ngIf="data?.areasOfExpertise?.length">
+        <span class="ion-margin-top" *ngFor="let label of data?.areasOfExpertise;  let isLast=last">
+          <ion-label>{{label?.label}}{{isLast ? '' : ', '}} </ion-label>
+        </span>
+      </div>
+      <p class="text-align" *ngIf="data?.description">{{data?.description}}</p>
+    </ion-col>
+  </ion-row>
+  <ion-label class="card-button" position="fixed">{{"VIEW_PROFILE"|translate}} <ion-icon class="icon-position" name="caret-forward"></ion-icon></ion-label>
+</ion-card>

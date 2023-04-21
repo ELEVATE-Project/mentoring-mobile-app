@@ -34,7 +34,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   public headerConfig: any = {
     // menu: true,
     backButton: {
-      label: 'Profile Details',
+      label: 'PROFILE_DETAILS',
     },
     notification: false,
   };
@@ -78,11 +78,13 @@ export class EditProfilePage implements OnInit, isDeactivatable {
         buttons: [
           {
             text: texts['CANCEL'],
+            cssClass: "alert-button",
             handler: () => { }
           },
           {
             text: texts['OK'],
             role: 'cancel',
+            cssClass: "alert-button",
             handler: () => { }
           }
         ]

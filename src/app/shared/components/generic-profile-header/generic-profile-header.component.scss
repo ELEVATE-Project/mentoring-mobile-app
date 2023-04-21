@@ -1,0 +1,40 @@
+img{    
+    border-radius:50%;
+    width: 95px;
+    height: 95px;
+}
+ion-icon {
+    color: white;
+}
+ion-col{
+    display: block;
+}
+.name{
+    font-weight: bold;
+    font-size:20px;
+    letter-spacing: .5px;
+    margin-left: 2px;
+}
+.details-wrapper{
+    margin: 22px 0px 0px 0px;
+    padding-left: 8px;
+}
+.location{
+    color: rgb(172, 175, 175);
+    font-size: 14px;
+    margin-left: 2px;
+}
+ion-button{
+    border-width: thick !important;
+    color: white;
+    margin: 30px 20px 0px 0px;
+    
+}
+.role{
+    color: rgb(221, 224, 224);
+    font-size:20px;
+    letter-spacing: .5px;
+}
+.content-wrapper{
+    padding: 16px 16px 16px 0px;
+}

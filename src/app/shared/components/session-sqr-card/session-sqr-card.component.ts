@@ -10,24 +10,8 @@ import { CommonRoutes } from 'src/global.routes';
 })
 export class SessionSqrCardComponent implements OnInit {
 
-  @Input() data;
-  @Output() onClickEvent = new EventEmitter();
   constructor(private router: Router) { }
 
-  ngOnInit() {
-    let startDate = moment.unix(this.data.startDate);
-    this.data.startDate = startDate.toLocaleString();
-  }
+  ngOnInit() {}
 
-  action(data,type){
-    let event ={
-      data : data,
-      type:type
-    }
-    this.onClickEvent.emit(event);
-  }
-
-  onCardClick() {
-    this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.data?.sessionId || this.data?._id}`]);
-  }
 }

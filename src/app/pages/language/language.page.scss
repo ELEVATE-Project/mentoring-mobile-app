@@ -1,0 +1,31 @@
+.section{
+    margin-top: 30px;
+}
+.header-label{
+    font-size: 17px;
+    font-weight: 500;
+}
+ion-card{
+    margin: 10px 3px;
+    height: 120px;
+    border-radius: 10px;
+}
+ion-card-content{
+    font-weight: bold;
+}
+.card-selected{
+    background-color: var(--ion-color-primary);
+}
+.card{
+    background-color: var(--white);
+}
+.text-white{
+    color: var(--white);
+}
+.text-black{
+    color: var(--black);
+}
+ion-button{
+    height: 50px;
+    font-weight: bold;
+}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Action } from 'rxjs/internal/scheduler/Action';
@@ -54,12 +54,13 @@ export class UtilService {
           {
             text: texts[msg.cancel],
             role: 'cancel',
-            cssClass: 'secondary',
+            cssClass: 'alert-button-white',
             handler: (blah) => {
               resolve(false);
             }
           }, {
             text: texts[msg.submit],
+            cssClass: 'alert-button-red',
             handler: () => {
               resolve(true);
             }

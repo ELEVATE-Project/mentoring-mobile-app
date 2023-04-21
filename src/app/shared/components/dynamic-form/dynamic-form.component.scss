@@ -15,11 +15,6 @@ ion-item {
   ion-textarea {
     caret-color: black !important;
   }
-
-  ion-label {
-    font-weight: bold;
-    color: var(--grey-medium);
-  }
 }
 :host {
   .item-interactive.ion-invalid {
@@ -30,6 +25,13 @@ ion-item {
   }
 }
 
+ion-label {
+  font-weight: bold;
+  color: var(--grey-medium);
+  font-size: 18px !important;
+  margin-bottom: 10px;
+}
+
 .form-invalid {
   border-bottom: 1.9px solid var(--highlight-color-invalid);
 }
@@ -37,6 +39,13 @@ ion-item {
 .icon {
   position: relative;
   top: 42%;
+}
+
+.label-invalid{
+  color: var(--red);
+  font-weight: bold;
+  font-size: 18px !important;
+  margin-bottom: 10px;
 }
 
 .error-msg {
@@ -50,4 +59,13 @@ ion-item {
   align-self:flex-end;
   margin-right: 8px;
   margin-bottom: 10px;
+}
+.fields{
+  margin-bottom: 5px;
+}
+textarea{
+  width: 100%;
+  border: none;
+  margin-top: 10px;
+  outline: none;
 }

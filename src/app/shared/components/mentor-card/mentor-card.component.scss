@@ -1,0 +1,40 @@
+.session-card{
+    padding: 8px 6px;
+    border-radius: 10px;
+    .card-avatar{
+    margin: auto 0px 3px;
+    .thumbnail-image{
+        width: 57px;
+        height: 57px;
+        border-radius: 50%;
+    }
+    }
+}
+h5{
+    margin-bottom: 5px;
+    margin-top: 0px;
+    font-size: 16px;
+}
+p{
+    margin: 6px 0px 0px 0px;
+}
+.session-actions{
+display: flex;
+justify-content: flex-end;
+}
+.text-align{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    color: rgb(41, 41, 41);
+}  
+.margin-btm-10{
+    margin-bottom: 10px;  
+}
+.card-button{
+    color: var(--ion-color-primary);
+    float: right;
+}
+.icon-position{
+    vertical-align: middle;
+}

@@ -1,10 +1,39 @@
-<app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
-<ion-content class="ion-padding">
-  <div>
-    <app-profile-image [profileImageData]='detailData.data'></app-profile-image>
-    <app-generic-details [sessionData]='detailData'></app-generic-details>
-  </div>
-</ion-content>
+<app-page-header [config]="headerConfig"></app-page-header>
+<app-generic-profile-header [headerData]='detailData.data' [buttonConfig]="buttonConfig" [showRole]="false">
+</app-generic-profile-header>
+<div>
+  <ion-card class="card-wrapper">
+    <ion-card-content>
+      <ion-row>
+        <ion-col class="d-flex flex-justify-center card-header-config">{{"SESSIONS_CONDUCTED"|translate}}</ion-col>
+        <ion-col class="d-flex flex-justify-center card-header-config">{{"RATING"|translate}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="d-flex flex-justify-center card-value-config">{{detailData?.data?.sessionsHosted}}</ion-col>
+        <ion-col class="d-flex flex-justify-center card-value-config"><app-star-rating [numberOfStars]="5" [rate]="detailData?.data?.rating?.average" [isDisabled]="true"></app-star-rating></ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+  <ion-segment [value]="segmentValue" (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="about">
+      <ion-label class="segment-lbl">{{"ABOUT"|translate}}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="upcoming">
+      <ion-label class="segment-lbl">{{"UPCOMING_SESSIONS"|translate}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</div>
+  <ion-content>
+    <div [ngSwitch]="segmentValue">
+      <app-generic-details *ngSwitchCase="'about'" [sessionData]='detailData'></app-generic-details>
+      <ion-list *ngSwitchCase="'upcoming'">
+        <div *ngIf="!upcomingSessions?.length">
+          <p class="no-details-message">{{ "NO_UPCOMING_SESSIONS" | translate }}</p>
+        </div>
+        <app-session-card *ngFor="let data of upcomingSessions" [data]="data" (onClickEvent)="onAction($event)"></app-session-card>
+      </ion-list>
+    </div>
+  </ion-content>
 <ion-footer class="ion-no-border">
   <ion-button (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>
 </ion-footer>

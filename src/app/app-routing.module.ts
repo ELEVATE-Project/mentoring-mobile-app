@@ -40,12 +40,28 @@ const routes: Routes = [
     loadChildren: () => import('./pages/home-search/home-search.module').then( m => m.HomeSearchPageModule)
   },
   {
-    path: `${CommonRoutes.MENTOR_DETAILS}/:id`,
+    path: CommonRoutes.MENTOR_DETAILS,
     loadChildren: () => import('./pages/mentor-details/mentor-details.module').then( m => m.MentorDetailsPageModule)
   },
   {
     path: CommonRoutes.TERMS_AND_CONDITIONS,
     loadChildren: () => import('./pages/terms-and-conditions/terms-and-conditions.module').then( m => m.TermsAndConditionsPageModule)
+  },
+  {
+    path: CommonRoutes.HELP,
+    loadChildren: () => import('./pages/help/help.module').then( m => m.HelpPageModule)
+  },
+  {
+    path: CommonRoutes.FAQ,
+    loadChildren: () => import('./pages/faq/faq.module').then( m => m.FaqPageModule)
+  },
+  {
+    path: CommonRoutes.LANGUAGE,
+    loadChildren: () => import('./pages/language/language.module').then( m => m.LanguagePageModule)
+  },
+  {
+    path: CommonRoutes.HELP_VIDEOS,
+    loadChildren: () => import('./pages/help-video/help-video.module').then( m => m.HelpVideoPageModule)
   }
 
 
