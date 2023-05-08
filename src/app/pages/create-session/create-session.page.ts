@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AttachmentService, LoaderService, ToastService } from 'src/app/core/services';
 import { HttpService } from 'src/app/core/services/http/http.service';
@@ -16,7 +16,7 @@ import { File } from "@ionic-native/file/ngx";
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
-import { CREATE_SESSION_FORM } from 'src/app/core/constants/formConstant';
+import { CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 
 @Component({
@@ -41,9 +41,26 @@ export class CreateSessionPage implements OnInit {
   profileImageData: any = {
     type: 'session'
   }
+  platformConfig: any = [
+    {
+      name: "Create session",
+      icon: "pencil-sharp",
+      form: {
+        controls : []
+      }
+    },
+    {
+      name: "Meeting platform",
+      icon: "add-circle-outline",
+      form: {
+        controls: []
+      }
+    }
+  ]
   public formData: JsonFormData;
   showForm: boolean = false;
   isSubmited: boolean;
+  type: any = "default";
   constructor(
     private http: HttpClient,
     private sessionService: SessionService,
@@ -198,5 +215,11 @@ export class CreateSessionPage implements OnInit {
     this.form1.myForm.value.image ='';
     this.form1.myForm.markAsDirty();
     this.profileImageData.isUploaded = true;
+  }
+  segmentChanged(event){
+    this.type = event.target.value;
+  }
+  isValid(event){
+    this.isSubmited = event;
   }
 }

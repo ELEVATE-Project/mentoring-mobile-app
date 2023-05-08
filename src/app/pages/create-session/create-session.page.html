@@ -1,15 +1,36 @@
 <app-page-header [config]="headerConfig"></app-page-header>
-
-<ion-content class="ion-padding">
-  <app-profile-image *ngIf="showForm" [profileImageData]='profileImageData' [uploadImage]="true" (imageUploadEvent)="imageUploadEvent($event)" (imageRemoveEvent)="imageRemoveEvent($event)"></app-profile-image>
-  <div *ngIf="formData && showForm">
-    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
+<div class="height">
+  <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
+    <ion-segment-button value="default">
+      <ion-label>{{'CREATE_SESSION' | translate}}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="segment"  [disabled]="!isSubmited">
+      <ion-label>{{"MEETING_LINK" | translate}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <div class="height" [ngSwitch]="type">
+    <ion-list class="height" *ngSwitchCase="'default'">
+      <ion-content class="ion-padding">
+        <app-profile-image *ngIf="showForm" [profileImageData]='profileImageData' [uploadImage]="true" (imageUploadEvent)="imageUploadEvent($event)" (imageRemoveEvent)="imageRemoveEvent($event)"></app-profile-image>
+        <div *ngIf="formData && showForm">
+          <app-dynamic-form [jsonFormData]="formData" #form1 (formValid)="isValid($event)"> </app-dynamic-form>
+        </div>
+      </ion-content>
+    </ion-list>
+    <ion-list class="height" *ngSwitchCase="'segment'">
+      <app-meeting-platform [config]="platformConfig"></app-meeting-platform>
+    </ion-list>
   </div>
-</ion-content>
+</div>
+
 <section
     [ngClass]="{'btn-disabled': form1?.myForm.invalid , 'btn-valid':form1?.myForm.valid}"
   >
-  <div class="ion-no-border" submitButton>
-    <ion-button expand="full" (click)="onSubmit()">{{'PUBLISH' | translate}}</ion-button>
+  <div class="ion-no-border" submitButton (click)="type = 'segment'">
+    <ion-button *ngIf="type == 'default'" expand="full" (click)="onSubmit()">{{'PUBLISH' | translate}}</ion-button>
+  </div>
+  <div class="ion-no-border segment" submitButton (click)="type = 'segment'"  *ngIf="type == 'segment'">
+    <ion-button style="width: 50%;" size="default">{{'SUBMIT' | translate}}</ion-button>
+    <ion-button style="width: 50%;" size="default" fill="outline">{{'SEE_IT_LATER' | translate}}</ion-button>
   </div>
 </section>

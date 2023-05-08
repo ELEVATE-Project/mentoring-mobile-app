@@ -1,0 +1,23 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title class="ion-text-center card-title">{{"SELECT_MEETING_PLATFORM" | translate}}</ion-card-title>
+  </ion-card-header>
+ 
+  <ion-card-content>
+    <ion-list>
+      <ion-item>
+        <ion-icon name="videocam" style="padding-right: 10px;"></ion-icon>
+        <ion-select #link class="select" interface="popover" [(ngModel)]="selectedLink" [value]="selectedLink" (ionChange)="clickOptions(meetingPlatforms)" >
+          <ion-select-option *ngFor="let option of meetingPlatforms" [value]="option.name">{{option.name}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-icon class="hint-icon" name="alert-circle"></ion-icon>
+        <ion-label class="hint-label">{{selectedHint}}</ion-label>
+      </ion-item>
+    </ion-list>
+    <div *ngFor="let option of meetingPlatforms">
+      <app-dynamic-form  *ngIf="selectedLink==option.name" [jsonFormData]="option.form"></app-dynamic-form>
+    </div>
+  </ion-card-content>
+</ion-card>

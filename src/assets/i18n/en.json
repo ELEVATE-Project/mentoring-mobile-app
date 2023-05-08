@@ -168,5 +168,9 @@
     "CATEGORIES": "Categories",
     "MEDIUM": "Medium",
     "DON'T_DELETE": "Don't delete",
-    "YES_DELETE": "Yes delete"
+    "YES_DELETE": "Yes delete",
+    "SEE_IT_LATER": "See it later",
+    "SELECT_MEETING_PLATFORM": "Add meeting link",
+    "MEETING_PLATFORM": "Meeting platform",
+    "MEETING_LINK": "Meeting link"
 }

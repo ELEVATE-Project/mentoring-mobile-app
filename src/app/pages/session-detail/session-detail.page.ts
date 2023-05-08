@@ -42,6 +42,10 @@ export class SessionDetailPage implements OnInit {
   detailData = {
     form: [
       {
+        title: "MEETING_PLATFORM",
+        key: "meetingInfo",
+      },
+      {
         title: 'RECOMMENDED_FOR',
         key: 'recommendedFor',
       },
@@ -103,7 +107,8 @@ export class SessionDetailPage implements OnInit {
       status:null,
       isEnrolled:null,
       title:"",
-      startDate:""
+      startDate:"",
+      meetingInfo:""
     },
   };
 
@@ -116,6 +121,7 @@ export class SessionDetailPage implements OnInit {
       this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='live')?true:false;
       this.detailData.data = Object.assign({}, response);
       this.detailData.data.startDate = readableStartDate;
+      this.detailData.data.meetingInfo = response.meetingInfo.platform;
       this.startDate = (response.startDate>0)?moment.unix(response.startDate).toLocaleString():this.startDate;
       this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
     }
