@@ -39,7 +39,8 @@ export class CreateSessionPage implements OnInit {
     notification: false,
   };
   profileImageData: any = {
-    type: 'session'
+    type: 'session',
+    haveValidationError: false
   }
   platformConfig: any = [
     {
@@ -102,7 +103,7 @@ export class CreateSessionPage implements OnInit {
   }
 
   async canPageLeave() {
-    if (!this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
+    if (!this.form1.myForm.pristine || this.profileImageData.haveValidationError) {
       let texts: any;
       this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'BACK']).subscribe(text => {
         texts = text;
@@ -180,6 +181,7 @@ export class CreateSessionPage implements OnInit {
       this.profileImageData.image = data.uploadUrl.destFilePath;
       this.form1.myForm.value.image = [data.uploadUrl.destFilePath];
       this.profileImageData.isUploaded = true;
+      this.profileImageData.haveValidationError = false;
       this.loaderService.stopLoader();
       this.onSubmit();
     }, error => {
@@ -207,7 +209,7 @@ export class CreateSessionPage implements OnInit {
     this.localImage = event;
     this.profileImageData.image = this.lastUploadedImage =  this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
     this.profileImageData.isUploaded = false;
-  
+    this.profileImageData.haveValidationError = true;
   }
 
   imageRemoveEvent(event){
@@ -215,6 +217,7 @@ export class CreateSessionPage implements OnInit {
     this.form1.myForm.value.image ='';
     this.form1.myForm.markAsDirty();
     this.profileImageData.isUploaded = true;
+    this.profileImageData.haveValidationError = false;
   }
   segmentChanged(event){
     this.type = event.target.value;

@@ -35,13 +35,14 @@ export class SessionCardComponent implements OnInit {
   }
  
   setButtonConfig(isCreator: boolean) {
+    let currentTimeInSeconds=Math.floor(Date.now()/1000);
     if(isCreator){
       this.buttonConfig={label:"START",type:"startAction"};
+      this.buttonConfig.isEnabled = ((this.data.startDate-currentTimeInSeconds)<600 || this.data.status=='live')?true:false;
     } else {
       this.buttonConfig=(!isCreator&&this.data.isEnrolled || !isCreator&&this.data.sessionId)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
+      this.buttonConfig.isEnabled = ((this.data.startDate-currentTimeInSeconds)<300 || this.data.status=='live')?true:false;
     }
-    let currentTimeInSeconds=Math.floor(Date.now()/1000);
-    this.buttonConfig.isEnabled = ((this.data.startDate-currentTimeInSeconds)<600 || this.data.status=='live')?true:false;
   }
 
   async checkIfCreator() {
