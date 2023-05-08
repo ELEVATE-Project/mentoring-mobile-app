@@ -21,7 +21,7 @@
         [formControlName]="control.name"
         [value]="control.value"
         [maxlength]="control?.validators?.maxLength"
-        (keydown)="removeSpace($event)"
+        (ionChange)="removeSpace($event)"
         numberOnly
       ></ion-input>
       <ion-input
@@ -41,15 +41,15 @@
         [formControlName]="control.name"
         [value]="control.value"
         [maxlength]="control?.validators?.maxLength"
-        (keydown)="removeSpace($event)"
+        (ionChange)="removeSpace($event)"
       ></ion-input>
-      <textarea
+      <ion-textarea
         *ngIf="control.type === 'textarea'"
         [formControlName]="control.name"
         [value]="control.value"
         [maxlength]="control?.validators?.maxLength"
-        (keydown)="removeSpace($event)"
-      ></textarea>
+        (ionChange)="removeSpace($event)"
+      ></ion-textarea>
       <ion-checkbox
         *ngIf="control.type === 'checkbox'"
         [formControlName]="control.name"
