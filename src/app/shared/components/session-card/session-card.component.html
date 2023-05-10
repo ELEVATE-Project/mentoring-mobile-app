@@ -29,7 +29,7 @@
         <ion-label *ngIf="endDate && data?.status=='completed'" class="date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
       </ion-col>
       <ion-col class="d-flex flex-justify-flex-end flex-align-items-center" size="4">
-        <ion-button *ngIf="data?.status!='completed'" class="button" [disabled]="!buttonConfig?.isEnabled&&(buttonConfig?.type!='enrollAction')" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary" (click)="setOpen(true)"> {{buttonConfig?.label | translate}}</ion-button>
+        <ion-button *ngIf="data?.status!='completed'" class="button" [disabled]="!buttonConfig?.isEnabled&&(buttonConfig?.type!='enrollAction' && buttonConfig?.type!='joinAction')" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary" (click)="setOpen(true)"> {{buttonConfig?.label | translate}}</ion-button>
         <ion-modal (click)="$event.stopPropagation();" [isOpen]="isModalOpen" id="example-modal" #modal>
             <ng-template>
                 <div class="wrapper">
@@ -59,7 +59,7 @@
                       <ion-button expand="block" no-margin size="default" color="primary" (click)="setOpen(false)">Close</ion-button>
                   </ion-col>
                   <ion-col no-padding>
-                      <ion-button expand="block" no-margin size="default" color="success">Join</ion-button>
+                      <ion-button expand="block" no-margin size="default" color="success" (click)="onButtonClick(data,buttonConfig?.type)">Join</ion-button>
                   </ion-col>
               </ion-row>
               </ion-footer>

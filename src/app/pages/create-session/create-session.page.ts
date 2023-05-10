@@ -28,6 +28,7 @@ export class CreateSessionPage implements OnInit {
   lastUploadedImage: boolean;
   private win: any = window;
   @ViewChild('form1') form1: DynamicFormComponent;
+  @ViewChild('platformForm') platformForm: DynamicFormComponent;
   id: any = null;
   localImage;
   path;
@@ -62,6 +63,11 @@ export class CreateSessionPage implements OnInit {
   showForm: boolean = false;
   isSubmited: boolean;
   type: any = "default";
+  selectedLink: any;
+  selectedHint: any;
+  meetingPlatforms:any ;
+  firstStepperTitle: string;
+
   constructor(
     private http: HttpClient,
     private sessionService: SessionService,
@@ -85,8 +91,10 @@ export class CreateSessionPage implements OnInit {
     });
   }
   async ngOnInit() {
+    this.firstStepperTitle = (this.id) ? "EDIT_SESSION":"CREATE_NEW_SESSION";
     const result = await this.form.getForm(CREATE_SESSION_FORM);
     this.formData = _.get(result, 'result.data.fields');
+    this.getPlatformFormDetails();
     if (this.id) {
       let response = await this.sessionService.getSessionDetailsAPI(this.id);
       this.profileImageData.image = response.image;
@@ -100,39 +108,51 @@ export class CreateSessionPage implements OnInit {
     this.isSubmited = false; //to be removed
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
+    if(this.id){
+      this.type = 'segment';
+    }
+  }
+
+  async getPlatformFormDetails() {
+    let form = await this.form.getForm(PLATFORMS)
+    this.meetingPlatforms = form.result.data.fields.forms;
+    this.selectedLink = this.meetingPlatforms[0].name;
+    this.selectedHint = this.meetingPlatforms[0].hint;
   }
 
   async canPageLeave() {
-    if (!this.form1.myForm.pristine || this.profileImageData.haveValidationError) {
-      let texts: any;
-      this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'BACK']).subscribe(text => {
-        texts = text;
-      })
-      const alert = await this.alert.create({
-        message: texts['SESSION_FORM_UNSAVED_DATA'],
-        buttons: [
-          {
-            text: texts['EXIT'],
-            cssClass: "alert-button",
-            handler: () => { }
-          },
-          {
-            text: texts['BACK'],
-            cssClass: "alert-button",
-            role: 'cancel',
-            handler: () => { }
-          }
-        ]
-      });
-      await alert.present();
-      let data = await alert.onDidDismiss();
-      if (data.role == 'cancel') {
-        return false;
+    if(this.type=='default'){
+      if (!this.form1?.myForm.pristine || this.profileImageData.haveValidationError) {
+        let texts: any;
+        this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'BACK']).subscribe(text => {
+          texts = text;
+        })
+        const alert = await this.alert.create({
+          message: texts['SESSION_FORM_UNSAVED_DATA'],
+          buttons: [
+            {
+              text: texts['EXIT'],
+              cssClass: "alert-button",
+              handler: () => { }
+            },
+            {
+              text: texts['BACK'],
+              cssClass: "alert-button",
+              role: 'cancel',
+              handler: () => { }
+            }
+          ]
+        });
+        await alert.present();
+        let data = await alert.onDidDismiss();
+        if (data.role == 'cancel') {
+          return false;
+        } else {
+          return true;
+        }
       } else {
         return true;
       }
-    } else {
-      return true;
     }
     return true
   }
@@ -155,7 +175,8 @@ export class CreateSessionPage implements OnInit {
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
         if (result) {
-          this.id ? this.location.back() : this.router.navigate([`${CommonRoutes.SESSIONS_DETAILS}/`+result._id],{replaceUrl:true})
+          this.type = 'segment';
+          // this.id ? this.location.back() : this.router.navigate([`${CommonRoutes.SESSIONS_DETAILS}/`+result._id],{replaceUrl:true})
         } else {
           this.profileImageData.image = this.lastUploadedImage;
           this.profileImageData.isUploaded = false;
@@ -194,6 +215,16 @@ export class CreateSessionPage implements OnInit {
   }
 
   preFillData(existingData) {
+    for(let j=0;j<this?.meetingPlatforms.length;j++){
+      if( existingData.meetingInfo.platform == this?.meetingPlatforms[j].name){
+         this.selectedLink = existingData.meetingInfo.platform;
+        let obj = this?.meetingPlatforms[j]?.form?.controls.find( (link:any) => link?.name == 'link')
+        if(existingData.meetingInfo.link){
+          obj.value = existingData?.meetingInfo?.link
+        }
+      }
+    }
+    
     for (let i = 0; i < this.formData.controls.length; i++) {
       this.formData.controls[i].value =
         existingData[this.formData.controls[i].name];
@@ -224,5 +255,29 @@ export class CreateSessionPage implements OnInit {
   }
   isValid(event){
     this.isSubmited = event;
+  }
+  clickOptions(event:any){
+    this.selectedHint = event.detail.value.hint;
+  }
+  setItLater(){
+    this.id ? this.router.navigate([`/${"session-detail"}/${this.id}`], {replaceUrl: true}): this.location.back();
+    
+  }
+  onSubmitLink(){
+    if (this.platformForm.myForm.valid){
+      let meetingInfo = {
+        'meetingInfo':{
+          'platform': this.selectedLink,
+          'link': this.platformForm.myForm.value?.link,
+          "meta": {
+            "password": this.platformForm.myForm.value?.password,
+            "meetingId":this.platformForm.myForm.value?.meetingId
+        }
+
+      }}
+      this.sessionService.createSession(meetingInfo,this.id).then(()=>{
+        this.router.navigate([`/${"session-detail"}/${this.id}`])
+      })
+    }
   }
 }
