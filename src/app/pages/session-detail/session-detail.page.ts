@@ -20,6 +20,7 @@ export class SessionDetailPage implements OnInit {
   isEnabled: boolean;
   startDate: any;
   endDate: any;
+  sessionDatas: any;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -114,6 +115,7 @@ export class SessionDetailPage implements OnInit {
 
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
+    this.sessionDatas = response;
     if (response) {
       this.setPageHeader(response);
       let readableStartDate = moment.unix(response.startDate).toLocaleString();
@@ -198,7 +200,7 @@ export class SessionDetailPage implements OnInit {
   }
 
   async onJoin() {
-    await this.sessionService.joinSession(this.id);
+    await this.sessionService.joinSession(this.sessionDatas);
   }
 
   async onEnroll() {

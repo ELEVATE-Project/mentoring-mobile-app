@@ -5,7 +5,7 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
-import { IonModal, ModalController } from '@ionic/angular';
+import { IonModal } from '@ionic/angular';
 
 @Component({
   selector: 'app-session-card',
@@ -64,12 +64,5 @@ export class SessionCardComponent implements OnInit {
       type:type
     }
     this.userData.about?this.onClickEvent.emit(value):this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
-  }
-  setOpen(isOpen: boolean) {
-    // (this.buttonConfig?.type!='enrollAction') ? this.isModalOpen = isOpen : null 
-    this.isModalOpen = isOpen 
-  }
-  close(){
-    this.modal.dismiss(null, 'cancel');
   }
 }

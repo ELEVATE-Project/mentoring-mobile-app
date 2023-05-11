@@ -25,6 +25,7 @@ import { SafeHtmlPipe } from './safe-html.pipe';
 import { MentorCardComponent } from './components/mentor-card/mentor-card.component';
 import { NumberOnlyDirective } from './directive/onlyNumbers';
 import { MeetingPlatformComponent } from './components/meeting-platform/meeting-platform.component';
+import { JoinDialogBoxComponent } from './components/join-dialog-box/join-dialog-box.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { MeetingPlatformComponent } from './components/meeting-platform/meeting-
     GenericProfileHeaderComponent,
     MentorCardComponent,
     NumberOnlyDirective,
-    MeetingPlatformComponent
+    MeetingPlatformComponent,
+    JoinDialogBoxComponent
   ],
   imports: [
     CommonModule,
@@ -75,7 +77,8 @@ import { MeetingPlatformComponent } from './components/meeting-platform/meeting-
     PersonaSelectionCardComponent,
     GenericProfileHeaderComponent,
     MentorCardComponent,
-    MeetingPlatformComponent
+    MeetingPlatformComponent,
+    JoinDialogBoxComponent
   ],
 })
 export class SharedModule {}

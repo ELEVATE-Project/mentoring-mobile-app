@@ -173,5 +173,6 @@
     "SELECT_MEETING_PLATFORM": "Add meeting link",
     "MEETING_PLATFORM": "Meeting platform",
     "MEETING_LINK": "Meeting link",
-    "EDIT_SESSION": "Edit session"
+    "EDIT_SESSION": "Edit session",
+    "PUBLISH_AND_ADD_LINK": "Publish and Add link"
 }

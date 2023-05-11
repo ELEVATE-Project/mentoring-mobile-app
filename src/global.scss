@@ -275,7 +275,7 @@ ion-accordion-group{
 //////////////
 
 
-ion-modal#example-modal {
+.example-modal {
   --width: fit-content;
   --min-width: 300px;
   --height: fit-content;
@@ -283,6 +283,6 @@ ion-modal#example-modal {
   --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
 }
 
-ion-modal#example-modal .wrapper {
+.example-modal .wrapper {
   margin-bottom: 10px;
 }

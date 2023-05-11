@@ -25,7 +25,7 @@
         </ion-card-header>
         <ion-card-content>
           <ion-list>
-            <ion-select #link class="select" [(ngModel)]="selectedLink" interface="popover" (ionChange)="clickOptions($event)" [compareWith]="selectedLink">
+            <ion-select #link class="select" [(ngModel)]="selectedLink" interface="popover" (ionChange)="clickOptions($event)" [compareWith]="compareWithFn" [value]="selectedLink">
               <ion-select-option [value]="option" *ngFor="let option of meetingPlatforms">
                 {{ option.name }}
               </ion-select-option>
@@ -46,10 +46,10 @@
 
 <section [ngClass]="{'btn-disabled': form1?.myForm.invalid , 'btn-valid':form1?.myForm.valid}">
   <div class="ion-no-border" submitButton>
-    <ion-button *ngIf="type == 'default'" expand="full" (click)="onSubmit()">{{'PUBLISH' | translate}}</ion-button>
+    <ion-button *ngIf="type == 'default'" expand="full" (click)="onSubmit()">{{'PUBLISH_AND_ADD_LINK' | translate}}</ion-button>
   </div>
   <div class="ion-no-border segment" submitButton (click)="type = 'segment'" *ngIf="type == 'segment'">
-    <ion-button class="btns" size="default" (click)="onSubmitLink()">{{'SUBMIT' | translate}}</ion-button>
-    <ion-button *ngIf="" class="btns" size="default" fill="outline" (click)="setItLater()">{{'SET_IT_LATER' | translate}}</ion-button>
+    <ion-button [disabled]="platformForm && !platformForm.myForm.valid" class="btns" size="default" (click)="onSubmitLink()">{{'SUBMIT' | translate}}</ion-button>
+    <ion-button *ngIf="!sessionDetails?.meetingInfo" class="btns" size="default" fill="outline" (click)="setItLater()">{{'SET_IT_LATER' | translate}}</ion-button>
   </div>
 </section>

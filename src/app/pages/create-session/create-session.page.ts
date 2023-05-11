@@ -67,6 +67,7 @@ export class CreateSessionPage implements OnInit {
   selectedHint: any;
   meetingPlatforms:any ;
   firstStepperTitle: string;
+  sessionDetails: any;
 
   constructor(
     private http: HttpClient,
@@ -97,6 +98,7 @@ export class CreateSessionPage implements OnInit {
     this.getPlatformFormDetails();
     if (this.id) {
       let response = await this.sessionService.getSessionDetailsAPI(this.id);
+      this.sessionDetails= response;
       this.profileImageData.image = response.image;
       this.profileImageData.isUploaded = true;
       response.startDate = moment.unix(response.startDate).format("YYYY-MM-DDTHH:mm");
@@ -109,14 +111,14 @@ export class CreateSessionPage implements OnInit {
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
     if(this.id){
-      this.type = 'segment';
+      this.type = 'default';
     }
   }
 
   async getPlatformFormDetails() {
     let form = await this.form.getForm(PLATFORMS)
     this.meetingPlatforms = form.result.data.fields.forms;
-    this.selectedLink = this.meetingPlatforms[0].name;
+    this.selectedLink = this.meetingPlatforms[0];
     this.selectedHint = this.meetingPlatforms[0].hint;
   }
 
@@ -174,9 +176,12 @@ export class CreateSessionPage implements OnInit {
         form.timeZone = timezone;
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
-        if (result) {
-          this.type = 'segment';
-          // this.id ? this.location.back() : this.router.navigate([`${CommonRoutes.SESSIONS_DETAILS}/`+result._id],{replaceUrl:true})
+        this.type = 'segment';
+        if (result._id) {
+          this.id = result._id;
+          result.startDate = moment.unix(result.startDate).format("YYYY-MM-DDTHH:mm");
+          result.endDate = moment.unix(result.endDate).format("YYYY-MM-DDTHH:mm");
+          this.preFillData(result);
         } else {
           this.profileImageData.image = this.lastUploadedImage;
           this.profileImageData.isUploaded = false;
@@ -217,7 +222,8 @@ export class CreateSessionPage implements OnInit {
   preFillData(existingData) {
     for(let j=0;j<this?.meetingPlatforms.length;j++){
       if( existingData.meetingInfo.platform == this?.meetingPlatforms[j].name){
-         this.selectedLink = existingData.meetingInfo.platform;
+         this.selectedLink = this?.meetingPlatforms[j];
+         this.selectedHint = this.meetingPlatforms[j].hint;
         let obj = this?.meetingPlatforms[j]?.form?.controls.find( (link:any) => link?.name == 'link')
         if(existingData.meetingInfo.link){
           obj.value = existingData?.meetingInfo?.link
@@ -267,7 +273,7 @@ export class CreateSessionPage implements OnInit {
     if (this.platformForm.myForm.valid){
       let meetingInfo = {
         'meetingInfo':{
-          'platform': this.selectedLink,
+          'platform': this.selectedLink.name,
           'link': this.platformForm.myForm.value?.link,
           "meta": {
             "password": this.platformForm.myForm.value?.password,
@@ -280,4 +286,8 @@ export class CreateSessionPage implements OnInit {
       })
     }
   }
+  compareWithFn(o1, o2) {
+    return o1 === o2;
+  };
+
 }

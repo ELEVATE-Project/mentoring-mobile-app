@@ -4,13 +4,15 @@ import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { Router } from '@angular/router';
+import { JoinDialogBoxComponent } from 'src/app/shared/components/join-dialog-box/join-dialog-box.component';
+import { ModalController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
-  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser, private router: Router) { }
+  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser, private router: Router, private modalCtrl: ModalController) { }
 
 
   async createSession(formData, id?: string) {
@@ -151,7 +153,8 @@ async getSessionsList(obj) {
     }
   }
 
-  async joinSession(id) {
+  async joinSession(sessionData) {
+    let id = sessionData.sessionId?sessionData.sessionId: sessionData._id;
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.JOIN_SESSION + id,
@@ -161,7 +164,13 @@ async getSessionsList(obj) {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-        this.openBrowser(data.result.link);
+        // this.openBrowser(data.result.link);
+          let modal = await this.modalCtrl.create({
+            component: JoinDialogBoxComponent,
+            componentProps: { data: data.result, sessionData : sessionData},
+            cssClass: 'example-modal'
+          });
+          modal.present()
       }
     }
     catch (error) {

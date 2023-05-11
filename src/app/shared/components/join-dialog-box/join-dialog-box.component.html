@@ -1,0 +1,46 @@
+<div>
+  <div class="wrapper">
+    <h5 class="join-header">
+      {{ sessionData?.name || sessionData?.title }}
+    </h5>
+    <ion-row>
+      <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="2">
+        <ion-icon name="calendar-number-outline"></ion-icon>
+      </ion-col>
+      <ion-col class="d-flex flex-align-items-center" size="8" class="join-platform">
+        <ion-label *ngIf="startDate && sessionData?.status == 'published'" class="date-label">{{ "STARTS_ON" | translate
+          }} {{ startDate | date : "dd/MM/yyyy" }}
+          {{ "AT" | translate }} {{ startDate | date : "shortTime" }}</ion-label>
+        <ion-label *ngIf="startDate && sessionData?.status == 'live'" class="date-label">{{ "STARTED_ON" | translate }}
+          {{ startDate | date : "dd/MM/yyyy" }}
+          {{ "AT" | translate }} {{ startDate | date : "shortTime" }}</ion-label>
+        <ion-label *ngIf="endDate && sessionData?.status == 'completed'" class="date-label">{{ "COMPLETED_ON" |
+          translate }} {{ endDate | date : "dd/MM/yyyy" }}
+          {{ "AT" | translate }} {{ endDate | date : "shortTime" }}</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="2">
+        <ion-icon name="videocam"></ion-icon>
+      </ion-col>
+      <ion-col class="d-flex flex-align-items-center" size="8">
+        <p class="join-platform">
+          {{ "MEETING_PLATFORM" | translate }} :
+          <b>{{ meetingPlatform.platform }}</b>
+        </p>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ion-footer>
+    <ion-row>
+      <ion-col no-padding>
+        <ion-button expand="block" no-margin size="default" color="primary" (click)="cancel()">{{ "CLOSE" | translate
+          }}</ion-button>
+      </ion-col>
+      <ion-col no-padding>
+        <ion-button expand="block" no-margin size="default" color="success" (click)="onButtonClick()">{{ "JOIN" |
+          translate }}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+</div>
