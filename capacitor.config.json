@@ -13,6 +13,9 @@
 			"splashFullScreen": false,
 			"layoutName": "launch_screen",
 			"useDialog": false
-		}
+		},
+		"CapacitorHttp": {
+			"enabled": true
+		  }
 	  }
 }
