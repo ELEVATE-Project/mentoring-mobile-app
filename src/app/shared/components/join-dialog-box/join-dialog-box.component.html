@@ -30,6 +30,35 @@
         </p>
       </ion-col>
     </ion-row>
+    <ion-row *ngIf="data.meta.password">
+      <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="2">
+        <ion-icon name="key-sharp"></ion-icon>
+      </ion-col>
+      <ion-col class="d-flex flex-align-items-center" size="fill">
+        <p class="join-platform">
+          {{'PASSWORD' | translate}}: 
+          <b>{{ data?.meta?.password }}</b>
+        </p>
+      </ion-col>
+      <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="2">
+        <!-- <ion-icon (click)="copyToClipBoard(data?.meta?.meetingId)" name="copy"></ion-icon> -->
+        <ion-icon name="copy"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="data.meta.password">
+      <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="2">
+        <ion-icon name="key-sharp"></ion-icon>
+      </ion-col>
+      <ion-col class="d-flex flex-align-items-center" size="fill">
+        <p class="join-platform">
+          {{'MEETING_ID' | translate}}: 
+          <b>{{ data?.meta?.meetingId }}</b>
+        </p>
+      </ion-col>
+      <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="2">
+        <ion-icon name="copy"></ion-icon>
+      </ion-col>
+    </ion-row>
   </div>
   <ion-footer>
     <ion-row>

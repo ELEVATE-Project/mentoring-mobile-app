@@ -226,8 +226,12 @@ export class CreateSessionPage implements OnInit {
          this.selectedLink = this?.meetingPlatforms[j];
          this.selectedHint = this.meetingPlatforms[j].hint;
         let obj = this?.meetingPlatforms[j]?.form?.controls.find( (link:any) => link?.name == 'link')
+        let meetingId = this?.meetingPlatforms[j]?.form?.controls.find( (meetingId:any) => meetingId?.name == 'meetingId')
+        let password = this?.meetingPlatforms[j]?.form?.controls.find( (password:any) => password?.name == 'password')
         if(existingData.meetingInfo.link){
           obj.value = existingData?.meetingInfo?.link
+          meetingId.value = existingData?.meetingInfo?.meta?.meetingId
+          password.value = existingData?.meetingInfo?.meta?.password
         }
       }
     }
@@ -283,7 +287,7 @@ export class CreateSessionPage implements OnInit {
 
       }}
       this.sessionService.createSession(meetingInfo,this.id).then(()=>{
-        this.router.navigate([`/${"session-detail"}/${this.id}`])
+        this.router.navigate([`/${"session-detail"}/${this.id}`],{replaceUrl: true})
       })
     }
   }

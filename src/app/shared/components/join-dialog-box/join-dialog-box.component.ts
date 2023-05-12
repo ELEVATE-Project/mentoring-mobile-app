@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { ToastService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-join-dialog-box',
@@ -15,7 +16,7 @@ export class JoinDialogBoxComponent implements OnInit {
   endDate: any;
   meetingPlatform: any;
 
-  constructor(private modalCtrl: ModalController, private inAppBrowser: InAppBrowser) { }
+  constructor(private modalCtrl: ModalController, private inAppBrowser: InAppBrowser, private toast: ToastService) { }
 
   ngOnInit() {
     this.startDate = (this.sessionData.startDate>0)?moment.unix(this.sessionData.startDate).toLocaleString():this.startDate;
@@ -35,5 +36,13 @@ export class JoinDialogBoxComponent implements OnInit {
   }
   onButtonClick(){
     this.openBrowser(this.data.link);
+  }
+  copyToClipBoard(copyData:any) {
+    console.log('copyclipboard',copyData)
+    navigator.clipboard.writeText(copyData).then(() => {
+      this.toast.showToast('Copied successfully.', "success")
+    },() => {
+      console.error('Failed to copy');
+    });
   }
 }
