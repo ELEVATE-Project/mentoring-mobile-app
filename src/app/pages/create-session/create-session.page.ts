@@ -176,6 +176,7 @@ export class CreateSessionPage implements OnInit {
         form.timeZone = timezone;
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
+        this.sessionDetails = result;
         this.type = 'segment';
         if (result._id) {
           this.id = result._id;
