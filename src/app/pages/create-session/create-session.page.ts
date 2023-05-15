@@ -229,9 +229,9 @@ export class CreateSessionPage implements OnInit {
         let meetingId = this?.meetingPlatforms[j]?.form?.controls.find( (meetingId:any) => meetingId?.name == 'meetingId')
         let password = this?.meetingPlatforms[j]?.form?.controls.find( (password:any) => password?.name == 'password')
         if(existingData.meetingInfo.link){
-          obj.value = existingData?.meetingInfo?.link
-          meetingId.value = existingData?.meetingInfo?.meta?.meetingId
-          password.value = existingData?.meetingInfo?.meta?.password
+          obj.value = existingData?.meetingInfo?.link;
+          meetingId.value = existingData?.meetingInfo?.meta?.meetingId;
+          password.value = existingData?.meetingInfo?.meta?.password;
         }
       }
     }

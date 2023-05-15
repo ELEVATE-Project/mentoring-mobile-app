@@ -41,8 +41,7 @@
         </p>
       </ion-col>
       <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="2">
-        <!-- <ion-icon (click)="copyToClipBoard(data?.meta?.meetingId)" name="copy"></ion-icon> -->
-        <ion-icon name="copy"></ion-icon>
+        <ion-icon (click)="copyToClipBoard(data?.meta?.password)" name="copy"></ion-icon>
       </ion-col>
     </ion-row>
     <ion-row *ngIf="data.meta.password">
@@ -56,7 +55,7 @@
         </p>
       </ion-col>
       <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="2">
-        <ion-icon name="copy"></ion-icon>
+        <ion-icon (click)="copyToClipBoard(data?.meta?.meetingId)" name="copy"></ion-icon>
       </ion-col>
     </ion-row>
   </div>
