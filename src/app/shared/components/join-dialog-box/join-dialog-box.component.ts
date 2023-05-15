@@ -42,6 +42,8 @@ export class JoinDialogBoxComponent implements OnInit {
   copyToClipBoard = async (copyData: any) => {
     await Clipboard.write({
       string: copyData
+    }).then(()=>{
+      this.toast.showToast('Copied successfully',"success");
     });
   };
 }
