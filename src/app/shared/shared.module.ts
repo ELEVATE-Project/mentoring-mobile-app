@@ -24,7 +24,6 @@ import {
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { MentorCardComponent } from './components/mentor-card/mentor-card.component';
 import { NumberOnlyDirective } from './directive/onlyNumbers';
-import { MeetingPlatformComponent } from './components/meeting-platform/meeting-platform.component';
 import { JoinDialogBoxComponent } from './components/join-dialog-box/join-dialog-box.component';
 
 @NgModule({
@@ -48,7 +47,6 @@ import { JoinDialogBoxComponent } from './components/join-dialog-box/join-dialog
     GenericProfileHeaderComponent,
     MentorCardComponent,
     NumberOnlyDirective,
-    MeetingPlatformComponent,
     JoinDialogBoxComponent
   ],
   imports: [
@@ -77,7 +75,6 @@ import { JoinDialogBoxComponent } from './components/join-dialog-box/join-dialog
     PersonaSelectionCardComponent,
     GenericProfileHeaderComponent,
     MentorCardComponent,
-    MeetingPlatformComponent,
     JoinDialogBoxComponent
   ],
 })
