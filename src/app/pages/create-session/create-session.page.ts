@@ -35,7 +35,7 @@ export class CreateSessionPage implements OnInit {
   public headerConfig: any = {
     // menu: true,
     backButton: {
-      label: 'CREATE_SESSION',
+      label: '',
     },
     notification: false,
   };
@@ -43,26 +43,11 @@ export class CreateSessionPage implements OnInit {
     type: 'session',
     haveValidationError: false
   }
-  platformConfig: any = [
-    {
-      name: "Create session",
-      icon: "pencil-sharp",
-      form: {
-        controls : []
-      }
-    },
-    {
-      name: "Meeting platform",
-      icon: "add-circle-outline",
-      form: {
-        controls: []
-      }
-    }
-  ]
+
   public formData: JsonFormData;
   showForm: boolean = false;
   isSubmited: boolean;
-  type: any = "default";
+  type: any ;
   selectedLink: any;
   selectedHint: any;
   meetingPlatforms:any ;
@@ -88,6 +73,9 @@ export class CreateSessionPage implements OnInit {
   ) {
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.id = params?.get('id');
+      this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
+      this.type = params?.get('type');
+      this.type ? this.type = 'segment': this.type = 'default';
       this.path = this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory;
     });
   }
@@ -110,9 +98,6 @@ export class CreateSessionPage implements OnInit {
     this.isSubmited = false; //to be removed
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
-    if(this.id){
-      this.type = 'default';
-    }
   }
 
   async getPlatformFormDetails() {
@@ -230,8 +215,8 @@ export class CreateSessionPage implements OnInit {
         let password = this?.meetingPlatforms[j]?.form?.controls.find( (password:any) => password?.name == 'password')
         if(existingData.meetingInfo.link){
           obj.value = existingData?.meetingInfo?.link;
-          meetingId.value = existingData?.meetingInfo?.meta?.meetingId;
-          password.value = existingData?.meetingInfo?.meta?.password;
+          meetingId = existingData?.meetingInfo?.meta?.meetingId;
+          password = existingData?.meetingInfo?.meta?.password;
         }
       }
     }
