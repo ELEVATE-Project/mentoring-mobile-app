@@ -133,7 +133,6 @@ export class SessionDetailPage implements OnInit {
       this.detailData.data.meetingInfo = response.meetingInfo.platform;
       this.startDate = (response.startDate>0)?moment.unix(response.startDate).toLocaleString():this.startDate;
       this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
-      console.log("response :", response)
     }
     if((response.meetingInfo.platform == 'OFF') && this.isCreator && response.status=='published'){
     this.showToasts('Meeting platform is not added, please add platform', 0 , [

@@ -53,3 +53,14 @@ ion-icon{
 .join-platform{
     padding-left: 8px;
 }
+.add-meeting-link{
+    width: 75%;
+    text-decoration: underline;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+    z-index: 1000;
+
+}
+.meetingPlatform{
+    padding-left: 10px;
+}

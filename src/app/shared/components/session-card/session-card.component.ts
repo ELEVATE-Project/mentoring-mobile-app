@@ -65,4 +65,8 @@ export class SessionCardComponent implements OnInit {
     }
     this.userData.about?this.onClickEvent.emit(value):this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
   }
+  clickOnAddMeetingLink(cardData:any){
+    let id = cardData._id;
+    this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: id , type: 'segment'} });
+  }
 }
