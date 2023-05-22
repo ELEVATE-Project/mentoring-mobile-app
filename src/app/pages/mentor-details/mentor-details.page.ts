@@ -71,7 +71,7 @@ export class MentorDetailsPage implements OnInit {
         if (result) {
           this.getMentor();
         } else {
-          this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams: { mentorId: this.mentorId } })
+          this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams: { mentorId: this.mentorId }, replaceUrl: true })
         }
       })
     })
