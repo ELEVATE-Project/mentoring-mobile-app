@@ -162,8 +162,8 @@ export class CreateSessionPage implements OnInit {
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
         this.sessionDetails = result;
-        this.type = 'segment';
         if (result._id) {
+          this.type = 'segment';
           this.id = result._id;
           result.startDate = moment.unix(result.startDate).format("YYYY-MM-DDTHH:mm");
           result.endDate = moment.unix(result.endDate).format("YYYY-MM-DDTHH:mm");
