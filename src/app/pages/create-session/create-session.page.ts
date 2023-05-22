@@ -265,6 +265,7 @@ export class CreateSessionPage implements OnInit {
         'meetingInfo':{
           'platform': this.selectedLink.name,
           'link': this.platformForm.myForm.value?.link,
+          'value': this.selectedLink.value,
           "meta": {
             "password": this.platformForm.myForm.value?.password,
             "meetingId":this.platformForm.myForm.value?.meetingId
