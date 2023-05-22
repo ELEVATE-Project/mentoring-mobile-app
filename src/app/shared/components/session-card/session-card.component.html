@@ -28,16 +28,16 @@
           <ion-label *ngIf="endDate && data?.status=='completed'" class="date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
         </div> 
       </ion-row>
-      <ion-row class="d-flex flex-align-items-center meetingPlatform" *ngIf="!(meetingPlatform.platform == 'OFF') ">
+      <ion-row class="d-flex flex-align-items-center meeting-platform" *ngIf="!(meetingPlatform?.platform == 'OFF') ">
         <ion-icon name="videocam"></ion-icon>
         <div>
           <p class="join-platform">
             {{ "MEETING_PLATFORM" | translate }} :
-            <b>{{ meetingPlatform.platform }}</b> 
+            <b>{{ meetingPlatform?.platform }}</b> 
           </p>
         </div>
       </ion-row>
-      <ion-row class="d-flex flex-align-items-center meetingPlatform" *ngIf="(meetingPlatform?.platform == 'OFF') && isCreator && (data.status != 'completed')">
+      <ion-row class="d-flex flex-align-items-center meeting-platform" *ngIf="meetingPlatform?.platform == 'OFF' && isCreator && (data.status != 'completed')">
         <ion-icon name="videocam"></ion-icon>
         <div>
           <p class="join-platform">
