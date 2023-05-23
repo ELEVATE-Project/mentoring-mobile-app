@@ -176,5 +176,6 @@
     "EDIT_SESSION": "Edit session details",
     "PUBLISH_AND_ADD_LINK": "Publish and Add link",
     "MEETING_ID": "Meeting id",
-    "PASSWORD": "Password"
+    "PASSWORD": "Password",
+    "EDIT_SESSION_LABEL": "Edit session"
 }

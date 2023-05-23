@@ -75,12 +75,12 @@ export class CreateSessionPage implements OnInit {
       this.id = params?.get('id');
       this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
       this.type = params?.get('type');
-      this.type ? this.type = 'segment': this.type = 'default';
+      this.type = this.type ? 'segment' : 'default';
       this.path = this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory;
     });
   }
   async ngOnInit() {
-    this.firstStepperTitle = (this.id) ? "EDIT_SESSION":"CREATE_NEW_SESSION";
+    this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
     const result = await this.form.getForm(CREATE_SESSION_FORM);
     this.formData = _.get(result, 'result.data.fields');
     this.getPlatformFormDetails();

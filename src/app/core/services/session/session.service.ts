@@ -164,7 +164,6 @@ async getSessionsList(obj) {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-        // this.openBrowser(data.result.link);
           let modal = await this.modalCtrl.create({
             component: JoinDialogBoxComponent,
             componentProps: { data: data.result, sessionData : sessionData},

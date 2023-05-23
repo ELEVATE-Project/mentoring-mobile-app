@@ -86,7 +86,7 @@ export class HomeSearchPage implements OnInit {
         break;
 
       case 'joinAction':
-        (event.data.sessionId)?await this.sessionService.joinSession(event.data):await this.sessionService.joinSession(event.data);
+        this.sessionService.joinSession(event.data)
         this.search();
         break;
 
