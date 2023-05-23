@@ -30,7 +30,7 @@
       </ion-row>
       <ion-row class="d-flex flex-align-items-center meeting-platform" *ngIf="!(meetingPlatform?.platform == 'OFF') ">
         <ion-icon name="videocam"></ion-icon>
-        <div>
+        <div class="join-platform-container">
           <p class="join-platform">
             {{ "MEETING_PLATFORM" | translate }} :
             <b>{{ meetingPlatform?.platform }}</b> 
