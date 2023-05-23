@@ -165,6 +165,8 @@ export class CreateSessionPage implements OnInit {
         if (result._id) {
           this.type = 'segment';
           this.id = result._id;
+          this.firstStepperTitle = (this.id) ? "EDIT_SESSION":"CREATE_NEW_SESSION";
+          this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
           result.startDate = moment.unix(result.startDate).format("YYYY-MM-DDTHH:mm");
           result.endDate = moment.unix(result.endDate).format("YYYY-MM-DDTHH:mm");
           this.preFillData(result);
