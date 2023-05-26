@@ -78,7 +78,7 @@ export class HomePage implements OnInit {
         break;
 
       case 'joinAction':
-        (event.data.sessionId)?await this.sessionService.joinSession(event.data.sessionId):await this.sessionService.joinSession(event.data._id);
+        this.sessionService.joinSession(event.data)
         this.getSessions();
         break;
 

@@ -23,9 +23,6 @@
         margin-top: 0px;
         font-size: 16px;
     }
-    p {
-        margin: 6px 0px 0px 0px;
-    }
 }
 .text-align {
     overflow: hidden;
@@ -52,4 +49,22 @@ ion-icon{
 }
 .header{
     margin-top: 10px;
+}
+.join-platform{
+    padding-left: 8px;
+}
+.add-meeting-link{
+    width: 75%;
+    text-decoration: underline;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+    z-index: 1000;
+
+}
+.join-platform-container{
+    width: 350px;
+}
+.meeting-platform{
+    padding-left: 10px;
+    width: max-content;
 }
