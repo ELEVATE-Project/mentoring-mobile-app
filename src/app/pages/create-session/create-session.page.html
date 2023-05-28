@@ -1,10 +1,12 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <div class="height">
   <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
-    <ion-segment-button value="default">
+    <ion-segment-button value="default" layout="icon-start">
+      <div class="icon-2">1</div>
       <ion-label>{{ firstStepperTitle | translate}}</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="segment"  [disabled]="!isSubmited">
+    <ion-segment-button value="segment"  [disabled]="!isSubmited" layout="icon-start">
+      <div class="icon-2">2</div>
       <ion-label>{{"MEETING_LINK" | translate}}</ion-label>
     </ion-segment-button>
   </ion-segment>
@@ -48,7 +50,7 @@
     <ion-button *ngIf="type == 'default'" expand="full" (click)="onSubmit()">{{'PUBLISH_AND_ADD_LINK' | translate}}</ion-button>
   </div>
   <div class="ion-no-border segment" submitButton (click)="type = 'segment'" *ngIf="type == 'segment'">
-    <ion-button *ngIf="sessionDetails?.meetingInfo?.platform == 'OFF'" class="btns" size="default" fill="outline" (click)="setItLater()">{{'SET_IT_LATER' | translate}}</ion-button>
+    <ion-button *ngIf="sessionDetails?.meetingInfo?.platform == 'OFF'" class="btns" size="default" fill="solid" (click)="setItLater()">{{'SET_IT_LATER' | translate}}</ion-button>
     <ion-button [disabled]="platformForm && !platformForm.myForm.valid" class="btns" size="default" (click)="onSubmitLink()">{{'SUBMIT' | translate}}</ion-button>
   </div>
 </section>

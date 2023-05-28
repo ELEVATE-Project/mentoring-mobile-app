@@ -135,7 +135,7 @@ export class SessionDetailPage implements OnInit {
       this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
     }
     if((response.meetingInfo.platform == 'OFF') && this.isCreator && response.status=='published'){
-    this.showToasts('Meeting platform is not added, please add platform', 0 , [
+    this.showToasts('Meeting link is not added, please add a link.', 0 , [
         {
           text: 'Add meeting link',
           role: 'cancel',
@@ -158,7 +158,7 @@ export class SessionDetailPage implements OnInit {
       if(this.userDetails){
         this.isCreator = this.userDetails._id == response.userId ? true : false;
       }
-      this.headerConfig.edit = (this.isCreator && response.status=="published")?true:null;
+      this.headerConfig.edit = (this.isCreator && response.status=="published"&& !this.isEnabled)?true:null;
       this.headerConfig.delete = (this.isCreator && response.status=="published" && !this.isEnabled)?true:null;
   }
 

@@ -36,6 +36,7 @@ export class JoinDialogBoxComponent implements OnInit {
     return this.modalCtrl.dismiss(null, 'cancel');
   }
   onButtonClick(){
+    this.modalCtrl.dismiss();
     this.openBrowser(this.data.link);
   }
   
