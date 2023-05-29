@@ -42,7 +42,7 @@
         [value]="control.value"
         [maxlength]="control?.validators?.maxLength"
         (ionChange)="removeSpace($event)"
-        [placeholder]="control.placeHolder"
+        [placeholder]="control.platformPlaceHolder"
       ></ion-input>
       <ion-textarea
         *ngIf="control.type === 'textarea'"
