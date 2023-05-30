@@ -177,5 +177,6 @@
     "PUBLISH_AND_ADD_LINK": "Publish and Add link",
     "MEETING_ID": "Meeting id",
     "PASSWORD": "Password",
-    "EDIT_SESSION_LABEL": "Edit session"
+    "EDIT_SESSION_LABEL": "Edit session",
+    "HAVING_TROUBLE_LOGIN": "Having trouble in logging in? Write to us."
 }
