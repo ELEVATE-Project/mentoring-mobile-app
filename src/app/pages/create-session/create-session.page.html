@@ -50,7 +50,7 @@
     <ion-button *ngIf="type == 'default'" expand="full" (click)="onSubmit()">{{'PUBLISH_AND_ADD_LINK' | translate}}</ion-button>
   </div>
   <div class="ion-no-border segment" submitButton (click)="type = 'segment'" *ngIf="type == 'segment'">
-    <ion-button *ngIf="sessionDetails?.meetingInfo?.platform == 'OFF'" class="btns" size="default" fill="solid" (click)="setItLater()">{{'SET_IT_LATER' | translate}}</ion-button>
+    <ion-button *ngIf="sessionDetails?.meetingInfo?.platform === 'OFF'" class="btns" size="default" fill="solid" (click)="setItLater()">{{'SET_IT_LATER' | translate}}</ion-button>
     <ion-button [disabled]="platformForm && !platformForm.myForm.valid" class="btns" size="default" (click)="onSubmitLink()">{{'SUBMIT' | translate}}</ion-button>
   </div>
 </section>

@@ -148,7 +148,6 @@ export class CreateSessionPage implements OnInit {
   async onSubmit() {
     if(!this.isSubmited){
       this.form1.onSubmit();
-      this.isSubmited = true;
     }
     if (this.form1.myForm.valid) {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
@@ -162,8 +161,8 @@ export class CreateSessionPage implements OnInit {
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
         this.sessionDetails = result;
-        this.type = 'segment';
         if (result._id) {
+          this.isSubmited = true;
           this.type = 'segment';
           this.id = result._id;
           this.firstStepperTitle = (this.id) ? "EDIT_SESSION":"CREATE_NEW_SESSION";
@@ -172,6 +171,8 @@ export class CreateSessionPage implements OnInit {
           result.endDate = moment.unix(result.endDate).format("YYYY-MM-DDTHH:mm");
           this.preFillData(result);
         } else {
+          this.isSubmited = true;
+          this.type = 'segment';
           this.profileImageData.image = this.lastUploadedImage;
           this.profileImageData.isUploaded = false;
         }
