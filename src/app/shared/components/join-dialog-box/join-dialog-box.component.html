@@ -8,15 +8,7 @@
         <ion-icon name="calendar-number-outline"></ion-icon>
       </ion-col>
       <ion-col class="d-flex flex-align-items-center" size="8" class="join-platform">
-        <ion-label *ngIf="startDate && sessionData?.status == 'published'" class="date-label">{{ "STARTS_ON" | translate
-          }} {{ startDate | date : "dd/MM/yyyy" }}
-          {{ "AT" | translate }} {{ startDate | date : "shortTime" }}</ion-label>
-        <ion-label *ngIf="startDate && sessionData?.status == 'live'" class="date-label">{{ "STARTED_ON" | translate }}
-          {{ startDate | date : "dd/MM/yyyy" }}
-          {{ "AT" | translate }} {{ startDate | date : "shortTime" }}</ion-label>
-        <ion-label *ngIf="endDate && sessionData?.status == 'completed'" class="date-label">{{ "COMPLETED_ON" |
-          translate }} {{ endDate | date : "dd/MM/yyyy" }}
-          {{ "AT" | translate }} {{ endDate | date : "shortTime" }}</ion-label>
+          <ion-label>{{startDate | date: 'EEEE, MMMM d'}} . {{startDate | date:'hh:mm'}} - {{startDate | date:'shortTime'}}</ion-label>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -30,7 +22,7 @@
         </p>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="data.meta.password">
+    <ion-row *ngIf="data?.meta?.password">
       <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="2">
         <ion-icon name="key-sharp"></ion-icon>
       </ion-col>
@@ -44,7 +36,7 @@
         <ion-icon (click)="copyToClipBoard(data?.meta?.password)" name="copy"></ion-icon>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="data.meta.password">
+    <ion-row *ngIf="data?.meta?.password">
       <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="2">
         <ion-icon name="key-sharp"></ion-icon>
       </ion-col>
@@ -62,8 +54,7 @@
   <ion-footer>
     <ion-row>
       <ion-col no-padding>
-        <ion-button expand="block" no-margin size="default" color="success" (click)="onButtonClick()">{{ "JOIN" |
-          translate }}</ion-button>
+        <ion-button expand="block" no-margin size="default" color="success" (click)="onButtonClick()">{{'JOIN' | translate}}</ion-button>
       </ion-col>
     </ion-row>
   </ion-footer>
