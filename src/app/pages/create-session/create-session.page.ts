@@ -71,37 +71,37 @@ export class CreateSessionPage implements OnInit {
     private changeDetRef: ChangeDetectorRef,
     private router: Router
   ) {
-    this.activatedRoute.queryParamMap.subscribe(params => {
-      this.id = params?.get('id');
-      this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
-      this.type = params?.get('type');
-      this.type = this.type ? 'segment' : 'default';
-      this.path = this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory;
-    });
+    this.path = this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory;
   }
   async ngOnInit() {
-    this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
     const result = await this.form.getForm(CREATE_SESSION_FORM);
     this.formData = _.get(result, 'result.data.fields');
+    this.changeDetRef.detectChanges();
+    this.activatedRoute.queryParamMap.subscribe(async (params) => {
+      this.id = params?.get('id');
+      this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
+      this.type = params?.get('type')? params?.get('type'): 'default';
+      this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
+      if (this.id) {
+        let response = await this.sessionService.getSessionDetailsAPI(this.id);
+        this.sessionDetails= response;
+        this.profileImageData.image = response.image;
+        this.profileImageData.isUploaded = true;
+        response.startDate = moment.unix(response.startDate).format("YYYY-MM-DDTHH:mm");
+        response.endDate = moment.unix(response.endDate).format("YYYY-MM-DDTHH:mm");
+        this.preFillData(response);
+      } else {
+        this.showForm = true;
+      }
+    });
     this.getPlatformFormDetails();
-    if (this.id) {
-      let response = await this.sessionService.getSessionDetailsAPI(this.id);
-      this.sessionDetails= response;
-      this.profileImageData.image = response.image;
-      this.profileImageData.isUploaded = true;
-      response.startDate = moment.unix(response.startDate).format("YYYY-MM-DDTHH:mm");
-      response.endDate = moment.unix(response.endDate).format("YYYY-MM-DDTHH:mm");
-      this.preFillData(response);
-    } else {
-      this.showForm = true;
-    }
     this.isSubmited = false; //to be removed
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
   }
 
   async getPlatformFormDetails() {
-    let form = await this.form.getForm(PLATFORMS)
+    let form = await this.form.getForm(PLATFORMS);
     this.meetingPlatforms = form.result.data.fields.forms;
     this.selectedLink = this.meetingPlatforms[0];
     this.selectedHint = this.meetingPlatforms[0].hint;
@@ -160,19 +160,16 @@ export class CreateSessionPage implements OnInit {
         form.timeZone = timezone;
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
-        this.sessionDetails = result;
-        if (result._id) {
+        this.id = this.id ? this.id : result._id;
+        if (result) {
+          this.sessionDetails = _.isEmpty(result) ? this.sessionDetails : result;
           this.isSubmited = true;
-          this.type = 'segment';
-          this.id = result._id;
-          this.firstStepperTitle = (this.id) ? "EDIT_SESSION":"CREATE_NEW_SESSION";
+          this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
           this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
           result.startDate = moment.unix(result.startDate).format("YYYY-MM-DDTHH:mm");
           result.endDate = moment.unix(result.endDate).format("YYYY-MM-DDTHH:mm");
-          this.preFillData(result);
+          this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'} });
         } else {
-          this.isSubmited = true;
-          this.type = 'segment';
           this.profileImageData.image = this.lastUploadedImage;
           this.profileImageData.isUploaded = false;
         }
