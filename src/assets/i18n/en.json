@@ -178,5 +178,6 @@
     "MEETING_ID": "Meeting id",
     "PASSWORD": "Password",
     "EDIT_SESSION_LABEL": "Edit session",
-    "HAVING_TROUBLE_LOGIN": "Having trouble in logging in/signing up? Write to us."
+    "HAVING_TROUBLE_LOGIN": "Having trouble in logging in/signing up? Write to us.",
+    "ADD_MEETING_LINK": "Meeting link is not added, please add a link."
 }

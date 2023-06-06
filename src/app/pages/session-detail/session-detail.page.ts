@@ -135,7 +135,7 @@ export class SessionDetailPage implements OnInit {
       this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
     }
     if((response.meetingInfo.platform == 'OFF') && this.isCreator && response.status=='published'){
-    this.showToasts('Meeting link is not added, please add a link.', 0 , [
+    this.showToasts('ADD_MEETING_LINK', 0 , [
         {
           text: 'Add meeting link',
           role: 'cancel',
