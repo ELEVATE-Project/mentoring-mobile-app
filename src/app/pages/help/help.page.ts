@@ -8,6 +8,7 @@ import { Device } from '@awesome-cordova-plugins/device/ngx';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { HELP } from 'src/app/core/constants/formConstant';
 import * as _ from 'lodash';
+import { App } from '@capacitor/app';
 
 @Component({
   selector: 'app-help',
@@ -21,17 +22,21 @@ export class HelpPage implements OnInit {
     label: "HELP"
   };
   public formData: JsonFormData;
-  metaData: { deviceName: string; androidVersion: string; };
+  metaData: { deviceName: string; androidVersion: string; version: string};
 
   constructor(private router: Router, private loaderService: LoaderService, private toast: ToastService, private httpService: HttpService, private device: Device, 
     private form: FormService,) { }
 
   ngOnInit() {
-    this.metaData = {
-      deviceName: this.device.model,
-      androidVersion: this.device.version
-    }
-    this.helpForm();
+    App.getInfo().then((data)=>{
+      this.metaData = {
+        deviceName: this.device.model,
+        androidVersion: this.device.version,
+        version: data.version
+      }
+      this.helpForm();
+    })
+    
   }
 
   onSubmit() {

@@ -168,7 +168,7 @@ export class CreateSessionPage implements OnInit {
           this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
           result.startDate = moment.unix(result.startDate).format("YYYY-MM-DDTHH:mm");
           result.endDate = moment.unix(result.endDate).format("YYYY-MM-DDTHH:mm");
-          this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'} });
+          this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'}, replaceUrl: true });
         } else {
           this.profileImageData.image = this.lastUploadedImage;
           this.profileImageData.isUploaded = false;
