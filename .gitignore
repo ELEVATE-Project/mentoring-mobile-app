@@ -31,3 +31,4 @@ npm-debug.log*
 /www
 /src/environments/
 /.angular
+/mentoring-key.keystore

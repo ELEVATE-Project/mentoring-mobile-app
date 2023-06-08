@@ -1,10 +1,11 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
+import { IonModal } from '@ionic/angular';
 
 @Component({
   selector: 'app-session-card',
@@ -14,15 +15,19 @@ import { CommonRoutes } from 'src/global.routes';
 export class SessionCardComponent implements OnInit {
   @Input() data: any;
   @Output() onClickEvent = new EventEmitter();
+  @ViewChild(IonModal) modal: IonModal;
   startDate: string;
   isCreator: boolean;
   buttonConfig;
   userData: any;
   endDate: string;
+  isModalOpen = false;
+  meetingPlatform: any;
   
   constructor(private router: Router, private sessionService: SessionService, private toast: ToastService, private localStorage: LocalStorageService) { }
   
   async ngOnInit() {
+    this.meetingPlatform = (this.data?.meetingInfo);
     this.isCreator = await this.checkIfCreator();
     this.setButtonConfig(this.isCreator);
     this.startDate = (this.data.startDate>0)?moment.unix(this.data.startDate).toLocaleString():this.startDate;
@@ -30,13 +35,14 @@ export class SessionCardComponent implements OnInit {
   }
  
   setButtonConfig(isCreator: boolean) {
+    let currentTimeInSeconds=Math.floor(Date.now()/1000);
     if(isCreator){
       this.buttonConfig={label:"START",type:"startAction"};
+      this.buttonConfig.isEnabled = ((this.data.startDate-currentTimeInSeconds)<600 || this.data.status=='live')?true:false;
     } else {
       this.buttonConfig=(!isCreator&&this.data.isEnrolled || !isCreator&&this.data.sessionId)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
+      this.buttonConfig.isEnabled = ((this.data.startDate-currentTimeInSeconds)<300 || this.data.status=='live')?true:false;
     }
-    let currentTimeInSeconds=Math.floor(Date.now()/1000);
-    this.buttonConfig.isEnabled = (this.data.startDate-currentTimeInSeconds<300)?true:false;
   }
 
   async checkIfCreator() {
@@ -58,5 +64,9 @@ export class SessionCardComponent implements OnInit {
       type:type
     }
     this.userData.about?this.onClickEvent.emit(value):this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+  }
+  clickOnAddMeetingLink(cardData:any){
+    let id = cardData._id;
+    this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: id , type: 'segment'} });
   }
 }

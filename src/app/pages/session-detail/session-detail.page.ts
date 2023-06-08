@@ -6,6 +6,8 @@ import { CommonRoutes } from 'src/global.routes';
 import *  as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { Location } from '@angular/common';
+import { ToastController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-session-detail',
@@ -20,10 +22,12 @@ export class SessionDetailPage implements OnInit {
   isEnabled: boolean;
   startDate: any;
   endDate: any;
+  sessionDatas: any;
+  snackbarRef: any;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
-    private utilService: UtilService, private toast: ToastService, private _location: Location, private user: UserService) {
+    private utilService: UtilService, private toast: ToastService, private _location: Location, private user: UserService ,private toaster: ToastController,private translate : TranslateService) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {}
@@ -41,6 +45,10 @@ export class SessionDetailPage implements OnInit {
   };
   detailData = {
     form: [
+      {
+        title: "MEETING_PLATFORM",
+        key: "meetingInfo",
+      },
       {
         title: 'RECOMMENDED_FOR',
         key: 'recommendedFor',
@@ -103,32 +111,55 @@ export class SessionDetailPage implements OnInit {
       status:null,
       isEnrolled:null,
       title:"",
-      startDate:""
+      startDate:"",
+      meetingInfo:""
     },
   };
 
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
+    this.sessionDatas = response;
     if (response) {
       this.setPageHeader(response);
       let readableStartDate = moment.unix(response.startDate).toLocaleString();
       let currentTimeInSeconds=Math.floor(Date.now()/1000);
-      this.isEnabled = (response.startDate-currentTimeInSeconds<300)?true:false;
+      if(response.isEnrolled){
+        this.isEnabled = ((response.startDate - currentTimeInSeconds) < 300 || response.status=='live') ? true : false
+      } else {
+        this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='live')?true:false;
+      }
       this.detailData.data = Object.assign({}, response);
       this.detailData.data.startDate = readableStartDate;
+      this.detailData.data.meetingInfo = response.meetingInfo.platform;
       this.startDate = (response.startDate>0)?moment.unix(response.startDate).toLocaleString():this.startDate;
       this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
     }
+    if((response.meetingInfo.platform == 'OFF') && this.isCreator && response.status=='published'){
+    this.showToasts('Meeting platform is not added, please add platform', 0 , [
+        {
+          text: 'Add meeting link',
+          role: 'cancel',
+          handler: () => {
+            this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'} });
+          }
+        }
+      ])
+    }
   }
+  ionViewWillLeave(){
+    this.snackbarRef = this.toaster.dismiss();
+   }
 
   setPageHeader(response) {
+    let currentTimeInSeconds=Math.floor(Date.now()/1000);
+    this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='live')?true:false;
       this.headerConfig.share = response.status=="completed"?false:true;
       this.id = response._id;
       if(this.userDetails){
         this.isCreator = this.userDetails._id == response.userId ? true : false;
       }
       this.headerConfig.edit = (this.isCreator && response.status=="published")?true:null;
-      this.headerConfig.delete = (this.isCreator)?true:null;
+      this.headerConfig.delete = (this.isCreator && response.status=="published" && !this.isEnabled)?true:null;
   }
 
   action(event) {
@@ -149,7 +180,7 @@ export class SessionDetailPage implements OnInit {
     if(this.userDetails){
       let sharableLink = await this.sessionService.getShareSessionId(this.id);
       if (sharableLink.shareLink) {
-        let url = `/${CommonRoutes.SESSIONS}/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
+        let url = `/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
         let link = await this.utilService.getDeepLink(url);
         this.detailData.data.mentorName = this.detailData.data.mentorName.trim();
         this.detailData.data.title = this.detailData.data.title.trim();
@@ -186,7 +217,7 @@ export class SessionDetailPage implements OnInit {
   }
 
   async onJoin() {
-    await this.sessionService.joinSession(this.id);
+    await this.sessionService.joinSession(this.sessionDatas);
   }
 
   async onEnroll() {
@@ -228,5 +259,20 @@ export class SessionDetailPage implements OnInit {
         this.fetchSessionDetails();
       }
     }).catch(error => { })
+  }
+  showToasts(message: any,duration : any, toastButton : any){
+    let texts;
+        this.translate.get([message]).subscribe(resp =>{
+          texts = resp;
+        });
+    this.snackbarRef = this.toaster.create({
+            message: texts[message],
+            // color: "danger",
+            buttons: toastButton,
+            cssClass: 'custom-toast'
+        }).then((toastData) => {
+      
+      toastData.present();
+    });
   }
 }

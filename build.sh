@@ -8,9 +8,11 @@ rm package-lock.json && npm install
 
 rm android/app/build/outputs/apk/debug
 
-ionic capacitor build android --release  --prod
+ionic capacitor build android --release  --prod --stacktrace
 
 cd android
+
+./gradlew clean
 
 ./gradlew bundle
 

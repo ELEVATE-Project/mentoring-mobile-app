@@ -11,7 +11,7 @@ export class ToastService {
         private translate : TranslateService
       ) { }
 
-      async showToast(msg, color) {
+      async showToast(msg, color , duration= 5000,toastButton = []) {
         let texts;
         this.translate.get([msg]).subscribe(resp =>{
           texts = resp;
@@ -19,8 +19,10 @@ export class ToastService {
         let toast = await this.toastCtrl.create({
             message: texts[msg],
             color:color,
-            duration: 5000,
+            duration: duration,
             position: 'top',
+            buttons: toastButton,
+            cssClass: 'custom-toast'
           });
           toast.present();
       }

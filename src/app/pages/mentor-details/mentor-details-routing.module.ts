@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: MentorDetailsPage
+  },
+  {
+    path: ':id',
+    component: MentorDetailsPage
   }
 ];
 

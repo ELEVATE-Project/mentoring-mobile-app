@@ -9,6 +9,9 @@ import { Router} from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
 import { Location } from '@angular/common';
 import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -43,9 +46,11 @@ export class AppComponent {
     private zone:NgZone,
     private _location: Location,
     private alert: AlertController,
+    private screenOrientation: ScreenOrientation,
   ) {
     this.initializeApp();
     this.router.navigate(["/"]);
+    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
   }
   subscribeBackButton() {
     this.platform.backButton.subscribeWithPriority(10,async () => {
@@ -103,14 +108,15 @@ export class AppComponent {
           this.user = data;
         }
       })
-      this.deeplinks.route({
-        '/sessions/details/:id': '',
-        '/mentor-details/:id': '',
-      }).subscribe(match=>{
-        this.zone.run(()=>{
-          this.router.navigateByUrl(match.$link.path);
-        })  
-      })
+      App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+        this.zone.run(() => {
+          const domain = environment.deepLinkUrl
+          const slug = event.url.split(domain).pop();
+          if (slug) {
+            this.router.navigateByUrl(slug);
+          }
+        });
+    });
     });
     this.subscribeBackButton();
   }

@@ -78,7 +78,7 @@ export class HomePage implements OnInit {
         break;
 
       case 'joinAction':
-        (event.data.sessionId)?await this.sessionService.joinSession(event.data.sessionId):await this.sessionService.joinSession(event.data._id);
+        this.sessionService.joinSession(event.data)
         this.getSessions();
         break;
 
@@ -91,8 +91,10 @@ export class HomePage implements OnInit {
         break;
 
       case 'startAction':
-        this.sessionService.startSession(event.data._id);
-        this.getSessions();
+        this.sessionService.startSession(event.data._id).then(async ()=>{
+          var obj = { page: this.page, limit: this.limit, searchText: "" };
+          this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+        })
         break;
     }
   }
