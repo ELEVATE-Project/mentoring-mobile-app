@@ -8,6 +8,7 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { Location } from '@angular/common';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { App, AppState } from '@capacitor/app';
 
 @Component({
   selector: 'app-session-detail',
@@ -30,7 +31,13 @@ export class SessionDetailPage implements OnInit {
     private utilService: UtilService, private toast: ToastService, private _location: Location, private user: UserService ,private toaster: ToastController,private translate : TranslateService) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
-  ngOnInit() {}
+  ngOnInit() {
+    App.addListener('appStateChange', (state: AppState) => {
+      if (state.isActive == true) {
+        this.fetchSessionDetails();
+      }
+    });
+  }
 
   async ionViewWillEnter() {
     await this.user.getUserValue();

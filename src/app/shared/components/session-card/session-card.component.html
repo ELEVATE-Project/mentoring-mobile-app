@@ -47,7 +47,7 @@
       </ion-row>
     </ion-col>
     <ion-col class="d-flex flex-justify-flex-end flex-align-items-center" style="float: right;" size="4">
-      <ion-button *ngIf="data?.status!='completed'" class="button" [disabled]="!buttonConfig?.isEnabled&&(buttonConfig?.type!='enrollAction' && buttonConfig?.type!='joinAction')" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
+      <ion-button *ngIf="data?.status!='completed'" class="button"  [disabled]="!buttonConfig?.isEnabled && buttonConfig?.label !='ENROLL'" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
     </ion-col>
   </ion-grid>
 </ion-card>
