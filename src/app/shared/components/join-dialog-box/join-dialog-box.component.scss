@@ -1,6 +1,15 @@
 .join-header{
     text-align: center;
+    max-width: 300px;
+    padding-left: 11%;
 }
 .join-platform{
     font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.platform-ellipsis{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
 }

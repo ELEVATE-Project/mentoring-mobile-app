@@ -6,6 +6,7 @@ import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
 import { IonModal } from '@ionic/angular';
+import { App, AppState } from '@capacitor/app';
 
 @Component({
   selector: 'app-session-card',
@@ -27,6 +28,11 @@ export class SessionCardComponent implements OnInit {
   constructor(private router: Router, private sessionService: SessionService, private toast: ToastService, private localStorage: LocalStorageService) { }
   
   async ngOnInit() {
+    App.addListener('appStateChange', (state: AppState) => {
+      if (state.isActive == true) {
+        this.setButtonConfig(this.isCreator);
+      }
+    });
     this.meetingPlatform = (this.data?.meetingInfo);
     this.isCreator = await this.checkIfCreator();
     this.setButtonConfig(this.isCreator);
@@ -38,11 +44,10 @@ export class SessionCardComponent implements OnInit {
     let currentTimeInSeconds=Math.floor(Date.now()/1000);
     if(isCreator){
       this.buttonConfig={label:"START",type:"startAction"};
-      this.buttonConfig.isEnabled = ((this.data.startDate-currentTimeInSeconds)<600 || this.data.status=='live')?true:false;
     } else {
       this.buttonConfig=(!isCreator&&this.data.isEnrolled || !isCreator&&this.data.sessionId)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
-      this.buttonConfig.isEnabled = ((this.data.startDate-currentTimeInSeconds)<300 || this.data.status=='live')?true:false;
     }
+    this.buttonConfig.isEnabled = ((this.data.startDate - currentTimeInSeconds) < 600 && !(this.data?.meetingInfo?.platform == 'OFF')) ? true : false
   }
 
   async checkIfCreator() {

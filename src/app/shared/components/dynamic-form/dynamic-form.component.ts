@@ -48,6 +48,7 @@ interface JsonFormControls {
   dependentKey?:string;
   isNumberOnly?: boolean;
   alertLabel?: string;
+  platformPlaceHolder?:string;
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
