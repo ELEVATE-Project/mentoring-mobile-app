@@ -8,6 +8,7 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { Location } from '@angular/common';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { App, AppState } from '@capacitor/app';
 
 @Component({
   selector: 'app-session-detail',
@@ -30,7 +31,13 @@ export class SessionDetailPage implements OnInit {
     private utilService: UtilService, private toast: ToastService, private _location: Location, private user: UserService ,private toaster: ToastController,private translate : TranslateService) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
-  ngOnInit() {}
+  ngOnInit() {
+    App.addListener('appStateChange', (state: AppState) => {
+      if (state.isActive == true) {
+        this.fetchSessionDetails();
+      }
+    });
+  }
 
   async ionViewWillEnter() {
     await this.user.getUserValue();
@@ -135,7 +142,7 @@ export class SessionDetailPage implements OnInit {
       this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
     }
     if((response.meetingInfo.platform == 'OFF') && this.isCreator && response.status=='published'){
-    this.showToasts('Meeting platform is not added, please add platform', 0 , [
+    this.showToasts('ADD_MEETING_LINK', 0 , [
         {
           text: 'Add meeting link',
           role: 'cancel',
@@ -158,7 +165,7 @@ export class SessionDetailPage implements OnInit {
       if(this.userDetails){
         this.isCreator = this.userDetails._id == response.userId ? true : false;
       }
-      this.headerConfig.edit = (this.isCreator && response.status=="published")?true:null;
+      this.headerConfig.edit = (this.isCreator && response.status=="published"&& !this.isEnabled)?true:null;
       this.headerConfig.delete = (this.isCreator && response.status=="published" && !this.isEnabled)?true:null;
   }
 

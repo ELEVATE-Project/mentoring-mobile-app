@@ -12,6 +12,8 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { Location } from '@angular/common';
 import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-conditions.page';
+import { App, AppState } from '@capacitor/app';
+
 
 @Component({
   selector: 'app-home',
@@ -54,6 +56,15 @@ export class HomePage implements OnInit {
     private toast:ToastService) { }
 
   ngOnInit() {
+    App.addListener('appStateChange', (state: AppState) => {
+      if (state.isActive == true) {
+        this.getSessions();
+        var obj = { page: this.page, limit: this.limit, searchText: "" };
+         this.sessionService.getAllSessionsAPI(obj).then((data)=>{
+            this.createdSessions = data;
+        })
+      }
+    });
     this.getUser();
     this.userService.userEventEmitted$.subscribe(data => {
       if (data) {
@@ -78,7 +89,7 @@ export class HomePage implements OnInit {
         break;
 
       case 'joinAction':
-        this.sessionService.joinSession(event.data)
+        await this.sessionService.joinSession(event.data)
         this.getSessions();
         break;
 

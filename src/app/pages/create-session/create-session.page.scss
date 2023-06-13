@@ -26,3 +26,13 @@ ion-label{
 .btns{
     width: 100%;
 }
+.icon-2{
+    background: var(--ion-color-primary);
+    height: 25px;
+    width: 25px;
+    border-radius: 50px;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -4,6 +4,8 @@
 }
 .load-more-button{
     height: 50px;
+    width: 100%;
+    font-size: 15px !important;
 }
 .session-btn{
     margin: 10px,;
@@ -42,3 +44,8 @@ img{
     border-radius: 10px;
     height: 220px;
 }
+ion-item {
+    --padding-end: 0px;
+    --inner-padding-end: 0px;
+    --padding-start: 0px;
+  }

@@ -31,6 +31,7 @@ export class SessionService {
     }
     catch (error) {
       this.loaderService.stopLoader();
+      return false
     }
   }
 
