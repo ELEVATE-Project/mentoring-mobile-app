@@ -20,6 +20,7 @@ import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
 })
 export class HttpService {
   baseUrl;
+  isFeedbackTriggered = false;
   constructor(
     private http: HTTP,
     private userService: UserService,
@@ -75,7 +76,8 @@ export class HttpService {
     return this.http.get(this.baseUrl + requestParam.url, '', headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
-        if(result?.meta?.data?.length){
+        if(result?.meta?.data?.length && !this.isFeedbackTriggered){
+          this.isFeedbackTriggered = true;
           this.openModal(result?.meta?.data[0]);
         }
         if (result.responseCode === "OK") {
@@ -179,6 +181,8 @@ export class HttpService {
         data: sessionData,
       }
     });
-    return await modal.present();
+    await modal.present();
+    const isModelClosed = await modal.onWillDismiss();
+    this.isFeedbackTriggered = isModelClosed.data;
   }
 }
