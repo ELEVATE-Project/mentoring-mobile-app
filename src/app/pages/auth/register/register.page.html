@@ -4,7 +4,6 @@
   <section>
     <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
   </section>
-</ion-content>
 <div class="mx-10">
   <section submitButton [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}">
     <div class="d-flex flex-justify-center">
@@ -21,3 +20,4 @@
     </div>
 </section>
   </div>
+</ion-content>
