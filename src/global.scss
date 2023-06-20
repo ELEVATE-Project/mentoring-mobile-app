@@ -295,3 +295,7 @@ ion-toast.custom-toast::part(button) {
 ion-toast.custom-toast{
   --background: var(--ion-color-primary);
 }
+.alert-button-no {
+  background: var(--white) !important;
+  color: var(--ion-color-primary) !important;
+}
