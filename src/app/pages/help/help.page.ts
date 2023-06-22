@@ -96,20 +96,7 @@ export class HelpPage implements OnInit {
         await alert.present();
         let data = await alert.onDidDismiss();
       if(data.role == 'no'){
-        await this.loaderService.startLoader();
-        const config = {
-          url: urlConstants.API_URLS.REPORT_ISSUE,
-          payload: this.form1.myForm.value
-        };
-        try {
-          let result = await this.httpService.post(config);
-          result?this.toast.showToast(result.message, "success"):this.toast.showToast(result.message, "danger");
-          this.loaderService.stopLoader();
-        }
-        catch (error) {
-          this.loaderService.stopLoader();
-        }
-        this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`])
+        this.submitHelpReport();
       }
   }
   async helpForm(){

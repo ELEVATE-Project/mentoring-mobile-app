@@ -10,9 +10,9 @@
             </ion-select-option>
           </ion-select>
         </ion-list>
-        <div *ngFor="let option of helpForms">
-          <div *ngIf="selectedOption == option && message" [innerHTML]="message" class="message"></div>
-          <app-dynamic-form *ngIf="selectedOption == option" [jsonFormData]="option.form" #form1 class="input"></app-dynamic-form>
+        <div *ngIf="selectedOption">
+          <div *ngIf="message" [innerHTML]="message"></div>
+          <app-dynamic-form [jsonFormData]="selectedOption.form" #form1 class="input"></app-dynamic-form>
        </div>
       </ion-card-content>
     </ion-card>
