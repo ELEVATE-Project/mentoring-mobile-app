@@ -1,6 +1,6 @@
 {
-	"appId": "org.elevate.mentoring",
-	"appName": "MentorED",
+	"appId": "org.elevate.mentored.ap",
+	"appName": "AP-MentorED",
 	"webDir": "www",
 	"bundledWebRuntime": false,
 	"plugins": {

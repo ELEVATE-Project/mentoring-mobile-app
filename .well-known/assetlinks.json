@@ -5,7 +5,7 @@
         ],
         "target": {
             "namespace": "android_app",
-            "package_name": "org.elevate.mentoring",
+            "package_name": "org.elevate.mentored.ap",
             "sha256_cert_fingerprints": [
                 "CC:C7:6A:C9:8A:76:19:37:CC:FE:6E:FA:7E:6B:DC:7C:15:82:EE:EF:D8:2E:7D:F9:75:02:27:8D:B8:C3:E7:F1"
             ]

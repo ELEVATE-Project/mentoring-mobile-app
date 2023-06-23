@@ -16,7 +16,7 @@ android {
         versionProps.store(versionPropsFile.newWriter(), null)
 
         defaultConfig {
-            applicationId "org.elevate.mentoring"
+            applicationId "org.elevate.mentored.ap"
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
             versionCode code
@@ -29,11 +29,6 @@ android {
             }
         }
     }
-    else {
-        throw new GradleException("Could not read version.properties!")
-    }
-
-    
     buildTypes {
         release {
             minifyEnabled false
