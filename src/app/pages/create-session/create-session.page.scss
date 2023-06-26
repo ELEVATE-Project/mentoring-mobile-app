@@ -1,0 +1,38 @@
+.segment{
+    display: flex;
+    justify-content: space-evenly;
+}
+.height{
+    height: 100%;
+}
+ion-label{
+    text-transform: none;
+}
+.card-title{
+    font-weight: 800;
+}
+.select{
+    width: 100%;
+}
+.hint-icon{
+    font-size: 12px;
+    margin: 0%;
+}
+.hint-label{
+    font-size: 12px;
+    padding-left: 5px;
+    margin: 0%;
+}
+.btns{
+    width: 100%;
+}
+.icon-2{
+    background: var(--ion-color-primary);
+    height: 25px;
+    width: 25px;
+    border-radius: 50px;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

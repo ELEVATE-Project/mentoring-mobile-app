@@ -271,3 +271,27 @@ ion-accordion-group{
       }
   }
 }
+
+//////////////
+
+
+.example-modal {
+  --width: fit-content;
+  --min-width: 95%;
+  --height: fit-content;
+  --border-radius: 6px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+}
+
+.example-modal .wrapper {
+  margin-bottom: 10px;
+}
+ion-toast.custom-toast::part(button) {
+  border-radius: 5px;
+  background-color: #39a464;
+  font-size: 15px;
+  text-transform: none;
+}
+ion-toast.custom-toast{
+  --background: var(--ion-color-primary);
+}

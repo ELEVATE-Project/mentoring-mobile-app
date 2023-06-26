@@ -34,3 +34,17 @@ export const HELP_VIDEOS: IFORM = {
 	"action": "videoFields",
     "templateName":"defaultTemplate",
 }
+
+export const PLATFORMS: IFORM = {
+	"type": "platformApp",
+	"subType": "platformAppForm",
+	"action": "platformAppFields",
+	"templateName": "defaultTemplate"	
+}
+
+export const HELP: IFORM = {
+	"type": "help",
+	"subType": "helpForm",
+	"action": "helpFields",
+	"templateName":"defaultTemplate"
+}

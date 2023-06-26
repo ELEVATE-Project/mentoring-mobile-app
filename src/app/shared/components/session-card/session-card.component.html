@@ -19,18 +19,35 @@
       </ion-col>
       <ion-col size="2"></ion-col>
     </ion-row>
-    <ion-row class="header">
-      <ion-col class="d-flex flex-align-items-center flex-justify-flex-end" size="1">
+    <ion-col class="header">
+      <ion-row class="d-flex flex-align-items-center" style="padding-left: 10px;">
         <ion-icon name="calendar-number-outline"></ion-icon>
-      </ion-col>
-      <ion-col class="d-flex flex-align-items-center" size="7">
-        <ion-label *ngIf="startDate && data?.status=='published'" class="date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
-        <ion-label *ngIf="startDate && data?.status=='live'" class="date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
-        <ion-label *ngIf="endDate && data?.status=='completed'" class="date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
-      </ion-col>
-      <ion-col class="d-flex flex-justify-flex-end flex-align-items-center" size="4">
-        <ion-button *ngIf="data?.status!='completed'" class="button" [disabled]="!buttonConfig?.isEnabled&&(buttonConfig?.type!='enrollAction')" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
-      </ion-col>
-    </ion-row>
+        <div>
+          <ion-label *ngIf="startDate && data?.status=='published'" class="platform-date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+          <ion-label *ngIf="startDate && data?.status=='live'" class="platform-date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+          <ion-label *ngIf="endDate && data?.status=='completed'" class="platform-date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
+        </div> 
+      </ion-row>
+      <ion-row class="d-flex flex-align-items-center meeting-platform" *ngIf="!(meetingPlatform?.platform == 'OFF' && isCreator) ">
+        <ion-icon name="videocam"></ion-icon>
+        <div class="join-platform-container">
+          <p class="platform-date-label">
+            {{ "MEETING_PLATFORM" | translate }} :
+            <b>{{ meetingPlatform?.platform }}</b> 
+          </p>
+        </div>
+      </ion-row>
+      <ion-row class="d-flex flex-align-items-center meeting-platform" *ngIf="meetingPlatform?.platform == 'OFF' && isCreator && (data.status != 'completed')">
+        <ion-icon name="videocam"></ion-icon>
+        <div>
+          <p class="platform-date-label">
+            <b class="add-meeting-link" (click)="clickOnAddMeetingLink(data); $event.stopPropagation()">Add meeting link</b>
+          </p>
+        </div>
+      </ion-row>
+    </ion-col>
+    <ion-col class="d-flex flex-justify-flex-end flex-align-items-center" style="float: right;" size="4">
+      <ion-button *ngIf="data?.status!='completed'" class="button"  [disabled]="!buttonConfig?.isEnabled && buttonConfig?.label !='ENROLL'" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
+    </ion-col>
   </ion-grid>
 </ion-card>

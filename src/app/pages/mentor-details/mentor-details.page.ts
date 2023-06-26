@@ -112,7 +112,7 @@ export class MentorDetailsPage implements OnInit {
         break;
 
       case 'joinAction':
-        await this.sessionService.joinSession(event.data._id);
+        await this.sessionService.joinSession(event.data);
         this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
         break;
 

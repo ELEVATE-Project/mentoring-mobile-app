@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AttachmentService, LoaderService, ToastService } from 'src/app/core/services';
 import { HttpService } from 'src/app/core/services/http/http.service';
@@ -16,7 +16,7 @@ import { File } from "@ionic-native/file/ngx";
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
-import { CREATE_SESSION_FORM } from 'src/app/core/constants/formConstant';
+import { CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 
 @Component({
@@ -28,22 +28,32 @@ export class CreateSessionPage implements OnInit {
   lastUploadedImage: boolean;
   private win: any = window;
   @ViewChild('form1') form1: DynamicFormComponent;
+  @ViewChild('platformForm') platformForm: DynamicFormComponent;
   id: any = null;
   localImage;
   path;
   public headerConfig: any = {
     // menu: true,
     backButton: {
-      label: 'CREATE_SESSION',
+      label: '',
     },
     notification: false,
   };
   profileImageData: any = {
-    type: 'session'
+    type: 'session',
+    haveValidationError: false
   }
+
   public formData: JsonFormData;
   showForm: boolean = false;
   isSubmited: boolean;
+  type: any ;
+  selectedLink: any;
+  selectedHint: any;
+  meetingPlatforms:any ;
+  firstStepperTitle: string;
+  sessionDetails: any;
+
   constructor(
     private http: HttpClient,
     private sessionService: SessionService,
@@ -61,60 +71,75 @@ export class CreateSessionPage implements OnInit {
     private changeDetRef: ChangeDetectorRef,
     private router: Router
   ) {
-    this.activatedRoute.queryParamMap.subscribe(params => {
-      this.id = params?.get('id');
-      this.path = this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory;
-    });
+    this.path = this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory;
   }
   async ngOnInit() {
     const result = await this.form.getForm(CREATE_SESSION_FORM);
     this.formData = _.get(result, 'result.data.fields');
-    if (this.id) {
-      let response = await this.sessionService.getSessionDetailsAPI(this.id);
-      this.profileImageData.image = response.image;
-      this.profileImageData.isUploaded = true;
-      response.startDate = moment.unix(response.startDate).format("YYYY-MM-DDTHH:mm");
-      response.endDate = moment.unix(response.endDate).format("YYYY-MM-DDTHH:mm");
-      this.preFillData(response);
-    } else {
-      this.showForm = true;
-    }
+    this.changeDetRef.detectChanges();
+    this.activatedRoute.queryParamMap.subscribe(async (params) => {
+      this.id = params?.get('id');
+      this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
+      this.type = params?.get('type')? params?.get('type'): 'default';
+      this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
+      if (this.id) {
+        let response = await this.sessionService.getSessionDetailsAPI(this.id);
+        this.sessionDetails= response;
+        this.profileImageData.image = response.image;
+        this.profileImageData.isUploaded = true;
+        response.startDate = moment.unix(response.startDate).format("YYYY-MM-DDTHH:mm");
+        response.endDate = moment.unix(response.endDate).format("YYYY-MM-DDTHH:mm");
+        this.preFillData(response);
+      } else {
+        this.showForm = true;
+      }
+    });
+    this.getPlatformFormDetails();
     this.isSubmited = false; //to be removed
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
   }
 
+  async getPlatformFormDetails() {
+    let form = await this.form.getForm(PLATFORMS);
+    this.meetingPlatforms = form.result.data.fields.forms;
+    this.selectedLink = this.meetingPlatforms[0];
+    this.selectedHint = this.meetingPlatforms[0].hint;
+  }
+
   async canPageLeave() {
-    if (!this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
-      let texts: any;
-      this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'BACK']).subscribe(text => {
-        texts = text;
-      })
-      const alert = await this.alert.create({
-        message: texts['SESSION_FORM_UNSAVED_DATA'],
-        buttons: [
-          {
-            text: texts['EXIT'],
-            cssClass: "alert-button",
-            handler: () => { }
-          },
-          {
-            text: texts['BACK'],
-            cssClass: "alert-button",
-            role: 'cancel',
-            handler: () => { }
-          }
-        ]
-      });
-      await alert.present();
-      let data = await alert.onDidDismiss();
-      if (data.role == 'cancel') {
-        return false;
+    if(this.type=='default'){
+      if (!this.form1?.myForm.pristine || this.profileImageData.haveValidationError) {
+        let texts: any;
+        this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'BACK']).subscribe(text => {
+          texts = text;
+        })
+        const alert = await this.alert.create({
+          message: texts['SESSION_FORM_UNSAVED_DATA'],
+          buttons: [
+            {
+              text: texts['EXIT'],
+              cssClass: "alert-button",
+              handler: () => { }
+            },
+            {
+              text: texts['BACK'],
+              cssClass: "alert-button",
+              role: 'cancel',
+              handler: () => { }
+            }
+          ]
+        });
+        await alert.present();
+        let data = await alert.onDidDismiss();
+        if (data.role == 'cancel') {
+          return false;
+        } else {
+          return true;
+        }
       } else {
         return true;
       }
-    } else {
-      return true;
     }
     return true
   }
@@ -123,7 +148,6 @@ export class CreateSessionPage implements OnInit {
   async onSubmit() {
     if(!this.isSubmited){
       this.form1.onSubmit();
-      this.isSubmited = true;
     }
     if (this.form1.myForm.valid) {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
@@ -136,8 +160,15 @@ export class CreateSessionPage implements OnInit {
         form.timeZone = timezone;
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
+        this.id = this.id ? this.id : result._id;
         if (result) {
-          this.id ? this.location.back() : this.router.navigate([`${CommonRoutes.SESSIONS_DETAILS}/`+result._id],{replaceUrl:true})
+          this.sessionDetails = _.isEmpty(result) ? this.sessionDetails : result;
+          this.isSubmited = true;
+          this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
+          this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
+          result.startDate = moment.unix(result.startDate).format("YYYY-MM-DDTHH:mm");
+          result.endDate = moment.unix(result.endDate).format("YYYY-MM-DDTHH:mm");
+          this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'}, replaceUrl: true });
         } else {
           this.profileImageData.image = this.lastUploadedImage;
           this.profileImageData.isUploaded = false;
@@ -163,6 +194,7 @@ export class CreateSessionPage implements OnInit {
       this.profileImageData.image = data.uploadUrl.destFilePath;
       this.form1.myForm.value.image = [data.uploadUrl.destFilePath];
       this.profileImageData.isUploaded = true;
+      this.profileImageData.haveValidationError = false;
       this.loaderService.stopLoader();
       this.onSubmit();
     }, error => {
@@ -175,6 +207,21 @@ export class CreateSessionPage implements OnInit {
   }
 
   preFillData(existingData) {
+    for(let j=0;j<this?.meetingPlatforms.length;j++){
+      if( existingData.meetingInfo.platform == this?.meetingPlatforms[j].name){
+         this.selectedLink = this?.meetingPlatforms[j];
+         this.selectedHint = this.meetingPlatforms[j].hint;
+        let obj = this?.meetingPlatforms[j]?.form?.controls.find( (link:any) => link?.name == 'link')
+        let meetingId = this?.meetingPlatforms[j]?.form?.controls.find( (meetingId:any) => meetingId?.name == 'meetingId')
+        let password = this?.meetingPlatforms[j]?.form?.controls.find( (password:any) => password?.name == 'password')
+        if(existingData.meetingInfo.link){
+          obj.value = existingData?.meetingInfo?.link;
+          meetingId = existingData?.meetingInfo?.meta?.meetingId;
+          password = existingData?.meetingInfo?.meta?.password;
+        }
+      }
+    }
+    
     for (let i = 0; i < this.formData.controls.length; i++) {
       this.formData.controls[i].value =
         existingData[this.formData.controls[i].name];
@@ -190,7 +237,7 @@ export class CreateSessionPage implements OnInit {
     this.localImage = event;
     this.profileImageData.image = this.lastUploadedImage =  this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
     this.profileImageData.isUploaded = false;
-  
+    this.profileImageData.haveValidationError = true;
   }
 
   imageRemoveEvent(event){
@@ -198,5 +245,41 @@ export class CreateSessionPage implements OnInit {
     this.form1.myForm.value.image ='';
     this.form1.myForm.markAsDirty();
     this.profileImageData.isUploaded = true;
+    this.profileImageData.haveValidationError = false;
   }
+  segmentChanged(event){
+    this.type = event.target.value;
+  }
+  isValid(event){
+    this.isSubmited = event;
+  }
+  clickOptions(event:any){
+    this.selectedHint = event.detail.value.hint;
+  }
+  setItLater(){
+    this.id ? this.router.navigate([`/${"session-detail"}/${this.id}`], {replaceUrl: true}): this.location.back();
+    
+  }
+  onSubmitLink(){
+    if (this.platformForm.myForm.valid){
+      let meetingInfo = {
+        'meetingInfo':{
+          'platform': this.selectedLink.name,
+          'link': this.platformForm.myForm.value?.link,
+          'value': this.selectedLink.value,
+          "meta": {
+            "password": this.platformForm.myForm.value?.password,
+            "meetingId":this.platformForm.myForm.value?.meetingId
+        }
+
+      }}
+      this.sessionService.createSession(meetingInfo,this.id).then(()=>{
+        this.router.navigate([`/${"session-detail"}/${this.id}`],{replaceUrl: true})
+      })
+    }
+  }
+  compareWithFn(o1, o2) {
+    return o1 === o2;
+  };
+
 }

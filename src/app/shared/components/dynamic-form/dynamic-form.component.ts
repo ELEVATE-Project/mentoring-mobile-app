@@ -4,8 +4,10 @@ import {
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
   ViewChild,
+  EventEmitter
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IonDatetime } from '@ionic/angular';
@@ -46,6 +48,7 @@ interface JsonFormControls {
   dependentKey?:string;
   isNumberOnly?: boolean;
   alertLabel?: string;
+  platformPlaceHolder?:string;
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
@@ -66,6 +69,7 @@ export class DynamicFormComponent implements OnInit {
   dependedChildDate="";
   dependedParent: any;
   dependedParentDate: any;
+  @Output() formValid = new EventEmitter()
 
   constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
   ngOnInit() {
@@ -133,6 +137,7 @@ export class DynamicFormComponent implements OnInit {
         )
       );
     }
+    this.formValid.emit(this.myForm.valid)
   }
   compareWith(a, b) {
     a = _.flatten([a]);
@@ -171,8 +176,6 @@ export class DynamicFormComponent implements OnInit {
     }
   }
   removeSpace(event: any){
-    if(event.target.selectionStart === 0 && event.code === "Space"){
-      event.preventDefault();
-    }
+    event.target.value = event.target.value.trimStart()
   }
 }
