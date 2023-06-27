@@ -43,7 +43,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   path;
   localImage;
   public formData: JsonFormData;
-  showForm: any = false;
+  showForm: any= false;
+  userDetails: any;
   constructor(
     private form: FormService,
     private api: HttpService,
@@ -67,10 +68,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.profileImageData.image = result.image;
     this.profileImageData.isUploaded = true;
     this.formData = _.get(response, 'result.data.fields');
-    const userDetails = await this.localStorage.getLocalData(
-      localKeys.USER_DETAILS
-    );
-    this.preFillData(userDetails);
+    this.userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    this.preFillData(this.userDetails);
   }
 
   async canPageLeave() {
@@ -157,8 +156,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   async getImageUploadUrl(file) {
     this.loaderService.startLoader();
     let config = {
-      url: urlConstants.API_URLS.GET_IMAGE_UPLOAD_URL + file.name,
-    };
+      url: urlConstants.API_URLS.GET_IMAGE_UPLOAD_URL + file.name + "&dynamicPath=users/" + this.userDetails._id
+    }
     let data: any = await this.api.get(config);
     this.loaderService.stopLoader();
     file.uploadUrl = data.result;
