@@ -54,7 +54,7 @@ export class UtilService {
           {
             text: texts[msg.cancel],
             role: 'cancel',
-            cssClass: 'alert-button-white',
+            cssClass: 'alert-button-bg-white',
             handler: (blah) => {
               resolve(false);
             }

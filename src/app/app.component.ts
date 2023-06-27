@@ -71,13 +71,12 @@ export class AppComponent {
             {
               text: texts['CONFIRM'],
               role: 'confirm',
-              cssClass: "alert-button",
+              cssClass: "alert-button-bg-white",
               handler: () => { 
                 navigator['app'].exitApp();
               }
             }
-          ]
-        });
+          ]       });
         await alert.present();
       } else {
         this._location.back();

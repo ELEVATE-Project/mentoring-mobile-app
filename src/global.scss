@@ -198,9 +198,14 @@ ion-button{
 
 .alert-button.sc-ion-alert-md {
   @extend.alert-button-global;
-  background-color: var(--ion-color-primary);
-  color: var(--white);
+  background-color: var(--ion-color-primary) !important;
+  color: var(--white) !important;
 } 
+.alert-button-bg-white.sc-ion-alert-md{
+  @extend.alert-button-global;
+  color: var(--ion-color-primary) !important;
+  background-color: var(--white) !important;
+}
 
 .alert-button-role-cancel.sc-ion-alert-md  {
   background-color: var(--white);
@@ -212,10 +217,6 @@ ion-button{
 }
 .alert-wrapper.sc-ion-alert-md{
   border-radius: 8px;
-}
-.alert-button-white.sc-ion-alert-md{
-  background-color: var(--white);
-  @extend.alert-button-global;
 }
 .alert-button-red.sc-ion-alert-md{
   background-color: var(--ion-color-primary);
