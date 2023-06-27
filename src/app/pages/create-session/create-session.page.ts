@@ -120,11 +120,12 @@ export class CreateSessionPage implements OnInit {
             {
               text: texts['EXIT'],
               cssClass: "alert-button",
+              role: 'exit',
               handler: () => { }
             },
             {
               text: texts['BACK'],
-              cssClass: "alert-button",
+              cssClass: "alert-button-bg-white",
               role: 'cancel',
               handler: () => { }
             }
@@ -132,11 +133,10 @@ export class CreateSessionPage implements OnInit {
         });
         await alert.present();
         let data = await alert.onDidDismiss();
-        if (data.role == 'cancel') {
-          return false;
-        } else {
-          return true;
-        }
+        if(data.role == 'exit'){
+          return true
+        } 
+        return false
       } else {
         return true;
       }
