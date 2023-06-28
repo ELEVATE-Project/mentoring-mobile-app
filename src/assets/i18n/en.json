@@ -183,5 +183,9 @@
     "DELETE_ACCOUNT": "Delete account",
     "DELETE_ALERT_MSG": "Deleting your account will remove all your data from the app forever. You will have to create a new account if you decide to come back. Do you want to continue?",
     "YES": "Yes",
-    "NO": "No"
+    "NO": "No",
+    "HELP_US_IMPROVE": "Please rate your experience to help us improve.",
+    "THANK_FOR_HOSTING": "Thank you for hosting",
+    "THANK_FOR_ATTENDING": "Thank you for attending",
+    "BY": "by"
 }
