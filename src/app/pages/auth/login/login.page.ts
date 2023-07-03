@@ -55,6 +55,7 @@ export class LoginPage implements OnInit {
   };
   labels = ["LOGIN_TO_MENTOR_ED"];
   mentorId: any;
+  supportInfo: any;
   constructor(private authService: AuthService, private router: Router,
               private menuCtrl: MenuController, private activatedRoute: ActivatedRoute,
               private translateService: TranslateService, private localStorage: LocalStorageService) {
@@ -63,6 +64,7 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.translateText();
+    this.getMailInfo();
   }
 
   async translateText() {
@@ -116,5 +118,9 @@ export class LoginPage implements OnInit {
   goToSignup() {
     this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.PERSONA_SELECTION}`]);
   }
-
+  getMailInfo(){
+    this.authService.getMailInfo().then((result:any) =>{
+      this.supportInfo = result
+    })
+}
 }

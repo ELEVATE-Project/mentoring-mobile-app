@@ -119,4 +119,13 @@ export class AuthService {
     }
   }
 
+  async getMailInfo(){
+    const config = {
+      url: urlConstants.API_URLS.GET_MAIL_INFO
+    };
+    let data: any = await this.httpService.post(config);
+    let result = _.get(data, 'result');
+    return result;
+  }
+
 }

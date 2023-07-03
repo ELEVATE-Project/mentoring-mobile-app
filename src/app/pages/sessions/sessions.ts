@@ -94,6 +94,6 @@ export class SessionsPage implements OnInit {
   }
 
   async onJoin(event){
-    await this.sessionService.joinSession(event.data.sessionId);
+    await this.sessionService.joinSession(event.data);
   }
 }
