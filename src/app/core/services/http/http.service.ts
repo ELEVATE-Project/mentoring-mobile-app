@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { HTTP } from '@ionic-native/http/ngx';
+import { Http } from '@capacitor-community/http';
 import { RequestParams } from '../../interface/request-param';
 import { environment } from 'src/environments/environment';
 import * as _ from 'lodash-es';
@@ -14,14 +14,12 @@ import { AuthService } from '../auth/auth.service';
 import { ModalController } from '@ionic/angular';
 import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
   baseUrl;
   constructor(
-    private http: HTTP,
     private userService: UserService,
     private network: NetworkService,
     private toastService: ToastService,
@@ -52,9 +50,12 @@ export class HttpService {
     }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     let body = requestParam.payload ? requestParam.payload : {};
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(60);
-    return this.http.post(this.baseUrl + requestParam.url, body, headers)
+    const options = {
+      url: this.baseUrl + requestParam.url,
+      headers: headers,
+      params: body,
+    };
+    return Http.post(headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
         if (result.responseCode === "OK") {
@@ -70,9 +71,12 @@ export class HttpService {
       throw Error(null);
     }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(60);
-    return this.http.get(this.baseUrl + requestParam.url, '', headers)
+    const options = {
+      url: this.baseUrl + requestParam.url,
+      headers: headers,
+      params: {},
+    };
+    return Http.post(headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
         if(result?.meta?.data?.length){
@@ -91,9 +95,12 @@ export class HttpService {
       throw Error(null);
     }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(60);
-    return this.http.delete(this.baseUrl + requestParam.url, '', headers)
+    const options = {
+      url: this.baseUrl + requestParam.url,
+      headers: headers,
+      params: {},
+    };
+    return Http.post(headers)
       .then((data: any) => {
         let result: any = JSON.parse(data.data);
         if (result.responseCode === "OK") {
@@ -114,7 +121,7 @@ export class HttpService {
     }
   }
 
-  //token validation and logout 
+//   //token validation and logout 
 
   async getToken() {
     let token = _.get(this.userService.token, 'access_token');
