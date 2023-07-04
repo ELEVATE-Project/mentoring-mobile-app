@@ -82,12 +82,13 @@ export class HelpPage implements OnInit {
           buttons: [
             {
               text: texts['YES'],
-              cssClass: "alert-button",
+              cssClass: "alert-button-bg-white",
+              role: 'yes',
               handler: () => { }
             },
             {
               text: texts['NO'],
-              cssClass: "alert-button-bg-white",
+              cssClass: "alert-button",
               role: 'no',
               handler: () => { }
             }
@@ -95,7 +96,7 @@ export class HelpPage implements OnInit {
         });
         await alert.present();
         let data = await alert.onDidDismiss();
-      if(data.role == 'no'){
+      if(data.role == 'yes'){
         this.submitHelpReport();
       }
   }
