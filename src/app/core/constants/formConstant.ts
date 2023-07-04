@@ -43,8 +43,8 @@ export const PLATFORMS: IFORM = {
 }
 
 export const HELP: IFORM = {
-	"type": "help",
-	"subType": "helpForm",
-	"action": "helpFields",
+	"type": "helpApp",
+	"subType": "helpAppForm",
+	"action": "helpAppFields",
 	"templateName":"defaultTemplate"
 }
