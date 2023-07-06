@@ -110,6 +110,6 @@ export class HelpPage implements OnInit {
   clickOptions(event:any){
     this.selectedOption.form = event.detail.value.form;
     this.message = (this.userDetails.isAMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
-    this.form1.createForm(this.selectedOption.form.controls);
+    this.form1?.createForm(this.selectedOption.form.controls);
   }
 }

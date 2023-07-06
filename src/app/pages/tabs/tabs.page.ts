@@ -12,7 +12,7 @@ export class TabsPage {
   subscription: any;
   constructor(private platform: Platform, private router: Router) { }
   tabChange(tabsRef: IonTabs) {
-    this.activeTab = tabsRef.outlet.activatedView.element;
+    this.activeTab = tabsRef?.outlet?.activatedView?.element;
   }
   ionViewWillLeave() {
     this.propagateToActiveTab('ionViewWillLeave');
