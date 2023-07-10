@@ -159,7 +159,7 @@ export class HttpService {
     console.log(result);
     let msg = JSON.parse(result.error);
     switch (result.status) {
-      case 400:
+      // case 400:
       case 406:
       case 422:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
@@ -167,6 +167,7 @@ export class HttpService {
       case 401:
         let auth = this.injector.get(AuthService);
         auth.logoutAccount(true);
+        this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
         break
       default:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')

@@ -77,7 +77,7 @@ export class ProfilePage implements OnInit {
     if (this.formData?.data?.about) {
       this.showProfileDetails = true;
     } else {
-      (!this.visited)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
+      (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
       this.visited=true;
     }
     this.gotToTop();

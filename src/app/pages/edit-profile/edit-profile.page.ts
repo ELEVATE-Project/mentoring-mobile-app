@@ -64,11 +64,10 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   }
   async ngOnInit() {
     const response = await this.form.getForm(EDIT_PROFILE_FORM);
-    var result = await this.profileService.getProfileDetailsAPI();
-    this.profileImageData.image = result.image;
     this.profileImageData.isUploaded = true;
     this.formData = _.get(response, 'result.data.fields');
     this.userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    this.profileImageData.image = this.userDetails.image;
     this.preFillData(this.userDetails);
   }
 
