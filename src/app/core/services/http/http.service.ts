@@ -159,7 +159,7 @@ export class HttpService {
     console.log(result);
     let msg = JSON.parse(result.error);
     switch (result.status) {
-      // case 400:
+      case 400:
       case 406:
       case 422:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
