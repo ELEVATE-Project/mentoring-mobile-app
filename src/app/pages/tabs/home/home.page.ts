@@ -57,13 +57,15 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     App.addListener('appStateChange', (state: AppState) => {
-      if (state.isActive == true) {
-        this.getSessions();
-        var obj = { page: this.page, limit: this.limit, searchText: "" };
-         this.sessionService.getAllSessionsAPI(obj).then((data)=>{
-            this.createdSessions = data;
-        })
-      }
+      this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
+        if (state.isActive == true && data) {
+          this.getSessions();
+          var obj = { page: this.page, limit: this.limit, searchText: "" };
+           this.sessionService.getAllSessionsAPI(obj).then((data)=>{
+              this.createdSessions = data;
+          })
+        }
+      })
     });
     this.getUser();
     this.userService.userEventEmitted$.subscribe(data => {
