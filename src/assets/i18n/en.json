@@ -181,7 +181,7 @@
     "HAVING_TROUBLE_LOGIN": "Having trouble in logging in/signing up? Write to us.",
     "ADD_MEETING_LINK": "Meeting link is not added, please add a link.",
     "DELETE_ACCOUNT": "Delete account",
-    "DELETE_ALERT_MSG": "Deleting your account will remove all your data from the app forever. You will have to create a new account if you decide to come back. Do you want to continue?",
+    "DELETE_ALERT_MSG": "Deleting your account will remove all your data from the MentorED forever. You will have to create a new account if you decide to come back. Do you want to continue?",
     "YES": "Yes",
     "NO": "No",
     "HELP_US_IMPROVE": "Please rate your experience to help us improve.",

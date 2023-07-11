@@ -73,6 +73,7 @@ export class HomePage implements OnInit {
         this.user = data;
       }
     })
+    this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
   }
   gotToTop() {
     this.content.scrollToTop(1000);
@@ -85,6 +86,7 @@ export class HomePage implements OnInit {
     this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
   }
   async eventAction(event) {
+    if(this.user.about){
     switch (event.type) {
       case 'cardSelect':
         (this.selectedSegment=="my-sessions")?this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.sessionId}`]):this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
@@ -110,6 +112,9 @@ export class HomePage implements OnInit {
         })
         break;
     }
+  }else {
+    this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+  }
   }
   viewMore(data) {
     this.router.navigate([`/${CommonRoutes.SESSIONS}`], { queryParams: { type: data } });
