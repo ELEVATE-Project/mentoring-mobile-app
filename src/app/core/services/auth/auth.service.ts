@@ -17,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AuthService {
   baseUrl: any;
+  user: any;
   constructor(
     private localStorage: LocalStorageService,
     private httpService: HttpService,
@@ -67,7 +68,8 @@ export class AuthService {
     if (!result.access_token) { throw Error(); };
     this.userService.token = result;
     await this.localStorage.setLocalData(localKeys.TOKEN, result);
-    const userData = await this.profileService.getProfileDetailsAPI();
+    this.user = data.result.user;
+    const userData = await this.profileService.getProfileDetailsFromAPI(this.user.isAMentor,this.user._id);
     if (!userData) {
       this.localStorage.delete(localKeys.TOKEN);
       throw Error();

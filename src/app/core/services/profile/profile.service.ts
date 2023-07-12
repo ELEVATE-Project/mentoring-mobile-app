@@ -39,8 +39,9 @@ export class ProfileService {
       let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
       userDetails.user = null;
       let profileData = await this.getProfileDetailsAPI();
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileData);
-      this.userService.userEvent.next(profileData);
+      let profileDatas = await {...userDetails, ...profileData};
+      await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileDatas);
+      this.userService.userEvent.next(profileDatas);
       this.loaderService.stopLoader();
       this._location.back();
       (showToast)?this.toast.showToast(data.message, "success"):null;
