@@ -131,7 +131,7 @@ export class SessionDetailPage implements OnInit {
       let readableStartDate = moment.unix(response.startDate).toLocaleString();
       let currentTimeInSeconds=Math.floor(Date.now()/1000);
       if(response.isEnrolled){
-        this.isEnabled = ((response.startDate - currentTimeInSeconds) < 300 || response.status=='live') ? true : false
+        this.isEnabled = ((response.startDate - currentTimeInSeconds) < 600 || response.status=='live') ? true : false
       } else {
         this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='live')?true:false;
       }
