@@ -33,7 +33,7 @@ export class SessionDetailPage implements OnInit {
   }
   ngOnInit() {
     App.addListener('appStateChange', (state: AppState) => {
-      if (state.isActive == true) {
+      if (state.isActive == true && this.id) {
         this.fetchSessionDetails();
       }
     });
@@ -141,7 +141,7 @@ export class SessionDetailPage implements OnInit {
       this.startDate = (response.startDate>0)?moment.unix(response.startDate).toLocaleString():this.startDate;
       this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
     }
-    if((response.meetingInfo.platform == 'OFF') && this.isCreator && response.status=='published'){
+    if((response?.meetingInfo?.platform == 'OFF') && this.isCreator && response.status=='published'){
     this.showToasts('ADD_MEETING_LINK', 0 , [
         {
           text: 'Add meeting link',
@@ -216,6 +216,7 @@ export class SessionDetailPage implements OnInit {
       if (data) {
         let result = await this.sessionService.deleteSession(this.id);
         if (result.responseCode == "OK") {
+          this.id = null;
           this.toast.showToast(result.message, "success");
           this._location.back();
         }
