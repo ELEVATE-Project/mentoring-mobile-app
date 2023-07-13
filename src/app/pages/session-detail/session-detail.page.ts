@@ -32,11 +32,13 @@ export class SessionDetailPage implements OnInit {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {
-    App.addListener('appStateChange', (state: AppState) => {
-      if (state.isActive == true && this.id) {
-        this.fetchSessionDetails();
-      }
-    });
+    App.removeAllListeners().then(() => {
+      App.addListener('appStateChange', (state: AppState) => {
+        if (state.isActive == true && this.id) {
+          this.fetchSessionDetails();
+        }
+      });
+    })
   }
 
   async ionViewWillEnter() {
