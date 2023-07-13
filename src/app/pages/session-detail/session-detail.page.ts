@@ -153,9 +153,6 @@ export class SessionDetailPage implements OnInit {
       ])
     }
   }
-  ionViewWillLeave(){
-    this.snackbarRef = this.toaster.dismiss();
-   }
 
   setPageHeader(response) {
     let currentTimeInSeconds=Math.floor(Date.now()/1000);
