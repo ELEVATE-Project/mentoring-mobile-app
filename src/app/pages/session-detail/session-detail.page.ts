@@ -25,6 +25,7 @@ export class SessionDetailPage implements OnInit {
   endDate: any;
   sessionDatas: any;
   snackbarRef: any;
+  skipWhenDelete: boolean= false;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -155,6 +156,9 @@ export class SessionDetailPage implements OnInit {
       ])
     }
   }
+  ionViewWillLeave(){
+    if(!this.skipWhenDelete){this.snackbarRef = this.toaster.dismiss()}
+   }
 
   setPageHeader(response) {
     let currentTimeInSeconds=Math.floor(Date.now()/1000);
@@ -215,6 +219,7 @@ export class SessionDetailPage implements OnInit {
       if (data) {
         let result = await this.sessionService.deleteSession(this.id);
         if (result.responseCode == "OK") {
+          this.skipWhenDelete= true;
           this.id = null;
           this.toast.showToast(result.message, "success");
           this._location.back();
