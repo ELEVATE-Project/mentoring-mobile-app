@@ -47,7 +47,8 @@
 
 <section [ngClass]="{'btn-disabled': form1?.myForm.invalid , 'btn-valid':form1?.myForm.valid}">
   <div class="ion-no-border" submitButton>
-    <ion-button *ngIf="type == 'default'" expand="full" (click)="onSubmit()">{{'PUBLISH_AND_ADD_LINK' | translate}}</ion-button>
+    <ion-button *ngIf="type == 'default' && !id" expand="full" (click)="onSubmit()">{{'PUBLISH_AND_ADD_LINK' | translate}}</ion-button>
+    <ion-button *ngIf="type == 'default' && id" expand="full" (click)="onSubmit()">{{'SAVE' | translate}}</ion-button>
   </div>
   <div class="ion-no-border segment" submitButton *ngIf="type == 'segment'">
     <ion-button *ngIf="sessionDetails?.meetingInfo?.platform === 'OFF'" class="btns" size="default" fill="solid" (click)="setItLater()">{{'SET_IT_LATER' | translate}}</ion-button>
