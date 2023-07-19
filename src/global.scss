@@ -198,11 +198,10 @@ ion-button{
 
 .alert-button.sc-ion-alert-md {
   @extend.alert-button-global;
-  background-color: var(--ion-color-primary) !important;
-  color: var(--white) !important;
+  background-color: var(--ion-color-primary);
+  color: var(--white);
 } 
-.alert-button-bg-white.sc-ion-alert-md{
-  @extend.alert-button-global;
+.alert-button-bg-white{
   color: var(--ion-color-primary) !important;
   background-color: var(--white) !important;
 }
