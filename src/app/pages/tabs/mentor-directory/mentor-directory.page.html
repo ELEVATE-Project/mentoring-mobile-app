@@ -17,11 +17,8 @@
   <div *ngIf="!mentors?.length">
     <app-no-data-found [messageHeader]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
   </div>
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore()">
-    <ion-infinite-scroll-content
-      loadingSpinner="bubbles"
-      loadingText="Loading more data..."
-    >
+  <ion-infinite-scroll #infinitescroll [disabled]="mentors.length==0" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
