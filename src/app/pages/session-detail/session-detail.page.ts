@@ -222,7 +222,7 @@ export class SessionDetailPage implements OnInit {
           this.skipWhenDelete= true;
           this.id = null;
           this.toast.showToast(result.message, "success");
-          this._location.back();
+          this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
           this.snackbarRef = this.toaster.dismiss();
         }
       }
