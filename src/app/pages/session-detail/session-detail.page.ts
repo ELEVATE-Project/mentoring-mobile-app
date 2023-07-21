@@ -26,6 +26,7 @@ export class SessionDetailPage implements OnInit {
   sessionDatas: any;
   snackbarRef: any;
   skipWhenDelete: boolean= false;
+  dismissWhenBack: boolean = false;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -34,7 +35,7 @@ export class SessionDetailPage implements OnInit {
   }
   ngOnInit() {
       App.addListener('appStateChange', (state: AppState) => {
-        if (state.isActive == true && this.id && this.sessionDatas) {
+        if (state.isActive == true && this.id && this.sessionDatas && !this.dismissWhenBack) {
           this.fetchSessionDetails();
         }
       });
@@ -143,16 +144,17 @@ export class SessionDetailPage implements OnInit {
       this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
     }
     if((response?.meetingInfo?.platform == 'OFF') && this.isCreator && response.status=='published'){
-    this.showToasts('ADD_MEETING_LINK', 0 , [
-        {
-          text: 'Add meeting link',
-          role: 'cancel',
-          handler: () => {
-            this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'} });
+      this.showToasts('ADD_MEETING_LINK', 0 , [
+          {
+            text: 'Add meeting link',
+            role: 'cancel',
+            handler: () => {
+              this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'} });
+            }
           }
-        }
-      ])
-    }
+        ])
+    } 
+    this.dismissWhenBack = true;
   }
   ionViewWillLeave(){
     if(!this.skipWhenDelete){this.snackbarRef = this.toaster.dismiss()}
@@ -221,6 +223,7 @@ export class SessionDetailPage implements OnInit {
           this.id = null;
           this.toast.showToast(result.message, "success");
           this._location.back();
+          this.snackbarRef = this.toaster.dismiss();
         }
       }
     }).catch(error => { })
