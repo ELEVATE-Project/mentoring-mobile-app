@@ -27,6 +27,7 @@ export class SessionDetailPage implements OnInit {
   snackbarRef: any;
   skipWhenDelete: boolean= false;
   dismissWhenBack: boolean = false;
+  platformOff: any;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -142,6 +143,7 @@ export class SessionDetailPage implements OnInit {
       this.detailData.data.meetingInfo = response.meetingInfo.platform;
       this.startDate = (response.startDate>0)?moment.unix(response.startDate).toLocaleString():this.startDate;
       this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
+      this.platformOff = (response?.meetingInfo?.platform == 'OFF') ? true : false;
     }
     if((response?.meetingInfo?.platform == 'OFF') && this.isCreator && response.status=='published'){
       this.showToasts('ADD_MEETING_LINK', 0 , [
