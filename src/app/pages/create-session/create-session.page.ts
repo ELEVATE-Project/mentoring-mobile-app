@@ -83,13 +83,7 @@ export class CreateSessionPage implements OnInit {
       this.type = params?.get('type')? params?.get('type'): 'default';
       this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
       if (this.id) {
-        let response = await this.sessionService.getSessionDetailsAPI(this.id);
-        this.sessionDetails= response;
-        this.profileImageData.image = response.image;
-        this.profileImageData.isUploaded = true;
-        response.startDate = moment.unix(response.startDate).format("YYYY-MM-DDTHH:mm");
-        response.endDate = moment.unix(response.endDate).format("YYYY-MM-DDTHH:mm");
-        this.preFillData(response);
+        this.getSessionDetailsUpdate()
       } else {
         this.showForm = true;
       }
@@ -98,6 +92,15 @@ export class CreateSessionPage implements OnInit {
     this.isSubmited = false; //to be removed
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
+  }
+  async getSessionDetailsUpdate(){
+    let response = await this.sessionService.getSessionDetailsAPI(this.id);
+        this.sessionDetails= response;
+        this.profileImageData.image = response.image;
+        this.profileImageData.isUploaded = true;
+        response.startDate = moment.unix(response.startDate).format("YYYY-MM-DDTHH:mm");
+        response.endDate = moment.unix(response.endDate).format("YYYY-MM-DDTHH:mm");
+        this.preFillData(response);
   }
 
   async getPlatformFormDetails() {
@@ -160,7 +163,6 @@ export class CreateSessionPage implements OnInit {
         form.timeZone = timezone;
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
-        this.id = this.id ? this.id : result._id;
         if (result) {
           this.sessionDetails = _.isEmpty(result) ? this.sessionDetails : result;
           this.isSubmited = true;
@@ -168,7 +170,11 @@ export class CreateSessionPage implements OnInit {
           this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
           result.startDate = moment.unix(result.startDate).format("YYYY-MM-DDTHH:mm");
           result.endDate = moment.unix(result.endDate).format("YYYY-MM-DDTHH:mm");
-          this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'}, replaceUrl: true });
+          if(!this.id && result._id){
+            this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: result._id , type: 'segment'}, replaceUrl: true });
+          }else {
+            this.type = 'segment';
+          }
         } else {
           this.profileImageData.image = this.lastUploadedImage;
           this.profileImageData.isUploaded = false;
@@ -247,8 +253,11 @@ export class CreateSessionPage implements OnInit {
     this.profileImageData.isUploaded = true;
     this.profileImageData.haveValidationError = false;
   }
-  segmentChanged(event){
+  async segmentChanged(event){
     this.type = event.target.value;
+    if(this.id){
+      this.getSessionDetailsUpdate();
+    }
   }
   isValid(event){
     this.isSubmited = event;
