@@ -1,34 +1,28 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
 @Directive({
     selector: '[numberOnly]'
 })
 export class NumberOnlyDirective {
-    // Allow decimal numbers. The \. is only allowed once to occur
-    private regex: RegExp = new RegExp(/^[0-9]+(\.[0-9]*){0,1}$/g);
-
-    // Allow key codes for special events. Reflect :
-    // Backspace, tab, end, home
-    private specialKeys: Array<string> = [ 'Backspace', 'Tab', 'End', 'Home' ];
-
-    constructor(private el: ElementRef) {
+    private value: string;
+    constructor(
+        private elementRef: ElementRef,
+        private renderer: Renderer2
+    ) {
     }
 
-    @HostListener('keydown', [ '$event' ])
-    onKeyDown(event: KeyboardEvent) {
-        // Allow Backspace, tab, end, and home keys
-        if (this.specialKeys.indexOf(event.key) !== -1) {
-            return;
-        }
-
-        // Do not use event.keycode this is deprecated.
-        // See: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
-        let current: string = this.el.nativeElement.value;
-        // We need this because the current value on the DOM element
-        // is not yet updated with the value from this event
-        let next: string = current.concat(event.key);
-        if (next && !String(next).match(this.regex)) {
-            event.preventDefault();
-        }
+    @HostListener('input', ['$event.target.value'])
+    onInputChange(value: string) {
+        const filteredValue: string = filterValue(value);
+        this.updateTextInput(filteredValue, this.value !== filteredValue);
     }
+
+    private updateTextInput(value: string, propagateChange: boolean) {
+        this.renderer.setProperty(this.elementRef.nativeElement, 'value', value);
+        this.value = value;
+    }
+}
+
+function filterValue(value): string {
+    return value.replace(/[^0-9]*/g, '');
 }
