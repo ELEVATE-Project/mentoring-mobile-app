@@ -66,7 +66,15 @@ export class AttachmentService {
     let data ={
         type:'removeCurrentPhoto'
     }
+    this.translate
+            .get([
+                "REMOVE_CURRENT_PHOTO"
+            ])
+            .subscribe((data) => {
+                this.texts = data;
+            });
     this.actionSheetController.dismiss(data);
+    this.presentToast(this.texts["REMOVE_CURRENT_PHOTO"], "success");
     }
     async selectImage(type) {
         this.translate
