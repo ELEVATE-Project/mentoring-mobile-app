@@ -114,10 +114,11 @@ export class CreateSessionPage implements OnInit {
     if(this.type=='default'){
       if (!this.form1?.myForm.pristine || this.profileImageData.haveValidationError) {
         let texts: any;
-        this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'BACK']).subscribe(text => {
+        this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'BACK', 'EXIT_HEADER_LABEL']).subscribe(text => {
           texts = text;
         })
         const alert = await this.alert.create({
+          header: texts['EXIT_HEADER_LABEL'],
           message: texts['SESSION_FORM_UNSAVED_DATA'],
           buttons: [
             {

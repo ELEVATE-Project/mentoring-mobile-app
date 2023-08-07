@@ -68,7 +68,7 @@
     "SORRY_NO_RESULTS":"Sorry no results found",
     "WELCOME_NOTE":"Search for top Mentors, enroll for live masterclass and enhance your learning.",
     "LOGOUT_CONFIRM_MESSAGE":"Are you sure you want to logout?",
-    "CANCEL_CONFIRM_MESSAGE":"Are you sure you want to cancel the session you have enrolled into?",
+    "CANCEL_CONFIRM_MESSAGE":"Are you sure you want to unenroll from this session?",
     "MENTORS_PROFILE":"Mentors Profile",
     "EDIT_PROFILE":"Edit profile",
     "ADD_PHOTO":"Add image",
@@ -188,5 +188,6 @@
     "THANK_FOR_HOSTING": "Thank you for hosting",
     "THANK_FOR_ATTENDING": "Thank you for attending",
     "BY": "by",
-    "REMOVE_CURRENT_PHOTO_LABEL": "Remove current photo"
+    "REMOVE_CURRENT_PHOTO_LABEL": "Remove current photo",
+    "EXIT_HEADER_LABEL": "Exit this page?"
 }
