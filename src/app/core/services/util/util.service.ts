@@ -76,7 +76,7 @@ export class UtilService {
     this.translate
       .get([
         "ADD_PHOTO",
-        "REMOVE_CURRENT_PHOTO",
+        "REMOVE_CURRENT_PHOTO_LABEL",
         "CHOOSE_FROM_LIBRARY",
         "TAKE_PHOTO",
         "CANCEL",
@@ -92,7 +92,7 @@ export class UtilService {
       case 'profile':
         buttons = [
           {
-            text: texts["REMOVE_CURRENT_PHOTO"],
+            text: texts["REMOVE_CURRENT_PHOTO_LABEL"],
             type: 'remove',
             action: 'remove'
           },
@@ -106,7 +106,7 @@ export class UtilService {
       case 'session':
         buttons = [
            {
-            text: texts["REMOVE_CURRENT_PHOTO"],
+            text: texts["REMOVE_CURRENT_PHOTO_LABEL"],
             type: 'remove',
             action: 'remove'
           },
