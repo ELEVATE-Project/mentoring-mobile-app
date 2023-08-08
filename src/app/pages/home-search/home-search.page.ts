@@ -53,8 +53,11 @@ export class HomeSearchPage implements OnInit {
     this.searching = false;
   }
 
-  checkInput(){
-    this.searchText=this.searchText.replace(/^ +/gm, '')
+  checkInput(event: any){
+    this.searchText=this.searchText.replace(/^ +/gm, '');
+    if(event.keyCode == 13){
+      this.search();
+    }
   }
 
   search(){
