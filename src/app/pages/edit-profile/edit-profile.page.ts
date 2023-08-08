@@ -75,11 +75,12 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     if (!this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
       let texts: any;
       this.translate
-        .get(['FORM_UNSAVED_DATA', 'CANCEL', 'OK'])
+        .get(['FORM_UNSAVED_DATA', 'CANCEL', 'OK', 'EXIT_HEADER_LABEL'])
         .subscribe((text) => {
           texts = text;
         });
       const alert = await this.alert.create({
+        header: texts['EXIT_HEADER_LABEL'],
         message: texts['FORM_UNSAVED_DATA'],
         buttons: [
           {
