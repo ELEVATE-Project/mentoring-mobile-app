@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.elevate.mentored.ap">
+    package="org.ap.elevate.mentored">
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +11,7 @@
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-            android:name="org.elevate.mentored.ap.MainActivity"
+            android:name="org.ap.elevate.mentored.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleInstance"
             android:exported="true">
