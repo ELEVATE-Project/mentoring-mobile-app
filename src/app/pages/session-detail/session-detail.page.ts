@@ -262,8 +262,8 @@ export class SessionDetailPage implements OnInit {
     let msg = {
       header: 'CANCEL_SESSION',
       message: 'CANCEL_CONFIRM_MESSAGE',
-      cancel: 'UN_ENROLL',
-      submit: 'CANCEL'
+      cancel: 'CANCEL',
+      submit: 'UN_ENROLL'
     }
     this.utilService.alertPopup(msg).then(async data => {
       if (data) {
