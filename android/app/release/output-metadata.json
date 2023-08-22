@@ -4,14 +4,14 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "org.elevate.mentored.ap",
+  "applicationId": "org.ap.elevate.mentored",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 1038,
+      "versionCode": 1510,
       "versionName": "2.4.0",
       "outputFile": "app-release.apk"
     }
