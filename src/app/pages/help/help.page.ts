@@ -74,10 +74,11 @@ export class HelpPage implements OnInit {
   }
   async deteteAccount(){
     let texts: any;
-        this.translate.get(['DELETE_ALERT_MSG', 'YES', 'NO']).subscribe(text => {
+        this.translate.get(['DELETE_ALERT_MSG', 'YES', 'NO', 'DELETE_ACCOUNT']).subscribe(text => {
           texts = text;
         })
         const alert = await this.alert.create({
+          header: texts['DELETE_ACCOUNT'],
           message: texts['DELETE_ALERT_MSG'],
           buttons: [
             {
