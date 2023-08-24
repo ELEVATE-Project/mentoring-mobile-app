@@ -81,7 +81,7 @@ export class ProfilePage implements OnInit {
       this.visited=true;
     }
     this.gotToTop();
-    this.profileFormUpdateApi();
+    this.profileDetailsApi();
   }
 
   gotToTop() {
@@ -90,14 +90,14 @@ export class ProfilePage implements OnInit {
 
 
   async doRefresh(event){
-    this.profileFormUpdateApi();
+    this.profileDetailsApi();
     event.target.complete();
   }
 
   feedback() {
     this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
   }
-  async profileFormUpdateApi(){
+  async profileDetailsApi(){
     var result = await this.profileService.getProfileDetailsFromAPI(this.user?.isAMentor,this.user?._id);
     if(result){
       this.formData.data = result;
