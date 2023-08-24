@@ -81,6 +81,7 @@ export class ProfilePage implements OnInit {
       this.visited=true;
     }
     this.gotToTop();
+    this.profileFormUpdateApi();
   }
 
   gotToTop() {
@@ -89,15 +90,18 @@ export class ProfilePage implements OnInit {
 
 
   async doRefresh(event){
-    var result = await this.profileService.getProfileDetailsFromAPI(this.user?.isAMentor,this.user?._id);
-    if(result){
-      this.formData.data = result;
-      this.formData.data.emailId = result.email.address;
-    }
+    this.profileFormUpdateApi();
     event.target.complete();
   }
 
   feedback() {
     this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
+  }
+  async profileFormUpdateApi(){
+    var result = await this.profileService.getProfileDetailsFromAPI(this.user?.isAMentor,this.user?._id);
+    if(result){
+      this.formData.data = result;
+      this.formData.data.emailId = result.email.address;
+    }
   }
 }
