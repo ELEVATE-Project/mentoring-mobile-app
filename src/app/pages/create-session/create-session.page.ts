@@ -114,7 +114,7 @@ export class CreateSessionPage implements OnInit {
     if(this.type=='default'){
       if (!this.form1?.myForm.pristine || this.profileImageData.haveValidationError) {
         let texts: any;
-        this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'BACK', 'EXIT_HEADER_LABEL']).subscribe(text => {
+        this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'CANCEL', 'EXIT_HEADER_LABEL']).subscribe(text => {
           texts = text;
         })
         const alert = await this.alert.create({
@@ -123,13 +123,13 @@ export class CreateSessionPage implements OnInit {
           buttons: [
             {
               text: texts['EXIT'],
-              cssClass: "alert-button",
+              cssClass: "alert-button-bg-white",
               role: 'exit',
               handler: () => { }
             },
             {
-              text: texts['BACK'],
-              cssClass: "alert-button-bg-white",
+              text: texts['CANCEL'],
+              cssClass: "alert-button-red",
               role: 'cancel',
               handler: () => { }
             }
