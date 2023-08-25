@@ -33,8 +33,8 @@
     <div *ngIf="detailData?.data?.isEnrolled && detailData?.data?.status==='published' && !isEnabled">
       <ion-button class="load-more-button" expand="full" (click)="onCancel()">{{"UN_ENROLL" | translate}}</ion-button>
     </div>
-    <div *ngIf="detailData?.data?.isEnrolled && detailData?.data?.status!='completed' && isEnabled">
-      <ion-button class="load-more-button" expand="full" (click)="onJoin()">{{"JOIN" | translate}}</ion-button>
+    <div *ngIf="detailData?.data?.isEnrolled && detailData?.data?.status!='completed' && isEnabled" class="join-button">
+      <ion-button class="load-more-button" expand="full" (click)="onJoin()" [disabled]="platformOff">{{"JOIN" | translate}}</ion-button>
     </div>
   </ng-template>
 </ion-footer>
