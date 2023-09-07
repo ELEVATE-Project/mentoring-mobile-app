@@ -1,16 +1,14 @@
 import { Injectable } from "@angular/core";
-import { Camera, CameraOptions, PictureSourceType } from "@awesome-cordova-plugins/camera/ngx";
-import { Chooser } from "@awesome-cordova-plugins/chooser/ngx";
-import { FilePath } from "@awesome-cordova-plugins/file-path/ngx";
+import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import { File } from "@ionic-native/file/ngx";
 import { ActionSheetController, Platform, ToastController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { FILE_EXTENSION_HEADERS } from "../../constants/file-extensions";
-import { urlConstants } from "../../constants/urlConstants";
 import { HttpService } from "../http/http.service";
 import { UtilService } from "../util/util.service";
-import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
-
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+import { HttpClient } from "@angular/common/http";
 @Injectable({
     providedIn: 'root'
 })
@@ -21,21 +19,16 @@ export class AttachmentService {
     fileBasePath;
     actionSheet;
     constructor(
-        private camera: Camera,
         private file: File,
         private actionSheetController: ActionSheetController,
         private toastController: ToastController,
         private platform: Platform,
-        private filePath: FilePath,
-        private chooser: Chooser,
+        private http: HttpClient,
         private utils: UtilService,
         private translate: TranslateService,
         private httpService: HttpService,
         private fileTransfer : FileTransfer
-        // private filePickerIOS: IOSFilePicker,
     ) {
-        this.isIos = this.platform.is('ios');
-        this.fileBasePath = this.isIos ? this.file.documentsDirectory : this.file.externalDataDirectory;
     }
 
     getActionSheetButtons(type): any {
@@ -43,9 +36,9 @@ export class AttachmentService {
         this.utils.getActionSheetButtons(type).forEach(element => {
             let button = {
                 text: element.text,
-                handler: () => {
+                handler: async () => {
                     if (element.action == 'camera') {
-                        this.takePicture(element.type == 'PHOTOLIBRARY' ? this.camera.PictureSourceType.PHOTOLIBRARY : this.camera.PictureSourceType.CAMERA);
+                        await this.takePicture(element.type == 'PHOTOLIBRARY' ? CameraSource.Photos : CameraSource.Camera);
                         return false;
                     } else if (element.action == 'remove') {
                         this.removeCurrentPhoto();
@@ -93,32 +86,14 @@ export class AttachmentService {
         return this.actionSheet.onDidDismiss();
     }
 
-    takePicture(sourceType: PictureSourceType) {
-        var options: CameraOptions = {
-            quality: 10,
-            sourceType: sourceType,
-            saveToPhotoAlbum: false,
-            correctOrientation: true,
-        };
-        this.camera
-            .getPicture(options)
-            .then((imagePath) => {
-                if (this.platform.is("android") && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
-                    this.filePath
-                        .resolveNativePath(imagePath)
-                        .then((filePath) => {
-                            this.copyFile(filePath);
-                        })
-                } else {
-                    this.copyFile(imagePath);
-                }
-            })
-            .catch((err) => {
-                if (err !== "No Image Selected") {
-                    this.actionSheetController.dismiss();
-                    this.presentToast(this.texts["ERROR_WHILE_STORING_FILE"]);
-                }
-            });
+    async takePicture(sourceType: CameraSource) {
+        const image = await Camera.getPhoto({
+            quality: 90,
+            allowEditing: false,
+            resultType: CameraResultType.Uri,
+            source: sourceType
+        });
+        await this.copyFileToLocalDir(image);
     }
 
     async presentToast(text, color = "danger") {
@@ -131,102 +106,111 @@ export class AttachmentService {
         toast.present();
     }
 
-    async openFile() {
-        try {
-            const file = await this.chooser.getFile();
-            const pathToWrite = this.directoryPath();
-            const newFileName = this.createFileName(file.name)
-            const writtenFile = await this.file.writeFile(pathToWrite, newFileName, file.data.buffer)
-            if (writtenFile.isFile) {
-                const data = {
-                    name: newFileName,
-                    type: this.mimeType(newFileName),
-                    isUploaded: false,
-                    url: "",
-                };
+    // async openFile() {
+    //     try {
+            // const file = await this.chooser.getFile();
+            // const pathToWrite = this.directoryPath();
+            // const newFileName = this.createFileName(file.name)
+            // const writtenFile = await this.file.writeFile(pathToWrite, newFileName, file.data.buffer)
+            // if (writtenFile.isFile) {
+            //     const data = {
+            //         name: newFileName,
+            //         type: this.mimeType(newFileName),
+            //         isUploaded: false,
+            //         url: "",
+            //     };
 
-                this.presentToast(this.texts["SUCCESSFULLY_ATTACHED"], "success");
-                this.actionSheetController.dismiss(data);
-            }
-        } catch (error) {
-            this.presentToast(this.texts["ERROR_WHILE_STORING_FILE"]);
+            //     this.presentToast(this.texts["SUCCESSFULLY_ATTACHED"], "success");
+            //     this.actionSheetController.dismiss(data);
+            // }
+    //     } catch (error) {
+    //         this.presentToast(this.texts["ERROR_WHILE_STORING_FILE"]);
+    //     }
+    // }
+
+    async copyFileToLocalDir(image) {
+        const base64Data = await this.readAsBase64(image);
+        const savedFile = await Filesystem.writeFile({
+            path: image.webPath!,
+            data: base64Data,
+            directory: Directory.Data,
+            recursive: true
+        });
+        image.binaryData = base64Data
+        image.type = this.mimeType(image.path),
+        image.isUploaded= false,
+        image.name = new Date().getTime()+'.'+image.path.split(".").pop();
+        this.presentToast(this.texts["SUCCESSFULLY_ATTACHED"], "success");
+        this.actionSheetController.dismiss(image);
+    }
+
+    private async readAsBase64(photo: Photo) {
+        if (this.platform.is('hybrid')) {
+            const file = await Filesystem.readFile({
+                path: photo.path
+            });
+    
+            return file.data;
+        }
+        else {
+            // Fetch the photo, read as a blob, then convert to base64 format
+            const response = await fetch(photo.webPath);
+            const blob = await response.blob();
+    
+            return await this.convertBlobToBase64(blob) as string;
         }
     }
+    
+    // Helper function
+    convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
+        const reader = new FileReader;
+        reader.onerror = reject;
+        reader.onload = () => {
+            resolve(reader.result);
+        };
+        reader.readAsDataURL(blob);
+    });
 
-    copyFile(filePath) {
-        let correctPath = filePath.substr(0, filePath.lastIndexOf("/") + 1);
-        let currentName = filePath.split("/").pop();
-        currentName = currentName.split("?")[0];
-        this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName));
-    }
+    // createFileName(name) {
+    //     let d = new Date(),
+    //         n = d.getTime(),
+    //         extentsion = name.split(".").pop().split(".").pop(),
+    //         newFileName = n + "." + extentsion;
+    //     return newFileName;
+    // }
 
-    copyFileToLocalDir(namePath, currentName, newFileName) {
-        this.file.copyFile(namePath, currentName, this.directoryPath(), newFileName).then(
-            (success) => {
-                const data = {
-                    name: newFileName,
-                    type: this.mimeType(newFileName),
-                    isUploaded: false,
-                };
-
-                this.presentToast(this.texts["SUCCESSFULLY_ATTACHED"], "success");
-                this.actionSheetController.dismiss(data);
-            },
-            (error) => {
-                this.presentToast(this.texts["ERROR_WHILE_STORING_FILE"]);
-            }
-        );
-    }
-    createFileName(name) {
-        let d = new Date(),
-            n = d.getTime(),
-            extentsion = name.split(".").pop(),
-            newFileName = n + "." + extentsion;
-        return newFileName;
-    }
-
-    directoryPath(): string {
-        if (this.platform.is("ios")) {
-            return this.file.documentsDirectory;
-        } else {
-            return this.file.externalDataDirectory;
-        }
-    }
+    // directoryPath(): string {
+    //     if (this.platform.is("ios")) {
+    //         return this.file.documentsDirectory;
+    //     } else {
+    //         return this.file.externalDataDirectory;
+    //     }
+    // }
 
     mimeType(fileName) {
         let ext = fileName.split(".").pop();
         return FILE_EXTENSION_HEADERS[ext];
     }
 
-    deleteFile(fileName) {
-        return this.file.removeFile(this.directoryPath(), fileName);
-    }
+    // deleteFile(fileName) {
+    //     return this.file.removeFile(this.directoryPath(), fileName);
+    // }
 
     cloudImageUpload(fileDetails) {
+        console.log(fileDetails)
         return new Promise((resolve, reject) => {
-            this.file.checkFile(this.fileBasePath, fileDetails.name).then(success => {
               var options = {
                 fileKey: fileDetails.name,
                 fileName: fileDetails.name,
                 chunkedMode: false,
-                mimeType: fileDetails.type,
+                mimeType: fileDetails.type, 
                 headers: {
-                  "Content-Type": "multipart/form-data",
-                  "x-ms-blob-type":
-                    fileDetails.cloudStorage === "AZURE"
-                      ? "BlockBlob"
-                      : null,
+                  "Content-Type": "multipart/form-data"
                 },
                 httpMethod: "PUT",
               };
-              const fileTrans: FileTransferObject = this.fileTransfer.create();
-              fileTrans.upload(this.fileBasePath + fileDetails.name, fileDetails.uploadUrl.signedUrl, options).then(success => {
+              this.http.put(fileDetails.uploadUrl.signedUrl, options).subscribe((success)=>{
                 resolve(success)
-              }).catch(error => {
-                reject(error)
-              })
-            }).catch(error => {
-              reject(error)
             })
           })
     }

@@ -14,18 +14,11 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CoreModule } from './core/core.module';
 import { Drivers, Storage } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
-import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+import { SQLite } from '@ionic-native/sqlite/ngx';
 import { File } from '@ionic-native/file/ngx';
-import { Camera } from '@awesome-cordova-plugins/camera/ngx';
-import { FilePath } from '@awesome-cordova-plugins/file-path/ngx';
-import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
-import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { TitleCasePipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
-import { Network } from '@awesome-cordova-plugins/network/ngx';
-import { Device } from '@awesome-cordova-plugins/device/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
@@ -55,18 +48,11 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   ],
 
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Deeplinks,
-    SocialSharing,
     File,
-    Camera,
-    FilePath,
-    Chooser,
+    SQLite,
     FileTransfer, 
     FileTransferObject,
-    InAppBrowser,
     TitleCasePipe,
-    Network,
-    Device,
     ScreenOrientation,
   ],
   bootstrap: [AppComponent],

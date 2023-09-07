@@ -8,7 +8,6 @@ import { CommonRoutes } from 'src/global.routes';
 import { Router} from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
 import { Location } from '@angular/common';
-import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { environment } from 'src/environments/environment';
@@ -40,7 +39,6 @@ export class AppComponent {
     private db:DbService,
     private router: Router,
     private network:NetworkService,
-    private deeplinks: Deeplinks,
     private authService:AuthService,
     private profile: ProfileService,
     private zone:NgZone,

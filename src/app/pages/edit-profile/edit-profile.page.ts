@@ -132,10 +132,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.profileImageData.isUploaded = true;
   }
   imageUploadEvent(event) {
-    this.localImage = event;
-    this.profileImageData.image = this.win.Ionic.WebView.convertFileSrc(
-      this.path + event.name
-    );
+    this.localImage = event.binaryData;
+    this.profileImageData.image = event.webPath
     this.profileImageData.isUploaded = false;
   }
   upload(data) {

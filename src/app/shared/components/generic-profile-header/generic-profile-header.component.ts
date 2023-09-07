@@ -32,7 +32,7 @@ export class GenericProfileHeaderComponent implements OnInit {
         let link = await this.utilService.getDeepLink(url);
         this.headerData.name = this.headerData.name.trim();
         let params = { link: link, subject: this.headerData?.name, text: this.labels[0] + ` ${this.headerData.name}` + this.labels[1] }
-        this.utilService.shareLink(params);
+        await this.utilService.shareLink(params);
       } else {
         this.toast.showToast("No link generated!!!", "danger");
       }

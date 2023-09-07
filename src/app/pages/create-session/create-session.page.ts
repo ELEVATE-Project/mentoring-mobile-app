@@ -12,7 +12,6 @@ import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
 import { Location } from '@angular/common';
 import { AlertController, Platform } from '@ionic/angular';
-import { File } from "@ionic-native/file/ngx";
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
@@ -62,7 +61,6 @@ export class CreateSessionPage implements OnInit {
     private location: Location,
     private attachment: AttachmentService,
     private platform: Platform,
-    private file: File,
     private api: HttpService,
     private loaderService: LoaderService,
     private translate: TranslateService,
@@ -71,9 +69,9 @@ export class CreateSessionPage implements OnInit {
     private changeDetRef: ChangeDetectorRef,
     private router: Router
   ) {
-    this.path = this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory;
   }
   async ngOnInit() {
+    const platformForm = await this.getPlatformFormDetails();
     const result = await this.form.getForm(CREATE_SESSION_FORM);
     this.formData = _.get(result, 'result.data.fields');
     this.changeDetRef.detectChanges();
@@ -83,12 +81,11 @@ export class CreateSessionPage implements OnInit {
       this.type = params?.get('type')? params?.get('type'): 'default';
       this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
       if (this.id) {
-        this.getSessionDetailsUpdate()
+        await this.getSessionDetailsUpdate()
       } else {
         this.showForm = true;
       }
     });
-    this.getPlatformFormDetails();
     this.isSubmited = false; //to be removed
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
@@ -105,6 +102,7 @@ export class CreateSessionPage implements OnInit {
 
   async getPlatformFormDetails() {
     let form = await this.form.getForm(PLATFORMS);
+    console.log(form.result.data.fields.forms)
     this.meetingPlatforms = form.result.data.fields.forms;
     this.selectedLink = this.meetingPlatforms[0];
     this.selectedHint = this.meetingPlatforms[0].hint;
@@ -214,6 +212,7 @@ export class CreateSessionPage implements OnInit {
   }
 
   preFillData(existingData) {
+    console.log(this.meetingPlatforms)
     for(let j=0;j<this?.meetingPlatforms.length;j++){
       if( existingData.meetingInfo.platform == this?.meetingPlatforms[j].name){
          this.selectedLink = this?.meetingPlatforms[j];
@@ -242,7 +241,7 @@ export class CreateSessionPage implements OnInit {
 
   imageUploadEvent(event) {
     this.localImage = event;
-    this.profileImageData.image = this.lastUploadedImage =  this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
+    this.profileImageData.image = this.lastUploadedImage = event.webPath
     this.profileImageData.isUploaded = false;
     this.profileImageData.haveValidationError = true;
   }

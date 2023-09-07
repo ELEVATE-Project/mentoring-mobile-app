@@ -8,8 +8,16 @@
 		"classpath": "com.capacitorjs.plugins.browser.BrowserPlugin"
 	},
 	{
+		"pkg": "@capacitor/camera",
+		"classpath": "com.capacitorjs.plugins.camera.CameraPlugin"
+	},
+	{
 		"pkg": "@capacitor/clipboard",
 		"classpath": "com.capacitorjs.plugins.clipboard.ClipboardPlugin"
+	},
+	{
+		"pkg": "@capacitor/device",
+		"classpath": "com.capacitorjs.plugins.device.DevicePlugin"
 	},
 	{
 		"pkg": "@capacitor/filesystem",
@@ -22,6 +30,10 @@
 	{
 		"pkg": "@capacitor/keyboard",
 		"classpath": "com.capacitorjs.plugins.keyboard.KeyboardPlugin"
+	},
+	{
+		"pkg": "@capacitor/network",
+		"classpath": "com.capacitorjs.plugins.network.NetworkPlugin"
 	},
 	{
 		"pkg": "@capacitor/share",
