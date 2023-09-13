@@ -132,13 +132,14 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.profileImageData.isUploaded = true;
   }
   imageUploadEvent(event) {
-    this.localImage = event.binaryData;
+    console.log(event)
+    this.localImage = event;
     this.profileImageData.image = event.webPath
     this.profileImageData.isUploaded = false;
   }
   upload(data) {
     this.loaderService.startLoader();
-    this.attachment.cloudImageUpload(data).then(
+    this.attachment.cloudImageUpload(data, data.uploadUrl).then(
       (resp) => {
         this.profileImageData.image = data.uploadUrl.destFilePath;
         this.form1.myForm.value.image = data.uploadUrl.destFilePath;

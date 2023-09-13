@@ -190,14 +190,14 @@ export class CreateSessionPage implements OnInit {
       url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name
     }
     let data: any = await this.api.get(config);
-    file.uploadUrl = data.result;
-    this.upload(file);
+    this.upload(file, data.result);
   }
 
-  upload(data) {
-    this.attachment.cloudImageUpload(data).then(resp => {
-      this.profileImageData.image = data.uploadUrl.destFilePath;
-      this.form1.myForm.value.image = [data.uploadUrl.destFilePath];
+  upload(data, uploadUrl) {
+    this.attachment.cloudImageUpload(data,uploadUrl).then(resp => {
+      console.log(resp)
+      this.profileImageData.image = uploadUrl.destFilePath;
+      this.form1.myForm.value.image = [uploadUrl.destFilePath];
       this.profileImageData.isUploaded = true;
       this.profileImageData.haveValidationError = false;
       this.loaderService.stopLoader();

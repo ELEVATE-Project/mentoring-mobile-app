@@ -65,7 +65,7 @@ export class HttpService {
         if (result.responseCode === "OK") {
           return result;
         } else {
-          data.error ? this.handleError(data) : null
+          this.handleError(data)
         }
       });
   }
@@ -90,7 +90,7 @@ export class HttpService {
         if (result.responseCode === "OK") {
           return result;
         } else {
-          data.error ? this.handleError(data) : null
+          this.handleError(data)
         }
       });
   }
@@ -111,7 +111,7 @@ export class HttpService {
         if (result.responseCode === "OK") {
           return result;
         } else {
-          data.error ? this.handleError(data) : null
+          this.handleError(data)
         }
       });
   }

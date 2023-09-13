@@ -7,8 +7,9 @@ import { TranslateService } from "@ngx-translate/core";
 import { FILE_EXTENSION_HEADERS } from "../../constants/file-extensions";
 import { HttpService } from "../http/http.service";
 import { UtilService } from "../util/util.service";
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
-import { HttpClient } from "@angular/common/http";
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { CapacitorHttp } from '@capacitor/core';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -23,7 +24,6 @@ export class AttachmentService {
         private actionSheetController: ActionSheetController,
         private toastController: ToastController,
         private platform: Platform,
-        private http: HttpClient,
         private utils: UtilService,
         private translate: TranslateService,
         private httpService: HttpService,
@@ -136,9 +136,7 @@ export class AttachmentService {
             directory: Directory.Data,
             recursive: true
         });
-        image.binaryData = base64Data
         image.type = this.mimeType(image.path),
-        image.isUploaded= false,
         image.name = new Date().getTime()+'.'+image.path.split(".").pop();
         this.presentToast(this.texts["SUCCESSFULLY_ATTACHED"], "success");
         this.actionSheetController.dismiss(image);
@@ -196,22 +194,43 @@ export class AttachmentService {
     //     return this.file.removeFile(this.directoryPath(), fileName);
     // }
 
-    cloudImageUpload(fileDetails) {
+    async cloudImageUpload(fileDetails,uploadUrl) {
         console.log(fileDetails)
-        return new Promise((resolve, reject) => {
-              var options = {
-                fileKey: fileDetails.name,
-                fileName: fileDetails.name,
-                chunkedMode: false,
-                mimeType: fileDetails.type, 
-                headers: {
-                  "Content-Type": "multipart/form-data"
-                },
-                httpMethod: "PUT",
+            // var options = {
+            // fileKey: fileDetails.name,
+            // fileName: fileDetails.name,
+            // chunkedMode: false,
+            // mimeType: fileDetails.type, 
+            const headers= {
+                "Content-Type": "multipart/form-data",
+                // "mimeType": fileDetails.type,
+                // "fileName": fileDetails.name,
+                // "fileKey": fileDetails.name,
+            }
+            // httpMethod: "PUT",
+            // };
+            const savedFile = await Filesystem.readFile({
+                path: fileDetails.webPath!,
+                directory: Directory.Data,
+            });
+            // const formData = new FormData();
+            // let response = await fetch(fileDetails.webPath)
+            // formData.append('file', savedFile.data);
+            //   const fileTrans: FileTransferObject = fileTransfer.create();
+            //   fileTrans.upload(fileDetails.name, fileDetails.uploadUrl.signedUrl, options).then(success => {
+            //     resolve(success)
+            //   }).catch(error => {
+            //     reject(error)
+            //   })
+            console.log(savedFile.data)
+            const option = {
+                url: uploadUrl.signedUrl,
+                headers: headers,
+                data: savedFile.data,
               };
-              this.http.put(fileDetails.uploadUrl.signedUrl, options).subscribe((success)=>{
-                resolve(success)
+            return CapacitorHttp.put(option).then((data)=>{
+                console.log(data)
+                return data
             })
-          })
     }
 }
