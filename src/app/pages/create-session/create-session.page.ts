@@ -214,7 +214,7 @@ export class CreateSessionPage implements OnInit {
   }
 
   preFillData(existingData) {
-    for(let j=0;j<this?.meetingPlatforms.length;j++){
+    for(let j=0;j<this?.meetingPlatforms?.length;j++){
       if( existingData.meetingInfo.platform == this?.meetingPlatforms[j].name){
          this.selectedLink = this?.meetingPlatforms[j];
          this.selectedHint = this.meetingPlatforms[j].hint;
