@@ -25,7 +25,7 @@ ion-label{
 }
 .btns{
     width: 100%;
-    background: var(--white);
+    background: var(--white) !important;
 }
 .icon-2{
     background: var(--ion-color-primary);
@@ -36,4 +36,8 @@ ion-label{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.form-content{
+    max-height: 100% !important;    
+    overflow-y: scroll !important;
 }
