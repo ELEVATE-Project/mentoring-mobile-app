@@ -210,7 +210,7 @@ export class CreateSessionPage implements OnInit {
   }
 
   preFillData(existingData) {
-    for(let j=0;j<this?.meetingPlatforms.length;j++){
+    for(let j=0;j<this?.meetingPlatforms?.length;j++){
       if( existingData.meetingInfo.platform == this?.meetingPlatforms[j].name){
          this.selectedLink = this?.meetingPlatforms[j];
          this.selectedHint = this.meetingPlatforms[j].hint;
@@ -219,8 +219,10 @@ export class CreateSessionPage implements OnInit {
         let password = this?.meetingPlatforms[j]?.form?.controls.find( (password:any) => password?.name == 'password')
         if(existingData.meetingInfo.link){
           obj.value = existingData?.meetingInfo?.link;
-          meetingId = existingData?.meetingInfo?.meta?.meetingId;
-          password = existingData?.meetingInfo?.meta?.password;
+        }
+        if(existingData?.meetingInfo?.meta?.meetingId){
+          meetingId.value = existingData?.meetingInfo?.meta?.meetingId;
+          password.value = existingData?.meetingInfo?.meta?.password;
         }
       }
     }
