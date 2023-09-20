@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
 import { CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-session',
@@ -187,24 +188,21 @@ export class CreateSessionPage implements OnInit {
   async getImageUploadUrl(file) {
     this.loaderService.startLoader();
     let config = {
-      url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name
+      url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name.replace(/[^A-Z0-9]+/ig, "_").toLowerCase()
     }
     let data: any = await this.api.get(config);
-    this.upload(file, data.result);
+    return this.upload(file, data.result).subscribe()
   }
 
   upload(data, uploadUrl) {
-    this.attachment.cloudImageUpload(data,uploadUrl).then(resp => {
-      console.log(resp)
+    return this.attachment.cloudImageUpload(data,uploadUrl).pipe(
+      map((resp=>{
       this.profileImageData.image = uploadUrl.destFilePath;
       this.form1.myForm.value.image = [uploadUrl.destFilePath];
       this.profileImageData.isUploaded = true;
       this.profileImageData.haveValidationError = false;
-      this.loaderService.stopLoader();
       this.onSubmit();
-    }, error => {
-      this.loaderService.stopLoader();
-    })
+    })))
   }
 
   resetForm() {
@@ -212,7 +210,6 @@ export class CreateSessionPage implements OnInit {
   }
 
   preFillData(existingData) {
-    console.log(this.meetingPlatforms)
     for(let j=0;j<this?.meetingPlatforms.length;j++){
       if( existingData.meetingInfo.platform == this?.meetingPlatforms[j].name){
          this.selectedLink = this?.meetingPlatforms[j];
@@ -239,11 +236,15 @@ export class CreateSessionPage implements OnInit {
     this.showForm = true;
   }
 
-  imageUploadEvent(event) {
-    this.localImage = event;
-    this.profileImageData.image = this.lastUploadedImage = event.webPath
-    this.profileImageData.isUploaded = false;
-    this.profileImageData.haveValidationError = true;
+  async imageUploadEvent(event) {
+    this.localImage = event.target.files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = (file: any) => {
+      this.profileImageData.image = this.lastUploadedImage = file.target.result
+      this.profileImageData.isUploaded = false;
+      this.profileImageData.haveValidationError = true;
+    }
   }
 
   imageRemoveEvent(event){

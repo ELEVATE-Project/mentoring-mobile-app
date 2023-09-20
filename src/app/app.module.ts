@@ -15,8 +15,6 @@ import { CoreModule } from './core/core.module';
 import { Drivers, Storage } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { SQLite } from '@ionic-native/sqlite/ngx';
-import { File } from '@ionic-native/file/ngx';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { TitleCasePipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
@@ -48,10 +46,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   ],
 
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    File,
     SQLite,
-    FileTransfer, 
-    FileTransferObject,
     TitleCasePipe,
     ScreenOrientation,
   ],
