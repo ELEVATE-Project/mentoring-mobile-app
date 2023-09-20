@@ -52,19 +52,20 @@ export class UtilService {
         message: texts[msg.message],
         buttons: [
           {
-            text: texts[msg.cancel],
-            role: 'cancel',
-            cssClass: 'alert-button-bg-white',
-            handler: (blah) => {
-              resolve(false);
-            }
-          }, {
             text: texts[msg.submit],
-            cssClass: 'alert-button-red',
+            cssClass: 'alert-button-bg-white',
             handler: () => {
               resolve(true);
             }
-          }
+          },
+          {
+            text: texts[msg.cancel],
+            role: 'cancel',
+            cssClass: 'alert-button-red',
+            handler: (blah) => {
+              resolve(false);
+            }
+          },
         ]
       });
       await alert.present();

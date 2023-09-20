@@ -84,7 +84,6 @@ export class AuthService {
   }
 
   async logoutAccount(skipApiCall?: boolean) {
-    await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.LOGOUT_ACCOUNT,
       payload: {
@@ -99,13 +98,11 @@ export class AuthService {
       this.localStorage.delete(localKeys.TOKEN);
       this.userService.token = null;
       this.userService.userEvent.next(null);
-      await this.loaderService.stopLoader();
       this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
         replaceUrl: true
       });
     }
     catch (error) {
-      await this.loaderService.stopLoader();
     }
   }
 
