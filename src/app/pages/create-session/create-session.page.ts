@@ -12,12 +12,12 @@ import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
 import { Location } from '@angular/common';
 import { AlertController, Platform } from '@ionic/angular';
-import { File } from "@ionic-native/file/ngx";
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
 import { CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-session',
@@ -62,7 +62,6 @@ export class CreateSessionPage implements OnInit {
     private location: Location,
     private attachment: AttachmentService,
     private platform: Platform,
-    private file: File,
     private api: HttpService,
     private loaderService: LoaderService,
     private translate: TranslateService,
@@ -71,9 +70,9 @@ export class CreateSessionPage implements OnInit {
     private changeDetRef: ChangeDetectorRef,
     private router: Router
   ) {
-    this.path = this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory;
   }
   async ngOnInit() {
+    const platformForm = await this.getPlatformFormDetails();
     const result = await this.form.getForm(CREATE_SESSION_FORM);
     this.formData = _.get(result, 'result.data.fields');
     this.changeDetRef.detectChanges();
@@ -83,12 +82,11 @@ export class CreateSessionPage implements OnInit {
       this.type = params?.get('type')? params?.get('type'): 'default';
       this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
       if (this.id) {
-        this.getSessionDetailsUpdate()
+        await this.getSessionDetailsUpdate()
       } else {
         this.showForm = true;
       }
     });
-    this.getPlatformFormDetails();
     this.isSubmited = false; //to be removed
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
@@ -105,6 +103,7 @@ export class CreateSessionPage implements OnInit {
 
   async getPlatformFormDetails() {
     let form = await this.form.getForm(PLATFORMS);
+    console.log(form.result.data.fields.forms)
     this.meetingPlatforms = form.result.data.fields.forms;
     this.selectedLink = this.meetingPlatforms[0];
     this.selectedHint = this.meetingPlatforms[0].hint;
@@ -114,7 +113,7 @@ export class CreateSessionPage implements OnInit {
     if(this.type=='default'){
       if (!this.form1?.myForm.pristine || this.profileImageData.haveValidationError) {
         let texts: any;
-        this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'BACK', 'EXIT_HEADER_LABEL']).subscribe(text => {
+        this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'CANCEL', 'EXIT_HEADER_LABEL']).subscribe(text => {
           texts = text;
         })
         const alert = await this.alert.create({
@@ -123,13 +122,13 @@ export class CreateSessionPage implements OnInit {
           buttons: [
             {
               text: texts['EXIT'],
-              cssClass: "alert-button",
+              cssClass: "alert-button-bg-white",
               role: 'exit',
               handler: () => { }
             },
             {
-              text: texts['BACK'],
-              cssClass: "alert-button-bg-white",
+              text: texts['CANCEL'],
+              cssClass: "alert-button-red",
               role: 'cancel',
               handler: () => { }
             }
@@ -189,24 +188,21 @@ export class CreateSessionPage implements OnInit {
   async getImageUploadUrl(file) {
     this.loaderService.startLoader();
     let config = {
-      url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name
+      url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name.replace(/[^A-Z0-9]+/ig, "_").toLowerCase()
     }
     let data: any = await this.api.get(config);
-    file.uploadUrl = data.result;
-    this.upload(file);
+    return this.upload(file, data.result).subscribe()
   }
 
-  upload(data) {
-    this.attachment.cloudImageUpload(data).then(resp => {
-      this.profileImageData.image = data.uploadUrl.destFilePath;
-      this.form1.myForm.value.image = [data.uploadUrl.destFilePath];
+  upload(data, uploadUrl) {
+    return this.attachment.cloudImageUpload(data,uploadUrl).pipe(
+      map((resp=>{
+      this.profileImageData.image = uploadUrl.destFilePath;
+      this.form1.myForm.value.image = [uploadUrl.destFilePath];
       this.profileImageData.isUploaded = true;
       this.profileImageData.haveValidationError = false;
-      this.loaderService.stopLoader();
       this.onSubmit();
-    }, error => {
-      this.loaderService.stopLoader();
-    })
+    })))
   }
 
   resetForm() {
@@ -214,7 +210,7 @@ export class CreateSessionPage implements OnInit {
   }
 
   preFillData(existingData) {
-    for(let j=0;j<this?.meetingPlatforms.length;j++){
+    for(let j=0;j<this?.meetingPlatforms?.length;j++){
       if( existingData.meetingInfo.platform == this?.meetingPlatforms[j].name){
          this.selectedLink = this?.meetingPlatforms[j];
          this.selectedHint = this.meetingPlatforms[j].hint;
@@ -223,8 +219,10 @@ export class CreateSessionPage implements OnInit {
         let password = this?.meetingPlatforms[j]?.form?.controls.find( (password:any) => password?.name == 'password')
         if(existingData.meetingInfo.link){
           obj.value = existingData?.meetingInfo?.link;
-          meetingId = existingData?.meetingInfo?.meta?.meetingId;
-          password = existingData?.meetingInfo?.meta?.password;
+        }
+        if(existingData?.meetingInfo?.meta?.meetingId){
+          meetingId.value = existingData?.meetingInfo?.meta?.meetingId;
+          password.value = existingData?.meetingInfo?.meta?.password;
         }
       }
     }
@@ -240,11 +238,15 @@ export class CreateSessionPage implements OnInit {
     this.showForm = true;
   }
 
-  imageUploadEvent(event) {
-    this.localImage = event;
-    this.profileImageData.image = this.lastUploadedImage =  this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
-    this.profileImageData.isUploaded = false;
-    this.profileImageData.haveValidationError = true;
+  async imageUploadEvent(event) {
+    this.localImage = event.target.files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = (file: any) => {
+      this.profileImageData.image = this.lastUploadedImage = file.target.result
+      this.profileImageData.isUploaded = false;
+      this.profileImageData.haveValidationError = true;
+    }
   }
 
   imageRemoveEvent(event){

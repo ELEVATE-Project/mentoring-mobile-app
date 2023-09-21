@@ -6,8 +6,9 @@
       <img class="thumbnail-image" src="{{profileImageData?.image}}"/>
     </ng-template>
   </div>
-  <div class="d-flex flex-justify-center">
-    <ion-button fill="clear" expand="block" class="add-image-button" *ngIf="uploadImage" (click)="uploadPhoto()">{{ "ADD_PHOTO" | translate }}</ion-button>
+  <div *ngIf="uploadImage" class="d-flex flex-justify-center">
+    <input type="file" (change)="upload($event)" #fileUpload accept="image/*" hidden>
+    <ion-button fill="clear" expand="block" class="add-image-button" (click)="uploadPhoto()">{{ "ADD_PHOTO" | translate }}</ion-button>
   </div>
   <div class="padding" *ngIf="profileImageData;">
     <div *ngIf="profileImageData?.name">

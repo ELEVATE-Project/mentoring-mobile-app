@@ -14,19 +14,12 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CoreModule } from './core/core.module';
 import { Drivers, Storage } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
-import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
-import { File } from '@ionic-native/file/ngx';
-import { Camera } from '@awesome-cordova-plugins/camera/ngx';
-import { FilePath } from '@awesome-cordova-plugins/file-path/ngx';
-import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
-import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { SQLite } from '@ionic-native/sqlite/ngx';
 import { TitleCasePipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
-import { Network } from '@awesome-cordova-plugins/network/ngx';
-import { Device } from '@awesome-cordova-plugins/device/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -52,21 +45,17 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
       },
     }),
     ReactiveFormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
 
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Deeplinks,
-    SocialSharing,
-    File,
-    Camera,
-    FilePath,
-    Chooser,
-    FileTransfer, 
-    FileTransferObject,
-    InAppBrowser,
+    SQLite,
     TitleCasePipe,
-    Network,
-    Device,
     ScreenOrientation,
   ],
   bootstrap: [AppComponent],
