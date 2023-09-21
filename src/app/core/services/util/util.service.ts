@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+// import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+import { Share } from '@capacitor/share';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Action } from 'rxjs/internal/scheduler/Action';
@@ -11,7 +12,7 @@ import { ISocialSharing } from '../../interface/soical-sharing-interface';
 })
 export class UtilService {
   constructor(
-    private socialSharing: SocialSharing,
+    // private socialSharing: SocialSharing,
     private alert: AlertController,
     private translate: TranslateService
   ) {}
@@ -20,25 +21,29 @@ export class UtilService {
     return environment.deepLinkUrl+url;
   }
 
-  shareLink(param:ISocialSharing) {
+  async shareLink(param:ISocialSharing) {
     let {text,subject,link} = param;
-    this.socialSharing.share(text,subject,null,link);
+    await Share.share({
+      text: text,
+      url: link,
+      dialogTitle: subject,
+    });
+    // this.socialSharing.share(text,subject,null,link);
   }
 
-  shareFile(param:ISocialSharing) {
-    let {file,text} = param;
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      let base64: any = reader.result;
-      this.socialSharing
-        .share(text, file.name, base64,null)
-        .then(() => {
-        })
-        .catch(() => {
-        });
-    };
-  }
+  // shareFile(param:ISocialSharing) {
+  //   let {file,text} = param;
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   reader.onload = async () => {
+  //     let base64: any = reader.result;
+  //     await Share.share(text, file.name, base64,null)
+  //       .then(() => {
+  //       })
+  //       .catch(() => {
+  //       });
+  //   };
+  // }
 
   async alertPopup(msg) {
     return new Promise(async (resolve) => {

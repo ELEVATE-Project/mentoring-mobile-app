@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    namespace 'org.elevate.mentoring'
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     def versionPropsFile = file('version.properties')
@@ -33,7 +35,7 @@ android {
         throw new GradleException("Could not read version.properties!")
     }
 
-    
+
     buildTypes {
         release {
             minifyEnabled false
@@ -49,6 +51,8 @@ repositories {
 }
 
 dependencies {
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation project(':capacitor-android')

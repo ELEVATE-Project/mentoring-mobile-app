@@ -4,7 +4,8 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, LoaderService, ToastService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
-import { Device } from '@awesome-cordova-plugins/device/ngx';
+// import { Device } from '@awesome-cordova-plugins/device/ngx';
+import { Device } from '@capacitor/device';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { HELP } from 'src/app/core/constants/formConstant';
 import * as _ from 'lodash';
@@ -31,7 +32,8 @@ export class HelpPage implements OnInit {
   userDetails: any;
   message: any;
 
-  constructor(private router: Router, private loaderService: LoaderService, private toast: ToastService, private httpService: HttpService, private device: Device, 
+  constructor(private router: Router, private loaderService: LoaderService, private toast: ToastService, private httpService: HttpService,
+    // private device: Device, 
     private form: FormService, private translate: TranslateService,private alert: AlertController,private profileService: ProfileService,) { }
 
   async ngOnInit() {
@@ -39,13 +41,15 @@ export class HelpPage implements OnInit {
     await  this.profileService.profileDetails().then((userDetails) => {
         this.userDetails = userDetails;
       });
-    App.getInfo().then((data)=>{
+    App.getInfo().then(async (data)=>{
+      const info = await Device.getInfo();
       this.metaData = {
-        deviceName: this.device.model,
-        androidVersion: this.device.version,
+        deviceName: info.model,
+        androidVersion: info.osVersion,
         version: data.version,
         type: ''
       }
+      console.log(this.metaData);
     })
     
   }

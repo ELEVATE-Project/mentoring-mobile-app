@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpService, LoaderService, ToastService } from '..';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { Browser } from '@capacitor/browser';
 import { Router } from '@angular/router';
 import { JoinDialogBoxComponent } from 'src/app/shared/components/join-dialog-box/join-dialog-box.component';
 import { ModalController } from '@ionic/angular';
@@ -12,7 +12,7 @@ import { ModalController } from '@ionic/angular';
 })
 export class SessionService {
 
-  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser, private router: Router, private modalCtrl: ModalController) { }
+  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private router: Router, private modalCtrl: ModalController) { }
 
 
   async createSession(formData, id?: string) {
@@ -142,7 +142,7 @@ async getSessionsList(obj) {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-        this.openBrowser(data.result.link);
+        await this.openBrowser(data.result.link);
         return true;
       } else {
         return false;
@@ -194,11 +194,10 @@ async getSessionsList(obj) {
     }
   }
 
-  openBrowser(link) {
-    let browser = this.inAppBrowser.create(link, `_system`);
-    browser.on('exit').subscribe(() => {
-    }, err => {
-      console.error(err);
+  async openBrowser(link) {
+    await Browser.open({ url: link });
+    Browser.addListener('browserFinished', () => {
+      console.log("exit");
     });
   }
 
