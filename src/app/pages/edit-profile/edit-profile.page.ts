@@ -52,7 +52,6 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     private localStorage: LocalStorageService,
     private attachment: AttachmentService,
     private platform: Platform,
-    private file: File,
     private loaderService: LoaderService,
     private alert: AlertController,
     private translate: TranslateService,

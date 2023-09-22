@@ -11,6 +11,7 @@ import { Location } from '@angular/common';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { environment } from 'src/environments/environment';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-root',
@@ -48,7 +49,9 @@ export class AppComponent {
   ) {
     this.initializeApp();
     this.router.navigate(["/"]);
-    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    if(Capacitor.isNativePlatform()){
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
+    }
   }
   subscribeBackButton() {
     this.platform.backButton.subscribeWithPriority(10,async () => {

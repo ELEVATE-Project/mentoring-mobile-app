@@ -78,7 +78,7 @@ export class HttpService {
     const options = {
       url: this.baseUrl + requestParam.url,
       headers: headers,
-      data: '',
+      params: {},
     };
     return CapacitorHttp.get(options)
       .then((data: any) => {
