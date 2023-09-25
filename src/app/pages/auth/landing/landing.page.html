@@ -1,23 +1,32 @@
 <ion-content class="ion-padding">
-  <div class="landing-header">
-    <app-generic-header [labels]="labels"></app-generic-header>
-  </div>
-  <section class="section-config">
-    <div class="d-flex flex-justify-center">
-      <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onSignup()">
-        <ion-icon class="button-icon" name="mail-outline"></ion-icon>{{"SIGN_UP"|translate}}
-      </ion-button>
-    </div>
-  </section>
-  <section class="section-config or-section">
-    <p><span>OR</span></p>
-  </section>
-  <section class="section-config">
-    <p class="text-config">{{"ALREADY_HAVE_ACCOUNT"|translate}}</p>
-    <div class="d-flex flex-justify-center">
-      <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onLogin()">
-        <ion-icon class="button-icon" name="mail-outline"></ion-icon>{{"LOGIN"|translate}}
-      </ion-button>
-    </div>
-  </section>
+  <ion-grid>
+    <ion-row class="d-flex flex-justify-center">
+      <ion-col padding size-xs="12" size-sm="12" size-md="6" size-lg="6" align-self-stretch>
+        <section class="section-config">
+          <div class="landing-header d-flex flex-justify-center">
+            <app-generic-header [labels]="labels"></app-generic-header>
+          </div>
+        </section>
+        <section class="section-config">
+          <div class="d-flex flex-justify-center">
+            <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onSignup()">
+              <ion-icon class="button-icon" name="mail-outline"></ion-icon>{{"SIGN_UP"|translate}}
+            </ion-button>
+          </div>
+        </section>
+        <section class="section-config or-section">
+          <p><span>OR</span></p>
+        </section>
+        <section class="section-config">
+          <p class="text-config">{{"ALREADY_HAVE_ACCOUNT"|translate}}</p>
+          <div class="d-flex flex-justify-center">
+            <ion-button class="mx-0 onboard-button" expand="block" shape="round" size="large" (click)="onLogin()">
+              <ion-icon class="button-icon" name="mail-outline"></ion-icon>{{"LOGIN"|translate}}
+            </ion-button>
+          </div>
+        </section>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -119,6 +119,7 @@
     "CREATE_ACCOUNT":"अकाउंट बनाएँ", 
     "TO_CONNECT_SOLVE":" जुड़ने, हल करने के लिए", 
     "&_SHARE":"& साझा करें", 
+    "CREATE_ACCOUNT_TO_CONNECT_SOLVE_&_SHARE":"अकाउंट बनाएँ जुड़ने, हल करने के लिए & साझा करें.",
     "CHOOSE_YOUR_ROLE":"अपनी भूमिका चुने",
     "CONTINUE": "जारी रखें", 
     "VERIFY_ACCOUNT": "अकाउंट को वेरीफाई करें", 

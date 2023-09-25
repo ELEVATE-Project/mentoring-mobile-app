@@ -1,41 +1,49 @@
 <app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
-<ion-content class="ion-padding">
-  <div class="mx-10">
-  <app-generic-header
-    [labels]="labels"
-  ></app-generic-header>
-  <section>
-    <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
-  </section>
-
-  <section
-    [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}"
-  >
-  <div class="d-flex flex-justify-center">
-    <ion-button class="mx-0 onboard-button" expand="block" shape="round" (click)="onSubmit()" size="large" [disabled]="!form1.myForm.valid"
-      >{{"LOGIN"|translate}}</ion-button
-    >
-  </div>
-    <section class="ion-text-center">
-      <div class="my-30">
-        <ion-text class="forgot-section" (click)="goToForgotPassword()">
-          {{"FORGOT_PASSWORD"|translate}}
-        </ion-text>
-        <ion-ripple-effect></ion-ripple-effect>
-      </div>
-    </section>
-    <section class="ion-text-center">
-      <div class="my-30" color="primary">
-        <a href="mailto:{{supportInfo?.reportIssue?.to}}?subject={{supportInfo?.reportIssue?.subject}}">
-          <ion-text>{{"HAVING_TROUBLE_LOGIN"|translate}}</ion-text> 
-        </a>
-        <ion-ripple-effect></ion-ripple-effect>
-      </div>
-    </section>
-    <div class="t-and-c">
-      <p>{{"TERMS_AND_CONDITION"|translate}}
-      <a class='links' href='https://shikshalokam.org/mentoring/privacy-policy'>{{"PRIVACY_POLICY"|translate}}</a> & <a class='links' href='https://shikshalokam.org/mentoring/term-of-use'>{{"TERMS_OF_SERVICE"|translate}}</a></p>
-    </div>
-  </section>
-  </div>
-</ion-content>
+<div class="d-flex flex-justify-center">
+  <ion-card  class="login-content hidden-sm" >
+    <ion-card-content>
+      <ion-grid>
+        <ion-row class="d-flex flex-justify-center">
+          <div class="mx-10">
+            <app-generic-header [labels]="labels"></app-generic-header>
+            <section>
+              <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
+            </section>
+  
+            <section [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}">
+              <div class="d-flex flex-justify-center">
+                <ion-button class="mx-0 onboard-button" expand="block" shape="round" (click)="onSubmit()" size="large"
+                  [disabled]="!form1.myForm.valid">{{"LOGIN"|translate}}</ion-button>
+              </div>
+              <section class="ion-text-center">
+                <div class="my-30">
+                  <ion-text class="forgot-section" (click)="goToForgotPassword()">
+                    {{"FORGOT_PASSWORD"|translate}}
+                  </ion-text>
+                  <ion-ripple-effect></ion-ripple-effect>
+                </div>
+              </section>
+              <section class="ion-text-center">
+                <div class="my-30" color="primary">
+                  <a href="mailto:{{supportInfo?.reportIssue?.to}}?subject={{supportInfo?.reportIssue?.subject}}">
+                    <ion-text>{{"HAVING_TROUBLE_LOGIN"|translate}}</ion-text>
+                  </a>
+                  <ion-ripple-effect></ion-ripple-effect>
+                </div>
+              </section>
+              <div class="t-and-c">
+                <p>{{"TERMS_AND_CONDITION"|translate}}
+                  <a class='links'
+                    href='https://shikshalokam.org/mentoring/privacy-policy'>{{"PRIVACY_POLICY"|translate}}</a> & <a
+                    class='links'
+                    href='https://shikshalokam.org/mentoring/term-of-use'>{{"TERMS_OF_SERVICE"|translate}}</a>
+                </p>
+              </div>
+            </section>
+          </div>
+        </ion-row>
+      </ion-grid>
+  </ion-card-content>
+  </ion-card>
+ 
+</div>
