@@ -8,10 +8,10 @@ import { CommonRoutes } from 'src/global.routes';
 import { Router} from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
 import { Location } from '@angular/common';
-import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { environment } from 'src/environments/environment';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-root',
@@ -40,7 +40,6 @@ export class AppComponent {
     private db:DbService,
     private router: Router,
     private network:NetworkService,
-    private deeplinks: Deeplinks,
     private authService:AuthService,
     private profile: ProfileService,
     private zone:NgZone,
@@ -50,7 +49,9 @@ export class AppComponent {
   ) {
     this.initializeApp();
     this.router.navigate(["/"]);
-    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    if(Capacitor.isNativePlatform()){
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
+    }
   }
   subscribeBackButton() {
     this.platform.backButton.subscribeWithPriority(10,async () => {

@@ -129,6 +129,7 @@ export class SessionDetailPage implements OnInit {
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     this.sessionDatas = response;
+    console.log(response)
     if (response) {
       this.setPageHeader(response);
       let readableStartDate = moment.unix(response.startDate).toLocaleString();
@@ -197,7 +198,7 @@ export class SessionDetailPage implements OnInit {
         this.detailData.data.mentorName = this.detailData.data.mentorName.trim();
         this.detailData.data.title = this.detailData.data.title.trim();
         let params = { link: link, subject: this.detailData.data.title, text: "Join an expert session on " + `${this.detailData.data.title} ` + "hosted by " + `${this.detailData.data.mentorName}` + " using the link" }
-        this.utilService.shareLink(params);
+        await this.utilService.shareLink(params);
       } else {
         this.toast.showToast("No link generated!!!", "danger");
       }
@@ -262,8 +263,8 @@ export class SessionDetailPage implements OnInit {
     let msg = {
       header: 'CANCEL_SESSION',
       message: 'CANCEL_CONFIRM_MESSAGE',
-      cancel: 'CLOSE',
-      submit: 'CANCEL'
+      cancel: 'CANCEL',
+      submit: 'UN_ENROLL'
     }
     this.utilService.alertPopup(msg).then(async data => {
       if (data) {

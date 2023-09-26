@@ -18,9 +18,9 @@ import {
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { AlertController, Platform } from '@ionic/angular';
-import { File } from '@ionic-native/file/ngx';
 import { isDeactivatable } from 'src/app/core/guards/canDeactive/deactive.guard';
 import { TranslateService } from '@ngx-translate/core';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-profile',
@@ -52,15 +52,11 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     private localStorage: LocalStorageService,
     private attachment: AttachmentService,
     private platform: Platform,
-    private file: File,
     private loaderService: LoaderService,
     private alert: AlertController,
     private translate: TranslateService,
     private toast: ToastService
   ) {
-    this.path = this.platform.is('ios')
-      ? this.file.documentsDirectory
-      : this.file.externalDataDirectory;
   }
   async ngOnInit() {
     const response = await this.form.getForm(EDIT_PROFILE_FORM);
@@ -131,37 +127,33 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.form1.myForm.markAsDirty();
     this.profileImageData.isUploaded = true;
   }
-  imageUploadEvent(event) {
-    this.localImage = event;
-    this.profileImageData.image = this.win.Ionic.WebView.convertFileSrc(
-      this.path + event.name
-    );
-    this.profileImageData.isUploaded = false;
+  async imageUploadEvent(event) {
+    this.localImage = event.target.files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = (file: any) => {
+      this.profileImageData.image = file.target.result
+      this.profileImageData.isUploaded = false;
+      this.profileImageData.haveValidationError = true;
+    }
   }
-  upload(data) {
-    this.loaderService.startLoader();
-    this.attachment.cloudImageUpload(data).then(
-      (resp) => {
-        this.profileImageData.image = data.uploadUrl.destFilePath;
-        this.form1.myForm.value.image = data.uploadUrl.destFilePath;
-        this.profileImageData.isUploaded = true;
-        this.loaderService.stopLoader();
-        this.onSubmit();
-      },
-      (error) => {
-        this.loaderService.stopLoader();
-      }
-    );
+
+  upload(data, uploadUrl) {
+    return this.attachment.cloudImageUpload(data,uploadUrl).pipe(
+      map((resp=>{
+      this.profileImageData.image = uploadUrl.destFilePath;
+      this.form1.myForm.value.image = [uploadUrl.destFilePath];
+      this.profileImageData.isUploaded = true;
+      this.onSubmit();
+    })))
   }
   async getImageUploadUrl(file) {
     this.loaderService.startLoader();
     let config = {
-      url: urlConstants.API_URLS.GET_IMAGE_UPLOAD_URL + file.name + "&dynamicPath=users/" + this.userDetails._id
+      url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name.replace(/[^A-Z0-9]+/ig, "_").toLowerCase()
     }
     let data: any = await this.api.get(config);
-    this.loaderService.stopLoader();
-    file.uploadUrl = data.result;
-    this.upload(file);
+    return this.upload(file, data.result).subscribe()
   }
   preFillData(existingData) {
     for (let i = 0; i < this.formData.controls.length; i++) {
