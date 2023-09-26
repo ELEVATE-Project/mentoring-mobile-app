@@ -75,18 +75,6 @@ export class RegisterPage implements OnInit {
     ]
   };
 
-  secretCodeControl = {
-    name: 'secretCode',
-    label: 'Secret code',
-    value: '',
-    class: 'ion-margin',
-    type: 'secretCode',
-    position: 'floating',
-    errorMessage:'Please enter secret code',
-    validators: {
-      required: true,
-    },
-  };
   public headerConfig: any = {
     // menu: true,
     backButton: {
@@ -111,10 +99,6 @@ export class RegisterPage implements OnInit {
   ) {
     this.activatedRoute.queryParams.subscribe(params => {
       this.userType = params.userType;
-      if (this.userType == "mentor") {
-        this.formData.controls.push(this.secretCodeControl);
-        this.isAMentor = true;
-      }
     });
   }
   ngOnInit() {

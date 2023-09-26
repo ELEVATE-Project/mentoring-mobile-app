@@ -32,10 +32,10 @@ const routes: Routes = [
     path: CommonRoutes.LANDING_PAGE,
     loadChildren: () => import('./landing/landing.module').then( m => m.LandingPageModule)
   },
-  {
-    path: CommonRoutes.PERSONA_SELECTION,
-    loadChildren: () => import('./persona-selection/persona-selection.module').then( m => m.PersonaSelectionPageModule)
-  }
+  // {
+  //   path: CommonRoutes.PERSONA_SELECTION,
+  //   loadChildren: () => import('./persona-selection/persona-selection.module').then( m => m.PersonaSelectionPageModule)
+  // }
 ];
 
 @NgModule({
