@@ -9,10 +9,14 @@
     <div class="index-label">
       {{mentor.key}}
     </div>
-    <div *ngFor="let value of mentor.values">
+    <ion-grid >
+      <ion-row class="d-flex flex-justify-center">
+        <ion-col *ngFor="let value of mentor.values" padding size-xs="12" size-sm="12" size-md="6" size-lg="6" align-self-stretch>
       <app-mentor-card [data]="value" (onClickEvent)="eventAction($event)">
       </app-mentor-card>
-    </div>
+  </ion-col>
+</ion-row>
+</ion-grid>
   </div>
   <div *ngIf="!mentors?.length">
     <app-no-data-found [messageHeader]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
