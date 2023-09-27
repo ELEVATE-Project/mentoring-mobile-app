@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-// import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { Share } from '@capacitor/share';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Action } from 'rxjs/internal/scheduler/Action';
 import { environment } from 'src/environments/environment';
 import { ISocialSharing } from '../../interface/soical-sharing-interface';
+import { Capacitor } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root',
@@ -28,22 +28,7 @@ export class UtilService {
       url: link,
       dialogTitle: subject,
     });
-    // this.socialSharing.share(text,subject,null,link);
   }
-
-  // shareFile(param:ISocialSharing) {
-  //   let {file,text} = param;
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file);
-  //   reader.onload = async () => {
-  //     let base64: any = reader.result;
-  //     await Share.share(text, file.name, base64,null)
-  //       .then(() => {
-  //       })
-  //       .catch(() => {
-  //       });
-  //   };
-  // }
 
   async alertPopup(msg) {
     return new Promise(async (resolve) => {
@@ -94,8 +79,8 @@ export class UtilService {
       });
     let buttons = []
 
-    switch (type) {
-      case 'profile':
+    switch (Capacitor.isNativePlatform()) {
+      case true:
         buttons = [
           {
             text: texts["REMOVE_CURRENT_PHOTO_LABEL"],
@@ -109,17 +94,12 @@ export class UtilService {
           }
         ]
         break;
-      case 'session':
+      case false:
         buttons = [
            {
             text: texts["REMOVE_CURRENT_PHOTO_LABEL"],
             type: 'remove',
             action: 'remove'
-          },
-          {
-            text: texts["TAKE_PHOTO"],
-            type: 'CAMERA',
-            action: 'camera'
           }
         ]
         break;

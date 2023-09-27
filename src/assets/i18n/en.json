@@ -189,5 +189,6 @@
     "THANK_FOR_ATTENDING": "Thank you for attending",
     "BY": "by",
     "REMOVE_CURRENT_PHOTO_LABEL": "Remove current photo",
-    "EXIT_HEADER_LABEL": "Exit this page?"
+    "EXIT_HEADER_LABEL": "Exit this page?",
+    "LINK_COPIED": "Copied the session link"
 }
