@@ -10,7 +10,7 @@
       {{mentor.key}}
     </div>
     <ion-grid >
-      <ion-row class="d-flex flex-justify-center">
+      <ion-row class="d-flex ">
         <ion-col *ngFor="let value of mentor.values" padding size-xs="12" size-sm="12" size-md="6" size-lg="6" align-self-stretch>
       <app-mentor-card [data]="value" (onClickEvent)="eventAction($event)">
       </app-mentor-card>
