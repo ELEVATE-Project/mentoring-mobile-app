@@ -21,6 +21,9 @@ import { Capacitor } from '@capacitor/core';
 export class AppComponent {
  user;
  public appPages = [
+  { title: 'HOME', action: "home", icon: 'home', class:"hide-on-small-screen" , url: CommonRoutes.TABS+'/'+CommonRoutes.HOME},
+  { title: 'MENTORS', action: "mentor-directory", icon: 'people', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.MENTOR_DIRECTORY},
+  { title: 'DASHBOARD', action: "dashboard", icon: 'stats-chart', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.DASHBOARD },
   { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP},
   { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ},
   { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
