@@ -1,5 +1,8 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row class="d-flex flex-justify-center">
+      <ion-col padding size-xs="12" size-sm="12" size-md="6" size-lg="6" align-self-stretch>
   <div class="align-content-center">
     <div class="mx-10">
       <app-generic-header [labels]="labels"></app-generic-header>
@@ -24,4 +27,7 @@
       <p class="underline" (click)="enableResendOtp && resendOtp()">{{"RESEND_OTP"|translate}}</p>
     </div>
   </div>
+</ion-col>
+</ion-row>
+</ion-grid>
 </ion-content>
