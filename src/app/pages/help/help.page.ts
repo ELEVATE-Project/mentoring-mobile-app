@@ -107,8 +107,8 @@ export class HelpPage implements OnInit {
   }
   async helpForm(){
     const result = await this.form.getForm(HELP);
-    this.formData = _.get(result, 'result.data.fields');
-    this.helpForms = _.get(result, 'result.data.fields.forms');
+    this.formData = _.get(result, 'data.fields');
+    this.helpForms = _.get(result, 'data.fields.forms');
     this.selectedOption = this.helpForms[0];
     this.message = (this.userDetails?.isAMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
   }
