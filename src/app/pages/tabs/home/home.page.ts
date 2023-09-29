@@ -86,19 +86,18 @@ export class HomePage implements OnInit {
     this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
   }
   async eventAction(event) {
-    if(this.user.about){
     switch (event.type) {
       case 'cardSelect':
         (this.selectedSegment=="my-sessions")?this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.sessionId}`]):this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
         break;
 
       case 'joinAction':
-        await this.sessionService.joinSession(event.data)
+        this.user.about ? await this.sessionService.joinSession(event.data) : this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
         this.getSessions();
         break;
 
       case 'enrollAction':
-        let enrollResult = await this.sessionService.enrollSession(event.data._id);
+        let enrollResult = this.user.about ? await this.sessionService.enrollSession(event.data._id): this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
         if(enrollResult.result){
           this.toast.showToast(enrollResult.message, "success")
           this.getSessions();
@@ -106,16 +105,13 @@ export class HomePage implements OnInit {
         break;
 
       case 'startAction':
-        this.sessionService.startSession(event.data._id).then(async ()=>{
-          var obj = { page: this.page, limit: this.limit, searchText: "" };
-          this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
-        })
+        this.user.about ? await this.sessionService.startSession(event.data._id) : this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+        var obj = { page: this.page, limit: this.limit, searchText: "" };
+        this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
         break;
     }
-  }else {
-    this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
   }
-  }
+
   viewMore(data) {
     this.router.navigate([`/${CommonRoutes.SESSIONS}`], { queryParams: { type: data } });
   }

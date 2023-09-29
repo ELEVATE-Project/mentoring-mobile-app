@@ -11,6 +11,8 @@ import { Location } from '@angular/common';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { environment } from 'src/environments/environment';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-root',
@@ -83,6 +85,10 @@ export class AppComponent {
   }
 
   initializeApp() {
+    StatusBar.setStyle({ style: Style.Default })
+    if (Capacitor.isNativePlatform()) {
+      StatusBar.setOverlaysWebView({ overlay: true })
+    }
     this.platform.ready().then(() => {
       this.network.netWorkCheck();
       setTimeout(async ()=>{
