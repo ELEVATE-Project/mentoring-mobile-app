@@ -9,6 +9,9 @@ import { Location } from '@angular/common';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { App, AppState } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
+import { Clipboard } from '@capacitor/clipboard';
+
 
 @Component({
   selector: 'app-session-detail',
@@ -190,22 +193,35 @@ export class SessionDetailPage implements OnInit {
   }
 
   async share() {
-    if(this.userDetails){
-      let sharableLink = await this.sessionService.getShareSessionId(this.id);
-      if (sharableLink.shareLink) {
-        let url = `/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
-        let link = await this.utilService.getDeepLink(url);
-        this.detailData.data.mentorName = this.detailData.data.mentorName.trim();
-        this.detailData.data.title = this.detailData.data.title.trim();
-        let params = { link: link, subject: this.detailData.data.title, text: "Join an expert session on " + `${this.detailData.data.title} ` + "hosted by " + `${this.detailData.data.mentorName}` + " using the link" }
-        await this.utilService.shareLink(params);
+    if(Capacitor.isNativePlatform()){
+      if(this.userDetails){
+        let sharableLink = await this.sessionService.getShareSessionId(this.id);
+        if (sharableLink.shareLink) {
+          let url = `/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
+          let link = await this.utilService.getDeepLink(url);
+          this.detailData.data.mentorName = this.detailData.data.mentorName.trim();
+          this.detailData.data.title = this.detailData.data.title.trim();
+          let params = { link: link, subject: this.detailData.data.title, text: "Join an expert session on " + `${this.detailData.data.title} ` + "hosted by " + `${this.detailData.data.mentorName}` + " using the link" }
+          await this.utilService.shareLink(params);
+        } else {
+          this.toast.showToast("No link generated!!!", "danger");
+        }
       } else {
-        this.toast.showToast("No link generated!!!", "danger");
-      }
+        this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id, isMentor:false}});
+      } 
     } else {
-      this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id, isMentor:false}});
+      await this.copyToClipBoard(window.location.href)
+      this.toast.showToast("LINK_COPIED","success")
     }
   }
+
+  copyToClipBoard = async (copyData: any) => {
+    await Clipboard.write({
+      string: copyData
+    }).then(()=>{
+      this.toast.showToast('Copied successfully',"success");
+    });
+  };
 
   editSession() {
     this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id } });

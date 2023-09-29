@@ -1,57 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
-import { environment } from 'src/environments/environment';
+import { Storage } from '@ionic/storage-angular';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DbService {
-  readonly db_name: string = environment.sqliteDBName;
-  private db: SQLiteObject;
+  private _storage: Storage;
 
-  constructor(private sqlite: SQLite) {
+  constructor(private storage: Storage) {
   }
 
+  //Initialize DB
   async init() {
-    try {
-      if(Capacitor.isNativePlatform()){
-        this.db = await this.sqlite.create({
-          name: this.db_name,
-          location: 'default',
-        });
-        this.db
-          .executeSql(
-            'CREATE TABLE IF NOT EXISTS forms(primary_key PRIMARY KEY,form,ttl)',
-            []
-          ) // CREATE ALL REQUIRED TABLES HERE
-          .then(() => console.log('Executed SQL'))
-          .catch((e) => console.log(e));
-        console.log(this.db);
-      }
-    } catch (error) {
-      console.log(JSON.stringify(error));
-    }
+    const storage = await this.storage.create();
+    this._storage = storage;
   }
 
-  async query(query, value = []) {
-    if(Capacitor.isNativePlatform()){
-      const res = await this.db.executeSql(query, value);
-      const data = [];
-      // CREATE ARRAY OF ALL ROWS
-      for (let index = 0; index < res.rows.length; index++) {
-        const element = res.rows.item([index]);
-        data.push(element);
-      }
-      return data;
-    }
-    return null
+  //Add item in DB
+  async setItem(key,value) {
+    return await this._storage.set(key, value);
   }
 
-  store(insertQuery, value) {
-    if(Capacitor.isNativePlatform()){
-      return this.db.executeSql(insertQuery, value);
-    }
-    return null
+  //Read item from DB 
+  async getItem(key) {
+    return await this._storage.get(key);
+  }
+
+  //Clear the DB 
+  async clear(S) {
+    return await this._storage.clear();
   }
 }
