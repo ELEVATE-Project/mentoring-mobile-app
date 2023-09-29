@@ -74,7 +74,7 @@ export class CreateSessionPage implements OnInit {
   async ngOnInit() {
     const platformForm = await this.getPlatformFormDetails();
     const result = await this.form.getForm(CREATE_SESSION_FORM);
-    this.formData = _.get(result, 'result.data.fields');
+    this.formData = _.get(result, 'data.fields');
     this.changeDetRef.detectChanges();
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.id = params?.get('id');
@@ -103,8 +103,7 @@ export class CreateSessionPage implements OnInit {
 
   async getPlatformFormDetails() {
     let form = await this.form.getForm(PLATFORMS);
-    console.log(form.result.data.fields.forms)
-    this.meetingPlatforms = form.result.data.fields.forms;
+    this.meetingPlatforms = form.data.fields.forms;
     this.selectedLink = this.meetingPlatforms[0];
     this.selectedHint = this.meetingPlatforms[0].hint;
   }

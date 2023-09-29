@@ -19,7 +19,7 @@ export class FaqPage implements OnInit {
 
   async ngOnInit() {
     let result = await this.form.getForm(FAQ)
-    this.faqArray = result.result.data.fields.controls
+    this.faqArray = result.data.fields.controls
   }
   async goToHome() {
     this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`])

@@ -35,7 +35,7 @@ export class TermsAndConditionsPage implements OnInit {
 
   async fetchForm() {
     const response = await this.form.getForm(TERMS_AND_CONDITIONS_FORM);
-    this.items = _.get(response, 'result.data.fields');
+    this.items = _.get(response, 'data.fields');
   }
 
   ngOnInit() { 

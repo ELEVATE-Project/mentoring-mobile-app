@@ -22,7 +22,7 @@
       <ion-content fullscreen>
         <div class="menu-css">
           <ion-list lines="none" class="sub-menu-list">
-            <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+            <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index" [class]="p?.class">
               <ion-item [routerLink]="p.url" [routerLink]="p.url" lines="none" detail="false" (click)="menuItemAction(p)">
                 <ion-icon class="side-menu-icon" class="side-menu-icon" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
                 <ion-label class="sub-menu-list-label"><strong>{{ p.title | translate}}</strong></ion-label>

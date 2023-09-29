@@ -15,6 +15,7 @@
   width: 100%;
   text-align: left;
   font-size: 13px;
+  text-align: center;
 }
 
 .text-bold {
@@ -36,4 +37,9 @@
 .link{
   text-decoration: none;
   color: var(--black);
+}
+
+.login-content{
+  width: fit-content;
+
 }

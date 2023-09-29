@@ -119,6 +119,7 @@
     "TO_CONNECT_SOLVE":" to connect, solve ",
     "&_SHARE":"& share.",
     "CHOOSE_YOUR_ROLE":"Choose your role",
+    "CREATE_ACCOUNT_TO_CONNECT_SOLVE_&_SHARE":"Create account to connect, solve & share.",
     "CONTINUE": "Continue",
     "VERIFY_ACCOUNT": "Verify account",
     "IF_YOU_DIDNT_RECIEVED_OTP": "If you didn't recieved the OTP!",
@@ -189,5 +190,6 @@
     "THANK_FOR_ATTENDING": "Thank you for attending",
     "BY": "by",
     "REMOVE_CURRENT_PHOTO_LABEL": "Remove current photo",
-    "EXIT_HEADER_LABEL": "Exit this page?"
+    "EXIT_HEADER_LABEL": "Exit this page?",
+    "LINK_COPIED": "Copied the session link"
 }

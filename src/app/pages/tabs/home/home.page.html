@@ -24,10 +24,17 @@
 </div>
 <ion-content>
   <div *ngIf="sessions&&(selectedSegment=='all-sessions')">
-    <div class="my-10" *ngFor="let session of sessions?.allSessions">
-      <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
-      </app-session-card>
-    </div>
+    <ion-grid>
+      <ion-row class="d-flex ">
+        <ion-col *ngFor="let session of sessions?.allSessions" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
+          align-self-stretch>
+          <div class="my-10" >
+            <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
+            </app-session-card>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
   <div *ngIf="(selectedSegment=='created-sessions')&&user?.isAMentor">
     <ion-card *ngIf="createdSessions?.data?.length" class="session-sqr-card">
@@ -42,10 +49,18 @@
     </ion-card>
     <div *ngIf="createdSessions?.data?.length">
       <ion-label class="font-bold section-header">{{"CREATED_SESSIONS"|translate}}</ion-label>
-      <div *ngFor="let session of createdSessions?.data">
-        <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
-        </app-session-card>
-      </div>
+      <ion-grid>
+        <ion-row class="d-flex ">
+          <ion-col *ngFor="let session of createdSessions?.data" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
+            align-self-stretch>
+            <div >
+              <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
+              </app-session-card>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
     </div>
     <div *ngIf="!createdSessions?.data?.length">
       <app-no-data-found [messageHeader]="'NO_SESSIONS_CREATED'" [messageDescription]="'START_CREATING_SESSION'">
@@ -60,10 +75,18 @@
   <div *ngIf="sessions&&(selectedSegment=='my-sessions')">
     <div *ngIf="sessions && sessions?.mySessions?.length">
       <ion-label class="font-bold section-header">{{"ENROLLED_SESSIONS"|translate}}</ion-label>
-      <div class="my-10" *ngFor="let session of sessions?.mySessions">
-        <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
-        </app-session-card>
-      </div>
+      <ion-grid>
+        <ion-row class="d-flex ">
+          <ion-col *ngFor="let session of sessions?.mySessions" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
+            align-self-stretch>
+            <div class="my-10" >
+              <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
+              </app-session-card>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+     
     </div>
     <!-- <div *ngIf="sessions?.mySessions?.length">
       <div class="page-intro">

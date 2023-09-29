@@ -87,15 +87,16 @@ export class OtpPage implements OnInit {
       let result = await this.authService.createAccount(this.signupData);
       if (result) {
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
+        this.menuCtrl.enable(true);
       }
     } else {
       this.resetPasswordData.otp = this.otp;
       let response = await this.profileService.updatePassword(this.resetPasswordData);
       if (response) {
         this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })
+        this.menuCtrl.enable(true);
       }
     }
-    this.menuCtrl.enable(true);
   }
 
   async resendOtp() {
