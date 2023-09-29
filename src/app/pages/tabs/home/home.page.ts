@@ -38,6 +38,70 @@ export class HomePage implements OnInit {
     headerColor: 'primary',
     // label:'MENU'
   };
+  public responses = {
+    "response_code": "OK",
+    "message": "Session fetched successfully.",
+    "result": {
+      "all_sessions": [
+        {
+          "id": 1,
+          "title": "session",
+          "description": "descriptio",
+          "image": [
+            "https://mentoring-dev-storage.s3.ap-south-1.amazonaws.com/session/62a73ffb12c0c4fe9b4c0f61-1695201766113-images_jpeg"
+          ],
+          "user_id": 2,
+          "status": "published",
+          "start_date": 1697215860,
+          "end_date": 1697219460,
+          "meeting_info": {
+            "platform": "BigBlueButton (Default)",
+            "value": "Default"
+          },
+          "created_at": "2023-09-13T16:51:46.377Z",
+          "is_enrolled": false,
+          "mentor_name": "afnan"
+        }
+      ],
+      "my_sessions": []
+    },
+    "meta": {
+      "type": "feedback",
+      "data": [
+        {
+          "id": 3,
+          "title": "STEM Education in India: Fostering Innovation and Scientific Thinking",
+          "description": "Explore the significance of STEM (Science, Technology, Engineering, and Mathematics) education in India. Discuss ways to nurture scientific curiosity and innovation among Indian students.",
+          "mentor_feedback_form": "mentorQS2",
+          "form": [
+            {
+              "id": 4,
+              "options": [],
+              "type": "rating",
+              "deleted": false,
+              "disable": false,
+              "visible": true,
+              "status": "published",
+              "name": "mentorEngagementInSession",
+              "value": "",
+              "class": "ion-margin",
+              "no_of_stars": 5,
+              "updated_at": "2021-12-14T09:41:55.552Z",
+              "created_at": "2021-12-14T09:41:55.552Z",
+              "questions_set_id": 5,
+              "validators": {
+                "required": false
+              },
+              "label": "How would you rate the engagement in the session?"
+            }
+          ],
+          "org_id": 22
+        }
+      ],
+      "correlation": "87a59ed4-483d-4d02-a6ae-9aad8b218f45",
+      "meeting_platform": "BBB"
+    }
+  }
   public segmentButtons = [{ name: "all-sessions", label: "ALL_SESSIONS" }, { name: "created-sessions", label: "CREATED_SESSIONS" }, { name: "my-sessions", label: "ENROLLED_SESSIONS" }]
   public mentorSegmentButton = ["created-sessions"]
   selectedSegment = "all-sessions";
@@ -126,9 +190,9 @@ export class HomePage implements OnInit {
   getUser() {
     this.profileService.profileDetails().then(data => {
       this.user = data
-      if (!this.user?.hasAcceptedTAndC) {
-        this.openModal();
-      }
+      // if (!this.user?.hasAcceptedTAndC) {
+      //   this.openModal();
+      // }
     })
   }
 
@@ -137,7 +201,8 @@ export class HomePage implements OnInit {
       url: urlConstants.API_URLS.HOME_SESSION + this.page + '&limit=' + this.limit,
     };
     try {
-      let data: any = await this.httpService.get(config);
+      // let data: any = await this.httpService.get(config);
+      let data: any = this.responses;
       this.sessions = data.result;
       this.sessionsCount = data.result.count;
     }
