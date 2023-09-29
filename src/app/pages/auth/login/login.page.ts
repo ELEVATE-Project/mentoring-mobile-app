@@ -22,7 +22,9 @@ export class LoginPage implements OnInit {
         class: 'ion-no-margin',
         type: 'text',
         position: 'floating',
-        errorMessage:'Please enter registered email ID',
+        errorMessage:{
+          required: "Please enter registered email ID"
+        },
         validators: {
           required: true,
         },
@@ -34,7 +36,10 @@ export class LoginPage implements OnInit {
         class: 'ion-margin',
         type: 'password',
         position: 'floating',
-        errorMessage:'Please enter password',
+        errorMessage:{
+          required: "Enter password",
+          minlength: "Password should contain minimum of 8 characters"
+        },
         validators: {
           required: true,
           minLength: 8,

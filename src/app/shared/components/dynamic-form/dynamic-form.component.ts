@@ -32,6 +32,18 @@ interface JsonFormControlOptions {
   step?: string;
   icon?: string;
 }
+
+interface JsonFormErrorMessages {
+  required?: string;
+  email?: string;
+  minlength?: string;
+  pattern?: string;
+  min?: string;
+  max?: string;
+  requiredtrue?: string;
+  nullvalidator?: string;
+}
+
 interface JsonFormControls {
   name: string;
   label: string;
@@ -44,7 +56,7 @@ interface JsonFormControls {
   options?: JsonFormControlOptions;
   validators: JsonFormValidators;
   numberOfStars?:number;
-  errorMessage?:string;
+  errorMessage?:JsonFormErrorMessages;
   dependentKey?:string;
   isNumberOnly?: boolean;
   alertLabel?: string;
