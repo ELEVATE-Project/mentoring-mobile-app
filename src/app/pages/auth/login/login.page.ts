@@ -92,13 +92,16 @@ export class LoginPage implements OnInit {
       if (this.userDetails !== null) {
         if (this.id) {
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
+          this.menuCtrl.enable(true);
         }else if(this.mentorId){
           this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`], { replaceUrl: true });
+          this.menuCtrl.enable(true);
         } else {
           this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
+          this.menuCtrl.enable(true);
         }
       }
-      this.menuCtrl.enable(true);
+      
     }
   }
 
