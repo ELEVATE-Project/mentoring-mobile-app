@@ -134,8 +134,10 @@
     <small class="error-msg d-flex error-msg flex-align-items-center" >
       <div *ngIf="myForm.get(control.name).touched && myForm.get(control.name).invalid ">
         <ion-icon name="alert-circle-outline"></ion-icon>
-        <span *ngIf="control.errorMessage" class="mx-10">{{control?.errorMessage}}</span>
-        <span *ngIf="!control.errorMessage" class="mx-10">Enter {{control?.label}}</span>
+         <span *ngIf="control?.errorMessage[(myForm.get(control.name).errors | keyvalue)[0].key]" class="mx-10">
+          {{ control?.errorMessage[(myForm.get(control.name).errors | keyvalue)[0].key] }}
+        </span>
+        <span *ngIf="!control?.errorMessage[(myForm.get(control.name).errors | keyvalue)[0].key]" class="mx-10">Enter {{control?.label}}</span> 
       </div>
     </small>
   </div>

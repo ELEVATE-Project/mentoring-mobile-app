@@ -1,7 +1,7 @@
 <ion-tabs #tabs (ionTabsDidChange)="tabChange(tabs)">
 
 
-  <ion-tab-bar slot="bottom">
+  <ion-tab-bar slot="bottom" class="tab-item hide-on-large-screen">
     <ion-tab-button tab="home">
       <ion-icon name="home-sharp" size="large"></ion-icon>
       <ion-label>{{'HOME' | translate}}</ion-label>

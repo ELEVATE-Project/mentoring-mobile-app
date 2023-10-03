@@ -26,7 +26,10 @@ export class RegisterPage implements OnInit {
         class: 'ion-margin',
         type: 'text',
         position: 'floating',
-        errorMessage:'This field can only contain alphabets',
+        errorMessage:{
+          required: "Enter your name",
+          pattern: "This field can only contain alphabets"
+        },
         validators: {
           required: true,
           pattern:'^[a-zA-Z ]*$',
@@ -39,7 +42,9 @@ export class RegisterPage implements OnInit {
         class: 'ion-margin',
         type: 'text',
         position: 'floating',
-        errorMessage:'Please enter valid email ID',
+        errorMessage:{
+          required: "Please enter valid email ID"
+        },
         validators: {
           required: true,
         },
@@ -51,7 +56,11 @@ export class RegisterPage implements OnInit {
         class: 'ion-margin',
         type: 'password',
         position: 'floating',
-        errorMessage:'Please enter minimum 8 characters.',
+        errorMessage:{
+          required: "Enter password",
+          minlength:"Please enter minimum 8 characters.",
+          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+        },
         validators: {
           required: true,
           minLength: 8,
@@ -65,7 +74,11 @@ export class RegisterPage implements OnInit {
         class: 'ion-margin',
         type: 'password',
         position: 'floating',
-        errorMessage:'Please enter minimum 8 characters.',
+        errorMessage:{
+          required: "Re-enter password",
+          minlength:"Please enter minimum 8 characters.",
+          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+        },
         validators: {
           required: true,
           minLength: 8,
