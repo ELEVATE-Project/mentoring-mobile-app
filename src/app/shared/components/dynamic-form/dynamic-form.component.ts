@@ -63,8 +63,8 @@ export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
-  currentDate = moment().format("YYYY-MM-DDTHH:mm");
-  maxDate = moment(this.currentDate).add(10, "years").format("YYYY-MM-DDTHH:mm");
+  currentDate = moment().format("YYYY-MM-DDTHH:mm A");
+  maxDate = moment(this.currentDate).add(10, "years").format("YYYY-MM-DDTHH:mm A");
   dependedChild: any;
   dependedChildDate="";
   dependedParent: any;
