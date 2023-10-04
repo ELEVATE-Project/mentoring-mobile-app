@@ -24,6 +24,8 @@ export class FeedbackPage implements OnInit {
   };
   sessionData: any;
   isMentor: boolean;
+  mentorName: any;
+  sessionTitle: any;
   constructor(private sessionService: SessionService,
     private toast: ToastService,
     private router: Router,
@@ -39,6 +41,8 @@ export class FeedbackPage implements OnInit {
   async isMentorChecking() {
     let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     var response = await this.sessionService.getSessionDetailsAPI(this.sessionData._id);
+    this.mentorName = response.mentorName;
+    this.sessionTitle = response.title;
     this.isMentor = userDetails?._id == response?.userId ? true : false;
     this.formData.controls = this.sessionData.form;
     this.feedbackData.feedbackAs = this.isMentor ? "mentor" : "mentee";

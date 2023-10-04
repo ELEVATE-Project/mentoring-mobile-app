@@ -25,6 +25,9 @@ export class SessionDetailPage implements OnInit {
   endDate: any;
   sessionDatas: any;
   snackbarRef: any;
+  skipWhenDelete: boolean= false;
+  dismissWhenBack: boolean = false;
+  platformOff: any;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -32,11 +35,11 @@ export class SessionDetailPage implements OnInit {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {
-    App.addListener('appStateChange', (state: AppState) => {
-      if (state.isActive == true) {
-        this.fetchSessionDetails();
-      }
-    });
+      App.addListener('appStateChange', (state: AppState) => {
+        if (state.isActive == true && this.id && this.sessionDatas && !this.dismissWhenBack) {
+          this.fetchSessionDetails();
+        }
+      });
   }
 
   async ionViewWillEnter() {
@@ -131,7 +134,7 @@ export class SessionDetailPage implements OnInit {
       let readableStartDate = moment.unix(response.startDate).toLocaleString();
       let currentTimeInSeconds=Math.floor(Date.now()/1000);
       if(response.isEnrolled){
-        this.isEnabled = ((response.startDate - currentTimeInSeconds) < 300 || response.status=='live') ? true : false
+        this.isEnabled = ((response.startDate - currentTimeInSeconds) < 600 || response.status=='live') ? true : false
       } else {
         this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='live')?true:false;
       }
@@ -140,21 +143,23 @@ export class SessionDetailPage implements OnInit {
       this.detailData.data.meetingInfo = response.meetingInfo.platform;
       this.startDate = (response.startDate>0)?moment.unix(response.startDate).toLocaleString():this.startDate;
       this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
+      this.platformOff = (response?.meetingInfo?.platform == 'OFF') ? true : false;
     }
-    if((response.meetingInfo.platform == 'OFF') && this.isCreator && response.status=='published'){
-    this.showToasts('ADD_MEETING_LINK', 0 , [
-        {
-          text: 'Add meeting link',
-          role: 'cancel',
-          handler: () => {
-            this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'} });
+    if((response?.meetingInfo?.platform == 'OFF') && this.isCreator && response.status=='published'){
+      this.showToasts('ADD_MEETING_LINK', 0 , [
+          {
+            text: 'Add meeting link',
+            role: 'cancel',
+            handler: () => {
+              this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'} });
+            }
           }
-        }
-      ])
-    }
+        ])
+    } 
+    this.dismissWhenBack = true;
   }
   ionViewWillLeave(){
-    this.snackbarRef = this.toaster.dismiss();
+    if(!this.skipWhenDelete){this.snackbarRef = this.toaster.dismiss()}
    }
 
   setPageHeader(response) {
@@ -216,8 +221,11 @@ export class SessionDetailPage implements OnInit {
       if (data) {
         let result = await this.sessionService.deleteSession(this.id);
         if (result.responseCode == "OK") {
+          this.skipWhenDelete= true;
+          this.id = null;
           this.toast.showToast(result.message, "success");
-          this._location.back();
+          this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
+          this.snackbarRef = this.toaster.dismiss();
         }
       }
     }).catch(error => { })
@@ -254,8 +262,8 @@ export class SessionDetailPage implements OnInit {
     let msg = {
       header: 'CANCEL_SESSION',
       message: 'CANCEL_CONFIRM_MESSAGE',
-      cancel: 'CLOSE',
-      submit: 'CANCEL'
+      cancel: 'CANCEL',
+      submit: 'UN_ENROLL'
     }
     this.utilService.alertPopup(msg).then(async data => {
       if (data) {

@@ -52,19 +52,20 @@ export class UtilService {
         message: texts[msg.message],
         buttons: [
           {
-            text: texts[msg.cancel],
-            role: 'cancel',
-            cssClass: 'alert-button-bg-white',
-            handler: (blah) => {
-              resolve(false);
-            }
-          }, {
             text: texts[msg.submit],
-            cssClass: 'alert-button-red',
+            cssClass: 'alert-button-bg-white',
             handler: () => {
               resolve(true);
             }
-          }
+          },
+          {
+            text: texts[msg.cancel],
+            role: 'cancel',
+            cssClass: 'alert-button-red',
+            handler: (blah) => {
+              resolve(false);
+            }
+          },
         ]
       });
       await alert.present();
@@ -76,7 +77,7 @@ export class UtilService {
     this.translate
       .get([
         "ADD_PHOTO",
-        "REMOVE_CURRENT_PHOTO",
+        "REMOVE_CURRENT_PHOTO_LABEL",
         "CHOOSE_FROM_LIBRARY",
         "TAKE_PHOTO",
         "CANCEL",
@@ -92,7 +93,7 @@ export class UtilService {
       case 'profile':
         buttons = [
           {
-            text: texts["REMOVE_CURRENT_PHOTO"],
+            text: texts["REMOVE_CURRENT_PHOTO_LABEL"],
             type: 'remove',
             action: 'remove'
           },
@@ -106,7 +107,7 @@ export class UtilService {
       case 'session':
         buttons = [
            {
-            text: texts["REMOVE_CURRENT_PHOTO"],
+            text: texts["REMOVE_CURRENT_PHOTO_LABEL"],
             type: 'remove',
             action: 'remove'
           },

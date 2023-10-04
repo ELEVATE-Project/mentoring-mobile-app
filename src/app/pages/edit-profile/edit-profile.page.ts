@@ -64,11 +64,10 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   }
   async ngOnInit() {
     const response = await this.form.getForm(EDIT_PROFILE_FORM);
-    var result = await this.profileService.getProfileDetailsAPI();
-    this.profileImageData.image = result.image;
     this.profileImageData.isUploaded = true;
     this.formData = _.get(response, 'result.data.fields');
     this.userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    this.profileImageData.image = this.userDetails.image;
     this.preFillData(this.userDetails);
   }
 
@@ -76,23 +75,24 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     if (!this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
       let texts: any;
       this.translate
-        .get(['FORM_UNSAVED_DATA', 'CANCEL', 'OK'])
+        .get(['FORM_UNSAVED_DATA', 'CANCEL', 'OK', 'EXIT_HEADER_LABEL'])
         .subscribe((text) => {
           texts = text;
         });
       const alert = await this.alert.create({
+        header: texts['EXIT_HEADER_LABEL'],
         message: texts['FORM_UNSAVED_DATA'],
         buttons: [
           {
             text: texts['CANCEL'],
-            cssClass: 'alert-button',
+            cssClass: 'alert-button-bg-white',
             role: 'exit',
             handler: () => {},
           },
           {
             text: texts['OK'],
             role: 'cancel',
-            cssClass: 'alert-button-bg-white',
+            cssClass: 'alert-button-red',
             handler: () => {},
           },
         ],

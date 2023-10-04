@@ -50,6 +50,7 @@
         [value]="control.value"
         [maxlength]="control?.validators?.maxLength"
         (ionChange)="removeSpace($event)"
+        [placeholder]="control.platformPlaceHolder"
       ></ion-textarea>
       <ion-checkbox
         *ngIf="control.type === 'checkbox'"

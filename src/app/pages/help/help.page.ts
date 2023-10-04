@@ -74,20 +74,22 @@ export class HelpPage implements OnInit {
   }
   async deteteAccount(){
     let texts: any;
-        this.translate.get(['DELETE_ALERT_MSG', 'YES', 'NO']).subscribe(text => {
+        this.translate.get(['DELETE_ALERT_MSG', 'YES', 'NO', 'DELETE_ACCOUNT']).subscribe(text => {
           texts = text;
         })
         const alert = await this.alert.create({
+          header: texts['DELETE_ACCOUNT'],
           message: texts['DELETE_ALERT_MSG'],
           buttons: [
             {
               text: texts['YES'],
-              cssClass: "alert-button",
+              cssClass: "alert-button-bg-white",
+              role: 'yes',
               handler: () => { }
             },
             {
               text: texts['NO'],
-              cssClass: "alert-button-bg-white",
+              cssClass: "alert-button",
               role: 'no',
               handler: () => { }
             }
@@ -95,7 +97,7 @@ export class HelpPage implements OnInit {
         });
         await alert.present();
         let data = await alert.onDidDismiss();
-      if(data.role == 'no'){
+      if(data.role == 'yes'){
         this.submitHelpReport();
       }
   }
@@ -108,7 +110,7 @@ export class HelpPage implements OnInit {
   }
   clickOptions(event:any){
     this.selectedOption.form = event.detail.value.form;
-    this.message = (this.userDetails.isAMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
-    this.form1.createForm(this.selectedOption.form.controls);
+    this.message = (this.userDetails?.isAMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
+    this.form1?.createForm(this.selectedOption.form.controls);
   }
 }

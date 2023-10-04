@@ -67,8 +67,8 @@ export class SessionCardComponent implements OnInit {
     let value = {
       data: data,
       type:type
-    }
-    this.userData.about?this.onClickEvent.emit(value):this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+    };
+    this.onClickEvent.emit(value)
   }
   clickOnAddMeetingLink(cardData:any){
     let id = cardData._id;

@@ -1,53 +1,56 @@
 <app-page-header [config]="headerConfig"></app-page-header>
-<div class="height">
-  <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
-    <ion-segment-button value="default" layout="icon-start">
-      <div class="icon-2">1</div>
-      <ion-label>{{ firstStepperTitle | translate}}</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="segment"  [disabled]="!isSubmited" layout="icon-start">
-      <div class="icon-2">2</div>
-      <ion-label>{{"MEETING_LINK" | translate}}</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-  <div class="height" [ngSwitch]="type">
-    <ion-list class="height" *ngSwitchCase="'default'">
-      <ion-content class="ion-padding">
-        <app-profile-image *ngIf="showForm" [profileImageData]='profileImageData' [uploadImage]="true" (imageUploadEvent)="imageUploadEvent($event)" (imageRemoveEvent)="imageRemoveEvent($event)"></app-profile-image>
-        <div *ngIf="formData && showForm">
-          <app-dynamic-form [jsonFormData]="formData" #form1 (formValid)="isValid($event)"> </app-dynamic-form>
-        </div>
-      </ion-content>
-    </ion-list>
-    <ion-list class="height" *ngSwitchCase="'segment'">
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title class="ion-text-center card-title">{{"SELECT_MEETING_PLATFORM" | translate}}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-list>
-            <ion-select #link class="select" [(ngModel)]="selectedLink" interface="popover" (ionChange)="clickOptions($event)" [compareWith]="compareWithFn" [value]="selectedLink">
-              <ion-select-option [value]="option" *ngFor="let option of meetingPlatforms">
-                {{ option.name }}
-              </ion-select-option>
-            </ion-select>
-            <ion-item lines="none">
-              <ion-icon class="hint-icon" name="alert-circle"></ion-icon>
-              <ion-label class="hint-label">{{selectedHint}}</ion-label>
-            </ion-item>
-          </ion-list>
-          <div *ngFor="let option of meetingPlatforms">
-            <app-dynamic-form *ngIf="selectedLink==option" [jsonFormData]=option.form #platformForm></app-dynamic-form>
-        </div>
-        </ion-card-content>
-      </ion-card>
-    </ion-list>
+<ion-content>
+  <div class="height">
+    <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
+      <ion-segment-button value="default" layout="icon-start">
+        <div class="icon-2">1</div>
+        <ion-label>{{ firstStepperTitle | translate}}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="segment"  [disabled]="!isSubmited" layout="icon-start">
+        <div class="icon-2">2</div>
+        <ion-label>{{"MEETING_LINK" | translate}}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <div class="height" [ngSwitch]="type">
+      <ion-list class="height" *ngSwitchCase="'default'">
+        <ion-content class="ion-padding">
+          <app-profile-image *ngIf="showForm" [profileImageData]='profileImageData' [uploadImage]="true" (imageUploadEvent)="imageUploadEvent($event)" (imageRemoveEvent)="imageRemoveEvent($event)"></app-profile-image>
+          <div *ngIf="formData && showForm">
+            <app-dynamic-form [jsonFormData]="formData" #form1 (formValid)="isValid($event)"> </app-dynamic-form>
+          </div>
+        </ion-content>
+      </ion-list>
+      <ion-list class="height" *ngSwitchCase="'segment'">
+        <ion-card  class="form-content">
+          <ion-card-header>
+            <ion-card-title class="ion-text-center card-title">{{"SELECT_MEETING_PLATFORM" | translate}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-select #link class="select" [(ngModel)]="selectedLink" interface="popover" (ionChange)="clickOptions($event)" [compareWith]="compareWithFn" [value]="selectedLink">
+                <ion-select-option [value]="option" *ngFor="let option of meetingPlatforms">
+                  {{ option.name }}
+                </ion-select-option>
+              </ion-select>
+              <ion-item lines="none">
+                <ion-icon class="hint-icon" name="alert-circle"></ion-icon>
+                <ion-label class="hint-label">{{selectedHint}}</ion-label>
+              </ion-item>
+            </ion-list>
+            <div *ngFor="let option of meetingPlatforms">
+              <app-dynamic-form *ngIf="selectedLink==option" [jsonFormData]=option.form #platformForm></app-dynamic-form>
+          </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </div>
   </div>
-</div>
+</ion-content>
 
 <section [ngClass]="{'btn-disabled': form1?.myForm.invalid , 'btn-valid':form1?.myForm.valid}">
   <div class="ion-no-border" submitButton>
-    <ion-button *ngIf="type == 'default'" expand="full" (click)="onSubmit()">{{'PUBLISH_AND_ADD_LINK' | translate}}</ion-button>
+    <ion-button *ngIf="type == 'default' && !id" expand="full" (click)="onSubmit()">{{'PUBLISH_AND_ADD_LINK' | translate}}</ion-button>
+    <ion-button *ngIf="type == 'default' && id" expand="full" (click)="onSubmit()">{{'SAVE' | translate}}</ion-button>
   </div>
   <div class="ion-no-border segment" submitButton *ngIf="type == 'segment'">
     <ion-button *ngIf="sessionDetails?.meetingInfo?.platform === 'OFF'" class="btns" size="default" fill="solid" (click)="setItLater()">{{'SET_IT_LATER' | translate}}</ion-button>

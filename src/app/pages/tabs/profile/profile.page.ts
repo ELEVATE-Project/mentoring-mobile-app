@@ -72,36 +72,36 @@ export class ProfilePage implements OnInit {
   }
   async ionViewWillEnter() {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    this.fetchProfileDetails();
+    this.formData.data = this.user;
+    this.formData.data.emailId = this.user.email.address;
+    if (this.formData?.data?.about) {
+      this.showProfileDetails = true;
+    } else {
+      (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
+      this.visited=true;
+    }
     this.gotToTop();
+    this.profileDetailsApi();
   }
 
   gotToTop() {
     this.content.scrollToTop(1000);
   }
 
-  async fetchProfileDetails() {
-    var response = await this.profileService.getProfileDetailsFromAPI(this.user.isAMentor,this.user._id);
-    this.formData.data = response;
-    this.formData.data.emailId = response.email.address;
-    if (this.formData?.data?.about) {
-      this.showProfileDetails = true;
-    } else {
-      (!this.visited)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
-      this.visited=true;
-    }
-  }
 
   async doRefresh(event){
-    var result = await this.profileService.getProfileDetailsFromAPI(this.user.isAMentor,this.user._id);
-    if(result){
-      this.formData.data = result;
-      this.formData.data.emailId = result.email.address;
-    }
+    this.profileDetailsApi();
     event.target.complete();
   }
 
   feedback() {
     this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
+  }
+  async profileDetailsApi(){
+    var result = await this.profileService.getProfileDetailsFromAPI(this.user?.isAMentor,this.user?._id);
+    if(result){
+      this.formData.data = result;
+      this.formData.data.emailId = result.email.address;
+    }
   }
 }

@@ -166,7 +166,12 @@ export class HttpService {
         break
       case 401:
         let auth = this.injector.get(AuthService);
-        auth.logoutAccount(true);
+        this.localStorage.getLocalData(localKeys.USER_DETAILS).then(async (data)=>{
+          if(data._id){
+            await auth.logoutAccount(true);
+            this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
+          }
+        })
         break
       default:
         this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
