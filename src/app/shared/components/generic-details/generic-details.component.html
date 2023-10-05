@@ -3,7 +3,7 @@
     <p class="session-detail-heading">{{item.title | translate }}</p>
     <div *ngIf="isArray(sessionData.data[item.key]); else elseBlock">
       <ion-chip outline="true" class="ion-margin-top" *ngFor="let chip of sessionData.data[item.key]">
-        <ion-label>{{chip.label}}</ion-label>
+        <ion-label class="label">{{chip.label}}</ion-label>
       </ion-chip>
     </div>
     <ng-template #elseBlock>

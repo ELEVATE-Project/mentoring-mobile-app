@@ -85,11 +85,11 @@ export class AppComponent {
   }
 
   initializeApp() {
-    StatusBar.setStyle({ style: Style.Default })
-    if (Capacitor.isNativePlatform()) {
-      StatusBar.setOverlaysWebView({ overlay: true })
-    }
     this.platform.ready().then(() => {
+      if (Capacitor.isNativePlatform()) {
+        StatusBar.setOverlaysWebView({ overlay: false })
+        StatusBar.hide()
+      }
       this.network.netWorkCheck();
       setTimeout(async ()=>{
         this.languageSetting();

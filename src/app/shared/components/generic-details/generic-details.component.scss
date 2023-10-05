@@ -5,6 +5,12 @@ ion-chip{
     --background: var(--white);
     color: var(--dark-gray);
     margin-top: 6px;
+    max-width: -webkit-fill-available;
+    .label{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
 
 .value{
