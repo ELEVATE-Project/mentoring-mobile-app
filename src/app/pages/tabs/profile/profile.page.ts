@@ -18,7 +18,7 @@ export class ProfilePage implements OnInit {
   formData: any = {
     form: [
       { title: 'SESSIONS_ATTENDED',
-        key: 'sessionsAttended',
+        key: 'total_sessions_attended',
       },
       {
         title: 'ABOUT',
@@ -34,11 +34,11 @@ export class ProfilePage implements OnInit {
       },
       {
         title: "KEY_AREAS_OF_EXPERTISE",
-        key: "areasOfExpertise"
+        key: "areas_of_expertise"
       },
       {
         title: "EDUCATION_QUALIFICATION",
-        key: "educationQualification"
+        key: "education_qualification"
       },
       {
         title: "EMAIL_ID",
@@ -53,7 +53,7 @@ export class ProfilePage implements OnInit {
     action: "edit"
     
   }
-  showProfileDetails: boolean = false;
+  showProfileDetails: boolean = true;
   username: boolean = true;
   data: any;
   public headerConfig: any = {
@@ -71,15 +71,15 @@ export class ProfilePage implements OnInit {
     this.visited = false;
   }
   async ionViewWillEnter() {
-    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    this.formData.data = this.user;
-    this.formData.data.emailId = this.user.email.address;
-    if (this.formData?.data?.about) {
-      this.showProfileDetails = true;
-    } else {
-      (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
-      this.visited=true;
-    }
+    // this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    // this.formData.data = this.user;
+    // this.formData.data.emailId = this.user.email.address;
+    // if (this.formData?.data?.about) {
+    //   this.showProfileDetails = true;
+    // } else {
+    //   (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
+    //   this.visited=true;
+    // }
     this.gotToTop();
     this.profileDetailsApi();
   }
@@ -101,7 +101,7 @@ export class ProfilePage implements OnInit {
     var result = await this.profileService.getProfileDetailsFromAPI(this.user?.isAMentor,this.user?._id);
     if(result){
       this.formData.data = result;
-      this.formData.data.emailId = result.email.address;
+      this.formData.data.emailId = result.email;
     }
   }
 }

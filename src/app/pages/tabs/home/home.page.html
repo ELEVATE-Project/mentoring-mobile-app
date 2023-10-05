@@ -73,7 +73,7 @@
     </div>
   </div>
   <div *ngIf="sessions&&(selectedSegment=='my-sessions')">
-    <div *ngIf="sessions && sessions?.mySessions?.length">
+    <div *ngIf="sessions && sessions?.all_sessions?.length">
       <ion-label class="font-bold section-header">{{"ENROLLED_SESSIONS"|translate}}</ion-label>
       <ion-grid>
         <ion-row class="d-flex ">
@@ -88,7 +88,7 @@
       </ion-grid>
      
     </div>
-    <!-- <div *ngIf="sessions?.mySessions?.length">
+    <!-- <div *ngIf="sessions?.all_sessions?.length">
       <div class="page-intro">
         <h5>
           {{"MY_SESSIONS" | translate}}
@@ -99,12 +99,12 @@
         </ion-button>
       </div>
       <ion-row>
-        <ion-col size="6" *ngFor="let session of sessions?.mySessions">
+        <ion-col size="6" *ngFor="let session of sessions?.all_sessions">
           <app-session-sqr-card [data]="session" (onClickEvent)="eventAction($event)"> </app-session-sqr-card>
         </ion-col>
       </ion-row>
     </div> -->
-    <div *ngIf="sessions && !sessions?.mySessions.length">
+    <div *ngIf="sessions && !sessions?.all_sessions.length">
       <app-no-data-found [messageHeader]="'NO_SESSIONS_ENROLLED'" [messageDescription]="'CHECK_ALLSESSION_TO_ENROLL'">
       </app-no-data-found>
     </div>
