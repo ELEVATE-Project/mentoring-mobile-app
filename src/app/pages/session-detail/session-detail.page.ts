@@ -245,7 +245,7 @@ export class SessionDetailPage implements OnInit {
         }
         this.fetchSessionDetails();
       } else {
-        this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+        this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`])
       }
     } else if(this.userDetails && !this.userDetails.hasAcceptedTAndC){
       this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`], { queryParams:{sessionId: this.id}});

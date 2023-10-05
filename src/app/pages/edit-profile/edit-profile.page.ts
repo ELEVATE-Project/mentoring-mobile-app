@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import {
@@ -51,8 +50,6 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     private profileService: ProfileService,
     private localStorage: LocalStorageService,
     private attachment: AttachmentService,
-    private platform: Platform,
-    private file: File,
     private loaderService: LoaderService,
     private alert: AlertController,
     private translate: TranslateService,
@@ -127,6 +124,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.profileImageData.image = '';
     this.form1.myForm.markAsDirty();
     this.profileImageData.isUploaded = true;
+    this.profileImageData.haveValidationError = false;
   }
   async imageUploadEvent(event) {
     this.localImage = event.target.files[0];
@@ -143,8 +141,9 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     return this.attachment.cloudImageUpload(data,uploadUrl).pipe(
       map((resp=>{
       this.profileImageData.image = uploadUrl.destFilePath;
-      this.form1.myForm.value.image = [uploadUrl.destFilePath];
+      this.form1.myForm.value.image = uploadUrl.destFilePath;
       this.profileImageData.isUploaded = true;
+      this.profileImageData.haveValidationError = false;
       this.onSubmit();
     })))
   }

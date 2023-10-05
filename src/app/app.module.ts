@@ -42,7 +42,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
         deps: [HttpClient],
       },
     }),
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
 
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
