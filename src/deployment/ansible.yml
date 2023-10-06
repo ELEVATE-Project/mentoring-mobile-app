@@ -1,7 +1,7 @@
 ---
 - hosts: elevate
   vars:
-    project_path: /opt/frontend/mentorED-Portal
+    project_path: /opt/frontend/mentoring-mobile-app
     root_path: /opt/frontend
   tasks:
     - name: Slurp host file
@@ -39,4 +39,4 @@
     - name: Build pwa app
       shell: cd {{project_path}} && ionic build --prod
     - name: Start pm2
-      shell: cd {{project_path}} && pm2 start pm2.config.js
+      shell: cd {{project_path}} && pm2 start pm2.config.json
