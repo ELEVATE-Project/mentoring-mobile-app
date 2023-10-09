@@ -2,6 +2,9 @@
 
 
 <ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row class="d-flex  ion-justify-content-center">
+      <ion-col padding size-xs="12" size-sm="12" size-md="10" size-lg="10">
   <div>
     <ion-toolbar *ngIf="isMentor">
       <ion-segment [value]="segment" swipeGesture="true" (ionChange)="segmentChanged($event)">
@@ -74,7 +77,11 @@
     </div>
 
   </div>
+</ion-col>
+</ion-row>
+</ion-grid>
 </ion-content>
+
 
 <ion-footer class="ion-no-border">
 </ion-footer>

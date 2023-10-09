@@ -2,6 +2,7 @@
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay" swipeGesture="false">
       <ion-header [translucent]="true" class="ion-no-border">
+        <div>
         <div class="sub-menu-toolbar">
           <div slot="start" class="img-mainDiv">
               <div class="image-div" *ngIf="user?.image; else elseBlock">
@@ -18,6 +19,7 @@
             <a (click)="goToProfilePage()">{{"VIEW_PROFILE" | translate}}</a>
           </div>
         </div>
+      </div>
       </ion-header>
       <ion-content fullscreen>
         <div class="menu-css">

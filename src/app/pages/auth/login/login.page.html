@@ -1,7 +1,9 @@
 <app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
+<ion-content>
 <div>
   <ion-grid>
     <ion-row class="d-flex flex-justify-center">
+      <ion-col padding size-xs="12" size-sm="12" size-md="6" size-lg="6" >
       <div class="mx-10">
         <app-generic-header [labels]="labels"></app-generic-header>
         <section>
@@ -38,6 +40,8 @@
           </div>
         </section>
       </div>
+    </ion-col>
     </ion-row>
   </ion-grid>
 </div>
+</ion-content>
