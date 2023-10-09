@@ -137,7 +137,6 @@ export class RegisterPage implements OnInit {
 
   async createUser() {
     let formJson = this.form1.myForm.value;
-    formJson.isAMentor = this.isAMentor ? this.isAMentor : false;
     if (_.isEqual(formJson.password, formJson.cPassword)) {
       let result = await this.profileService.registrationOtp(formJson);
       if (result) {

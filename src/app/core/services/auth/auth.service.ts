@@ -69,15 +69,15 @@ export class AuthService {
     this.userService.token = result;
     await this.localStorage.setLocalData(localKeys.TOKEN, result);
     this.user = data.result.user;
-    const userData = await this.profileService.getProfileDetailsFromAPI(this.user.isAMentor,this.user._id);
+    const userData = await this.profileService.getProfileDetailsFromAPI((this.user.user_roles[0].title==='mentor'),this.user._id);
     if (!userData) {
       this.localStorage.delete(localKeys.TOKEN);
       throw Error();
     }
     await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
-    if(userData.preferredLanguage){
-      await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, userData.preferredLanguage);
-      this.translate.use(userData.preferredLanguage)
+    if(userData.languages[0]){
+      await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, userData.languages[0].value);
+      this.translate.use(userData.languages[0].value)
     }
     this.userService.userEvent.next(userData);
     return userData;
