@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "MentorED",
-      "script": "www/main.js",
+      "script": "server.js",
       "args": [],
       "instances": "1",
       "exec_mode": "cluster",
