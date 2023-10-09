@@ -46,7 +46,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
     }),
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
+      enabled: typeof(environment.production)=='string' ? JSON.parse(environment.production) : environment.production,
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
