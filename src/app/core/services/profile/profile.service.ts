@@ -72,17 +72,9 @@ export class ProfileService {
       try {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
-            if (data) {
-              this.isMentor = (data.user_roles[0].title==='mentor')
-              //showLoader ? this.loaderService.stopLoader() : null;
-              resolve(data);
-            } else {
-              // var res = await this.getProfileDetailsFromAPI();
-              // await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
-              // data = _.get(data, 'user');
-             // showLoader ? this.loaderService.stopLoader() : null;
-              resolve(data);
-            }
+            this.isMentor = (data.user_roles[0].title==='mentor')
+            //showLoader ? this.loaderService.stopLoader() : null;
+            resolve(data);
           })
       } catch (error) {
        // showLoader ? this.loaderService.stopLoader() : showLoader;
