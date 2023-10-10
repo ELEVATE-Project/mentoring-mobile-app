@@ -107,7 +107,7 @@ export class AppComponent {
 
       this.userService.userEventEmitted$.subscribe(data=>{
         if(data){
-          this.isMentor = (data?.user_roles[0].title==='mentor')
+          this.isMentor = this.profile.isMentor
           this.user = data;
         }
       })
@@ -163,7 +163,7 @@ export class AppComponent {
   getUser() {
     this.profile.profileDetails(false).then(profileDetails => {
       this.user = profileDetails;
-      this.isMentor = (this.user?.user_roles[0].title==='mentor')
+      this.isMentor = this.profile.isMentor;
     })
   }
   goToProfilePage(){

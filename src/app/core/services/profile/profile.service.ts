@@ -73,6 +73,7 @@ export class ProfileService {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
             if (data) {
+              this.isMentor = (data.user_roles[0].title==='mentor')
               //showLoader ? this.loaderService.stopLoader() : null;
               resolve(data);
             } else {

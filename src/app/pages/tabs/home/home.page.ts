@@ -73,6 +73,7 @@ export class HomePage implements OnInit {
     this.getUser();
     this.userService.userEventEmitted$.subscribe(data => {
       if (data) {
+        this.isMentor = this.profileService.isMentor
         this.user = data;
       }
     })
