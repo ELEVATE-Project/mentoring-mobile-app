@@ -86,6 +86,9 @@ export class HomePage implements OnInit {
     this.gotToTop();
     var obj = { page: this.page, limit: this.limit, searchText: "" };
     this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+    this.profileService.isMentorCheck().then((data)=>{
+      this.isMentor = data;
+    });
   }
   async eventAction(event) {
     if(this.user.about){
@@ -128,7 +131,6 @@ export class HomePage implements OnInit {
   getUser() {
     this.profileService.profileDetails().then(data => {
       this.user = data;
-      this.isMentor = data.user_roles.length && (data?.user_roles[0].title==='mentor') ? true: false;
       // if (!this.user?.hasAcceptedTAndC) {
       //   this.openModal();
       // }
