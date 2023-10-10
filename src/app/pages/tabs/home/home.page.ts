@@ -10,9 +10,9 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { HttpService, LoaderService, LocalStorageService, ToastService, UserService, UtilService } from 'src/app/core/services';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
-import { Location } from '@angular/common';
 import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-conditions.page';
 import { App, AppState } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 
 
 @Component({
@@ -29,7 +29,8 @@ export class HomePage implements OnInit {
   limit = 100;
   sessions;
   sessionsCount = 0;
-  status = "published,live";
+  isNativeApp = Capacitor.isNativePlatform()
+  status = "PUBLISHED,LIVE";
   @ViewChild(IonContent) content: IonContent;
 
   public headerConfig: any = {
@@ -38,7 +39,7 @@ export class HomePage implements OnInit {
     headerColor: 'primary',
     // label:'MENU'
   };
-  
+  isAMentor
   public segmentButtons = [{ name: "all-sessions", label: "ALL_SESSIONS" }, { name: "created-sessions", label: "CREATED_SESSIONS" }, { name: "my-sessions", label: "ENROLLED_SESSIONS" }]
   public mentorSegmentButton = ["created-sessions"]
   selectedSegment = "all-sessions";
@@ -65,7 +66,6 @@ export class HomePage implements OnInit {
           var obj = { page: this.page, limit: this.limit, searchText: "" };
            this.sessionService.getAllSessionsAPI(obj).then((data)=>{
               this.createdSessions = data;
-              console.log()
           })
         }
       })
@@ -73,6 +73,7 @@ export class HomePage implements OnInit {
     this.getUser();
     this.userService.userEventEmitted$.subscribe(data => {
       if (data) {
+        this.isMentor = this.profileService.isMentor
         this.user = data;
       }
     })
@@ -129,10 +130,11 @@ export class HomePage implements OnInit {
   }
   getUser() {
     this.profileService.profileDetails().then(data => {
-      this.user = data;
-      // if (!this.user?.hasAcceptedTAndC) {
-      //   this.openModal();
-      // }
+      this.isAMentor = this.profileService.isMentor
+      this.user = data
+      if (!this.user?.terms_and_conditions) {
+        this.openModal();
+      }
     })
   }
 
@@ -144,7 +146,6 @@ export class HomePage implements OnInit {
       let data: any = await this.httpService.get(config);
       this.sessions = data.result;
       this.sessionsCount = data.result.count;
-      console.log(this.sessions )
     }
     catch (error) {
     }

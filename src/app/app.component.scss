@@ -8,6 +8,7 @@
 .menu-css{
     height: 100%;
     margin-left: 20px;
+    overflow: hidden;
 }
 
 .sub-menu-list{
@@ -93,4 +94,7 @@
 }
 .side-menu-icon{
     font-size: xx-large;
+}
+.cursor {
+    cursor: pointer;
 }

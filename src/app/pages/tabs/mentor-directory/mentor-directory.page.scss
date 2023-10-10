@@ -1,11 +1,12 @@
 .index-label{
     border-top: 1px solid var(--gray);
     padding: 10px 15px;
-    margin: 40px 15px 15px 10px;
+    margin: 20px 15px 15px 10px;
     border-bottom: 1px solid var(--gray);
     font-weight: 600;
 }
 .search-style{
-    --border-radius: 10px;
-    padding: 5px 35px;
+    --border-radius: 20px;
+    padding: 5px 35px !important;
+    max-width: 600px;
   }

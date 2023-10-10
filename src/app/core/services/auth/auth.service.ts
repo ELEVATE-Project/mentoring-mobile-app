@@ -37,9 +37,9 @@ export class AuthService {
     };
     try {
       let data: any = await this.httpService.post(config);
-      let userData = this.setUserInLocal(data);
+      this.setUserInLocal(data);
       this.loaderService.stopLoader();
-      return userData;
+      return data.result.user;
     }
     catch (error) {
       this.loaderService.stopLoader();
@@ -54,9 +54,9 @@ export class AuthService {
     };
     try {
       const data: any = await this.httpService.post(config);
-      let userData = await this.setUserInLocal(data);
+      this.setUserInLocal(data);
       this.loaderService.stopLoader();
-      return userData
+      return data.result.user
     }
     catch (error) {
       this.loaderService.stopLoader();
@@ -69,25 +69,22 @@ export class AuthService {
     this.userService.token = result;
     await this.localStorage.setLocalData(localKeys.TOKEN, result);
     this.user = data.result.user;
-    const userData = await this.profileService.getProfileDetailsFromAPI(this.user.isAMentor,this.user._id);
-    if (!userData) {
-      this.localStorage.delete(localKeys.TOKEN);
-      throw Error();
+    this.profileService.isMentor = (this.user?.user_roles[0]?.title === 'mentor')
+    this.userService.userEvent.next(this.user);
+    await this.localStorage.setLocalData(localKeys.USER_DETAILS, this.user);
+    if(this.user.languages){
+      await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, this.user.languages[0].value);
+      this.translate.use(this.user.languages[0].value)
     }
-    await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
-    if(userData.preferredLanguage){
-      await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, userData.preferredLanguage);
-      this.translate.use(userData.preferredLanguage)
-    }
-    this.userService.userEvent.next(userData);
-    return userData;
+    return this.user;
   }
 
   async logoutAccount(skipApiCall?: boolean) {
     const config = {
       url: urlConstants.API_URLS.LOGOUT_ACCOUNT,
       payload: {
-        refreshToken: _.get(this.userService.token, 'refresh_token'),
+        'X-auth-token': _.get(this.userService.token, 'access_token'),
+        'refresh_token': _.get(this.userService.token, 'refresh_token'),
       },
     };
     try {

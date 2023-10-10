@@ -1,20 +1,20 @@
 <ion-card (click)="onCardClick(data)" class="session-card card-shadow-bottom">
-  <span class="status-badge d-flex flex-justify-center" *ngIf="data?.status == 'live'">
+  <span class="status-badge d-flex flex-justify-center" *ngIf="data?.status == 'LIVE'">
     {{data?.status | titlecase}}
   </span>
   <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col size="3">
-        <img *ngIf="!data?.image || data?.image==''; else Img; let image" class="thumbnail-image"
+        <img *ngIf="!data?.image.length || data?.image==''; else Img; let image" class="thumbnail-image"
           src="../../../../assets/default-session-img/session-img.png" />
         <ng-template #Img>
-          <img class="thumbnail-image" src="{{data?.image}}" />
+          <img class="thumbnail-image" src="{{data?.image[0]}}" />
         </ng-template>
       </ion-col>
       <ion-col class="header" size="7">
         <h5 class="text-align">{{data?.name || data?.title}}</h5>
         <div class="margin-btm-10">
-          <p class="text-align" *ngIf="data?.description">{{data?.mentorName}}</p>
+          <p class="text-align" *ngIf="data?.description">{{data?.mentor_name}}</p>
         </div>
       </ion-col>
       <ion-col size="2"></ion-col>
@@ -23,9 +23,9 @@
       <ion-row class="d-flex flex-align-items-center" style="padding-left: 10px;">
         <ion-icon name="calendar-number-outline"></ion-icon>
         <div>
-          <ion-label *ngIf="startDate && data?.status=='published'" class="platform-date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
-          <ion-label *ngIf="startDate && data?.status=='live'" class="platform-date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
-          <ion-label *ngIf="endDate && data?.status=='completed'" class="platform-date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
+          <ion-label *ngIf="startDate && data?.status=='PUBLISHED'" class="platform-date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+          <ion-label *ngIf="startDate && data?.status=='LIVE'" class="platform-date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+          <ion-label *ngIf="endDate && data?.status=='COMPLETED'" class="platform-date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
         </div> 
       </ion-row>
       <ion-row class="d-flex flex-align-items-center meeting-platform" *ngIf="!(meetingPlatform?.platform == 'OFF' && isCreator) ">
@@ -37,7 +37,7 @@
           </p>
         </div>
       </ion-row>
-      <ion-row class="d-flex flex-align-items-center meeting-platform" *ngIf="meetingPlatform?.platform == 'OFF' && isCreator && (data.status != 'completed')">
+      <ion-row class="d-flex flex-align-items-center meeting-platform" *ngIf="meetingPlatform?.platform == 'OFF' && isCreator && (data.status != 'COMPLETED')">
         <ion-icon name="videocam"></ion-icon>
         <div>
           <p class="platform-date-label">
@@ -47,7 +47,7 @@
       </ion-row>
     </ion-col>
     <ion-col class="d-flex flex-justify-flex-end flex-align-items-center" style="float: right;" size="4">
-      <ion-button *ngIf="data?.status!='completed'" class="button"  [disabled]="!buttonConfig?.isEnabled && buttonConfig?.label !='ENROLL'" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
+      <ion-button *ngIf="data?.status!='COMPLETED'" class="button"  [disabled]="!buttonConfig?.isEnabled && buttonConfig?.label !='ENROLL'" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
     </ion-col>
   </ion-grid>
 </ion-card>

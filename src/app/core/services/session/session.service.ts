@@ -50,8 +50,9 @@ export class SessionService {
     try {
       let data = await this.httpService.get(config);
       let result = _.get(data, 'result');
-      //this.loaderService.stopLoader();
+      this.loaderService.stopLoader();
       return result;
+      return {}
     }
     catch (error) {
      // this.loaderService.stopLoader();

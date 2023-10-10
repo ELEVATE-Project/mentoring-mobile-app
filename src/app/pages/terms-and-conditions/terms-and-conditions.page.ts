@@ -54,7 +54,6 @@ export class TermsAndConditionsPage implements OnInit {
         this.labels[index] = translatedLabel[key];
       })
     })
-    console.log(this.labels)
   }
 
   // expandItem(item): void {
@@ -79,7 +78,7 @@ export class TermsAndConditionsPage implements OnInit {
   }
   async setLocalStorage() {
     let localUser = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    await this.profileService.getProfileDetailsFromAPI(localUser.isAMentor,localUser._id);
+    await this.profileService.getProfileDetailsFromAPI(localUser.id);
   }
 
   checked() {

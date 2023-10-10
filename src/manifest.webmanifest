@@ -1,15 +1,15 @@
 {
   "name": "MentorED",
   "short_name": "MentorED",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "theme_color": "#000000",
+  "background_color": "#000000",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
   "icons": [
     {
       "src": "assets/icons/icon-48x48.png",
-      "sizes": "72x72",
+      "sizes": "48x48",
       "type": "image/png",
       "purpose": "maskable any"
     },

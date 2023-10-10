@@ -38,8 +38,8 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.post(config);
       let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+      let profileData = await this.getProfileDetailsFromAPI(userDetails.id);
       userDetails.user = null;
-      let profileData = await this.getProfileDetailsAPI();
       let profileDatas = await {...userDetails, ...profileData};
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileDatas);
       this.userService.userEvent.next(profileDatas);
@@ -72,16 +72,9 @@ export class ProfileService {
       try {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
-            if (data) {
-              //showLoader ? this.loaderService.stopLoader() : null;
-              resolve(data);
-            } else {
-              var res = await this.getProfileDetailsAPI();
-              await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
-              data = _.get(data, 'user');
-             // showLoader ? this.loaderService.stopLoader() : null;
-              resolve(data);
-            }
+            this.isMentor = (data.user_roles[0].title==='mentor')
+            //showLoader ? this.loaderService.stopLoader() : null;
+            resolve(data);
           })
       } catch (error) {
        // showLoader ? this.loaderService.stopLoader() : showLoader;
@@ -156,8 +149,9 @@ export class ProfileService {
   }
 
   async getProfileDetailsFromAPI(id, showLoader=true){
+    console.log(id)
     const config = {
-      url: urlConstants.API_URLS.PROFILE_READ+id,
+      url: urlConstants.API_URLS.PROFILE_DETAILS+id,
       payload: {}
     };
     try {

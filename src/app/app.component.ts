@@ -107,7 +107,7 @@ export class AppComponent {
 
       this.userService.userEventEmitted$.subscribe(data=>{
         if(data){
-          this.isMentor = data?.isAMentor;
+          this.isMentor = this.profile.isMentor
           this.user = data;
         }
       })
@@ -144,7 +144,6 @@ export class AppComponent {
   }
 
   logout(){
-    this.menuCtrl.toggle();
     let msg = {
       header: 'LOGOUT',
       message: 'LOGOUT_CONFIRM_MESSAGE',
@@ -155,7 +154,8 @@ export class AppComponent {
       if(data){
         await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, "en");
         this.translate.use("en")
-        this.authService.logoutAccount();
+        await this.authService.logoutAccount();
+        this.menuCtrl.enable(false);
       }
     }).catch(error => {})
   }
@@ -163,11 +163,13 @@ export class AppComponent {
   getUser() {
     this.profile.profileDetails(false).then(profileDetails => {
       this.user = profileDetails;
-      this.isMentor = this.user?.isAMentor
+      this.isMentor = this.profile.isMentor;
     })
   }
   goToProfilePage(){
-    this.menuCtrl.close();
+    if(Capacitor.isNativePlatform()){
+      this.menuCtrl.enable(false);
+    }
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
   }
 
