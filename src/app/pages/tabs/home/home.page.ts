@@ -128,7 +128,7 @@ export class HomePage implements OnInit {
   getUser() {
     this.profileService.profileDetails().then(data => {
       this.user = data;
-      this.isMentor = (data?.user_roles[0].title==='mentor');
+      this.isMentor = data.user_roles.length && (data?.user_roles[0].title==='mentor') ? true: false;
       // if (!this.user?.hasAcceptedTAndC) {
       //   this.openModal();
       // }
