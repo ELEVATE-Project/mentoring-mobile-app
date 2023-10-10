@@ -130,7 +130,7 @@ export class HomePage implements OnInit {
   }
   getUser() {
     this.profileService.profileDetails().then(data => {
-      this.isAMentor = (data.user_roles[0].title==='mentor')
+      this.isAMentor = this.profileService.isMentor
       this.user = data
       if (!this.user?.terms_and_conditions) {
         this.openModal();
