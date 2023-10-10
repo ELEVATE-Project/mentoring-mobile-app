@@ -9,17 +9,31 @@ h3{
 }
 .welcome-note{
     font-size: 18px;
+    text-align: center;
+    font-weight: bold;
 }
 .search-bar{
     --border-radius:25px;
     --icon-color:var(--ion-color-primary);
     font-size:16px;
-    margin-top: 10px;
-    height: fit-content;
+    height: 36px;
+    max-width: 600px;
 }
 .segment-wrapper{
-    padding: 8px 20px 0px 3px;
+    padding: 6px 0px 6px 0px;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
+
+.align-center {
+    justify-content: center;
+}
+
+.segment-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
 .segment-div{
     margin: 2px 4px;
     ion-button{

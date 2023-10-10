@@ -54,7 +54,6 @@ export class TermsAndConditionsPage implements OnInit {
         this.labels[index] = translatedLabel[key];
       })
     })
-    console.log(this.labels)
   }
 
   // expandItem(item): void {

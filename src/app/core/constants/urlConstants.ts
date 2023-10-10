@@ -6,7 +6,7 @@ export const urlConstants = {
         REFRESH_TOKEN:"/user/v1/account/generateToken",
         TERMS_CONDITIONS:"/user/v1/account/acceptTermsAndCondition",
         PROFILE_UPDATE:"/user/v1/profile/update",
-        PROFILE_DETAILS: "/user/v1/profile/details",
+        PROFILE_DETAILS: "/user/v1/user/read/",
         MENTOR_PROFILE_DETAILS: "/mentoring/v1/mentors/profile/",
         MENTEE_PROFILE_DETAILS:"/mentoring/v1/mentees/profile/",
         MENTORS_DIRECTORY:"/user/v1/mentors/list?page=",

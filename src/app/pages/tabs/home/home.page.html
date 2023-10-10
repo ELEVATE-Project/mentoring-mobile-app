@@ -1,18 +1,19 @@
 <app-page-header [config]="headerConfig">
-  <!-- <ion-row class="header-bottom-border ion-padding"> -->
-    <!-- <h3>
+  <!-- <ion-row class="header-bottom-border ion-padding">
+    <h3>
       {{'WELCOME'| translate}} {{ user?.name }}!
     </h3>
-    <ion-col class="welcome-note" size="12">{{'WELCOME_NOTE' | translate}}</ion-col> -->
-    <ion-col size="6" class="ion-no-padding">
-      <div>
+    <ion-col class="welcome-note" size="12">{{'WELCOME_NOTE' | translate}}</ion-col>
+    <ion-col size="6" class="ion-no-padding"> -->
+      <!-- <p class="welcome-note hide-on-small-screen">{{'WELCOME_NOTE'| translate}}!</p> -->
+      <div class="d-flex flex-justify-center my-8">
         <ion-searchbar class="search-bar" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}" (click)="search()">
         </ion-searchbar>
       </div>
-    </ion-col>
-  <!-- </ion-row> -->
+    <!--</ion-col>
+  </ion-row> -->
 </app-page-header>
-<div class="page-intro segment-wrapper">
+<div class="page-intro segment-wrapper" [ngClass]="{'align-center': !isNativeApp}">
   <div class="d-flex segment-wrapper">
     <div class="segment-div" *ngFor="let segment of segmentButtons;">
       <ion-button
@@ -73,11 +74,11 @@
     </div>
   </div>
   <div *ngIf="sessions&&(selectedSegment=='my-sessions')">
-    <div *ngIf="sessions && sessions?.all_sessions?.length">
+    <div *ngIf="sessions && sessions?.my_sessions?.length">
       <ion-label class="font-bold section-header">{{"ENROLLED_SESSIONS"|translate}}</ion-label>
       <ion-grid>
         <ion-row class="d-flex ">
-          <ion-col *ngFor="let session of sessions?.mySessions" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
+          <ion-col *ngFor="let session of sessions?.my_sessions" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
             align-self-stretch>
             <div class="my-10" >
               <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
@@ -104,7 +105,7 @@
         </ion-col>
       </ion-row>
     </div> -->
-    <div *ngIf="sessions && !sessions?.all_sessions.length">
+    <div *ngIf="sessions && !sessions?.my_sessions.length">
       <app-no-data-found [messageHeader]="'NO_SESSIONS_ENROLLED'" [messageDescription]="'CHECK_ALLSESSION_TO_ENROLL'">
       </app-no-data-found>
     </div>

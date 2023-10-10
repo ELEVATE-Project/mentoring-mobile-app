@@ -167,7 +167,9 @@ export class AppComponent {
     })
   }
   goToProfilePage(){
-    this.menuCtrl.enable(false);
+    if(Capacitor.isNativePlatform()){
+      this.menuCtrl.enable(false);
+    }
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
   }
 

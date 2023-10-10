@@ -157,7 +157,7 @@ export class ProfileService {
 
   async getProfileDetailsFromAPI(id, showLoader=true){
     const config = {
-      url: urlConstants.API_URLS.PROFILE_READ+id,
+      url: urlConstants.API_URLS.PROFILE_DETAILS+id,
       payload: {}
     };
     try {
