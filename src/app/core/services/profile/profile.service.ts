@@ -157,26 +157,15 @@ export class ProfileService {
 
   async getProfileDetailsFromAPI(id, showLoader=true){
     const config = {
-      // url: (isAMentor)?urlConstants.API_URLS.MENTOR_PROFILE_DETAILS+id:urlConstants.API_URLS.MENTEE_PROFILE_DETAILS+id,
       url: urlConstants.API_URLS.PROFILE_READ+id,
       payload: {}
     };
     try {
       let data: any = await this.httpService.get(config);
-      // let data:any = this.responses;
       data = _.get(data, 'result');
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
+      this.isMentor = data.user_roles.length && (data?.user_roles[0].title==='mentor') ? true: false;
       return data;
-    }
-    catch (error) {
-    }
-  }
-
-  async isMentorCheck(){
-    try {
-      let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-      this.isMentor = userDetails.user_roles.length && (userDetails?.user_roles[0].title==='mentor') ? true: false;
-      return this.isMentor;
     }
     catch (error) {
     }

@@ -87,9 +87,7 @@ export class HomePage implements OnInit {
     this.gotToTop();
     var obj = { page: this.page, limit: this.limit, searchText: "" };
     this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
-    this.profileService.isMentorCheck().then((data)=>{
-      this.isMentor = data;
-    });
+    this.isMentor = this.profileService.isMentor;
   }
   async eventAction(event) {
     if(this.user.about){
