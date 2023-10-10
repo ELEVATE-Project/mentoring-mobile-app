@@ -127,6 +127,7 @@ export class HomePage implements OnInit {
           var obj = { page: this.page, limit: this.limit, searchText: "" };
            this.sessionService.getAllSessionsAPI(obj).then((data)=>{
               this.createdSessions = data;
+              console.log()
           })
         }
       })
@@ -205,6 +206,7 @@ export class HomePage implements OnInit {
       let data: any = this.responses;
       this.sessions = data.result;
       this.sessionsCount = data.result.count;
+      console.log(this.sessions )
     }
     catch (error) {
     }
