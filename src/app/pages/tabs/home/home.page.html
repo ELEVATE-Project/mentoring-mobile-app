@@ -16,7 +16,7 @@
   <div class="d-flex segment-wrapper">
     <div class="segment-div" *ngFor="let segment of segmentButtons;">
       <ion-button
-        *ngIf="!mentorSegmentButton.includes(segment.name) || (mentorSegmentButton.includes(segment.name)&&user?.isAMentor)"
+        *ngIf="!mentorSegmentButton.includes(segment.name) || (mentorSegmentButton.includes(segment.name)&&isMentor)"
         [ngClass]="{'font-bold': (selectedSegment==segment?.name) , 'segment-button': (selectedSegment!=segment?.name)}"
         fill="outline" (click)="segmentChanged(segment)">{{segment?.label|translate}}</ion-button>
     </div>
@@ -26,7 +26,7 @@
   <div *ngIf="sessions&&(selectedSegment=='all-sessions')">
     <ion-grid>
       <ion-row class="d-flex ">
-        <ion-col *ngFor="let session of sessions?.allSessions" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
+        <ion-col *ngFor="let session of sessions?.all_sessions" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
           align-self-stretch>
           <div class="my-10" >
             <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
@@ -36,7 +36,7 @@
       </ion-row>
     </ion-grid>
   </div>
-  <div *ngIf="(selectedSegment=='created-sessions')&&user?.isAMentor">
+  <div *ngIf="(selectedSegment=='created-sessions')&& isMentor">  
     <ion-card *ngIf="createdSessions?.data?.length" class="session-sqr-card">
       <ion-card-content class="card-content">
         <div class="segment-button d-flex flex-justify-center flex-align-items-flex-end">

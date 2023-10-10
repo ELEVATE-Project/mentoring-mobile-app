@@ -18,68 +18,7 @@ import { AuthService } from '../auth/auth.service';
   providedIn: 'root',
 })
 export class ProfileService {
-  public responses:any = {
-    "response_code": "OK",
-    "message": "Profile fetched successfully.",
-    "result": {
-      "email": "example@mail.com",
-      "verified": true,
-      "total_sessions_attended": "1",
-      "terms_and_conditions": false,
-      "id": 4564,
-      "name": "Nevil",
-      "designation": [
-        {
-          "value": "teacher",
-          "label": "Teacher"
-        }
-      ],
-      "location": [
-        {
-          "value": "kl",
-          "label": "Kerala"
-        }
-      ],
-      "areas_of_expertise": [
-        {
-          "value": "educational_leadership",
-          "label": "Educational Leadership"
-        }
-      ],
-      "languages": [
-        {
-          "value": "en",
-          "label": "English"
-        }
-      ],
-      "education_qualification": [
-        {
-          "value": "bcom",
-          "label": "B.Com"
-        }
-      ],
-      "updated_at": "2022-05-18T05:24:52.431Z",
-      "created_at": "2022-05-18T05:24:52.431Z",
-      "last_logged_in_at": "2022-05-18T05:24:52.431Z",
-      "about": "This is test about of mentee",
-      "experience": "4.2",
-      "gender": [
-        {
-          "value": "male",
-          "label": "MALE"
-        }
-      ],
-      "image": "https://cloudstorage.com/container/abc.png",
-      "user_roles": [
-        {
-          "id": 1,
-          "title": "mentee",
-          "user_type": 0,
-          "status": "ACTIVE"
-        }
-      ]
-    }
-  }
+  isMentor: boolean;
   constructor(
     private httpService: HttpService,
     private loaderService: LoaderService,
@@ -216,16 +155,16 @@ export class ProfileService {
     }
   }
 
-  async getProfileDetailsFromAPI(isAMentor, id, showLoader=true){
+  async getProfileDetailsFromAPI(id, showLoader=true){
     const config = {
-      url: (isAMentor)?urlConstants.API_URLS.MENTOR_PROFILE_DETAILS+id:urlConstants.API_URLS.MENTEE_PROFILE_DETAILS+id,
+      url: urlConstants.API_URLS.PROFILE_READ+id,
       payload: {}
     };
     try {
-      // let data: any = await this.httpService.get(config);
-      let data:any = this.responses;
+      let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
+      this.isMentor = data.user_roles.length && (data?.user_roles[0].title==='mentor') ? true: false;
       return data;
     }
     catch (error) {
