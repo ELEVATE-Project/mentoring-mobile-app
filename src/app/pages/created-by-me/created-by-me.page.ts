@@ -54,13 +54,13 @@ export class CreatedByMePage implements OnInit {
     var obj = { page: this.page, limit: this.limit, status: this.type, searchText: this.searchText };
     var response = await this.sessionService.getAllSessionsAPI(obj);
     this.loading = false;
-    if (response?.data) {
-      this.sessions = this.sessions.concat(response?.data);
-      if (response?.count) {
-        this.sessionsCount = response?.count;
-        this.showLoadMoreButton = (this.sessions?.length === this.sessionsCount) ? false : true;
-      }
-    }
+    // if (response?.data) {
+    //   this.sessions = this.sessions.concat(response?.data);
+    //   if (response?.count) {
+    //     this.sessionsCount = response?.count;
+    //     this.showLoadMoreButton = (this.sessions?.length === this.sessionsCount) ? false : true;
+    //   }
+    // }
   }
 
   public segmentChanged(ev: any) {
