@@ -30,7 +30,7 @@ export class HomePage implements OnInit {
   sessions;
   sessionsCount = 0;
   isNativeApp = Capacitor.isNativePlatform()
-  status = "published,live";
+  status = "PUBLISHED,LIVE";
   @ViewChild(IonContent) content: IonContent;
 
   public headerConfig: any = {

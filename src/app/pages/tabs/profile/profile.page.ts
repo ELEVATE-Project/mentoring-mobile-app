@@ -98,7 +98,7 @@ export class ProfilePage implements OnInit {
     this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
   }
   async profileDetailsApi(){
-    var result = await this.profileService.getProfileDetailsFromAPI((this.user?.user_roles[0].title==='mentor'),this.user?.id);
+    var result = await this.profileService.getProfileDetailsFromAPI(this.user?.id);
     if(result){
       this.formData.data = result;
       this.formData.data.emailId = result.email;

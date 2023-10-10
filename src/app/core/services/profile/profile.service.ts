@@ -38,8 +38,8 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.post(config);
       let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+      let profileData = await this.getProfileDetailsFromAPI(userDetails.id);
       userDetails.user = null;
-      let profileData = await this.getProfileDetailsAPI();
       let profileDatas = await {...userDetails, ...profileData};
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileDatas);
       this.userService.userEvent.next(profileDatas);
@@ -76,9 +76,9 @@ export class ProfileService {
               //showLoader ? this.loaderService.stopLoader() : null;
               resolve(data);
             } else {
-              var res = await this.getProfileDetailsAPI();
-              await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
-              data = _.get(data, 'user');
+              // var res = await this.getProfileDetailsFromAPI();
+              // await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
+              // data = _.get(data, 'user');
              // showLoader ? this.loaderService.stopLoader() : null;
               resolve(data);
             }
@@ -156,6 +156,7 @@ export class ProfileService {
   }
 
   async getProfileDetailsFromAPI(id, showLoader=true){
+    console.log(id)
     const config = {
       url: urlConstants.API_URLS.PROFILE_DETAILS+id,
       payload: {}
