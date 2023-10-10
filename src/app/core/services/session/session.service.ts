@@ -12,33 +12,6 @@ import { ModalController } from '@ionic/angular';
 })
 export class SessionService {
 
-  public responses: any = {
-  "responseCode": "OK",
-  "message": "Session fetched successfully.",
-  "result": {
-    "count": 1,
-    "data": [
-      {
-        "id": 1,
-        "title": "Leadership session by Adam",
-        "mentor_id": 21,
-        "description": "Leadership session desc",
-        "status": "PUBLISHED",
-        "start_date": "1695210731",
-        "end_date": "1695214329",
-        "image": [
-          "https://aws-bucket-storage-name.s3.ap-south-1.amazonaws.com/users/1232s2133sdd1-12e2dasd3123.png"
-        ],
-        "created_at": "2023-09-20T11:56:42.257Z,",
-        "meeting_info.value": "BBB",
-        "meeting_info.platform": "BigBlueButton (Default)",
-        "mentor_name": "Newell",
-        "org_id": 1
-      }
-    ]
-  }
-}
-
   constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private router: Router, private modalCtrl: ModalController) { }
 
 
@@ -75,8 +48,7 @@ export class SessionService {
       payload: {}
     };
     try {
-      // let data = await this.httpService.get(config);
-      let data = this.responses;
+      let data = await this.httpService.get(config);
       let result = _.get(data, 'result');
       //this.loaderService.stopLoader();
       return result;
