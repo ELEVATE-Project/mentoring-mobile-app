@@ -1,6 +1,5 @@
 <ion-header>
   <ion-toolbar color="{{config?.headerColor}}">
-    <ng-content></ng-content>
     <ion-buttons slot="start" *ngIf="config?.menu">
       <ion-menu-button>
       </ion-menu-button>
@@ -9,6 +8,7 @@
       <ion-back-button defaultHref="/tabs/home" *ngIf="config?.backButton"></ion-back-button>
     </ion-buttons>
     <ion-title>{{config?.backButton?.label || config?.label | translate}}</ion-title>
+    <ng-content></ng-content>
     <ion-grid>
       <ion-row>
         <ion-col size="2" *ngIf="config?.edit">

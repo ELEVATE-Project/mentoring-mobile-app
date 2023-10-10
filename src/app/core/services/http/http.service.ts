@@ -152,7 +152,7 @@ export class HttpService {
     const config = {
       url: urlConstants.API_URLS.REFRESH_TOKEN,
       payload: {
-        refreshToken: _.get(this.userService.token, 'refresh_token')
+        refresh_token: _.get(this.userService.token, 'refresh_token')
       },
       headers: {}
     };

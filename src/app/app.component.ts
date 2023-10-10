@@ -144,7 +144,6 @@ export class AppComponent {
   }
 
   logout(){
-    this.menuCtrl.toggle();
     let msg = {
       header: 'LOGOUT',
       message: 'LOGOUT_CONFIRM_MESSAGE',
@@ -155,7 +154,8 @@ export class AppComponent {
       if(data){
         await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, "en");
         this.translate.use("en")
-        this.authService.logoutAccount();
+        await this.authService.logoutAccount();
+        this.menuCtrl.enable(false);
       }
     }).catch(error => {})
   }
@@ -167,7 +167,7 @@ export class AppComponent {
     })
   }
   goToProfilePage(){
-    this.menuCtrl.close();
+    this.menuCtrl.enable(false);
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
   }
 
