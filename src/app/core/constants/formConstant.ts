@@ -21,28 +21,20 @@ export const TERMS_AND_CONDITIONS_FORM: IFORM = {
 
 export const FAQ: IFORM = {
 	"type": "faq",
-	"subType": "faqPage",
-	"action": "formFields",
-	"templateName":"defaultTemplate"
+	"sub_type": "faqPage",
 }
 
 export const HELP_VIDEOS: IFORM = {
 	"type": "helpVideos",
-	"subType": "videos",
-	"action": "videoFields",
-    "templateName":"defaultTemplate",
+	"sub_type": "videos",
 }
 
 export const PLATFORMS: IFORM = {
 	"type": "platformApp",
-	"subType": "platformAppForm",
-	"action": "platformAppFields",
-	"templateName": "defaultTemplate"	
+	"sub_type": "platformAppForm",
 }
 
 export const HELP: IFORM = {
 	"type": "helpApp",
-	"subType": "helpAppForm",
-	"action": "helpAppFields",
-	"templateName":"defaultTemplate"
+	"sub_type": "helpAppForm",
 }
