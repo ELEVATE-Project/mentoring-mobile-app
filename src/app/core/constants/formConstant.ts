@@ -16,9 +16,7 @@ export const CREATE_SESSION_FORM: IFORM = {
 
 export const TERMS_AND_CONDITIONS_FORM: IFORM = {
 	"type": "termsAndConditions",
-	"subType": "termsAndConditionsForm",
-	"action": "termsAndConditionsFields",
-	"templateName": "defaultTemplate"
+	"sub_type": "termsAndConditionsForm",
 }
 
 export const FAQ: IFORM = {
