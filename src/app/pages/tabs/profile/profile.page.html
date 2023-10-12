@@ -4,7 +4,7 @@
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <div *ngIf="formData && formData.data">
-        <app-generic-profile-header [headerData]='formData.data'[buttonConfig]="buttonConfig" [showRole]="true"></app-generic-profile-header>
+        <app-generic-profile-header [headerData]='formData.data'[buttonConfig]="buttonConfig" [isMentor]='isMentor' [showRole]="true"></app-generic-profile-header>
         <div *ngIf="showProfileDetails; else elseBlock">
             <ion-card *ngIf="isMentor" class="card-wrapper">
                 <ion-card-content class="padding-top-10">
