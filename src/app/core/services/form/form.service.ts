@@ -38,4 +38,18 @@ export class FormService {
   getUniqueKey = (object) => Object.values(object).join('_'); // get '_' seperated object values in string format
   timeToExpire = (h) => new Date(Date.now() + 1000 * 60 * 60 * h).getTime(); //get unix time of expiry by passing hour
   checkIfexpired = (unix) => unix < Date.now(); // pass unix time to check,true if expired else false
+
+  async getEntities(entityTypes) {
+    const config = {
+      url: urlConstants.API_URLS.GET_ENTITY_LIST,
+      payload: { value: entityTypes }
+    };
+    try {
+      let data = await this.http.post(config);
+      let result = _.get(data, 'result.entity_types');
+      return result;
+    }
+    catch (error) {
+    }
+  }
 }

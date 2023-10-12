@@ -55,7 +55,7 @@ export class MentorDetailsPage implements OnInit {
       rating: {
         average:0
       },
-      sessionsHosted:0 
+      sessions_hosted:0 
     },
   };
   segmentValue = "about";

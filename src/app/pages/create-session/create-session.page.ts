@@ -53,6 +53,8 @@ export class CreateSessionPage implements OnInit {
   meetingPlatforms:any ;
   firstStepperTitle: string;
   sessionDetails: any;
+  entityNames:any
+  entityList:any;
 
   constructor(
     private http: HttpClient,
@@ -75,6 +77,9 @@ export class CreateSessionPage implements OnInit {
     const platformForm = await this.getPlatformFormDetails();
     const result = await this.form.getForm(CREATE_SESSION_FORM);
     this.formData = _.get(result, 'data.fields');
+    this.entityNames = _.get(result, 'data.required_entity_types')
+    this.entityList = await this.form.getEntities(this.entityNames)
+    this.populateEntity()
     this.changeDetRef.detectChanges();
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.id = params?.get('id');
@@ -96,8 +101,8 @@ export class CreateSessionPage implements OnInit {
         this.sessionDetails= response;
         this.profileImageData.image = response.image;
         this.profileImageData.isUploaded = true;
-        response.startDate = moment.unix(response.startDate).format("YYYY-MM-DDTHH:mm");
-        response.endDate = moment.unix(response.endDate).format("YYYY-MM-DDTHH:mm");
+        response.start_date = moment.unix(response.start_date).format("YYYY-MM-DDTHH:mm");
+        response.end_date = moment.unix(response.end_date).format("YYYY-MM-DDTHH:mm");
         this.preFillData(response);
   }
 
@@ -156,10 +161,16 @@ export class CreateSessionPage implements OnInit {
         this.getImageUploadUrl(this.localImage);
       } else {
         const form = Object.assign({}, this.form1.myForm.value);
-        form.startDate = new Date(form.startDate).getTime() / 1000.0;
-        form.endDate = new Date(form.endDate).getTime() / 1000.0;
+        form.start_date = new Date(form.start_date).getTime() / 1000.0;
+        form.end_date = new Date(form.end_date).getTime() / 1000.0;
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        form.timeZone = timezone;
+        form.time_zone = timezone;
+        _.forEach(this.entityNames, (entityKey) => {
+          form[entityKey] = _.map(form[entityKey], 'value');
+        });
+        if(!this.profileImageData.image){
+          form.image=[]
+        }
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
         if (result) {
@@ -167,10 +178,10 @@ export class CreateSessionPage implements OnInit {
           this.isSubmited = true;
           this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
           this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
-          result.startDate = moment.unix(result.startDate).format("YYYY-MM-DDTHH:mm");
-          result.endDate = moment.unix(result.endDate).format("YYYY-MM-DDTHH:mm");
-          if(!this.id && result._id){
-            this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: result._id , type: 'segment'}, replaceUrl: true });
+          result.start_date = moment.unix(result.start_date).format("YYYY-MM-DDTHH:mm");
+          result.end_date = moment.unix(result.end_date).format("YYYY-MM-DDTHH:mm");
+          if(!this.id && result.id){
+            this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: result.id , type: 'segment'}, replaceUrl: true });
           }else {
             this.type = 'segment';
           }
@@ -210,18 +221,18 @@ export class CreateSessionPage implements OnInit {
 
   preFillData(existingData) {
     for(let j=0;j<this?.meetingPlatforms?.length;j++){
-      if( existingData.meetingInfo.platform == this?.meetingPlatforms[j].name){
+      if( existingData.meeting_info.platform == this?.meetingPlatforms[j].name){
          this.selectedLink = this?.meetingPlatforms[j];
          this.selectedHint = this.meetingPlatforms[j].hint;
         let obj = this?.meetingPlatforms[j]?.form?.controls.find( (link:any) => link?.name == 'link')
         let meetingId = this?.meetingPlatforms[j]?.form?.controls.find( (meetingId:any) => meetingId?.name == 'meetingId')
         let password = this?.meetingPlatforms[j]?.form?.controls.find( (password:any) => password?.name == 'password')
-        if(existingData.meetingInfo.link){
-          obj.value = existingData?.meetingInfo?.link;
+        if(existingData.meeting_info.link){
+          obj.value = existingData?.meeting_info?.link;
         }
-        if(existingData?.meetingInfo?.meta?.meetingId){
-          meetingId.value = existingData?.meetingInfo?.meta?.meetingId;
-          password.value = existingData?.meetingInfo?.meta?.password;
+        if(existingData?.meeting_info?.meta?.meetingId){
+          meetingId.value = existingData?.meeting_info?.meta?.meetingId;
+          password.value = existingData?.meeting_info?.meta?.password;
         }
       }
     }
@@ -293,4 +304,12 @@ export class CreateSessionPage implements OnInit {
     return o1 === o2;
   };
 
+  populateEntity(){
+    _.forEach(this.formData.controls, (formData) => {
+      const entity = _.find(this.entityList, (entityData) => formData.name === entityData.value);
+      if (entity) {
+        formData.options = entity.entities.map((entityItem)=>{ return { label : entityItem.label, value : entityItem.value }});
+      }
+    });
+  }
 }

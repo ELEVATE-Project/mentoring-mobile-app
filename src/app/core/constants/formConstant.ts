@@ -9,9 +9,7 @@ export const EDIT_PROFILE_FORM: IFORM = {
 
 export const CREATE_SESSION_FORM: IFORM = {
 	"type": "session",
-	"subType": "sessionForm",
-	"action": "sessionFields",
-	"templateName": "defaultTemplate"
+	"sub_type": "sessionForm",
 }
 
 export const TERMS_AND_CONDITIONS_FORM: IFORM = {
