@@ -40,11 +40,15 @@ export class MentorDetailsPage implements OnInit {
       },
       {
         title: 'KEY_AREAS_OF_EXPERTISE',
-        key: 'areasOfExpertise',
+        key: 'area_of_expertise',
       },
       {
         title: "EDUCATION_QUALIFICATION",
-        key: "educationQualification"
+        key: "education_qualification"
+      },
+      {
+        title: "LANGUAGES",
+        key: "languages" 
       }
     ],
     data: {
