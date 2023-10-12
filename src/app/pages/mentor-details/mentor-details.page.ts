@@ -40,11 +40,15 @@ export class MentorDetailsPage implements OnInit {
       },
       {
         title: 'KEY_AREAS_OF_EXPERTISE',
-        key: 'areasOfExpertise',
+        key: 'area_of_expertise',
       },
       {
         title: "EDUCATION_QUALIFICATION",
-        key: "educationQualification"
+        key: "education_qualification"
+      },
+      {
+        title: "LANGUAGES",
+        key: "languages" 
       }
     ],
     data: {
@@ -117,7 +121,7 @@ export class MentorDetailsPage implements OnInit {
         break;
 
       case 'enrollAction':
-        await this.sessionService.enrollSession(event.data._id);
+        await this.sessionService.enrollSession(event.data.id);
         this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
         break;
     }

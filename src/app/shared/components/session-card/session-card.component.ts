@@ -15,6 +15,7 @@ import { App, AppState } from '@capacitor/app';
 })
 export class SessionCardComponent implements OnInit {
   @Input() data: any;
+  @Input() isEnrolled;
   @Output() onClickEvent = new EventEmitter();
   @ViewChild(IonModal) modal: IonModal;
   startDate: string;
@@ -45,7 +46,7 @@ export class SessionCardComponent implements OnInit {
     if(isCreator){
       this.buttonConfig={label:"START",type:"startAction"};
     } else {
-      this.buttonConfig=(!isCreator&&this.data.is_enrolled)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
+      this.buttonConfig=(!isCreator&&this.data.is_enrolled || this.isEnrolled)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
     }
     this.buttonConfig.isEnabled = ((this.data.start_date - currentTimeInSeconds) < 600 && !(this.data?.meeting_info?.platform == 'OFF')) ? true : false
   }

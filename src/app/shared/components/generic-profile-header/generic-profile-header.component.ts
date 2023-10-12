@@ -14,6 +14,7 @@ export class GenericProfileHeaderComponent implements OnInit {
   @Input() headerData:any;
   @Input() buttonConfig:any;
   @Input() showRole:any;
+  @Input() isMentor: any;
   labels = ["CHECK_OUT_MENTOR","PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS"];
 
   constructor(private navCtrl:NavController, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService) { }
