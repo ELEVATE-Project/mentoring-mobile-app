@@ -48,7 +48,7 @@ export class HomeSearchPage implements OnInit {
       searchText : this.searchText,
     }
     let data = await this.sessionService.getSessionsList(obj);
-    this.results = data?.result[0]?.data;
+    this.results = data?.result?.data;
     this.noResults = (this.results.length)?false:true;
     this.searching = false;
   }
@@ -95,7 +95,7 @@ export class HomeSearchPage implements OnInit {
 
       case 'enrollAction':
         console.log("enrolled")
-        let enrollResult = await this.sessionService.enrollSession(event.data._id);
+        let enrollResult = await this.sessionService.enrollSession(event.data.id);
         if(enrollResult.result){
           this.toast.showToast(enrollResult.message, "success")
           this.search();
@@ -110,7 +110,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   eventAction(event){
-    this.router.navigate([CommonRoutes.MENTOR_DETAILS,event.data._id]);
+    this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${event.data.id}`])
   }
 
 }
