@@ -149,9 +149,8 @@ export class ProfileService {
   }
 
   async getProfileDetailsFromAPI(id, showLoader=true){
-    console.log(id)
     const config = {
-      url: urlConstants.API_URLS.PROFILE_DETAILS+id,
+      url: urlConstants.API_URLS.PROFILE_READ+id,
       payload: {}
     };
     try {
