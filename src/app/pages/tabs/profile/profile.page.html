@@ -6,20 +6,20 @@
     <div *ngIf="formData && formData.data">
         <app-generic-profile-header [headerData]='formData.data'[buttonConfig]="buttonConfig" [showRole]="true"></app-generic-profile-header>
         <div *ngIf="showProfileDetails; else elseBlock">
-            <ion-card *ngIf="formData?.data?.isAMentor" class="card-wrapper">
+            <ion-card *ngIf="isMentor" class="card-wrapper">
                 <ion-card-content class="padding-top-10">
                     <ion-row>
                         <ion-col class="d-flex flex-justify-center card-header-config">{{"SESSIONS_CONDUCTED"|translate}}</ion-col>
                         <ion-col class="d-flex flex-justify-center card-header-config">{{"RATING"|translate}}</ion-col>
                     </ion-row>
                     <ion-row>
-                        <ion-col class="d-flex flex-justify-center card-value-config">{{formData?.data?.sessionsHosted}}</ion-col>
+                        <ion-col class="d-flex flex-justify-center card-value-config">{{formData?.data?.sessions_hosted}}</ion-col>
                         <ion-col class="d-flex flex-justify-center card-value-config"><app-star-rating [numberOfStars]="5" [rate]="formData?.data?.rating?.average" [isDisabled]="true"></app-star-rating></ion-col>
                     </ion-row>
                 </ion-card-content>
             </ion-card>
             <div class="details-wrapper">
-                <app-generic-details [sessionData]='formData'></app-generic-details>
+                <app-generic-details [sessionData]='formData' [isMentor]='isMentor'></app-generic-details>
             </div>
         </div>
         <ng-template #elseBlock>

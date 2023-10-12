@@ -18,7 +18,7 @@ export class ProfilePage implements OnInit {
   formData: any = {
     form: [
       { title: 'SESSIONS_ATTENDED',
-        key: 'total_sessions_attended',
+        key: 'sessions_attended',
       },
       {
         title: 'ABOUT',
@@ -34,7 +34,7 @@ export class ProfilePage implements OnInit {
       },
       {
         title: "KEY_AREAS_OF_EXPERTISE",
-        key: "areas_of_expertise"
+        key: "area_of_expertise"
       },
       {
         title: "EDUCATION_QUALIFICATION",
@@ -65,15 +65,17 @@ export class ProfilePage implements OnInit {
   sessionData={}
   user: any;
   visited:boolean;
+  isMentor: boolean;
   constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private router: Router, private localStorage:LocalStorageService) { }
 
   ngOnInit() {
     this.visited = false;
   }
   async ionViewWillEnter() {
-    // this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    // this.formData.data = this.user;
-    // this.formData.data.emailId = this.user.email.address;
+    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    this.formData.data = this.user;
+    this.formData.data.emailId = this.user.email.address;
+    this.isMentor = this.profileService.isMentor;
     // if (this.formData?.data?.about) {
     //   this.showProfileDetails = true;
     // } else {
