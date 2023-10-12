@@ -163,6 +163,8 @@ export class HomePage implements OnInit {
   }
   async createSession() {
     let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]);
+    return
     if (userDetails?.about) {
       this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]);
     } else {
