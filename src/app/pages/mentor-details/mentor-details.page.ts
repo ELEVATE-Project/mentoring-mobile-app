@@ -121,7 +121,7 @@ export class MentorDetailsPage implements OnInit {
         break;
 
       case 'enrollAction':
-        await this.sessionService.enrollSession(event.data._id);
+        await this.sessionService.enrollSession(event.data.id);
         this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
         break;
     }

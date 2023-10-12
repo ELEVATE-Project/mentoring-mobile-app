@@ -222,7 +222,7 @@ async getSessionsList(obj) {
     };
     try {
       let data = await this.httpService.post(config);
-      return data.result[0].data;
+      return data.result.data;
     }
     catch (error) {
     }
