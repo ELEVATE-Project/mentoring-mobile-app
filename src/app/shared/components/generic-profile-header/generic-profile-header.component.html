@@ -9,10 +9,10 @@
       </div>
     </ion-col>
     <ion-col size="8" class="details-wrapper">
-      <div>
+      <div *ngFor="let array of headerData.user_roles">
         <ion-label *ngIf="headerData?.name" class="name">{{headerData?.name}} </ion-label>
-        <ion-label *ngIf="showRole&&headerData?.isAMentor" class="role ellipsis">({{"MENTOR"|translate}})</ion-label>
-        <ion-label *ngIf="showRole&&!headerData?.isAMentor" class="role ellipsis">({{"MENTEE"|translate}})</ion-label>
+        <ion-label *ngIf="showRole&&(array.title == 'mentor')" class="role ellipsis">({{"MENTOR"|translate}})</ion-label>
+        <ion-label *ngIf="showRole&&(array.title == 'mentee')" class="role ellipsis">({{"MENTEE"|translate}})</ion-label>
       </div>
       <div class="d-inline-flex flex-align-items-center my-4" *ngIf="headerData?.location?.length">
         <ion-icon name="location"></ion-icon>
