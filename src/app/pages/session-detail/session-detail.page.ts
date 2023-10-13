@@ -253,7 +253,7 @@ export class SessionDetailPage implements OnInit {
   }
 
   async onEnroll() {
-    if (this.userDetails && this.userDetails.hasAcceptedTAndC) {
+    if (this.userDetails) {
       if (this.userDetails?.about) {
         let result = await this.sessionService.enrollSession(this.id);
         if (result?.result) {
@@ -263,9 +263,7 @@ export class SessionDetailPage implements OnInit {
       } else {
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
       }
-    } else if(this.userDetails && !this.userDetails.hasAcceptedTAndC){
-      this.router.navigate([`/${CommonRoutes.TERMS_AND_CONDITIONS}`], { queryParams:{sessionId: this.id}});
-    } else {
+    }else {
       this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id}});
     }
   }
