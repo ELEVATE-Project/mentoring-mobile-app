@@ -63,10 +63,12 @@ export class HomePage implements OnInit {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
         if (state.isActive == true && data) {
           this.getSessions();
-          var obj = { page: this.page, limit: this.limit, searchText: "" };
-           this.sessionService.getAllSessionsAPI(obj).then((data)=>{
-              this.createdSessions = data;
+          if(this.isMentor){
+            var obj = { page: this.page, limit: this.limit, searchText: "" };
+            this.sessionService.getAllSessionsAPI(obj).then((data)=>{
+            this.createdSessions = data;
           })
+          }
         }
       })
     });
@@ -87,8 +89,8 @@ export class HomePage implements OnInit {
     this.getSessions();
     this.gotToTop();
     var obj = { page: this.page, limit: this.limit, searchText: "" };
-    this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
     this.isMentor = this.profileService.isMentor;
+    this.createdSessions = this.isAMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
   }
   async eventAction(event) {
     // if(this.user.about){
