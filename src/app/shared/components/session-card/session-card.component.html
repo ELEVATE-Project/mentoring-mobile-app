@@ -4,19 +4,19 @@
   </span>
   <ion-grid class="ion-no-padding">
     <ion-row>
-      <ion-col size="3">
+      <div class="session-image">
         <img *ngIf="!data?.image.length || data?.image==''; else Img; let image" class="thumbnail-image"
           src="../../../../assets/default-session-img/session-img.png" />
         <ng-template #Img>
           <img class="thumbnail-image" src="{{data?.image[0]}}" />
         </ng-template>
-      </ion-col>
-      <ion-col class="header" size="7">
+      </div>
+      <div class="header">
         <h5 class="text-align">{{data?.name || data?.title}}</h5>
         <div class="margin-btm-10">
           <p class="text-align" *ngIf="data?.description">{{data?.mentor_name}}</p>
         </div>
-      </ion-col>
+      </div>
       <ion-col size="2"></ion-col>
     </ion-row>
     <ion-col class="header">
