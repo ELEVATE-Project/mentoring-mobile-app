@@ -133,7 +133,7 @@ export class HomePage implements OnInit {
       this.isAMentor = this.profileService.isMentor
       this.user = data
       if (!this.user?.terms_and_conditions) {
-        this.openModal();
+        // this.openModal();
       }
     })
   }
