@@ -60,11 +60,11 @@ export class SessionDetailPage implements OnInit {
     form: [
       {
         title: "MEETING_PLATFORM",
-        key: "meetingInfo",
+        key: "meeting_info",
       },
       {
         title: 'RECOMMENDED_FOR',
-        key: 'recommendedFor',
+        key: 'recommended_for',
       },
       {
         title: "CATEGORIES",
@@ -78,7 +78,7 @@ export class SessionDetailPage implements OnInit {
     data: {
       image: [],
       description: '',
-      recommendedFor: [
+      recommended_for: [
         {
           "value": "Teachers",
           "label": "Teachers"
@@ -120,12 +120,12 @@ export class SessionDetailPage implements OnInit {
           "label": "Professional Development"
         },
       ],
-      mentorName: null,
+      mentor_name: null,
       status:null,
-      isEnrolled:null,
+      is_enrolled:null,
       title:"",
-      startDate:"",
-      meetingInfo:""
+      start_date:"",
+      meeting_info:""
     },
   };
 
@@ -136,19 +136,19 @@ export class SessionDetailPage implements OnInit {
       this.setPageHeader(response);
       let readableStartDate = moment.unix(response.start_date).toLocaleString();
       let currentTimeInSeconds=Math.floor(Date.now()/1000);
-      if(response.isEnrolled){
-        this.isEnabled = ((response.start_date - currentTimeInSeconds) < 600 || response.status=='live') ? true : false
+      if(response.is_enrolled){
+        this.isEnabled = ((response.start_date - currentTimeInSeconds) < 600 || response.status=='LIVE') ? true : false
       } else {
-        this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response.status=='live')?true:false;
+        this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response.status=='LIVE')?true:false;
       }
       this.detailData.data = Object.assign({}, response);
-      this.detailData.data.startDate = readableStartDate;
-      this.detailData.data.meetingInfo = response.meeting_info.platform;
+      this.detailData.data.start_date = readableStartDate;
+      this.detailData.data.meeting_info = response.meeting_info.platform;
       this.startDate = (response.start_date>0)?moment.unix(response.start_date).toLocaleString():this.startDate;
-      this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
+      this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
     }
-    if((response?.meeting_info?.platform == 'OFF') && this.isCreator && response.status=='published'){
+    if((response?.meeting_info?.platform == 'OFF') && this.isCreator && response.status=='PUBLISHED'){
       this.showToasts('ADD_MEETING_LINK', 0 , [
           {
             text: 'Add meeting link',
@@ -167,8 +167,8 @@ export class SessionDetailPage implements OnInit {
 
   setPageHeader(response) {
     let currentTimeInSeconds=Math.floor(Date.now()/1000);
-    this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response.status=='live')?true:false;
-      this.headerConfig.share = response.status=="completed"?false:true;
+    this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response.status=='LIVE')?true:false;
+      this.headerConfig.share = response.status=="COMPLETED"?false:true;
       this.id = response.id;
       if(this.userDetails){
         this.isCreator = this.userDetails.id == response.mentor_id ? true : false;
@@ -198,9 +198,9 @@ export class SessionDetailPage implements OnInit {
         if (sharableLink.shareLink) {
           let url = `/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
           let link = await this.utilService.getDeepLink(url);
-          this.detailData.data.mentorName = this.detailData.data.mentorName.trim();
+          this.detailData.data.mentor_name = this.detailData.data.mentor_name.trim();
           this.detailData.data.title = this.detailData.data.title.trim();
-          let params = { link: link, subject: this.detailData.data.title, text: "Join an expert session on " + `${this.detailData.data.title} ` + "hosted by " + `${this.detailData.data.mentorName}` + " using the link" }
+          let params = { link: link, subject: this.detailData.data.title, text: "Join an expert session on " + `${this.detailData.data.title} ` + "hosted by " + `${this.detailData.data.mentor_name}` + " using the link" }
           await this.utilService.shareLink(params);
         } else {
           this.toast.showToast("No link generated!!!", "danger");
