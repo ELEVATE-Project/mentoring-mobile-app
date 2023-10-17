@@ -21,7 +21,7 @@ import { Clipboard } from '@capacitor/clipboard';
 export class SessionDetailPage implements OnInit {
   id: any;
   showEditButton: any;
-  isCreator: boolean=false;
+  isCreator:any = false;
   userDetails: any;
   isEnabled: boolean;
   startDate: any;
@@ -132,24 +132,23 @@ export class SessionDetailPage implements OnInit {
   async fetchSessionDetails() {
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
     this.sessionDatas = response;
-    console.log(response)
     if (response) {
       this.setPageHeader(response);
-      let readableStartDate = moment.unix(response.startDate).toLocaleString();
+      let readableStartDate = moment.unix(response.start_date).toLocaleString();
       let currentTimeInSeconds=Math.floor(Date.now()/1000);
       if(response.isEnrolled){
-        this.isEnabled = ((response.startDate - currentTimeInSeconds) < 600 || response.status=='live') ? true : false
+        this.isEnabled = ((response.start_date - currentTimeInSeconds) < 600 || response.status=='live') ? true : false
       } else {
-        this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='live')?true:false;
+        this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response.status=='live')?true:false;
       }
       this.detailData.data = Object.assign({}, response);
       this.detailData.data.startDate = readableStartDate;
-      this.detailData.data.meetingInfo = response.meetingInfo.platform;
-      this.startDate = (response.startDate>0)?moment.unix(response.startDate).toLocaleString():this.startDate;
-      this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
-      this.platformOff = (response?.meetingInfo?.platform == 'OFF') ? true : false;
+      this.detailData.data.meetingInfo = response.meeting_info.platform;
+      this.startDate = (response.start_date>0)?moment.unix(response.start_date).toLocaleString():this.startDate;
+      this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
+      this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
     }
-    if((response?.meetingInfo?.platform == 'OFF') && this.isCreator && response.status=='published'){
+    if((response?.meeting_info?.platform == 'OFF') && this.isCreator && response.status=='published'){
       this.showToasts('ADD_MEETING_LINK', 0 , [
           {
             text: 'Add meeting link',
@@ -168,14 +167,14 @@ export class SessionDetailPage implements OnInit {
 
   setPageHeader(response) {
     let currentTimeInSeconds=Math.floor(Date.now()/1000);
-    this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='live')?true:false;
+    this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response.status=='live')?true:false;
       this.headerConfig.share = response.status=="completed"?false:true;
-      this.id = response._id;
+      this.id = response.id;
       if(this.userDetails){
-        this.isCreator = this.userDetails._id == response.userId ? true : false;
+        this.isCreator = this.userDetails.id == response.mentor_id ? true : false;
       }
-      this.headerConfig.edit = (this.isCreator && response.status=="published"&& !this.isEnabled)?true:null;
-      this.headerConfig.delete = (this.isCreator && response.status=="published" && !this.isEnabled)?true:null;
+      this.headerConfig.edit = (this.isCreator && response.status=="PUBLISHED"&& !this.isEnabled)?true:null;
+      this.headerConfig.delete = (this.isCreator && response.status=="PUBLISHED" && !this.isEnabled)?true:null;
   }
 
   action(event) {

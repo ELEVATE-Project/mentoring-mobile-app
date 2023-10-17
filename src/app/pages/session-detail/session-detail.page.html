@@ -12,9 +12,9 @@
       <p class="description">{{detailData?.data?.description}}</p>
       <ion-item class="ion-no-padding" lines="none">
         <ion-icon class="calendar-icon" name="calendar-number-outline"></ion-icon>
-        <ion-label *ngIf="startDate && detailData?.data?.status=='published'" class="date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
-        <ion-label *ngIf="startDate && detailData?.data?.status=='live'" class="date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
-        <ion-label *ngIf="endDate && detailData?.data?.status=='completed'" class="date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
+        <ion-label *ngIf="startDate && detailData?.data?.status=='PUBLISHED'" class="date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+        <ion-label *ngIf="startDate && detailData?.data?.status=='LIVE'" class="date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+        <ion-label *ngIf="endDate && detailData?.data?.status=='COMPLETED'" class="date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
       </ion-item>
     </div>
     <app-generic-details [sessionData]='detailData'></app-generic-details>
@@ -22,18 +22,18 @@
 </ion-content>
 <ion-footer class="ion-no-border">
   <ion-item *ngIf="isCreator; else elseBlockFooter">
-      <ion-button *ngIf="detailData?.data?.status=='published' || detailData?.data?.status=='live'" [disabled]="!isEnabled || platformOff" class="load-more-button" expand="full"
+      <ion-button *ngIf="detailData?.data?.status=='PUBLISHED' || detailData?.data?.status=='LIVE'" [disabled]="!isEnabled || platformOff" class="load-more-button" expand="full"
       (click)="onStart(detailData?.data)">{{"START_SESSIONS" | translate}}</ion-button>
     
   </ion-item>
   <ng-template #elseBlockFooter>
-    <div *ngIf="!detailData?.data?.isEnrolled && detailData?.data?.status!='completed'">
+    <div *ngIf="!detailData?.data?.is_enrolled && detailData?.data?.status!='COMPLETED'">
       <ion-button class="load-more-button" expand="full" (click)="onEnroll()">{{"ENROLL" | translate}}</ion-button>
     </div>
-    <div *ngIf="detailData?.data?.isEnrolled && detailData?.data?.status==='published' && !isEnabled">
+    <div *ngIf="detailData?.data?.is_enrolled && detailData?.data?.status==='PUBLISHED' && !isEnabled">
       <ion-button class="load-more-button" expand="full" (click)="onCancel()">{{"UN_ENROLL" | translate}}</ion-button>
     </div>
-    <div *ngIf="detailData?.data?.isEnrolled && detailData?.data?.status!='completed' && isEnabled" class="join-button">
+    <div *ngIf="detailData?.data?.is_enrolled && detailData?.data?.status!='COMPLETED' && isEnabled" class="join-button">
       <ion-button class="load-more-button" expand="full" (click)="onJoin()" [disabled]="platformOff">{{"JOIN" | translate}}</ion-button>
     </div>
   </ng-template>
