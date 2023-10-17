@@ -77,9 +77,9 @@ export class CreateSessionPage implements OnInit {
     const platformForm = await this.getPlatformFormDetails();
     const result = await this.form.getForm(CREATE_SESSION_FORM);
     this.formData = _.get(result, 'data.fields');
-    this.entityNames = _.get(result, 'data.required_entity_types')
+    this.entityNames = await this.form.getEntityNames(this.formData)
     this.entityList = await this.form.getEntities(this.entityNames)
-    this.populateEntity()
+    this.formData = await this.form.populateEntity(this.formData,this.entityList)
     this.changeDetRef.detectChanges();
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.id = params?.get('id');
@@ -303,13 +303,4 @@ export class CreateSessionPage implements OnInit {
   compareWithFn(o1, o2) {
     return o1 === o2;
   };
-
-  populateEntity(){
-    _.forEach(this.formData.controls, (formData) => {
-      const entity = _.find(this.entityList, (entityData) => formData.name === entityData.value);
-      if (entity) {
-        formData.options = entity.entities.map((entityItem)=>{ return { label : entityItem.label, value : entityItem.value }});
-      }
-    });
-  }
 }

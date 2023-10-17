@@ -104,8 +104,8 @@
         [formControlName]="control.name"
         [label]="control.alertLabel?control.alertLabel:control.label"
         [chips]="control.options"
-        [showSelectAll]="control.showSelectAll"
-        [showAddOption]="control.showAddOption"
+        [showSelectAll]="control.meta.showSelectAll"
+        [showAddOption]="control.meta.showAddOption"
         [validators]="control.validators"
       ></app-input-chip>
       <ion-icon
