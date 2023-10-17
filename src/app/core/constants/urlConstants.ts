@@ -32,7 +32,7 @@ export const urlConstants = {
         GET_SESSION_DETAILS:"/mentoring/v1/sessions/details/",
         GET_SHARE_SESSION_LINK:"/mentoring/v1/sessions/share/",
         ENROLL_SESSION:"/mentoring/v1/sessions/enroll/",
-        UNENROLL_SESSION:"/mentoring/v1/sessions/unenroll/",
+        UNENROLL_SESSION:"/mentoring/v1/sessions/unEnroll/",
         START_SESSION:"/mentoring/v1/sessions/start/",
         JOIN_SESSION:"/mentoring/v1/mentees/joinSession/",
         MENTOR_REPORTS:"/mentoring/v1/mentors/reports?filterType=",

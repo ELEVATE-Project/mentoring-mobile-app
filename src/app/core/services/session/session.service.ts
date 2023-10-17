@@ -156,7 +156,7 @@ async getSessionsList(obj) {
   }
 
   async joinSession(sessionData) {
-    let id = sessionData.sessionId?sessionData.sessionId: sessionData._id;
+    let id = sessionData.sessionId?sessionData.sessionId: sessionData.id;
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.JOIN_SESSION + id,

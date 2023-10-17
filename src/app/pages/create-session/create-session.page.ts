@@ -285,7 +285,7 @@ export class CreateSessionPage implements OnInit {
   onSubmitLink(){
     if (this.platformForm.myForm.valid){
       let meetingInfo = {
-        'meetingInfo':{
+        'meeting_info':{
           'platform': this.selectedLink.name,
           'link': this.platformForm.myForm.value?.link,
           'value': this.selectedLink.value,
