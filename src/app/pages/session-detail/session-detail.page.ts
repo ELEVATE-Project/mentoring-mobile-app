@@ -145,7 +145,7 @@ export class SessionDetailPage implements OnInit {
       this.detailData.data.start_date = readableStartDate;
       this.detailData.data.meeting_info = response.meeting_info.platform;
       this.startDate = (response.start_date>0)?moment.unix(response.start_date).toLocaleString():this.startDate;
-      this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
+      this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
     }
     if((response?.meeting_info?.platform == 'OFF') && this.isCreator && response.status=='PUBLISHED'){
@@ -268,7 +268,7 @@ export class SessionDetailPage implements OnInit {
   }
 
   async onStart(data) {
-    let result = await this.sessionService.startSession(data._id);
+    let result = await this.sessionService.startSession(data);
     result?this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]):null;
   }
 
