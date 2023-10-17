@@ -38,7 +38,7 @@
     </ion-grid>
   </div>
   <div *ngIf="(selectedSegment=='created-sessions')&& isMentor">  
-    <ion-card *ngIf="createdSessions?.rows?.length" class="session-sqr-card">
+    <ion-card *ngIf="createdSessions?.data?.length" class="session-sqr-card">
       <ion-card-content class="card-content">
         <div class="segment-button d-flex flex-justify-center flex-align-items-flex-end">
           {{"START_CREATE_SESSION"|translate}}
@@ -48,11 +48,11 @@
         </ion-button>
       </ion-card-content>
     </ion-card>
-    <div *ngIf="createdSessions?.rows?.length">
+    <div *ngIf="createdSessions?.data?.length">
       <ion-label class="font-bold section-header">{{"CREATED_SESSIONS"|translate}}</ion-label>
       <ion-grid>
         <ion-row class="d-flex ">
-          <ion-col *ngFor="let session of createdSessions?.rows" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
+          <ion-col *ngFor="let session of createdSessions?.data" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
             align-self-stretch>
             <div >
               <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
@@ -63,7 +63,7 @@
       </ion-grid>
       
     </div>
-    <div *ngIf="!createdSessions?.rows?.length">
+    <div *ngIf="!createdSessions?.data?.length">
       <app-no-data-found [messageHeader]="'NO_SESSIONS_CREATED'" [messageDescription]="'START_CREATING_SESSION'">
       </app-no-data-found>
       <div class="d-flex flex-justify-center">
