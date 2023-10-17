@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService, UtilService } from 'src/app/core/services';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
@@ -19,16 +19,13 @@ export class GenericProfileHeaderComponent implements OnInit {
   @Input() isMentor: any;
   labels = ["CHECK_OUT_MENTOR","PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS"];
 
-  constructor(private navCtrl:NavController, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService) { }
+  constructor(private navCtrl:NavController, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService,private platform: Platform,) { }
 
   ngOnInit() {
   }
 
   async action(event) {
-    if(Capacitor.isNativePlatform()){
-      if(event==="edit"){
-        this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE);
-      }else{
+    if(this.platform.is('mobile')){
         this.translateText();
         let shareLink = await this.profileService.shareProfile(this.headerData.id);
         if (shareLink) {
@@ -40,8 +37,10 @@ export class GenericProfileHeaderComponent implements OnInit {
         } else {
           this.toast.showToast("No link generated!!!", "danger");
         }
-      }
     }else {
+      if(event==="edit"){
+        this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE);
+      }else
       await this.copyToClipBoard(window.location.href)
       this.toast.showToast("LINK_COPIED","success")
     }
