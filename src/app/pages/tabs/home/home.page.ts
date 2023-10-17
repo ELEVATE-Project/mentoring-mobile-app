@@ -113,7 +113,7 @@ export class HomePage implements OnInit {
         break;
 
       case 'startAction':
-        this.sessionService.startSession(event.data._id).then(async ()=>{
+        this.sessionService.startSession(event.data.id).then(async ()=>{
           var obj = { page: this.page, limit: this.limit, searchText: "" };
           this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
         })

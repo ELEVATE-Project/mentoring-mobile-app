@@ -21,7 +21,7 @@ import { Clipboard } from '@capacitor/clipboard';
 export class SessionDetailPage implements OnInit {
   id: any;
   showEditButton: any;
-  isCreator: boolean=false;
+  isCreator:any = false;
   userDetails: any;
   isEnabled: boolean;
   startDate: any;
@@ -144,8 +144,8 @@ export class SessionDetailPage implements OnInit {
       this.detailData.data = Object.assign({}, response);
       this.detailData.data.start_date = readableStartDate;
       this.detailData.data.meeting_info = response.meeting_info.platform;
-      this.startDate = (response.startDate>0)?moment.unix(response.startDate).toLocaleString():this.startDate;
-      this.endDate = (response.endDate>0)?moment.unix(response.endDate).toLocaleString():this.endDate;
+      this.startDate = (response.start_date>0)?moment.unix(response.start_date).toLocaleString():this.startDate;
+      this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
     }
     if((response?.meeting_info?.platform == 'OFF') && this.isCreator && response.status=='PUBLISHED'){
@@ -167,11 +167,11 @@ export class SessionDetailPage implements OnInit {
 
   setPageHeader(response) {
     let currentTimeInSeconds=Math.floor(Date.now()/1000);
-    this.isEnabled = ((response.startDate-currentTimeInSeconds)<600 || response.status=='LIVE')?true:false;
+    this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response.status=='LIVE')?true:false;
       this.headerConfig.share = response.status=="COMPLETED"?false:true;
       this.id = response.id;
       if(this.userDetails){
-        this.isCreator = this.userDetails.id == response.id ? true : false;
+        this.isCreator = this.userDetails.id == response.mentor_id ? true : false;
       }
       this.headerConfig.edit = (this.isCreator && response.status=="PUBLISHED"&& !this.isEnabled)?true:null;
       this.headerConfig.delete = (this.isCreator && response.status=="PUBLISHED" && !this.isEnabled)?true:null;
@@ -268,7 +268,7 @@ export class SessionDetailPage implements OnInit {
   }
 
   async onStart(data) {
-    let result = await this.sessionService.startSession(data._id);
+    let result = await this.sessionService.startSession(data);
     result?this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]):null;
   }
 
