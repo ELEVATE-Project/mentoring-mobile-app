@@ -1,16 +1,16 @@
 <app-page-header [config]="headerConfig"></app-page-header>
+<ion-segment (ionChange)="segmentChanged($event)" [value]="type">
+  <ion-segment-button value="default" layout="icon-start">
+    <div class="icon-2">1</div>
+    <ion-label>{{ firstStepperTitle | translate}}</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="segment"  [disabled]="!isSubmited" layout="icon-start">
+    <div class="icon-2">2</div>
+    <ion-label>{{"MEETING_LINK" | translate}}</ion-label>
+  </ion-segment-button>
+</ion-segment>
 <ion-content>
   <div class="height">
-    <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
-      <ion-segment-button value="default" layout="icon-start">
-        <div class="icon-2">1</div>
-        <ion-label>{{ firstStepperTitle | translate}}</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="segment"  [disabled]="!isSubmited" layout="icon-start">
-        <div class="icon-2">2</div>
-        <ion-label>{{"MEETING_LINK" | translate}}</ion-label>
-      </ion-segment-button>
-    </ion-segment>
     <div class="height" [ngSwitch]="type">
       <ion-list class="height" *ngSwitchCase="'default'">
         <ion-content class="ion-padding">

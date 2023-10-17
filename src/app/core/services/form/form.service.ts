@@ -52,4 +52,20 @@ export class FormService {
     catch (error) {
     }
   }
+
+  getEntityNames(formData){
+    return formData.controls
+    .filter((filterData)=> filterData?.meta && filterData.meta.entityType)
+    .map((data)=> data.meta.entityType)
+  }
+
+  async populateEntity(formData, entityList){
+    _.forEach(formData.controls, (formData) => {
+      const entity = _.find(entityList, (entityData) => formData.name === entityData.value);
+      if (entity) {
+        formData.options = entity.entities.map((entityItem)=>{ return { label : entityItem.label, value : entityItem.value }});
+      }
+    });
+    return formData
+  }
 }
