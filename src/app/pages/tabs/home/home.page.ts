@@ -59,6 +59,7 @@ export class HomePage implements OnInit {
     private toast:ToastService) { }
 
   ngOnInit() {
+    this.isMentor = this.profileService.isMentor
     App.addListener('appStateChange', (state: AppState) => {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
         if (state.isActive == true && data) {

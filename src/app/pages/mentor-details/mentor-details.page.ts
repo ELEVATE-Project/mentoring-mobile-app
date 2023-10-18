@@ -112,7 +112,7 @@ export class MentorDetailsPage implements OnInit {
   async onAction(event){
     switch (event.type) {
       case 'cardSelect':
-        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
+        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
         break;
 
       case 'joinAction':
