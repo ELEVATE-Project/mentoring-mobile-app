@@ -59,6 +59,7 @@ export class HomePage implements OnInit {
     private toast:ToastService) { }
 
   ngOnInit() {
+    this.isMentor = this.profileService.isMentor
     App.addListener('appStateChange', (state: AppState) => {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
         if (state.isActive == true && data) {
@@ -113,7 +114,7 @@ export class HomePage implements OnInit {
         break;
 
       case 'startAction':
-        this.sessionService.startSession(event.data._id).then(async ()=>{
+        this.sessionService.startSession(event.data.id).then(async ()=>{
           var obj = { page: this.page, limit: this.limit, searchText: "" };
           this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
         })

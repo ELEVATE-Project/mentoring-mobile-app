@@ -23,9 +23,9 @@ export class JoinDialogBoxComponent implements OnInit {
      private toast: ToastService) { }
 
   ngOnInit() {
-    this.startDate = (this.sessionData.startDate>0)?moment.unix(this.sessionData.startDate).toLocaleString():this.startDate;
-    this.endDate = (this.sessionData.endDate>0)?moment.unix(this.sessionData.endDate).toLocaleString():this.endDate;
-    this.meetingPlatform = (this.sessionData.meetingInfo);
+    this.startDate = (this.sessionData.start_date>0)?moment.unix(this.sessionData.start_date).toLocaleString():this.startDate;
+    this.endDate = (this.sessionData.end_date>0)?moment.unix(this.sessionData.end_date).toLocaleString():this.endDate;
+    this.meetingPlatform = (this.sessionData.meeting_info);
   }
   async openBrowser(link) {
     await Browser.open({ url: link });
