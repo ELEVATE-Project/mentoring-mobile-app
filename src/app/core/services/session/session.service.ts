@@ -221,7 +221,7 @@ async getSessionsList(obj) {
       payload: {}
     };
     try {
-      let data = await this.httpService.post(config);
+      let data = await this.httpService.get(config);
       return data.result.data;
     }
     catch (error) {
