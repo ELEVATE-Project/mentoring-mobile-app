@@ -68,4 +68,13 @@ export class FormService {
     });
     return formData
   }
+
+  async formatEntityOptions(existingData, entityList){
+    await entityList.map((entityName)=>{
+      existingData[entityName] = existingData[entityName].map((data)=>{
+        return { label : data.label, value : data.value == 'other' ? data.label : data.value }
+      })
+    })
+    return existingData
+  }
 }

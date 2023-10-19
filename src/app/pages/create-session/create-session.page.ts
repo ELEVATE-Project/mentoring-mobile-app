@@ -219,7 +219,9 @@ export class CreateSessionPage implements OnInit {
     this.form1.reset();
   }
 
-  preFillData(existingData) {
+  async preFillData(data) {
+    let existingData = await this.form.formatEntityOptions(data,this.entityNames)
+
     for(let j=0;j<this?.meetingPlatforms?.length;j++){
       if( existingData.meeting_info.platform == this?.meetingPlatforms[j].name){
          this.selectedLink = this?.meetingPlatforms[j];
