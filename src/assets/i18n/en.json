@@ -191,5 +191,15 @@
     "BY": "by",
     "REMOVE_CURRENT_PHOTO_LABEL": "Remove current photo",
     "EXIT_HEADER_LABEL": "Exit this page?",
-    "LINK_COPIED": "Copied the session link"
+    "LINK_COPIED": "Copied the session link",
+    "ADMIN_DASHBOARD": "Admin Dashboard",
+    "BECOME_A_MENTOR": "Become a Mentor",
+    "EMPOWER_THE_SCHOOL_LEADERS": "Empower the school leaders by sharing your knowledge and experience as a mentor.",
+    "CONNECT_SHARE_&_INSPIRE": "Connect, Share & Inspire",
+    "ADMIN_WORKSPACE": "Admin Workspace",
+    "SL_NO": "No.",
+    "EMAIL": "Email",
+    "ACTIONS": "Actions",
+    "NAME": "Name",
+    "FILL_IN_THE_BELOW_DETAILS": "Fill in the below details!"
 }

@@ -11,12 +11,14 @@
           <img class="thumbnail-image" src="{{data?.image[0]}}" />
         </ng-template>
       </div>
+      <ion-col padding size-xs="6" size-sm="8" size-md="6" size-lg="8">
       <div class="header">
         <h5 class="text-align">{{data?.name || data?.title}}</h5>
         <div class="margin-btm-10">
           <p class="text-align" *ngIf="data?.description">{{data?.mentor_name}}</p>
         </div>
       </div>
+    </ion-col>
       <ion-col size="2"></ion-col>
     </ion-row>
     <ion-col class="header">

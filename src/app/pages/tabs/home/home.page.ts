@@ -31,6 +31,7 @@ export class HomePage implements OnInit {
   sessionsCount = 0;
   isNativeApp = Capacitor.isNativePlatform()
   status = "PUBLISHED,LIVE";
+  showBecomeMentorCard
   @ViewChild(IonContent) content: IonContent;
 
   public headerConfig: any = {
@@ -59,6 +60,7 @@ export class HomePage implements OnInit {
     private toast:ToastService) { }
 
   ngOnInit() {
+    this.isMentor = this.profileService.isMentor
     App.addListener('appStateChange', (state: AppState) => {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
         if (state.isActive == true && data) {
@@ -73,6 +75,9 @@ export class HomePage implements OnInit {
       })
     });
     this.getUser();
+    this.localStorage.getLocalData(localKeys.ISROLEREQUESTED).then((isRoleRequested)=>{
+      this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false: true;
+    })
     this.userService.userEventEmitted$.subscribe(data => {
       if (data) {
         this.isMentor = this.profileService.isMentor
@@ -172,5 +177,14 @@ export class HomePage implements OnInit {
     } else {
       this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
     }
+  }
+
+  becomeMentor() {
+    this.showBecomeMentorCard = false;
+    this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);
+  }
+
+  closeCard() {
+    this.showBecomeMentorCard = false;
   }
 }

@@ -76,6 +76,7 @@ export class SessionDetailPage implements OnInit {
       }
     ],
     data: {
+      id:'',
       image: [],
       description: '',
       recommended_for: [

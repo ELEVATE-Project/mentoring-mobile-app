@@ -280,7 +280,7 @@ ion-accordion-group{
 
 .example-modal {
   --width: fit-content;
-  --min-width: 95%;
+  --min-width: 400px;
   --height: fit-content;
   --border-radius: 6px;
   --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
@@ -302,6 +302,9 @@ ion-toast.custom-toast{
 @media (max-width: 991px) {
   .hide-on-small-screen {
     display: none;
+  }
+  .example-modal{
+    --min-width: 300px;
   }
 }
 
