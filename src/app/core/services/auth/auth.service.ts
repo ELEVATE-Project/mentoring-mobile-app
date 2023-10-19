@@ -69,6 +69,8 @@ export class AuthService {
     this.userService.token = result;
     await this.localStorage.setLocalData(localKeys.TOKEN, result);
     this.user = data.result.user;
+    await this.localStorage.setLocalData(localKeys.USER_ROLES, this.profileService.setUserRole(this.user))
+    await this.profileService.setUserRole(this.user);
     this.profileService.isMentor = (this.user?.user_roles[0]?.title === 'mentor')
     this.userService.userEvent.next(this.user);
     await this.localStorage.setLocalData(localKeys.USER_DETAILS, this.user);
@@ -90,6 +92,7 @@ export class AuthService {
         await this.httpService.post(config);
       }
       this.localStorage.delete(localKeys.USER_DETAILS);
+      this.localStorage.delete(localKeys.USER_ROLES);
       this.localStorage.delete(localKeys.TOKEN);
       this.userService.token = null;
       this.userService.userEvent.next(null);

@@ -47,7 +47,7 @@
     "@ionic/storage-angular": "^3.0.6",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
-    "@schematics/angular": "^16.2.3",
+    "@schematics/angular": "^14.2.13",
     "@shikshalokam/sl-reports-library": "^1.0.7",
     "@types/lodash": "^4.14.182",
     "angular2-uuid": "^1.1.1",

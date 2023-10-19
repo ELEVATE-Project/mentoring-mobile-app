@@ -40,6 +40,9 @@ export const urlConstants = {
         MENTOR_FEEDBACK_QUESTION_SET:"/mentoring/v1/questionsSet/read/61b867df5201107b3c2fb435",
         MENTEE_FEEDBACK_QUESTIONS_SET:"/mentoring/v1/questionsSet/read/61b8656fed665f7b5470a9f1",
         GET_FEEDBACK_QUESTION:"/mentoring/v1/questions/read/", 
-        GET_ENTITY_LIST:"/mentoring/v1/entity-type/read"
+        GET_ENTITY_LIST:"/mentoring/v1/entity-type/read",
+        REQUEST_TO_BECOME_MENTOR: "/user/v1/organization/requestOrgRole",
+        LIST_ORG_ROLES: "/user/v1/userRole/list",
+        ADMIN_MENTOR_REQUEST_LIST: "/user/v1/org-admin/getRequests"
     }
 };

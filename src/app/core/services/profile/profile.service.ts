@@ -19,6 +19,7 @@ import { AuthService } from '../auth/auth.service';
 })
 export class ProfileService {
   isMentor: boolean;
+  isOrgAdmin: any;
   constructor(
     private httpService: HttpService,
     private loaderService: LoaderService,
@@ -59,6 +60,7 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
+      await this.localStorage.setLocalData(localKeys.USER_ROLES, this.setUserRole(data))
       this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
       return data;
     }
@@ -72,7 +74,7 @@ export class ProfileService {
       try {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
-            this.isMentor = (data.user_roles[0].title==='mentor')
+            await this.setUserRole(data)
             //showLoader ? this.loaderService.stopLoader() : null;
             resolve(data);
           })
@@ -157,10 +159,19 @@ export class ProfileService {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
-      this.isMentor = data.user_roles.length && (data?.user_roles[0].title==='mentor') ? true: false;
+      await this.localStorage.setLocalData(localKeys.USER_ROLES, this.setUserRole(data))
       return data;
     }
     catch (error) {
     }
+  }
+
+  setUserRole(userDetails) {
+    var roles = userDetails.user_roles.map(function(item) {
+      return item['title'];
+    });
+    this.isMentor = roles.includes('mentor')?true:false;
+    this.isOrgAdmin = roles.includes('org_admin')?true:false;
+    return roles
   }
 }

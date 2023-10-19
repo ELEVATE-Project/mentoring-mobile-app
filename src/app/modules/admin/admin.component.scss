@@ -1,0 +1,46 @@
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+  }
+  
+  th, td {
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+
+  tr {
+    height: 50px;
+  }
+  ion-icon {
+    font-size: x-large;
+  }
+
+  .color-green {
+    color: green;
+  }
+
+  .color-red {
+    color: red;
+  }
+
+  .color-black {
+    color: black
+  }
+
+  .width-250{
+    width: 250px;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .card-config {
+    width: 300px;
+  }
