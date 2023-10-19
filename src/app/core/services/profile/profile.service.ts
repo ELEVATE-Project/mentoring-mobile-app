@@ -60,7 +60,7 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
-      await this.localStorage.setLocalData(localKeys.USER_ROLES, this.setUserRole(data))
+      await this.localStorage.setLocalData(localKeys.USER_ROLES, this.getUserRole(data))
       this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
       return data;
     }
@@ -74,7 +74,7 @@ export class ProfileService {
       try {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
-            await this.setUserRole(data)
+            await this.getUserRole(data)
             //showLoader ? this.loaderService.stopLoader() : null;
             resolve(data);
           })
@@ -159,14 +159,14 @@ export class ProfileService {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
-      await this.localStorage.setLocalData(localKeys.USER_ROLES, this.setUserRole(data))
+      await this.localStorage.setLocalData(localKeys.USER_ROLES, this.getUserRole(data))
       return data;
     }
     catch (error) {
     }
   }
 
-  setUserRole(userDetails) {
+  getUserRole(userDetails) {
     var roles = userDetails.user_roles.map(function(item) {
       return item['title'];
     });

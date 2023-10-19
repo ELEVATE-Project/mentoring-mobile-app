@@ -69,8 +69,8 @@ export class AuthService {
     this.userService.token = result;
     await this.localStorage.setLocalData(localKeys.TOKEN, result);
     this.user = data.result.user;
-    await this.localStorage.setLocalData(localKeys.USER_ROLES, this.profileService.setUserRole(this.user))
-    await this.profileService.setUserRole(this.user);
+    await this.localStorage.setLocalData(localKeys.USER_ROLES, this.profileService.getUserRole(this.user))
+    await this.profileService.getUserRole(this.user);
     this.profileService.isMentor = (this.user?.user_roles[0]?.title === 'mentor')
     this.userService.userEvent.next(this.user);
     await this.localStorage.setLocalData(localKeys.USER_DETAILS, this.user);

@@ -2,6 +2,6 @@ export const localKeys = {
     SELECTED_LANGUAGE : 'selectedLanguage',
     USER_DETAILS: 'userDetails',
     TOKEN:'token',
-    ISROLEREQUESTED: 'isRoleRequested',
+    IS_ROLE_REQUESTED: 'isRoleRequested',
     USER_ROLES: 'userRoles'
 }

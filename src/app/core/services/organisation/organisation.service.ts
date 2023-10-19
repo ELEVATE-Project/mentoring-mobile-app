@@ -22,7 +22,7 @@ export class OrganisationService {
     };
     try {
       let data: any = await this.httpService.post(config);
-      await this.localStorage.setLocalData(localKeys.ISROLEREQUESTED, true)
+      await this.localStorage.setLocalData(localKeys.IS_ROLE_REQUESTED, true)
       this.toast.showToast(data.message, "success")
       return data.result
     }
