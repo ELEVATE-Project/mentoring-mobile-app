@@ -30,8 +30,11 @@ export class AppComponent {
   { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
 ];
 
+ adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD}
+
 
   isMentor:boolean
+  isOrgAdmin:boolean
   showAlertBox = false;
   constructor(
     private translate :TranslateService,
@@ -98,6 +101,7 @@ export class AppComponent {
       setTimeout(async ()=>{
         const userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
         if(userDetails){
+          this.isOrgAdmin = this.profile.isOrgAdmin;
           this.getUser();
         }
       },1000);
@@ -107,6 +111,7 @@ export class AppComponent {
 
       this.userService.userEventEmitted$.subscribe(data=>{
         if(data){
+          this.isOrgAdmin = this.profile.isOrgAdmin;
           this.isMentor = this.profile.isMentor
           this.user = data;
         }
@@ -162,6 +167,7 @@ export class AppComponent {
   
   getUser() {
     this.profile.profileDetails(false).then(profileDetails => {
+      this.isOrgAdmin = this.profile.isOrgAdmin;
       this.user = profileDetails;
       this.isMentor = this.profile.isMentor;
     })
@@ -184,10 +190,6 @@ export class AppComponent {
         break;
       }
     }
-  }
-
-  async showAlert(alertData){
-    
   }
 
 }

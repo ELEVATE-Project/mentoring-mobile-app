@@ -10,7 +10,7 @@
         <div class="mx-10">
           <section submitButton [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}">
             <div class="d-flex flex-justify-center">
-              <ion-button *ngIf="!isAMentor" class="mx-0 onboard-button" shape="round" (click)="onSubmit()"
+              <ion-button class="mx-0 onboard-button" shape="round" (click)="onSubmit()"
                 expand="block" size="large" [disabled]="!form1.myForm.valid">
                 {{"SIGN_UP_AS_MENTEE"|translate}}</ion-button>
             </div>

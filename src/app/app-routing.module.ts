@@ -62,9 +62,15 @@ const routes: Routes = [
   {
     path: CommonRoutes.HELP_VIDEOS,
     loadChildren: () => import('./pages/help-video/help-video.module').then( m => m.HelpVideoPageModule)
+  },
+  {
+    path: CommonRoutes.MENTOR_QUESTIONNAIRE,
+    loadChildren: () => import('./pages/mentor-questionnaire/mentor-questionnaire.module').then( m => m.MentorQuestionnairePageModule)
+  },
+  {
+    path: CommonRoutes.ADMIN,
+    loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule),
   }
-
-
 ];
 @NgModule({
   imports: [
