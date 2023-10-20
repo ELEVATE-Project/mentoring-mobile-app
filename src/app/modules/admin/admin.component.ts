@@ -42,10 +42,10 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    rejectRequest(id){
+    rejectRequest(id, status){
       
     }
-    viewRequest(id){
+    viewRequest(id, status){
       
     }
     async confirmPopup(){
