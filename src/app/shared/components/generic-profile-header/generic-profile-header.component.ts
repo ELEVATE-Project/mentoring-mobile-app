@@ -19,17 +19,19 @@ export class GenericProfileHeaderComponent implements OnInit {
   @Input() isMentor: any;
   labels = ["CHECK_OUT_MENTOR","PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS"];
 
+  public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
+
   constructor(private navCtrl:NavController, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService,private platform: Platform,) { }
 
   ngOnInit() {
   }
 
   async action(event) {
-    if(this.platform.is('mobile')){
+    if(this.isMobile && navigator.share && !(event==="edit")){
         this.translateText();
         let shareLink = await this.profileService.shareProfile(this.headerData.id);
         if (shareLink) {
-          let url = `/${CommonRoutes.MENTOR_DETAILS}/${shareLink.share_link}`;
+          let url = `/${CommonRoutes.MENTOR_DETAILS}/${shareLink.shareLink}`;
           let link = await this.utilService.getDeepLink(url);
           this.headerData.name = this.headerData.name.trim();
           let params = { link: link, subject: this.headerData?.name, text: this.labels[0] + ` ${this.headerData.name}` + this.labels[1] }
@@ -40,9 +42,10 @@ export class GenericProfileHeaderComponent implements OnInit {
     }else {
       if(event==="edit"){
         this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE);
-      }else
-      await this.copyToClipBoard(window.location.href)
-      this.toast.showToast("LINK_COPIED","success")
+      }else{
+        await this.copyToClipBoard(window.location.href)
+        this.toast.showToast("LINK_COPIED","success")
+      }
     }
     //add output event and catch from parent; TODO
   }

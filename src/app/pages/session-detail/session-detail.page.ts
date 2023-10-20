@@ -31,6 +31,7 @@ export class SessionDetailPage implements OnInit {
   skipWhenDelete: boolean= false;
   dismissWhenBack: boolean = false;
   platformOff: any;
+  public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -194,8 +195,8 @@ export class SessionDetailPage implements OnInit {
   }
 
   async share() {
-    if(this.platform.is('mobile') && !(Capacitor.getPlatform() === 'web')){
-      if(this.userDetails){
+    if(this.isMobile && navigator.share){
+      if(this.id){
         let sharableLink = await this.sessionService.getShareSessionId(this.id);
         if (sharableLink.shareLink) {
           let url = `/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
