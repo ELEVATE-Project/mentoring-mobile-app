@@ -36,6 +36,7 @@ export class AppComponent {
   isMentor:boolean
   isOrgAdmin:boolean
   showAlertBox = false;
+  userRoles: any;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -99,6 +100,7 @@ export class AppComponent {
       },0)
       this.db.init();
       setTimeout(async ()=>{
+        this.userRoles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
         const userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
         if(userDetails){
           this.isOrgAdmin = this.profile.isOrgAdmin;
