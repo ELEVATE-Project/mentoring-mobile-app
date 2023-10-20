@@ -55,4 +55,20 @@ export class OrganisationService {
     catch (error) {
     }
   }
+
+  async updateRequest(id,status){
+    const config = {
+      url: urlConstants.API_URLS.ADMIN_UPDATE_REQUEST,
+      payload: {
+        "request_id": id,
+        "status": status
+      },
+    };
+    try {
+      let data: any = await this.httpService.post(config);
+      return data
+    }
+    catch (error) {
+    }
+  }
 }
