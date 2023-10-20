@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
-import { NavController, Platform } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService, UtilService } from 'src/app/core/services';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
@@ -21,7 +20,7 @@ export class GenericProfileHeaderComponent implements OnInit {
 
   public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
 
-  constructor(private navCtrl:NavController, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService,private platform: Platform,) { }
+  constructor(private navCtrl:NavController, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService,) { }
 
   ngOnInit() {
   }
