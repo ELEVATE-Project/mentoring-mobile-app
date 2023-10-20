@@ -45,7 +45,7 @@ export class AdminComponent implements OnInit {
     rejectRequest(id, status){
       
     }
-    viewRequest(id, status){
+    viewRequest(id){
       
     }
     async confirmPopup(){
