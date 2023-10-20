@@ -6,10 +6,9 @@ import { CommonRoutes } from 'src/global.routes';
 import *  as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { Location } from '@angular/common';
-import { Platform, ToastController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { App, AppState } from '@capacitor/app';
-import { Capacitor } from '@capacitor/core';
 import { Clipboard } from '@capacitor/clipboard';
 
 
@@ -35,8 +34,7 @@ export class SessionDetailPage implements OnInit {
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
-    private utilService: UtilService, private toast: ToastService, private _location: Location, private user: UserService ,private toaster: ToastController,private translate : TranslateService,
-    private platform: Platform,) {
+    private utilService: UtilService, private toast: ToastService, private _location: Location, private user: UserService ,private toaster: ToastController,private translate : TranslateService,) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {
