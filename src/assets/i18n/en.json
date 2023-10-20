@@ -198,9 +198,11 @@
     "CONNECT_SHARE_&_INSPIRE": "Connect, Share & Inspire",
     "ADMIN_WORKSPACE": "Admin Workspace",
     "SL_NO": "No.",
-    "EMAIL": "Email",
+    "STATUS": "Status",
     "ACTIONS": "Actions",
     "NAME": "Name",
     "FILL_IN_THE_BELOW_DETAILS": "Fill in the below details!",
-    "ORG_ADMIN": "Org Admin"
+    "ORG_ADMIN": "Org Admin",
+    "UPDATE_REQUEST_CONFIRMATION": "Are you sure you want to update this request status?",
+    "UPDATE_REQUEST": "Update request?"
 }
