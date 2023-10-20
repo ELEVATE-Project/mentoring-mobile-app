@@ -75,7 +75,7 @@ export class HomePage implements OnInit {
       })
     });
     this.getUser();
-    this.localStorage.getLocalData(localKeys.ISROLEREQUESTED).then((isRoleRequested)=>{
+    this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested)=>{
       this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false: true;
     })
     this.userService.userEventEmitted$.subscribe(data => {
