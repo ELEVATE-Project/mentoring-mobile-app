@@ -201,5 +201,6 @@
     "EMAIL": "Email",
     "ACTIONS": "Actions",
     "NAME": "Name",
-    "FILL_IN_THE_BELOW_DETAILS": "Fill in the below details!"
+    "FILL_IN_THE_BELOW_DETAILS": "Fill in the below details!",
+    "ORG_ADMIN": "Org Admin"
 }
