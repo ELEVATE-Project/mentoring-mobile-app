@@ -31,6 +31,7 @@ export class HomePage implements OnInit {
   sessionsCount = 0;
   isNativeApp = Capacitor.isNativePlatform()
   status = "PUBLISHED,LIVE";
+  showBecomeMentorCard
   @ViewChild(IonContent) content: IonContent;
 
   public headerConfig: any = {
@@ -74,6 +75,9 @@ export class HomePage implements OnInit {
       })
     });
     this.getUser();
+    this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested)=>{
+      this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false: true;
+    })
     this.userService.userEventEmitted$.subscribe(data => {
       if (data) {
         this.isMentor = this.profileService.isMentor
@@ -173,5 +177,14 @@ export class HomePage implements OnInit {
     } else {
       this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
     }
+  }
+
+  becomeMentor() {
+    this.showBecomeMentorCard = false;
+    this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);
+  }
+
+  closeCard() {
+    this.showBecomeMentorCard = false;
   }
 }

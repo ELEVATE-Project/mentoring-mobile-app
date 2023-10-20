@@ -1,12 +1,17 @@
 <app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
 <ion-content [fullscreen]="true">
-  <div *ngIf="detailData" class="main-wrapper">
+  <div *ngIf="detailData" class="main-wrapper"> 
+    <ion-grid>
+      <ion-row class="d-flex ">
+        <ion-col padding size-xs="12" size-sm="12" size-md="4" size-lg="4">
     <div class="d-flex flex-justify-center">
       <img *ngIf="!detailData?.data?.image?.length || !detailData?.data?.image[0]; else elseBlock" src="../../../assets/default-session-img/session-img.png"/>
       <ng-template #elseBlock>
         <img src="{{detailData?.data?.image}}"/>
       </ng-template>
     </div>
+  </ion-col>
+    <ion-col padding >
     <div class="field-wrapper">
       <h6 class="title-font">{{detailData?.data?.title}}</h6>
       <p class="description">{{detailData?.data?.description}}</p>
@@ -18,6 +23,9 @@
       </ion-item>
     </div>
     <app-generic-details [sessionData]='detailData'></app-generic-details>
+  </ion-col>
+</ion-row>
+</ion-grid>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">

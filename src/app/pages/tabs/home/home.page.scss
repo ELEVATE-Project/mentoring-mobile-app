@@ -84,3 +84,33 @@ h3{
     margin: 8px 0px 12px 10px;
     letter-spacing: 1px;
 }
+.card-config {
+    border-radius: 20px;
+}
+
+.round-icon-button{
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: #832215;
+    --color: white;
+}
+.close-icon {
+    color: white;
+    font-weight: bold;
+}
+.header-label{
+    font-weight: bold;
+    color: black;
+}
+.content-label {
+    font-size: 13px;
+}
+img {
+    margin: 16px 0px;
+    max-width: 55%;
+}
+.mentor-card-button {
+    min-width: 100%;
+    --border-radius:8px;
+}

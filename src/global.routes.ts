@@ -24,4 +24,7 @@ export class CommonRoutes {
     public static HELP='help';
     public static FAQ='faq';
     public static HELP_VIDEOS= 'help-videos';
+    public static MENTOR_QUESTIONNAIRE= 'mentor-questionnaire';
+    public static ADMIN_DASHBOARD= 'admin-dashboard';
+    public static ADMIN= 'admin'
 }

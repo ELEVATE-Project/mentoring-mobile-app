@@ -1,0 +1,45 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<ion-content>
+    <div class="d-flex flex-justify-center">
+        <ion-header>
+            <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
+                <ion-segment-button value="manage-user">
+                    <ion-label>Manage User</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="bulk-upload">
+                    <ion-label>Bulk Upload</ion-label>
+                </ion-segment-button>
+            </ion-segment>
+        </ion-header>
+    </div>
+    <div class="ion-padding">
+        <div [ngSwitch]="type">
+            <ion-card *ngSwitchCase="'manage-user'">
+                <table *ngIf="requestList" class="table color-black">
+                    <thead>
+                        <tr>
+                        <th>{{"SL_NO"|translate}}</th>
+                        <th>{{"NAME"|translate}}</th>
+                        <th>{{"EMAIL"|translate}}</th>
+                        <th>{{"ACTIONS"|translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let request of requestList.data; let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{request.requester.name}}</td>
+                        <td>{{request.requester.email}}</td>
+                        <td class="ion-padding width-250">
+                            <div class="d-flex flex-justify-space-between">
+                                <ion-icon name="checkmark-sharp" class="color-green" (click)="acceptRequest()"></ion-icon><ion-icon name="close-sharp" class="color-red" (click)="rejectRequest()"></ion-icon><ion-icon name="eye-sharp" class="color-black" (click)="viewRequest()"></ion-icon>
+                            </div>
+                        </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ion-card>
+            <div *ngSwitchCase="'bulk-upload'">
+            </div>
+          </div>
+    </div>
+</ion-content>
