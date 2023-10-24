@@ -51,6 +51,7 @@
     "@shikshalokam/sl-reports-library": "^1.0.7",
     "@types/lodash": "^4.14.182",
     "angular2-uuid": "^1.1.1",
+    "bowser": "2.7.0",
     "cordova-plugin-screen-orientation": "^3.0.3",
     "cordova-sqlite-storage": "^6.1.0",
     "es6-promise-plugin": "^4.2.2",

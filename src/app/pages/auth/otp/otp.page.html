@@ -13,9 +13,23 @@
       </div>
       <p class="hint-message"> {{"YOU_WILL_RECIEVE_OTP_IN_YOUR_EMAIL" | translate}}</p>
     </section>
+    <section class="t-and-c d-flex">
+  
+          
+            <ion-item >
+              <ion-checkbox label-placement="stacked" alignment="start" (ionChange)="checkboxClick($event)" >Aligned to the Start</ion-checkbox>
+              <p class="t-and-c-text">{{"TERMS_AND_CONDITION"|translate}}
+                <a class='links'
+                  href='https://shikshalokam.org/mentoring/privacy-policy'>{{"PRIVACY_POLICY"|translate}}</a> & <a
+                  class='links' href='https://shikshalokam.org/mentoring/term-of-use'>{{"TERMS_OF_SERVICE"|translate}}</a>
+              </p>
+            </ion-item>
+          
+    </section>
+    
     <section>
       <div class="d-flex flex-justify-center flex-align-items-center">
-        <ion-button [ngClass]="{'my-10': true, 'disabled': !isEnabled, 'onboard-button':true}" [disabled]="!isEnabled"
+        <ion-button [ngClass]="{'my-10': true, 'disabled': !checked  || !isEnabled, 'onboard-button':true}" [disabled]="!checked  || !isEnabled"
           (click)="onSubmit()" shape="round">
           {{'VERIFY_AND_LOGIN'|translate}}
         </ion-button>

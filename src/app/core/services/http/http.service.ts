@@ -90,7 +90,7 @@ export class HttpService {
         if (result.responseCode === "OK") {
           return result;
         } else {
-          this.handleError(data)
+          // this.handleError(data)
         }
       });
   }
