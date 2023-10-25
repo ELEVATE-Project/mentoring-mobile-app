@@ -7,6 +7,7 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { AuthService, LocalStorageService, ToastService } from 'src/app/core/services';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-otp',
@@ -40,6 +41,9 @@ export class OtpPage implements OnInit {
   countDownTimer;
   labels;
   signupData: any;
+  checked: boolean = false;
+  privacyPolicyUrl =environment.privacyPolicyUrl;
+  termsOfServiceUrl = environment.termsOfServiceUrl;
 
   constructor(private router: Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService, private menuCtrl: MenuController, private nav: NavController) {
     this.actionType=this.router.getCurrentNavigation().extras.state?.type;
@@ -84,6 +88,7 @@ export class OtpPage implements OnInit {
   async onSubmit() {
     if (this.actionType == "signup") {
       this.signupData.otp = this.otp;
+      this.signupData.has_accepted_terms_and_conditions = this.checked;
       let result = await this.authService.createAccount(this.signupData);
       if (result) {
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
@@ -112,4 +117,8 @@ export class OtpPage implements OnInit {
     this.otp = otp;
     this.isEnabled = this.otp.length == 6 ? true : false;
   }
+  checkboxClick(e){
+   this.checked = e.detail.checked
+  }
+
 }

@@ -57,15 +57,9 @@ export class DashboardPage implements OnInit {
   ionViewWillEnter(){
     this.gotToTop();
     this.dataAvailable = false;
-    if(typeof this.isMentor === "undefined"){
-      this.profile.profileDetails().then(profileDetails => {
-        this.isMentor = profileDetails?.isAMentor;
-        this.segment= this.isMentor ? "mentor":"mentee";
-        this.getReports();
-      })
-    } else {
+      this.isMentor = this.profile.isMentor;
+      this.segment= this.isMentor ? "mentor":"mentee";
       this.getReports();
-    } this.getReports();
   }
 
   gotToTop() {
@@ -107,10 +101,10 @@ export class DashboardPage implements OnInit {
         this.chartData.chart.data.datasets[0].data.length = 0;
       if(this.segment === 'mentor'){
         this.chartData.chart.data.labels.push(texts['TOTAL_SESSION_CREATED'], texts['TOTAL_SESSION_CONDUCTED'])
-        this.chartData.chart.data.datasets[0].data.push(success.result.totalSessionCreated || 0, success.result.totalsessionHosted || 0);
+        this.chartData.chart.data.datasets[0].data.push(success.result.total_session_created || 0, success.result.total_session_hosted || 0);
       } else {
         this.chartData.chart.data.labels.push(texts['TOTAL_SESSION_ENROLLED'], texts['TOTAL_SESSION_ATTENDED'])
-        this.chartData.chart.data.datasets[0].data.push(success.result.totalSessionEnrolled || 0, success.result.totalsessionsAttended || 0);
+        this.chartData.chart.data.datasets[0].data.push(success.result.total_session_enrolled || 0, success.result.total_session_attended || 0);
       }
       this.dataAvailable=(this.chartData.chart.data.datasets[0].data[0]===0&&this.chartData.chart.data.datasets[0].data[1]===0) ? false:true;
       this.loading = false;
