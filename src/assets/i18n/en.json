@@ -204,5 +204,6 @@
     "FILL_IN_THE_BELOW_DETAILS": "Fill in the below details!",
     "ORG_ADMIN": "Org Admin",
     "UPDATE_REQUEST_CONFIRMATION": "Are you sure you want to update this request status?",
-    "UPDATE_REQUEST": "Update request?"
+    "UPDATE_REQUEST": "Update request?",
+    "COPIED": "Copied successfully"
 }
