@@ -17,11 +17,11 @@
   
           
             <ion-item >
-              <ion-checkbox label-placement="stacked" alignment="start" (ionChange)="checkboxClick($event)" >Aligned to the Start</ion-checkbox>
+              <ion-checkbox label-placement="stacked" alignment="start" (ionChange)="checkboxClick($event)"></ion-checkbox>
               <p class="t-and-c-text">{{"TERMS_AND_CONDITION"|translate}}
                 <a class='links'
-                  href='https://shikshalokam.org/mentoring/privacy-policy'>{{"PRIVACY_POLICY"|translate}}</a> & <a
-                  class='links' href='https://shikshalokam.org/mentoring/term-of-use'>{{"TERMS_OF_SERVICE"|translate}}</a>
+                 [href]="privacyPolicyUrl" target="_blank">{{"PRIVACY_POLICY"|translate}}</a> & <a
+                  class='links' [href]="termsOfServiceUrl" target="_blank">{{"TERMS_OF_SERVICE"|translate}}</a>
               </p>
             </ion-item>
           

@@ -27,7 +27,7 @@ export class HelpPage implements OnInit {
     label: "HELP"
   };
   public formData: JsonFormData;
-  metaData: { deviceName: string; androidVersion: string; version: string; type: string;browserName:string;browserVersion:string} = {deviceName: '', androidVersion: '', version: '', type: '', browserName:'',browserVersion:''};
+  metaData: { deviceName: string; androidVersion: string; version: string; type: string;browserName:string;browserVersion:string};
   selectedOption: any;
   helpForms: any;
   userDetails: any;
