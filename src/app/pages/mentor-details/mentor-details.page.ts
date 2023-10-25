@@ -18,11 +18,11 @@ export class MentorDetailsPage implements OnInit {
     headerColor: "primary"
   };
 
-  public buttonConfig = {
+  public buttonConfig = [{
     label: "SHARE_PROFILE",
     action: "share"
 
-  }
+  }]
 
   detailData = {
     form: [
@@ -71,6 +71,7 @@ export class MentorDetailsPage implements OnInit {
   ) {
     routerParams.params.subscribe(params => {
       this.mentorId = params.id;
+      console.log(this.mentorId)
       this.userService.getUserValue().then(async (result) => {
         if (result) {
           this.getMentor();
