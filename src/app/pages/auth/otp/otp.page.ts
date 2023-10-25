@@ -42,8 +42,8 @@ export class OtpPage implements OnInit {
   labels;
   signupData: any;
   checked: boolean = false;
-  privacyPolicyUrl:any;
-  termsOfServiceUrl:any;
+  privacyPolicyUrl =environment.privacyPolicyUrl;
+  termsOfServiceUrl = environment.termsOfServiceUrl;
 
   constructor(private router: Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService, private menuCtrl: MenuController, private nav: NavController) {
     this.actionType=this.router.getCurrentNavigation().extras.state?.type;
@@ -51,8 +51,6 @@ export class OtpPage implements OnInit {
     this.resetPasswordData.password = this.actionType == "reset-password" ? this.router.getCurrentNavigation().extras.state?.password : null;
     this.signupData = this.actionType == "signup" ? this.router.getCurrentNavigation().extras.state?.formData : null;
     this.menuCtrl.enable(false);
-    this.privacyPolicyUrl = environment.privacyPolicyUrl;
-    this.termsOfServiceUrl = environment.termsOfServiceUrl
   }
 
   ngOnInit() {
