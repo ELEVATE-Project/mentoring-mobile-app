@@ -71,7 +71,6 @@ export class AdminComponent implements OnInit {
         data: request.meta
       }
       this.util.openModal(componenProps).then((data)=>{
-        console.log(data)
       })
     }
 
