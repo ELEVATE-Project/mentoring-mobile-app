@@ -37,13 +37,18 @@ export class GenericProfileHeaderComponent implements OnInit {
         this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);
         break;
       
-      default: 
-        this.translateText();
-          let url = `/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`;
-          let link = await this.utilService.getDeepLink(url);
-          this.headerData.name = this.headerData.name.trim();
-          let params = { link: link, subject: this.headerData?.name, text: this.labels[0] + ` ${this.headerData.name}` + this.labels[1] }
-          await this.utilService.shareLink(params);
+        case 'share':
+          if(this.isMobile && navigator.share){
+                  this.translateText();
+                  let url = `/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`;
+                  let link = await this.utilService.getDeepLink(url);
+                  this.headerData.name = this.headerData.name.trim();
+                  let params = { link: link, subject: this.headerData?.name, text: this.labels[0] + ` ${this.headerData.name}` + this.labels[1] }
+                  await this.utilService.shareLink(params);
+            }else {
+              await this.copyToClipBoard(window.location.href);
+              this.toast.showToast("LINK_COPIED","success");
+            }
         break;
     }
   }
