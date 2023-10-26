@@ -90,8 +90,8 @@ export class DynamicFormComponent implements OnInit {
   ngOnInit() {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){
-        console.log(element, index);
         this.jsonFormData.controls[index].options = _.sortBy(this.jsonFormData.controls[index].options, ['label']);
+        this.jsonFormData.controls[index].value = this.jsonFormData.controls[index].value === null ? [{}] : this.jsonFormData.controls[index].value
       }
     });
     setTimeout(() => {

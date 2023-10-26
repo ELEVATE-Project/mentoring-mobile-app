@@ -38,7 +38,7 @@
                     </tbody>
                 </table>
             </ion-card>
-            <div *ngSwitchCase="'bulk-upload'">
+            <div *ngSwitchCase="'bulk-upload'" class="d-flex flex-justify-center flex-align-items-center">
                 <div class="ion-margin ion-padding">
                     <ion-button class="btn-width-200" (click)="downloadCSV()">{{"DOWNLOAD_SAMPLE_CSV"|translate}}</ion-button>
                 </div>
@@ -50,3 +50,6 @@
           </div>
     </div>
 </ion-content>
+<ion-footer>
+    <ion-button (click)="goToHome()" expand="full">{{"HOME"|translate}}</ion-button>
+</ion-footer>

@@ -65,7 +65,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.profileImageData.isUploaded = true;
     this.formData = _.get(response, 'data.fields');
     this.entityNames = await this.form.getEntityNames(this.formData)
-    this.entityList = await this.form.getEntities(this.entityNames)
+    this.entityList = await this.form.getEntities(this.entityNames,'profile')
     this.formData = await this.form.populateEntity(this.formData,this.entityList)
     this.changeDetRef.detectChanges();
     this.userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
@@ -160,7 +160,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   async getImageUploadUrl(file) {
     this.loaderService.startLoader();
     let config = {
-      url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name.replace(/[^A-Z0-9]+/ig, "_").toLowerCase()
+      url: urlConstants.API_URLS.GET_FILE_UPLOAD_URL + file.name.replace(/[^A-Z0-9]+/ig, "_").toLowerCase()
     }
     let data: any = await this.api.get(config);
     return this.upload(file, data.result).subscribe()

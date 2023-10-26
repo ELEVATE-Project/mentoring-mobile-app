@@ -1,9 +1,11 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { ToastService, UtilService } from "src/app/core/services";
 import { OrganisationService } from "src/app/core/services/organisation/organisation.service";
 import { SessionService } from "src/app/core/services/session/session.service";
+import { CommonRoutes } from "src/global.routes";
 
 @Component({
   selector: "app-admin",
@@ -23,7 +25,7 @@ export class AdminComponent implements OnInit {
   };
   requestList: any;
 
-  constructor(private organisation: OrganisationService, private util: UtilService, private sessionService: SessionService, private toast: ToastService) {
+  constructor(private organisation: OrganisationService, private util: UtilService, private sessionService: SessionService, private toast: ToastService, private router: Router) {
   }
     async ngOnInit() {
       this.requestList = await this.organisation.adminRequestList(this.page,this.limit)
@@ -84,5 +86,9 @@ export class AdminComponent implements OnInit {
         let data = await this.organisation.bulkUpload(signedUrl.filePath);
         this.toast.showToast("Done","success")
       })
+    }
+
+    goToHome(){
+      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`])
     }
   }
