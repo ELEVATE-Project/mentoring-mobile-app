@@ -71,7 +71,6 @@ export class MentorDetailsPage implements OnInit {
   ) {
     routerParams.params.subscribe(params => {
       this.mentorId = params.id;
-      console.log(this.mentorId)
       this.userService.getUserValue().then(async (result) => {
         if (result) {
           this.getMentor();

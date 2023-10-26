@@ -16,6 +16,7 @@ export class GenericProfileHeaderComponent implements OnInit {
   @Input() buttonConfig:any;
   @Input() showRole:any;
   @Input() isMentor: any;
+  @Input() mentorId:any;
   labels = ["CHECK_OUT_MENTOR","PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS"];
 
   public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
@@ -33,16 +34,11 @@ export class GenericProfileHeaderComponent implements OnInit {
       case 'share':
         if(this.isMobile && navigator.share){
               this.translateText();
-              let shareLink = await this.profileService.shareProfile(this.headerData.id);
-              if (shareLink) {
-                let url = `/${CommonRoutes.MENTOR_DETAILS}/${shareLink.shareLink}`;
+                let url = `/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`;
                 let link = await this.utilService.getDeepLink(url);
                 this.headerData.name = this.headerData.name.trim();
                 let params = { link: link, subject: this.headerData?.name, text: this.labels[0] + ` ${this.headerData.name}` + this.labels[1] }
                 await this.utilService.shareLink(params);
-              } else {
-                this.toast.showToast("No link generated!!!", "danger");
-              }
           }else {
             await this.copyToClipBoard(window.location.href);
             this.toast.showToast("LINK_COPIED","success");

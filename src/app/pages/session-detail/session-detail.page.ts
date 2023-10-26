@@ -195,17 +195,12 @@ export class SessionDetailPage implements OnInit {
   async share() {
     if(this.isMobile && navigator.share){
       if(this.id){
-        let sharableLink = await this.sessionService.getShareSessionId(this.id);
-        if (sharableLink.shareLink) {
-          let url = `/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
+          let url = `/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`;
           let link = await this.utilService.getDeepLink(url);
           this.detailData.data.mentor_name = this.detailData.data.mentor_name.trim();
           this.detailData.data.title = this.detailData.data.title.trim();
           let params = { link: link, subject: this.detailData.data.title, text: "Join an expert session on " + `${this.detailData.data.title} ` + "hosted by " + `${this.detailData.data.mentor_name}` + " using the link" }
           await this.utilService.shareLink(params);
-        } else {
-          this.toast.showToast("No link generated!!!", "danger");
-        }
       } else {
         this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id, isMentor:false}});
       } 
