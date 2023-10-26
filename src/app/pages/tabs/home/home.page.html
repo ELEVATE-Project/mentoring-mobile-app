@@ -59,9 +59,15 @@
         <div class="segment-button d-flex flex-justify-center flex-align-items-flex-end">
           {{"START_CREATE_SESSION"|translate}}
         </div>
+        <ion-grid>
+          <ion-row class="d-flex flex-justify-center">
+            <ion-col padding size-xs="12" size-sm="12" size-md="8" size-lg="6" align-self-stretch>
         <ion-button shape="round" strong="true" class="card-button" (click)="createSession()">
           {{'CREATE_SESSION' | translate}} <ion-icon class="create-icon" name="add-circle-outline"></ion-icon>
         </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
       </ion-card-content>
     </ion-card>
     <div *ngIf="createdSessions?.data?.length">
