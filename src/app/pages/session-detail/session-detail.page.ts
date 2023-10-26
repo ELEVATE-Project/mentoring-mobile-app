@@ -34,7 +34,7 @@ export class SessionDetailPage implements OnInit {
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
-    private utilService: UtilService, private toast: ToastService, private _location: Location, private user: UserService ,private toaster: ToastController,private translate : TranslateService,) {
+    private utilService: UtilService, private toast: ToastService, private user: UserService ,private toaster: ToastController,private translate : TranslateService,) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {
