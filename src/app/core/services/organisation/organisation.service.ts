@@ -4,13 +4,14 @@ import { HttpService } from '../http/http.service';
 import { ToastService } from '../toast.service';
 import { LocalStorageService } from '../localstorage.service';
 import { localKeys } from '../../constants/localStorage.keys';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrganisationService {
 
-  constructor(private httpService: HttpService, private toast: ToastService, private localStorage: LocalStorageService) { }
+  constructor(private httpService: HttpService, private toast: ToastService, private localStorage: LocalStorageService, private http: HttpClient) { }
 
   async requestOrgRole(roleId, formData){
     const config = {
@@ -70,5 +71,42 @@ export class OrganisationService {
     }
     catch (error) {
     }
+  }
+
+  async bulkUpload(path){
+    const config = {
+      url: urlConstants.API_URLS.ADMIN_BULK_UPLOAD,
+      payload: {
+        "file_path": path,
+      },
+    };
+    try {
+      let data: any = await this.httpService.post(config);
+      return data
+    }
+    catch (error) {
+    }
+  }
+
+  async getSignedUrl(name){
+    const config = {
+      url: urlConstants.API_URLS.GET_FILE_UPLOAD_URL+name.replace(" ", "_"),
+      payload: {}
+    };
+    try {
+      let data: any = await this.httpService.get(config);
+      return data.result
+    }
+    catch (error) {
+    }
+  }
+
+  upload(file: any, path: any) {
+    var options = {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      },
+    };
+    return this.http.put(path.signedUrl, file, options);
   }
 }

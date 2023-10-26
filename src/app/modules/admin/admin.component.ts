@@ -1,8 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
-import { ToastService } from "src/app/core/services";
+import { ToastService, UtilService } from "src/app/core/services";
 import { OrganisationService } from "src/app/core/services/organisation/organisation.service";
+import { SessionService } from "src/app/core/services/session/session.service";
 
 @Component({
   selector: "app-admin",
@@ -22,7 +23,7 @@ export class AdminComponent implements OnInit {
   };
   requestList: any;
 
-  constructor(private organisation: OrganisationService, private translate: TranslateService, private alert: AlertController, private toast: ToastService) {
+  constructor(private organisation: OrganisationService, private util: UtilService, private sessionService: SessionService, private toast: ToastService) {
   }
     async ngOnInit() {
       this.requestList = await this.organisation.adminRequestList(this.page,this.limit)
@@ -33,50 +34,55 @@ export class AdminComponent implements OnInit {
     }
 
     async acceptRequest(id,status){
-      this.confirmPopup().then(async (data)=>{
+      let message = {
+        header: 'ACCEPT_REQUEST',
+        message: 'ACCEPT_REQUEST_CONFIRMATION',
+        cancel: 'NO',
+        submit: 'YES'
+      }
+      this.util.alertPopup(message).then(async (data)=>{
         if(data){
-          let data = await this.organisation.updateRequest(id,status)
-          this.toast.showToast(data.message, "success")
+          let result = await this.organisation.updateRequest(id,status)
+          this.toast.showToast(result.message, "success")
           this.requestList = await this.organisation.adminRequestList(this.page,this.limit)
         }
       })
     }
 
     rejectRequest(id, status){
-      
-    }
-    viewRequest(id){
-      
-    }
-    async confirmPopup(){
-      let texts: any;
-      this.translate
-        .get(['UPDATE_REQUEST_CONFIRMATION', 'YES', 'NO', 'UPDATE_REQUEST'])
-        .subscribe((text) => {
-          texts = text;
-        });
-      const alert = await this.alert.create({
-        header: texts['UPDATE_REQUEST'],
-        message: texts['UPDATE_REQUEST_CONFIRMATION'],
-        buttons: [
-          {
-            text: texts['NO'],
-            cssClass: 'alert-button-bg-white',
-            role: 'no',
-            handler: () => {},
-          },
-          {
-            text: texts['YES'],
-            role: 'yes',
-            cssClass: 'alert-button-red',
-            handler: () => {},
-          },
-        ],
-      });
-      await alert.present();
-      let data = await alert.onDidDismiss();
-      if (data.role == 'yes') {
-        return true;
+      let message = {
+        header: 'REJECT_REQUEST',
+        message: 'REJECT_REQUEST_CONFIRMATION',
+        cancel: 'NO',
+        submit: 'YES'
       }
+      this.util.alertPopup(message).then(async (data)=>{
+        if(data){
+          let result = await this.organisation.updateRequest(id,status)
+          this.toast.showToast(result.message, "success")
+          this.requestList = await this.organisation.adminRequestList(this.page,this.limit)
+        }
+      })
+    }
+
+    viewRequest(request){
+      let componenProps ={
+        readonly: true,
+        data: request.meta
+      }
+      this.util.openModal(componenProps).then((data)=>{
+      })
+    }
+
+    downloadCSV(){
+      this.sessionService.openBrowser('https://drive.google.com/file/d/1ZDjsc7YLZKIwxmao-8PdEvnHppkMkXIE/view?usp=sharing')
+    }
+
+    async uploadCSV(event){
+      let signedUrl = await this.organisation.getSignedUrl(event.target.files[0].name)
+      return this.organisation.upload(event.target.files[0], signedUrl).subscribe(async () => {
+        let data = await this.organisation.bulkUpload(signedUrl.filePath);
+        this.toast.showToast("Done","success")
+      })
     }
   }

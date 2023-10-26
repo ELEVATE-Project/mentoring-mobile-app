@@ -67,11 +67,10 @@ export class MentorDetailsPage implements OnInit {
     private sessionService: SessionService,
     private userService: UserService,
     private localStorage:LocalStorageService,
-    private toastService:ToastService
+    private toast:ToastService
   ) {
     routerParams.params.subscribe(params => {
       this.mentorId = params.id;
-      console.log(this.mentorId)
       this.userService.getUserValue().then(async (result) => {
         if (result) {
           this.getMentor();
@@ -121,9 +120,12 @@ export class MentorDetailsPage implements OnInit {
         this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
         break;
 
-      case 'enrollAction':
-        await this.sessionService.enrollSession(event.data.id);
-        this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+        case 'enrollAction':
+        let enrollResult = await this.sessionService.enrollSession(event.data.id);
+        if(enrollResult.result){
+          this.toast.showToast(enrollResult.message, "success")
+          this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+        }
         break;
     }
   }

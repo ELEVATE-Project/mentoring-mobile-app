@@ -4,10 +4,10 @@
         <ion-header>
             <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
                 <ion-segment-button value="manage-user">
-                    <ion-label>Manage User</ion-label>
+                    <ion-label>{{"MANAGE_USER"|translate}}</ion-label>
                 </ion-segment-button>
                 <ion-segment-button value="bulk-upload">
-                    <ion-label>Bulk Upload</ion-label>
+                    <ion-label>{{"BULK_UPLOAD"|translate}}</ion-label>
                 </ion-segment-button>
             </ion-segment>
         </ion-header>
@@ -31,7 +31,7 @@
                             <td>{{request?.status}}</td>
                             <td class="ion-padding width-250">
                                 <div class="d-flex flex-justify-space-between">
-                                    <ion-icon *ngIf="request?.status!=='APPROVED'" name="checkmark-sharp" class="color-green" (click)="acceptRequest(request?.id, 'APPROVED')"></ion-icon><ion-icon *ngIf="request?.status!=='APPROVED'" name="close-sharp" class="color-red" (click)="rejectRequest(request?.id, 'REJECTED')"></ion-icon><ion-icon name="eye-sharp" class="color-black" (click)="viewRequest(request?.id)"></ion-icon>
+                                    <ion-icon *ngIf="request?.status!=='APPROVED'" name="checkmark-sharp" class="color-green" (click)="acceptRequest(request?.id, 'APPROVED')"></ion-icon><ion-icon *ngIf="request?.status!=='APPROVED'" name="close-sharp" class="color-red" (click)="rejectRequest(request?.id, 'REJECTED')"></ion-icon><ion-icon name="eye-sharp" class="color-black" (click)="viewRequest(request)"></ion-icon>
                                 </div>
                             </td>
                         </tr>
@@ -39,6 +39,13 @@
                 </table>
             </ion-card>
             <div *ngSwitchCase="'bulk-upload'">
+                <div class="ion-margin ion-padding">
+                    <ion-button class="btn-width-200" (click)="downloadCSV()">{{"DOWNLOAD_SAMPLE_CSV"|translate}}</ion-button>
+                </div>
+                <div class="ion-margin ion-padding">
+                    <ion-button class="btn-width-200" (click)="upload.click()">{{"UPLOAD_CSV"|translate}}</ion-button>
+                    <input type="file" accept=".csv" (change)="uploadCSV($event)" hidden #upload />
+                </div>
             </div>
           </div>
     </div>
