@@ -77,8 +77,7 @@ export class TermsAndConditionsPage implements OnInit {
     await this.modalController.dismiss();
   }
   async setLocalStorage() {
-    let localUser = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    await this.profileService.getProfileDetailsFromAPI(localUser.id);
+    await this.profileService.getProfileDetailsFromAPI();
   }
 
   checked() {

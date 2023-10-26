@@ -127,11 +127,11 @@ export class HelpPage implements OnInit {
     this.formData = _.get(result, 'data.fields');
     this.helpForms = _.get(result, 'data.fields.forms');
     this.selectedOption = this.helpForms[0];
-    this.message = (this.userDetails?.isAMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
+    this.message = (this.profileService.isMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
   }
   clickOptions(event:any){
     this.selectedOption.form = event.detail.value.form;
-    this.message = (this.userDetails?.isAMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
+    this.message = (this.profileService.isMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
     this.form1?.createForm(this.selectedOption.form.controls);
   }
 }

@@ -116,6 +116,28 @@ export class HttpService {
       });
   }
 
+  async patch(requestParam: RequestParams) {
+    if (!this.checkNetworkAvailability()) {
+      throw Error(null);
+    }
+    let body = requestParam.payload ? requestParam.payload : {};
+    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+    const options = {
+      url: this.baseUrl + requestParam.url,
+      headers: headers,
+      data: body,
+    };
+    return CapacitorHttp.patch(options)
+      .then((data: any) => {
+        let result: any = data.data;
+        if (result.responseCode === "OK") {
+          return result;
+        } else {
+          this.handleError(data)
+        }
+      });
+  }
+
   //network check
   checkNetworkAvailability() {
     if (!this.network.isNetworkAvailable) {

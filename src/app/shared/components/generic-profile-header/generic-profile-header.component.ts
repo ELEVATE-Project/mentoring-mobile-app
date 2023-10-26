@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService, UtilService } from 'src/app/core/services';
@@ -17,26 +18,34 @@ export class GenericProfileHeaderComponent implements OnInit {
   @Input() isMentor: any;
   labels = ["CHECK_OUT_MENTOR","PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS"];
 
-  constructor(private navCtrl:NavController, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService) { }
+  constructor(private router:Router, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService) { }
 
   ngOnInit() {
   }
 
   async action(event) {
-    if(event==="edit"){
-      this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE);
-    }else{
-      this.translateText();
-      let shareLink = await this.profileService.shareProfile(this.headerData._id);
-      if (shareLink) {
-        let url = `/${CommonRoutes.MENTOR_DETAILS}/${shareLink.shareLink}`;
-        let link = await this.utilService.getDeepLink(url);
-        this.headerData.name = this.headerData.name.trim();
-        let params = { link: link, subject: this.headerData?.name, text: this.labels[0] + ` ${this.headerData.name}` + this.labels[1] }
-        await this.utilService.shareLink(params);
-      } else {
-        this.toast.showToast("No link generated!!!", "danger");
-      }
+    switch(event){
+      case 'edit':
+        this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+        break;
+      
+      case 'role':
+        this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);
+        break;
+      
+      default: 
+        this.translateText();
+        let shareLink = await this.profileService.shareProfile(this.headerData._id);
+        if (shareLink) {
+          let url = `/${CommonRoutes.MENTOR_DETAILS}/${shareLink.shareLink}`;
+          let link = await this.utilService.getDeepLink(url);
+          this.headerData.name = this.headerData.name.trim();
+          let params = { link: link, subject: this.headerData?.name, text: this.labels[0] + ` ${this.headerData.name}` + this.labels[1] }
+          await this.utilService.shareLink(params);
+        } else {
+          this.toast.showToast("No link generated!!!", "danger");
+        }
+        break;
     }
     //add output event and catch from parent; TODO
   }
