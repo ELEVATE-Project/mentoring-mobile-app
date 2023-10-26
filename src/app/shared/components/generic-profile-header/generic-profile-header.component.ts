@@ -17,7 +17,6 @@ export class GenericProfileHeaderComponent implements OnInit {
   @Input() buttonConfig:any;
   @Input() showRole:any;
   @Input() isMentor: any;
-  @Input() mentorId:any;
   labels = ["CHECK_OUT_MENTOR","PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS"];
 
   public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
@@ -38,9 +37,9 @@ export class GenericProfileHeaderComponent implements OnInit {
         break;
       
         case 'share':
-          if(this.isMobile && navigator.share){
+          if(this.isMobile && navigator.share && this.buttonConfig.meta){
                   this.translateText();
-                  let url = `/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`;
+                  let url = `/${CommonRoutes.MENTOR_DETAILS}/${this.buttonConfig.meta.id}`;
                   let link = await this.utilService.getDeepLink(url);
                   this.headerData.name = this.headerData.name.trim();
                   let params = { link: link, subject: this.headerData?.name, text: this.labels[0] + ` ${this.headerData.name}` + this.labels[1] }
