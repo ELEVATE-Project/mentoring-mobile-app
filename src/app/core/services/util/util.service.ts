@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Share } from '@capacitor/share';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Action } from 'rxjs/internal/scheduler/Action';
 import { environment } from 'src/environments/environment';
 import { ISocialSharing } from '../../interface/soical-sharing-interface';
 import { Capacitor } from '@capacitor/core';
+import { ModelComponent } from 'src/app/shared/components/model/model.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
+  modal: any;
   constructor(
-    // private socialSharing: SocialSharing,
+    private modalCtrl: ModalController,
     private alert: AlertController,
     private translate: TranslateService
   ) {}
@@ -28,6 +30,15 @@ export class UtilService {
       url: link,
       dialogTitle: subject,
     });
+  }
+
+  async openModal(componentProps) {
+    this.modal = await this.modalCtrl.create({
+      component: ModelComponent,
+      componentProps: componentProps
+    });
+    this.modal.present();
+    const { data, role } = await this.modal.onWillDismiss();
   }
 
   async alertPopup(msg) {

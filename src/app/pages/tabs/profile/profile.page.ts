@@ -84,12 +84,12 @@ export class ProfilePage implements OnInit {
     this.formData.data = this.user;
     this.formData.data.emailId = this.user.email.address;
     this.isMentor = this.profileService.isMentor;
-    // if (this.formData?.data?.about) {
-    //   this.showProfileDetails = true;
-    // } else {
-    //   (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
-    //   this.visited=true;
-    // }
+    if (this.formData?.data?.about) {
+      this.showProfileDetails = true;
+    } else {
+      (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
+      this.visited=true;
+    }
     this.gotToTop();
     this.profileDetailsApi();
   }
@@ -108,7 +108,7 @@ export class ProfilePage implements OnInit {
     this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
   }
   async profileDetailsApi(){
-    var result = await this.profileService.getProfileDetailsFromAPI(this.user?.id);
+    var result = await this.profileService.getProfileDetailsFromAPI();
     if(result){
       this.formData.data = result;
       this.formData.data.emailId = result.email;

@@ -1,10 +1,8 @@
 import { IFORM } from '../interface/form';
 
 export const EDIT_PROFILE_FORM: IFORM = {
-	"type": "profile",
-	"subType": "profileForm",
-	"action": "profileFields",
-	"templateName": "defaultTemplate",
+	"type": "editProfile",
+	"sub_type": "editProfileForm"
 };
 
 export const CREATE_SESSION_FORM: IFORM = {

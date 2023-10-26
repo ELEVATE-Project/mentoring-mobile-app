@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService, UtilService } from 'src/app/core/services';
@@ -21,29 +22,29 @@ export class GenericProfileHeaderComponent implements OnInit {
 
   public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
 
-  constructor(private navCtrl:NavController, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService,) { }
+  constructor(private router:Router,private navCtrl:NavController, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService,) { }
 
   ngOnInit() {
   }
 
   async action(event) {
-    switch (event) {
+    switch(event){
       case 'edit':
-        this.navCtrl.navigateForward(CommonRoutes.EDIT_PROFILE);
+        this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
         break;
-      case 'share':
-        if(this.isMobile && navigator.share){
-              this.translateText();
-                let url = `/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`;
-                let link = await this.utilService.getDeepLink(url);
-                this.headerData.name = this.headerData.name.trim();
-                let params = { link: link, subject: this.headerData?.name, text: this.labels[0] + ` ${this.headerData.name}` + this.labels[1] }
-                await this.utilService.shareLink(params);
-          }else {
-            await this.copyToClipBoard(window.location.href);
-            this.toast.showToast("LINK_COPIED","success");
-          }
-
+      
+      case 'role':
+        this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);
+        break;
+      
+      default: 
+        this.translateText();
+          let url = `/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`;
+          let link = await this.utilService.getDeepLink(url);
+          this.headerData.name = this.headerData.name.trim();
+          let params = { link: link, subject: this.headerData?.name, text: this.labels[0] + ` ${this.headerData.name}` + this.labels[1] }
+          await this.utilService.shareLink(params);
+        break;
     }
   }
 
