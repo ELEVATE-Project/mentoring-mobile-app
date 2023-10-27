@@ -48,12 +48,15 @@ export class ProfilePage implements OnInit {
     menteeForm:['SESSIONS_ATTENDED'],
     data: {},
   };
-  public buttonConfig = [{
-    label: "EDIT_PROFILE",
-    action: "edit"
-    
-  },
-]
+  
+public buttonConfig = {
+  buttons: [
+    {
+      label: "EDIT_PROFILE",
+      action: "edit"
+    }
+  ]
+}
   showProfileDetails: boolean = true;
   username: boolean = true;
   data: any;
@@ -76,7 +79,7 @@ export class ProfilePage implements OnInit {
 
   ngOnInit() {
     if(!this.profileService.isMentor)
-      this.buttonConfig.push(this.becomeAMentorButton)
+      this.buttonConfig.buttons.push(this.becomeAMentorButton)
     this.visited = false;
   }
   async ionViewWillEnter() {

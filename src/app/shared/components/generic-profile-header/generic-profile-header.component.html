@@ -19,7 +19,7 @@
         <ion-label class="location">{{headerData?.location[0]?.label}}</ion-label>
       </div>
       <div *ngIf="buttonConfig">
-        <div *ngFor="let button of buttonConfig">
+        <div *ngFor="let button of buttonConfig.buttons">
           <ion-button color="Light" expand="block" fill="outline" shape="round" (click)="action(button?.action)">{{ button?.label | translate }}</ion-button>
         </div>
       </div>

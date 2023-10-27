@@ -55,7 +55,6 @@ export class AppComponent {
     private screenOrientation: ScreenOrientation,
   ) {
     this.initializeApp();
-    this.router.navigate(["/"]);
     if(Capacitor.isNativePlatform()){
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
     }
