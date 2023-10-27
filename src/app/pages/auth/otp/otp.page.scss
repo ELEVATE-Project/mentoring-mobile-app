@@ -20,8 +20,9 @@ ion-button{
 }
 .underline{
   text-decoration: underline;
-  text-decoration-color: rgb(108, 147, 206);
-  color: rgb(108, 147, 206);
+  color: rgb(143, 143, 143);
+  padding: 5px;
+  pointer-events: none;
   text-align: center;
 }
 .disabled{
@@ -56,4 +57,10 @@ ion-button{
 }
 .t-and-c-text{
   padding-left: 10px;
+}
+
+.enable {
+  color: rgb(108, 147, 206);;
+  cursor: pointer;
+  pointer-events: all;
 }

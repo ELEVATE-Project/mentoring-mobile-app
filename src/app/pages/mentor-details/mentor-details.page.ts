@@ -18,11 +18,17 @@ export class MentorDetailsPage implements OnInit {
     headerColor: "primary"
   };
 
-  public buttonConfig = [{
-    label: "SHARE_PROFILE",
-    action: "share"
-
-  }]
+  public buttonConfig = {
+    meta : { 
+      id: null
+    },
+    buttons: [
+      {
+        label: "SHARE_PROFILE",
+        action: "share",
+      }
+    ]
+  }
 
   detailData = {
     form: [
@@ -70,7 +76,7 @@ export class MentorDetailsPage implements OnInit {
     private toast:ToastService
   ) {
     routerParams.params.subscribe(params => {
-      this.mentorId = params.id;
+      this.mentorId = this.buttonConfig.meta.id = params.id;
       this.userService.getUserValue().then(async (result) => {
         if (result) {
           this.getMentor();

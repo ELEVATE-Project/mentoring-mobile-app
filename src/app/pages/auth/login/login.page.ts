@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService, LocalStorageService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -60,6 +61,8 @@ export class LoginPage implements OnInit {
   labels = ["LOGIN_TO_MENTOR_ED"];
   mentorId: any;
   supportInfo: any;
+  privacyPolicyUrl =environment.privacyPolicyUrl;
+  termsOfServiceUrl = environment.termsOfServiceUrl;
   constructor(private authService: AuthService, private router: Router,
               private menuCtrl: MenuController, private activatedRoute: ActivatedRoute,
               private translateService: TranslateService, private localStorage: LocalStorageService) {
