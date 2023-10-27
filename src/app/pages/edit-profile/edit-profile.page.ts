@@ -69,12 +69,14 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.formData = await this.form.populateEntity(this.formData,this.entityList)
     this.changeDetRef.detectChanges();
     this.userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    this.profileImageData.image = this.userDetails.image;
-    this.preFillData(this.userDetails);
+    if(this.userDetails) {
+      this.profileImageData.image = this.userDetails.image;
+      this.preFillData(this.userDetails);
+    }
   }
 
   async canPageLeave() {
-    if (!this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
+    if (this.form1 && !this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
       let texts: any;
       this.translate
         .get(['FORM_UNSAVED_DATA', 'CANCEL', 'OK', 'EXIT_HEADER_LABEL'])
@@ -152,7 +154,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     return this.attachment.cloudImageUpload(data,uploadUrl).pipe(
       map((resp=>{
       this.profileImageData.image = uploadUrl.destFilePath;
-      this.form1.myForm.value.image = [uploadUrl.destFilePath];
+      this.form1.myForm.value.image = uploadUrl.destFilePath;
       this.profileImageData.isUploaded = true;
       this.onSubmit();
     })))

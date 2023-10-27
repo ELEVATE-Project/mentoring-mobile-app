@@ -96,12 +96,14 @@ export class AppComponent {
       this.network.netWorkCheck();
       setTimeout(async ()=>{
         this.languageSetting();
+        this.setHeader();
       },0)
       this.db.init();
       setTimeout(async ()=>{
         this.userRoles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
         const userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
         if(userDetails){
+          await this.profile.getUserRole(userDetails)
           this.isOrgAdmin = this.profile.isOrgAdmin;
           this.getUser();
         }
@@ -128,6 +130,9 @@ export class AppComponent {
     });
     });
     this.subscribeBackButton();
+  }
+  setHeader() {
+    this.userService.getUserValue();
   }
   languageSetting() {
     this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{

@@ -147,7 +147,7 @@ export class DynamicFormComponent implements OnInit {
       this.myForm.addControl(
         control.name,
         this.fb.control(
-          { value: control.value, disabled: control.disabled },
+          { value: control.value==null ? [] : control.value, disabled: control.disabled },
           validatorsToAdd
         )
       );
@@ -195,5 +195,12 @@ export class DynamicFormComponent implements OnInit {
   }
   removeSpace(event: any){
     event.target.value = event.target.value.trimStart()
+  }
+
+  selectionChanged(control, event){
+    const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
+    if (indexToEdit !== -1) {
+      this.jsonFormData.controls[indexToEdit].value = event.detail.value
+    }
   }
 }

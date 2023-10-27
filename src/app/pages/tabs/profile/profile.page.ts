@@ -75,15 +75,18 @@ public buttonConfig = {
   user: any;
   visited:boolean;
   isMentor: boolean;
+  isMentorButtonPushed: boolean = false;
   constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private router: Router, private localStorage:LocalStorageService) { }
 
   ngOnInit() {
-    if(!this.profileService.isMentor)
-      this.buttonConfig.buttons.push(this.becomeAMentorButton)
     this.visited = false;
   }
   async ionViewWillEnter() {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    await this.profileService.getUserRole(this.user)
+    if(!this.profileService.isMentor&&!this.isMentorButtonPushed)
+      this.buttonConfig.buttons.push(this.becomeAMentorButton)
+      this.isMentorButtonPushed = true;
     this.formData.data = this.user;
     this.formData.data.emailId = this.user.email.address;
     this.isMentor = this.profileService.isMentor;
