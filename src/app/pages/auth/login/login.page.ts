@@ -21,13 +21,15 @@ export class LoginPage implements OnInit {
         label: 'Email',
         value: '',
         class: 'ion-no-margin',
-        type: 'text',
+        type: 'email',
         position: 'floating',
         errorMessage:{
-          required: "Please enter registered email ID"
+          required: "Please enter registered email ID",
+          email:"Enter a valid email ID"
         },
         validators: {
           required: true,
+          email: true
         },
       },
       {
