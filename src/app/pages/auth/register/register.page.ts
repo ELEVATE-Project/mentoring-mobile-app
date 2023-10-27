@@ -40,13 +40,15 @@ export class RegisterPage implements OnInit {
         label: 'Email',
         value: '',
         class: 'ion-margin',
-        type: 'text',
+        type: 'email',
         position: 'floating',
         errorMessage:{
-          required: "Please enter valid email ID"
+          required: "Please enter registered email ID",
+          email:"Enter a valid email ID"
         },
         validators: {
           required: true,
+          email: true
         },
       },
       {
