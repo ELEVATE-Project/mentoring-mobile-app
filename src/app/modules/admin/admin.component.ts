@@ -90,6 +90,7 @@ export class AdminComponent implements OnInit {
 
     async uploadCSV(event){
       let signedUrl = await this.organisation.getSignedUrl(event.target.files[0].name)
+      event.target.value=''
       return this.organisation.upload(event.target.files[0], signedUrl).subscribe(async () => {
         let data = await this.organisation.bulkUpload(signedUrl.filePath);
         this.toast.showToast(data.message, 'success');
