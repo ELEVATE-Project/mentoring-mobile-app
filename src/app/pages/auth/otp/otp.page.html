@@ -38,7 +38,7 @@
     <div class="d-flex flex-justify-center flex-align-items-center resend-otp">
       <div class="counter" *ngIf="countDownTimer">{{'TRY_AGAIN_AFTER'|translate}} {{countDownTimer}}
         {{'SECONDS'|translate}}</div>
-      <p class="underline" (click)="enableResendOtp && resendOtp()">{{"RESEND_OTP"|translate}}</p>
+      <p class="underline" (click)="enableResendOtp && resendOtp()" [ngClass]="{'enable': enableResendOtp}">{{"RESEND_OTP"|translate}}</p>
     </div>
   </div>
 </ion-col>
