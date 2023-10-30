@@ -41,8 +41,8 @@ export const urlConstants = {
         MENTEE_FEEDBACK_QUESTIONS_SET:"/mentoring/v1/questionsSet/read/61b8656fed665f7b5470a9f1",
         GET_FEEDBACK_QUESTION:"/mentoring/v1/questions/read/", 
         GET_ENTITY_LIST: {
-            profile: "/interface/v1/entity-type/read",
-            session: "/mentoring/v1/entity-type/read"
+            PROFILE: "/interface/v1/entity-type/read",
+            SESSION: "/mentoring/v1/entity-type/read"
         },
         REQUEST_TO_BECOME_MENTOR: "/user/v1/organization/requestOrgRole",
         LIST_ORG_ROLES: "/user/v1/userRole/list",

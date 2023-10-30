@@ -78,7 +78,7 @@ export class CreateSessionPage implements OnInit {
     const result = await this.form.getForm(CREATE_SESSION_FORM);
     this.formData = _.get(result, 'data.fields');
     this.entityNames = await this.form.getEntityNames(this.formData)
-    this.entityList = await this.form.getEntities(this.entityNames, 'session')
+    this.entityList = await this.form.getEntities(this.entityNames, 'SESSION')
     this.formData = await this.form.populateEntity(this.formData,this.entityList)
     this.changeDetRef.detectChanges();
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
