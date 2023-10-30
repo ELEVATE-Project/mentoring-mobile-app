@@ -94,6 +94,7 @@ export class AuthService {
       this.localStorage.delete(localKeys.USER_DETAILS);
       this.localStorage.delete(localKeys.USER_ROLES);
       this.localStorage.delete(localKeys.TOKEN);
+      this.localStorage.delete(localKeys.IS_ROLE_REQUESTED);
       this.userService.token = null;
       this.userService.userEvent.next(null);
       this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
@@ -120,7 +121,7 @@ export class AuthService {
     const config = {
       url: urlConstants.API_URLS.GET_MAIL_INFO
     };
-    let data: any = await this.httpService.post(config);
+    let data: any = await this.httpService.get(config);
     let result = _.get(data, 'result');
     return result;
   }

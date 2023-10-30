@@ -53,7 +53,7 @@ interface JsonFormControls {
   position: string;
   required?: boolean;
   disabled?: boolean;
-  options?: JsonFormControlOptions;
+  options?: Array<object>;
   validators: JsonFormValidators;
   numberOfStars?:number;
   errorMessage?:JsonFormErrorMessages;
@@ -61,6 +61,7 @@ interface JsonFormControls {
   isNumberOnly?: boolean;
   alertLabel?: string;
   platformPlaceHolder?:string;
+  showSelectAll?: boolean;
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
@@ -73,6 +74,8 @@ export interface JsonFormData {
 })
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
+  @Input() readonly: any = false;
+  
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
   currentDate = moment().format("YYYY-MM-DDTHH:mm");
@@ -89,8 +92,8 @@ export class DynamicFormComponent implements OnInit {
   ngOnInit() {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){
-        console.log(element, index);
         this.jsonFormData.controls[index].options = _.sortBy(this.jsonFormData.controls[index].options, ['label']);
+        this.jsonFormData.controls[index].value = this.jsonFormData.controls[index].value === null ? [] : this.jsonFormData.controls[index].value
       }
     });
     setTimeout(() => {
@@ -152,6 +155,9 @@ export class DynamicFormComponent implements OnInit {
       );
     }
     this.formValid.emit(this.myForm.valid)
+    if(this.readonly){
+      this.myForm.disable()
+    }
   }
   compareWith(a, b) {
     a = _.flatten([a]);
@@ -204,4 +210,10 @@ export class DynamicFormComponent implements OnInit {
     this.toggleCalendar(control)
   }
   
+  selectionChanged(control, event){
+    const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
+    if (indexToEdit !== -1) {
+      this.jsonFormData.controls[indexToEdit].value = event.detail.value
+    }
+  }
 }

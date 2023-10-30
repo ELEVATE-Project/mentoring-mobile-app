@@ -1,11 +1,11 @@
 export const urlConstants = {
     API_URLS:{
-        CREATE_ACCOUNT:"/user/v1/account/create",
+        CREATE_ACCOUNT:"/interface/v1/account/create",
         ACCOUNT_LOGIN:"/user/v1/account/login",
         LOGOUT_ACCOUNT:"/user/v1/account/logout",
         REFRESH_TOKEN:"/user/v1/account/generateToken",
         TERMS_CONDITIONS:"/user/v1/account/acceptTermsAndCondition",
-        PROFILE_UPDATE:"/user/v1/profile/update",
+        PROFILE_UPDATE:"/interface/v1/account/update",
         PROFILE_DETAILS: "/user/v1/user/read/",
         MENTOR_PROFILE_DETAILS: "/mentoring/v1/mentors/profile/",
         MENTEE_PROFILE_DETAILS:"/mentoring/v1/mentees/profile/",
@@ -13,14 +13,14 @@ export const urlConstants = {
         FILE_UPLOAD:"/user/v1/cloud-services/file/upload",
         SESSIONS:"/mentoring/v1/mentees/sessions?enrolled=", //sessions?enrolled=true/false&page=1&limit=5&search=:search
         HOME_SESSION:"/mentoring/v1/mentees/homeFeed?page=", ///v1/mentees/homefeed?page=1&limit=4
-        GET_IMAGE_UPLOAD_URL:'/user/v1/cloud-services/file/getSignedUrl?fileName=',
+        GET_FILE_UPLOAD_URL:'/user/v1/cloud-services/file/getSignedUrl?fileName=',
         GET_SESSION_IMAGE_UPLOAD_URL:"/mentoring/v1/cloud-services/getSignedUrl?fileName=",
         SUBMIT_FEEDBACK:"/mentoring/v1/feedback/submit/",
         UPCOMING_SESSIONS:"/mentoring/v1/mentors/upcomingSessions/",
         SHARE_MENTOR_PROFILE:"/mentoring/v1/mentors/share/",
         REPORT_ISSUE:"/mentoring/v1/issues/create",
         GET_MAIL_INFO:"/mentoring/v1/platform/config",
-        PROFILE_READ: "/mentoring/v1/profile/read/",
+        PROFILE_READ: "/mentoring/v1/profile/read",
         
         // FORMS
         FORM_READ:'/mentoring/v1/form/read',
@@ -40,9 +40,14 @@ export const urlConstants = {
         MENTOR_FEEDBACK_QUESTION_SET:"/mentoring/v1/questionsSet/read/61b867df5201107b3c2fb435",
         MENTEE_FEEDBACK_QUESTIONS_SET:"/mentoring/v1/questionsSet/read/61b8656fed665f7b5470a9f1",
         GET_FEEDBACK_QUESTION:"/mentoring/v1/questions/read/", 
-        GET_ENTITY_LIST:"/mentoring/v1/entity-type/read",
+        GET_ENTITY_LIST: {
+            PROFILE: "/interface/v1/entity-type/read",
+            SESSION: "/mentoring/v1/entity-type/read"
+        },
         REQUEST_TO_BECOME_MENTOR: "/user/v1/organization/requestOrgRole",
         LIST_ORG_ROLES: "/user/v1/userRole/list",
-        ADMIN_MENTOR_REQUEST_LIST: "/user/v1/org-admin/getRequests"
+        ADMIN_MENTOR_REQUEST_LIST: "/user/v1/org-admin/getRequests",
+        ADMIN_UPDATE_REQUEST: "/user/v1/org-admin/updateRequestStatus",
+        ADMIN_BULK_UPLOAD: "/user/v1/org-admin/bulkUserCreate"
     }
 };

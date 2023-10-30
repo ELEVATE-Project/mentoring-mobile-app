@@ -9,7 +9,6 @@ import { Location } from '@angular/common';
 import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { App, AppState } from '@capacitor/app';
-import { Capacitor } from '@capacitor/core';
 import { Clipboard } from '@capacitor/clipboard';
 
 
@@ -31,10 +30,11 @@ export class SessionDetailPage implements OnInit {
   skipWhenDelete: boolean= false;
   dismissWhenBack: boolean = false;
   platformOff: any;
+  public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
-    private utilService: UtilService, private toast: ToastService, private _location: Location, private user: UserService ,private toaster: ToastController,private translate : TranslateService) {
+    private utilService: UtilService, private toast: ToastService, private user: UserService ,private toaster: ToastController,private translate : TranslateService,) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
   }
   ngOnInit() {
@@ -193,19 +193,14 @@ export class SessionDetailPage implements OnInit {
   }
 
   async share() {
-    if(Capacitor.isNativePlatform()){
-      if(this.userDetails){
-        let sharableLink = await this.sessionService.getShareSessionId(this.id);
-        if (sharableLink.shareLink) {
-          let url = `/${CommonRoutes.SESSIONS_DETAILS}/${sharableLink.shareLink}`;
+    if(this.isMobile && navigator.share){
+      if(this.id){
+          let url = `/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`;
           let link = await this.utilService.getDeepLink(url);
           this.detailData.data.mentor_name = this.detailData.data.mentor_name.trim();
           this.detailData.data.title = this.detailData.data.title.trim();
           let params = { link: link, subject: this.detailData.data.title, text: "Join an expert session on " + `${this.detailData.data.title} ` + "hosted by " + `${this.detailData.data.mentor_name}` + " using the link" }
           await this.utilService.shareLink(params);
-        } else {
-          this.toast.showToast("No link generated!!!", "danger");
-        }
       } else {
         this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id, isMentor:false}});
       } 

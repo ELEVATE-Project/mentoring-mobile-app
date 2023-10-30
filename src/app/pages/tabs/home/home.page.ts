@@ -98,7 +98,7 @@ export class HomePage implements OnInit {
     this.createdSessions = this.isAMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
   }
   async eventAction(event) {
-    // if(this.user.about){
+    if(this.user.about){
     switch (event.type) {
       case 'cardSelect':
         this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
@@ -124,9 +124,9 @@ export class HomePage implements OnInit {
         })
         break;
     }
-  // }else {
-  //   this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
-  // }
+  }else {
+    this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+  }
   }
   viewMore(data) {
     this.router.navigate([`/${CommonRoutes.SESSIONS}`], { queryParams: { type: data } });

@@ -13,6 +13,7 @@ import { App } from '@capacitor/app';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController } from '@ionic/angular';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
+import * as Bowser from "bowser"
 
 @Component({
   selector: 'app-help',
@@ -26,31 +27,47 @@ export class HelpPage implements OnInit {
     label: "HELP"
   };
   public formData: JsonFormData;
-  metaData: { deviceName: string; androidVersion: string; version: string; type: string};
+  metaData: { deviceName: string; androidVersion: string; version: string; type: string;browserName:string;browserVersion:string};
   selectedOption: any;
   helpForms: any;
   userDetails: any;
   message: any;
+  public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
+ 
 
   constructor(private router: Router, private loaderService: LoaderService, private toast: ToastService, private httpService: HttpService,
     // private device: Device, 
     private form: FormService, private translate: TranslateService,private alert: AlertController,private profileService: ProfileService,) { }
 
   async ngOnInit() {
+    const browser = Bowser.getParser(window.navigator.userAgent);
     this.helpForm();
     await  this.profileService.profileDetails().then((userDetails) => {
         this.userDetails = userDetails;
       });
-    App.getInfo().then(async (data)=>{
-      const info = await Device.getInfo();
-      this.metaData = {
-        deviceName: info.model,
-        androidVersion: info.osVersion,
-        version: data.version,
-        type: ''
+      if(this.isMobile){
+        App.getInfo().then(async (data)=>{
+          const info = await Device.getInfo();
+          this.metaData = {
+            deviceName: info.model,
+            androidVersion: info.osVersion,
+            version: data.version,
+            type: '',
+            browserName:'',
+            browserVersion:''
+          }
+        })
+      }else{
+        this.metaData = {
+          deviceName: '',
+          androidVersion: '',
+          version: '',
+          type: '',
+          browserName:browser.getBrowserName(),
+          browserVersion:browser.getBrowserVersion()
+        }
       }
-      console.log(this.metaData);
-    })
+   
     
   }
 
@@ -110,11 +127,11 @@ export class HelpPage implements OnInit {
     this.formData = _.get(result, 'data.fields');
     this.helpForms = _.get(result, 'data.fields.forms');
     this.selectedOption = this.helpForms[0];
-    this.message = (this.userDetails?.isAMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
+    this.message = (this.profileService.isMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
   }
   clickOptions(event:any){
     this.selectedOption.form = event.detail.value.form;
-    this.message = (this.userDetails?.isAMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
+    this.message = (this.profileService.isMentor) ? this.selectedOption?.menterMessage : this.selectedOption?.menteeMessage;
     this.form1?.createForm(this.selectedOption.form.controls);
   }
 }

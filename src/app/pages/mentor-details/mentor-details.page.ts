@@ -19,9 +19,15 @@ export class MentorDetailsPage implements OnInit {
   };
 
   public buttonConfig = {
-    label: "SHARE_PROFILE",
-    action: "share"
-
+    meta : { 
+      id: null
+    },
+    buttons: [
+      {
+        label: "SHARE_PROFILE",
+        action: "share",
+      }
+    ]
   }
 
   detailData = {
@@ -67,10 +73,10 @@ export class MentorDetailsPage implements OnInit {
     private sessionService: SessionService,
     private userService: UserService,
     private localStorage:LocalStorageService,
-    private toastService:ToastService
+    private toast:ToastService
   ) {
     routerParams.params.subscribe(params => {
-      this.mentorId = params.id;
+      this.mentorId = this.buttonConfig.meta.id = params.id;
       this.userService.getUserValue().then(async (result) => {
         if (result) {
           this.getMentor();
@@ -120,9 +126,12 @@ export class MentorDetailsPage implements OnInit {
         this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
         break;
 
-      case 'enrollAction':
-        await this.sessionService.enrollSession(event.data.id);
-        this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+        case 'enrollAction':
+        let enrollResult = await this.sessionService.enrollSession(event.data.id);
+        if(enrollResult.result){
+          this.toast.showToast(enrollResult.message, "success")
+          this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+        }
         break;
     }
   }

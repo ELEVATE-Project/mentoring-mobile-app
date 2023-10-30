@@ -36,6 +36,7 @@ export class AppComponent {
   isMentor:boolean
   isOrgAdmin:boolean
   showAlertBox = false;
+  userRoles: any;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -54,7 +55,6 @@ export class AppComponent {
     private screenOrientation: ScreenOrientation,
   ) {
     this.initializeApp();
-    this.router.navigate(["/"]);
     if(Capacitor.isNativePlatform()){
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
     }
@@ -96,11 +96,14 @@ export class AppComponent {
       this.network.netWorkCheck();
       setTimeout(async ()=>{
         this.languageSetting();
+        this.setHeader();
       },0)
       this.db.init();
       setTimeout(async ()=>{
+        this.userRoles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
         const userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
         if(userDetails){
+          await this.profile.getUserRole(userDetails)
           this.isOrgAdmin = this.profile.isOrgAdmin;
           this.getUser();
         }
@@ -127,6 +130,9 @@ export class AppComponent {
     });
     });
     this.subscribeBackButton();
+  }
+  setHeader() {
+    this.userService.getUserValue();
   }
   languageSetting() {
     this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{

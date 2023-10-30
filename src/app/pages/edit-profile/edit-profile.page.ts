@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import {
   DynamicFormComponent,
@@ -42,16 +42,18 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   };
   path;
   localImage;
-  public formData: JsonFormData;
   showForm: any= false;
   userDetails: any;
+  entityNames: any;
+  entityList: any;
+  formData: any;
   constructor(
     private form: FormService,
     private api: HttpService,
     private profileService: ProfileService,
     private localStorage: LocalStorageService,
     private attachment: AttachmentService,
-    private platform: Platform,
+    private changeDetRef: ChangeDetectorRef,
     private loaderService: LoaderService,
     private alert: AlertController,
     private translate: TranslateService,
@@ -62,13 +64,19 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     const response = await this.form.getForm(EDIT_PROFILE_FORM);
     this.profileImageData.isUploaded = true;
     this.formData = _.get(response, 'data.fields');
+    this.entityNames = await this.form.getEntityNames(this.formData)
+    this.entityList = await this.form.getEntities(this.entityNames,'PROFILE')
+    this.formData = await this.form.populateEntity(this.formData,this.entityList)
+    this.changeDetRef.detectChanges();
     this.userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    this.profileImageData.image = this.userDetails.image;
-    this.preFillData(this.userDetails);
+    if(this.userDetails) {
+      this.profileImageData.image = this.userDetails.image;
+      this.preFillData(this.userDetails);
+    }
   }
 
   async canPageLeave() {
-    if (!this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
+    if (this.form1 && !this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
       let texts: any;
       this.translate
         .get(['FORM_UNSAVED_DATA', 'CANCEL', 'OK', 'EXIT_HEADER_LABEL'])
@@ -110,8 +118,12 @@ export class EditProfilePage implements OnInit, isDeactivatable {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
         this.getImageUploadUrl(this.localImage);
       } else {
+        const form = Object.assign({}, this.form1.myForm.value);
+        _.forEach(this.entityNames, (entityKey) => {
+          form[entityKey] = _.map(form[entityKey], 'value');
+        });
         this.form1.myForm.markAsPristine();
-        this.profileService.profileUpdate(this.form1.myForm.value);
+        this.profileService.profileUpdate(form);
       }
     } else {
       this.toast.showToast('Please fill all the mandatory fields', 'danger');
@@ -142,7 +154,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     return this.attachment.cloudImageUpload(data,uploadUrl).pipe(
       map((resp=>{
       this.profileImageData.image = uploadUrl.destFilePath;
-      this.form1.myForm.value.image = [uploadUrl.destFilePath];
+      this.form1.myForm.value.image = uploadUrl.destFilePath;
       this.profileImageData.isUploaded = true;
       this.onSubmit();
     })))
@@ -150,7 +162,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   async getImageUploadUrl(file) {
     this.loaderService.startLoader();
     let config = {
-      url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name.replace(/[^A-Z0-9]+/ig, "_").toLowerCase()
+      url: urlConstants.API_URLS.GET_FILE_UPLOAD_URL + file.name.replace(/[^A-Z0-9]+/ig, "_").toLowerCase()
     }
     let data: any = await this.api.get(config);
     return this.upload(file, data.result).subscribe()

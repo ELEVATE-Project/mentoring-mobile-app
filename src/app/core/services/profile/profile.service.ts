@@ -37,9 +37,9 @@ export class ProfileService {
       payload: formData,
     };
     try {
-      let data: any = await this.httpService.post(config);
+      let data: any = await this.httpService.patch(config);
       let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-      let profileData = await this.getProfileDetailsFromAPI(userDetails.id);
+      let profileData = await this.getProfileDetailsFromAPI();
       userDetails.user = null;
       let profileDatas = await {...userDetails, ...profileData};
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileDatas);
@@ -50,21 +50,6 @@ export class ProfileService {
     }
     catch (error) {
       this.loaderService.stopLoader();
-    }
-  }
-  async getProfileDetailsAPI() {
-    const config = {
-      url: urlConstants.API_URLS.PROFILE_DETAILS,
-      payload: {}
-    };
-    try {
-      let data: any = await this.httpService.get(config);
-      data = _.get(data, 'result');
-      await this.localStorage.setLocalData(localKeys.USER_ROLES, this.getUserRole(data))
-      this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
-      return data;
-    }
-    catch (error) {
     }
   }
 
@@ -150,9 +135,9 @@ export class ProfileService {
     }
   }
 
-  async getProfileDetailsFromAPI(id, showLoader=true){
+  async getProfileDetailsFromAPI(){
     const config = {
-      url: urlConstants.API_URLS.PROFILE_READ+id,
+      url: urlConstants.API_URLS.PROFILE_READ,
       payload: {}
     };
     try {

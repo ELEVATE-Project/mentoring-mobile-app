@@ -48,11 +48,15 @@ export class ProfilePage implements OnInit {
     menteeForm:['SESSIONS_ATTENDED'],
     data: {},
   };
-  public buttonConfig = {
-    label: "EDIT_PROFILE",
-    action: "edit"
-    
-  }
+  
+public buttonConfig = {
+  buttons: [
+    {
+      label: "EDIT_PROFILE",
+      action: "edit"
+    }
+  ]
+}
   showProfileDetails: boolean = true;
   username: boolean = true;
   data: any;
@@ -62,10 +66,16 @@ export class ProfilePage implements OnInit {
     headerColor: 'primary',
     label:'PROFILE'
   };
+  becomeAMentorButton ={
+    label: "BECOME_A_MENTOR",
+    action: "role"
+    
+  }
   sessionData={}
   user: any;
   visited:boolean;
   isMentor: boolean;
+  isMentorButtonPushed: boolean = false;
   constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private router: Router, private localStorage:LocalStorageService) { }
 
   ngOnInit() {
@@ -73,15 +83,20 @@ export class ProfilePage implements OnInit {
   }
   async ionViewWillEnter() {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    await this.profileService.getUserRole(this.user)
+    if(!this.profileService.isMentor&&!await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)&&!this.isMentorButtonPushed) {
+      this.buttonConfig.buttons.push(this.becomeAMentorButton)
+      this.isMentorButtonPushed = true;
+    }
     this.formData.data = this.user;
     this.formData.data.emailId = this.user.email.address;
     this.isMentor = this.profileService.isMentor;
-    // if (this.formData?.data?.about) {
-    //   this.showProfileDetails = true;
-    // } else {
-    //   (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
-    //   this.visited=true;
-    // }
+    if (this.formData?.data?.about) {
+      this.showProfileDetails = true;
+    } else {
+      (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
+      this.visited=true;
+    }
     this.gotToTop();
     this.profileDetailsApi();
   }
@@ -100,7 +115,7 @@ export class ProfilePage implements OnInit {
     this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
   }
   async profileDetailsApi(){
-    var result = await this.profileService.getProfileDetailsFromAPI(this.user?.id);
+    var result = await this.profileService.getProfileDetailsFromAPI();
     if(result){
       this.formData.data = result;
       this.formData.data.emailId = result.email;

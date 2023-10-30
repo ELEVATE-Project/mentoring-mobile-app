@@ -140,7 +140,7 @@ async getSessionsList(obj) {
       payload: {}
     };
     try {
-      let data = await this.httpService.get(config);
+      let data = await this.httpService.post(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
         await this.openBrowser(data.result.link);
