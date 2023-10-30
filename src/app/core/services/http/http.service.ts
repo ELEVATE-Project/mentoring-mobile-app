@@ -161,7 +161,7 @@ export class HttpService {
       let access_token = _.get(data, 'access_token');
       if (!access_token) {
         let authService = this.injector.get(AuthService);
-        authService.logoutAccount();
+        await authService.logoutAccount();
       }
       this.userService.token['access_token'] = access_token;
       this.localStorage.setLocalData(localKeys.TOKEN, this.userService.token);

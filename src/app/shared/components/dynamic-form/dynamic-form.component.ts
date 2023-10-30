@@ -90,8 +90,8 @@ export class DynamicFormComponent implements OnInit {
   ngOnInit() {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){
-        console.log(element, index);
         this.jsonFormData.controls[index].options = _.sortBy(this.jsonFormData.controls[index].options, ['label']);
+        this.jsonFormData.controls[index].value = this.jsonFormData.controls[index].value === null ? [] : this.jsonFormData.controls[index].value
       }
     });
     setTimeout(() => {
@@ -195,5 +195,12 @@ export class DynamicFormComponent implements OnInit {
   }
   removeSpace(event: any){
     event.target.value = event.target.value.trimStart()
+  }
+
+  selectionChanged(control, event){
+    const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
+    if (indexToEdit !== -1) {
+      this.jsonFormData.controls[indexToEdit].value = event.detail.value
+    }
   }
 }
