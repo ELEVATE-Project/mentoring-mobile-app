@@ -39,9 +39,9 @@ export class FormService {
   timeToExpire = (h) => new Date(Date.now() + 1000 * 60 * 60 * h).getTime(); //get unix time of expiry by passing hour
   checkIfexpired = (unix) => unix < Date.now(); // pass unix time to check,true if expired else false
 
-  async getEntities(entityTypes) {
+  async getEntities(entityTypes, type='session') {
     const config = {
-      url: urlConstants.API_URLS.GET_INTERFACE_ENTITY_LIST,
+      url: type === 'profile' ? urlConstants.API_URLS.GET_INTERFACE_ENTITY_LIST : urlConstants.API_URLS.GET_ENTITY_LIST,
       payload: { value: entityTypes }
     };
     try {
