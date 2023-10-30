@@ -89,7 +89,7 @@
         [multiple]="control.multiple"
         [formControlName]="control.name"
         [compareWith]="compareWith"
-        [selectedText]="control.value[0].label"
+        [selectedText]="control?.value[0]?.label"
         [okText]="'OK' | translate"
         (ionChange)="selectionChanged(control,$event)"
         [cancelText]="'CANCEL' | translate"

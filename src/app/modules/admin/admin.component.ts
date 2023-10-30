@@ -2,7 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
+import * as _ from "lodash";
+import { MENTOR_QUESTIONNAIRE } from "src/app/core/constants/formConstant";
 import { ToastService, UtilService } from "src/app/core/services";
+import { FormService } from "src/app/core/services/form/form.service";
 import { OrganisationService } from "src/app/core/services/organisation/organisation.service";
 import { SessionService } from "src/app/core/services/session/session.service";
 import { CommonRoutes } from "src/global.routes";
@@ -25,8 +28,9 @@ export class AdminComponent implements OnInit {
     label:'ADMIN_DASHBOARD'
   };
   requestList: any;
+  formData: any;
 
-  constructor(private organisation: OrganisationService, private util: UtilService, private sessionService: SessionService, private toast: ToastService, private router: Router) {
+  constructor(private organisation: OrganisationService, private util: UtilService, private sessionService: SessionService, private toast: ToastService, private form: FormService) {
   }
     async ngOnInit() {
       this.requestList = await this.organisation.adminRequestList(this.page,this.limit, this.status)
@@ -68,10 +72,13 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    viewRequest(request){
+    async viewRequest(request){
+      let form = await this.form.getForm(MENTOR_QUESTIONNAIRE)
+      this.formData = _.get(form, 'data.fields');
+      request.meta.form = this.formData
       let componenProps ={
         readonly: true,
-        data: request.meta
+        data: request.meta,
       }
       this.util.openModal(componenProps).then((data)=>{
       })

@@ -3,7 +3,7 @@
 <ion-content class="ion-padding">
   <div class="my-10">
     <p class="header-label">{{"FILL_IN_THE_BELOW_DETAILS"|translate}}</p>
-    <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
+    <app-dynamic-form *ngIf="formData" [jsonFormData]="formData" #form1></app-dynamic-form>
   </div>
 </ion-content>
 <ion-footer>

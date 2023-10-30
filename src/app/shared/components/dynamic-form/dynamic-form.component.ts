@@ -91,7 +91,7 @@ export class DynamicFormComponent implements OnInit {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){
         this.jsonFormData.controls[index].options = _.sortBy(this.jsonFormData.controls[index].options, ['label']);
-        this.jsonFormData.controls[index].value = this.jsonFormData.controls[index].value === null ? [{}] : this.jsonFormData.controls[index].value
+        this.jsonFormData.controls[index].value = this.jsonFormData.controls[index].value === null ? [] : this.jsonFormData.controls[index].value
       }
     });
     setTimeout(() => {
@@ -147,7 +147,7 @@ export class DynamicFormComponent implements OnInit {
       this.myForm.addControl(
         control.name,
         this.fb.control(
-          { value: control.value==null ? [] : control.value, disabled: control.disabled },
+          { value: control.value, disabled: control.disabled },
           validatorsToAdd
         )
       );
