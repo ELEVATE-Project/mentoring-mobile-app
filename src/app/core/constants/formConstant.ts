@@ -34,3 +34,8 @@ export const HELP: IFORM = {
 	"type": "helpApp",
 	"sub_type": "helpAppForm",
 }
+
+export const MENTOR_QUESTIONNAIRE: IFORM = {
+	"type": "mentorQuestionnaire",
+	"sub_type": "mentorQuestionnaireForm",
+}

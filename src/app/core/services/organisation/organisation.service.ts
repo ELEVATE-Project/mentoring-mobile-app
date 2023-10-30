@@ -44,10 +44,16 @@ export class OrganisationService {
     }
   }
 
-  async adminRequestList(page, limit){
+  async adminRequestList(page, limit, status){
     const config = {
       url: `${urlConstants.API_URLS.ADMIN_MENTOR_REQUEST_LIST}?page=${page}&limit=${limit}`,
-      payload: {},
+      payload: {
+        "filters": {
+          "status": [
+            status 
+          ]
+        }
+      }
     };
     try {
       let data: any = await this.httpService.post(config);
