@@ -81,7 +81,7 @@
         (click)="toggleCalendar(control)"
         value="{{control.value | date :'YYYY-MM-dd hh:mm a'}}"
         placeholder="{{control?.placeHolder}}"
-        (ionFocus)="focus(control)"
+        (ionFocus)="toggleCalendar(control)"
       ></ion-input>
       <ion-select
         *ngIf="control.type === 'select'"

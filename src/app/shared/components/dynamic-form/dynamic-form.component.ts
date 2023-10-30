@@ -206,10 +206,6 @@ export class DynamicFormComponent implements OnInit {
     this.showCalendar = !this.showCalendar
   }
 
-  focus(control){
-    this.toggleCalendar(control)
-  }
-  
   selectionChanged(control, event){
     const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
     if (indexToEdit !== -1) {
