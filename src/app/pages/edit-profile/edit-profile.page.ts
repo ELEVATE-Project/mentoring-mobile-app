@@ -65,7 +65,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.profileImageData.isUploaded = true;
     this.formData = _.get(response, 'data.fields');
     this.entityNames = await this.form.getEntityNames(this.formData)
-    this.entityList = await this.form.getEntities(this.entityNames,'profile')
+    this.entityList = await this.form.getEntities(this.entityNames)
     this.formData = await this.form.populateEntity(this.formData,this.entityList)
     this.changeDetRef.detectChanges();
     this.userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);

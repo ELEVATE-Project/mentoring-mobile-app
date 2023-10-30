@@ -17,6 +17,7 @@ export class AdminComponent implements OnInit {
   type = 'manage-user'
   page=1;
   limit=50;
+  status='REQUESTED'
   public headerConfig: any = {
     menu: true,
     notification: true,
@@ -28,7 +29,7 @@ export class AdminComponent implements OnInit {
   constructor(private organisation: OrganisationService, private util: UtilService, private sessionService: SessionService, private toast: ToastService, private router: Router) {
   }
     async ngOnInit() {
-      this.requestList = await this.organisation.adminRequestList(this.page,this.limit)
+      this.requestList = await this.organisation.adminRequestList(this.page,this.limit, this.status)
     }
 
     segmentChanged(event){
@@ -46,7 +47,7 @@ export class AdminComponent implements OnInit {
         if(data){
           let result = await this.organisation.updateRequest(id,status)
           this.toast.showToast(result.message, "success")
-          this.requestList = await this.organisation.adminRequestList(this.page,this.limit)
+          this.requestList = await this.organisation.adminRequestList(this.page,this.limit, this.status)
         }
       })
     }
@@ -62,7 +63,7 @@ export class AdminComponent implements OnInit {
         if(data){
           let result = await this.organisation.updateRequest(id,status)
           this.toast.showToast(result.message, "success")
-          this.requestList = await this.organisation.adminRequestList(this.page,this.limit)
+          this.requestList = await this.organisation.adminRequestList(this.page,this.limit, this.status)
         }
       })
     }
@@ -84,11 +85,7 @@ export class AdminComponent implements OnInit {
       let signedUrl = await this.organisation.getSignedUrl(event.target.files[0].name)
       return this.organisation.upload(event.target.files[0], signedUrl).subscribe(async () => {
         let data = await this.organisation.bulkUpload(signedUrl.filePath);
-        this.toast.showToast("Done","success")
+        this.toast.showToast(data.message, 'success');
       })
-    }
-
-    goToHome(){
-      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`])
     }
   }
