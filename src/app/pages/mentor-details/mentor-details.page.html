@@ -26,7 +26,14 @@
 </div>
 <ion-content>
   <div [ngSwitch]="segmentValue">
-    <app-generic-details *ngSwitchCase="'about'" [sessionData]='detailData'></app-generic-details>
+    <ion-grid>
+      <ion-row class="d-flex ion-padding">
+        <ion-col size-xs="12" size-sm="12" size-md="8" size-lg="8" align-self-stretch>
+          <app-generic-details *ngSwitchCase="'about'" [sessionData]='detailData'></app-generic-details>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    
     <ion-list *ngSwitchCase="'upcoming'">
       <div *ngIf="!upcomingSessions?.length">
         <p class="no-details-message">{{ "NO_UPCOMING_SESSIONS" | translate }}</p>
