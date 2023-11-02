@@ -40,4 +40,7 @@ export const MENTOR_QUESTIONNAIRE: IFORM = {
 	"sub_type": "mentorQuestionnaireForm",
 }
 
-export const SAMPLE_CSV_DOWNLOAD_URL = 'https://drive.google.com/file/d/1ZDjsc7YLZKIwxmao-8PdEvnHppkMkXIE/view?usp=sharing'
+export const SAMPLE_CSV_DOWNLOAD_URL = {
+	"type": "sampleCsvDownload",
+	"sub_type": "sampleCsvDownload"
+}
