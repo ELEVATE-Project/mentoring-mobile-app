@@ -31,7 +31,15 @@
                             <td>{{request?.status}}</td>
                             <td class="ion-padding width-250">
                                 <div class="d-flex flex-justify-space-between">
-                                    <ion-icon *ngIf="request?.status!=='APPROVED'" name="checkmark-sharp" class="color-green" (click)="acceptRequest(request?.id, 'APPROVED')"></ion-icon><ion-icon *ngIf="request?.status!=='APPROVED'" name="close-sharp" class="color-red" (click)="rejectRequest(request?.id, 'REJECTED')"></ion-icon><ion-icon name="eye-sharp" class="color-black" (click)="viewRequest(request)"></ion-icon>
+                                    <ion-button color="success">
+                                        <ion-icon name="checkmark-sharp" (click)="acceptRequest(request?.id, 'APPROVED')"></ion-icon>
+                                    </ion-button>
+                                    <ion-button color="danger">
+                                        <ion-icon name="close-sharp" (click)="rejectRequest(request?.id, 'REJECTED')"></ion-icon>
+                                    </ion-button>
+                                    <ion-button color="dark">
+                                        <ion-icon name="eye-sharp" (click)="viewRequest(request)"></ion-icon>
+                                    </ion-button>
                                 </div>
                             </td>
                         </tr>
