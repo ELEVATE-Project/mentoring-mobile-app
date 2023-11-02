@@ -85,6 +85,8 @@ export class DynamicFormComponent implements OnInit {
   dependedParent: any;
   dependedParentDate: any;
   @Output() formValid = new EventEmitter()
+  showCalendar=false
+  dateControl={}
 
   constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
   ngOnInit() {
@@ -185,6 +187,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   dateSelected(event, control){
+    this.dateControl['value'] = event.detail.value
     if(control.dependedChild){
       this.dependedChild = control.dependedChild;
       this.dependedChildDate = event.detail.value;
@@ -195,6 +198,12 @@ export class DynamicFormComponent implements OnInit {
   }
   removeSpace(event: any){
     event.target.value = event.target.value.trimStart()
+  }
+
+  toggleCalendar(control){
+    control['value'] = control.value? moment(control.value).format('YYYY-MM-DDTHH:mm'):'';
+    this.dateControl = control
+    this.showCalendar = !this.showCalendar
   }
 
   selectionChanged(control, event){
