@@ -79,8 +79,9 @@ export class ManageListComponent implements OnInit {
       })
     }
 
-    downloadCSV(){
-      this.sessionService.openBrowser(SAMPLE_CSV_DOWNLOAD_URL)
+    async downloadCSV(){
+      let form = await this.form.getForm(SAMPLE_CSV_DOWNLOAD_URL)
+      await this.sessionService.openBrowser(form.data.fields.controls[0].csvDownloadUrl)
     }
   
     async uploadCSV(event){
