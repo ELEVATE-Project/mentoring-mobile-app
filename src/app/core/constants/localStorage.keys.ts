@@ -1,5 +1,5 @@
 export const localKeys = {
-    SELECTED_LANGUAGE : 'preferred_language',
+    SELECTED_LANGUAGE : 'selectedLanguage',
     USER_DETAILS: 'userDetails',
     TOKEN:'token',
     IS_ROLE_REQUESTED: 'isRoleRequested',

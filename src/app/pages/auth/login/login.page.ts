@@ -73,7 +73,7 @@ export class LoginPage implements OnInit {
   @HostListener('document:keydown.enter', ['$event'])
     onEnterKey(event: KeyboardEvent) {
       let currentState = this.router.routerState.snapshot.url;
-      if (event.key === 'Enter' && currentState == '/auth/login') {
+      if (event.key === 'Enter' && currentState == `/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`) {
         this.onSubmit();
       }
   }

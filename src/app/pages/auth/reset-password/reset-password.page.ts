@@ -88,7 +88,7 @@ export class ResetPasswordPage implements OnInit {
   @HostListener('document:keydown.enter', ['$event'])
   onEnterKey(event: KeyboardEvent) {
     let currentState = this.router.routerState.snapshot.url;
-    if (event.key === 'Enter' && currentState == '/auth/reset-password') {
+    if (event.key === 'Enter' && currentState == `/${CommonRoutes.AUTH}/${CommonRoutes.RESET_PASSWORD}`) {
       this.onSubmit();
     }
 }

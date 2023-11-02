@@ -56,7 +56,7 @@ export class OtpPage implements OnInit {
   @HostListener('document:keydown.enter', ['$event'])
     onEnterKey(event: KeyboardEvent) {
       let currentState = this.router.routerState.snapshot.url;
-      if (event.key === 'Enter' && currentState == '/auth/otp') {
+      if (event.key === 'Enter' && currentState == `/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`) {
         this.onSubmit();
       }
   }
