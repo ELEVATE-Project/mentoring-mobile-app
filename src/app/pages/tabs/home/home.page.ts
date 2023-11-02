@@ -57,7 +57,7 @@ export class HomePage implements OnInit {
     private modalController: ModalController,
     private userService: UserService,
     private localStorage: LocalStorageService,
-    private toast:ToastService) { }
+    private toast: ToastService) { }
 
   ngOnInit() {
     this.isMentor = this.profileService.isMentor
@@ -65,14 +65,14 @@ export class HomePage implements OnInit {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
         if (state.isActive == true && data) {
           this.getSessions();
-          this.getCreatedSessionSetails();
+          this.getCreatedSessionDetails();
         }
       })
     });
-    this.getCreatedSessionSetails();
+    this.getCreatedSessionDetails();
     this.getUser();
-    this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested)=>{
-      this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false: true;
+    this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested) => {
+      this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false : true;
     })
     this.userService.userEventEmitted$.subscribe(data => {
       if (data) {
@@ -94,35 +94,35 @@ export class HomePage implements OnInit {
     this.createdSessions = this.isAMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
   }
   async eventAction(event) {
-    if(this.user.about){
-    switch (event.type) {
-      case 'cardSelect':
-        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
-        break;
+    if (this.user.about) {
+      switch (event.type) {
+        case 'cardSelect':
+          this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
+          break;
 
-      case 'joinAction':
-        await this.sessionService.joinSession(event.data)
-        this.getSessions();
-        break;
-
-      case 'enrollAction':
-        let enrollResult = await this.sessionService.enrollSession(event.data.id);
-        if(enrollResult.result){
-          this.toast.showToast(enrollResult.message, "success")
+        case 'joinAction':
+          await this.sessionService.joinSession(event.data)
           this.getSessions();
-        }
-        break;
+          break;
 
-      case 'startAction':
-        this.sessionService.startSession(event.data.id).then(async ()=>{
-          var obj = { page: this.page, limit: this.limit, searchText: "" };
-          this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
-        })
-        break;
+        case 'enrollAction':
+          let enrollResult = await this.sessionService.enrollSession(event.data.id);
+          if (enrollResult.result) {
+            this.toast.showToast(enrollResult.message, "success")
+            this.getSessions();
+          }
+          break;
+
+        case 'startAction':
+          this.sessionService.startSession(event.data.id).then(async () => {
+            var obj = { page: this.page, limit: this.limit, searchText: "" };
+            this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+          })
+          break;
+      }
+    } else {
+      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
     }
-  }else {
-    this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
-  }
   }
   viewMore(data) {
     this.router.navigate([`/${CommonRoutes.SESSIONS}`], { queryParams: { type: data } });
@@ -184,12 +184,12 @@ export class HomePage implements OnInit {
     this.showBecomeMentorCard = false;
   }
 
-  getCreatedSessionSetails(){
-    if(this.isMentor){
+  getCreatedSessionDetails() {
+    if (this.isMentor) {
       var obj = { page: this.page, limit: this.limit, searchText: "" };
-      this.sessionService.getAllSessionsAPI(obj).then((data)=>{
-      this.createdSessions = data;
-    })
+      this.sessionService.getAllSessionsAPI(obj).then((data) => {
+        this.createdSessions = data;
+      })
     }
   }
 }
