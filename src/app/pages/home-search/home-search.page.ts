@@ -85,7 +85,7 @@ export class HomeSearchPage implements OnInit {
   async onSessionAction(event){
     switch (event.type) {
       case 'cardSelect':
-        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`])
+        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`])
         break;
 
       case 'joinAction':
@@ -110,6 +110,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   eventAction(event){
+    console.log(event)
     this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${event.data.id}`])
   }
 
