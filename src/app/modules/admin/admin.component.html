@@ -2,7 +2,7 @@
 <ion-content class="ion-padding ion-margin">
     <ion-grid>
         <ion-row justify-content-center align-items-center>
-          <ion-col size="6" size-sm="12" size-xs="12"  size-md="6" size-lg="6" *ngFor="let action of actionsArray">
+          <ion-col size-sm="12" size-xs="12"  size-md="6" size-lg="4" *ngFor="let action of actionsArray">
                 <ion-card (click)="cardSelected(action)">
                     <ion-card-header class="d-flex flex-justify-center">
                       <ion-icon class="icon-large" [name]="action.icon"></ion-icon>
