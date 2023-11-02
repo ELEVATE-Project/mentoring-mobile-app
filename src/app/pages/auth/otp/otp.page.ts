@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController, NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -51,6 +51,14 @@ export class OtpPage implements OnInit {
     this.resetPasswordData.password = this.actionType == "reset-password" ? this.router.getCurrentNavigation().extras.state?.password : null;
     this.signupData = this.actionType == "signup" ? this.router.getCurrentNavigation().extras.state?.formData : null;
     this.menuCtrl.enable(false);
+  }
+
+  @HostListener('document:keydown.enter', ['$event'])
+    onEnterKey(event: KeyboardEvent) {
+      let currentState = this.router.routerState.snapshot.url;
+      if (event.key === 'Enter' && currentState == '/auth/otp') {
+        this.onSubmit();
+      }
   }
 
   ngOnInit() {

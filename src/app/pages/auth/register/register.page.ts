@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { AuthService, ToastService } from 'src/app/core/services';
 import {
   DynamicFormComponent,
@@ -119,6 +119,13 @@ export class RegisterPage implements OnInit {
   ngOnInit() {
     this.translateText();
   }
+  @HostListener('document:keydown.enter', ['$event'])
+  onEnterKey(event: KeyboardEvent) {
+    let currentState = this.router.routerState.snapshot.url;
+    if (event.key === 'Enter' && currentState == '/auth/register') {
+      this.onSubmit();
+    }
+}
 
   async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {
