@@ -1,0 +1,52 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<ion-content>
+    <div class="d-flex flex-justify-center">
+        <ion-header>
+            <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
+                <ion-segment-button value="manage-user">
+                    <ion-label>{{"MANAGE_REQUEST"|translate}}</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="bulk-upload">
+                    <ion-label>{{"BULK_UPLOAD"|translate}}</ion-label>
+                </ion-segment-button>
+            </ion-segment>
+        </ion-header>
+    </div>
+    <div class="ion-padding">
+        <div [ngSwitch]="type">
+            <ion-card *ngSwitchCase="'manage-user'">
+                <table *ngIf="requestList" class="table color-black">
+                    <thead>
+                        <tr>
+                        <th>{{"SL_NO"|translate}}</th>
+                        <th>{{"NAME"|translate}}</th>
+                        <th>{{"STATUS"|translate}}</th>
+                        <th>{{"ACTIONS"|translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let request of requestList.data; let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{request?.requester?.name}}</td>
+                            <td>{{request?.status}}</td>
+                            <td class="ion-padding width-250">
+                                <div class="d-flex flex-justify-space-between">
+                                    <ion-icon *ngIf="request?.status!=='APPROVED'" name="checkmark-sharp" class="color-green" (click)="acceptRequest(request?.id, 'APPROVED')"></ion-icon><ion-icon *ngIf="request?.status!=='APPROVED'" name="close-sharp" class="color-red" (click)="rejectRequest(request?.id, 'REJECTED')"></ion-icon><ion-icon name="eye-sharp" class="color-black" (click)="viewRequest(request)"></ion-icon>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ion-card>
+            <div *ngSwitchCase="'bulk-upload'" class="d-flex flex-justify-center flex-align-items-center">
+                <div class="ion-margin ion-padding">
+                    <ion-button class="btn-width-200" (click)="downloadCSV()">{{"DOWNLOAD_SAMPLE_CSV"|translate}}</ion-button>
+                </div>
+                <div class="ion-margin ion-padding">
+                    <ion-button class="btn-width-200" (click)="upload.click()">{{"UPLOAD_CSV"|translate}}</ion-button>
+                    <input type="file" accept=".csv" (change)="uploadCSV($event)" hidden #upload />
+                </div>
+            </div>
+          </div>
+    </div>
+</ion-content>
