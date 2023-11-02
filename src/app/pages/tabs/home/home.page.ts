@@ -65,16 +65,11 @@ export class HomePage implements OnInit {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
         if (state.isActive == true && data) {
           this.getSessions();
-          if(this.isMentor){
-            var obj = { page: this.page, limit: this.limit, searchText: "" };
-            this.sessionService.getAllSessionsAPI(obj).then((data)=>{
-            this.createdSessions = data;
-          })
-          }
+          this.getUserDetails();
         }
       })
     });
-    this.getUser();
+    this.getUserDetails();
     this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested)=>{
       this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false: true;
     })
@@ -186,5 +181,15 @@ export class HomePage implements OnInit {
 
   closeCard() {
     this.showBecomeMentorCard = false;
+  }
+
+  getUserDetails(){
+    this.getUser();
+    if(this.isMentor){
+      var obj = { page: this.page, limit: this.limit, searchText: "" };
+      this.sessionService.getAllSessionsAPI(obj).then((data)=>{
+      this.createdSessions = data;
+    })
+    }
   }
 }
