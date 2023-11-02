@@ -214,5 +214,6 @@
     "DOWNLOAD_SAMPLE_CSV": "Download sample CSV",
     "UPLOAD_CSV": "Upload CSV",
     "BULK_UPLOAD": "Bulk Upload",
-    "MANAGE_USER": "Manage user"
+    "MANAGE_USER": "Manage requests",
+    "REQUEST_TO_BE_A_MENTOR": "Request to be a Mentor"
 }
