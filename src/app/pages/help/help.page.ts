@@ -73,7 +73,7 @@ export class HelpPage implements OnInit {
 
   onSubmit(option: any) {
     this.metaData.type = option.value;
-    this.form1.myForm.value.metaData = this.metaData;
+    this.form1.myForm.value.meta_data = this.metaData;
     this.form1.myForm.value.description = this.form1.myForm.value.description ? this.form1.myForm.value.description: option.value;
     (option.buttonText == "DELETE_ACCOUNT") ? this.deteteAccount(): this.submitHelpReport();
   }

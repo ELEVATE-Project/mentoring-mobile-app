@@ -65,11 +65,12 @@ export class HomePage implements OnInit {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
         if (state.isActive == true && data) {
           this.getSessions();
-          this.getUserDetails();
+          this.getCreatedSessionSetails();
         }
       })
     });
-    this.getUserDetails();
+    this.getCreatedSessionSetails();
+    this.getUser();
     this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested)=>{
       this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false: true;
     })
@@ -183,8 +184,7 @@ export class HomePage implements OnInit {
     this.showBecomeMentorCard = false;
   }
 
-  getUserDetails(){
-    this.getUser();
+  getCreatedSessionSetails(){
     if(this.isMentor){
       var obj = { page: this.page, limit: this.limit, searchText: "" };
       this.sessionService.getAllSessionsAPI(obj).then((data)=>{
