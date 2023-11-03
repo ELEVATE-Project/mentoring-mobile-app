@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import * as _ from 'lodash-es';
 import { CommonRoutes } from 'src/global.routes';
@@ -85,13 +85,11 @@ export class ResetPasswordPage implements OnInit {
   ngOnInit() {
     this.translateText();
   }
-  @HostListener('document:keydown.enter', ['$event'])
-  onEnterKey(event: KeyboardEvent) {
-    let currentState = this.router.routerState.snapshot.url;
-    if (event.key === 'Enter' && currentState == `/${CommonRoutes.AUTH}/${CommonRoutes.RESET_PASSWORD}`) {
-      this.onSubmit();
-    }
-}
+  
+  onEnterPicked(){
+    this.onSubmit()
+  }
+
   async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {
       let labelKeys = Object.keys(translatedLabel);

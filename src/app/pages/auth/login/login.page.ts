@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -70,17 +70,13 @@ export class LoginPage implements OnInit {
               private translateService: TranslateService, private localStorage: LocalStorageService) {
     this.menuCtrl.enable(false);
   }
-  @HostListener('document:keydown.enter', ['$event'])
-    onEnterKey(event: KeyboardEvent) {
-      let currentState = this.router.routerState.snapshot.url;
-      if (event.key === 'Enter' && currentState == `/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`) {
-        this.onSubmit();
-      }
-  }
 
   ngOnInit() {
     this.translateText();
     this.getMailInfo();
+  }
+  onEnterPicked(){
+    this.onSubmit()
   }
 
   async translateText() {

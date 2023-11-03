@@ -85,6 +85,7 @@ export class DynamicFormComponent implements OnInit {
   dependedParent: any;
   dependedParentDate: any;
   @Output() formValid = new EventEmitter()
+  @Output() onEnter = new EventEmitter()
 
   constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
   ngOnInit() {
@@ -202,5 +203,8 @@ export class DynamicFormComponent implements OnInit {
     if (indexToEdit !== -1) {
       this.jsonFormData.controls[indexToEdit].value = event.detail.value
     }
+  }
+  onEnterPress(event){
+    this.onEnter.emit(event)
   }
 }

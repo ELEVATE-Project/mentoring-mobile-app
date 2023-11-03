@@ -43,6 +43,7 @@
         [maxlength]="control?.validators?.maxLength"
         (ionChange)="removeSpace($event)"
         [placeholder]="control.platformPlaceHolder"
+        (keyup.enter)="onEnterPress($event)"
       ></ion-input>
       <ion-textarea
         *ngIf="control.type === 'textarea'"
