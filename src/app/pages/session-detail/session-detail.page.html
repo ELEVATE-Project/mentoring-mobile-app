@@ -1,6 +1,6 @@
 <app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
 <ion-content [fullscreen]="true">
-  <div *ngIf="detailData" class="main-wrapper"> 
+  <div *ngIf="detailData && isLoaded" class="main-wrapper"> 
     <ion-grid>
       <ion-row class="d-flex ">
         <ion-col padding size-xs="12" size-sm="12" size-md="4" size-lg="4">
@@ -28,7 +28,7 @@
 </ion-grid>
   </div>
 </ion-content>
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border" *ngIf="isLoaded">
   <ion-item *ngIf="isCreator; else elseBlockFooter">
       <ion-button *ngIf="detailData?.data?.status=='PUBLISHED' || detailData?.data?.status=='LIVE'" [disabled]="!isEnabled || platformOff" class="load-more-button" expand="full"
       (click)="onStart(detailData?.data?.id)">{{"START_SESSIONS" | translate}}</ion-button>

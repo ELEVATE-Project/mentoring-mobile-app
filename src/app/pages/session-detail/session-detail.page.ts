@@ -30,6 +30,7 @@ export class SessionDetailPage implements OnInit {
   skipWhenDelete: boolean= false;
   dismissWhenBack: boolean = false;
   platformOff: any;
+  isLoaded : boolean = false
   public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
 
   constructor(private localStorage: LocalStorageService, private router: Router,
@@ -161,6 +162,7 @@ export class SessionDetailPage implements OnInit {
         ])
     } 
     this.dismissWhenBack = true;
+    this.isLoaded = true
   }
   ionViewWillLeave(){
     if(!this.skipWhenDelete){this.snackbarRef = this.toaster.dismiss()}

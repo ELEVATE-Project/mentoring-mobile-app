@@ -1,50 +1,18 @@
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #ddd;
-  }
-  
-  th, td {
-    border-bottom: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #f2f2f2;
-  }
-
-  tr {
-    height: 50px;
-  }
-  ion-icon {
-    font-size: x-large;
-  }
-
-  .color-green {
-    color: green;
-  }
-
-  .color-red {
-    color: red;
-  }
-
-  .color-black {
-    color: black
-  }
-
-  .width-250{
-    width: 250px;
-  }
-
-  .bold {
-    font-weight: bold;
-  }
-
-  .card-config {
-    width: 300px;
-  }
-
-  .btn-width-200 {
-    width: 200px;
-  }
+.color-black {
+  color: black
+}
+.color-primary {
+  color: var(--ion-color-primary)
+}
+.header {
+  font-weight: bold;
+  font-size: 16px;
+  padding-bottom: 15px;
+}
+.icon-large {
+  font-size: xx-large;
+  color: var(--ion-color-primary);
+}
+ion-card-header {
+  padding-bottom: 10px;
+}

@@ -26,5 +26,7 @@ export class CommonRoutes {
     public static HELP_VIDEOS= 'help-videos';
     public static MENTOR_QUESTIONNAIRE= 'mentor-questionnaire';
     public static ADMIN_DASHBOARD= 'admin-dashboard';
-    public static ADMIN= 'admin'
+    public static ADMIN= 'admin';
+    public static MANAGE_USER= 'manage-user';
+    public static BULK_UPLOAD= 'bulk-upload';
 }

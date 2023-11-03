@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { MENTOR_QUESTIONNAIRE } from 'src/app/core/constants/formConstant';
-import { ToastService } from 'src/app/core/services';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
+import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { OrganisationService } from 'src/app/core/services/organisation/organisation.service';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
@@ -22,12 +23,25 @@ export class MentorQuestionnairePage implements OnInit {
       label: 'BECOME_A_MENTOR',
     },
   };
+  showForm: boolean=false;
 
-  constructor(private toast: ToastService, private router: Router, private organisation: OrganisationService, private form: FormService) {}
+  constructor(private toast: ToastService, private router: Router, private organisation: OrganisationService, private form: FormService, private localStorage: LocalStorageService) {}
 
   async ngOnInit() {
     let form = await this.form.getForm(MENTOR_QUESTIONNAIRE)
     this.formData = _.get(form, 'data.fields');
+    this.prefillData(await this.localStorage.getLocalData(localKeys.USER_DETAILS))
+  }
+  prefillData(userDetails: any) {
+    for (let i = 0; i < this.formData.controls.length; i++) {
+      this.formData.controls[i].value = userDetails[this.formData.controls[i].name] ? userDetails[this.formData.controls[i].name] : '';
+      this.formData.controls[i].options = _.unionBy(
+        this.formData.controls[i].options,
+        this.formData.controls[i].value,
+        'value'
+      );
+    }
+    this.showForm = true;
   }
 
   async RequestToBecomeMentor(){

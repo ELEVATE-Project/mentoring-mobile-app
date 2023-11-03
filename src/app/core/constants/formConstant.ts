@@ -39,3 +39,8 @@ export const MENTOR_QUESTIONNAIRE: IFORM = {
 	"type": "mentorQuestionnaire",
 	"sub_type": "mentorQuestionnaireForm",
 }
+
+export const SAMPLE_CSV_DOWNLOAD_URL = {
+	"type": "sampleCsvDownload",
+	"sub_type": "sampleCsvDownload"
+}
