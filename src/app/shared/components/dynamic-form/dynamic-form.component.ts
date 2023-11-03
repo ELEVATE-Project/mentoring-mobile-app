@@ -205,6 +205,8 @@ export class DynamicFormComponent implements OnInit {
     }
   }
   onEnterPress(event){
-    this.onEnter.emit(event)
+    if(this.myForm.valid){
+      this.onEnter.emit(event)
+    }
   }
 }

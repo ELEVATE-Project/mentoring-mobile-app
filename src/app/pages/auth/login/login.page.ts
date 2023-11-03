@@ -75,9 +75,6 @@ export class LoginPage implements OnInit {
     this.translateText();
     this.getMailInfo();
   }
-  onEnterPicked(){
-    this.onSubmit()
-  }
 
   async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {

@@ -85,10 +85,6 @@ export class ResetPasswordPage implements OnInit {
   ngOnInit() {
     this.translateText();
   }
-  
-  onEnterPicked(){
-    this.onSubmit()
-  }
 
   async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {

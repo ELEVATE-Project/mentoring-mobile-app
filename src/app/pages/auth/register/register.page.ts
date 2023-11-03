@@ -119,11 +119,6 @@ export class RegisterPage implements OnInit {
   ngOnInit() {
     this.translateText();
   }
-  onEnterPicked(){
-    if(this.form1.myForm.valid){
-      this.onSubmit()
-    }
-  }
 
   async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {
@@ -139,7 +134,9 @@ export class RegisterPage implements OnInit {
 
   async onSubmit() {
     this.form1.onSubmit();
-    this.createUser();
+    if(this.form1.myForm.valid){
+      this.createUser();
+    }
   }
 
   async createUser() {
