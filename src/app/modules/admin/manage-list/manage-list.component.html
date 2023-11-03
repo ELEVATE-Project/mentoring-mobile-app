@@ -31,14 +31,14 @@
                             <td>{{request?.status}}</td>
                             <td class="ion-padding width-250">
                                 <div class="d-flex flex-justify-space-between">
-                                    <ion-button color="success">
-                                        <ion-icon name="checkmark-sharp" (click)="acceptRequest(request?.id, 'APPROVED')"></ion-icon>
+                                    <ion-button color="success" (click)="acceptRequest(request?.id, 'APPROVED')">
+                                        <ion-icon name="checkmark-sharp"></ion-icon>
                                     </ion-button>
-                                    <ion-button color="danger">
-                                        <ion-icon name="close-sharp" (click)="rejectRequest(request?.id, 'REJECTED')"></ion-icon>
+                                    <ion-button color="danger" (click)="rejectRequest(request?.id, 'REJECTED')">
+                                        <ion-icon name="close-sharp"></ion-icon>
                                     </ion-button>
-                                    <ion-button color="dark">
-                                        <ion-icon name="eye-sharp" (click)="viewRequest(request)"></ion-icon>
+                                    <ion-button color="dark" (click)="viewRequest(request)">
+                                        <ion-icon name="eye-sharp"></ion-icon>
                                     </ion-button>
                                 </div>
                             </td>
