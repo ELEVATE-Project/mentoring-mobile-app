@@ -120,7 +120,9 @@ export class RegisterPage implements OnInit {
     this.translateText();
   }
   onEnterPicked(){
-    this.onSubmit()
+    if(this.form1.myForm.valid){
+      this.onSubmit()
+    }
   }
 
   async translateText() {
