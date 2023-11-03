@@ -175,8 +175,7 @@ export class HttpService {
       url: urlConstants.API_URLS.REFRESH_TOKEN,
       payload: {
         refresh_token: _.get(this.userService.token, 'refresh_token')
-      },
-      headers: {}
+      }
     };
     try {
       let data: any = await this.post(config);
