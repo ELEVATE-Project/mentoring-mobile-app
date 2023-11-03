@@ -86,7 +86,7 @@ export class DynamicFormComponent implements OnInit {
   dependedParentDate: any;
   @Output() formValid = new EventEmitter()
   showCalendar=false
-  dateControl={}
+  dateControl:any={}
 
   constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
   ngOnInit() {
