@@ -86,6 +86,7 @@ export class ResetPasswordPage implements OnInit {
     this.translateText();
   }
 
+
   async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {
       let labelKeys = Object.keys(translatedLabel);

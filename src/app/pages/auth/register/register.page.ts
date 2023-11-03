@@ -134,9 +134,7 @@ export class RegisterPage implements OnInit {
 
   async onSubmit() {
     this.form1.onSubmit();
-    if(this.form1.myForm.valid){
-      this.createUser();
-    }
+    this.createUser();
   }
 
   async createUser() {
