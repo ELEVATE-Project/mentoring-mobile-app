@@ -85,7 +85,6 @@ export class ResetPasswordPage implements OnInit {
   ngOnInit() {
     this.translateText();
   }
-
   async translateText() {
     this.translateService.get(this.labels).subscribe(translatedLabel => {
       let labelKeys = Object.keys(translatedLabel);
