@@ -27,7 +27,7 @@ export class HelpPage implements OnInit {
     label: "HELP"
   };
   public formData: JsonFormData;
-  metaData: { deviceName: string; androidVersion: string; version: string; type: string;browserName:string;browserVersion:string};
+  metaData:any;
   selectedOption: any;
   helpForms: any;
   userDetails: any;
@@ -53,15 +53,10 @@ export class HelpPage implements OnInit {
             androidVersion: info.osVersion,
             version: data.version,
             type: '',
-            browserName:'',
-            browserVersion:''
           }
         })
       }else{
         this.metaData = {
-          deviceName: '',
-          androidVersion: '',
-          version: '',
           type: '',
           browserName:browser.getBrowserName(),
           browserVersion:browser.getBrowserVersion()

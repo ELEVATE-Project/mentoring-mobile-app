@@ -13,7 +13,7 @@
       </div>
       <p class="hint-message"> {{"YOU_WILL_RECIEVE_OTP_IN_YOUR_EMAIL" | translate}}</p>
     </section>
-    <section class="t-and-c d-flex">
+    <section class="t-and-c d-flex" *ngIf="this.actionType == 'signup'">
   
           
             <ion-item >

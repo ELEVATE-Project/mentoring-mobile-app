@@ -196,7 +196,7 @@ async getSessionsList(obj) {
   }
 
   async openBrowser(link) {
-    await Browser.open({ url: link });
+    await Browser.open({ url: link, windowName:"_self" });
     Browser.addListener('browserFinished', () => {
       console.log("exit");
     });

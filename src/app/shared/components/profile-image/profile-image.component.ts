@@ -21,7 +21,7 @@ export class ProfileImageComponent implements OnInit {
 
   ngOnInit() {}
   uploadPhoto(){
-    this.attachment.selectImage(this.profileImageData.type).then(resp => {
+    this.attachment.selectImage(this.profileImageData).then(resp => {
       switch (resp.data) {
         case 'CAMERA':
           console.log("1")
