@@ -85,6 +85,7 @@ export class DynamicFormComponent implements OnInit {
   dependedParent: any;
   dependedParentDate: any;
   @Output() formValid = new EventEmitter()
+  @Output() onEnter = new EventEmitter()
   showCalendar=false
   dateControl:any={}
 
@@ -210,6 +211,11 @@ export class DynamicFormComponent implements OnInit {
     const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
     if (indexToEdit !== -1) {
       this.jsonFormData.controls[indexToEdit].value = event.detail.value
+    }
+  }
+  onEnterPress(event){
+    if(this.myForm.valid){
+      this.onEnter.emit(event)
     }
   }
 }
