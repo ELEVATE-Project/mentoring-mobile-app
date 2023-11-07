@@ -19,9 +19,11 @@ export class GenericProfileHeaderComponent implements OnInit {
   @Input() isMentor: any;
   labels = ["CHECK_OUT_MENTOR","PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS"];
 
-  public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
+  public isMobile:any;
 
-  constructor(private router:Router,private navCtrl:NavController, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService,) { }
+  constructor(private router:Router,private navCtrl:NavController, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService,) {
+    this.isMobile = utilService.isMobile()
+   }
 
   ngOnInit() {
   }

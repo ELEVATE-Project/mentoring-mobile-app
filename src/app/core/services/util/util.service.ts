@@ -14,7 +14,6 @@ import * as Bowser from "bowser"
 })
 export class UtilService {
   modal: any;
-  public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
   constructor(
     private modalCtrl: ModalController,
     private alert: AlertController,
@@ -78,7 +77,6 @@ export class UtilService {
   }
 
   getActionSheetButtons(profileImageData) {
-    console.log(profileImageData)
     let texts
     this.translate
       .get([
@@ -94,6 +92,7 @@ export class UtilService {
         texts = data;
       });
     let buttons = []
+    let isMobile = this.isMobile()
     let removeCurrentPhotoValid = (profileImageData.image) ? true:false;
     switch (removeCurrentPhotoValid){
       case true:
@@ -107,7 +106,7 @@ export class UtilService {
         break;
     }
 
-    switch (this.isMobile) {
+    switch (isMobile) {
       case true:
         buttons.push({
           text: texts["TAKE_PHOTO"],
@@ -128,5 +127,9 @@ export class UtilService {
       action: "cancel",
     })
     return buttons;
+  }
+
+  isMobile(){
+    return /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
   }
 }
