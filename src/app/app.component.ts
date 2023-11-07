@@ -12,6 +12,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { environment } from 'src/environments/environment';
 import { Capacitor } from '@capacitor/core';
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'app-root',
@@ -53,6 +54,7 @@ export class AppComponent {
     private _location: Location,
     private alert: AlertController,
     private screenOrientation: ScreenOrientation,
+    private updates: SwUpdate
   ) {
     this.initializeApp();
     if(Capacitor.isNativePlatform()){
@@ -95,6 +97,10 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.network.netWorkCheck();
       setTimeout(async ()=>{
+        this.updates.checkForUpdate().then((data)=>{
+          if(data)
+            this.updates.activateUpdate()
+        })
         this.languageSetting();
         this.setHeader();
       },0)
