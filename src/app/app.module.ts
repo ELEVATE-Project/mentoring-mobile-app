@@ -18,7 +18,7 @@ import { SQLite } from '@ionic-native/sqlite/ngx';
 import { TitleCasePipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { ServiceWorkerModule, SwUpdate } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
@@ -57,6 +57,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
     SQLite,
     TitleCasePipe,
     ScreenOrientation,
+    SwUpdate
   ],
   bootstrap: [AppComponent],
 })
