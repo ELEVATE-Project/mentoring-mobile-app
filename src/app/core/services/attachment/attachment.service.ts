@@ -24,9 +24,9 @@ export class AttachmentService {
     ) {
     }
 
-    getActionSheetButtons(type): any {
+    getActionSheetButtons(profileImageData): any {
         let buttons = [];
-        this.utils.getActionSheetButtons(type).forEach(element => {
+        this.utils.getActionSheetButtons(profileImageData).forEach(element => {
             let button = {
                 text: element.text,
                 handler: async () => {
@@ -61,7 +61,7 @@ export class AttachmentService {
         this.actionSheetController.dismiss('removeCurrentPhoto');
         this.presentToast(this.texts["REMOVE_CURRENT_PHOTO"], "success");
     }
-    async selectImage(type) {
+    async selectImage(profileImageData) {
         this.translate
             .get([
                 "ERROR_WHILE_STORING_FILE",
@@ -71,7 +71,7 @@ export class AttachmentService {
                 this.texts = data;
             });
         let opts = {
-            buttons: this.getActionSheetButtons(type)
+            buttons: this.getActionSheetButtons(profileImageData)
         };
         this.actionSheet = await this.actionSheetController.create(opts);
         await this.actionSheet.present();

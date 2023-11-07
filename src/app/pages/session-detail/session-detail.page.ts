@@ -31,12 +31,13 @@ export class SessionDetailPage implements OnInit {
   dismissWhenBack: boolean = false;
   platformOff: any;
   isLoaded : boolean = false
-  public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
+  public isMobile:any
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
     private utilService: UtilService, private toast: ToastService, private user: UserService ,private toaster: ToastController,private translate : TranslateService,) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
+    this.isMobile = utilService.isMobile()
   }
   ngOnInit() {
       App.addListener('appStateChange', (state: AppState) => {

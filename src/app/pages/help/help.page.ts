@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService, LoaderService, ToastService } from 'src/app/core/services';
+import { HttpService, LoaderService, ToastService, UtilService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 // import { Device } from '@awesome-cordova-plugins/device/ngx';
@@ -27,17 +27,19 @@ export class HelpPage implements OnInit {
     label: "HELP"
   };
   public formData: JsonFormData;
-  metaData: { deviceName: string; androidVersion: string; version: string; type: string;browserName:string;browserVersion:string};
+  metaData:any;
   selectedOption: any;
   helpForms: any;
   userDetails: any;
   message: any;
-  public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
+  public isMobile:any 
  
 
   constructor(private router: Router, private loaderService: LoaderService, private toast: ToastService, private httpService: HttpService,
     // private device: Device, 
-    private form: FormService, private translate: TranslateService,private alert: AlertController,private profileService: ProfileService,) { }
+    private form: FormService, private translate: TranslateService,private alert: AlertController,private profileService: ProfileService, private utilService:UtilService) {
+      this.isMobile = utilService.isMobile();
+     }
 
   async ngOnInit() {
     const browser = Bowser.getParser(window.navigator.userAgent);
@@ -53,15 +55,10 @@ export class HelpPage implements OnInit {
             androidVersion: info.osVersion,
             version: data.version,
             type: '',
-            browserName:'',
-            browserVersion:''
           }
         })
       }else{
         this.metaData = {
-          deviceName: '',
-          androidVersion: '',
-          version: '',
           type: '',
           browserName:browser.getBrowserName(),
           browserVersion:browser.getBrowserVersion()
