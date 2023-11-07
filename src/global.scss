@@ -44,15 +44,16 @@
   input:-webkit-autofill {
     height: 0px;
     -webkit-box-shadow:0 0 0 10px white inset;
-    box-shadow: 0 0 0 10px white inset;
+    box-shadow: 0 0 0 15px white inset;
     -webkit-text-fill-color: black;
     font-weight: 500px;
+    padding: 12px;
 }
 
 input:-webkit-autofill:focus {
     height: 0px;
-    -webkit-box-shadow: 0 0 0 10px white inset;
-    box-shadow: 0 0 0 10px white inset;
+    -webkit-box-shadow: 0 0 0 15px white inset;
+    box-shadow: 0 0 0 15px white inset;
     -webkit-text-fill-color: black;
     font-weight: 500px;
 } 

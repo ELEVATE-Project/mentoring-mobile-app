@@ -46,7 +46,7 @@ export class GenericProfileHeaderComponent implements OnInit {
                   await this.utilService.shareLink(params);
             }else {
               await this.copyToClipBoard(window.location.href);
-              this.toast.showToast("LINK_COPIED","success");
+              this.toast.showToast("PROFILE_LINK_COPIED","success");
             }
         break;
     }
