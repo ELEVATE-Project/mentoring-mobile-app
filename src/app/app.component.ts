@@ -54,7 +54,7 @@ export class AppComponent {
     private _location: Location,
     private alert: AlertController,
     private screenOrientation: ScreenOrientation,
-    private updates: SwUpdate
+    private swUpdate: SwUpdate
   ) {
     this.initializeApp();
     if(Capacitor.isNativePlatform()){
@@ -97,10 +97,13 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.network.netWorkCheck();
       setTimeout(async ()=>{
-        this.updates.checkForUpdate().then((data)=>{
-          if(data)
-            this.updates.activateUpdate()
-        })
+        if (this.swUpdate.isEnabled) {
+          this.swUpdate.checkForUpdate().then((data)=>{
+            if(data) {
+              window.location.reload();
+            }
+          })
+        }
         this.languageSetting();
         this.setHeader();
       },0)
