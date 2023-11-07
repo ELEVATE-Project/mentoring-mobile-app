@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { AuthService, LocalStorageService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -21,11 +21,15 @@ export class LoginPage implements OnInit {
         label: 'Email',
         value: '',
         class: 'ion-no-margin',
-        type: 'text',
+        type: 'email',
         position: 'floating',
-        errorMessage:'Please enter registered email ID',
+        errorMessage:{
+          required: "Please enter registered email ID",
+          email:"Enter a valid email ID"
+        },
         validators: {
           required: true,
+          email: true
         },
       },
       {
@@ -35,7 +39,10 @@ export class LoginPage implements OnInit {
         class: 'ion-margin',
         type: 'password',
         position: 'floating',
-        errorMessage:'Please enter password',
+        errorMessage:{
+          required: "Enter password",
+          minlength: "Password should contain minimum of 8 characters"
+        },
         validators: {
           required: true,
           minLength: 8,
@@ -56,6 +63,8 @@ export class LoginPage implements OnInit {
   labels = ["LOGIN_TO_MENTOR_ED"];
   mentorId: any;
   supportInfo: any;
+  privacyPolicyUrl =environment.privacyPolicyUrl;
+  termsOfServiceUrl = environment.termsOfServiceUrl;
   constructor(private authService: AuthService, private router: Router,
               private menuCtrl: MenuController, private activatedRoute: ActivatedRoute,
               private translateService: TranslateService, private localStorage: LocalStorageService) {
@@ -93,13 +102,16 @@ export class LoginPage implements OnInit {
       if (this.userDetails !== null) {
         if (this.id) {
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
+          this.menuCtrl.enable(true);
         }else if(this.mentorId){
           this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`], { replaceUrl: true });
+          this.menuCtrl.enable(true);
         } else {
           this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
+          this.menuCtrl.enable(true);
         }
       }
-      this.menuCtrl.enable(true);
+      
     }
   }
 
@@ -116,7 +128,7 @@ export class LoginPage implements OnInit {
   }
 
   goToSignup() {
-    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.PERSONA_SELECTION}`]);
+    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.REGISTER}`]);
   }
   getMailInfo(){
     this.authService.getMailInfo().then((result:any) =>{

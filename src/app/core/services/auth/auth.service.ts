@@ -17,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AuthService {
   baseUrl: any;
+  user: any;
   constructor(
     private localStorage: LocalStorageService,
     private httpService: HttpService,
@@ -36,9 +37,9 @@ export class AuthService {
     };
     try {
       let data: any = await this.httpService.post(config);
-      let userData = this.setUserInLocal(data);
+      this.setUserInLocal(data);
       this.loaderService.stopLoader();
-      return userData;
+      return data.result.user;
     }
     catch (error) {
       this.loaderService.stopLoader();
@@ -53,9 +54,9 @@ export class AuthService {
     };
     try {
       const data: any = await this.httpService.post(config);
-      let userData = await this.setUserInLocal(data);
+      this.setUserInLocal(data);
       this.loaderService.stopLoader();
-      return userData
+      return data.result.user
     }
     catch (error) {
       this.loaderService.stopLoader();
@@ -67,26 +68,23 @@ export class AuthService {
     if (!result.access_token) { throw Error(); };
     this.userService.token = result;
     await this.localStorage.setLocalData(localKeys.TOKEN, result);
-    const userData = await this.profileService.getProfileDetailsAPI();
-    if (!userData) {
-      this.localStorage.delete(localKeys.TOKEN);
-      throw Error();
-    }
-    await this.localStorage.setLocalData(localKeys.USER_DETAILS, userData);
-    if(userData.preferredLanguage){
-      await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, userData.preferredLanguage);
-      this.translate.use(userData.preferredLanguage)
-    }
-    this.userService.userEvent.next(userData);
-    return userData;
+    this.user = data.result.user;
+    await this.localStorage.setLocalData(localKeys.USER_ROLES, this.profileService.getUserRole(this.user))
+    await this.profileService.getUserRole(this.user);
+    this.profileService.isMentor = (this.user?.user_roles[0]?.title === 'mentor')
+    this.userService.userEvent.next(this.user);
+    await this.localStorage.setLocalData(localKeys.USER_DETAILS, this.user);
+    await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, this.user.preferred_language);
+    this.translate.use(this.user.preferred_language)
+    return this.user;
   }
 
   async logoutAccount(skipApiCall?: boolean) {
-    await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.LOGOUT_ACCOUNT,
       payload: {
-        refreshToken: _.get(this.userService.token, 'refresh_token'),
+        'X-auth-token': _.get(this.userService.token, 'access_token'),
+        'refresh_token': _.get(this.userService.token, 'refresh_token'),
       },
     };
     try {
@@ -94,16 +92,16 @@ export class AuthService {
         await this.httpService.post(config);
       }
       this.localStorage.delete(localKeys.USER_DETAILS);
+      this.localStorage.delete(localKeys.USER_ROLES);
       this.localStorage.delete(localKeys.TOKEN);
+      this.localStorage.delete(localKeys.IS_ROLE_REQUESTED);
       this.userService.token = null;
       this.userService.userEvent.next(null);
-      await this.loaderService.stopLoader();
       this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
         replaceUrl: true
       });
     }
     catch (error) {
-      await this.loaderService.stopLoader();
     }
   }
 
@@ -123,7 +121,7 @@ export class AuthService {
     const config = {
       url: urlConstants.API_URLS.GET_MAIL_INFO
     };
-    let data: any = await this.httpService.post(config);
+    let data: any = await this.httpService.get(config);
     let result = _.get(data, 'result');
     return result;
   }

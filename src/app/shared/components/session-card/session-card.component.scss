@@ -1,6 +1,7 @@
 .session-card {
     padding: 8px 6px;
     border-radius: 10px;
+    height: 200px;
     .thumbnail-image {
         width: 57px;
         height: 57px;
@@ -23,6 +24,9 @@
         margin-top: 0px;
         font-size: 16px;
     }
+    .session-image{
+        margin-right: 20px;
+    }
 }
 .text-align {
     overflow: hidden;
@@ -37,6 +41,7 @@
 .button{
     --border-radius: 10px;
     flex:1;
+    max-width: 150px;
 }
 ion-icon{
     font-size: 20px;

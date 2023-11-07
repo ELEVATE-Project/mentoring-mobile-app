@@ -8,10 +8,10 @@ import { CommonRoutes } from 'src/global.routes';
 import { Router} from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
 import { Location } from '@angular/common';
-import { Deeplinks } from '@awesome-cordova-plugins/deeplinks/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { environment } from 'src/environments/environment';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-root',
@@ -21,15 +21,22 @@ import { environment } from 'src/environments/environment';
 export class AppComponent {
  user;
  public appPages = [
+  { title: 'HOME', action: "home", icon: 'home', class:"hide-on-small-screen" , url: CommonRoutes.TABS+'/'+CommonRoutes.HOME},
+  { title: 'MENTORS', action: "mentor-directory", icon: 'people', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.MENTOR_DIRECTORY},
+  { title: 'DASHBOARD', action: "dashboard", icon: 'stats-chart', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.DASHBOARD },
   { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP},
   { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ},
   { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
   { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
 ];
 
+ adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD}
+
 
   isMentor:boolean
+  isOrgAdmin:boolean
   showAlertBox = false;
+  userRoles: any;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -40,7 +47,6 @@ export class AppComponent {
     private db:DbService,
     private router: Router,
     private network:NetworkService,
-    private deeplinks: Deeplinks,
     private authService:AuthService,
     private profile: ProfileService,
     private zone:NgZone,
@@ -49,8 +55,9 @@ export class AppComponent {
     private screenOrientation: ScreenOrientation,
   ) {
     this.initializeApp();
-    this.router.navigate(["/"]);
-    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    if(Capacitor.isNativePlatform()){
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
+    }
   }
   subscribeBackButton() {
     this.platform.backButton.subscribeWithPriority(10,async () => {
@@ -65,7 +72,7 @@ export class AppComponent {
             {
               text: texts['CANCEL'],
               role: 'cancel',
-              cssClass: "alert-button",
+              cssClass: "alert-button-bg-white",
               handler: () => { }
             },
             {
@@ -76,8 +83,7 @@ export class AppComponent {
                 navigator['app'].exitApp();
               }
             }
-          ]
-        });
+          ]       });
         await alert.present();
       } else {
         this._location.back();
@@ -90,11 +96,15 @@ export class AppComponent {
       this.network.netWorkCheck();
       setTimeout(async ()=>{
         this.languageSetting();
+        this.setHeader();
       },0)
       this.db.init();
       setTimeout(async ()=>{
+        this.userRoles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
         const userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
         if(userDetails){
+          await this.profile.getUserRole(userDetails)
+          this.isOrgAdmin = this.profile.isOrgAdmin;
           this.getUser();
         }
       },1000);
@@ -104,7 +114,8 @@ export class AppComponent {
 
       this.userService.userEventEmitted$.subscribe(data=>{
         if(data){
-          this.isMentor = data?.isAMentor;
+          this.isOrgAdmin = this.profile.isOrgAdmin;
+          this.isMentor = this.profile.isMentor
           this.user = data;
         }
       })
@@ -119,6 +130,9 @@ export class AppComponent {
     });
     });
     this.subscribeBackButton();
+  }
+  setHeader() {
+    this.userService.getUserValue();
   }
   languageSetting() {
     this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
@@ -141,7 +155,6 @@ export class AppComponent {
   }
 
   logout(){
-    this.menuCtrl.toggle();
     let msg = {
       header: 'LOGOUT',
       message: 'LOGOUT_CONFIRM_MESSAGE',
@@ -152,19 +165,21 @@ export class AppComponent {
       if(data){
         await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, "en");
         this.translate.use("en")
-        this.authService.logoutAccount();
+        await this.authService.logoutAccount();
+        this.menuCtrl.enable(false);
       }
     }).catch(error => {})
   }
   
   getUser() {
     this.profile.profileDetails(false).then(profileDetails => {
+      this.isOrgAdmin = this.profile.isOrgAdmin;
       this.user = profileDetails;
-      this.isMentor = this.user?.isAMentor
+      this.isMentor = this.profile.isMentor;
     })
   }
   goToProfilePage(){
-    this.menuCtrl.close();
+    this.menuCtrl.toggle();
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
   }
 
@@ -181,10 +196,6 @@ export class AppComponent {
         break;
       }
     }
-  }
-
-  async showAlert(alertData){
-    
   }
 
 }

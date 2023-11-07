@@ -11,15 +11,17 @@
     <ion-col size="8" class="details-wrapper">
       <div>
         <ion-label *ngIf="headerData?.name" class="name">{{headerData?.name}} </ion-label>
-        <ion-label *ngIf="showRole&&headerData?.isAMentor" class="role ellipsis">({{"MENTOR"|translate}})</ion-label>
-        <ion-label *ngIf="showRole&&!headerData?.isAMentor" class="role ellipsis">({{"MENTEE"|translate}})</ion-label>
+        <ion-label *ngIf="showRole&&isMentor" class="role ellipsis">({{"MENTOR"|translate}})</ion-label>
+        <ion-label *ngIf="showRole&&!isMentor" class="role ellipsis">({{"MENTEE"|translate}})</ion-label>
       </div>
       <div class="d-inline-flex flex-align-items-center my-4" *ngIf="headerData?.location?.length">
         <ion-icon name="location"></ion-icon>
         <ion-label class="location">{{headerData?.location[0]?.label}}</ion-label>
       </div>
       <div *ngIf="buttonConfig">
-        <ion-button color="Light" expand="block" fill="outline" shape="round" (click)="action(buttonConfig?.action)">{{ buttonConfig?.label | translate }}</ion-button>
+        <div *ngFor="let button of buttonConfig.buttons">
+          <ion-button color="Light" expand="block" fill="outline" shape="round" (click)="action(button?.action)">{{ button?.label | translate }}</ion-button>
+        </div>
       </div>
     </ion-col>
   </ion-row>

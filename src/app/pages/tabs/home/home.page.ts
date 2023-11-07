@@ -10,9 +10,9 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { HttpService, LoaderService, LocalStorageService, ToastService, UserService, UtilService } from 'src/app/core/services';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
-import { Location } from '@angular/common';
 import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-conditions.page';
 import { App, AppState } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 
 
 @Component({
@@ -29,7 +29,9 @@ export class HomePage implements OnInit {
   limit = 100;
   sessions;
   sessionsCount = 0;
-  status = "published,live";
+  isNativeApp = Capacitor.isNativePlatform()
+  status = "PUBLISHED,LIVE";
+  showBecomeMentorCard
   @ViewChild(IonContent) content: IonContent;
 
   public headerConfig: any = {
@@ -38,10 +40,12 @@ export class HomePage implements OnInit {
     headerColor: 'primary',
     // label:'MENU'
   };
+  isAMentor
   public segmentButtons = [{ name: "all-sessions", label: "ALL_SESSIONS" }, { name: "created-sessions", label: "CREATED_SESSIONS" }, { name: "my-sessions", label: "ENROLLED_SESSIONS" }]
   public mentorSegmentButton = ["created-sessions"]
   selectedSegment = "all-sessions";
   createdSessions: any;
+  isMentor: boolean;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -53,24 +57,30 @@ export class HomePage implements OnInit {
     private modalController: ModalController,
     private userService: UserService,
     private localStorage: LocalStorageService,
-    private toast:ToastService) { }
+    private toast: ToastService) { }
 
   ngOnInit() {
+    this.isMentor = this.profileService.isMentor
     App.addListener('appStateChange', (state: AppState) => {
-      if (state.isActive == true) {
-        this.getSessions();
-        var obj = { page: this.page, limit: this.limit, searchText: "" };
-         this.sessionService.getAllSessionsAPI(obj).then((data)=>{
-            this.createdSessions = data;
-        })
-      }
+      this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
+        if (state.isActive == true && data) {
+          this.getSessions();
+          this.getCreatedSessionDetails();
+        }
+      })
     });
+    this.getCreatedSessionDetails();
     this.getUser();
+    this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested) => {
+      this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false : true;
+    })
     this.userService.userEventEmitted$.subscribe(data => {
       if (data) {
+        this.isMentor = this.profileService.isMentor
         this.user = data;
       }
     })
+    this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
   }
   gotToTop() {
     this.content.scrollToTop(1000);
@@ -80,33 +90,38 @@ export class HomePage implements OnInit {
     this.getSessions();
     this.gotToTop();
     var obj = { page: this.page, limit: this.limit, searchText: "" };
-    this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+    this.isMentor = this.profileService.isMentor;
+    this.createdSessions = this.isAMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
   }
   async eventAction(event) {
-    switch (event.type) {
-      case 'cardSelect':
-        (this.selectedSegment=="my-sessions")?this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.sessionId}`]):this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
-        break;
+    if (this.user.about) {
+      switch (event.type) {
+        case 'cardSelect':
+          this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
+          break;
 
-      case 'joinAction':
-        await this.sessionService.joinSession(event.data)
-        this.getSessions();
-        break;
-
-      case 'enrollAction':
-        let enrollResult = await this.sessionService.enrollSession(event.data._id);
-        if(enrollResult.result){
-          this.toast.showToast(enrollResult.message, "success")
+        case 'joinAction':
+          await this.sessionService.joinSession(event.data)
           this.getSessions();
-        }
-        break;
+          break;
 
-      case 'startAction':
-        this.sessionService.startSession(event.data._id).then(async ()=>{
-          var obj = { page: this.page, limit: this.limit, searchText: "" };
-          this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
-        })
-        break;
+        case 'enrollAction':
+          let enrollResult = await this.sessionService.enrollSession(event.data.id);
+          if (enrollResult.result) {
+            this.toast.showToast(enrollResult.message, "success")
+            this.getSessions();
+          }
+          break;
+
+        case 'startAction':
+          this.sessionService.startSession(event.data.id).then(async () => {
+            var obj = { page: this.page, limit: this.limit, searchText: "" };
+            this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+          })
+          break;
+      }
+    } else {
+      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
     }
   }
   viewMore(data) {
@@ -118,9 +133,10 @@ export class HomePage implements OnInit {
   }
   getUser() {
     this.profileService.profileDetails().then(data => {
+      this.isAMentor = this.profileService.isMentor
       this.user = data
-      if (!this.user?.hasAcceptedTAndC) {
-        this.openModal();
+      if (!this.user?.terms_and_conditions) {
+        // this.openModal();
       }
     })
   }
@@ -150,10 +166,30 @@ export class HomePage implements OnInit {
   }
   async createSession() {
     let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]);
+    return
     if (userDetails?.about) {
       this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]);
     } else {
       this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+    }
+  }
+
+  becomeMentor() {
+    this.showBecomeMentorCard = false;
+    this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);
+  }
+
+  closeCard() {
+    this.showBecomeMentorCard = false;
+  }
+
+  getCreatedSessionDetails() {
+    if (this.isMentor) {
+      var obj = { page: this.page, limit: this.limit, searchText: "" };
+      this.sessionService.getAllSessionsAPI(obj).then((data) => {
+        this.createdSessions = data;
+      })
     }
   }
 }

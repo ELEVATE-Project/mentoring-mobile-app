@@ -1,5 +1,8 @@
 <app-page-header [config]="headerConfig"></app-page-header>
-<ion-content class="ion-padding">
+<ion-content>
+  <ion-grid>
+    <ion-row class="d-flex flex-justify-center">
+      <ion-col padding size-xs="12" size-sm="12" size-md="6" size-lg="6" align-self-stretch>
   <div class="align-content-center">
     <div class="mx-10">
       <app-generic-header [labels]="labels"></app-generic-header>
@@ -10,9 +13,23 @@
       </div>
       <p class="hint-message"> {{"YOU_WILL_RECIEVE_OTP_IN_YOUR_EMAIL" | translate}}</p>
     </section>
+    <section class="t-and-c d-flex">
+  
+          
+            <ion-item >
+              <ion-checkbox label-placement="stacked" alignment="start" (ionChange)="checkboxClick($event)"></ion-checkbox>
+              <p class="t-and-c-text">{{"TERMS_AND_CONDITION"|translate}}
+                <a class='links'
+                 [href]="privacyPolicyUrl" target="_blank">{{"PRIVACY_POLICY"|translate}}</a> & <a
+                  class='links' [href]="termsOfServiceUrl" target="_blank">{{"TERMS_OF_SERVICE"|translate}}</a>
+              </p>
+            </ion-item>
+          
+    </section>
+    
     <section>
       <div class="d-flex flex-justify-center flex-align-items-center">
-        <ion-button [ngClass]="{'my-10': true, 'disabled': !isEnabled, 'onboard-button':true}" [disabled]="!isEnabled"
+        <ion-button [ngClass]="{'my-10': true, 'disabled': !checked  || !isEnabled, 'onboard-button':true}" [disabled]="!checked  || !isEnabled"
           (click)="onSubmit()" shape="round">
           {{'VERIFY_AND_LOGIN'|translate}}
         </ion-button>
@@ -21,7 +38,10 @@
     <div class="d-flex flex-justify-center flex-align-items-center resend-otp">
       <div class="counter" *ngIf="countDownTimer">{{'TRY_AGAIN_AFTER'|translate}} {{countDownTimer}}
         {{'SECONDS'|translate}}</div>
-      <p class="underline" (click)="enableResendOtp && resendOtp()">{{"RESEND_OTP"|translate}}</p>
+      <p class="underline" (click)="enableResendOtp && resendOtp()" [ngClass]="{'enable': enableResendOtp}">{{"RESEND_OTP"|translate}}</p>
     </div>
   </div>
+</ion-col>
+</ion-row>
+</ion-grid>
 </ion-content>

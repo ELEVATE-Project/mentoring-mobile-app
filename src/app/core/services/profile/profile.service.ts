@@ -18,6 +18,8 @@ import { AuthService } from '../auth/auth.service';
   providedIn: 'root',
 })
 export class ProfileService {
+  isMentor: boolean;
+  isOrgAdmin: any;
   constructor(
     private httpService: HttpService,
     private loaderService: LoaderService,
@@ -35,32 +37,19 @@ export class ProfileService {
       payload: formData,
     };
     try {
-      let data: any = await this.httpService.post(config);
+      let data: any = await this.httpService.patch(config);
       let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+      let profileData = await this.getProfileDetailsFromAPI();
       userDetails.user = null;
-      let profileData = await this.getProfileDetailsAPI();
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileData);
-      this.userService.userEvent.next(profileData);
+      let profileDatas = await {...userDetails, ...profileData};
+      await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileDatas);
+      this.userService.userEvent.next(profileDatas);
       this.loaderService.stopLoader();
       this._location.back();
       (showToast)?this.toast.showToast(data.message, "success"):null;
     }
     catch (error) {
       this.loaderService.stopLoader();
-    }
-  }
-  async getProfileDetailsAPI() {
-    const config = {
-      url: urlConstants.API_URLS.PROFILE_DETAILS,
-      payload: {}
-    };
-    try {
-      let data: any = await this.httpService.get(config);
-      data = _.get(data, 'result');
-      this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
-      return data;
-    }
-    catch (error) {
     }
   }
 
@@ -70,16 +59,9 @@ export class ProfileService {
       try {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
-            if (data) {
-              //showLoader ? this.loaderService.stopLoader() : null;
-              resolve(data);
-            } else {
-              var res = await this.getProfileDetailsAPI();
-              await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
-              data = _.get(data, 'user');
-             // showLoader ? this.loaderService.stopLoader() : null;
-              resolve(data);
-            }
+            await this.getUserRole(data)
+            //showLoader ? this.loaderService.stopLoader() : null;
+            resolve(data);
           })
       } catch (error) {
        // showLoader ? this.loaderService.stopLoader() : showLoader;
@@ -153,18 +135,28 @@ export class ProfileService {
     }
   }
 
-  async getProfileDetailsFromAPI(isAMentor, id, showLoader=true){
+  async getProfileDetailsFromAPI(){
     const config = {
-      url: (isAMentor)?urlConstants.API_URLS.MENTOR_PROFILE_DETAILS+id:urlConstants.API_URLS.MENTEE_PROFILE_DETAILS+id,
+      url: urlConstants.API_URLS.PROFILE_READ,
       payload: {}
     };
     try {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
+      await this.localStorage.setLocalData(localKeys.USER_ROLES, this.getUserRole(data))
       return data;
     }
     catch (error) {
     }
+  }
+
+  getUserRole(userDetails) {
+    var roles = userDetails.user_roles.map(function(item) {
+      return item['title'];
+    });
+    this.isMentor = roles.includes('mentor')?true:false;
+    this.isOrgAdmin = roles.includes('org_admin')?true:false;
+    return roles
   }
 }

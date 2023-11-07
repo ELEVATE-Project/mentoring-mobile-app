@@ -44,15 +44,16 @@
   input:-webkit-autofill {
     height: 0px;
     -webkit-box-shadow:0 0 0 10px white inset;
-    box-shadow: 0 0 0 10px white inset;
+    box-shadow: 0 0 0 15px white inset;
     -webkit-text-fill-color: black;
     font-weight: 500px;
+    padding: 12px;
 }
 
 input:-webkit-autofill:focus {
     height: 0px;
-    -webkit-box-shadow: 0 0 0 10px white inset;
-    box-shadow: 0 0 0 10px white inset;
+    -webkit-box-shadow: 0 0 0 15px white inset;
+    box-shadow: 0 0 0 15px white inset;
     -webkit-text-fill-color: black;
     font-weight: 500px;
 } 
@@ -113,6 +114,9 @@ h6, h5 , h4, h3, h2, h1 {
 .my-4 {
   margin: 4px 0;
 }
+.my-8 {
+  margin: 4px 0;
+}
 .my-10 {
   margin: 10px 0;
 }
@@ -120,7 +124,7 @@ h6, h5 , h4, h3, h2, h1 {
   margin: 30px 0;
 }
 .my-20 {
-  margin: 20 0;
+  margin: 20px 0;
 }
 .my-50 {
   margin: 50px 0;
@@ -201,6 +205,10 @@ ion-button{
   background-color: var(--ion-color-primary);
   color: var(--white);
 } 
+.alert-button-bg-white{
+  color: var(--ion-color-primary) !important;
+  background-color: var(--white) !important;
+}
 
 .alert-button-role-cancel.sc-ion-alert-md  {
   background-color: var(--white);
@@ -212,10 +220,6 @@ ion-button{
 }
 .alert-wrapper.sc-ion-alert-md{
   border-radius: 8px;
-}
-.alert-button-white.sc-ion-alert-md{
-  background-color: var(--white);
-  @extend.alert-button-global;
 }
 .alert-button-red.sc-ion-alert-md{
   background-color: var(--ion-color-primary);
@@ -237,7 +241,7 @@ ion-button{
 .onboard-button{
   width: 80%;
   height: 46px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: bold;
   text-transform: none;
 }
@@ -277,7 +281,7 @@ ion-accordion-group{
 
 .example-modal {
   --width: fit-content;
-  --min-width: 95%;
+  --min-width: 400px;
   --height: fit-content;
   --border-radius: 6px;
   --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
@@ -294,4 +298,32 @@ ion-toast.custom-toast::part(button) {
 }
 ion-toast.custom-toast{
   --background: var(--ion-color-primary);
+}
+
+@media (max-width: 991px) {
+  .hide-on-small-screen {
+    display: none;
+  }
+  .example-modal{
+    --min-width: 300px;
+  }
+}
+
+@media (min-width: 992px) {
+  .hide-on-large-screen {
+    display: none;
+  }
+  .width-20 {
+    width:20%
+  }
+}
+
+ion-searchbar {
+  padding: 0px 5px 0px 0px!important;
+  .searchbar-input-container {
+      input{
+          font-size: 16px !important;
+          padding: 5px 14px 5px 45px !important;
+      }
+  }
 }

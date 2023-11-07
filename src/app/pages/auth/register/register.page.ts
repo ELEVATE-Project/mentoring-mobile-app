@@ -26,7 +26,10 @@ export class RegisterPage implements OnInit {
         class: 'ion-margin',
         type: 'text',
         position: 'floating',
-        errorMessage:'This field can only contain alphabets',
+        errorMessage:{
+          required: "Enter your name",
+          pattern: "This field can only contain alphabets"
+        },
         validators: {
           required: true,
           pattern:'^[a-zA-Z ]*$',
@@ -37,11 +40,15 @@ export class RegisterPage implements OnInit {
         label: 'Email',
         value: '',
         class: 'ion-margin',
-        type: 'text',
+        type: 'email',
         position: 'floating',
-        errorMessage:'Please enter valid email ID',
+        errorMessage:{
+          required: "Please enter registered email ID",
+          email:"Enter a valid email ID"
+        },
         validators: {
           required: true,
+          email: true
         },
       },
       {
@@ -51,7 +58,11 @@ export class RegisterPage implements OnInit {
         class: 'ion-margin',
         type: 'password',
         position: 'floating',
-        errorMessage:'Please enter minimum 8 characters.',
+        errorMessage:{
+          required: "Enter password",
+          minlength:"Please enter minimum 8 characters.",
+          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+        },
         validators: {
           required: true,
           minLength: 8,
@@ -65,7 +76,11 @@ export class RegisterPage implements OnInit {
         class: 'ion-margin',
         type: 'password',
         position: 'floating',
-        errorMessage:'Please enter minimum 8 characters.',
+        errorMessage:{
+          required: "Re-enter password",
+          minlength:"Please enter minimum 8 characters.",
+          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+        },
         validators: {
           required: true,
           minLength: 8,
@@ -75,18 +90,6 @@ export class RegisterPage implements OnInit {
     ]
   };
 
-  secretCodeControl = {
-    name: 'secretCode',
-    label: 'Secret code',
-    value: '',
-    class: 'ion-margin',
-    type: 'secretCode',
-    position: 'floating',
-    errorMessage:'Please enter secret code',
-    validators: {
-      required: true,
-    },
-  };
   public headerConfig: any = {
     // menu: true,
     backButton: {
@@ -111,10 +114,6 @@ export class RegisterPage implements OnInit {
   ) {
     this.activatedRoute.queryParams.subscribe(params => {
       this.userType = params.userType;
-      if (this.userType == "mentor") {
-        this.formData.controls.push(this.secretCodeControl);
-        this.isAMentor = true;
-      }
     });
   }
   ngOnInit() {
@@ -140,7 +139,6 @@ export class RegisterPage implements OnInit {
 
   async createUser() {
     let formJson = this.form1.myForm.value;
-    formJson.isAMentor = this.isAMentor ? this.isAMentor : false;
     if (_.isEqual(formJson.password, formJson.cPassword)) {
       let result = await this.profileService.registrationOtp(formJson);
       if (result) {

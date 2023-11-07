@@ -7,46 +7,74 @@ import * as _ from 'lodash-es';
   providedIn: 'root',
 })
 export class FormService {
-  constructor(private http: HttpService, private db: DbService) {}
+  constructor(private http: HttpService, private db: DbService) { }
 
   getForm = async (formBody) => {
-    //check form in sqlite db with primary_key as UniqueKey
-    let dbForm: any = await this.db.query(
-      `SELECT * FROM forms where primary_key=?`,
-      [this.getUniqueKey(formBody)]
-    );
-    dbForm = dbForm[0];
-    // check if db form is expired
-    if (dbForm && !this.checkIfexpired(dbForm.ttl)) {
-      console.log(dbForm);
-      return JSON.parse(dbForm.form);
+    //Check if form is available in local DB
+    let form = await this.db.getItem(this.getUniqueKey(formBody))
+    let dbForm = JSON.parse(form);
+
+    // Check if local form is expired; return the form if not expired
+    if (form && !this.checkIfexpired(dbForm?.ttl)) {
+      return dbForm;
     }
-    //if db form expired or not present then call api
+
+    //Get the form from API
     const args = {
       url: urlConstants.API_URLS.FORM_READ,
       payload: formBody,
     };
     const resp = await this.http.post(args);
-    // store api response in db with 24hrs expiryTime
     if (!_.has(resp, 'result.data.fields')) {
-      return resp; // if form is not present return without storing
+      return resp.result; // if form is not present return without storing
     }
-    this.db
-      .store(
-        `INSERT OR REPLACE INTO forms (primary_key,form,ttl) VALUES(?,?,?);`,
-        [
-          this.getUniqueKey(formBody),
-          JSON.stringify(resp),
-          this.timeToExpire(24),
-        ]
-      )
-      .then((res) => {
-        console.log(res);
-      });
-    return resp;
+    
+    // Store api response in db with 24hrs expiryTime
+    resp.ttl = this.timeToExpire(24)
+    await this.db.setItem(this.getUniqueKey(formBody), JSON.stringify(resp.result))
+    return resp.result;
   };
 
   getUniqueKey = (object) => Object.values(object).join('_'); // get '_' seperated object values in string format
   timeToExpire = (h) => new Date(Date.now() + 1000 * 60 * 60 * h).getTime(); //get unix time of expiry by passing hour
   checkIfexpired = (unix) => unix < Date.now(); // pass unix time to check,true if expired else false
+
+  async getEntities(entityTypes, type) {
+    const config = {
+      url: urlConstants.API_URLS.GET_ENTITY_LIST[type],
+      payload: { value: entityTypes }
+    };
+    try {
+      let data = await this.http.post(config);
+      let result = _.get(data, 'result.entity_types');
+      return result;
+    }
+    catch (error) {
+    }
+  }
+
+  getEntityNames(formData){
+    return formData.controls
+    .filter((filterData)=> filterData?.meta && filterData.meta.entityType)
+    .map((data)=> data.meta.entityType)
+  }
+
+  async populateEntity(formData, entityList){
+    _.forEach(formData.controls, (formData) => {
+      const entity = _.find(entityList, (entityData) => formData.name === entityData.value);
+      if (entity) {
+        formData.options = entity.entities.map((entityItem)=>{ return { label : entityItem.label, value : entityItem.value }});
+      }
+    });
+    return formData
+  }
+
+  async formatEntityOptions(existingData, entityList){
+    await entityList.map((entityName)=>{
+      existingData[entityName] = existingData[entityName].map((data)=>{
+        return { label : data.label, value : data.value == 'other' ? data.label : data.value }
+      })
+    })
+    return existingData
+  }
 }

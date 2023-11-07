@@ -10,7 +10,7 @@ import { CommonRoutes } from 'src/global.routes';
   styleUrls: ['./landing.page.scss'],
 })
 export class LandingPage implements OnInit {
-  labels=["CREATE_ACCOUNT","TO_CONNECT_SOLVE","&_SHARE"];
+  labels=["CREATE_ACCOUNT_TO_CONNECT_SOLVE_&_SHARE"];
 
   constructor(
     private router: Router,
@@ -39,7 +39,7 @@ export class LandingPage implements OnInit {
     this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`]);
   }
   onSignup(){
-    this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.PERSONA_SELECTION}`])
+    this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.REGISTER}`])
   }
 
 }

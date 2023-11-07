@@ -2,6 +2,7 @@
     display: inline-flex;
     padding-left: 20px !important;
     overflow: scroll;
+    background-color: var(--white);
 }
 h3{
     margin: 10px 0px 10px 5px;
@@ -9,17 +10,31 @@ h3{
 }
 .welcome-note{
     font-size: 18px;
+    text-align: center;
+    font-weight: bold;
 }
 .search-bar{
     --border-radius:25px;
     --icon-color:var(--ion-color-primary);
     font-size:16px;
-    margin-top: 10px;
-    height: fit-content;
+    height: 36px;
+    max-width: 600px;
 }
 .segment-wrapper{
-    padding: 8px 20px 0px 3px;
+    padding: 6px 0px 6px 0px;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
+
+.align-center {
+    justify-content: center;
+}
+
+.segment-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
 .segment-div{
     margin: 2px 4px;
     ion-button{
@@ -69,4 +84,34 @@ h3{
 .section-header{
     margin: 8px 0px 12px 10px;
     letter-spacing: 1px;
+}
+.card-config {
+    border-radius: 20px;
+}
+
+.round-icon-button{
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: #832215;
+    --color: white;
+}
+.close-icon {
+    color: white;
+    font-weight: bold;
+}
+.header-label{
+    font-weight: bold;
+    color: black;
+}
+.content-label {
+    font-size: 13px;
+}
+img {
+    margin: 16px 0px;
+    max-width: 55%;
+}
+.mentor-card-button {
+    min-width: 100%;
+    --border-radius:8px;
 }

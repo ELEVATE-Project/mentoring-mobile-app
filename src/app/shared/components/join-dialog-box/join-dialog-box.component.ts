@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+// import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { Browser } from '@capacitor/browser';
 import { ToastService } from 'src/app/core/services';
 import { Clipboard } from '@capacitor/clipboard';
 
@@ -17,19 +18,25 @@ export class JoinDialogBoxComponent implements OnInit {
   endDate: any;
   meetingPlatform: any;
 
-  constructor(private modalCtrl: ModalController, private inAppBrowser: InAppBrowser, private toast: ToastService) { }
+  constructor(private modalCtrl: ModalController,
+    //  private inAppBrowser: InAppBrowser,
+     private toast: ToastService) { }
 
   ngOnInit() {
-    this.startDate = (this.sessionData.startDate>0)?moment.unix(this.sessionData.startDate).toLocaleString():this.startDate;
-    this.endDate = (this.sessionData.endDate>0)?moment.unix(this.sessionData.endDate).toLocaleString():this.endDate;
-    this.meetingPlatform = (this.sessionData.meetingInfo);
+    this.startDate = (this.sessionData.start_date>0)?moment.unix(this.sessionData.start_date).toLocaleString():this.startDate;
+    this.endDate = (this.sessionData.end_date>0)?moment.unix(this.sessionData.end_date).toLocaleString():this.endDate;
+    this.meetingPlatform = (this.sessionData.meeting_info);
   }
-  openBrowser(link) {
-    let browser = this.inAppBrowser.create(link, `_system`);
-    browser.on('exit').subscribe(() => {
-    }, err => {
-      console.error(err);
+  async openBrowser(link) {
+    await Browser.open({ url: link });
+    Browser.addListener('browserFinished', () => {
+      console.log("exit");
     });
+    // let browser = this.inAppBrowser.create(link, `_system`);
+    // browser.on('exit').subscribe(() => {
+    // }, err => {
+    //   console.error(err);
+    // });
   }
 
   cancel(){

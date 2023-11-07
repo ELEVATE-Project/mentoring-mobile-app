@@ -15,6 +15,7 @@ import { App, AppState } from '@capacitor/app';
 })
 export class SessionCardComponent implements OnInit {
   @Input() data: any;
+  @Input() isEnrolled;
   @Output() onClickEvent = new EventEmitter();
   @ViewChild(IonModal) modal: IonModal;
   startDate: string;
@@ -33,11 +34,11 @@ export class SessionCardComponent implements OnInit {
         this.setButtonConfig(this.isCreator);
       }
     });
-    this.meetingPlatform = (this.data?.meetingInfo);
+    this.meetingPlatform = (this.data?.meeting_info);
     this.isCreator = await this.checkIfCreator();
     this.setButtonConfig(this.isCreator);
-    this.startDate = (this.data.startDate>0)?moment.unix(this.data.startDate).toLocaleString():this.startDate;
-    this.endDate = (this.data.endDate>0)?moment.unix(this.data.endDate).toLocaleString():this.endDate;
+    this.startDate = (this.data.start_date>0)?moment.unix(this.data.start_date).toLocaleString():this.startDate;
+    this.endDate = (this.data.end_date>0)?moment.unix(this.data.end_date).toLocaleString():this.endDate;
   }
  
   setButtonConfig(isCreator: boolean) {
@@ -45,14 +46,14 @@ export class SessionCardComponent implements OnInit {
     if(isCreator){
       this.buttonConfig={label:"START",type:"startAction"};
     } else {
-      this.buttonConfig=(!isCreator&&this.data.isEnrolled || !isCreator&&this.data.sessionId)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
+      this.buttonConfig=(!isCreator&&this.data.is_enrolled || this.isEnrolled)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
     }
-    this.buttonConfig.isEnabled = ((this.data.startDate - currentTimeInSeconds) < 600 && !(this.data?.meetingInfo?.platform == 'OFF')) ? true : false
+    this.buttonConfig.isEnabled = ((this.data.start_date - currentTimeInSeconds) < 600 && !(this.data?.meeting_info?.platform == 'OFF')) ? true : false
   }
 
   async checkIfCreator() {
     this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    return (this.data.userId == this.userData._id) ?true : false;
+    return (this.data.mentor_id == this.userData.id) ?true : false;
   }
  
   onCardClick(data) {
@@ -67,11 +68,11 @@ export class SessionCardComponent implements OnInit {
     let value = {
       data: data,
       type:type
-    }
-    this.userData.about?this.onClickEvent.emit(value):this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+    };
+    this.onClickEvent.emit(value)
   }
   clickOnAddMeetingLink(cardData:any){
-    let id = cardData._id;
+    let id = cardData.id;
     this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: id , type: 'segment'} });
   }
 }

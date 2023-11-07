@@ -41,7 +41,7 @@ export class LanguagePage implements OnInit {
   onSubmit(){
     this.setLanguage(this.selectedLanguage);
     let showProfileUpdateToast = false;
-    this.profile.profileUpdate({preferredLanguage:this.selectedLanguage}, showProfileUpdateToast).then(()=>{
+    this.profile.profileUpdate({preferred_language:this.selectedLanguage}, showProfileUpdateToast).then(()=>{
       this.toast.showToast("LANGUAGE_CHANGED_SUCCESSFULLY","success");
     })
   }

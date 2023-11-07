@@ -13,6 +13,7 @@ import { localKeys } from '../../constants/localStorage.keys';
 import { AuthService } from '../auth/auth.service';
 import { ModalController } from '@ionic/angular';
 import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
+import { CapacitorHttp } from '@capacitor/core';
 
 
 @Injectable({
@@ -53,16 +54,19 @@ export class HttpService {
     }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     let body = requestParam.payload ? requestParam.payload : {};
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(60);
-    return this.http.post(this.baseUrl + requestParam.url, body, headers)
+    const options = {
+      url: this.baseUrl + requestParam.url,
+      headers: headers,
+      data: body,
+    };
+    return CapacitorHttp.post(options)
       .then((data: any) => {
-        let result: any = JSON.parse(data.data);
+        let result: any = data.data;
         if (result.responseCode === "OK") {
           return result;
+        } else {
+          this.handleError(data)
         }
-      }, error => {
-        return this.handleError(error);
       });
   }
 
@@ -71,20 +75,23 @@ export class HttpService {
       throw Error(null);
     }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(60);
-    return this.http.get(this.baseUrl + requestParam.url, '', headers)
+    const options = {
+      url: this.baseUrl + requestParam.url,
+      headers: headers,
+      params: {},
+    };
+    return CapacitorHttp.get(options)
       .then((data: any) => {
-        let result: any = JSON.parse(data.data);
+        let result: any = data.data;
         if(result?.meta?.data?.length && !this.isFeedbackTriggered){
           this.isFeedbackTriggered = true;
-          this.openModal(result?.meta?.data[0]);
+          // this.openModal(result?.meta?.data[0]);
         }
         if (result.responseCode === "OK") {
           return result;
+        } else {
+          this.handleError(data)
         }
-      }, error => {
-        return this.handleError(error);
       });
   }
 
@@ -93,16 +100,41 @@ export class HttpService {
       throw Error(null);
     }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
-    this.http.setDataSerializer('json');
-    this.http.setRequestTimeout(60);
-    return this.http.delete(this.baseUrl + requestParam.url, '', headers)
+    const options = {
+      url: this.baseUrl + requestParam.url,
+      headers: headers,
+      data: '',
+    };
+    return CapacitorHttp.delete(options)
       .then((data: any) => {
-        let result: any = JSON.parse(data.data);
+        let result: any = data.data;
         if (result.responseCode === "OK") {
           return result;
+        } else {
+          this.handleError(data)
         }
-      }, error => {
-        return this.handleError(error);
+      });
+  }
+
+  async patch(requestParam: RequestParams) {
+    if (!this.checkNetworkAvailability()) {
+      throw Error(null);
+    }
+    let body = requestParam.payload ? requestParam.payload : {};
+    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+    const options = {
+      url: this.baseUrl + requestParam.url,
+      headers: headers,
+      data: body,
+    };
+    return CapacitorHttp.patch(options)
+      .then((data: any) => {
+        let result: any = data.data;
+        if (result.responseCode === "OK") {
+          return result;
+        } else {
+          this.handleError(data)
+        }
       });
   }
 
@@ -129,7 +161,7 @@ export class HttpService {
       let access_token = _.get(data, 'access_token');
       if (!access_token) {
         let authService = this.injector.get(AuthService);
-        authService.logoutAccount();
+        await authService.logoutAccount();
       }
       this.userService.token['access_token'] = access_token;
       this.localStorage.setLocalData(localKeys.TOKEN, this.userService.token);
@@ -142,9 +174,8 @@ export class HttpService {
     const config = {
       url: urlConstants.API_URLS.REFRESH_TOKEN,
       payload: {
-        refreshToken: _.get(this.userService.token, 'refresh_token')
-      },
-      headers: {}
+        refresh_token: _.get(this.userService.token, 'refresh_token')
+      }
     };
     try {
       let data: any = await this.post(config);
@@ -156,20 +187,21 @@ export class HttpService {
   }
 
   public handleError(result) {
-    console.log(result);
-    let msg = JSON.parse(result.error);
+    let msg = result.data.message;
     switch (result.status) {
       case 400:
       case 406:
       case 422:
-        this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
+        this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:
         let auth = this.injector.get(AuthService);
-        auth.logoutAccount(true);
+          auth.logoutAccount(true).then(()=>{
+            this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
+          })
         break
       default:
-        this.toastService.showToast(msg ? msg.message : 'SOMETHING_WENT_WRONG', 'danger')
+        this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
     }
     throw Error(result);
   }

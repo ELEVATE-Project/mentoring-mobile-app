@@ -20,10 +20,10 @@ export class LoaderService {
         translucent: true,
         backdropDismiss: false,
       });
-      await this.loading.present();
+      // await this.loading.present();
   }
 
   async stopLoader() {
-      await this.loading.dismiss();
+      // await this.loading.dismiss();
   }
 }

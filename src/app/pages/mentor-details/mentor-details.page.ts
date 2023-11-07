@@ -19,9 +19,15 @@ export class MentorDetailsPage implements OnInit {
   };
 
   public buttonConfig = {
-    label: "SHARE_PROFILE",
-    action: "share"
-
+    meta : { 
+      id: null
+    },
+    buttons: [
+      {
+        label: "SHARE_PROFILE",
+        action: "share",
+      }
+    ]
   }
 
   detailData = {
@@ -40,18 +46,22 @@ export class MentorDetailsPage implements OnInit {
       },
       {
         title: 'KEY_AREAS_OF_EXPERTISE',
-        key: 'areasOfExpertise',
+        key: 'area_of_expertise',
       },
       {
         title: "EDUCATION_QUALIFICATION",
-        key: "educationQualification"
+        key: "education_qualification"
+      },
+      {
+        title: "LANGUAGES",
+        key: "languages" 
       }
     ],
     data: {
       rating: {
         average:0
       },
-      sessionsHosted:0 
+      sessions_hosted:0 
     },
   };
   segmentValue = "about";
@@ -63,10 +73,10 @@ export class MentorDetailsPage implements OnInit {
     private sessionService: SessionService,
     private userService: UserService,
     private localStorage:LocalStorageService,
-    private toastService:ToastService
+    private toast:ToastService
   ) {
     routerParams.params.subscribe(params => {
-      this.mentorId = params.id;
+      this.mentorId = this.buttonConfig.meta.id = params.id;
       this.userService.getUserValue().then(async (result) => {
         if (result) {
           this.getMentor();
@@ -108,7 +118,7 @@ export class MentorDetailsPage implements OnInit {
   async onAction(event){
     switch (event.type) {
       case 'cardSelect':
-        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
+        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
         break;
 
       case 'joinAction':
@@ -116,9 +126,12 @@ export class MentorDetailsPage implements OnInit {
         this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
         break;
 
-      case 'enrollAction':
-        await this.sessionService.enrollSession(event.data._id);
-        this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+        case 'enrollAction':
+        let enrollResult = await this.sessionService.enrollSession(event.data.id);
+        if(enrollResult.result){
+          this.toast.showToast(enrollResult.message, "success")
+          this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+        }
         break;
     }
   }

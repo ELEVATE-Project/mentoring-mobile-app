@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
-import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
-import { AlertController } from '@ionic/angular';
+import { Share } from '@capacitor/share';
+import { AlertController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Action } from 'rxjs/internal/scheduler/Action';
 import { environment } from 'src/environments/environment';
 import { ISocialSharing } from '../../interface/soical-sharing-interface';
+import { Capacitor } from '@capacitor/core';
+import { ModelComponent } from 'src/app/shared/components/model/model.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
+  modal: any;
   constructor(
-    private socialSharing: SocialSharing,
+    private modalCtrl: ModalController,
     private alert: AlertController,
     private translate: TranslateService
   ) {}
@@ -20,24 +23,22 @@ export class UtilService {
     return environment.deepLinkUrl+url;
   }
 
-  shareLink(param:ISocialSharing) {
+  async shareLink(param:ISocialSharing) {
     let {text,subject,link} = param;
-    this.socialSharing.share(text,subject,null,link);
+    await Share.share({
+      text: text,
+      url: link,
+      dialogTitle: subject,
+    });
   }
 
-  shareFile(param:ISocialSharing) {
-    let {file,text} = param;
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      let base64: any = reader.result;
-      this.socialSharing
-        .share(text, file.name, base64,null)
-        .then(() => {
-        })
-        .catch(() => {
-        });
-    };
+  async openModal(componentProps) {
+    this.modal = await this.modalCtrl.create({
+      component: ModelComponent,
+      componentProps: componentProps
+    });
+    this.modal.present();
+    const { data, role } = await this.modal.onWillDismiss();
   }
 
   async alertPopup(msg) {
@@ -52,19 +53,20 @@ export class UtilService {
         message: texts[msg.message],
         buttons: [
           {
-            text: texts[msg.cancel],
-            role: 'cancel',
-            cssClass: 'alert-button-white',
-            handler: (blah) => {
-              resolve(false);
-            }
-          }, {
             text: texts[msg.submit],
-            cssClass: 'alert-button-red',
+            cssClass: 'alert-button-bg-white',
             handler: () => {
               resolve(true);
             }
-          }
+          },
+          {
+            text: texts[msg.cancel],
+            role: 'cancel',
+            cssClass: 'alert-button-red',
+            handler: (blah) => {
+              resolve(false);
+            }
+          },
         ]
       });
       await alert.present();
@@ -76,7 +78,7 @@ export class UtilService {
     this.translate
       .get([
         "ADD_PHOTO",
-        "REMOVE_CURRENT_PHOTO",
+        "REMOVE_CURRENT_PHOTO_LABEL",
         "CHOOSE_FROM_LIBRARY",
         "TAKE_PHOTO",
         "CANCEL",
@@ -88,11 +90,11 @@ export class UtilService {
       });
     let buttons = []
 
-    switch (type) {
-      case 'profile':
+    switch (Capacitor.isNativePlatform()) {
+      case true:
         buttons = [
           {
-            text: texts["REMOVE_CURRENT_PHOTO"],
+            text: texts["REMOVE_CURRENT_PHOTO_LABEL"],
             type: 'remove',
             action: 'remove'
           },
@@ -103,17 +105,12 @@ export class UtilService {
           }
         ]
         break;
-      case 'session':
+      case false:
         buttons = [
            {
-            text: texts["REMOVE_CURRENT_PHOTO"],
+            text: texts["REMOVE_CURRENT_PHOTO_LABEL"],
             type: 'remove',
             action: 'remove'
-          },
-          {
-            text: texts["TAKE_PHOTO"],
-            type: 'CAMERA',
-            action: 'camera'
           }
         ]
         break;

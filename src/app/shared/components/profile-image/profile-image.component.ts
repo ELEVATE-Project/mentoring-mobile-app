@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 import { AttachmentService } from 'src/app/core/services';
 
 
@@ -8,6 +8,7 @@ import { AttachmentService } from 'src/app/core/services';
   styleUrls: ['./profile-image.component.scss'],
 })
 export class ProfileImageComponent implements OnInit {
+  @ViewChild ('fileUpload') fileUpload: ElementRef;
   @Input() profileImageData;
   @Input() showProfileDetails: any;
   @Input() username: any;
@@ -19,14 +20,34 @@ export class ProfileImageComponent implements OnInit {
   ) { }
 
   ngOnInit() {}
-uploadPhoto(){
-  this.attachment.selectImage(this.profileImageData.type).then(resp => {
-    if(resp.data){
-      // this.upload(resp.data);
-      resp.data.type == "removeCurrentPhoto" ? this.imageRemoveEvent.emit(resp.data): this.imageUploadEvent.emit(resp.data);
-    }
-  },error =>{
-    console.log(error,"error");
-  })
-}
+  uploadPhoto(){
+    this.attachment.selectImage(this.profileImageData.type).then(resp => {
+      switch (resp.data) {
+        case 'CAMERA':
+          console.log("1")
+          this.fileUpload.nativeElement.setAttribute('capture', 'environment');
+          this.fileUpload.nativeElement.click();
+          break
+
+        case 'PHOTOLIBRARY':
+          console.log("2")
+          this.fileUpload.nativeElement.removeAttribute('capture');
+          this.fileUpload.nativeElement.click();
+          break
+        
+        case 'removeCurrentPhoto':
+          this.imageRemoveEvent.emit(resp.data)
+          break
+
+        default:
+          break
+      }
+    },error =>{
+      console.log(error,"error");
+    })
+  }
+
+  upload(event) {
+    this.imageUploadEvent.emit(event)
+  }
 }

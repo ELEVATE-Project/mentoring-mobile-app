@@ -12,12 +12,12 @@ import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
 import { Location } from '@angular/common';
 import { AlertController, Platform } from '@ionic/angular';
-import { File } from "@ionic-native/file/ngx";
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
 import { CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-session',
@@ -53,6 +53,8 @@ export class CreateSessionPage implements OnInit {
   meetingPlatforms:any ;
   firstStepperTitle: string;
   sessionDetails: any;
+  entityNames:any
+  entityList:any;
 
   constructor(
     private http: HttpClient,
@@ -62,7 +64,6 @@ export class CreateSessionPage implements OnInit {
     private location: Location,
     private attachment: AttachmentService,
     private platform: Platform,
-    private file: File,
     private api: HttpService,
     private loaderService: LoaderService,
     private translate: TranslateService,
@@ -71,11 +72,14 @@ export class CreateSessionPage implements OnInit {
     private changeDetRef: ChangeDetectorRef,
     private router: Router
   ) {
-    this.path = this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory;
   }
   async ngOnInit() {
+    const platformForm = await this.getPlatformFormDetails();
     const result = await this.form.getForm(CREATE_SESSION_FORM);
-    this.formData = _.get(result, 'result.data.fields');
+    this.formData = _.get(result, 'data.fields');
+    this.entityNames = await this.form.getEntityNames(this.formData)
+    this.entityList = await this.form.getEntities(this.entityNames, 'SESSION')
+    this.formData = await this.form.populateEntity(this.formData,this.entityList)
     this.changeDetRef.detectChanges();
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.id = params?.get('id');
@@ -83,26 +87,28 @@ export class CreateSessionPage implements OnInit {
       this.type = params?.get('type')? params?.get('type'): 'default';
       this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
       if (this.id) {
-        let response = await this.sessionService.getSessionDetailsAPI(this.id);
-        this.sessionDetails= response;
-        this.profileImageData.image = response.image;
-        this.profileImageData.isUploaded = true;
-        response.startDate = moment.unix(response.startDate).format("YYYY-MM-DDTHH:mm");
-        response.endDate = moment.unix(response.endDate).format("YYYY-MM-DDTHH:mm");
-        this.preFillData(response);
+        await this.getSessionDetailsUpdate()
       } else {
         this.showForm = true;
       }
     });
-    this.getPlatformFormDetails();
     this.isSubmited = false; //to be removed
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
   }
+  async getSessionDetailsUpdate(){
+    let response = await this.sessionService.getSessionDetailsAPI(this.id);
+        this.sessionDetails= response;
+        this.profileImageData.image = response.image;
+        this.profileImageData.isUploaded = true;
+        response.start_date = moment.unix(response.start_date).format("YYYY-MM-DD hh:mm a");
+        response.end_date = moment.unix(response.end_date).format("YYYY-MM-DD hh:mm a");
+        this.preFillData(response);
+  }
 
   async getPlatformFormDetails() {
     let form = await this.form.getForm(PLATFORMS);
-    this.meetingPlatforms = form.result.data.fields.forms;
+    this.meetingPlatforms = form.data.fields.forms;
     this.selectedLink = this.meetingPlatforms[0];
     this.selectedHint = this.meetingPlatforms[0].hint;
   }
@@ -111,20 +117,22 @@ export class CreateSessionPage implements OnInit {
     if(this.type=='default'){
       if (!this.form1?.myForm.pristine || this.profileImageData.haveValidationError) {
         let texts: any;
-        this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'BACK']).subscribe(text => {
+        this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'CANCEL', 'EXIT_HEADER_LABEL']).subscribe(text => {
           texts = text;
         })
         const alert = await this.alert.create({
+          header: texts['EXIT_HEADER_LABEL'],
           message: texts['SESSION_FORM_UNSAVED_DATA'],
           buttons: [
             {
               text: texts['EXIT'],
-              cssClass: "alert-button",
+              cssClass: "alert-button-bg-white",
+              role: 'exit',
               handler: () => { }
             },
             {
-              text: texts['BACK'],
-              cssClass: "alert-button",
+              text: texts['CANCEL'],
+              cssClass: "alert-button-red",
               role: 'cancel',
               handler: () => { }
             }
@@ -132,11 +140,10 @@ export class CreateSessionPage implements OnInit {
         });
         await alert.present();
         let data = await alert.onDidDismiss();
-        if (data.role == 'cancel') {
-          return false;
-        } else {
-          return true;
-        }
+        if(data.role == 'exit'){
+          return true
+        } 
+        return false
       } else {
         return true;
       }
@@ -154,21 +161,30 @@ export class CreateSessionPage implements OnInit {
         this.getImageUploadUrl(this.localImage);
       } else {
         const form = Object.assign({}, this.form1.myForm.value);
-        form.startDate = new Date(form.startDate).getTime() / 1000.0;
-        form.endDate = new Date(form.endDate).getTime() / 1000.0;
+        form.start_date = new Date(form.start_date).getTime() / 1000.0;
+        form.end_date = new Date(form.end_date).getTime() / 1000.0;
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        form.timeZone = timezone;
+        form.time_zone = timezone;
+        _.forEach(this.entityNames, (entityKey) => {
+          form[entityKey] = _.map(form[entityKey], 'value');
+        });
+        if(!this.profileImageData.image){
+          form.image=[]
+        }
         this.form1.myForm.markAsPristine();
         let result = await this.sessionService.createSession(form, this.id);
-        this.id = this.id ? this.id : result._id;
         if (result) {
           this.sessionDetails = _.isEmpty(result) ? this.sessionDetails : result;
           this.isSubmited = true;
           this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
           this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
-          result.startDate = moment.unix(result.startDate).format("YYYY-MM-DDTHH:mm");
-          result.endDate = moment.unix(result.endDate).format("YYYY-MM-DDTHH:mm");
-          this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'}, replaceUrl: true });
+          result.start_date = moment.unix(result.start_date).format("YYYY-MM-DD HH:mm a");
+          result.end_date = moment.unix(result.end_date).format("YYYY-MM-DD HH:mm a");
+          if(!this.id && result.id){
+            this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: result.id , type: 'segment'}, replaceUrl: true });
+          }else {
+            this.type = 'segment';
+          }
         } else {
           this.profileImageData.image = this.lastUploadedImage;
           this.profileImageData.isUploaded = false;
@@ -182,42 +198,43 @@ export class CreateSessionPage implements OnInit {
   async getImageUploadUrl(file) {
     this.loaderService.startLoader();
     let config = {
-      url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name
+      url: urlConstants.API_URLS.GET_SESSION_IMAGE_UPLOAD_URL + file.name.replace(/[^A-Z0-9]+/ig, "_").toLowerCase()
     }
     let data: any = await this.api.get(config);
-    file.uploadUrl = data.result;
-    this.upload(file);
+    return this.upload(file, data.result).subscribe()
   }
 
-  upload(data) {
-    this.attachment.cloudImageUpload(data).then(resp => {
-      this.profileImageData.image = data.uploadUrl.destFilePath;
-      this.form1.myForm.value.image = [data.uploadUrl.destFilePath];
+  upload(data, uploadUrl) {
+    return this.attachment.cloudImageUpload(data,uploadUrl).pipe(
+      map((resp=>{
+      this.profileImageData.image = uploadUrl.destFilePath;
+      this.form1.myForm.value.image = [uploadUrl.destFilePath];
       this.profileImageData.isUploaded = true;
       this.profileImageData.haveValidationError = false;
-      this.loaderService.stopLoader();
       this.onSubmit();
-    }, error => {
-      this.loaderService.stopLoader();
-    })
+    })))
   }
 
   resetForm() {
     this.form1.reset();
   }
 
-  preFillData(existingData) {
-    for(let j=0;j<this?.meetingPlatforms.length;j++){
-      if( existingData.meetingInfo.platform == this?.meetingPlatforms[j].name){
+  async preFillData(data) {
+    let existingData = await this.form.formatEntityOptions(data,this.entityNames)
+
+    for(let j=0;j<this?.meetingPlatforms?.length;j++){
+      if( existingData.meeting_info.platform == this?.meetingPlatforms[j].name){
          this.selectedLink = this?.meetingPlatforms[j];
          this.selectedHint = this.meetingPlatforms[j].hint;
         let obj = this?.meetingPlatforms[j]?.form?.controls.find( (link:any) => link?.name == 'link')
         let meetingId = this?.meetingPlatforms[j]?.form?.controls.find( (meetingId:any) => meetingId?.name == 'meetingId')
         let password = this?.meetingPlatforms[j]?.form?.controls.find( (password:any) => password?.name == 'password')
-        if(existingData.meetingInfo.link){
-          obj.value = existingData?.meetingInfo?.link;
-          meetingId = existingData?.meetingInfo?.meta?.meetingId;
-          password = existingData?.meetingInfo?.meta?.password;
+        if(existingData.meeting_info.link){
+          obj.value = existingData?.meeting_info?.link;
+        }
+        if(existingData?.meeting_info?.meta?.meetingId){
+          meetingId.value = existingData?.meeting_info?.meta?.meetingId;
+          password.value = existingData?.meeting_info?.meta?.password;
         }
       }
     }
@@ -233,11 +250,15 @@ export class CreateSessionPage implements OnInit {
     this.showForm = true;
   }
 
-  imageUploadEvent(event) {
-    this.localImage = event;
-    this.profileImageData.image = this.lastUploadedImage =  this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
-    this.profileImageData.isUploaded = false;
-    this.profileImageData.haveValidationError = true;
+  async imageUploadEvent(event) {
+    this.localImage = event.target.files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = (file: any) => {
+      this.profileImageData.image = this.lastUploadedImage = file.target.result
+      this.profileImageData.isUploaded = false;
+      this.profileImageData.haveValidationError = true;
+    }
   }
 
   imageRemoveEvent(event){
@@ -247,8 +268,11 @@ export class CreateSessionPage implements OnInit {
     this.profileImageData.isUploaded = true;
     this.profileImageData.haveValidationError = false;
   }
-  segmentChanged(event){
+  async segmentChanged(event){
     this.type = event.target.value;
+    if(this.id){
+      this.getSessionDetailsUpdate();
+    }
   }
   isValid(event){
     this.isSubmited = event;
@@ -263,7 +287,7 @@ export class CreateSessionPage implements OnInit {
   onSubmitLink(){
     if (this.platformForm.myForm.valid){
       let meetingInfo = {
-        'meetingInfo':{
+        'meeting_info':{
           'platform': this.selectedLink.name,
           'link': this.platformForm.myForm.value?.link,
           'value': this.selectedLink.value,
@@ -281,5 +305,4 @@ export class CreateSessionPage implements OnInit {
   compareWithFn(o1, o2) {
     return o1 === o2;
   };
-
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonContent } from '@ionic/angular';
+import { IonContent, IonInfiniteScroll } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import {
   HttpService,
@@ -16,8 +16,10 @@ import { CommonRoutes } from 'src/global.routes';
 })
 export class MentorDirectoryPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
+  @ViewChild(IonContent) infinitescroll: IonInfiniteScroll;
+
   page = 1; //todo: Enable pagenation
-  limit = 100;
+  limit = 50;
   searchText: string = '';
   public headerConfig: any = {
     menu: true,
@@ -49,34 +51,41 @@ export class MentorDirectoryPage implements OnInit {
     this.content.scrollToTop(1000);
   }
 
-  async getMentors() {
-    await this.loaderService.startLoader();
+  async getMentors(showLoader = true) {
+    showLoader ? await this.loaderService.startLoader(): '';
     const config = {
       url: urlConstants.API_URLS.MENTORS_DIRECTORY + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText),
       payload: {}
     };
     try {
       let data: any = await this.httpService.get(config);
-      this.loaderService.stopLoader();
-      console.log(data.result, "data.result");
-      this.mentors = this.mentors.concat(data.result.data);
+      showLoader ? await this.loaderService.stopLoader(): '';
+      if(this.mentors.length && this.mentors[this.mentors.length-1].key==data.result.data[0]?.key){
+        this.mentors[this.mentors.length-1].values = this.mentors[this.mentors.length-1].values.concat(data.result.data[0].values)
+        data.result.data.shift();
+        this.mentors = this.mentors.concat(data.result.data);
+      } else {
+        this.mentors = this.mentors.concat(data.result.data);
+      }
+      this.infinitescroll.disabled = this.mentorsCount == 0 ? true : false;
       this.mentorsCount = data.result.count;
     }
     catch (error) {
-      this.loaderService.stopLoader();
+      showLoader ? await this.loaderService.stopLoader(): '';
     }
   }
   eventAction(event) {
     console.log(event, "event");
     switch (event.type) {
       case 'cardSelect':
-        this.router.navigate([CommonRoutes.MENTOR_DETAILS,event?.data?._id]);
+        this.router.navigate([CommonRoutes.MENTOR_DETAILS,event?.data?.id]);
         break;
     }
   }
-  loadMore() {
+  async loadMore(event) {
     this.page = this.page + 1;
-    this.getMentors();
+    await this.getMentors(false);
+    event.target.complete();
   }
   onSearch() {
     this.page = 1;

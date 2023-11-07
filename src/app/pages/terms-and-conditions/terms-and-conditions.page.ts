@@ -35,7 +35,7 @@ export class TermsAndConditionsPage implements OnInit {
 
   async fetchForm() {
     const response = await this.form.getForm(TERMS_AND_CONDITIONS_FORM);
-    this.items = _.get(response, 'result.data.fields');
+    this.items = _.get(response, 'data.fields');
   }
 
   ngOnInit() { 
@@ -54,7 +54,6 @@ export class TermsAndConditionsPage implements OnInit {
         this.labels[index] = translatedLabel[key];
       })
     })
-    console.log(this.labels)
   }
 
   // expandItem(item): void {
@@ -78,8 +77,7 @@ export class TermsAndConditionsPage implements OnInit {
     await this.modalController.dismiss();
   }
   async setLocalStorage() {
-    let localUser = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    await this.profileService.getProfileDetailsFromAPI(localUser.isAMentor,localUser._id);
+    await this.profileService.getProfileDetailsFromAPI();
   }
 
   checked() {

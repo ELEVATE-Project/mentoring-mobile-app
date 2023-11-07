@@ -32,6 +32,18 @@ interface JsonFormControlOptions {
   step?: string;
   icon?: string;
 }
+
+interface JsonFormErrorMessages {
+  required?: string;
+  email?: string;
+  minlength?: string;
+  pattern?: string;
+  min?: string;
+  max?: string;
+  requiredtrue?: string;
+  nullvalidator?: string;
+}
+
 interface JsonFormControls {
   name: string;
   label: string;
@@ -41,14 +53,15 @@ interface JsonFormControls {
   position: string;
   required?: boolean;
   disabled?: boolean;
-  options?: JsonFormControlOptions;
+  options?: Array<object>;
   validators: JsonFormValidators;
   numberOfStars?:number;
-  errorMessage?:string;
+  errorMessage?:JsonFormErrorMessages;
   dependentKey?:string;
   isNumberOnly?: boolean;
   alertLabel?: string;
   platformPlaceHolder?:string;
+  showSelectAll?: boolean;
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
@@ -61,6 +74,8 @@ export interface JsonFormData {
 })
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
+  @Input() readonly: any = false;
+  
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
   currentDate = moment().format("YYYY-MM-DDTHH:mm");
@@ -70,13 +85,16 @@ export class DynamicFormComponent implements OnInit {
   dependedParent: any;
   dependedParentDate: any;
   @Output() formValid = new EventEmitter()
+  @Output() onEnter = new EventEmitter()
+  showCalendar=false
+  dateControl:any={}
 
   constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
   ngOnInit() {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){
-        console.log(element, index);
         this.jsonFormData.controls[index].options = _.sortBy(this.jsonFormData.controls[index].options, ['label']);
+        this.jsonFormData.controls[index].value = this.jsonFormData.controls[index].value === null ? [] : this.jsonFormData.controls[index].value
       }
     });
     setTimeout(() => {
@@ -138,6 +156,9 @@ export class DynamicFormComponent implements OnInit {
       );
     }
     this.formValid.emit(this.myForm.valid)
+    if(this.readonly){
+      this.myForm.disable()
+    }
   }
   compareWith(a, b) {
     a = _.flatten([a]);
@@ -167,6 +188,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   dateSelected(event, control){
+    this.dateControl['value'] = event.detail.value
     if(control.dependedChild){
       this.dependedChild = control.dependedChild;
       this.dependedChildDate = event.detail.value;
@@ -177,5 +199,23 @@ export class DynamicFormComponent implements OnInit {
   }
   removeSpace(event: any){
     event.target.value = event.target.value.trimStart()
+  }
+
+  toggleCalendar(control){
+    control['value'] = control.value? moment(control.value).format('YYYY-MM-DDTHH:mm'):'';
+    this.dateControl = control
+    this.showCalendar = !this.showCalendar
+  }
+
+  selectionChanged(control, event){
+    const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
+    if (indexToEdit !== -1) {
+      this.jsonFormData.controls[indexToEdit].value = event.detail.value
+    }
+  }
+  onEnterPress(event){
+    if(this.myForm.valid){
+      this.onEnter.emit(event)
+    }
   }
 }

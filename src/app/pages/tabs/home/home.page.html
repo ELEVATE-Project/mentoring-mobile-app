@@ -1,22 +1,39 @@
 <app-page-header [config]="headerConfig">
-  <ion-row class="header-bottom-border ion-padding">
+  <!-- <ion-row class="header-bottom-border ion-padding">
     <h3>
       {{'WELCOME'| translate}} {{ user?.name }}!
     </h3>
     <ion-col class="welcome-note" size="12">{{'WELCOME_NOTE' | translate}}</ion-col>
-    <ion-col size="12" class="ion-no-padding">
-      <div>
+    <ion-col size="6" class="ion-no-padding"> -->
+      <!-- <p class="welcome-note hide-on-small-screen">{{'WELCOME_NOTE'| translate}}!</p> -->
+      <div class="d-flex flex-justify-center my-8">
         <ion-searchbar class="search-bar" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}" (click)="search()">
         </ion-searchbar>
       </div>
-    </ion-col>
-  </ion-row>
+    <!--</ion-col>
+  </ion-row> -->
 </app-page-header>
-<div class="page-intro segment-wrapper">
+<ion-card *ngIf="showBecomeMentorCard" class="ion-padding card-config">
+  <ion-card-header class="ion-no-padding d-flex flex-align-items-center flex-justify-space-between">
+    <ion-label class="header-label">{{"CONNECT_SHARE_&_INSPIRE"|translate}}</ion-label>
+    <div class="round-icon-button d-flex flex-align-items-center flex-justify-center" (click)="closeCard()">
+      <ion-icon class="close-icon" name="close"></ion-icon>
+    </div>
+  </ion-card-header>
+
+  <ion-card-content class="ion-no-padding">
+    <div class="d-flex flex-justify-center">
+      <img src="../../../../assets/images/request-to-be-a-mentor.svg" alt="Image" />
+    </div>
+    <ion-label class="header-label content-label">{{"EMPOWER_THE_SCHOOL_LEADERS"|translate}}</ion-label>
+  </ion-card-content>
+  <ion-button class="mentor-card-button my-8" (click)="becomeMentor()">{{"BECOME_A_MENTOR"|translate}}</ion-button>
+</ion-card>
+<div class="page-intro segment-wrapper" [ngClass]="{'align-center': !isNativeApp}">
   <div class="d-flex segment-wrapper">
     <div class="segment-div" *ngFor="let segment of segmentButtons;">
       <ion-button
-        *ngIf="!mentorSegmentButton.includes(segment.name) || (mentorSegmentButton.includes(segment.name)&&user?.isAMentor)"
+        *ngIf="!mentorSegmentButton.includes(segment.name) || (mentorSegmentButton.includes(segment.name)&&isMentor)"
         [ngClass]="{'font-bold': (selectedSegment==segment?.name) , 'segment-button': (selectedSegment!=segment?.name)}"
         fill="outline" (click)="segmentChanged(segment)">{{segment?.label|translate}}</ion-button>
     </div>
@@ -24,28 +41,49 @@
 </div>
 <ion-content>
   <div *ngIf="sessions&&(selectedSegment=='all-sessions')">
-    <div class="my-10" *ngFor="let session of sessions?.allSessions">
-      <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
-      </app-session-card>
-    </div>
+    <ion-grid>
+      <ion-row class="d-flex ">
+        <ion-col *ngFor="let session of sessions?.all_sessions" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
+          align-self-stretch>
+          <div class="my-10" >
+            <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
+            </app-session-card>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
-  <div *ngIf="(selectedSegment=='created-sessions')&&user?.isAMentor">
+  <div *ngIf="(selectedSegment=='created-sessions')&& isMentor">  
     <ion-card *ngIf="createdSessions?.data?.length" class="session-sqr-card">
       <ion-card-content class="card-content">
         <div class="segment-button d-flex flex-justify-center flex-align-items-flex-end">
           {{"START_CREATE_SESSION"|translate}}
         </div>
+        <ion-grid>
+          <ion-row class="d-flex flex-justify-center">
+            <ion-col padding size-xs="12" size-sm="12" size-md="8" size-lg="6" align-self-stretch>
         <ion-button shape="round" strong="true" class="card-button" (click)="createSession()">
           {{'CREATE_SESSION' | translate}} <ion-icon class="create-icon" name="add-circle-outline"></ion-icon>
         </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
       </ion-card-content>
     </ion-card>
     <div *ngIf="createdSessions?.data?.length">
       <ion-label class="font-bold section-header">{{"CREATED_SESSIONS"|translate}}</ion-label>
-      <div *ngFor="let session of createdSessions?.data">
-        <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
-        </app-session-card>
-      </div>
+      <ion-grid>
+        <ion-row class="d-flex ">
+          <ion-col *ngFor="let session of createdSessions?.data" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
+            align-self-stretch>
+            <div >
+              <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
+              </app-session-card>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
     </div>
     <div *ngIf="!createdSessions?.data?.length">
       <app-no-data-found [messageHeader]="'NO_SESSIONS_CREATED'" [messageDescription]="'START_CREATING_SESSION'">
@@ -58,30 +96,22 @@
     </div>
   </div>
   <div *ngIf="sessions&&(selectedSegment=='my-sessions')">
-    <div *ngIf="sessions && sessions?.mySessions?.length">
+    <div *ngIf="sessions && sessions?.my_sessions?.length">
       <ion-label class="font-bold section-header">{{"ENROLLED_SESSIONS"|translate}}</ion-label>
-      <div class="my-10" *ngFor="let session of sessions?.mySessions">
-        <app-session-card [data]="session" (onClickEvent)="eventAction($event)">
-        </app-session-card>
-      </div>
+      <ion-grid>
+        <ion-row class="d-flex ">
+          <ion-col *ngFor="let session of sessions?.my_sessions" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
+            align-self-stretch>
+            <div class="my-10" >
+              <app-session-card [data]="session" (onClickEvent)="eventAction($event)" [isEnrolled]="true">
+              </app-session-card>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+     
     </div>
-    <!-- <div *ngIf="sessions?.mySessions?.length">
-      <div class="page-intro">
-        <h5>
-          {{"MY_SESSIONS" | translate}}
-        </h5>
-        <ion-button color="primary" size="small" shape="round" class="ion-margin-top ion-text-capitalize"
-          (click)="viewMore('my-sessions')">
-          {{"VIEW_MORE" | translate}}<ion-icon name="caret-forward-outline"></ion-icon>
-        </ion-button>
-      </div>
-      <ion-row>
-        <ion-col size="6" *ngFor="let session of sessions?.mySessions">
-          <app-session-sqr-card [data]="session" (onClickEvent)="eventAction($event)"> </app-session-sqr-card>
-        </ion-col>
-      </ion-row>
-    </div> -->
-    <div *ngIf="sessions && !sessions?.mySessions.length">
+    <div *ngIf="sessions && !sessions?.my_sessions.length">
       <app-no-data-found [messageHeader]="'NO_SESSIONS_ENROLLED'" [messageDescription]="'CHECK_ALLSESSION_TO_ENROLL'">
       </app-no-data-found>
     </div>

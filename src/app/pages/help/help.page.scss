@@ -16,3 +16,10 @@
   .input{
       margin-top: 10px;
   }
+  ion-select::part(text) {
+    color: var(--black);
+  }
+  .select {
+    padding: unset;
+    width: 100%;
+  }

@@ -1,6 +1,6 @@
 .sub-menu-toolbar{
     height: 100px;
-    margin: 50px 5px 0px 10px;
+    padding: 10px;
     background-color: var(--white);
     color:--dark-gray;
     display: flex;
@@ -8,6 +8,7 @@
 .menu-css{
     height: 100%;
     margin-left: 20px;
+    overflow: hidden;
 }
 
 .sub-menu-list{
@@ -72,7 +73,8 @@
 .usr-div{
     display: grid;
     height: fit-content;
-    margin-top: 20px;
+    margin-top: 10%;
+    padding-left: 20px;
 }
 .usr-div a {
     background-color: transparent;
@@ -93,4 +95,7 @@
 }
 .side-menu-icon{
     font-size: xx-large;
+}
+.cursor {
+    cursor: pointer;
 }

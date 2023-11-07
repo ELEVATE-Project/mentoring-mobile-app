@@ -1,0 +1,18 @@
+.color-black {
+  color: black
+}
+.color-primary {
+  color: var(--ion-color-primary)
+}
+.header {
+  font-weight: bold;
+  font-size: 16px;
+  padding-bottom: 15px;
+}
+.icon-large {
+  font-size: xx-large;
+  color: var(--ion-color-primary);
+}
+ion-card-header {
+  padding-bottom: 10px;
+}
