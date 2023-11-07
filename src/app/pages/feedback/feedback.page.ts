@@ -4,6 +4,7 @@ import { ModalController, NavParams } from '@ionic/angular';
 import * as _ from 'lodash-es';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService, ToastService } from 'src/app/core/services';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 
@@ -20,7 +21,7 @@ export class FeedbackPage implements OnInit {
   };
   feedbackData = {
     feedbacks: [],
-    feedbackAs: null
+    feedback_as: null
   };
   sessionData: any;
   isMentor: boolean;
@@ -31,7 +32,8 @@ export class FeedbackPage implements OnInit {
     private router: Router,
     private modalController: ModalController,
     private navParams: NavParams,
-    private localStorage: LocalStorageService) {
+    private localStorage: LocalStorageService,
+    private profileService: ProfileService) {
     this.sessionData = this.navParams?.data?.data;
   }
 
@@ -39,13 +41,16 @@ export class FeedbackPage implements OnInit {
     this.isMentorChecking();
   }
   async isMentorChecking() {
-    let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    var response = await this.sessionService.getSessionDetailsAPI(this.sessionData._id);
-    this.mentorName = response.mentorName;
+    var response = await this.sessionService.getSessionDetailsAPI(this.sessionData.id);
+    this.mentorName = response.mentor_name;
     this.sessionTitle = response.title;
-    this.isMentor = userDetails?._id == response?.userId ? true : false;
+    this.isMentor = this.profileService.isMentor;
+    for (let i = 0; i < this.sessionData.form.length; i++) {
+      this.sessionData.form[i].validators = this.sessionData.form[i].rendering_data.validators;
+      this.sessionData.form[i].class = this.sessionData.form[i].rendering_data.class;
+    }
     this.formData.controls = this.sessionData.form;
-    this.feedbackData.feedbackAs = this.isMentor ? "mentor" : "mentee";
+    this.feedbackData.feedback_as = this.isMentor ? "mentor" : "mentee";
   }
 
   async submit() {
@@ -60,11 +65,11 @@ export class FeedbackPage implements OnInit {
             return element;
           }
         });
-        let feedback = { questionId: data._id, value: this.form1.myForm.value[key], label: data.label };
+        let feedback = { question_id: data.id, value: this.form1.myForm.value[key], label: data.label };
         this.feedbackData.feedbacks.push(feedback);
       }
     })
-    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.sessionData._id) : await this.sessionService.submitFeedback({ skippedFeedback: true, feedbackAs: this.feedbackData.feedbackAs }, this.sessionData._id);
+    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.sessionData.id) : await this.sessionService.submitFeedback({ skippedFeedback: true, feedback_as: this.feedbackData.feedback_as }, this.sessionData.id);
     if (result) {
       this.toast.showToast(result?.message, "success");
     }
@@ -72,7 +77,7 @@ export class FeedbackPage implements OnInit {
   }
 
   async closeModal() {
-    await this.sessionService.submitFeedback({ skippedFeedback: true, feedbackAs: this.feedbackData.feedbackAs }, this.sessionData._id);
+    await this.sessionService.submitFeedback({ skippedFeedback: true, feedback_as: this.feedbackData.feedback_as }, this.sessionData.id);
     await this.modalController.dismiss(false);
   }
 }

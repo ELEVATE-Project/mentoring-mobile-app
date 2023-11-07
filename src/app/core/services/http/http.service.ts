@@ -85,7 +85,7 @@ export class HttpService {
         let result: any = data.data;
         if(result?.meta?.data?.length && !this.isFeedbackTriggered){
           this.isFeedbackTriggered = true;
-          // this.openModal(result?.meta?.data[0]);
+          this.openModal(result?.meta?.data[0]);
         }
         if (result.responseCode === "OK") {
           return result;
