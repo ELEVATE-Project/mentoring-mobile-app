@@ -45,12 +45,16 @@ export class FeedbackPage implements OnInit {
     this.mentorName = response.mentor_name;
     this.sessionTitle = response.title;
     this.isMentor = this.profileService.isMentor;
-    for (let i = 0; i < this.sessionData.form.length; i++) {
-      this.sessionData.form[i].validators = this.sessionData.form[i].rendering_data.validators;
-      this.sessionData.form[i].class = this.sessionData.form[i].rendering_data.class;
-    }
+    this.formItems()
     this.formData.controls = this.sessionData.form;
     this.feedbackData.feedback_as = this.isMentor ? "mentor" : "mentee";
+  }
+
+  formItems(){
+    for (const formItem of this.sessionData.form) {
+    formItem.validators = formItem.rendering_data.validators;
+    formItem.class = formItem.rendering_data.class;
+    }
   }
 
   async submit() {
