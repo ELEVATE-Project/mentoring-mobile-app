@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { CommonRoutes } from 'src/global.routes';
 import { UserService } from '../../services/user/user.service';
 
 @Injectable({
@@ -21,7 +20,9 @@ export class PublicGuard implements CanActivate {
       else {
         return true;
       }
-    })
+    }).catch(error => {
+        return true;
+    });
   
   }
   

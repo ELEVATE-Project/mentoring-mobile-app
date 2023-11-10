@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
-import { PublicGuard } from './core/guards/canActivate/auth.guard';
+import { PublicGuard } from './core/guards/canActivate/public.guard';
 
 const routes: Routes = [
   {
