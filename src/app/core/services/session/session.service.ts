@@ -44,7 +44,7 @@ export class SessionService {
       params ='&search=' + obj.searchText
     }
     const config = {
-      url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj.page + '&limit=' + obj.limit +params,
+      url: urlConstants.API_URLS.CREATED_SESSIONS + obj.page + '&limit=' + obj.limit +params,
       payload: {}
     };
     try {

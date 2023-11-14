@@ -21,6 +21,9 @@ export const urlConstants = {
         REPORT_ISSUE:"/mentoring/v1/issues/create",
         GET_MAIL_INFO:"/mentoring/v1/platform/config",
         PROFILE_READ: "/mentoring/v1/profile/read",
+        CREATED_SESSIONS: "mentoring/v1/mentors/createdSessions?page=",
+        MENTORS_DIRECTORY_LIST: "mentoring/v1/mentors/list",
+        MENTORS_PROFILE_DETAILS: "mentoring/v1/mentors/details/",
         
         // FORMS
         FORM_READ:'/mentoring/v1/form/read',
