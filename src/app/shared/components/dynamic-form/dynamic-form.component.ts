@@ -96,6 +96,8 @@ export class DynamicFormComponent implements OnInit {
   dependedParentDate: any;
   @Output() formValid = new EventEmitter()
   @Output() onEnter = new EventEmitter()
+  showCalendar=false
+  dateControl:any={}
 
   constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
   ngOnInit() {
@@ -195,17 +197,27 @@ export class DynamicFormComponent implements OnInit {
     this.toast.showToast("Please refer to the on-boarding email for your secret code", "success")
   }
 
+  // dateSelected(event, control){
+  //   const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
+  //   if (indexToEdit !== -1) {
+  //     this.jsonFormData.controls[indexToEdit].value = event.value
+  //   }
+  //   if(control.dependedChild){
+  //     this.dependedChild = control.dependedChild;
+  //     this.dependedChildDate = event.value;
+  //   } else {
+  //     this.dependedParent = control.dependedParent
+  //     this.dependedParentDate = event.value;
+  //   }
+  // }
   dateSelected(event, control){
-    const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
-    if (indexToEdit !== -1) {
-      this.jsonFormData.controls[indexToEdit].value = event.value
-    }
+    this.dateControl['value'] = event.detail.value
     if(control.dependedChild){
       this.dependedChild = control.dependedChild;
-      this.dependedChildDate = event.value;
+      this.dependedChildDate = event.detail.value;
     } else {
       this.dependedParent = control.dependedParent
-      this.dependedParentDate = event.value;
+      this.dependedParentDate = event.detail.value;
     }
   }
 
@@ -218,6 +230,12 @@ export class DynamicFormComponent implements OnInit {
   
   removeSpace(event: any){
     event.target.value = event.target.value.trimStart()
+  }
+
+  toggleCalendar(control){
+    control['value'] = control.value? moment(control.value).format('YYYY-MM-DDTHH:mm'):'';
+    this.dateControl = control
+    this.showCalendar = !this.showCalendar
   }
 
   onEnterPress(event){
