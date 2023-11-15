@@ -101,8 +101,8 @@ export class CreateSessionPage implements OnInit {
         this.sessionDetails= response;
         this.profileImageData.image = response.image;
         this.profileImageData.isUploaded = true;
-        response.start_date = moment.unix(response.start_date).format("YYYY-MM-DD hh:mm a");
-        response.end_date = moment.unix(response.end_date).format("YYYY-MM-DD hh:mm a");
+        response.start_date = moment.unix(response.start_date);
+        response.end_date = moment.unix(response.end_date);
         this.preFillData(response);
   }
 
@@ -161,8 +161,8 @@ export class CreateSessionPage implements OnInit {
         this.getImageUploadUrl(this.localImage);
       } else {
         const form = Object.assign({}, this.form1.myForm.value);
-        form.start_date = new Date(form.start_date).getTime() / 1000.0;
-        form.end_date = new Date(form.end_date).getTime() / 1000.0;
+        form.start_date = form.start_date.unix().toString();
+        form.end_date = form.end_date.unix().toString();
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         form.time_zone = timezone;
         _.forEach(this.entityNames, (entityKey) => {
@@ -178,8 +178,6 @@ export class CreateSessionPage implements OnInit {
           this.isSubmited = true;
           this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
           this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
-          result.start_date = moment.unix(result.start_date).format("YYYY-MM-DD HH:mm a");
-          result.end_date = moment.unix(result.end_date).format("YYYY-MM-DD HH:mm a");
           if(!this.id && result.id){
             this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: result.id , type: 'segment'}, replaceUrl: true });
           }else {

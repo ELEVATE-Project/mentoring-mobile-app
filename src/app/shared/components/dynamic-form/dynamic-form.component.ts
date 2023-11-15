@@ -2,18 +2,17 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
-  OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChild,
   EventEmitter
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { IonDatetime } from '@ionic/angular';
 import * as _ from 'lodash-es';
 import * as moment from 'moment';
 import { ToastService } from 'src/app/core/services';
+import { ThemePalette } from '@angular/material/core';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 interface JsonFormValidators {
   min?: number;
@@ -75,7 +74,18 @@ export interface JsonFormData {
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
   @Input() readonly: any = false;
+  @ViewChild('picker') picker: MatDatepicker<Date>;
   
+  public showSpinners = true;
+  public showSeconds = false;
+  public touchUi = false;
+  public enableMeridian = true;
+  public stepHour = 1;
+  public stepMinute = 1;
+  public stepSecond = 1;
+  public color: ThemePalette = 'primary';
+
+
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
   currentDate = moment().format("YYYY-MM-DDTHH:mm");
@@ -86,8 +96,6 @@ export class DynamicFormComponent implements OnInit {
   dependedParentDate: any;
   @Output() formValid = new EventEmitter()
   @Output() onEnter = new EventEmitter()
-  showCalendar=false
-  dateControl:any={}
 
   constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
   ngOnInit() {
@@ -188,31 +196,23 @@ export class DynamicFormComponent implements OnInit {
   }
 
   dateSelected(event, control){
-    this.dateControl['value'] = event.detail.value
+    const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
+    if (indexToEdit !== -1) {
+      this.jsonFormData.controls[indexToEdit].value = event.value
+    }
     if(control.dependedChild){
       this.dependedChild = control.dependedChild;
-      this.dependedChildDate = event.detail.value;
+      this.dependedChildDate = event.value;
     } else {
       this.dependedParent = control.dependedParent
-      this.dependedParentDate = event.detail.value;
+      this.dependedParentDate = event.value;
     }
   }
+
   removeSpace(event: any){
     event.target.value = event.target.value.trimStart()
   }
 
-  toggleCalendar(control){
-    control['value'] = control.value? moment(control.value).format('YYYY-MM-DDTHH:mm'):'';
-    this.dateControl = control
-    this.showCalendar = !this.showCalendar
-  }
-
-  selectionChanged(control, event){
-    const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
-    if (indexToEdit !== -1) {
-      this.jsonFormData.controls[indexToEdit].value = event.detail.value
-    }
-  }
   onEnterPress(event){
     if(this.myForm.valid){
       this.onEnter.emit(event)
