@@ -209,6 +209,13 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
+  selectionChanged(control, event){
+    const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
+    if (indexToEdit !== -1) {
+      this.jsonFormData.controls[indexToEdit].value = event.detail.value
+    }
+  }
+  
   removeSpace(event: any){
     event.target.value = event.target.value.trimStart()
   }

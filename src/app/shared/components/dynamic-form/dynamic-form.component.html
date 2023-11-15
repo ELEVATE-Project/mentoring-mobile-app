@@ -76,7 +76,7 @@
         ></ion-icon>
         <ion-icon slot="end" [name]="control.options.icon"></ion-icon>
       </ion-range>
-      <mat-form-field *ngIf="control.type === 'date'" appearance="none">
+      <mat-form-field *ngIf="control.type === 'date'" appearance="outline">
         <input matInput [ngxMatDatetimePicker]="picker" 
           [formControlName]="control.name"
           [value]="control.value"
