@@ -76,15 +76,16 @@
         ></ion-icon>
         <ion-icon slot="end" [name]="control.options.icon"></ion-icon>
       </ion-range>
-      <!-- <mat-form-field *ngIf="control.type === 'date'" appearance="outline">
+      <mat-form-field *ngIf="control.type === 'date'" appearance="fill">
         <input matInput [ngxMatDatetimePicker]="picker" 
           [formControlName]="control.name"
           [value]="control.value"
           [min]="(control.name === dependedChild)?dependedChildDate:currentDate"
           [max]="maxDate"
           [disabled]="control?.disabled"
-          (dateChange)="dateSelected($event, control)">
-        <mat-datepicker-toggle matSuffix [for]="picker">
+          (dateChange)="dateSelected($event, control)"
+          (click)="dateInputClick(control,picker)">
+        <mat-datepicker-toggle matSuffix [for]="$any(picker)">
         </mat-datepicker-toggle>
         <ngx-mat-datetime-picker #picker 
           [showSpinners]="showSpinners" 
@@ -95,15 +96,7 @@
           [enableMeridian]="enableMeridian"
           [color]="color">
         </ngx-mat-datetime-picker>
-      </mat-form-field>  -->
-      <ion-input
-        [formControlName]="control.name"
-        *ngIf="control.type === 'date'"
-        (click)="toggleCalendar(control)"
-        value="{{control.value | date :'YYYY-MM-dd hh:mm a'}}"
-        placeholder="{{control?.placeHolder}}"
-        (ionFocus)="toggleCalendar(control)"
-      ></ion-input>
+      </mat-form-field> 
       <ion-select
         *ngIf="control.type === 'select'"
         [multiple]="control.multiple"
@@ -145,14 +138,6 @@
       class="icon"
       (click)="alertToast()"
       ></ion-icon>
-      <ion-icon 
-        slot="end"
-        size="small"
-        name="calendar"
-        *ngIf="control.type === 'date'"
-        class="icon"
-        (click)="toggleCalendar(control)"
-      ></ion-icon>
       <app-star-rating
         *ngIf="control.type === 'rating'"
         [formControlName]="control.name"
@@ -171,18 +156,3 @@
     </small>
   </div>
 </form>
-
-<ion-popover [isOpen]="showCalendar" (ionPopoverWillDismiss)="showCalendar=false">
-  <ng-template>
-    <ion-datetime
-    [name]="dateControl.name"
-    (ionChange)="dateSelected($event, dateControl)"
-    [min]="(dateControl.name === dependedChild)?dependedChildDate:currentDate"
-    [max]="(dependedParentDate && dateControl.name === dependedParent)?dependedParentDate:maxDate"
-    value="{{dateControl.value?dateControl.value:currentDate}}"
-    hourCycle="h12"
-    showDefaultButtons="true"
-    >
-    </ion-datetime>
-  </ng-template>
-</ion-popover>
