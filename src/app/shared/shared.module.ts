@@ -26,6 +26,11 @@ import { MentorCardComponent } from './components/mentor-card/mentor-card.compon
 import { NumberOnlyDirective } from './directive/onlyNumbers';
 import { JoinDialogBoxComponent } from './components/join-dialog-box/join-dialog-box.component';
 import { ModelComponent } from './components/model/model.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 
 @NgModule({
   declarations: [
@@ -57,6 +62,14 @@ import { ModelComponent } from './components/model/model.component';
     IonicModule,
     TranslateModule,
     FormsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    NgxMatMomentModule
   ],
   exports: [
     DynamicFormComponent,

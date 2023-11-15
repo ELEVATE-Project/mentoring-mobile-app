@@ -20,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { ServiceWorkerModule, SwUpdate } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -51,6 +52,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
+    BrowserAnimationsModule,
   ],
 
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
