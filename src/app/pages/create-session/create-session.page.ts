@@ -178,8 +178,6 @@ export class CreateSessionPage implements OnInit {
           this.isSubmited = true;
           this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
           this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
-          result.start_date = moment.unix(result.start_date).format("YYYY-MM-DD HH:mm a");
-          result.end_date = moment.unix(result.end_date).format("YYYY-MM-DD HH:mm a");
           if(!this.id && result.id){
             this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: result.id , type: 'segment'}, replaceUrl: true });
           }else {

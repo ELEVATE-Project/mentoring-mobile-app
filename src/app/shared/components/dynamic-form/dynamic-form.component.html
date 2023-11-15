@@ -76,6 +76,26 @@
         ></ion-icon>
         <ion-icon slot="end" [name]="control.options.icon"></ion-icon>
       </ion-range>
+      <!-- <mat-form-field *ngIf="control.type === 'date'" appearance="outline">
+        <input matInput [ngxMatDatetimePicker]="picker" 
+          [formControlName]="control.name"
+          [value]="control.value"
+          [min]="(control.name === dependedChild)?dependedChildDate:currentDate"
+          [max]="maxDate"
+          [disabled]="control?.disabled"
+          (dateChange)="dateSelected($event, control)">
+        <mat-datepicker-toggle matSuffix [for]="picker">
+        </mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #picker 
+          [showSpinners]="showSpinners" 
+          [showSeconds]="showSeconds"
+          [stepHour]="stepHour" [stepMinute]="stepMinute" 
+          [stepSecond]="stepSecond"
+          [touchUi]="touchUi"
+          [enableMeridian]="enableMeridian"
+          [color]="color">
+        </ngx-mat-datetime-picker>
+      </mat-form-field>  -->
       <ion-input
         [formControlName]="control.name"
         *ngIf="control.type === 'date'"
