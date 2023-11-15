@@ -37,6 +37,6 @@
     - name: Remove www folder
       shell: rm -rf www
     - name: Build pwa app
-      shell: cd {{project_path}} && ionic build --prod
+      shell: cd {{project_path}} && ionic build
     - name: Start pm2
       shell: cd {{project_path}} && pm2 start pm2.config.json
