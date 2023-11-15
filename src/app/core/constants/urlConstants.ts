@@ -7,9 +7,9 @@ export const urlConstants = {
         TERMS_CONDITIONS:"/user/v1/account/acceptTermsAndCondition",
         PROFILE_UPDATE:"/interface/v1/account/update",
         PROFILE_DETAILS: "/user/v1/user/read/",
-        MENTOR_PROFILE_DETAILS: "/mentoring/v1/mentors/profile/",
+        // MENTOR_PROFILE_DETAILS: "/mentoring/v1/mentors/profile/",
         MENTEE_PROFILE_DETAILS:"/mentoring/v1/mentees/profile/",
-        MENTORS_DIRECTORY:"/mentoring/v1/users/list?type=mentor&page=",
+        // MENTORS_DIRECTORY:"/mentoring/v1/users/list?type=mentor&page=",
         FILE_UPLOAD:"/user/v1/cloud-services/file/upload",
         SESSIONS:"/mentoring/v1/mentees/sessions?enrolled=", //sessions?enrolled=true/false&page=1&limit=5&search=:search
         HOME_SESSION:"/mentoring/v1/mentees/homeFeed?page=", ///v1/mentees/homefeed?page=1&limit=4
@@ -21,9 +21,9 @@ export const urlConstants = {
         REPORT_ISSUE:"/mentoring/v1/issues/create",
         GET_MAIL_INFO:"/mentoring/v1/platform/config",
         PROFILE_READ: "/mentoring/v1/profile/read",
-        CREATED_SESSIONS: "mentoring/v1/mentors/createdSessions?page=",
-        MENTORS_DIRECTORY_LIST: "mentoring/v1/mentors/list",
-        MENTORS_PROFILE_DETAILS: "mentoring/v1/mentors/details/",
+        CREATED_SESSIONS: "/mentoring/v1/mentors/createdSessions?page=",
+        MENTORS_DIRECTORY_LIST: "/mentoring/v1/mentors/list?page=",
+        MENTORS_PROFILE_DETAILS: "/mentoring/v1/mentors/details/",
         
         // FORMS
         FORM_READ:'/mentoring/v1/form/read',
@@ -31,7 +31,7 @@ export const urlConstants = {
         REGISTRATION_OTP:"/user/v1/account/registrationOtp",
         RESET_PASSWORD:"/user/v1/account/resetPassword",
         CREATE_SESSION:"/mentoring/v1/sessions/update",
-        GET_SESSIONS_LIST:"/mentoring/v1/sessions/list?page=",
+        // GET_SESSIONS_LIST:"/mentoring/v1/sessions/list?page=",
         GET_SESSION_DETAILS:"/mentoring/v1/sessions/details/",
         GET_SHARE_SESSION_LINK:"/mentoring/v1/sessions/share/",
         ENROLL_SESSION:"/mentoring/v1/sessions/enroll/",
