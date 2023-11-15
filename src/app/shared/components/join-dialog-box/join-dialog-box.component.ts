@@ -28,7 +28,7 @@ export class JoinDialogBoxComponent implements OnInit {
     this.meetingPlatform = (this.sessionData.meeting_info);
   }
   async openBrowser(link) {
-    await Browser.open({ url: link });
+    await Browser.open({  url: link, windowName:"_self" });
     Browser.addListener('browserFinished', () => {
       console.log("exit");
     });

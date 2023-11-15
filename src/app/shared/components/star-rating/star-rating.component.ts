@@ -37,7 +37,6 @@ export class StarRatingComponent implements OnInit, ControlValueAccessor {
   onTouched = () => { };
 
   writeValue(quantity: number) {
-    this.rate = quantity;
   }
 
   registerOnChange(onChange: any): void {

@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { ISocialSharing } from '../../interface/soical-sharing-interface';
 import { Capacitor } from '@capacitor/core';
 import { ModelComponent } from 'src/app/shared/components/model/model.component';
+import * as Bowser from "bowser"
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,9 @@ export class UtilService {
     private modalCtrl: ModalController,
     private alert: AlertController,
     private translate: TranslateService
-  ) {}
+  ) {
+    const browser = Bowser.getParser(window.navigator.userAgent);
+  }
 
   getDeepLink(url){
     return environment.deepLinkUrl+url;
@@ -73,7 +76,7 @@ export class UtilService {
     });
   }
 
-  getActionSheetButtons(type) {
+  getActionSheetButtons(profileImageData) {
     let texts
     this.translate
       .get([
@@ -89,25 +92,12 @@ export class UtilService {
         texts = data;
       });
     let buttons = []
-
-    switch (Capacitor.isNativePlatform()) {
+    let isMobile = this.isMobile()
+    let removeCurrentPhotoValid = (profileImageData.image) ? true:false;
+    switch (removeCurrentPhotoValid){
       case true:
         buttons = [
           {
-            text: texts["REMOVE_CURRENT_PHOTO_LABEL"],
-            type: 'remove',
-            action: 'remove'
-          },
-          {
-            text: texts["TAKE_PHOTO"],
-            type: 'CAMERA',
-            action: 'camera'
-          }
-        ]
-        break;
-      case false:
-        buttons = [
-           {
             text: texts["REMOVE_CURRENT_PHOTO_LABEL"],
             type: 'remove',
             action: 'remove'
@@ -115,6 +105,17 @@ export class UtilService {
         ]
         break;
     }
+
+    switch (isMobile) {
+      case true:
+        buttons.push({
+          text: texts["TAKE_PHOTO"],
+            type: 'CAMERA',
+            action: 'camera'
+        })
+        break;
+    }
+    
     buttons.push({
       text: texts["CHOOSE_FROM_LIBRARY"],
       type: 'PHOTOLIBRARY',
@@ -126,5 +127,9 @@ export class UtilService {
       action: "cancel",
     })
     return buttons;
+  }
+
+  isMobile(){
+    return /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
   }
 }

@@ -333,3 +333,8 @@ ion-searchbar {
 .mat-form-field-wrapper{
   padding-bottom: 15px !important;
 }
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}

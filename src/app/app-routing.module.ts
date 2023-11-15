@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
+import { PublicGuard } from './core/guards/canActivate/public.guard';
 
 const routes: Routes = [
   {
@@ -9,7 +10,8 @@ const routes: Routes = [
   },
   {
     path: CommonRoutes.AUTH,
-    loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule)
+    loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule),
+    canActivate:[PublicGuard]
   },
   {
     path: CommonRoutes.SESSIONS,

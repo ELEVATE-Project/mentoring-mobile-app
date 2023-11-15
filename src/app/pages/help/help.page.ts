@@ -11,7 +11,7 @@ import { HELP } from 'src/app/core/constants/formConstant';
 import * as _ from 'lodash';
 import { App } from '@capacitor/app';
 import { TranslateService } from '@ngx-translate/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController} from '@ionic/angular';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import * as Bowser from "bowser"
 
@@ -27,48 +27,29 @@ export class HelpPage implements OnInit {
     label: "HELP"
   };
   public formData: JsonFormData;
-  metaData: { deviceName: string; androidVersion: string; version: string; type: string;browserName:string;browserVersion:string};
+  metaData:any;
   selectedOption: any;
   helpForms: any;
   userDetails: any;
   message: any;
-  public isMobile = /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
- 
 
   constructor(private router: Router, private loaderService: LoaderService, private toast: ToastService, private httpService: HttpService,
     // private device: Device, 
-    private form: FormService, private translate: TranslateService,private alert: AlertController,private profileService: ProfileService,) { }
+    private form: FormService, private translate: TranslateService, private alert: AlertController, private profileService: ProfileService) {}
 
   async ngOnInit() {
     const browser = Bowser.getParser(window.navigator.userAgent);
     this.helpForm();
-    await  this.profileService.profileDetails().then((userDetails) => {
-        this.userDetails = userDetails;
-      });
-      if(this.isMobile){
-        App.getInfo().then(async (data)=>{
-          const info = await Device.getInfo();
-          this.metaData = {
-            deviceName: info.model,
-            androidVersion: info.osVersion,
-            version: data.version,
-            type: '',
-            browserName:'',
-            browserVersion:''
-          }
-        })
-      }else{
-        this.metaData = {
-          deviceName: '',
-          androidVersion: '',
-          version: '',
-          type: '',
-          browserName:browser.getBrowserName(),
-          browserVersion:browser.getBrowserVersion()
-        }
-      }
-   
-    
+    await this.profileService.profileDetails().then((userDetails) => {
+      this.userDetails = userDetails;
+    });
+    this.metaData = {
+      browserName: browser.getBrowserName(),
+      browserVersion: browser.getBrowserVersion(),
+      osName: browser.getOSName(),
+      platformType: browser.getPlatformType(),
+      type: '',
+    }
   }
 
   onSubmit(option: any) {
@@ -85,7 +66,7 @@ export class HelpPage implements OnInit {
     };
     try {
       let result = await this.httpService.post(config);
-      result?this.toast.showToast(result.message, "success"):this.toast.showToast(result.message, "danger");
+      result?this.toast.showToast(result.message, "success") : this.toast.showToast(result.message, "danger");
       this.loaderService.stopLoader();
     }
     catch (error) {
@@ -95,32 +76,32 @@ export class HelpPage implements OnInit {
   }
   async deteteAccount(){
     let texts: any;
-        this.translate.get(['DELETE_ALERT_MSG', 'YES', 'NO', 'DELETE_ACCOUNT']).subscribe(text => {
-          texts = text;
-        })
-        const alert = await this.alert.create({
-          header: texts['DELETE_ACCOUNT'],
-          message: texts['DELETE_ALERT_MSG'],
-          buttons: [
-            {
-              text: texts['YES'],
-              cssClass: "alert-button-bg-white",
-              role: 'yes',
-              handler: () => { }
-            },
-            {
-              text: texts['NO'],
-              cssClass: "alert-button",
-              role: 'no',
-              handler: () => { }
-            }
-          ]
-        });
-        await alert.present();
-        let data = await alert.onDidDismiss();
-      if(data.role == 'yes'){
-        this.submitHelpReport();
-      }
+    this.translate.get(['DELETE_ALERT_MSG', 'YES', 'NO', 'DELETE_ACCOUNT']).subscribe(text => {
+      texts = text;
+    })
+    const alert = await this.alert.create({
+      header: texts['DELETE_ACCOUNT'],
+      message: texts['DELETE_ALERT_MSG'],
+      buttons: [
+        {
+          text: texts['YES'],
+          cssClass: "alert-button-bg-white",
+          role: 'yes',
+          handler: () => { }
+        },
+        {
+          text: texts['NO'],
+          cssClass: "alert-button",
+          role: 'no',
+          handler: () => { }
+        }
+      ]
+    });
+    await alert.present();
+    let data = await alert.onDidDismiss();
+    if (data.role == 'yes') {
+      this.submitHelpReport();
+    }
   }
   async helpForm(){
     const result = await this.form.getForm(HELP);
