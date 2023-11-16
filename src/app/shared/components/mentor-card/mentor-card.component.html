@@ -8,15 +8,14 @@
         <img class="thumbnail-image" src="{{data?.image}}" />
       </ng-template>
     </div>
-    <ion-col padding size-xs="6" size-sm="10" size-md="8" size-lg="6">
+    <ion-col padding size-xs="8" size-sm="10" size-md="8" size-lg="7">
     <div>
       <h5 class="text-align">{{data?.name || data?.title}}</h5>
-      <!-- <div class="margin-btm-10" *ngIf="data?.areasOfExpertise?.length">
-        <span class="ion-margin-top" *ngFor="let label of data?.areasOfExpertise;  let isLast=last">
+      <div class="margin-btm-10 align-area-of-expertise" *ngIf="data?.area_of_expertise?.length">
+        <span class="ion-margin-top" *ngFor="let label of data?.area_of_expertise;  let isLast=last">
           <ion-label>{{label?.label}}{{isLast ? '' : ', '}} </ion-label>
         </span>
-      </div> -->
-      <p class="text-align" *ngIf="data?.about">{{data?.about}}</p>
+      </div>
     </div>
   </ion-col>    
   </ion-row>
