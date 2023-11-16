@@ -330,11 +330,23 @@ ion-searchbar {
   }
 }
 
-.mat-form-field-wrapper{
-  padding-bottom: 15px !important;
-}
-
 ::-webkit-scrollbar {
   width: 0px;
   background: transparent;
 }
+
+::ng-deep .mat-form-field-appearance-outline.mat-form-field-disabled, ::ng-deep .mat-form-field-outline {
+  opacity: 0 !important;
+  }
+
+  .mat-form-field-flex {
+    background: transparent !important;
+  }
+
+  .mat-form-field-underline {
+    display: none !important; /* Hide the underline */
+  }
+
+  .mat-form-field-wrapper{
+    padding-bottom: 10px !important;
+  }

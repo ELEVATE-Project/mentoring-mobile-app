@@ -13,6 +13,7 @@ import * as moment from 'moment';
 import { ToastService } from 'src/app/core/services';
 import { ThemePalette } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { NGX_MAT_DATE_FORMATS, NgxMatDateFormats, NgxMatDatetimePicker } from '@angular-material-components/datetime-picker';
 
 interface JsonFormValidators {
   min?: number;
@@ -66,10 +67,28 @@ export interface JsonFormData {
   controls: JsonFormControls[];
 }
 
+const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
+  parse: {
+    dateInput: 'MMM d, y, LT'
+  },
+  display: {
+    dateInput: 'MMM d, y, LT',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
+
 @Component({
   selector: 'app-dynamic-form',
   templateUrl: './dynamic-form.component.html',
   styleUrls: ['./dynamic-form.component.scss'],
+  providers: [
+    {
+      provide: NGX_MAT_DATE_FORMATS,
+      useValue: CUSTOM_DATE_FORMATS
+    }
+]
 })
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
@@ -83,23 +102,21 @@ export class DynamicFormComponent implements OnInit {
   public stepHour = 1;
   public stepMinute = 1;
   public stepSecond = 1;
-  public color: ThemePalette = 'primary';
+  public color: ThemePalette = 'warn';
 
 
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
-  currentDate = moment().format("YYYY-MM-DDTHH:mm");
-  maxDate = moment(this.currentDate).add(10, "years").format("YYYY-MM-DDTHH:mm");
+  currentDate = moment().format('dd/MM/yyyy HH:mm');
+  maxDate = moment(this.currentDate).add(10, "years").format('dd/MM/yyyy HH:mm:ss');
   dependedChild: any;
   dependedChildDate="";
   dependedParent: any;
   dependedParentDate: any;
   @Output() formValid = new EventEmitter()
   @Output() onEnter = new EventEmitter()
-  showCalendar=false
-  dateControl:any={}
 
-  constructor(private fb: FormBuilder, private toast: ToastService, private changeDetRef: ChangeDetectorRef) {}
+  constructor(private fb: FormBuilder, private toast: ToastService) {}
   ngOnInit() {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){
@@ -197,28 +214,24 @@ export class DynamicFormComponent implements OnInit {
     this.toast.showToast("Please refer to the on-boarding email for your secret code", "success")
   }
 
-  // dateSelected(event, control){
-  //   const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
-  //   if (indexToEdit !== -1) {
-  //     this.jsonFormData.controls[indexToEdit].value = event.value
-  //   }
-  //   if(control.dependedChild){
-  //     this.dependedChild = control.dependedChild;
-  //     this.dependedChildDate = event.value;
-  //   } else {
-  //     this.dependedParent = control.dependedParent
-  //     this.dependedParentDate = event.value;
-  //   }
-  // }
   dateSelected(event, control){
-    this.dateControl['value'] = event.detail.value
+    const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
+    if (indexToEdit !== -1) {
+      this.jsonFormData.controls[indexToEdit].value = event.value
+    }
     if(control.dependedChild){
       this.dependedChild = control.dependedChild;
-      this.dependedChildDate = event.detail.value;
+      this.dependedChildDate = event.value;
     } else {
       this.dependedParent = control.dependedParent
-      this.dependedParentDate = event.detail.value;
+      this.dependedParentDate = event.value;
     }
+  }
+
+  dateInputClick(control, datetimePicker: NgxMatDatetimePicker<any>) {
+    if (this.myForm.get(control.name).value)
+      datetimePicker._selected = this.myForm.get(control.name).value;
+    datetimePicker.open();
   }
 
   selectionChanged(control, event){
@@ -230,12 +243,6 @@ export class DynamicFormComponent implements OnInit {
   
   removeSpace(event: any){
     event.target.value = event.target.value.trimStart()
-  }
-
-  toggleCalendar(control){
-    control['value'] = control.value? moment(control.value).format('YYYY-MM-DDTHH:mm'):'';
-    this.dateControl = control
-    this.showCalendar = !this.showCalendar
   }
 
   onEnterPress(event){
