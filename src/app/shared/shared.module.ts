@@ -28,7 +28,7 @@ import { JoinDialogBoxComponent } from './components/join-dialog-box/join-dialog
 import { ModelComponent } from './components/model/model.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';                                              
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 
@@ -69,7 +69,7 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
-    NgxMatMomentModule
+    NgxMatMomentModule, 
   ],
   exports: [
     DynamicFormComponent,
