@@ -96,7 +96,7 @@ export class MentorDetailsPage implements OnInit {
     let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     // this.mentorId=user._id;
     const config = {
-      url: urlConstants.API_URLS.MENTOR_PROFILE_DETAILS + this.mentorId,
+      url: urlConstants.API_URLS.MENTORS_PROFILE_DETAILS + this.mentorId,
       payload: {}
     };
     try {
