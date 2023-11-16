@@ -102,7 +102,7 @@ export class DynamicFormComponent implements OnInit {
   public stepHour = 1;
   public stepMinute = 1;
   public stepSecond = 1;
-  public color: ThemePalette = 'primary';
+  public color: ThemePalette = 'warn';
 
 
   public myForm: FormGroup = this.fb.group({});
