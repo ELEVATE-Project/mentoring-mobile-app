@@ -71,14 +71,14 @@ export class DashboardPage implements OnInit {
 
   public headerConfig: any = {
     menu: true,
-    label: 'DASHBOARD_PAGE',
+    label:'DASHBOARD_PAGE',
     headerColor: 'primary',
   };
 
   getReports() {
     const url = this.segment === 'mentor' ? urlConstants.API_URLS.MENTOR_REPORTS : urlConstants.API_URLS.MENTEE_REPORTS;
     const config = {
-      url: url + this.selectedFilter.toUpperCase(),
+      url: url+this.selectedFilter.toUpperCase(),
     };
     let texts: any;
     this.translate.get(['TOTAL_SESSION_CREATED', 'TOTAL_SESSION_CONDUCTED', 'TOTAL_SESSION_ENROLLED', 'TOTAL_SESSION_ATTENDED']).subscribe(text => {
