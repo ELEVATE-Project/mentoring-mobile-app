@@ -201,6 +201,13 @@ async getSessionsList(obj) {
       console.log("exit");
     });
   }
+  async openBrowserWithNewTab(link) {
+    await Browser.open({ url: link, windowName:"_blank" });
+    Browser.addListener('browserFinished', () => {
+      console.log("exit");
+    });
+  }
+
 
   async submitFeedback(feedbackData, sessionId) {
     const config = {
