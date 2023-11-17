@@ -17,7 +17,7 @@ export class DashboardPage implements OnInit {
   public chart: any;
   segment: any;
   dataAvailable;
-  isMentor: boolean;
+  isMentor:boolean;
   selectedFilter = "WEEKLY";
   filter: any = [
     {
