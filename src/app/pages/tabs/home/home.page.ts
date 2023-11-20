@@ -165,17 +165,20 @@ export class HomePage implements OnInit {
     this.selectedSegment = event.name;
   }
   async createSession() {
-    let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    if (userDetails?.about) {
-      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]);
+    if (this.user?.about != null) {
+      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]); 
     } else {
-      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]); 
     }
   }
 
-  becomeMentor() {
-    this.showBecomeMentorCard = false;
-    this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);
+  async becomeMentor() {
+    if(this.user?.about != null){
+      this.showBecomeMentorCard = false;
+      this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);   
+    } else{
+      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+    }
   }
 
   closeCard() {

@@ -44,7 +44,7 @@ export class SessionService {
       params ='&search=' + obj.searchText
     }
     const config = {
-      url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj.page + '&limit=' + obj.limit +params,
+      url: urlConstants.API_URLS.CREATED_SESSIONS + obj.page + '&limit=' + obj.limit +params,
       payload: {}
     };
     try {
@@ -63,7 +63,7 @@ export class SessionService {
 
 async getSessionsList(obj) {
   const config = {
-    url: urlConstants.API_URLS.SESSIONS + obj?.type + '&page=' + obj?.page + '&limit=' + obj?.limit + '&search=' + btoa(obj?.searchText),
+    url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj?.type + '&page=' + obj?.page + '&limit=' + obj?.limit + '&search=' + btoa(obj?.searchText),
   };
   try {
     let data: any = await this.httpService.get(config);
@@ -195,8 +195,8 @@ async getSessionsList(obj) {
     }
   }
 
-  async openBrowser(link) {
-    await Browser.open({ url: link, windowName:"_self" });
+  async openBrowser(link, windowName:any = "_self") {
+    await Browser.open({ url: link, windowName:windowName });
     Browser.addListener('browserFinished', () => {
       console.log("exit");
     });

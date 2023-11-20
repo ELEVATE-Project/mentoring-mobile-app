@@ -54,7 +54,7 @@ export class MentorDirectoryPage implements OnInit {
   async getMentors(showLoader = true) {
     showLoader ? await this.loaderService.startLoader(): '';
     const config = {
-      url: urlConstants.API_URLS.MENTORS_DIRECTORY + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText),
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText),
       payload: {}
     };
     try {
