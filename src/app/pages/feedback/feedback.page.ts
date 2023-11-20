@@ -73,7 +73,7 @@ export class FeedbackPage implements OnInit {
         this.feedbackData.feedbacks.push(feedback);
       }
     })
-    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.sessionData.id) : await this.sessionService.submitFeedback({ is_feedback_skipped: true, feedback_as: this.feedbackData.feedback_as }, this.sessionData.id);
+    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.sessionData.id) : await this.sessionService.submitFeedback({ skippedFeedback: true, feedback_as: this.feedbackData.feedback_as }, this.sessionData.id);
     if (result) {
       this.toast.showToast(result?.message, "success");
     }
@@ -81,7 +81,7 @@ export class FeedbackPage implements OnInit {
   }
 
   async closeModal() {
-    await this.sessionService.submitFeedback({ is_feedback_skipped: true, feedback_as: this.feedbackData.feedback_as }, this.sessionData.id);
+    await this.sessionService.submitFeedback({ skippedFeedback: true, feedback_as: this.feedbackData.feedback_as }, this.sessionData.id);
     await this.modalController.dismiss(false);
   }
 }
