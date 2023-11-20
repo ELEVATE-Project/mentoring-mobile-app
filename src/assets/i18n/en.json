@@ -82,7 +82,7 @@
     "MENTOR": "Mentor",
     "MENTEE": "Mentee",
     "SIGNUP_MESSAGE":"You have Signed up sucessfully, please use your registered id, password to login",
-    "MSG_PLEASE_NETWORK":"You are offline. Please connect to WiFi or mobile data.",
+    "MSG_PLEASE_NETWORK":"You are offline, please connect to a network.",
     "PASSWORD_MISMATCH":"Password mismatch",
     "SESSION_OVERVIEW": "Session overview",
     "TOTAL_SESSION_CREATED": "Total sessions created",
