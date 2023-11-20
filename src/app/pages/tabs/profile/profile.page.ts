@@ -83,7 +83,9 @@ public buttonConfig = {
   }
   async ionViewWillEnter() {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    await this.profileService.getUserRole(this.user)
+    if(this.user){
+      await this.profileService.getUserRole(this.user)
+    }
     if(!this.profileService.isMentor&&!await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)&&!this.isMentorButtonPushed) {
       this.buttonConfig.buttons.push(this.becomeAMentorButton)
       this.isMentorButtonPushed = true;

@@ -98,8 +98,10 @@ export class AppComponent {
         this.languageSetting();
         this.setHeader();
         this.localStorage.getLocalData(localKeys.USER_DETAILS).then((userDetails)=>{
-          this.profile.getUserRole(userDetails)
-          this.isOrgAdmin = this.profile.isOrgAdmin;
+          if(userDetails) {
+            this.profile.getUserRole(userDetails)
+            this.isOrgAdmin = this.profile.isOrgAdmin;
+          }
           this.getUser();
         })
       },0)
@@ -108,7 +110,7 @@ export class AppComponent {
         this.userRoles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
       },1000);
       setTimeout(() => {
-        document.querySelector('ion-menu').shadowRoot.querySelector('.menu-inner').setAttribute('style', 'border-radius:8px 8px 0px 0px');
+        document.querySelector('ion-menu')?.shadowRoot?.querySelector('.menu-inner')?.setAttribute('style', 'border-radius:8px 8px 0px 0px');
       }, 2000);
 
       this.userService.userEventEmitted$.subscribe(data=>{
