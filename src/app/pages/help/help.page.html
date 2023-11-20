@@ -24,6 +24,6 @@
 </ion-row>
 </ion-grid>
 </ion-content>
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border footer-button">
   <ion-button *ngIf="selectedOption" expand="full" [disabled]="form1 && !form1.myForm.valid" (click)="onSubmit(selectedOption)">{{selectedOption?.buttonText | translate}}</ion-button>
 </ion-footer>

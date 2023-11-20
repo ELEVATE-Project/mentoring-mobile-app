@@ -18,10 +18,10 @@
                 <table *ngIf="requestList" class="table color-black">
                     <thead>
                         <tr>
-                        <th>{{"SL_NO"|translate}}</th>
-                        <th>{{"NAME"|translate}}</th>
-                        <th>{{"STATUS"|translate}}</th>
-                        <th>{{"ACTIONS"|translate}}</th>
+                            <th>{{"SL_NO"|translate}}</th>
+                            <th>{{"NAME"|translate}}</th>
+                            <th>{{"STATUS"|translate}}</th>
+                            <th>{{"ACTIONS"|translate}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,6 +31,8 @@
                             <td>{{request?.status}}</td>
                             <td class="ion-padding width-250">
                                 <div class="d-flex flex-justify-space-between">
+                                    <ion-grid>
+                                        <ion-row class="d-flex flex-justify-center">
                                     <ion-button color="success" (click)="acceptRequest(request?.id, 'APPROVED')">
                                         <ion-icon name="checkmark-sharp"></ion-icon>
                                     </ion-button>
@@ -40,21 +42,30 @@
                                     <ion-button color="dark" (click)="viewRequest(request)">
                                         <ion-icon name="eye-sharp"></ion-icon>
                                     </ion-button>
+                                </ion-row>
+                            </ion-grid>
                                 </div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </ion-card>
+
             <div *ngSwitchCase="'bulk-upload'" class="d-flex flex-justify-center flex-align-items-center">
-                <div class="ion-margin ion-padding">
-                    <ion-button class="btn-width-200" (click)="downloadCSV()">{{"DOWNLOAD_SAMPLE_CSV"|translate}}</ion-button>
-                </div>
-                <div class="ion-margin ion-padding">
-                    <ion-button class="btn-width-200" (click)="upload.click()">{{"UPLOAD_CSV"|translate}}</ion-button>
-                    <input type="file" accept=".csv" (change)="uploadCSV($event)" hidden #upload />
-                </div>
+                <ion-grid>
+                    <ion-row class="d-flex flex-justify-center">
+                        <div class="ion-margin ion-padding">
+                            <ion-button class="btn-width-200"
+                                (click)="downloadCSV()">{{"DOWNLOAD_SAMPLE_CSV"|translate}}</ion-button>
+                        </div>
+                        <div class="ion-margin ion-padding">
+                            <ion-button class="btn-width-200"
+                                (click)="upload.click()">{{"UPLOAD_CSV"|translate}}</ion-button>
+                            <input type="file" accept=".csv" (change)="uploadCSV($event)" hidden #upload />
+                        </div>
+                    </ion-row>
+                </ion-grid>
             </div>
-          </div>
+        </div>
     </div>
 </ion-content>
