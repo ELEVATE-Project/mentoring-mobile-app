@@ -16,7 +16,7 @@ import { CommonRoutes } from 'src/global.routes';
 })
 export class MentorQuestionnairePage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;
-  formData:any
+  formData:any;
   public headerConfig: any = {
     notification: false,
     backButton: {
