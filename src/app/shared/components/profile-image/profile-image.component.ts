@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
-import { AttachmentService } from 'src/app/core/services';
+import { AttachmentService, ToastService } from 'src/app/core/services';
 
 
 @Component({
@@ -16,7 +16,8 @@ export class ProfileImageComponent implements OnInit {
   @Output() imageUploadEvent = new EventEmitter();
   @Output() imageRemoveEvent = new EventEmitter();
   constructor(
-    private attachment : AttachmentService
+    private attachment : AttachmentService,
+    private toast: ToastService
   ) { }
 
   ngOnInit() {}
@@ -24,13 +25,11 @@ export class ProfileImageComponent implements OnInit {
     this.attachment.selectImage(this.profileImageData).then(resp => {
       switch (resp.data) {
         case 'CAMERA':
-          console.log("1")
           this.fileUpload.nativeElement.setAttribute('capture', 'environment');
           this.fileUpload.nativeElement.click();
           break
 
         case 'PHOTOLIBRARY':
-          console.log("2")
           this.fileUpload.nativeElement.removeAttribute('capture');
           this.fileUpload.nativeElement.click();
           break
@@ -43,11 +42,13 @@ export class ProfileImageComponent implements OnInit {
           break
       }
     },error =>{
+      this.toast.showToast("ERROR_WHILE_STORING_FILE", "danger")
       console.log(error,"error");
     })
   }
 
   upload(event) {
+    this.toast.showToast("SUCCESSFULLY_ATTACHED", "success")
     this.imageUploadEvent.emit(event)
   }
 }
