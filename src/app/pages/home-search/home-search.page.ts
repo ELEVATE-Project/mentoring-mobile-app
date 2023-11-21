@@ -54,10 +54,12 @@ export class HomeSearchPage implements OnInit {
   }
 
   checkInput(event: any){
-    this.searchText=this.searchText.replace(/^ +/gm, '');
     if(event.keyCode == 13){
       this.search();
     }
+  }
+  trimLeft(inputString: string): string {
+    return this.searchText = inputString.replace(/^\s+/, '');
   }
 
   search(){
