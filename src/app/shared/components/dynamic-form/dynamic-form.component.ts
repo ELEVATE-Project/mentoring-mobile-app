@@ -69,13 +69,13 @@ export interface JsonFormData {
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
   parse: {
-    dateInput: 'MMM d, y, LT'
+    dateInput: 'LL LT'
   },
   display: {
-    dateInput: 'MMM d, y, LT',
+    dateInput: 'LL LT',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY'
+    monthYearA11yLabel: 'MMM YYYY'
   }
 };
 
