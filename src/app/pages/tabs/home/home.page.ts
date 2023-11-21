@@ -121,7 +121,7 @@ export class HomePage implements OnInit {
           break;
       }
     } else {
-      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+      this.profileService.upDateProfilePopup()
     }
   }
   viewMore(data) {
@@ -168,7 +168,7 @@ export class HomePage implements OnInit {
     if (this.user?.about != null) {
       this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]); 
     } else {
-      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]); 
+      this.profileService.upDateProfilePopup()
     }
   }
 
@@ -177,7 +177,7 @@ export class HomePage implements OnInit {
       this.showBecomeMentorCard = false;
       this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);   
     } else{
-      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+      this.profileService.upDateProfilePopup()
     }
   }
 

@@ -167,7 +167,11 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     let data: any = await this.api.get(config);
     return this.upload(file, data.result).subscribe()
   }
-  preFillData(existingData) {
+  async preFillData(data) {
+    let existingData = data;
+  if(data?.about){
+     existingData = await this.form.formatEntityOptions(data,this.entityNames)
+  }
     for (let i = 0; i < this.formData.controls.length; i++) {
       this.formData.controls[i].value = existingData[this.formData.controls[i].name] ? existingData[this.formData.controls[i].name] : [];
       this.formData.controls[i].options = _.unionBy(
