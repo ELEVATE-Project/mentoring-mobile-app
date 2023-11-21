@@ -32,10 +32,8 @@ export class AttachmentService {
                 handler: async () => {
                     if (element.action == 'camera') {
                         this.actionSheetController.dismiss(element.type);
-                        // await this.takePicture(element.type == 'PHOTOLIBRARY' ? CameraSource.Photos : CameraSource.Camera);
                         return false;
                     } else if (element.action == 'remove') {
-                        console.log("remove")
                         this.removeCurrentPhoto();
                         return false;
                     } else if (element.action == 'cancel') {

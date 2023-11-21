@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 import { Share } from '@capacitor/share';
 import { AlertController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { Action } from 'rxjs/internal/scheduler/Action';
 import { environment } from 'src/environments/environment';
 import { ISocialSharing } from '../../interface/soical-sharing-interface';
-import { Capacitor } from '@capacitor/core';
 import { ModelComponent } from 'src/app/shared/components/model/model.component';
 import * as Bowser from "bowser"
 
@@ -84,9 +82,7 @@ export class UtilService {
         "REMOVE_CURRENT_PHOTO_LABEL",
         "CHOOSE_FROM_LIBRARY",
         "TAKE_PHOTO",
-        "CANCEL",
-        "ERROR_WHILE_STORING_FILE",
-        "SUCCESSFULLY_ATTACHED"
+        "CANCEL"
       ])
       .subscribe((data) => {
         texts = data;

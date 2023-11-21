@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { UUID } from 'angular2-uuid';
 import * as _ from 'lodash-es';
 
 @Component({

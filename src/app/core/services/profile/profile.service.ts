@@ -59,9 +59,11 @@ export class ProfileService {
       try {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
-            await this.getUserRole(data)
+            if(data) {
+              await this.getUserRole(data)
+              resolve(data);
+            }
             //showLoader ? this.loaderService.stopLoader() : null;
-            resolve(data);
           })
       } catch (error) {
        // showLoader ? this.loaderService.stopLoader() : showLoader;
