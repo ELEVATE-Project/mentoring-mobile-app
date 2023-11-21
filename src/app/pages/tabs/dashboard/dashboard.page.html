@@ -47,7 +47,7 @@
               </p>
             </ion-col>
           </ion-row>
-          <div class="my-chart" fxFlex *ngIf="chartData">
+          <div class="my-chart" fxFlex *ngIf="dataAvailable">
             <canvas id="MyChart">{{ chart }}</canvas>
           </div>
         </div>

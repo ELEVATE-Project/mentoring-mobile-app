@@ -43,7 +43,7 @@ export class DashboardPage implements OnInit {
 
   ngOnInit() {
     this.isMentor = this.profile.isMentor;
-    this.segment = "mentee";
+    this.segment = this.isMentor ? "mentor" : "mentee";
     this.dataAvailable = true;
     this.getReports();
   }
@@ -60,12 +60,14 @@ export class DashboardPage implements OnInit {
     console.log('Segment changed', ev);
     this.segment = ev.detail.value;
     this.chart.destroy();
+    this.dataAvailable = true;
     this.getReports();
   }
 
   filterChangeHandler(event: any) {
     this.selectedFilter = event.target.value;
     this.chart.destroy();
+    this.dataAvailable = true;
     this.getReports();
   }
 
