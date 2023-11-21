@@ -107,8 +107,8 @@ export class DynamicFormComponent implements OnInit {
 
   public myForm: FormGroup = this.fb.group({});
   showForm = false;
-  currentDate = moment().format('dd/MM/yyyy HH:mm');
-  maxDate = moment(this.currentDate).add(10, "years").format('dd/MM/yyyy HH:mm:ss');
+  currentDate = moment().format();
+  maxDate = moment(this.currentDate).add(10, "years").format();
   dependedChild: any;
   dependedChildDate="";
   dependedParent: any;
