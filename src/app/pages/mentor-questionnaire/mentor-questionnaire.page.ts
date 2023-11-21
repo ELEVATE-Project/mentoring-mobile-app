@@ -23,6 +23,7 @@ export class MentorQuestionnairePage implements OnInit {
       label: 'BECOME_A_MENTOR',
     },
   };
+  entityNames:any;
   showForm: boolean=false;
 
   constructor(private toast: ToastService, private router: Router, private organisation: OrganisationService, private form: FormService, private localStorage: LocalStorageService) {}
@@ -30,11 +31,17 @@ export class MentorQuestionnairePage implements OnInit {
   async ngOnInit() {
     let form = await this.form.getForm(MENTOR_QUESTIONNAIRE)
     this.formData = _.get(form, 'data.fields');
+    this.entityNames = await this.form.getEntityNames(this.formData)
     this.prefillData(await this.localStorage.getLocalData(localKeys.USER_DETAILS))
   }
-  prefillData(userDetails: any) {
+
+  async prefillData(userDetails: any) {
+    let existingData = userDetails;
+    if(userDetails?.about){
+       existingData = await this.form.formatEntityOptions(userDetails,this.entityNames)
+    }
     for (let i = 0; i < this.formData.controls.length; i++) {
-      this.formData.controls[i].value = userDetails[this.formData.controls[i].name] ? userDetails[this.formData.controls[i].name] : '';
+      this.formData.controls[i].value = existingData[this.formData.controls[i].name] ? existingData[this.formData.controls[i].name] : '';
       this.formData.controls[i].options = _.unionBy(
         this.formData.controls[i].options,
         this.formData.controls[i].value,

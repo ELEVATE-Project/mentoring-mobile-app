@@ -1,6 +1,7 @@
 .session-card{
     padding: 8px 6px;
     border-radius: 10px;
+    height: 150px;
     .card-avatar{
     margin-right: 20px;
     .thumbnail-image{
@@ -47,4 +48,7 @@ justify-content: flex-end;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+}
+.area-of-expertise-container{
+    height: 75px;
 }

@@ -6,6 +6,7 @@ import {
   LoaderService,
   LocalStorageService,
   ToastService,
+  UtilService,
 } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 import { localKeys } from '../../constants/localStorage.keys';
@@ -27,6 +28,7 @@ export class ProfileService {
     private toast: ToastService,
     private localStorage: LocalStorageService,
     private _location: Location,
+    private utilService:UtilService,
     private userService: UserService,
     private injector: Injector
   ) { }
@@ -160,5 +162,13 @@ export class ProfileService {
     this.isMentor = roles.includes('mentor')?true:false;
     this.isOrgAdmin = roles.includes('org_admin')?true:false;
     return roles
+  }
+
+  async upDateProfilePopup(msg:any = {header: 'UPDATE_PROFILE',message: 'PLEASE_UPDATE_YOUR_PROFILE_IN_ORDER_TO_PROCEED',cancel:'UPDATE',submit:'CANCEL'}){
+    this.utilService.alertPopup(msg).then(async (data) => {
+      if(!data){
+        this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+      }
+    }).catch(error => {})
   }
 }
