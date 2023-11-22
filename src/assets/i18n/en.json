@@ -202,7 +202,7 @@
     "STATUS": "Status",
     "ACTIONS": "Actions",
     "NAME": "Name",
-    "FILL_IN_THE_BELOW_DETAILS": "Fill in the below details!",
+    "FILL_IN_THE_BELOW_DETAILS": "Fill in your details. (Your request will require approval from the Admin.)",
     "ORG_ADMIN": "Org Admin",
     "UPDATE_REQUEST_CONFIRMATION": "Are you sure you want to update this request status?",
     "UPDATE_REQUEST": "Update request?",
