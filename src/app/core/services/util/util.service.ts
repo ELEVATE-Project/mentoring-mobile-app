@@ -6,12 +6,18 @@ import { environment } from 'src/environments/environment';
 import { ISocialSharing } from '../../interface/soical-sharing-interface';
 import { ModelComponent } from 'src/app/shared/components/model/model.component';
 import * as Bowser from "bowser"
+import { Subject } from 'rxjs/Subject';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
   modal: any;
+  public Subject = new Subject<boolean>();
+
+  passValue(data:boolean) {
+    this.Subject.next(data);
+  }
   constructor(
     private modalCtrl: ModalController,
     private alert: AlertController,
