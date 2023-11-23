@@ -4,6 +4,7 @@ import { MENTOR_QUESTIONNAIRE, SAMPLE_CSV_DOWNLOAD_URL } from 'src/app/core/cons
 import { ToastService, UtilService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { OrganisationService } from 'src/app/core/services/organisation/organisation.service';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 
 @Component({
@@ -26,7 +27,7 @@ export class ManageListComponent implements OnInit {
   };
   requestList: any;
   formData: any;
-  constructor(private organisation: OrganisationService, private util: UtilService, private toast: ToastService, private form: FormService, private sessionService: SessionService) { }
+  constructor(private organisation: OrganisationService, private util: UtilService, private toast: ToastService, private form: FormService, private sessionService: SessionService, private profileService:ProfileService) { }
 
   async ngOnInit() {
     this.requestList = await this.organisation.adminRequestList(this.page,this.limit, this.status)
@@ -72,7 +73,7 @@ export class ManageListComponent implements OnInit {
       let form = await this.form.getForm(MENTOR_QUESTIONNAIRE)
       this.formData = _.get(form, 'data.fields');
       this.entityNames = await this.form.getEntityNames(this.formData)
-      this.prefillData(request.meta)
+      this.profileService.prefillData(request.meta,this.entityNames,this.formData,false)
       request.meta.form = this.formData
       let componenProps ={
         readonly: true,
@@ -81,24 +82,6 @@ export class ManageListComponent implements OnInit {
       this.util.openModal(componenProps).then((data)=>{
       })
     }
-    async prefillData(requestDetails: any) {
-      let existingData = requestDetails;
-      if(requestDetails?.about){
-         existingData = await this.form.formatEntityOptions(requestDetails,this.entityNames)
-      }
-      for (let i = 0; i < this.formData.controls.length; i++) {
-        if(this.formData.controls[i].type == 'chip'){
-          this.formData.controls[i].meta.showAddOption = false;
-        }
-        this.formData.controls[i].value = existingData[this.formData.controls[i].name] ? existingData[this.formData.controls[i].name] : '';
-        this.formData.controls[i].options = _.unionBy(
-          this.formData.controls[i].options,
-          this.formData.controls[i].value,
-          'value'
-        );
-      }
-    }
-
     async downloadCSV(){
       let form = await this.form.getForm(SAMPLE_CSV_DOWNLOAD_URL)
       await this.sessionService.openBrowser(form.data.fields.controls[0].csvDownloadUrl,"_blank")

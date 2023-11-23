@@ -56,9 +56,7 @@ export class AppComponent {
     private cdr: ChangeDetectorRef,
     private screenOrientation: ScreenOrientation
   ) {
-    this.utilService.Subject.subscribe(
-      data => 
-      {
+    this.utilService.canIonMenuShow.subscribe(data =>{
         this.showMenu = data
         this.cdr.detectChanges();
       }

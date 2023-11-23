@@ -101,7 +101,7 @@ export class LoginPage implements OnInit {
     if (this.form1.myForm.valid) {
       this.userDetails = await this.authService.loginAccount(this.form1.myForm.value);
       if (this.userDetails !== null) {
-        this.utilService.passValue(true)
+        this.utilService.ionMenuShow(true)
         await this.profileService.getProfileDetailsFromAPI();
         if (this.id) {
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });

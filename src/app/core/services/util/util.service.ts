@@ -13,10 +13,10 @@ import { Subject } from 'rxjs/Subject';
 })
 export class UtilService {
   modal: any;
-  public Subject = new Subject<boolean>();
+  public canIonMenuShow = new Subject<boolean>();
 
-  passValue(data:boolean) {
-    this.Subject.next(data);
+  ionMenuShow(data:boolean) {
+    this.canIonMenuShow.next(data);
   }
   constructor(
     private modalCtrl: ModalController,
