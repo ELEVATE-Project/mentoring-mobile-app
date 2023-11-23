@@ -59,7 +59,6 @@ export class AppComponent {
     this.utilService.Subject.subscribe(
       data => 
       {
-        this.menuCtrl.open('side-menu')
         this.showMenu = data
         this.cdr.detectChanges();
       }
@@ -80,7 +79,6 @@ export class AppComponent {
      if(url.includes('/auth')){
       return false;
      }else{
-      this.menuCtrl.open('side-menu')
        return true
      }
   }
