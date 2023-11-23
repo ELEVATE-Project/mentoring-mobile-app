@@ -57,10 +57,14 @@ ion-button{
 }
 .t-and-c-text{
   padding-left: 10px;
+  margin: unset;
 }
 
 .enable {
   color: rgb(108, 147, 206);;
   cursor: pointer;
   pointer-events: all;
+}
+.check-box{
+  margin-inline-end: unset;
 }
