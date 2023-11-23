@@ -16,7 +16,8 @@ export class ManageListComponent implements OnInit {
   type = 'manage-user'
   page=1;
   limit=50;
-  status='REQUESTED'
+  status='REQUESTED';
+  entityNames:any;
   public headerConfig: any = {
     menu: true,
     notification: true,
@@ -70,6 +71,8 @@ export class ManageListComponent implements OnInit {
     async viewRequest(request){
       let form = await this.form.getForm(MENTOR_QUESTIONNAIRE)
       this.formData = _.get(form, 'data.fields');
+      this.entityNames = await this.form.getEntityNames(this.formData)
+      this.prefillData(request.meta)
       request.meta.form = this.formData
       let componenProps ={
         readonly: true,
@@ -77,6 +80,23 @@ export class ManageListComponent implements OnInit {
       }
       this.util.openModal(componenProps).then((data)=>{
       })
+    }
+    async prefillData(requestDetails: any) {
+      let existingData = requestDetails;
+      if(requestDetails?.about){
+         existingData = await this.form.formatEntityOptions(requestDetails,this.entityNames)
+      }
+      for (let i = 0; i < this.formData.controls.length; i++) {
+        if(this.formData.controls[i].type == 'chip'){
+          this.formData.controls[i].meta.showAddOption = false;
+        }
+        this.formData.controls[i].value = existingData[this.formData.controls[i].name] ? existingData[this.formData.controls[i].name] : '';
+        this.formData.controls[i].options = _.unionBy(
+          this.formData.controls[i].options,
+          this.formData.controls[i].value,
+          'value'
+        );
+      }
     }
 
     async downloadCSV(){

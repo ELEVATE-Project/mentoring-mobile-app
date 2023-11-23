@@ -220,5 +220,6 @@
     "PROFILE_LINK_COPIED": "Copied the profile link",
     "UPDATE":"Update",
     "UPDATE_PROFILE":"Update profile",
-    "PLEASE_UPDATE_YOUR_PROFILE_IN_ORDER_TO_PROCEED":"Please update your profile in order to proceed."
+    "PLEASE_UPDATE_YOUR_PROFILE_IN_ORDER_TO_PROCEED":"Please update your profile in order to proceed.",
+    "ORGANIZATION":"Organization"
 }
