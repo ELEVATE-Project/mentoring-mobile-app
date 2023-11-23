@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { MENTOR_QUESTIONNAIRE, SAMPLE_CSV_DOWNLOAD_URL } from 'src/app/core/constants/formConstant';
-import { ToastService, UtilService } from 'src/app/core/services';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
+import { HttpService, ToastService, UtilService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { OrganisationService } from 'src/app/core/services/organisation/organisation.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
@@ -25,7 +26,7 @@ export class ManageListComponent implements OnInit {
   };
   requestList: any;
   formData: any;
-  constructor(private organisation: OrganisationService, private util: UtilService, private toast: ToastService, private form: FormService, private sessionService: SessionService) { }
+  constructor(private organisation: OrganisationService, private util: UtilService, private toast: ToastService, private form: FormService, private sessionService: SessionService, private http: HttpService) { }
 
   async ngOnInit() {
     this.requestList = await this.organisation.adminRequestList(this.page,this.limit, this.status)
@@ -80,8 +81,13 @@ export class ManageListComponent implements OnInit {
     }
 
     async downloadCSV(){
-      let form = await this.form.getForm(SAMPLE_CSV_DOWNLOAD_URL)
-      await this.sessionService.openBrowser(form.data.fields.controls[0].csvDownloadUrl,"_blank")
+      let config = {
+        url: urlConstants.API_URLS.ADMIN_DOWNLOAD_SAMPLE_CSV,
+        payload: {}
+      }
+      this.http.get(config).then(async (response)=>{
+        await this.sessionService.openBrowser(response.result,"_blank")
+      })
     }
   
     async uploadCSV(event){
