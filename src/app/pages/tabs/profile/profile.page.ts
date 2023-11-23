@@ -41,6 +41,10 @@ export class ProfilePage implements OnInit {
         key: "education_qualification"
       },
       {
+        title: 'LANGUAGES',
+        key: 'languages',
+      },
+      {
         title: "EMAIL_ID",
         key: "emailId"
       },
