@@ -113,7 +113,7 @@
       >
         <ion-select-option
           *ngFor="let option of control.options"
-          [value]="[option]"
+          [value]="option.value"
           >{{ option.label }}</ion-select-option
         >
       </ion-select>

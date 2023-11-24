@@ -20,10 +20,6 @@ const routes: Routes = [
         loadChildren: () => import('./mentor-directory/mentor-directory.module').then(m => m.MentorDirectoryPageModule)
       },
       {
-        path: 'tab2',
-        loadChildren: () => import('./tab2/tab2.module').then(m => m.Tab2PageModule)
-      },
-      {
         path: CommonRoutes.DASHBOARD,
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardPageModule)
       },

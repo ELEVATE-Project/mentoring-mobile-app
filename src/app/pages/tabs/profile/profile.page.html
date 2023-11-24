@@ -3,7 +3,7 @@
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <div *ngIf="formData && formData.data">
+    <div *ngIf="showProfileDetails">
         <app-generic-profile-header [headerData]='formData.data'[buttonConfig]="buttonConfig" [isMentor]='isMentor' [showRole]="true"></app-generic-profile-header>
         <div *ngIf="showProfileDetails; else elseBlock">
             <ion-card *ngIf="isMentor" class="card-wrapper">

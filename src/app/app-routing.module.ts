@@ -88,6 +88,9 @@ const routes: Routes = [
     path: CommonRoutes.ADMIN,
     loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule),
     canActivate: [PrivateGuard]
+  },
+  {
+    path:'**', redirectTo:'',pathMatch:'full'
   }
 ];
 @NgModule({

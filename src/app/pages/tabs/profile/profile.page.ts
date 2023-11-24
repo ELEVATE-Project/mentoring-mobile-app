@@ -57,7 +57,7 @@ public buttonConfig = {
     }
   ]
 }
-  showProfileDetails: boolean = true;
+  showProfileDetails: boolean = false;
   username: boolean = true;
   data: any;
   public headerConfig: any = {
