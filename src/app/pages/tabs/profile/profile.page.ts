@@ -41,8 +41,16 @@ export class ProfilePage implements OnInit {
         key: "education_qualification"
       },
       {
+        title: 'LANGUAGES',
+        key: 'languages',
+      },
+      {
         title: "EMAIL_ID",
         key: "emailId"
+      },
+      {
+        title: "ORGANIZATION",
+        key: "organizationName"
       },
     ],
     menteeForm:['SESSIONS_ATTENDED'],
@@ -92,6 +100,7 @@ public buttonConfig = {
     }
     this.formData.data = this.user;
     this.formData.data.emailId = this.user.email.address;
+    this.formData.data.organizationName = this.user.organization.name;
     this.isMentor = this.profileService.isMentor;
     if (this.formData?.data?.about) {
       this.showProfileDetails = true;
@@ -121,6 +130,7 @@ public buttonConfig = {
     if(result){
       this.formData.data = result;
       this.formData.data.emailId = result.email;
+      this.formData.data.organizationName = this.user.organization.name;
     }
   }
 }

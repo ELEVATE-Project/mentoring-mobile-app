@@ -71,7 +71,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     if(this.userDetails) {
       this.profileImageData.image = this.userDetails.image;
-      this.preFillData(this.userDetails);
+      this.profileService.prefillData(this.userDetails,this.entityNames, this.formData);
+      this.showForm = true;
     }
   }
 
@@ -166,20 +167,5 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     }
     let data: any = await this.api.get(config);
     return this.upload(file, data.result).subscribe()
-  }
-  async preFillData(data) {
-    let existingData = data;
-  if(data?.about){
-     existingData = await this.form.formatEntityOptions(data,this.entityNames)
-  }
-    for (let i = 0; i < this.formData.controls.length; i++) {
-      this.formData.controls[i].value = existingData[this.formData.controls[i].name] ? existingData[this.formData.controls[i].name] : [];
-      this.formData.controls[i].options = _.unionBy(
-        this.formData.controls[i].options,
-        this.formData.controls[i].value,
-        'value'
-      );
-    }
-    this.showForm = true;
   }
 }

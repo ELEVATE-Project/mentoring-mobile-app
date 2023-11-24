@@ -6,6 +6,7 @@ import { AuthService, LocalStorageService, ToastService } from 'src/app/core/ser
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import { environment } from 'src/environments/environment';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-otp',
@@ -43,8 +44,14 @@ export class OtpPage implements OnInit {
   privacyPolicyUrl =environment.privacyPolicyUrl;
   termsOfServiceUrl = environment.termsOfServiceUrl;
 
-  constructor(private router: Router, private profileService: ProfileService, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService, private menuCtrl: MenuController, private nav: NavController) {
+  constructor(private router: Router, private profileService: ProfileService,private location: Location, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService, private menuCtrl: MenuController, private nav: NavController) {
+    if(!this.router.getCurrentNavigation()?.extras.state){
+      this.location.back();
+    }
     this.actionType=this.router.getCurrentNavigation().extras.state?.type;
+    if(this.actionType != 'signup'){
+      this.checked = true;
+    }
     this.resetPasswordData.email = this.actionType == "reset-password" ? this.router.getCurrentNavigation().extras.state?.email : null;
     this.resetPasswordData.password = this.actionType == "reset-password" ? this.router.getCurrentNavigation().extras.state?.password : null;
     this.signupData = this.actionType == "signup" ? this.router.getCurrentNavigation().extras.state?.formData : null;
