@@ -14,6 +14,7 @@ import * as _ from 'lodash-es';
 import { Location } from '@angular/common';
 import { UserService } from '../user/user.service';
 import { AuthService } from '../auth/auth.service';
+import { FormService } from 'src/app/core/services/form/form.service';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +31,8 @@ export class ProfileService {
     private _location: Location,
     private utilService:UtilService,
     private userService: UserService,
-    private injector: Injector
+    private injector: Injector,
+    private form: FormService
   ) { }
   async profileUpdate(formData, showToast=true) {
     await this.loaderService.startLoader();
@@ -171,4 +173,24 @@ export class ProfileService {
       }
     }).catch(error => {})
   }
+
+  async prefillData(requestDetails: any,entityNames:any,formData:any,showAddOption:any=true) {
+    let existingData = requestDetails;
+    if(requestDetails?.about){
+       existingData = await this.form.formatEntityOptions(requestDetails,entityNames)
+    }
+    for (let i = 0; i < formData.controls.length; i++) {
+      if(formData.controls[i].type == 'chip'){
+        formData.controls[i].meta.showAddOption = showAddOption;
+      }
+      formData.controls[i].value = existingData[formData.controls[i].name] ? existingData[formData.controls[i].name] : '';
+      formData.controls[i].options = _.unionBy(
+        formData.controls[i].options,
+        formData.controls[i].value,
+        'value'
+      );
+    }
+  }
+
+
 }

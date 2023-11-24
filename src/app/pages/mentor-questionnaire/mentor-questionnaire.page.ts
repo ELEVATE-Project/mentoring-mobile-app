@@ -6,6 +6,7 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { OrganisationService } from 'src/app/core/services/organisation/organisation.service';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -26,28 +27,14 @@ export class MentorQuestionnairePage implements OnInit {
   entityNames:any;
   showForm: boolean=false;
 
-  constructor(private toast: ToastService, private router: Router, private organisation: OrganisationService, private form: FormService, private localStorage: LocalStorageService) {}
+  constructor(private toast: ToastService, private router: Router, private organisation: OrganisationService, private form: FormService, private localStorage: LocalStorageService,private profileService:ProfileService) {}
 
   async ngOnInit() {
     let form = await this.form.getForm(MENTOR_QUESTIONNAIRE)
     this.formData = _.get(form, 'data.fields');
     this.entityNames = await this.form.getEntityNames(this.formData)
-    this.prefillData(await this.localStorage.getLocalData(localKeys.USER_DETAILS))
-  }
-
-  async prefillData(userDetails: any) {
-    let existingData = userDetails;
-    if(userDetails?.about){
-       existingData = await this.form.formatEntityOptions(userDetails,this.entityNames)
-    }
-    for (let i = 0; i < this.formData.controls.length; i++) {
-      this.formData.controls[i].value = existingData[this.formData.controls[i].name] ? existingData[this.formData.controls[i].name] : '';
-      this.formData.controls[i].options = _.unionBy(
-        this.formData.controls[i].options,
-        this.formData.controls[i].value,
-        'value'
-      );
-    }
+    let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    this.profileService.prefillData(userDetails,this.entityNames, this.formData)
     this.showForm = true;
   }
 

@@ -1,6 +1,6 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay" swipeGesture="false" class="width-20">
+    <ion-menu contentId="main-content" menuId="side-menu" type="overlay" swipeGesture="false" class="width-20" [hidden]="!showMenu">
       <ion-header  [translucent]="true" class="ion-no-border">
         <div *ngIf="user" >
           <div class="sub-menu-toolbar">
@@ -16,7 +16,7 @@
               <ion-label class="username"><strong>{{user?.name}}</strong></ion-label>
               <ion-label *ngIf="isMentor">{{"MENTOR" | translate }}</ion-label>
               <ion-label *ngIf="!isMentor">{{"MENTEE" | translate }}</ion-label>
-              <a (click)="goToProfilePage()" class="cursor">{{"VIEW_PROFILE" | translate}}</a>
+              <a (click)="goToProfilePage()" class="cursor">{{"PROFILE" | translate}}</a>
             </div>
           </div>
         </div>

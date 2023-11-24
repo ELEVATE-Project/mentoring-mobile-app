@@ -5,6 +5,7 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, ToastService, UtilService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { OrganisationService } from 'src/app/core/services/organisation/organisation.service';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 
 @Component({
@@ -17,7 +18,8 @@ export class ManageListComponent implements OnInit {
   type = 'manage-user'
   page=1;
   limit=50;
-  status='REQUESTED'
+  status='REQUESTED';
+  entityNames:any;
   public headerConfig: any = {
     menu: true,
     notification: true,
@@ -26,7 +28,7 @@ export class ManageListComponent implements OnInit {
   };
   requestList: any;
   formData: any;
-  constructor(private organisation: OrganisationService, private util: UtilService, private toast: ToastService, private form: FormService, private sessionService: SessionService, private http: HttpService) { }
+  constructor(private organisation: OrganisationService, private util: UtilService, private toast: ToastService, private form: FormService, private sessionService: SessionService, private profileService:ProfileService, private http: HttpService) { }
 
   async ngOnInit() {
     this.requestList = await this.organisation.adminRequestList(this.page,this.limit, this.status)
@@ -71,6 +73,8 @@ export class ManageListComponent implements OnInit {
     async viewRequest(request){
       let form = await this.form.getForm(MENTOR_QUESTIONNAIRE)
       this.formData = _.get(form, 'data.fields');
+      this.entityNames = await this.form.getEntityNames(this.formData)
+      this.profileService.prefillData(request.meta,this.entityNames,this.formData,false)
       request.meta.form = this.formData
       let componenProps ={
         readonly: true,
@@ -79,7 +83,6 @@ export class ManageListComponent implements OnInit {
       this.util.openModal(componenProps).then((data)=>{
       })
     }
-
     async downloadCSV(){
       let config = {
         url: urlConstants.API_URLS.ADMIN_DOWNLOAD_SAMPLE_CSV,

@@ -1,11 +1,11 @@
-import { Component, NgZone } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
 import { AlertController, MenuController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
 import * as _ from 'lodash-es';
 import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService} from './core/services';
 import { CommonRoutes } from 'src/global.routes';
-import { Router} from '@angular/router';
+import { Router, NavigationEnd} from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
 import { Location } from '@angular/common';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
@@ -19,6 +19,7 @@ import { Capacitor } from '@capacitor/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  showMenu: boolean = false;
  user;
  public appPages = [
   { title: 'HOME', action: "home", icon: 'home', class:"hide-on-small-screen" , url: CommonRoutes.TABS+'/'+CommonRoutes.HOME},
@@ -52,12 +53,32 @@ export class AppComponent {
     private zone:NgZone,
     private _location: Location,
     private alert: AlertController,
+    private cdr: ChangeDetectorRef,
     private screenOrientation: ScreenOrientation
   ) {
+    this.utilService.canIonMenuShow.subscribe(data =>{
+        this.showMenu = data
+        this.cdr.detectChanges();
+      }
+    );
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.showMenu = this.shouldHideMenu(event.url);
+         this.cdr.detectChanges();
+      }
+    });
     this.initializeApp();
     if(Capacitor.isNativePlatform()){
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
     }
+  }
+
+  shouldHideMenu(url: string): boolean {
+     if(url.includes('/auth')){
+      return false;
+     }else{
+       return true
+     }
   }
   subscribeBackButton() {
     this.platform.backButton.subscribeWithPriority(10,async () => {
