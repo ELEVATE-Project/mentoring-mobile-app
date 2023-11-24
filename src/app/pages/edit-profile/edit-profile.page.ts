@@ -121,7 +121,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
       } else {
         const form = Object.assign({}, this.form1.myForm.value);
         _.forEach(this.entityNames, (entityKey) => {
-          form[entityKey] = _.map(form[entityKey], 'value');
+          let control = this.formData.controls.find(obj => obj.name === entityKey);
+          form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey]
         });
         this.form1.myForm.markAsPristine();
         this.profileService.profileUpdate(form);
