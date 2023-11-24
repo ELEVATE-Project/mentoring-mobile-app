@@ -122,7 +122,7 @@ export class DynamicFormComponent implements OnInit {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){
         this.jsonFormData.controls[index].options = _.sortBy(this.jsonFormData.controls[index].options, ['label']);
-        if(this.jsonFormData.control[index].multiple){
+        if(this.jsonFormData.controls[index].multiple){
           this.jsonFormData.controls[index].value = this.jsonFormData.controls[index].value === null ? [] : this.jsonFormData.controls[index].value
         } else {
           this.jsonFormData.controls[index].value = this.jsonFormData.controls[index].value === null ? '' : this.jsonFormData.controls[index].value.value
