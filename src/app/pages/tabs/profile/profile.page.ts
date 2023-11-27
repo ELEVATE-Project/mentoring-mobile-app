@@ -102,12 +102,11 @@ public buttonConfig = {
     this.formData.data.emailId = this.user.email.address;
     this.formData.data.organizationName = this.user.organization.name;
     this.isMentor = this.profileService.isMentor;
-    if (this.formData?.data?.about) {
-      this.showProfileDetails = true;
-    } else {
+    if (!this.formData?.data?.about) {
       (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
       this.visited=true;
     }
+    this.showProfileDetails = true;
     this.gotToTop();
     this.profileDetailsApi();
   }
