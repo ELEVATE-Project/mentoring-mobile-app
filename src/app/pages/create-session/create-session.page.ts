@@ -166,7 +166,8 @@ export class CreateSessionPage implements OnInit {
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         form.time_zone = timezone;
         _.forEach(this.entityNames, (entityKey) => {
-          form[entityKey] = _.map(form[entityKey], 'value');
+          let control = this.formData.controls.find(obj => obj.name === entityKey);
+          form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey]
         });
         if(!this.profileImageData.image){
           form.image=[]

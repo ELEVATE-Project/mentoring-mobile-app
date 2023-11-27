@@ -62,6 +62,7 @@ interface JsonFormControls {
   alertLabel?: string;
   platformPlaceHolder?:string;
   showSelectAll?: boolean;
+  multiple?:boolean;
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
@@ -121,7 +122,11 @@ export class DynamicFormComponent implements OnInit {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){
         this.jsonFormData.controls[index].options = _.sortBy(this.jsonFormData.controls[index].options, ['label']);
-        this.jsonFormData.controls[index].value = this.jsonFormData.controls[index].value === null ? [] : this.jsonFormData.controls[index].value
+        if(this.jsonFormData.controls[index].multiple){
+          this.jsonFormData.controls[index].value = this.jsonFormData.controls[index].value === null ? [] : this.jsonFormData.controls[index].value
+        } else {
+          this.jsonFormData.controls[index].value = this.jsonFormData.controls[index].value === null ? '' : this.jsonFormData.controls[index].value.value
+        }
       }
     });
     setTimeout(() => {

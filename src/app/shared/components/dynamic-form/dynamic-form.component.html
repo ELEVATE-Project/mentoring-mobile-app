@@ -106,14 +106,14 @@
         [multiple]="control.multiple"
         [formControlName]="control.name"
         [compareWith]="compareWith"
-        [selectedText]="control?.value[0]?.label"
+        [selectedText]="control?.value?.label"
         [okText]="'OK' | translate"
         (ionChange)="selectionChanged(control,$event)"
         [cancelText]="'CANCEL' | translate"
       >
         <ion-select-option
           *ngFor="let option of control.options"
-          [value]="[option]"
+          [value]="option.value"
           >{{ option.label }}</ion-select-option
         >
       </ion-select>
