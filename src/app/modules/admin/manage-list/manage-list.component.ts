@@ -94,14 +94,19 @@ export class ManageListComponent implements OnInit {
     }
   
     async uploadCSV(event){
-      let signedUrl = await this.organisation.getSignedUrl(event.target.files[0].name)
-      this.organisation.upload(event.target.files[0], signedUrl).subscribe(async () => {
-        let data = await this.organisation.bulkUpload(signedUrl.filePath);
-        if(data){
-          this.toast.showToast(data.message, 'success');
-          event.target.value='';
-        }
-        (error) => event.target.value='';
-      })
+      let file= event.target.files[0];
+      if(file.type != 'text/csv'){
+        this.toast.showToast('PLEASE_UPLOAD_CSV_FILE', 'danger')
+      }else{
+        let signedUrl = await this.organisation.getSignedUrl(event.target.files[0].name)
+        this.organisation.upload(event.target.files[0], signedUrl).subscribe(async () => {
+          let data = await this.organisation.bulkUpload(signedUrl.filePath);
+          if(data){
+            this.toast.showToast(data.message, 'success');
+            event.target.value='';
+          }
+          (error) => event.target.value='';
+        })
+      }
     }
 }
