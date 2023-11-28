@@ -29,6 +29,10 @@ export class ProfilePage implements OnInit {
         key: 'designation',
       },
       {
+        title: "ORGANIZATION",
+        key: "organizationName"
+      },
+      {
         title: 'YEAR_OF_EXPERIENCE',
         key: 'experience',
       },
@@ -47,11 +51,7 @@ export class ProfilePage implements OnInit {
       {
         title: "EMAIL_ID",
         key: "emailId"
-      },
-      {
-        title: "ORGANIZATION",
-        key: "organizationName"
-      },
+      }
     ],
     menteeForm:['SESSIONS_ATTENDED'],
     data: {},
