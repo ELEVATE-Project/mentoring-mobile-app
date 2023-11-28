@@ -41,6 +41,10 @@ export class MentorDetailsPage implements OnInit {
         key: "designation"
       },
       {
+        title: "ORGANIZATION",
+        key: "organizationName"
+      },
+      {
         title: 'YEAR_OF_EXPERIENCE',
         key: 'experience',
       },
@@ -55,11 +59,7 @@ export class MentorDetailsPage implements OnInit {
       {
         title: "LANGUAGES",
         key: "languages" 
-      },
-      {
-        title: "ORGANIZATION",
-        key: "organizationName"
-      },
+      }
     ],
     data: {
       rating: {
