@@ -55,13 +55,18 @@ export class MentorDetailsPage implements OnInit {
       {
         title: "LANGUAGES",
         key: "languages" 
-      }
+      },
+      {
+        title: "ORGANIZATION",
+        key: "organizationName"
+      },
     ],
     data: {
       rating: {
         average:0
       },
-      sessions_hosted:0 
+      sessions_hosted:0 ,
+      organizationName:""
     },
   };
   segmentValue = "about";
@@ -102,6 +107,7 @@ export class MentorDetailsPage implements OnInit {
     try {
       let data: any = await this.httpService.get(config);
       this.detailData.data = data.result;
+      this.detailData.data.organizationName = data.result.organization.name;
     }
     catch (error) {
     }
