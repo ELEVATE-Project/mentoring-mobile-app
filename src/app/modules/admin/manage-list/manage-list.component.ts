@@ -108,6 +108,6 @@ export class ManageListComponent implements OnInit {
           }
           (error) => event.target.value='';
         })
-      } 
+      }
     }
 }
