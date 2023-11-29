@@ -97,6 +97,7 @@ export class ManageListComponent implements OnInit {
       let file= event.target.files[0];
       if(file.type != 'text/csv'){
         this.toast.showToast('PLEASE_UPLOAD_CSV_FILE', 'danger')
+        event.target.value='';
       }else{
         let signedUrl = await this.organisation.getSignedUrl(event.target.files[0].name)
         this.organisation.upload(event.target.files[0], signedUrl).subscribe(async () => {
@@ -107,6 +108,6 @@ export class ManageListComponent implements OnInit {
           }
           (error) => event.target.value='';
         })
-      }
+      } 
     }
 }
