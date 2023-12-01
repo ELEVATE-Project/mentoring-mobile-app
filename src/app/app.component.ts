@@ -38,6 +38,8 @@ export class AppComponent {
   isOrgAdmin:boolean
   showAlertBox = false;
   userRoles: any;
+  userEventSubscription: any;
+  backButtonSubscription: any;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -81,7 +83,7 @@ export class AppComponent {
      }
   }
   subscribeBackButton() {
-    this.platform.backButton.subscribeWithPriority(10,async () => {
+    this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(10,async () => {
       if (this._location.isCurrentPathEqualTo("/tabs/home")){
         let texts: any;
         this.translate.get(['EXIT_CONFIRM_MESSAGE', 'CANCEL', 'CONFIRM']).subscribe(text => {
@@ -134,7 +136,7 @@ export class AppComponent {
         document.querySelector('ion-menu')?.shadowRoot?.querySelector('.menu-inner')?.setAttribute('style', 'border-radius:8px 8px 0px 0px');
       }, 2000);
 
-      this.userService.userEventEmitted$.subscribe(data=>{
+      this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data=>{
         if(data){
           this.isOrgAdmin = this.profile.isOrgAdmin;
           this.isMentor = this.profile.isMentor
@@ -220,4 +222,12 @@ export class AppComponent {
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.userEventSubscription) {
+      this.userEventSubscription.unsubscribe();
+    }
+    if (this.backButtonSubscription) {
+      this.backButtonSubscription.unsubscribe();
+    }
+  }
 }

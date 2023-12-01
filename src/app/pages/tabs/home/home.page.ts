@@ -46,6 +46,7 @@ export class HomePage implements OnInit {
   selectedSegment = "all-sessions";
   createdSessions: any;
   isMentor: boolean;
+  userEventSubscription: any;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -74,7 +75,7 @@ export class HomePage implements OnInit {
     this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested) => {
       this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false : true;
     })
-    this.userService.userEventEmitted$.subscribe(data => {
+    this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data => {
       if (data) {
         this.isMentor = this.profileService.isMentor
         this.user = data;
@@ -191,6 +192,12 @@ export class HomePage implements OnInit {
       this.sessionService.getAllSessionsAPI(obj).then((data) => {
         this.createdSessions = data;
       })
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.userEventSubscription) {
+      this.userEventSubscription.unsubscribe();
     }
   }
 }
