@@ -91,6 +91,7 @@ export class HttpService {
           return result;
         } else {
           this.handleError(data)
+          return data;
         }
       });
   }
@@ -192,6 +193,7 @@ export class HttpService {
       case 400:
       case 406:
       case 422:
+      case 404:
         this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:

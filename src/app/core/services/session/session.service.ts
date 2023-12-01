@@ -81,9 +81,8 @@ async getSessionsList(obj) {
     };
     try {
       let data = await this.httpService.get(config);
-      let result = _.get(data, 'result');
       //this.loaderService.stopLoader();
-      return result;
+      return data;
     }
     catch (error) {
       //this.loaderService.stopLoader();

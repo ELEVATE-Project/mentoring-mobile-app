@@ -1,7 +1,7 @@
-<!-- <app-page-header [config]="headerConfig"></app-page-header> -->
-<app-generic-profile-header [headerData]='detailData.data' [buttonConfig]="buttonConfig" [showRole]="false">
+<app-page-header [config]="headerConfig" *ngIf="this.userCantAccess && isloaded"></app-page-header>
+<app-generic-profile-header *ngIf="!this.userCantAccess && isloaded" [headerData]='detailData.data' [buttonConfig]="buttonConfig" [showRole]="false">
 </app-generic-profile-header>
-<div>
+<div *ngIf="!this.userCantAccess && isloaded">
   <ion-card class="card-wrapper">
     <ion-card-content>
       <ion-row>
@@ -24,7 +24,7 @@
     </ion-segment-button>
   </ion-segment>
 </div>
-<ion-content>
+<ion-content *ngIf="!this.userCantAccess && isloaded">
   <div [ngSwitch]="segmentValue">
     <ion-grid>
       <ion-row class="d-flex ion-padding">
@@ -51,6 +51,9 @@
     </ion-list>
   </div>
 </ion-content>
-<ion-footer class="ion-no-border footer-button">
+<div *ngIf="this.userCantAccess && isloaded" class="d-flex flex-justify-center">
+    <app-no-data-found [messageHeader]="'USER_CANT_ACCESS_THIS_SESSION'" [messageDescription]="'USER_CANT_ACCESS_SESSION_GO_TO_HOME_PAGE'" [image]="'../../../../assets/no-data/unotherised-access.png'"> </app-no-data-found>
+</div>
+<ion-footer *ngIf="isloaded" class="ion-no-border footer-button">
   <ion-button (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>
 </ion-footer>

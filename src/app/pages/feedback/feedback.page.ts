@@ -41,7 +41,8 @@ export class FeedbackPage implements OnInit {
     this.isMentorChecking();
   }
   async isMentorChecking() {
-    var response = await this.sessionService.getSessionDetailsAPI(this.sessionData.id);
+    var data = await this.sessionService.getSessionDetailsAPI(this.sessionData.id);
+    var response = data.result
     this.mentorName = response.mentor_name;
     this.sessionTitle = response.title;
     this.isMentor = this.profileService.isMentor;

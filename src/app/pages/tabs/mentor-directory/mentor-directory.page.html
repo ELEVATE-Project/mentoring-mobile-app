@@ -6,7 +6,7 @@
     [(ngModel)]="searchText" (ionChange)="onSearch()"></ion-searchbar>
   </div>
 </ion-toolbar>
-<ion-content>
+<ion-content *ngIf="isLoaded">
   
   <div *ngFor="let mentor of mentors">
     <div class="index-label">
