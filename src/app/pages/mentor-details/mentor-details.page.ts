@@ -1,3 +1,4 @@
+import { DataSource } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
@@ -69,8 +70,11 @@ export class MentorDetailsPage implements OnInit {
       organizationName:""
     },
   };
+  userCantAccess:any;
+  isloaded:boolean=false
   segmentValue = "about";
   upcomingSessions;
+  mentorProfileData:any;
   constructor(
     private routerParams: ActivatedRoute,
     private httpService: HttpService,
@@ -99,15 +103,21 @@ export class MentorDetailsPage implements OnInit {
   }
   async getMentor() {
     let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    // this.mentorId=user._id;
+    this.mentorProfileData = await this.getMentorDetails()
+    this.isloaded = true
+    this.userCantAccess = this.mentorProfileData?.responseCode == 'OK' ? false:true
+      this.detailData.data = this.mentorProfileData?.result;
+      this.detailData.data.organizationName = this.mentorProfileData?.result?.organization.name;
+  }
+
+  async getMentorDetails(){
     const config = {
       url: urlConstants.API_URLS.MENTORS_PROFILE_DETAILS + this.mentorId,
       payload: {}
     };
     try {
-      let data: any = await this.httpService.get(config);
-      this.detailData.data = data.result;
-      this.detailData.data.organizationName = data.result.organization.name;
+      let data = await this.httpService.get(config);
+      return data;
     }
     catch (error) {
     }

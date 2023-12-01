@@ -30,6 +30,7 @@ export class MentorDirectoryPage implements OnInit {
 
   mentors = [];
   mentorsCount;
+  isLoaded : boolean = false
   constructor(
     private router: Router,
     private loaderService: LoaderService,
@@ -59,6 +60,7 @@ export class MentorDirectoryPage implements OnInit {
     };
     try {
       let data: any = await this.httpService.get(config);
+      this.isLoaded = true
       showLoader ? await this.loaderService.stopLoader(): '';
       if(this.mentors.length && this.mentors[this.mentors.length-1].key==data.result.data[0]?.key){
         this.mentors[this.mentors.length-1].values = this.mentors[this.mentors.length-1].values.concat(data.result.data[0].values)
@@ -88,6 +90,7 @@ export class MentorDirectoryPage implements OnInit {
     event.target.complete();
   }
   onSearch() {
+    this.isLoaded = false
     this.page = 1;
     this.getMentors();
     this.mentors = [];
