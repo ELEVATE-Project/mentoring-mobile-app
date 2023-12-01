@@ -1,3 +1,4 @@
+import { DataSource } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
@@ -69,6 +70,8 @@ export class MentorDetailsPage implements OnInit {
       organizationName:""
     },
   };
+  userCantAccess:any;
+  isloaded:boolean=false
   segmentValue = "about";
   upcomingSessions;
   constructor(
@@ -106,8 +109,10 @@ export class MentorDetailsPage implements OnInit {
     };
     try {
       let data: any = await this.httpService.get(config);
-      this.detailData.data = data.result;
-      this.detailData.data.organizationName = data.result.organization.name;
+      this.isloaded = true
+      this.userCantAccess = data.responseCode == 'OK' ? false:true
+      this.detailData.data = data?.result;
+      this.detailData.data.organizationName = data?.result.organization.name;
     }
     catch (error) {
     }

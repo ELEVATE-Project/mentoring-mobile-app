@@ -1,6 +1,6 @@
-<app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
-<ion-content [fullscreen]="true">
-  <div *ngIf="detailData && isLoaded" class="main-wrapper"> 
+<app-page-header [config]="headerConfig" (actionEvent)="action($event)" *ngIf="isLoaded"></app-page-header>
+<ion-content [fullscreen]="true" *ngIf="!this.userCantAccess">
+  <div *ngIf="detailData && isLoaded && !this.userCantAccess" class="main-wrapper"> 
     <ion-grid>
       <ion-row class="d-flex ">
         <ion-col padding size-xs="12" size-sm="12" size-md="4" size-lg="4">
@@ -28,7 +28,7 @@
 </ion-grid>
   </div>
 </ion-content>
-<ion-footer class="ion-no-border" *ngIf="isLoaded">
+<ion-footer class="ion-no-border" *ngIf="isLoaded && !this.userCantAccess">
   <ion-item *ngIf="isCreator; else elseBlockFooter">
       <ion-button *ngIf="detailData?.data?.status=='PUBLISHED' || detailData?.data?.status=='LIVE'" [disabled]="!isEnabled || platformOff" class="load-more-button" expand="full"
       (click)="onStart(detailData?.data?.id)">{{"START_SESSIONS" | translate}}</ion-button>
@@ -45,4 +45,10 @@
       <ion-button class="load-more-button" expand="full" (click)="onJoin()" [disabled]="platformOff">{{"JOIN" | translate}}</ion-button>
     </div>
   </ng-template>
+</ion-footer>
+<div *ngIf="this.userCantAccess && isLoaded">
+      <app-no-data-found [messageHeader]="'USER_CANT_ACCESS_THIS_SESSION'" [messageDescription]="'USER_CANT_ACCESS_SESSION_GO_TO_HOME_PAGE'" [image]="'../../../../assets/no-data/unotherised-access.png'"> </app-no-data-found>
+</div>
+<ion-footer class="ion-no-border footer-button" *ngIf="this.userCantAccess && isLoaded">
+    <ion-button expand="full" (click)="goToHome()">{{"HOME" | translate}}</ion-button>
 </ion-footer>

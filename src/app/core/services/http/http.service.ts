@@ -91,6 +91,7 @@ export class HttpService {
           return result;
         } else {
           this.handleError(data)
+          return data;
         }
       });
   }

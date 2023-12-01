@@ -32,6 +32,7 @@ export class SessionDetailPage implements OnInit {
   platformOff: any;
   isLoaded : boolean = false
   public isMobile:any
+  userCantAccess:any = true;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -132,10 +133,11 @@ export class SessionDetailPage implements OnInit {
     },
   };
 
-  async fetchSessionDetails() {
+  async fetchSessionDetails() { 
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
-    this.sessionDatas = response;
-    if (response) {
+    this.userCantAccess = response.responseCode == 'OK' ? false:true
+    if (!this.userCantAccess) {
+      response = response.result;
       this.setPageHeader(response);
       let readableStartDate = moment.unix(response.start_date).toLocaleString();
       let currentTimeInSeconds=Math.floor(Date.now()/1000);
@@ -146,7 +148,7 @@ export class SessionDetailPage implements OnInit {
       }
       this.detailData.data = Object.assign({}, response);
       this.detailData.data.start_date = readableStartDate;
-      this.detailData.data.meeting_info = response.meeting_info.platform;
+      this.detailData.data.meeting_info = response.meeting_info?.platform;
       this.startDate = (response.start_date>0)?moment.unix(response.start_date).toLocaleString():this.startDate;
       this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
@@ -302,5 +304,9 @@ export class SessionDetailPage implements OnInit {
       
       toastData.present();
     });
+  }
+  
+  goToHome() {
+    this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]);
   }
 }
