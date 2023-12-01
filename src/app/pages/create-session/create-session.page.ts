@@ -97,7 +97,8 @@ export class CreateSessionPage implements OnInit {
     this.changeDetRef.detectChanges();
   }
   async getSessionDetailsUpdate(){
-    let response = await this.sessionService.getSessionDetailsAPI(this.id);
+    let data = await this.sessionService.getSessionDetailsAPI(this.id);
+    let response = data.result
         this.sessionDetails= response;
         this.profileImageData.image = response.image;
         this.profileImageData.isUploaded = true;
