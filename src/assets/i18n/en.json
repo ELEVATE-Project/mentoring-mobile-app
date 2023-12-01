@@ -222,5 +222,7 @@
     "UPDATE_PROFILE":"Update profile",
     "PLEASE_UPDATE_YOUR_PROFILE_IN_ORDER_TO_PROCEED":"Please update your profile in order to proceed.",
     "ORGANIZATION":"Organization",
-    "PLEASE_UPLOAD_CSV_FILE":"Please uplaod csv file."
+    "PLEASE_UPLOAD_CSV_FILE":"Please uplaod csv file.",
+    "RELOGIN_LABEL": "Alert",
+    "RELOGIN_MESSAGE": "Congratulations! You are now a mentor to the organisation. Please re-login to start your journey as a mentor"
 }
