@@ -73,6 +73,7 @@ export class MentorDirectoryPage implements OnInit {
       this.mentorsCount = data.result.count;
     }
     catch (error) {
+      this.isLoaded = true
       showLoader ? await this.loaderService.stopLoader(): '';
     }
   }

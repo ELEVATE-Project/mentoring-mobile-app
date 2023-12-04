@@ -135,7 +135,8 @@ export class SessionDetailPage implements OnInit {
 
   async fetchSessionDetails() { 
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
-    this.isLoaded = true
+    this.sessionDatas = response.result;
+    this.isLoaded = true 
     this.userCantAccess = response?.responseCode == 'OK' ? false:true
     if (!this.userCantAccess) {
       response = response.result;

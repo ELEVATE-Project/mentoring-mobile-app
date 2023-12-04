@@ -31,7 +31,7 @@ export class HomePage implements OnInit {
   sessionsCount = 0;
   isNativeApp = Capacitor.isNativePlatform()
   status = "PUBLISHED,LIVE";
-  showBecomeMentorCard
+  showBecomeMentorCard = false;
   @ViewChild(IonContent) content: IonContent;
 
   public headerConfig: any = {
@@ -89,6 +89,9 @@ export class HomePage implements OnInit {
   async ionViewWillEnter() {
     this.getSessions();
     this.gotToTop();
+    this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested) => {
+      this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false : true;
+    })
     var obj = { page: this.page, limit: this.limit, searchText: "" };
     this.isMentor = this.profileService.isMentor;
     this.createdSessions = this.isAMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
@@ -174,7 +177,7 @@ export class HomePage implements OnInit {
 
   async becomeMentor() {
     if(this.user?.about != null){
-      this.showBecomeMentorCard = false;
+      // this.showBecomeMentorCard = false;
       this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);   
     } else{
       this.profileService.upDateProfilePopup()
