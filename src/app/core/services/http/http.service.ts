@@ -11,9 +11,10 @@ import { LocalStorageService } from '../localstorage.service';
 import { urlConstants } from '../../constants/urlConstants';
 import { localKeys } from '../../constants/localStorage.keys';
 import { AuthService } from '../auth/auth.service';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
 import { CapacitorHttp } from '@capacitor/core';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Injectable({
@@ -22,6 +23,7 @@ import { CapacitorHttp } from '@capacitor/core';
 export class HttpService {
   baseUrl;
   isFeedbackTriggered = false;
+  isAlertOpen: any = false;
   constructor(
     private http: HTTP,
     private userService: UserService,
@@ -31,6 +33,8 @@ export class HttpService {
     private localStorage: LocalStorageService,
     private injector: Injector,
     private modalController: ModalController,
+    private translate: TranslateService,
+    private alert: AlertController,
   ) {
     this.baseUrl = environment.baseUrl;
   }
@@ -197,10 +201,8 @@ export class HttpService {
         this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:
-        let auth = this.injector.get(AuthService);
-          auth.logoutAccount(true).then(()=>{
-            this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
-          })
+          this.triggerLogoutConfirmationAlert(result)
+
         break
       default:
         this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
@@ -218,5 +220,41 @@ export class HttpService {
     await modal.present();
     const isModelClosed = await modal.onWillDismiss();
     this.isFeedbackTriggered = isModelClosed.data;
+  }
+
+  async triggerLogoutConfirmationAlert(result) {
+    let msg = result.data.message;
+    if (result && !this.isAlertOpen) {
+      let texts: any;
+      this.translate
+        .get(['OK'])
+        .subscribe((text) => {
+          texts = text;
+        });
+        this.isAlertOpen = true;
+      const alert = await this.alert.create({
+        message: msg,
+        buttons: [
+          {
+            text: texts['OK'],
+            role: 'cancel',
+            cssClass: 'alert-button-red',
+            handler: () => {
+              this.isAlertOpen = false;
+            },
+          },
+        ],
+        backdropDismiss: false
+      });
+      await alert.present();
+      let data = await alert.onDidDismiss();
+      if (data.role == 'cancel') {
+        let auth = this.injector.get(AuthService);
+        auth.logoutAccount(true);
+      }
+      return false;
+    } else {
+      return true;
+    }
   }
 }
