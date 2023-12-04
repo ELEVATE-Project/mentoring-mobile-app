@@ -23,6 +23,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class HttpService {
   baseUrl;
   isFeedbackTriggered = false;
+  isAlertOpen: any = false;
   constructor(
     private http: HTTP,
     private userService: UserService,
@@ -230,6 +231,7 @@ export class HttpService {
         .subscribe((text) => {
           texts = text;
         });
+        this.isAlertOpen = true;
       const alert = await this.alert.create({
         message: msg,
         buttons: [
@@ -237,7 +239,9 @@ export class HttpService {
             text: texts['OK'],
             role: 'cancel',
             cssClass: 'alert-button-red',
-            handler: () => {},
+            handler: () => {
+              this.isAlertOpen = false;
+            },
           },
         ],
         backdropDismiss: false
