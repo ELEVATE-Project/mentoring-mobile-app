@@ -224,7 +224,7 @@ export class HttpService {
 
   async triggerLogoutConfirmationAlert(result) {
     let msg = result.data.message;
-    if (result) {
+    if (result && !this.isAlertOpen) {
       let texts: any;
       this.translate
         .get(['OK'])
