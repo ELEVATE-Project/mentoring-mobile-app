@@ -222,8 +222,6 @@
     "PLEASE_UPDATE_YOUR_PROFILE_IN_ORDER_TO_PROCEED":"Please update your profile in order to proceed.",
     "ORGANIZATION":"Organization",
     "PLEASE_UPLOAD_CSV_FILE":"Please uplaod csv file.",
-    "RELOGIN_LABEL": "Alert",
-    "RELOGIN_MESSAGE": "Congratulations! You are now a mentor to the organisation. Please re-login to start your journey as a mentor",
     "CREATED_BY_ME":"Created by me",
     "USER_CANT_ACCESS_THIS_SESSION":"User can't access this session",
     "USER_CANT_ACCESS_SESSION_GO_TO_HOME_PAGE":"User cant't access this session, Please go to home to find and enroll for sessions by professional mentors in the 'All sessions' tab"

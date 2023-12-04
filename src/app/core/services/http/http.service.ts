@@ -226,13 +226,12 @@ export class HttpService {
     if (result) {
       let texts: any;
       this.translate
-        .get(['RELOGIN_LABEL', 'OK', 'RELOGIN_MESSAGE'])
+        .get(['OK'])
         .subscribe((text) => {
           texts = text;
         });
       const alert = await this.alert.create({
-        header: texts['RELOGIN_LABEL'],
-        message: texts['RELOGIN_MESSAGE'],
+        message: msg,
         buttons: [
           {
             text: texts['OK'],
@@ -247,9 +246,7 @@ export class HttpService {
       let data = await alert.onDidDismiss();
       if (data.role == 'cancel') {
         let auth = this.injector.get(AuthService);
-        auth.logoutAccount(true).then(()=>{
-            this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
-          })
+        auth.logoutAccount(true);
       }
       return false;
     } else {
