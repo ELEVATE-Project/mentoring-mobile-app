@@ -200,7 +200,7 @@ export class HttpService {
         this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:
-          this.canPageLeave(result)
+          this.triggerLogoutConfirmationAlert(result)
 
         break
       default:
@@ -221,7 +221,7 @@ export class HttpService {
     this.isFeedbackTriggered = isModelClosed.data;
   }
 
-  async canPageLeave(result) {
+  async triggerLogoutConfirmationAlert(result) {
     let msg = result.data.message;
     if (result) {
       let texts: any;
