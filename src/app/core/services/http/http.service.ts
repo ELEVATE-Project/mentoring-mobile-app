@@ -1,5 +1,4 @@
 import { Injectable, Injector } from '@angular/core';
-import { HTTP } from '@ionic-native/http/ngx';
 import { RequestParams } from '../../interface/request-param';
 import { environment } from 'src/environments/environment';
 import * as _ from 'lodash-es';
@@ -25,7 +24,6 @@ export class HttpService {
   isFeedbackTriggered = false;
   isAlertOpen: any = false;
   constructor(
-    private http: HTTP,
     private userService: UserService,
     private network: NetworkService,
     private toastService: ToastService,

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { AlertController, MenuController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
@@ -40,6 +40,8 @@ export class AppComponent {
   userRoles: any;
   userEventSubscription: any;
   backButtonSubscription: any;
+  menuSubscription: any;
+  routerSubscription: any;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -55,18 +57,15 @@ export class AppComponent {
     private zone:NgZone,
     private _location: Location,
     private alert: AlertController,
-    private cdr: ChangeDetectorRef,
     private screenOrientation: ScreenOrientation
   ) {
-    this.utilService.canIonMenuShow.subscribe(data =>{
+    this.menuSubscription = this.utilService.canIonMenuShow.subscribe(data =>{
         this.showMenu = data
-        this.cdr.detectChanges();
       }
     );
-    this.router.events.subscribe((event) => {
+    this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.showMenu = this.shouldHideMenu(event.url);
-         this.cdr.detectChanges();
       }
     });
     this.initializeApp();
@@ -228,6 +227,12 @@ export class AppComponent {
     }
     if (this.backButtonSubscription) {
       this.backButtonSubscription.unsubscribe();
+    }
+    if (this.menuSubscription) {
+      this.menuSubscription.unsubscribe();
+    }
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
     }
   }
 }
