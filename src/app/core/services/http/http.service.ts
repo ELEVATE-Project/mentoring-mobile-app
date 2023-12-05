@@ -1,5 +1,4 @@
 import { Injectable, Injector } from '@angular/core';
-import { HTTP } from '@ionic-native/http/ngx';
 import { RequestParams } from '../../interface/request-param';
 import { environment } from 'src/environments/environment';
 import * as _ from 'lodash-es';
@@ -25,7 +24,6 @@ export class HttpService {
   isFeedbackTriggered = false;
   isAlertOpen: any = false;
   constructor(
-    private http: HTTP,
     private userService: UserService,
     private network: NetworkService,
     private toastService: ToastService,
@@ -176,19 +174,25 @@ export class HttpService {
   }
 
   async getAccessToken() {
-    const config = {
-      url: urlConstants.API_URLS.REFRESH_TOKEN,
-      payload: {
+    if (!this.checkNetworkAvailability()) {
+      throw Error(null);
+    }
+    const options = {
+      url: this.baseUrl + urlConstants.API_URLS.REFRESH_TOKEN,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
         refresh_token: _.get(this.userService.token, 'refresh_token')
-      }
+      },
     };
-    try {
-      let data: any = await this.post(config);
-      let result = data.result;
-      return result;
-    }
-    catch (error) {
-    }
+    return CapacitorHttp.post(options)
+      .then((data: any) => {
+        let result: any = data.data;
+        if (result.responseCode === "OK") {
+          return result.result
+        }
+      });
   }
 
   public handleError(result) {
