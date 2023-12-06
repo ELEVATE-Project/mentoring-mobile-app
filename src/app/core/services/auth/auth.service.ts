@@ -93,6 +93,10 @@ export class AuthService {
       if (!skipApiCall) {
         await this.httpService.post(config);
       }
+      this.localStorage.delete(localKeys.USER_DETAILS);
+      this.localStorage.delete(localKeys.USER_ROLES);
+      this.localStorage.delete(localKeys.TOKEN);
+      this.localStorage.delete(localKeys.IS_ROLE_REQUESTED);
       await this.db.clear()
       this.userService.token = null;
       this.userService.userEvent.next(null);
