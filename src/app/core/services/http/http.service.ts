@@ -23,7 +23,6 @@ export class HttpService {
   baseUrl;
   isFeedbackTriggered = false;
   isAlertOpen: any = false;
-  isPopUpTriggered = false;
   constructor(
     private userService: UserService,
     private network: NetworkService,
@@ -208,7 +207,7 @@ export class HttpService {
         this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:
-          this.triggerLogoutConfirmationAlert(result);
+          this.triggerLogoutConfirmationAlert(result)
 
         break
       default:
