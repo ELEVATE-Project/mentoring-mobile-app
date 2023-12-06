@@ -184,8 +184,9 @@ export class HomePage implements OnInit {
     }
   }
 
-  closeCard() {
+  async closeCard() {
     this.showBecomeMentorCard = false;
+    await this.localStorage.setLocalData(localKeys.IS_ROLE_REQUESTED, true)
   }
 
   getCreatedSessionDetails() {
