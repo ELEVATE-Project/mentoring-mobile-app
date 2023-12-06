@@ -167,7 +167,7 @@ export class HttpService {
         await authService.logoutAccount();
       }
       this.userService.token['access_token'] = access_token;
-      this.localStorage.setLocalData(localKeys.TOKEN, this.userService.token);
+      await this.localStorage.setLocalData(localKeys.TOKEN, this.userService.token);
     }
     let userToken = 'bearer ' + _.get(this.userService.token, 'access_token');
     return userToken;
@@ -191,6 +191,8 @@ export class HttpService {
         let result: any = data.data;
         if (result.responseCode === "OK") {
           return result.result
+        } else {
+          this.handleError(data)
         }
       });
   }
