@@ -143,7 +143,8 @@ export class HttpService {
 
   //network check
   checkNetworkAvailability() {
-    if (!this.network.isNetworkAvailable) {
+    this.network.getCurrentStatus()
+    if (this.network.isNetworkAvailable) {
       this.toastService.showToast('MSG_PLEASE_NETWORK', 'danger')
       return false;
     } else {
