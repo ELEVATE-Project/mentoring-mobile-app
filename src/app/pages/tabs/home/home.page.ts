@@ -66,12 +66,16 @@ export class HomePage implements OnInit {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
         if (state.isActive == true && data) {
           this.getSessions();
-          this.getCreatedSessionDetails();
+          if(this.profileService.isMentor){
+            this.getCreatedSessionDetails();
+          }
         }
       })
     });
-    this.getCreatedSessionDetails();
     this.getUser();
+    if(this.profileService.isMentor){
+      this.getCreatedSessionDetails();
+    }
     this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested) => {
       this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false : true;
     })
