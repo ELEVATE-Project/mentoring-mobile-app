@@ -169,9 +169,9 @@ export class SessionDetailPage implements OnInit {
     this.dismissWhenBack = true;
   }
   ionViewWillLeave(){
-    if(!this.skipWhenDelete){this.snackbarRef = this.toaster?.dismiss().catch(err =>{
-      console.log("Toaster is not opened so error has been caught gracefully." , err)
-    })}
+    if(!this.skipWhenDelete && this.snackbarRef){
+      this.snackbarRef = this.toaster.dismiss()
+    }
    }
 
   setPageHeader(response) {
