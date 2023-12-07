@@ -3,5 +3,6 @@ export const localKeys = {
     USER_DETAILS: 'userDetails',
     TOKEN:'token',
     IS_ROLE_REQUESTED: 'isRoleRequested',
-    USER_ROLES: 'userRoles'
+    USER_ROLES: 'userRoles',
+    IS_BECOME_MENTOR_TILE_CLOSED:'isBecomeMentorTileClosed'
 }
