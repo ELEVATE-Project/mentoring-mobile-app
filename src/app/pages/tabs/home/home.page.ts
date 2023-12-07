@@ -182,7 +182,7 @@ export class HomePage implements OnInit {
 
   async becomeMentor() {
     if(this.user?.about != null){
-      this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);  
+      this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);   
     } else{
       this.profileService.upDateProfilePopup()
     }
