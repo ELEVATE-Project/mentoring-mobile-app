@@ -72,12 +72,12 @@ export class HomePage implements OnInit {
       })
     });
     this.getUser();
+    let isRoleRequested = this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
+    let isBecomeMentorTileClosed = this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
+    this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor || isBecomeMentorTileClosed ? false : true;
     if(this.profileService.isMentor){
       this.getCreatedSessionDetails();
     }
-    this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested) => {
-      this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false : true;
-    })
     this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data => {
       if (data) {
         this.isMentor = this.profileService.isMentor
@@ -93,9 +93,9 @@ export class HomePage implements OnInit {
   async ionViewWillEnter() {
     this.getSessions();
     this.gotToTop();
-    this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested) => {
-      this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false : true;
-    })
+    let isRoleRequested = await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
+    let isBecomeMentorTileClosed =await this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
+    this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor || isBecomeMentorTileClosed ? false : true;
     var obj = { page: this.page, limit: this.limit, searchText: "" };
     this.isMentor = this.profileService.isMentor;
     this.createdSessions = this.isMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
@@ -191,7 +191,7 @@ export class HomePage implements OnInit {
 
   async closeCard() {
     this.showBecomeMentorCard = false;
-    await this.localStorage.setLocalData(localKeys.IS_ROLE_REQUESTED, true)
+    await this.localStorage.setLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED, true)
   }
 
   getCreatedSessionDetails() {
