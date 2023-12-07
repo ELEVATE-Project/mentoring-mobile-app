@@ -66,7 +66,7 @@ export class HomePage implements OnInit {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
         if (state.isActive == true && data) {
           this.getSessions();
-          if (this.profileService.isMentor) {
+          if(this.profileService.isMentor){
             this.getCreatedSessionDetails();
           }
         }
@@ -76,7 +76,7 @@ export class HomePage implements OnInit {
     let isRoleRequested = this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
     let isBecomeMentorTileClosed = this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
     this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor || isBecomeMentorTileClosed ? false : true;
-    if (this.profileService.isMentor) {
+    if(this.profileService.isMentor){
       this.getCreatedSessionDetails();
     }
     this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data => {
@@ -174,16 +174,16 @@ export class HomePage implements OnInit {
   }
   async createSession() {
     if (this.user?.about != null) {
-      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]);
+      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]); 
     } else {
       this.profileService.upDateProfilePopup()
     }
   }
 
   async becomeMentor() {
-    if (this.user?.about != null) {
+    if(this.user?.about != null){
       this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);
-    } else {
+    } else{
       this.profileService.upDateProfilePopup()
     }
   }
