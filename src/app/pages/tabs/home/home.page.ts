@@ -40,7 +40,6 @@ export class HomePage implements OnInit {
     headerColor: 'primary',
     // label:'MENU'
   };
-  isAMentor
   public segmentButtons = [{ name: "all-sessions", label: "ALL_SESSIONS" }, { name: "created-sessions", label: "CREATED_SESSIONS" }, { name: "my-sessions", label: "ENROLLED_SESSIONS" }]
   public mentorSegmentButton = ["created-sessions"]
   selectedSegment = "all-sessions";
@@ -99,7 +98,7 @@ export class HomePage implements OnInit {
     })
     var obj = { page: this.page, limit: this.limit, searchText: "" };
     this.isMentor = this.profileService.isMentor;
-    this.createdSessions = this.isAMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
+    this.createdSessions = this.isMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
   }
   async eventAction(event) {
     if (this.user.about) {
@@ -124,7 +123,9 @@ export class HomePage implements OnInit {
         case 'startAction':
           this.sessionService.startSession(event.data.id).then(async () => {
             var obj = { page: this.page, limit: this.limit, searchText: "" };
-            this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+            if(this.profileService.isMentor){
+              this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+            }
           })
           break;
       }
@@ -141,7 +142,7 @@ export class HomePage implements OnInit {
   }
   getUser() {
     this.profileService.profileDetails().then(data => {
-      this.isAMentor = this.profileService.isMentor
+      this.isMentor = this.profileService.isMentor
       this.user = data
       if (!this.user?.terms_and_conditions) {
         // this.openModal();
