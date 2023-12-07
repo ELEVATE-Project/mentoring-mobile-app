@@ -11,6 +11,7 @@ import { ToastService } from '../toast.service';
 import { UserService } from '../user/user.service';
 import { ProfileService } from '../profile/profile.service';
 import { TranslateService } from '@ngx-translate/core';
+import { DbService } from '../db/db.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,8 @@ export class AuthService {
     private toast: ToastService,
     private userService: UserService,
     private profileService: ProfileService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private db: DbService
   ) { }
 
   async createAccount(formData) {
@@ -95,6 +97,7 @@ export class AuthService {
       this.localStorage.delete(localKeys.USER_ROLES);
       this.localStorage.delete(localKeys.TOKEN);
       this.localStorage.delete(localKeys.IS_ROLE_REQUESTED);
+      await this.db.clear()
       this.userService.token = null;
       this.userService.userEvent.next(null);
       this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {

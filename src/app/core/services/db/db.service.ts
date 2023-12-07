@@ -27,7 +27,7 @@ export class DbService {
   }
 
   //Clear the DB 
-  async clear(S) {
+  async clear() {
     return await this._storage.clear();
   }
 }

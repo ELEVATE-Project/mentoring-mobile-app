@@ -223,6 +223,8 @@
     "ORGANIZATION":"Organization",
     "PLEASE_UPLOAD_CSV_FILE":"Please upload csv file.",
     "CREATED_BY_ME":"Created by me",
-    "USER_CANT_ACCESS_THIS_SESSION":"User can't access this session",
-    "USER_CANT_ACCESS_SESSION_GO_TO_HOME_PAGE":"User cant't access this session, Please go to home to find and enroll for sessions by professional mentors in the 'All sessions' tab"
+    "USER_CANT_ACCESS_THIS_SESSION":"You can’t access this session.",
+    "USER_CANT_ACCESS_SESSION_GO_TO_HOME_PAGE":"This is a private mentoring session. You shall not be able to access it. Go to the ‘All session’ tab to enroll for mentoring sessions that are available to you.",
+    "USER_CANT_ACCESS_THIS_PROFILE":"You can’t access this mentor’s profile.",
+    "USER_CANT_ACCESS_PROFILE_GO_TO_HOME_PAGE":"This mentor's profile is private. Go to the ‘All session’ tab to enroll for mentoring sessions that are available to you."
 }

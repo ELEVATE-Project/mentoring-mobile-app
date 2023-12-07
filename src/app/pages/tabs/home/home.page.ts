@@ -40,7 +40,6 @@ export class HomePage implements OnInit {
     headerColor: 'primary',
     // label:'MENU'
   };
-  isAMentor
   public segmentButtons = [{ name: "all-sessions", label: "ALL_SESSIONS" }, { name: "created-sessions", label: "CREATED_SESSIONS" }, { name: "my-sessions", label: "ENROLLED_SESSIONS" }]
   public mentorSegmentButton = ["created-sessions"]
   selectedSegment = "all-sessions";
@@ -66,15 +65,19 @@ export class HomePage implements OnInit {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
         if (state.isActive == true && data) {
           this.getSessions();
-          this.getCreatedSessionDetails();
+          if(this.profileService.isMentor){
+            this.getCreatedSessionDetails();
+          }
         }
       })
     });
-    this.getCreatedSessionDetails();
     this.getUser();
-    this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested) => {
-      this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false : true;
-    })
+    let isRoleRequested = this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
+    let isBecomeMentorTileClosed = this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
+    this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor || isBecomeMentorTileClosed ? false : true;
+    if(this.profileService.isMentor){
+      this.getCreatedSessionDetails();
+    }
     this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data => {
       if (data) {
         this.isMentor = this.profileService.isMentor
@@ -90,12 +93,12 @@ export class HomePage implements OnInit {
   async ionViewWillEnter() {
     this.getSessions();
     this.gotToTop();
-    this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED).then((isRoleRequested) => {
-      this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor ? false : true;
-    })
+    let isRoleRequested = await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
+    let isBecomeMentorTileClosed =await this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
+    this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor || isBecomeMentorTileClosed ? false : true;
     var obj = { page: this.page, limit: this.limit, searchText: "" };
     this.isMentor = this.profileService.isMentor;
-    this.createdSessions = this.isAMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
+    this.createdSessions = this.isMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
   }
   async eventAction(event) {
     if (this.user.about) {
@@ -120,7 +123,9 @@ export class HomePage implements OnInit {
         case 'startAction':
           this.sessionService.startSession(event.data.id).then(async () => {
             var obj = { page: this.page, limit: this.limit, searchText: "" };
-            this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+            if(this.profileService.isMentor){
+              this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+            }
           })
           break;
       }
@@ -137,7 +142,7 @@ export class HomePage implements OnInit {
   }
   getUser() {
     this.profileService.profileDetails().then(data => {
-      this.isAMentor = this.profileService.isMentor
+      this.isMentor = this.profileService.isMentor
       this.user = data
       if (!this.user?.terms_and_conditions) {
         // this.openModal();
@@ -184,8 +189,9 @@ export class HomePage implements OnInit {
     }
   }
 
-  closeCard() {
+  async closeCard() {
     this.showBecomeMentorCard = false;
+    await this.localStorage.setLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED, true)
   }
 
   getCreatedSessionDetails() {

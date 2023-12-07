@@ -173,7 +173,7 @@
     "NO_SESSIONS_CREATED":"अभी तक कोई सत्र नहीं बनाया गया",
     "DON'T_DELETE": "मिटाएं नहीं",
     "YES_DELETE": "हाँ हटाएं",
-    "SET_IT_LATER": "Set it later",
+    "SET_IT_LATER": "इसे बाद में सेट करें",
     "SELECT_MEETING_PLATFORM": "मीटिंग लिंक दर्ज करें",
     "MEETING_PLATFORM": "मीटिंग प्लेटफ़ॉर्म",
     "MEETING_LINK": "मीटिंग लिंक",
@@ -227,6 +227,8 @@
     "ORGANIZATION":"संगठन",
     "PLEASE_UPLOAD_CSV_FILE":"कृपया CSV फ़ाइल अपलोड करें.",
     "CREATED_BY_ME":"मेरे द्वारा बनाया गया",
-    "USER_CANT_ACCESS_THIS_SESSION":"User can't access this session",
-    "USER_CANT_ACCESS_SESSION_GO_TO_HOME_PAGE":"User cant't access this session, Please go to home to find and enroll for sessions by professional mentors in the 'All sessions' tab"
+    "USER_CANT_ACCESS_THIS_SESSION":"आप इस सेशन को एक्सेस नहीं कर सकते",
+    "USER_CANT_ACCESS_SESSION_GO_TO_HOME_PAGE":"यह एक निजी मेंटरिंग सेशन है। आप इसको एक्सेस नहीं कर पाएंगे। 'ऑल सेशन' टैब पर जाएं और उन मेंटरिंग सेशन के लिए रजिस्टर करें जो आपके लिए उपलब्ध हैं।",
+    "USER_CANT_ACCESS_THIS_PROFILE":"आप इस मेंटर के प्रोफ़ाइल नहीं देख सकते।",
+    "USER_CANT_ACCESS_PROFILE_GO_TO_HOME_PAGE":"इस मेंटर का प्रोफ़ाइल निजी है। उन सेशन के लिए रजिस्टर करें जो आपके लिए उपलब्ध हैं, 'ऑल सेशन' टैब पर जाएं।"
 }

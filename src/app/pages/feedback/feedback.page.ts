@@ -45,7 +45,8 @@ export class FeedbackPage implements OnInit {
     var response = data.result
     this.mentorName = response.mentor_name;
     this.sessionTitle = response.title;
-    this.isMentor = this.profileService.isMentor;
+    let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    this.isMentor = user.id === response.mentor_id ? true : false;
     this.formItems()
     this.formData.controls = this.sessionData.form;
     this.feedbackData.feedback_as = this.isMentor ? "mentor" : "mentee";

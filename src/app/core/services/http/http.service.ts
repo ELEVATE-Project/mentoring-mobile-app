@@ -143,6 +143,7 @@ export class HttpService {
 
   //network check
   checkNetworkAvailability() {
+    this.network.getCurrentStatus()
     if (!this.network.isNetworkAvailable) {
       this.toastService.showToast('MSG_PLEASE_NETWORK', 'danger')
       return false;
@@ -167,7 +168,7 @@ export class HttpService {
         await authService.logoutAccount();
       }
       this.userService.token['access_token'] = access_token;
-      this.localStorage.setLocalData(localKeys.TOKEN, this.userService.token);
+      await this.localStorage.setLocalData(localKeys.TOKEN, this.userService.token);
     }
     let userToken = 'bearer ' + _.get(this.userService.token, 'access_token');
     return userToken;
@@ -191,6 +192,8 @@ export class HttpService {
         let result: any = data.data;
         if (result.responseCode === "OK") {
           return result.result
+        } else {
+          this.handleError(data)
         }
       });
   }
