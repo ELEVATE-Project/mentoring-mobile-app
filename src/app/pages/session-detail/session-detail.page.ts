@@ -169,7 +169,9 @@ export class SessionDetailPage implements OnInit {
     this.dismissWhenBack = true;
   }
   ionViewWillLeave(){
-    if(!this.skipWhenDelete){this.snackbarRef = this.toaster.dismiss()}
+    if(!this.skipWhenDelete && this.snackbarRef){
+      this.snackbarRef = this.toaster.dismiss()
+    }
    }
 
   setPageHeader(response) {

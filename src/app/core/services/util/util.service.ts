@@ -80,6 +80,14 @@ export class UtilService {
     });
   }
 
+ async alertClose(){
+    this.alert.getTop().then(alertInstance => {
+      if (alertInstance) {
+        alertInstance.dismiss();
+      }
+    });
+  }
+
   getActionSheetButtons(profileImageData) {
     let texts
     this.translate
