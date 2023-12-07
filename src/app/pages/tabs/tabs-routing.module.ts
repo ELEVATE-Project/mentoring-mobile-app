@@ -17,15 +17,18 @@ const routes: Routes = [
       },
       {
         path: CommonRoutes.MENTOR_DIRECTORY,
-        loadChildren: () => import('./mentor-directory/mentor-directory.module').then(m => m.MentorDirectoryPageModule)
+        loadChildren: () => import('./mentor-directory/mentor-directory.module').then(m => m.MentorDirectoryPageModule),
+        canActivate:[PrivateGuard]
       },
       {
         path: CommonRoutes.DASHBOARD,
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardPageModule)
+        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardPageModule),
+        canActivate:[PrivateGuard]
       },
       {
         path: CommonRoutes.PROFILE,
-        loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+        loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule),
+        canActivate:[PrivateGuard]
       },
       {
         path: '',
