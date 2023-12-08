@@ -12,6 +12,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { environment } from 'src/environments/environment';
 import { Capacitor } from '@capacitor/core';
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'app-root',
@@ -57,7 +58,8 @@ export class AppComponent {
     private zone:NgZone,
     private _location: Location,
     private alert: AlertController,
-    private screenOrientation: ScreenOrientation
+    private screenOrientation: ScreenOrientation,
+    private swUpdate: SwUpdate
   ) {
     this.menuSubscription = this.utilService.canIonMenuShow.subscribe(data =>{
         this.showMenu = data
@@ -71,6 +73,18 @@ export class AppComponent {
     this.initializeApp();
     if(Capacitor.isNativePlatform()){
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
+    }
+  }
+
+  ngOnInit(){
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.checkForUpdate().then((data) => {
+        if(data){
+          this.swUpdate.activateUpdate().then((data)=>{
+            window.location.reload()
+          })
+        }
+      });
     }
   }
 
