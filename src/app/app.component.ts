@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, HostListener, NgZone } from '@angular/core';
 import { AlertController, MenuController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
@@ -234,5 +234,9 @@ export class AppComponent {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
+  }
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event: any) {
+    this.utilService.alertClose()
   }
 }
