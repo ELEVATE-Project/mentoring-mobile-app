@@ -1,7 +1,7 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding">
   <ion-toolbar>
-    <ion-searchbar (ionClear)="cancelSearch($event)" class="top-padding" [(ngModel)]="searchText" placeholder="" (keypress)="checkInput($event)" debounce="100"  ></ion-searchbar>
+    <ion-searchbar (ionClear)="cancelSearch($event)" class="top-padding" [(ngModel)]="searchText" placeholder="" (keypress)="checkInput($event)" debounce="100"></ion-searchbar>
   </ion-toolbar>
   <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
     <ion-segment-button value="all-sessions">
