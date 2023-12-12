@@ -58,6 +58,10 @@ export class HomeSearchPage implements OnInit {
       this.search();
     }
   }
+  cancelSearch(event: any){
+    this.searching = true
+    this.results = []
+  }
   trimLeft(inputString: string): string {
     return this.searchText = inputString.replace(/^\s+/, '');
   }
