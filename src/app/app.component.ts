@@ -198,6 +198,9 @@ export class AppComponent {
       cancel:'CANCEL',
       submit:'LOGOUT'
     }
+    this._location.subscribe(() => {
+      this.utilService.alertClose();
+    });
     this.utilService.alertPopup(msg).then(async (data) => {
       if(data){
         await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, "en");
@@ -248,9 +251,5 @@ export class AppComponent {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
-  }
-  @HostListener('window:popstate', ['$event'])
-  onPopState(event: any) {
-    this.utilService.alertClose()
   }
 }

@@ -21,6 +21,8 @@ import { AlertController, Platform } from '@ionic/angular';
 import { isDeactivatable } from 'src/app/core/guards/canDeactive/deactive.guard';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit-profile',
@@ -57,7 +59,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     private loaderService: LoaderService,
     private alert: AlertController,
     private translate: TranslateService,
-    private toast: ToastService
+    private toast: ToastService,
+    private dialog: MatDialog
   ) {
   }
   async ngOnInit() {
@@ -76,7 +79,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     }
   }
 
-  async canPageLeave() {
+ async canPageLeave(): Promise<any> {
     if (this.form1 && !this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
       let texts: any;
       this.translate
@@ -84,30 +87,19 @@ export class EditProfilePage implements OnInit, isDeactivatable {
         .subscribe((text) => {
           texts = text;
         });
-      const alert = await this.alert.create({
-        header: texts['EXIT_HEADER_LABEL'],
-        message: texts['FORM_UNSAVED_DATA'],
-        buttons: [
-          {
-            text: texts['CANCEL'],
-            cssClass: 'alert-button-bg-white',
-            role: 'exit',
-            handler: () => {},
-          },
-          {
-            text: texts['OK'],
-            role: 'cancel',
-            cssClass: 'alert-button-red',
-            handler: () => {},
-          },
-        ],
+      let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          header: texts['EXIT_HEADER_LABEL'],
+          message: texts['FORM_UNSAVED_DATA'],
+          cancelButtonText: texts['CANCEL'],
+          okButtonText: texts['OK'],
+        }
       });
-      await alert.present();
-      let data = await alert.onDidDismiss();
-      if (data.role == 'exit') {
-        return true;
-      }
-      return false;
+      return new Promise<boolean>((resolve) =>{
+        dialogRef.afterClosed().subscribe(result =>{
+          resolve(result);
+        })
+      })
     } else {
       return true;
     }

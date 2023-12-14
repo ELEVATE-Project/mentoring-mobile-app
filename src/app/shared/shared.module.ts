@@ -31,6 +31,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';                                              
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,8 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
     MentorCardComponent,
     NumberOnlyDirective,
     JoinDialogBoxComponent,
-    ModelComponent
+    ModelComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     CommonModule,
@@ -70,6 +73,7 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
     ReactiveFormsModule,
     MatButtonModule,
     NgxMatMomentModule, 
+    MatDialogModule
   ],
   exports: [
     DynamicFormComponent,
