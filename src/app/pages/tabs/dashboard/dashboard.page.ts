@@ -57,7 +57,6 @@ export class DashboardPage implements OnInit {
   }
 
   segmentChanged(ev: any) {
-    console.log('Segment changed', ev);
     this.segment = ev.detail.value;
     this.chart.destroy();
     this.dataAvailable = true;

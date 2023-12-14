@@ -18,6 +18,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation.component';
 
 @Component({
   selector: 'app-create-session',
@@ -70,7 +72,8 @@ export class CreateSessionPage implements OnInit {
     private alert: AlertController,
     private form: FormService,
     private changeDetRef: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
   }
   async ngOnInit() {
@@ -114,42 +117,28 @@ export class CreateSessionPage implements OnInit {
     this.selectedHint = this.meetingPlatforms[0].hint;
   }
 
-  async canPageLeave() {
-    if(this.type=='default'){
-      if (!this.form1?.myForm.pristine || this.profileImageData.haveValidationError) {
-        let texts: any;
+  async canPageLeave(): Promise<any> {
+    if (this.form1 && !this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
+      let texts: any;
         this.translate.get(['SESSION_FORM_UNSAVED_DATA', 'EXIT', 'CANCEL', 'EXIT_HEADER_LABEL']).subscribe(text => {
           texts = text;
         })
-        const alert = await this.alert.create({
+      let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
           header: texts['EXIT_HEADER_LABEL'],
           message: texts['SESSION_FORM_UNSAVED_DATA'],
-          buttons: [
-            {
-              text: texts['EXIT'],
-              cssClass: "alert-button-bg-white",
-              role: 'exit',
-              handler: () => { }
-            },
-            {
-              text: texts['CANCEL'],
-              cssClass: "alert-button-red",
-              role: 'cancel',
-              handler: () => { }
-            }
-          ]
-        });
-        await alert.present();
-        let data = await alert.onDidDismiss();
-        if(data.role == 'exit'){
-          return true
-        } 
-        return false
-      } else {
-        return true;
-      }
+          cancelButtonText: texts['EXIT'],
+          okButtonText: texts['CANCEL'],
+        },
+      });
+      return new Promise<boolean>((resolve) =>{
+        dialogRef.afterClosed().subscribe(result =>{
+          resolve(result);
+        })
+      })
+    } else {
+      return true;
     }
-    return true
   }
 
 
