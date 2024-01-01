@@ -5,10 +5,11 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { AdminComponent } from './admin.component';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
-import { ManageListComponent } from './manage-list/manage-list.component';
+import { ManageListComponent } from './components/manage-list/manage-list.component';
+import { ManageSessionComponent } from './components/manage-session/manage-session.component';
 
 @NgModule({
-  declarations: [AdminComponent, ManageListComponent],
+  declarations: [AdminComponent, ManageListComponent, ManageSessionComponent],
   imports: [
     CommonModule,
     SharedModule,
