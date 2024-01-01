@@ -1,0 +1,25 @@
+.session-sqr-card{
+    text-align: center;
+    padding: 4px;
+    margin: 10px;
+    border-radius: 10px;
+}
+.label{
+    font-size: 15px;
+    color: var(--black);
+}
+.card-button{
+    --background:rgb(53, 120, 184);
+    width: 85% !important;
+    font-weight: bold;
+    height: 43px;
+    font-size: larger;
+    margin-top: 13px;
+}
+.create-icon{
+    font-size: 32px;
+    margin: 10px;
+}
+.card-content{
+    padding-top: 0px;
+}
