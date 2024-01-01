@@ -1,0 +1,16 @@
+
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
+  [length]="dataSource.data.length" [pageSize]="pageSize" (page)="onPageChange($event)">
+</mat-paginator>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <ng-container *ngFor="let column of columnData" [matColumnDef]="column.name">
+    <th mat-header-cell *matHeaderCellDef>{{ column.displayName }} <span (click)="onClickSorting(column)" *ngIf="column.sorting"><ion-icon name="arrow-up"></ion-icon></span></th>
+    <td mat-cell (click)="onCellClick(column,element[column.name])" *matCellDef="let element">{{ element[column.name] }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>
+
