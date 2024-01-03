@@ -1,0 +1,43 @@
+
+table {
+    width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 100px; /* Adjust the second value to control the gap between rows */
+  margin-bottom: 20px;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  th.mat-header-cell {
+    text-align: center;
+}
+  tr {
+    text-align: center;
+    background-color: #fffbfb;
+    border: 1px solid #5e5d5d; /* Add a border between rows */
+  }
+
+  tr:hover {
+    cursor: pointer;
+  }
+  table.mat-table {
+    // border-spacing: 0 10px;
+    padding: o 10px;
+    margin: 10px;
+  }
+  tr.mat-header-row, tr.mat-row {
+    border: 1px solid #5e5d5d;
+}
+
+
+.custom-sort-icon {
+  font-size: 20px; /* Adjust the size as needed */
+  color: #000; /* Set the desired color */
+}
