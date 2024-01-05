@@ -19,7 +19,8 @@ import {
   FilterComponent,
   ExpandableCardComponent,
   PersonaSelectionCardComponent,
-  GenericProfileHeaderComponent
+  GenericProfileHeaderComponent,
+  FiltersComponent
 } from './components/index';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { MentorCardComponent } from './components/mentor-card/mentor-card.component';
@@ -34,6 +35,8 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
 import { GenericTableComponent } from './components/generic-table/generic-table.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { SearchAndSelectComponent } from './components/search-and-select/search-and-select.component';
+import { SearchPopoverComponent } from './components/search-popover/search-popover.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +61,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     NumberOnlyDirective,
     JoinDialogBoxComponent,
     ModelComponent,
-    GenericTableComponent
+    GenericTableComponent,
+    SearchAndSelectComponent,
+    SearchPopoverComponent,
+    FiltersComponent
   ],
   imports: [
     CommonModule,
@@ -97,7 +103,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     JoinDialogBoxComponent,
     GenericTableComponent,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    SearchAndSelectComponent,
+    SearchPopoverComponent,
+    FiltersComponent
   ],
 })
 export class SharedModule {}

@@ -18,6 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { map } from 'rxjs/operators';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-session',
@@ -75,8 +76,283 @@ export class CreateSessionPage implements OnInit {
   }
   async ngOnInit() {
     const platformForm = await this.getPlatformFormDetails();
-    const result = await this.form.getForm(CREATE_SESSION_FORM);
-    this.formData = _.get(result, 'data.fields');
+    // const result = await this.form.getForm(CREATE_SESSION_FORM);
+    // this.formData = _.get(result, 'data.fields');
+    this.formData = {
+      "controls": [
+          {
+              "name": "title",
+              "label": "Session title",
+              "value": "",
+              "class": "ion-no-margin",
+              "type": "text",
+              "placeHolder": "Ex. Name of your session",
+              "position": "floating",
+              "errorMessage": {
+                  "required": "Enter session title"
+              },
+              "validators": {
+                  "required": true,
+                  "maxLength": 255
+              }
+          },
+          {
+              "name": "description",
+              "label": "Description",
+              "value": "",
+              "class": "ion-no-margin",
+              "type": "textarea",
+              "placeHolder": "Tell the community something about your session",
+              "position": "floating",
+              "errorMessage": {
+                  "required": "Enter description"
+              },
+              "validators": {
+                  "required": true,
+                  "maxLength": 255
+              }
+          },
+          {
+            "name": "type",
+            "label": "Session type",
+            "value": '',
+            "class": "ion-no-margin",
+            "type": "select",
+            "dependedChild": 'mentee_list',
+            "position": "floating",
+            "info": [{
+              header: "Public session", message: "Discoverable. Mentees can enroll and attend"
+            },
+            {
+              header: "Private session", message: "Non-discoverable. Invited mentee can attend"
+            }],
+            "errorMessage": {
+                "required": "Please select your session type"
+            },
+            "validators": {
+                "required": true
+            },
+            "meta": {
+                "errorLabel": "Location"
+            },
+            "multiple": false,
+            options: [{
+                label: 'Private',
+                value: 'private'
+              },
+              {
+                label: 'Public',
+                value: 'public'
+              }],
+          },  
+          {
+            name: 'mentor_list',
+            label: 'Add mentor',
+            value: '',
+            class: 'ion-no-margin',
+            type: 'search',
+            position: 'floating',
+            meta: {
+              multiSelect: false, 
+              searchType: 'mentor',
+              filters: {
+                entity_types: ['designation'],
+                others: ['organisation']
+              }
+            },
+            "info": [{
+              message: "Click to select Mentor for this session"
+            }],
+            errorMessage:{
+              required: "Please add a mentor for the session",
+            },
+            validators: {
+              required: true,
+            },
+          },
+          {
+            name: 'mentee_list',
+            label: 'Add mentee',
+            value: '',
+            class: 'ion-no-margin',
+            type: 'search',
+            meta: {
+              multiSelect: false, 
+              searchType: 'mentee',
+              filters: {
+                entity_types: ['designation'],
+                others: ['organisation']
+              }
+            },
+            position: 'floating',
+            "info": [{
+              message: "Click to select Mentee(s) for this session"
+            }],
+            errorMessage:{
+              required: "Please add mentee for the session",
+            },
+            validators: {
+              required: true,
+            },
+          },
+          {
+              "name": "start_date",
+              "label": "Start date",
+              "class": "ion-no-margin",
+              "value": "",
+              "displayFormat": "DD/MMM/YYYY HH:mm",
+              "dependedChild": "end_date",
+              "type": "date",
+              "placeHolder": "YYYY-MM-DD hh:mm",
+              "errorMessage": {
+                  "required": "Enter start date"
+              },
+              "position": "floating",
+              "validators": {
+                  "required": true
+              }
+          },
+          {
+              "name": "end_date",
+              "label": "End date",
+              "class": "ion-no-margin",
+              "position": "floating",
+              "value": "",
+              "displayFormat": "DD/MMM/YYYY HH:mm",
+              "dependedParent": "start_date",
+              "type": "date",
+              "placeHolder": "YYYY-MM-DD hh:mm",
+              "errorMessage": {
+                  "required": "Enter end date"
+              },
+              "validators": {
+                  "required": true
+              }
+          },
+          {
+              "name": "recommended_for",
+              "label": "Recommended for",
+              "class": "ion-no-margin",
+              "value": "",
+              "type": "chip",
+              "position": "",
+              "disabled": false,
+              "errorMessage": {
+                  "required": "Enter recommended for"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [
+                  {
+                      "label": "Block education officer",
+                      "value": "beo"
+                  },
+                  {
+                      "label": "Cluster officials",
+                      "value": "co"
+                  },
+                  {
+                      "label": "District education officer",
+                      "value": "deo"
+                  },
+                  {
+                      "label": "Head master",
+                      "value": "hm"
+                  },
+                  {
+                      "label": "Teacher",
+                      "value": "te"
+                  }
+              ],
+              "meta": {
+                  "entityType": "recommended_for",
+                  "addNewPopupHeader": "Recommended for",
+                  "addNewPopupSubHeader": "Who is this session for?",
+                  "showSelectAll": true,
+                  "showAddOption": true
+              },
+              "multiple": true
+          },
+          {
+              "name": "categories",
+              "label": "Categories",
+              "class": "ion-no-margin",
+              "value": "",
+              "type": "chip",
+              "position": "",
+              "disabled": false,
+              "errorMessage": {
+                  "required": "Enter categories"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [
+                  {
+                      "label": "Communication",
+                      "value": "communication"
+                  },
+                  {
+                      "label": "Educational leadership",
+                      "value": "educational_leadership"
+                  },
+                  {
+                      "label": "Professional development",
+                      "value": "professional_development"
+                  },
+                  {
+                      "label": "School process",
+                      "value": "school_process"
+                  },
+                  {
+                      "label": "SQAA",
+                      "value": "sqaa"
+                  }
+              ],
+              "meta": {
+                  "entityType": "categories",
+                  "addNewPopupHeader": "Add a new category",
+                  "showSelectAll": true,
+                  "showAddOption": true
+              },
+              "multiple": true
+          },
+          {
+              "name": "medium",
+              "label": "Select medium",
+              "alertLabel": "medium",
+              "class": "ion-no-margin",
+              "value": "",
+              "type": "chip",
+              "position": "",
+              "disabled": false,
+              "errorMessage": {
+                  "required": "Enter select medium"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [
+                  {
+                      "label": "English",
+                      "value": "en_in"
+                  },
+                  {
+                      "label": "Hindi",
+                      "value": "hi"
+                  }
+              ],
+              "meta": {
+                  "entityType": "medium",
+                  "addNewPopupHeader": "Add new language",
+                  "showSelectAll": true,
+                  "showAddOption": true
+              },
+              "multiple": true
+          }
+      ]
+  }
     this.entityNames = await this.form.getEntityNames(this.formData)
     this.entityList = await this.form.getEntities(this.entityNames, 'SESSION')
     this.formData = await this.form.populateEntity(this.formData,this.entityList)
@@ -170,6 +446,7 @@ export class CreateSessionPage implements OnInit {
           let control = this.formData.controls.find(obj => obj.name === entityKey);
           form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey]
         });
+        console.log(form)
         if(!this.profileImageData.image){
           form.image=[]
         }
@@ -302,7 +579,21 @@ export class CreateSessionPage implements OnInit {
       })
     }
   }
+
   compareWithFn(o1, o2) {
     return o1 === o2;
   };
+
+  formValueChanged(event){
+    if(event.value == 'public'){
+      this.formData.controls[event.dependedControlIndex].validators['required'] = false
+      event.dependedControl.setValidators(null);
+      event.dependedControl.setErrors(null)
+      event.dependedControl.updateValueAndValidity();
+    } else {
+      this.formData.controls[event.dependedControlIndex].validators['required'] = true
+      event.dependedControl.setValidators([Validators.required]);
+      event.dependedControl.updateValueAndValidity();
+    }
+  }
 }

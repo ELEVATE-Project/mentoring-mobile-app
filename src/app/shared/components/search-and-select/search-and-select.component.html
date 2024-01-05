@@ -1,0 +1,20 @@
+<div style="display: flex; align-items: center;">
+  <ion-label position="stacked" class="head-label">
+    {{ control.label }}&nbsp;<span *ngIf="control?.validators['required']==true" class="star-icon-red">*</span>
+  </ion-label>
+  <ion-icon *ngIf="control?.info" id="{{control.name}}" class="info" name="information-circle"></ion-icon>
+  <ion-popover trigger="{{control.name}}" triggerAction="hover">
+    <ng-template>
+      <ion-content class="ion-padding">
+        <div class="ion-padding-bottom" *ngFor="let info of control.info">
+          <span *ngIf="info?.header" class="popover-header">{{info?.header}}:</span> {{info?.message}}</div>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+</div>
+<ion-item class="ion-margin-top">
+  <ion-chip (click)="showPopover(control.meta)">
+    <ion-icon name="add-outline"></ion-icon>
+    <ion-label>{{control?.label}}</ion-label>
+  </ion-chip>
+</ion-item>

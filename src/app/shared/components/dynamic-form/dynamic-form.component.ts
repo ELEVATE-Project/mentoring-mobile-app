@@ -14,6 +14,7 @@ import { ToastService } from 'src/app/core/services';
 import { ThemePalette } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { NGX_MAT_DATE_FORMATS, NgxMatDateFormats, NgxMatDatetimePicker } from '@angular-material-components/datetime-picker';
+import { debounceTime } from 'rxjs/operators';
 
 interface JsonFormValidators {
   min?: number;
@@ -63,6 +64,13 @@ interface JsonFormControls {
   platformPlaceHolder?:string;
   showSelectAll?: boolean;
   multiple?:boolean;
+  placeHolder?: string;
+  displayFormat?: string;
+  dependedChild?: string;
+  dependedParent?: string;
+  meta?: Object;
+  multiSelect?: boolean;
+  info?: Array<object>
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
@@ -94,6 +102,9 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;
   @Input() readonly: any = false;
+  @Output() formValid = new EventEmitter()
+  @Output() onEnter = new EventEmitter()
+  @Output() formValueChanged = new EventEmitter()
   @ViewChild('picker') picker: MatDatepicker<Date>;
   
   public showSpinners = true;
@@ -114,8 +125,6 @@ export class DynamicFormComponent implements OnInit {
   dependedChildDate="";
   dependedParent: any;
   dependedParentDate: any;
-  @Output() formValid = new EventEmitter()
-  @Output() onEnter = new EventEmitter()
 
   constructor(private fb: FormBuilder, private toast: ToastService) {}
   ngOnInit() {
@@ -191,6 +200,9 @@ export class DynamicFormComponent implements OnInit {
     if(this.readonly){
       this.myForm.disable()
     }
+    this.myForm.valueChanges.subscribe((data)=>{
+      console.log(this.myForm)
+    })
   }
   compareWith(a, b) {
     a = _.flatten([a]);
@@ -214,9 +226,6 @@ export class DynamicFormComponent implements OnInit {
     //  this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
     control.type = control.type === 'text' ? 'password' : 'text';
     control.showPasswordIcon = true;
-  }
-  alertToast(){
-    this.toast.showToast("Please refer to the on-boarding email for your secret code", "success")
   }
 
   dateSelected(event, control){
@@ -244,6 +253,9 @@ export class DynamicFormComponent implements OnInit {
     if (indexToEdit !== -1) {
       this.jsonFormData.controls[indexToEdit].value = event.detail.value
     }
+    control.dependedControl = this.myForm.get(this.jsonFormData.controls[indexToEdit].dependedChild)
+    control.dependedControlIndex = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.dependedChild)
+    this.formValueChanged.emit(control)
   }
   
   removeSpace(event: any){
