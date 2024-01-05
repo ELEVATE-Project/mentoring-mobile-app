@@ -22,16 +22,7 @@ export class PermissionService {
     // api call here
   }
 
-  storePassedObject(passedData:any) {
-    console.log(passedData)
-    this.actionsArray = passedData.filter(action =>
-      this.hasPermission(action.permission)
-    );
-    return this.actionsArray
-  }
-
-  hasPermission(module: any): boolean {
-    console.log(module)
+  hasPermission(module: string): boolean {
     // Check if there is a corresponding entry in permissions array with a matching module
     return this.permissions.some(permission => permission.module === module);
   }

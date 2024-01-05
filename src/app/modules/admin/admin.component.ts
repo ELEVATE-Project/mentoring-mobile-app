@@ -33,15 +33,11 @@ export class AdminComponent implements OnInit {
     },
   ];
 
-  filteredActions: any[] = [];
-
   constructor(
-    private router: Router,
-    private permissionService: PermissionService
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.filteredActions =  this.permissionService.storePassedObject(this.actionsArrays);
   }
 
   cardSelected(action) {

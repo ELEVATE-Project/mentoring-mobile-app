@@ -6,9 +6,7 @@ import { PermissionService } from 'src/app/core/services/permission/permission.s
 })
 export class HasPermissionDirective {
   @Input() set appHasPermission(
-    permissions: { module: string; action: string }[]
-  ) {
-    console.log('directive permission :', permissions);
+    permissions: string  ) {
     if (this.permissionService.hasPermission(permissions)) {
       this.viewContainer.createEmbeddedView(this.templateRef);
     } else {

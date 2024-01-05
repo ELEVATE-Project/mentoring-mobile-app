@@ -1,18 +1,19 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding ion-margin">
     <ion-grid>
-        <ion-row justify-content-center align-items-center *ngIf="filteredActions.length">
-          <ion-col size-sm="12" size-xs="12"  size-md="6" size-lg="4" *ngFor="let action of filteredActions" >
-                <ion-card  (click)="cardSelected(action)">
-                    <ion-card-header class="d-flex flex-justify-center">
-                      <ion-icon class="icon-large" [name]="action.icon"></ion-icon>
-                    </ion-card-header>
-                    <ion-card-content class="d-flex flex-justify-center color-primary header">
-                      <label>{{ action.title | translate }}</label>
-                    </ion-card-content>
-                  </ion-card>
-          </ion-col>
+        <ion-row justify-content-center align-items-center>
+          <ng-container *ngFor="let action of actionsArrays">
+            <ion-col size-sm="12" size-xs="12"  size-md="6" size-lg="4" *appHasPermission="action.permission">
+              <ion-card  (click)="cardSelected(action)">
+                  <ion-card-header class="d-flex flex-justify-center">
+                    <ion-icon class="icon-large" [name]="action.icon"></ion-icon>
+                  </ion-card-header>
+                  <ion-card-content class="d-flex flex-justify-center color-primary header">
+                    <label>{{ action.title | translate }}</label>
+                  </ion-card-content>
+                </ion-card>
+            </ion-col>
+          </ng-container>
         </ion-row>
       </ion-grid>
-
 </ion-content>
