@@ -18,8 +18,5 @@
       </ion-card>
 </div>
 <div>
-    <app-generic-table [columnData]="columnData"  [tableData]="tableData"></app-generic-table>
+    <app-generic-table [columnData]="columnData"  [tableData]="tableData" (onClickEvent)='handleCustomEvent($event)'></app-generic-table>
 </div>
-
-
-

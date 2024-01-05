@@ -1,9 +1,10 @@
 
 table {
     width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 100px; /* Adjust the second value to control the gap between rows */
   margin-bottom: 20px;
+  }
+  .table-container{
+margin: 10px;
   }
   
   th, td {
@@ -20,24 +21,72 @@ table {
 }
   tr {
     text-align: center;
-    background-color: #fffbfb;
-    border: 1px solid #5e5d5d; /* Add a border between rows */
+    background-color: #ffffff;
+    border: 1px solid #eaeaea; /* Add a border between rows */
   }
 
   tr:hover {
     cursor: pointer;
   }
-  table.mat-table {
-    // border-spacing: 0 10px;
-    padding: o 10px;
-    margin: 10px;
+  .mat-elevation-z8 {
+    border-collapse: separate;
+    border-spacing: 0 10px; /* Adjust the spacing as needed */
+    box-shadow: none;
   }
+  .mat-elevation-z8 tr:first-of-type th,
+.mat-elevation-z8 tr:first-of-type td,
+.mat-elevation-z8 tr:last-of-type th,
+.mat-elevation-z8 tr:last-of-type td {
+  border-spacing: 0 0 !important;
+}
+
   tr.mat-header-row, tr.mat-row {
-    border: 1px solid #5e5d5d;
+    border: 1px solid #eaeaea;
 }
 
 
 .custom-sort-icon {
   font-size: 20px; /* Adjust the size as needed */
   color: #000; /* Set the desired color */
+}
+
+.mat-cell, .mat-footer-cell {
+  color: #5e5d5d;
+}
+.button-container{
+   color: #5e5d5d;
+}
+
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+  padding: 0;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-color:  #eaeaea;
+  // border-left-width: 2px;
+  // border-left-style: solid;
+}
+
+/* Apply style to left cells (first child in each row) */
+th.mat-header-cell:first-child,
+td.mat-cell:first-child,
+td.mat-footer-cell:first-child {
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-color:  #eaeaea;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+/* Apply style to right cells (last child in each row) */
+th.mat-header-cell:last-child,
+td.mat-cell:last-child,
+td.mat-footer-cell:last-child {
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-color:  #eaeaea;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+ 
 }
