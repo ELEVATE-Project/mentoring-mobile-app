@@ -22,10 +22,10 @@ export class PermissionService {
     // api call here
   }
 
-  hasPermission(moduleAndAction: any): boolean {
+  hasPermission(adminPermissions: any): boolean {
     for (let permission of this.permissions) {
       if (
-        moduleAndAction.module === permission.module &&
+        adminPermissions.module === permission.module &&
         permission.action.length
       ) {
         return true;
