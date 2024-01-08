@@ -18,13 +18,18 @@ export class PermissionService {
 
   actionsArray: any[] = [];
 
-  fetchPermissions(){
+  fetchPermissions() {
     // api call here
   }
 
-  hasPermission(module: string): boolean {
-    // Check if there is a corresponding entry in permissions array with a matching module
-    return this.permissions.some(permission => permission.module === module);
+  hasPermission(moduleAndAction: any): boolean {
+    for (let permission of this.permissions) {
+      if (
+        moduleAndAction.module === permission.module &&
+        permission.action.length
+      ) {
+        return true;
+      }
+    }
   }
-
 }

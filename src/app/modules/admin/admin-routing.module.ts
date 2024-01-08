@@ -24,7 +24,7 @@ const routes: Routes = [
         component: ManageSessionComponent,
         canActivate: [PermissionGuard],
         data: {
-            permissions: [{ module: 'mentor-listing' }],
+            permissions: [{ module: 'manage-sessions' }],
         }
     }
 ];

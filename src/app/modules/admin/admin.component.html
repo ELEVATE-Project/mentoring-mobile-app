@@ -3,7 +3,7 @@
     <ion-grid>
         <ion-row justify-content-center align-items-center>
           <ng-container *ngFor="let action of actionsArrays">
-            <ion-col size-sm="12" size-xs="12"  size-md="6" size-lg="4" *appHasPermission="action.permission">
+            <ion-col size-sm="12" size-xs="12"  size-md="6" size-lg="4" *appHasPermission="{'module': action.permission, 'action': action.actions}">
               <ion-card  (click)="cardSelected(action)">
                   <ion-card-header class="d-flex flex-justify-center">
                     <ion-icon class="icon-large" [name]="action.icon"></ion-icon>
