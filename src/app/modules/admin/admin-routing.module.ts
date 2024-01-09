@@ -5,6 +5,7 @@ import { CommonRoutes } from "src/global.routes";
 import { ManageListComponent } from "./components/manage-list/manage-list.component";
 import { ManageSessionComponent } from "./components/manage-session/manage-session.component";
 import { PermissionGuard } from "src/app/core/guards/permission/permission.guard";
+import { permissions } from 'src/app/core/constants/permissionsConstant';
 
 const routes: Routes = [
     {
@@ -16,7 +17,7 @@ const routes: Routes = [
         component: ManageListComponent,
         canActivate: [PermissionGuard],
         data: {
-            permissions: [{ module: 'mentor-listing' }],
+            permissions: [{ module: permissions.MANAGE_USER }],
           },
     },
     {
@@ -24,7 +25,7 @@ const routes: Routes = [
         component: ManageSessionComponent,
         canActivate: [PermissionGuard],
         data: {
-            permissions: [{ module: 'manage-sessions' }],
+            permissions: [{ module: permissions.MANAGE_SESSION }],
         }
     }
 ];
