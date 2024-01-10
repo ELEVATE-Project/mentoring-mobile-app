@@ -14,7 +14,7 @@ export class PermissionGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    const permissions = route.data.permission.length ? route.data.permissions[0] : route.data.permissions[0];
+    const permissions = route.data.permissions.length ? route.data.permissions[0] : [];
     return this.permissionService.hasPermission(permissions);
   }
 }
