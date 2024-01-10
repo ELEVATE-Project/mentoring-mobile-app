@@ -4,7 +4,7 @@ table {
   margin-bottom: 20px;
   }
   .table-container{
-margin: 10px;
+margin: 0 10px;
   }
   
   th, td {
@@ -14,7 +14,8 @@ margin: 10px;
   
   th {
     background-color: #f2f2f2;
-    font-weight: bold;
+    font-weight:700;
+    color: #1e1e1e;
   }
   th.mat-header-cell {
     text-align: center;
@@ -55,6 +56,9 @@ margin: 10px;
 }
 .button-container{
    color: #5e5d5d;
+   padding: 0%;
+   margin: 0%;
+   height: 30px;
 }
 
 th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
@@ -64,11 +68,8 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   border-top-width: 1px;
   border-top-style: solid;
   border-color:  #eaeaea;
-  // border-left-width: 2px;
-  // border-left-style: solid;
 }
 
-/* Apply style to left cells (first child in each row) */
 th.mat-header-cell:first-child,
 td.mat-cell:first-child,
 td.mat-footer-cell:first-child {
@@ -79,7 +80,6 @@ td.mat-footer-cell:first-child {
   border-bottom-left-radius: 10px;
 }
 
-/* Apply style to right cells (last child in each row) */
 th.mat-header-cell:last-child,
 td.mat-cell:last-child,
 td.mat-footer-cell:last-child {
@@ -89,4 +89,52 @@ td.mat-footer-cell:last-child {
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
  
+}
+
+tr.mat-header-row {
+  height: 40px;
+}
+
+tr.mat-row, tr.mat-footer-row {
+  height: 40px;
+}
+.popover-container{
+  width: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.popover-div{
+  cursor: pointer;
+  padding: 2px;
+  width: 50px;
+}
+ion-popover {
+  &::part(content) {
+    max-width: 80px;
+  }
+}
+.header-container{
+  display: flex;
+  width: 100%;
+}
+.header{
+  display: flex;
+  flex: 0 0 65%;
+  align-items: center;
+  justify-content:flex-start;
+  margin: 10px;
+  font-weight:700;
+    color: #1e1e1e;
+}
+.paginator{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.ion-padding {
+  --padding-start: var(--ion-padding, 0px);
+  --padding-end: var(--ion-padding, 0px);
+  --padding-top: var(--ion-padding, 0px);
+  --padding-bottom: var(--ion-padding, 0px);
 }

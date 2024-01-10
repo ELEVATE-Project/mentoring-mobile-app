@@ -15,92 +15,183 @@ export class ManageSessionComponent implements OnInit {
   };
   receivedEventData:any;
   constructor() { }
+  headingText="SESSION_LIST"
   columnData = [
-    {name:'no',displayName:'No.', sorting:false,type:'text', sortingData:"dont know as of now"},
-    {name:'sessionName', displayName:'Session name',type:'text',sorting:true, sortingData:['A-Z','Z-A']},
-    {name:'type', displayName:'Type',sorting:false,type:'text', sortingData:"dont know as of now"},
-    {name:'mentor',displayName:'Mentor', sorting:false,type:'text', sortingData:"dont know as of now"},
-    {name:'date',displayName:'Date', sorting:true, type:'text',sortingData:"dont know as of now"},
-    {name:'time', displayName:'Time',sorting:true, type:'text',sortingData:"dont know as of now"},
-    {name:'duration',displayName:'Duration(min)', type:'text',sorting:true, sortingData:"dont know as of now"},
-    {name:'menteeCount', displayName:'Mentee count',type:'text',sorting:false, sortingData:"dont know as of now"},
-    {name:'status',displayName:'Status', sorting:false, type:'text',sortingData:"dont know as of now"},
-    {name:'action', displayName:'Actions',sorting:false, type:'button',sortingData:"dont know as of now"},
+    {name:'index_number',displayName:'No.',type:'text'},
+    {name:'title', displayName:'Session name',type:'text',sorting:true, sortingData:['A -> Z','Z -> A']},
+    {name:'type', displayName:'Type',type:'object'},
+    {name:'mentor_name',displayName:'Mentor',type:'text'},
+    {name:'start_date',displayName:'Date',  type:'text',sorting:true,sortingData:['Latest','Oldest']},
+    {name:'start_time', displayName:'Time', type:'text'},
+    {name:'duration_in_minutes',displayName:'Duration(min)', type:'text'},
+    {name:'mentee_count', displayName:'Mentee count',type:'text'},
+    {name:'status',displayName:'Status', type:'object',},
+    {name:'action', displayName:'Actions',type:'button'}
 ]
 tableData:any = [
-  { "no": 1, 
-  "sessionName": 'Micro improvements-1',
-   "type": 'private' ,
-   "mentor": 'Meno"tr name',
-   "date": '12-10-1014',
-   "time":'10:30',
-   "duration":60,
-   "menteeCount":25,
-   "status":'live',
-  },
-  { "no": 2, 
-  "sessionName": 'Micro improvements-1',
-   "type": 'private' ,
-   "mentor": 'Meno"tr name',
-   "date": '12-10-1014',
-   "time":'10:30',
-   "duration":60,
-   "menteeCount":25,
-   "status":'live',
-  },
-  { "no": 3, 
-  "sessionName": 'Micro improvements-1',
-   "type": 'private' ,
-   "mentor": 'Meno"tr name',
-   "date": '12-10-1014',
-   "time":'10:30',
-   "duration":60,
-   "menteeCount":25,
-   "status":'upcoming',
-  }, { "no": 4, 
-  "sessionName": 'Micro improvements-1',
-   "type": 'private' ,
-   "mentor": 'Meno"tr name',
-   "date": '12-10-1014',
-   "time":'10:30',
-   "duration":60,
-   "menteeCount":25,
-   "status":'live',
-  },
-  { "no": 5, 
-  "sessionName": 'Micro improvements-1',
-   "type": 'private' ,
-   "mentor": 'Meno"tr name',
-   "date": '12-10-1014',
-   "time":'10:30',
-   "duration":60,
-   "menteeCount":25,
-   "status":'completed',
-  },
-  { "no": 10, 
-  "sessionName": 'Micro improvements-1',
-   "type": 'private' ,
-   "mentor": 'Meno"tr name',
-   "date": '12-10-1014',
-   "time":'10:30',
-   "duration":60,
-   "menteeCount":25,
-   "status":'upcoming',
-  },
-   
-  // Add more data as needed
- 
-];
+      {
+          "id": 6,
+          "index_number": 1,
+          "title": "Test 1",
+          "type": {
+              "value": "PUBLIC",
+              "label": "Public"
+          },
+          "mentor_name": "Nevil",
+          "start_date": "06-Jan-2024",
+          "start_time": "09:51 PM",
+          "duration_in_minutes": 60,
+          "status": {
+              "value": "COMPLETED",
+              "label": "Completed"
+          },
+          "mentee_count": 0,
+          "mentor_organization_id": 1
+      },
+      {
+          "id": 9,
+          "index_number": 2,
+          "title": "Nevil",
+          "type": {
+              "value": "PUBLIC",
+              "label": "Public"
+          },
+          "mentor_name": "Nevil M",
+          "start_date": "05-Dec-2023",
+          "start_time": "04:30 PM",
+          "duration_in_minutes": 60.2,
+          "status": {
+              "value": "ACTIVE",
+              "label": "Active"
+          },
+          "mentee_count": 0,
+          "mentor_organization_id": 1
+      },
+      {
+          "id": 10,
+          "index_number": 3,
+          "title": "Introduction to Python",
+          "type": {
+              "value": "PRIVATE",
+              "label": "Private"
+          },
+          "mentor_name": "Nevil M",
+          "start_date": "05-Dec-2023",
+          "start_time": "04:30 PM",
+          "duration_in_minutes": 60.2,
+          "status": {
+              "value": "PUBLISHED",
+              "label": "Published"
+          },
+          "mentee_count": 0,
+          "mentor_organization_id": 1
+      },
+      {
+          "id": 13,
+          "index_number": 4,
+          "title": "Introduction to Python",
+          "type": {
+              "value": "PUBLIC",
+              "label": "Public"
+          },
+          "mentor_name": "Nevil M",
+          "start_date": "05-Dec-2023",
+          "start_time": "04:30 PM",
+          "duration_in_minutes": 60.2,
+          "status": {
+              "value": "PUBLISHED",
+              "label": "Published"
+          },
+          "mentee_count": 0,
+          "mentor_organization_id": 1
+      },
+      {
+          "id": 11,
+          "index_number": 5,
+          "title": "Introduction to Python",
+          "type": {
+              "value": "PUBLIC",
+              "label": "Public"
+          },
+          "mentor_name": "Nevil M",
+          "start_date": "05-Dec-2023",
+          "start_time": "04:30 PM",
+          "duration_in_minutes": 60.2,
+          "status": {
+              "value": "PUBLISHED",
+              "label": "Published"
+          },
+          "mentee_count": 0,
+          "mentor_organization_id": 1
+      },
+      {
+          "id": 12,
+          "index_number": 6,
+          "title": "Introduction to Python",
+          "type": {
+              "value": "PUBLIC",
+              "label": "Public"
+          },
+          "mentor_name": "Nevil M",
+          "start_date": "05-Dec-2023",
+          "start_time": "04:30 PM",
+          "duration_in_minutes": 60.2,
+          "status": {
+              "value": "PUBLISHED",
+              "label": "Published"
+          },
+          "mentee_count": 0,
+          "mentor_organization_id": 1
+      },
+      {
+          "id": 15,
+          "index_number": 7,
+          "title": "Introduction to Python",
+          "type": {
+              "value": "PUBLIC",
+              "label": "Public"
+          },
+          "mentor_name": "Nevil M",
+          "start_date": "05-Dec-2023",
+          "start_time": "04:30 PM",
+          "duration_in_minutes": 60.2,
+          "status": {
+              "value": "PUBLISHED",
+              "label": "Published"
+          },
+          "mentee_count": 0,
+          "mentor_organization_id": 1
+      },
+      {
+          "id": 14,
+          "index_number": 8,
+          "title": "Introduction to Python",
+          "type": {
+              "value": "PUBLIC",
+              "label": "Public"
+          },
+          "mentor_name": "Nevil M",
+          "start_date": "05-Dec-2023",
+          "start_time": "04:30 PM",
+          "duration_in_minutes": 60.2,
+          "status": {
+              "value": "PUBLISHED",
+              "label": "Published"
+          },
+          "mentee_count": 0,
+          "mentor_organization_id": 1
+      }
+  ]
 
 actionButtons={
-  'live':['view'],
-  'upcoming':['view','edit', 'delete'],
-  'completed':['view']
+  'ACTIVE':['view'],
+  'PUBLISHED':['view','edit', 'delete'],
+  'COMPLETED':['view']
 }
   ngOnInit() {
     
     this.tableData.forEach((ele) => {
-      ele.action = this.actionButtons[ele.status]
+      ele.action = this.actionButtons[ele.status.value]
     });
   }
 

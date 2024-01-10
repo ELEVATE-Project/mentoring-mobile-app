@@ -34,7 +34,6 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
 import { GenericTableComponent } from './components/generic-table/generic-table.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { SortingModuleComponent } from './components/sorting-module/sorting-module.component';
 
 @NgModule({
   declarations: [
@@ -59,8 +58,7 @@ import { SortingModuleComponent } from './components/sorting-module/sorting-modu
     NumberOnlyDirective,
     JoinDialogBoxComponent,
     ModelComponent,
-    GenericTableComponent,
-    SortingModuleComponent
+    GenericTableComponent
   ],
   imports: [
     CommonModule,
@@ -99,8 +97,7 @@ import { SortingModuleComponent } from './components/sorting-module/sorting-modu
     JoinDialogBoxComponent,
     GenericTableComponent,
     MatTableModule,
-    MatPaginatorModule,
-    SortingModuleComponent
+    MatPaginatorModule
   ],
 })
 export class SharedModule {}

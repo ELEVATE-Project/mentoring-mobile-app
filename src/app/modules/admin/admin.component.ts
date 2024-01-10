@@ -21,7 +21,7 @@ export class AdminComponent implements OnInit {
 
   actionsArray: any[] = [
     { title: 'MANAGE_USER', url: CommonRoutes.ADMIN+'/'+CommonRoutes.MANAGE_USER, icon: 'people-outline' },
-    { title: 'MANAGE_SESSION', url: CommonRoutes.ADMIN+'/'+CommonRoutes.MANAGE_SESSION, icon: 'people-outline' }
+    { title: 'MANAGE_SESSION', url: CommonRoutes.ADMIN+'/'+CommonRoutes.MANAGE_SESSION, icon: 'person-add-outline' }
   ];
 
   constructor(private router: Router) {

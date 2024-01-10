@@ -1,4 +1,5 @@
 <app-page-header [config]="headerConfig"></app-page-header>
+<ion-content>
 <div>
     <ion-card class="session-sqr-card">
         <ion-card-content class="card-content">
@@ -17,6 +18,14 @@
         </ion-card-content>
       </ion-card>
 </div>
-<div>
-    <app-generic-table [columnData]="columnData"  [tableData]="tableData" (onClickEvent)='handleCustomEvent($event)'></app-generic-table>
+<div class="filter">
+  <p>Filter </p>
+    <div class="circle-container">
+      <ion-icon class="ion-funnel-icon" name="funnel"></ion-icon>
+    </div>
+  
 </div>
+<div>
+    <app-generic-table [headingText]="headingText" [columnData]="columnData"  [tableData]="tableData" (onClickEvent)='handleCustomEvent($event)'></app-generic-table>
+</div>
+</ion-content>
