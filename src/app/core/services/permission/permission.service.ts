@@ -1,34 +1,43 @@
 import { Injectable } from '@angular/core';
-import { CommonRoutes } from 'src/global.routes';
+import { permissions, actions } from 'src/app/core/constants/permissionsConstant';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PermissionService {
-  public permissions: any = [
+  public apiPermissions: any = [
     {
-      module: 'manage-sessions',
-      action: ['ALL', 'CREATE', 'GET', 'EDIT', 'UPDATE'],
+      module: permissions.MANAGE_SESSION,
+      action: [
+        actions.ALL,
+        actions.CREATE,
+        actions.GET,
+        actions.EDIT,
+        actions.UPDATE,
+      ],
     },
     {
-      module: 'mentor-listing',
-      action: ['GET'],
+      module: permissions.MANAGE_USER,
+      action: [actions.GET],
     },
   ];
-
-  actionsArray: any[] = [];
 
   fetchPermissions() {
     // api call here
   }
 
-  hasPermission(adminPermissions: any): boolean {
-    for (let permission of this.permissions) {
-      if (
-        adminPermissions.module === permission.module &&
-        permission.action.length
-      ) {
-        return true;
+  hasPermission(permissions: any): boolean {
+    for (let apiPermission of this.apiPermissions) {
+      if (permissions.module === apiPermission.module && apiPermission.action) {
+        if (apiPermission.action.includes(actions.ALL)) {
+          return true;
+        } else {
+          if (permissions.action.every((value) => apiPermission.action.includes(value))) {
+            return true;
+          } else {
+            return false;
+          }
+        }
       }
     }
   }
