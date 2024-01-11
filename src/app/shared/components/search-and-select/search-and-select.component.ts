@@ -29,28 +29,29 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   touched = false;
   selectedChips;
   _selectAll;
-  lowerCaseLabel;
+  addIconDark = {name: 'add-outline', color: 'dark'}
+  closeIconLight = {name: 'close-circle-sharp', color: 'light'}
+  selectedData: any;
+  originalLabel: any;
+  icon = this.addIconDark;
+  value: any[];
 
   constructor(
     private popoverCtrl: PopoverController,
     private translateService: TranslateService
   ) { }
 
-  onChange = (quantity) => { };
+  onChange = (quantity) => {};
 
   onTouched = () => { };
 
   ngOnInit() { 
+
+    this.originalLabel = this.control.label
   }
 
   writeValue(value: any[]) {
-    // this.selectedChips = new Set();
-    // this.chips.map((chip) =>
-    //   _.some(value, chip) ? this.selectedChips.add(chip) : null
-    // );
-    // if (this.selectedChips.size === this.chips.length) {
-    //   this._selectAll = true;
-    // }
+    this.selectedData = value;
   }
   registerOnChange(onChange: any) {
     this.onChange = onChange;
@@ -68,47 +69,59 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
   }
-  onChipClick(chip) {
-    // this.markAsTouched();
-    // if (this.disabled) {
-    //   return;
-    // }
-    // if (this.selectedChips.has(chip)) {
-    //   this.selectedChips.delete(chip);
-    // } else {
-    //   this.selectedChips.add(chip);
-    // }
-    // if (!this.selectedChips.size) {
-    //   this.onChange('');
-    // } else {
-    //   this.onChange([...this.selectedChips]);
-    // }
-    // if (this.selectedChips.size !== this.chips.length) {
-    //   this._selectAll = false;
-    // } else {
-    //   this._selectAll = true;
-    // }
-  }
 
-  selectAll() {
-    // this.markAsTouched();
-    // if (this._selectAll) {
-    //   this.chips.map((chip) => this.selectedChips.add(chip));
-    // } else {
-    //   this.selectedChips.clear();
-    // }
-    // if (!this.selectedChips.size) {
-    //   this.onChange('');
-    // } else {
-    //   this.onChange([...this.selectedChips]);
-    // }
-  }
   async showPopover(event) {
+    console.log(this.control)
     const popover = await this.popoverCtrl.create({
       component: SearchPopoverComponent,
       cssClass: 'search-popover-config',
-      event
+      componentProps: {
+        control: this.control
+      }
+    });
+
+    popover.onDidDismiss().then((data) => {
+      if (data) {
+        console.log(data)
+        this.selectedData = data
+        this.onChange(this.selectedData.data)
+        this.icon = this.closeIconLight
+      }
     });
     await popover.present();
   }
+
+  clearControl(event){
+    this.control.label = this.originalLabel
+    this.selectedData = null
+    this.icon = this.addIconDark
+    this.onChange(null)
+    event.stopPropagation()
+  }
+
+  // Your component code
+handleIconClick(event: Event): void {
+  if (this.selectedData) {
+    this.clearControl(event);
+  }
+}
+
+getMenteeLabel(): string {
+  if (this.selectedData) {
+    const { labelWhenSelected, label } = this.control?.meta;
+    const count = this.selectedData?.data?.length;
+    return `${this.selectedData ? labelWhenSelected : label}   ${count !== undefined ? count : ''}`;
+  }
+  return this.control.label;
+}
+
+getMentorLabel(): string {
+  if (this.selectedData) {
+    const { label } = this.control?.meta;
+    const data = this.selectedData?.data[0];
+    const count = this.selectedData?.role === 'mentee' ? this.selectedData?.data?.length : undefined;
+    return `${this.selectedData ? data.name : label}, ${data.organisation}   ${count !== undefined ? count : ''}`;
+  }
+  return this.control.label;;
+}
 }

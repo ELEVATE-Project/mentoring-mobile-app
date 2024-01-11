@@ -19,3 +19,11 @@ ion-chip {
     margin-top: 5px;
     z-index: 1000;
   }
+
+  .color-red {
+    --background: var(--ion-color-primary);
+    --color: var(--white)
+  }
+  .icon{
+    z-index: 1000;
+  }

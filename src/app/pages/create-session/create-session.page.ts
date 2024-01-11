@@ -156,8 +156,8 @@ export class CreateSessionPage implements OnInit {
               multiSelect: false, 
               searchType: 'mentor',
               filters: {
-                entity_types: ['designation'],
-                others: ['organisation']
+                entity_types: [{key:'designation', label: 'Designation', type: 'radio'}],
+                organizations: [{isEnabled: true, key: 'organizations', type: 'checkbox'}]
               }
             },
             "info": [{
@@ -177,11 +177,12 @@ export class CreateSessionPage implements OnInit {
             class: 'ion-no-margin',
             type: 'search',
             meta: {
-              multiSelect: false, 
+              multiSelect: true, 
               searchType: 'mentee',
+              labelWhenSelected: 'Mentee count',
               filters: {
-                entity_types: ['designation'],
-                others: ['organisation']
+                entity_types: [{key:'designation', label: 'Designation', type: 'radio'}],
+                organizations: [{isEnabled: true, key: 'organizations', type: 'checkbox'}]
               }
             },
             position: 'floating',
@@ -451,21 +452,21 @@ export class CreateSessionPage implements OnInit {
           form.image=[]
         }
         this.form1.myForm.markAsPristine();
-        let result = await this.sessionService.createSession(form, this.id);
-        if (result) {
-          this.sessionDetails = _.isEmpty(result) ? this.sessionDetails : result;
-          this.isSubmited = true;
-          this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
-          this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
-          if(!this.id && result.id){
-            this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: result.id , type: 'segment'}, replaceUrl: true });
-          }else {
-            this.type = 'segment';
-          }
-        } else {
-          this.profileImageData.image = this.lastUploadedImage;
-          this.profileImageData.isUploaded = false;
-        }
+        // let result = await this.sessionService.createSession(form, this.id);
+        // if (result) {
+        //   this.sessionDetails = _.isEmpty(result) ? this.sessionDetails : result;
+        //   this.isSubmited = true;
+        //   this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
+        //   this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
+        //   if(!this.id && result.id){
+        //     this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: result.id , type: 'segment'}, replaceUrl: true });
+        //   }else {
+        //     this.type = 'segment';
+        //   }
+        // } else {
+        //   this.profileImageData.image = this.lastUploadedImage;
+        //   this.profileImageData.isUploaded = false;
+        // }
       }
     } else {
       this.toast.showToast("Please fill all the mandatory fields", "danger");
