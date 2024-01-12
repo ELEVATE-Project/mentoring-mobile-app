@@ -196,7 +196,7 @@
     "BECOME_A_MENTOR": "Become a Mentor",
     "EMPOWER_THE_SCHOOL_LEADERS": "Empower the school leaders by sharing your knowledge and experience as a mentor.",
     "CONNECT_SHARE_&_INSPIRE": "Connect, Share & Inspire",
-    "ADMIN_WORKSPACE": "Admin Workspace",
+    "ADMIN_WORKSPACE": "Workspace",
     "SL_NO": "No.",
     "STATUS": "Status",
     "ACTIONS": "Actions",
@@ -228,5 +228,6 @@
     "USER_CANT_ACCESS_THIS_PROFILE":"You can’t access this mentor’s profile.",
     "USER_CANT_ACCESS_PROFILE_GO_TO_HOME_PAGE":"This mentor's profile is private. Go to the ‘All session’ tab to enroll for mentoring sessions that are available to you.",
     "SESSIONS":"Sessions",
-    "REMOVE_PHOTO":"Remove image"
+    "REMOVE_PHOTO":"Remove image",
+    "MANAGE_SESSION":"Manage session"
 }

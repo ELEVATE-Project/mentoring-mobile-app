@@ -31,6 +31,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';                                              
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import { GenericTableComponent } from './components/generic-table/generic-table.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { HasPermissionDirective } from './directive/permission.directive';
 
 @NgModule({
   declarations: [
@@ -54,7 +58,9 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
     MentorCardComponent,
     NumberOnlyDirective,
     JoinDialogBoxComponent,
-    ModelComponent
+    ModelComponent,
+    GenericTableComponent,
+    HasPermissionDirective
   ],
   imports: [
     CommonModule,
@@ -90,7 +96,11 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
     PersonaSelectionCardComponent,
     GenericProfileHeaderComponent,
     MentorCardComponent,
-    JoinDialogBoxComponent
+    JoinDialogBoxComponent,
+    GenericTableComponent,
+    MatTableModule,
+    MatPaginatorModule,
+    HasPermissionDirective
   ],
 })
 export class SharedModule {}
