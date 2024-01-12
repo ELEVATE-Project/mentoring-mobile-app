@@ -3,13 +3,13 @@
     height: 40px;
     border-radius: 50%;
 }
-.username {
+.username{
     font-size: 19px;
     text-align: center;
     margin: 0px;
     padding: 0px;
 }
-.region{   
+.region{
     font-size: 16px;
     text-align: center;
     margin: 4px;
@@ -17,7 +17,7 @@
 }
 .join-button{
     display: flex;
-    justify-content: center; 
+    justify-content: center;
 }
 .padding{
     padding-bottom: 5px;
@@ -32,4 +32,24 @@
     justify-self: center;
     width: 50%;
     color: black;
+}
+.profile-container{
+    position: relative;
+}
+.camera-icon{
+    position: absolute;
+    font-size: 15px;
+    color: grey;
+}
+.camera-icon-container{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgb(207, 207, 207);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -5px;
+    right: -5px;
 }
