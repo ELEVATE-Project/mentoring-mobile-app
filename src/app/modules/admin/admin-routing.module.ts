@@ -17,7 +17,7 @@ const routes: Routes = [
         component: ManageListComponent,
         canActivate: [PermissionGuard],
         data: {
-            permissions: [{ module: permissions.MANAGE_USER, action: [actions.GET] }],
+            permissions: { module: permissions.MANAGE_USER, action: [actions.GET] },
           },
     },
     {
@@ -25,7 +25,7 @@ const routes: Routes = [
         component: ManageSessionComponent,
         canActivate: [PermissionGuard],
         data: {
-            permissions: [{ module: permissions.MANAGE_SESSION, action: manageSessionAction.MANAGE_ACTIONS }],
+            permissions: { module: permissions.MANAGE_SESSION, action: manageSessionAction.MANAGE_ACTIONS },
         }
     }
 ];
