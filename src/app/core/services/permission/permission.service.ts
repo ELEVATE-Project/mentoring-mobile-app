@@ -5,7 +5,7 @@ import { permissions, actions } from 'src/app/core/constants/permissionsConstant
   providedIn: 'root',
 })
 export class PermissionService {
-  public apiPermissions: any = [
+  public userPermissions: any = [
     {
       module: permissions.MANAGE_SESSION,
       action: [
@@ -27,16 +27,12 @@ export class PermissionService {
   }
 
   hasPermission(permissions: any): boolean {
-    for (let apiPermission of this.apiPermissions) {
-      if (permissions.module === apiPermission.module && apiPermission.action) {
-        if (apiPermission.action.includes(actions.ALL)) {
+    for (let userPermission of this.userPermissions) {
+      if (permissions && userPermission.action.length && permissions.module === userPermission.module) {
+        if (userPermission.action.includes(actions.ALL) || permissions.action.every((value) => userPermission.action.includes(value))) {
           return true;
         } else {
-          if (permissions.action.every((value) => apiPermission.action.includes(value))) {
-            return true;
-          } else {
-            return false;
-          }
+          return false;
         }
       }
     }
