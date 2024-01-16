@@ -228,6 +228,6 @@
     "USER_CANT_ACCESS_THIS_PROFILE":"You can’t access this mentor’s profile.",
     "USER_CANT_ACCESS_PROFILE_GO_TO_HOME_PAGE":"This mentor's profile is private. Go to the ‘All session’ tab to enroll for mentoring sessions that are available to you.",
     "SESSIONS":"Sessions",
-    "REMOVE_PHOTO":"Remove image",
-    "MANAGE_SESSION":"Manage session"
+    "MANAGE_SESSION":"Manage session",
+    "PLEASE_UPLOAD_IMAGE_FILE":"Please, upload image file."
 }

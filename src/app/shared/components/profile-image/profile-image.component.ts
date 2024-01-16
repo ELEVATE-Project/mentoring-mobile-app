@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 import { AttachmentService, ToastService, UtilService } from 'src/app/core/services';
 
-
 @Component({
   selector: 'app-profile-image',
   templateUrl: './profile-image.component.html',
@@ -47,7 +46,13 @@ export class ProfileImageComponent implements OnInit {
   }
 
   upload(event) {
-    this.toast.showToast("SUCCESSFULLY_ATTACHED", "success")
-    this.imageUploadEvent.emit(event)
+    const allowedFormats = ['image/jpeg', 'image/png'];
+    if (allowedFormats.includes(event.target.files[0].type)) {
+      this.toast.showToast("SUCCESSFULLY_ATTACHED", "success")
+      this.imageUploadEvent.emit(event)
+    }
+    else {
+      this.toast.showToast("PLEASE_UPLOAD_IMAGE_FILE", "danger")
+    }
   }
 }
