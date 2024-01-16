@@ -115,22 +115,38 @@ ion-popover {
   }
 }
 .header-container{
-  display: flex;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 50% 10% 40%;
+  height: 50px;
 }
 .header{
-  display: flex;
-  flex: 0 0 65%;
+  display: grid;
   align-items: center;
   justify-content:flex-start;
-  margin: 10px;
   font-weight:700;
     color: #1e1e1e;
+    padding: 10px;
 }
 .paginator{
-  display: flex;
+  display: grid;
+  align-items: center;
+  justify-content: flex-start;
+}
+.download{
+  display: grid;
   align-items: center;
   justify-content: flex-end;
+  font-weight:700;
+  color: #6da6f2;
+  text-decoration: underline;
+  cursor: pointer;
+}
+@media (max-width: 900px) {
+  .header-container {
+    display: grid;
+    grid-template-columns: 30% 10% 60%;
+    height: 50px;
+  }
 }
 .ion-padding {
   --padding-start: var(--ion-padding, 0px);

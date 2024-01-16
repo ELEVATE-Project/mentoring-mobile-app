@@ -1,7 +1,6 @@
-import { Component, Input, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import {MatTableModule} from '@angular/material/table';
 import { PopoverController } from '@ionic/angular';
 
 @Component({
@@ -15,39 +14,50 @@ export class GenericTableComponent implements OnInit {
   @Input() columnData;
   @Input() tableData;
   @Input() headingText;
+  @Input() download;
+  @Input() totalCount;
   @Output() onClickEvent = new EventEmitter();
+  @Output() paginatorChanged = new EventEmitter();
+  @Output() onSorting = new EventEmitter();
+  
   dataSource: MatTableDataSource<any>;
   displayedColumns:any;
-  pageSize = 5
- 
   constructor(public popoverController: PopoverController) { }
- 
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
 
   ngOnInit() {
-    
-  this.displayedColumns = this.columnData.map(column => column.name);
+    this.displayedColumns = this.columnData.map(column => column.name);
     this.dataSource = new MatTableDataSource(this.tableData);
   }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['tableData']) {
+      this.dataSource = new MatTableDataSource(this.tableData);
+    }
+  }
 
-  onCellClick(column:any,element:any){
-    let value={
+  onCellClick(column: any, columnName: any, element: any) {
+    let value = {
       column: column,
-      element: element,
-      type:'clickCell'
+      columnName: columnName,
+      element: element
     }
     this.onClickEvent.emit(value)
   }
 
-  async onClickSorting(event: any, column:any,data:any){
+  async onClickSorting(event: any,data: any) {
     this.popoverController.dismiss();
+    this.onSorting.emit(data)
   }
 
-  onPageChange(event:any){
+  async onClickDownload($event, download) {
+    this.onClickEvent.emit(download)
+  }
 
+  onPageChange(event: any) {
+    let data = {
+      page: event.pageIndex + 1,
+      pageSize: this.paginator.pageSize
+    }
+    this.paginatorChanged.emit(data);
   }
 
 }

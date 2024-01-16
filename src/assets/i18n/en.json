@@ -229,5 +229,6 @@
     "USER_CANT_ACCESS_PROFILE_GO_TO_HOME_PAGE":"This mentor's profile is private. Go to the ‘All session’ tab to enroll for mentoring sessions that are available to you.",
     "SESSIONS":"Sessions",
     "MANAGE_SESSION":"Manage session",
-    "SESSION_LIST":"Session list"
+    "SESSION_LIST":"Session list",
+    "DOWNLOAD":"Download"
 }

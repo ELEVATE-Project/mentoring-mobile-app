@@ -1,52 +1,60 @@
 <div class="header-container">
-  <p class="header">{{ headingText | translate}}</p>
-  <mat-paginator class="paginator"
-  [length]="dataSource.data.length" [pageSize]="pageSize" (page)="onPageChange($event)">
-</mat-paginator>
+  <div class="header">{{ headingText | translate}}</div>
+  <div class="download"  (click)="onClickDownload($event,download)">{{ download | translate}}</div>
+  <mat-paginator class="paginator" [length]="totalCount" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"
+    (page)="onPageChange($event)">
+  </mat-paginator>
 </div>
 <div class="table-container ">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
     <ng-container *ngFor="let column of columnData" [matColumnDef]="column.name">
-     
-      <th mat-header-cell *matHeaderCellDef>{{ column.displayName }} <span *ngIf="column.sorting">
-      <ion-icon   [id]="column.displayName" class="info" name="arrow-up"></ion-icon>
-      <ion-popover [trigger]="column.displayName" triggerAction="click">
-        <ng-template class="popover-container">
-          <ion-content class="ion-padding popover-container">
-            <div class="popover-div d-flex flex-justify-center" *ngFor="let data of column.sortingData">
-              <span (click)="onClickSorting($event,column,data)" class="popover-header">{{data}}</span>
+      <ng-container>
+        <th mat-header-cell *matHeaderCellDef>{{ column.displayName }} <span *ngIf="column.sortingData">
+            <ion-icon [id]="column.displayName" class="info" name="arrow-up"></ion-icon>
+            <ion-popover [trigger]="column.displayName" triggerAction="click">
+              <ng-template class="popover-container">
+                <ion-content class="ion-padding popover-container">
+                  <div class="popover-div d-flex flex-justify-center" *ngFor="let data of column.sortingData">
+                    <span (click)="onClickSorting($event,data)" class="popover-header">{{data.label}}</span>
+                  </div>
+                </ion-content>
+              </ng-template>
+            </ion-popover>
+          </span></th>
+      </ng-container>
+      <ng-container >
+        <div *ngIf="column.type == 'text'">
+          <td mat-cell (click)="onCellClick(column,element[column.name],element)" *matCellDef="let element">{{
+            element[column.name] }}</td>
+        </div>
+        <div *ngIf="column.type == 'object'">
+          <td mat-cell (click)="onCellClick(column,element[column.name],element)" *matCellDef="let element">{{
+            element[column.name].label }}</td>
+        </div>
+        <div *ngIf="column.type == 'button'">
+          <td mat-cell *matCellDef="let element">
+            <div class="d-flex flex-justify-space-between">
+              <ion-grid>
+                <ion-row class="d-flex flex-justify-center">
+                  <ion-button class="button-container" color="white" (click)="onCellClick(column,buttonName,element)"
+                    *ngFor="let buttonName of element[column.name]">
+                    {{ buttonName }}
+                  </ion-button>
+                </ion-row>
+              </ion-grid>
             </div>
-          </ion-content>
-        </ng-template>
-      </ion-popover>
-    </span></th>
-      <div *ngIf="column.type == 'text'">
-        <td mat-cell (click)="onCellClick(column,element[column.name])" *matCellDef="let element">{{ element[column.name] }}</td>
-      </div>
-      <div *ngIf="column.type == 'object'">
-        <td mat-cell (click)="onCellClick(column,element[column.name])" *matCellDef="let element">{{ element[column.name].label }}</td>
-      </div>
-      <div *ngIf="column.type == 'button'">
-        <td mat-cell *matCellDef="let element">
-        <div class="d-flex flex-justify-space-between">
-          <ion-grid>
-              <ion-row class="d-flex flex-justify-center">
-          <ion-button class="button-container" color="white" (click)="onCellClick(column,buttonName)" *ngFor="let buttonName of element[column.name]">
-            {{ buttonName }}
-          </ion-button> 
-      </ion-row>
-  </ion-grid>
-      </div>
-    </td>
-      </div>
-  
+          </td>
+        </div>
+      </ng-container>
     </ng-container>
-  
+    
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  
+
   </table>
+  <div *ngIf="tableData.length == 0">
+    <app-no-data-found [messageHeader]="'NO_SESSIONS_CREATED'" [messageDescription]="'START_CREATING_SESSION'">
+      </app-no-data-found>
+  </div>
 </div>
-
-

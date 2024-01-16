@@ -174,7 +174,7 @@ export class AppComponent {
   languageSetting() {
     this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
       if(data){
-        this.translate.use(data);
+        this.translate.use(data.value);
       } else {
       this.setLanguage('en');
       }
