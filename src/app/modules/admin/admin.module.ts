@@ -16,6 +16,7 @@ import { ManageSessionComponent } from './components/manage-session/manage-sessi
     IonicModule.forRoot(),
     AdminRoutingModule,
     HttpClientModule
-  ]
+  ],
+  providers: []
 })
 export class AdminModule { }

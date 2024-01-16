@@ -1,34 +1,46 @@
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { ToastService, UtilService } from "src/app/core/services";
-import { FormService } from "src/app/core/services/form/form.service";
-import { SessionService } from "src/app/core/services/session/session.service";
-import { CommonRoutes } from "src/global.routes";
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonRoutes } from 'src/global.routes';
+import { permissions, actions, manageSessionAction } from 'src/app/core/constants/permissionsConstant';
 
 @Component({
-  selector: "app-admin",
-  templateUrl: "./admin.component.html",
-  styleUrls: ["./admin.component.scss"],
+  selector: 'app-admin',
+  templateUrl: './admin.component.html',
+  styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
-
   public headerConfig: any = {
     menu: true,
     notification: true,
     headerColor: 'primary',
-    label:'ADMIN_WORKSPACE'
+    label: 'ADMIN_WORKSPACE',
   };
-
-  actionsArray: any[] = [
-    { title: 'MANAGE_USER', url: CommonRoutes.ADMIN+'/'+CommonRoutes.MANAGE_USER, icon: 'people-outline' },
-    { title: 'MANAGE_SESSION', url: CommonRoutes.ADMIN+'/'+CommonRoutes.MANAGE_SESSION, icon: 'person-add-outline' }
+  
+  actionsArrays: any[] = [
+    {
+      title: 'MANAGE_USER',
+      url: CommonRoutes.ADMIN + '/' + CommonRoutes.MANAGE_USER,
+      icon: 'people-outline',
+      permission: permissions.MANAGE_USER,
+      actions: [actions.GET],
+    },
+    {
+      title: 'MANAGE_SESSION',
+      url: CommonRoutes.ADMIN + '/' + CommonRoutes.MANAGE_SESSION,
+      icon: 'people-outline',
+      permission: permissions.MANAGE_SESSION,
+      actions: manageSessionAction.MANAGE_ACTIONS,
+    },
   ];
 
-  constructor(private router: Router) {
-  }
-    ngOnInit() {}
+  constructor(
+    private router: Router
+  ) {}
 
-    cardSelected(action){
-      this.router.navigate([action.url])
-    }
+  ngOnInit() {
   }
+
+  cardSelected(action) {
+    this.router.navigate([action.url]);
+  }
+}

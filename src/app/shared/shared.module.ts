@@ -34,6 +34,7 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
 import { GenericTableComponent } from './components/generic-table/generic-table.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { HasPermissionDirective } from './directive/permission.directive';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     NumberOnlyDirective,
     JoinDialogBoxComponent,
     ModelComponent,
-    GenericTableComponent
+    GenericTableComponent,
+    HasPermissionDirective
   ],
   imports: [
     CommonModule,
@@ -97,7 +99,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     JoinDialogBoxComponent,
     GenericTableComponent,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    HasPermissionDirective
   ],
 })
 export class SharedModule {}
