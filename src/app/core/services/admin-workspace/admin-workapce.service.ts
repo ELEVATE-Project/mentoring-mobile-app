@@ -7,10 +7,7 @@ import * as _ from 'lodash-es';
   providedIn: 'root'
 })
 export class AdminWorkapceService {
-  loaderService: any;
-
   constructor(private httpService: HttpService) { }
-
 
   async createdSessinBySessionManager(obj:any) {
     let params = obj.order ? ('&order=' + obj.order + '&sort_by=' + obj.sort_by) : ''
@@ -19,13 +16,10 @@ export class AdminWorkapceService {
         };
     try {
       let result = await this.httpService.get(config);
-     
       result = _.get(result, 'result');
-
       return result;
     }
     catch (error) {
-      this.loaderService.stopLoader();
       return false
     }
   }
