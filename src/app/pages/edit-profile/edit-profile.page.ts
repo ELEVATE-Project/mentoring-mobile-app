@@ -42,7 +42,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   };
   path;
   localImage;
-  showForm: any= false;
+  showForm: any = false;
   userDetails: any;
   entityNames: any;
   entityList: any;
@@ -65,13 +65,13 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.profileImageData.isUploaded = true;
     this.formData = _.get(response, 'data.fields');
     this.entityNames = await this.form.getEntityNames(this.formData)
-    this.entityList = await this.form.getEntities(this.entityNames,'PROFILE')
-    this.formData = await this.form.populateEntity(this.formData,this.entityList)
+    this.entityList = await this.form.getEntities(this.entityNames, 'PROFILE')
+    this.formData = await this.form.populateEntity(this.formData, this.entityList)
     this.changeDetRef.detectChanges();
-    this.userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    if(this.userDetails) {
+    this.userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    if (this.userDetails) {
       this.profileImageData.image = this.userDetails.image;
-      this.profileService.prefillData(this.userDetails,this.entityNames, this.formData);
+      this.profileService.prefillData(this.userDetails, this.entityNames, this.formData);
       this.showForm = true;
     }
   }
@@ -92,13 +92,13 @@ export class EditProfilePage implements OnInit, isDeactivatable {
             text: texts['CANCEL'],
             cssClass: 'alert-button-bg-white',
             role: 'exit',
-            handler: () => {},
+            handler: () => { },
           },
           {
             text: texts['OK'],
             role: 'cancel',
             cssClass: 'alert-button-red',
-            handler: () => {},
+            handler: () => { },
           },
         ],
       });
@@ -153,13 +153,13 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   }
 
   upload(data, uploadUrl) {
-    return this.attachment.cloudImageUpload(data,uploadUrl).pipe(
-      map((resp=>{
-      this.profileImageData.image = uploadUrl.destFilePath;
-      this.form1.myForm.value.image = uploadUrl.destFilePath;
-      this.profileImageData.isUploaded = true;
-      this.onSubmit();
-    })))
+    return this.attachment.cloudImageUpload(data, uploadUrl).pipe(
+      map((resp => {
+        this.profileImageData.image = uploadUrl.destFilePath;
+        this.form1.myForm.value.image = uploadUrl.destFilePath;
+        this.profileImageData.isUploaded = true;
+        this.onSubmit();
+      })))
   }
   async getImageUploadUrl(file) {
     this.loaderService.startLoader();
