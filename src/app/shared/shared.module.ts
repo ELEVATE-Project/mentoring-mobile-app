@@ -19,7 +19,7 @@ import {
   FilterComponent,
   ExpandableCardComponent,
   PersonaSelectionCardComponent,
-  GenericProfileHeaderComponent
+  GenericProfileHeaderComponent,
 } from './components/index';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { MentorCardComponent } from './components/mentor-card/mentor-card.component';
@@ -75,7 +75,7 @@ import { HasPermissionDirective } from './directive/permission.directive';
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
-    NgxMatMomentModule, 
+    NgxMatMomentModule
   ],
   exports: [
     DynamicFormComponent,

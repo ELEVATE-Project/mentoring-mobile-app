@@ -23,3 +23,41 @@
 .card-content{
     padding-top: 0px;
 }
+.circle-container {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #832215;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .ion-funnel-icon {
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+  }
+
+  .filter{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: end;
+    padding-right: 20px;
+  }
+  .search-bar{
+    --border-radius:25px;
+    --icon-color:var(--ion-color-primary);
+    font-size:16px;
+    height: 36px;
+    width: 500px;
+}
+.download{
+  display: grid;
+  align-items: center;
+  justify-content: flex-end;
+  font-weight:700;
+  color: #6da6f2;
+  text-decoration: underline;
+  cursor: pointer;
+}
