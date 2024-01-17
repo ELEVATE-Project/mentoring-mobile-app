@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LineElement } from 'chart.js/dist';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
+import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admin-workapce.service';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-manage-session',
@@ -7,240 +11,98 @@ import { LineElement } from 'chart.js/dist';
   styleUrls: ['./manage-session.component.scss'],
 })
 export class ManageSessionComponent implements OnInit {
-  tableData:any;
   public headerConfig: any = {
     menu: true,
     notification: true,
     headerColor: 'primary',
     label:'MANAGE_SESSION'
   };
-  constructor() { }
+  receivedEventData:any;
+  constructor(private adminWorkapceService: AdminWorkapceService, private router: Router,) { }
+  headingText="SESSION_LIST"
+  download = "DOWNLOAD";
+  page = 1;
+  limit = 5;
+  searchText: string = '';
+  type = "";
+  totalCount:any;
+  sortingData :any;
   columnData = [
-    {name:'no',displayName:'No.', sorting:false, sortingData:"dont know as of now"},
-    {name:'sessionName', displayName:'Session name',sorting:true, sortingData:"dont know as of now"},
-    {name:'type', displayName:'Type',sorting:false, sortingData:"dont know as of now"},
-    {name:'mentor',displayName:'Mentor', sorting:false, sortingData:"dont know as of now"},
-    {name:'date',displayName:'Date', sorting:true, sortingData:"dont know as of now"},
-    {name:'time', displayName:'Time',sorting:true, sortingData:"dont know as of now"},
-    {name:'duration',displayName:'Duration(min)', sorting:true, sortingData:"dont know as of now"},
-    {name:'menteeCount', displayName:'Mentee count',sorting:false, sortingData:"dont know as of now"},
-    {name:'status',displayName:'Status', sorting:false, sortingData:"dont know as of now"},
-    {name:'action', displayName:'Actions',sorting:false, sortingData:"dont know as of now"},
+    {name:'index_number',displayName:'No.',type:'text'},
+    {name:'title', displayName:'Session name',type:'text',sortingData:[{sort_by:'title', order:'ASC', label:'A -> Z'},{sort_by:'title', order:'DESC', label:'Z -> A'}]},
+    {name:'type', displayName:'Type',type:'text'},
+    {name:'mentor_name',displayName:'Mentor',type:'text'},
+    {name:'start_date',displayName:'Date',  type:'text',sortingData:[{sort_by:'start_date', order:'DESC', label:'Latest'},{sort_by:'start_date', order:'ASC', label:'Oldest'}]},
+    {name:'start_time', displayName:'Time', type:'text'},
+    {name:'duration_in_minutes',displayName:'Duration(min)', type:'text'},
+    {name:'mentee_count', displayName:'Mentee count',type:'text'},
+    {name:'status',displayName:'Status', type:'text',},
+    {name:'action', displayName:'Actions',type:'button'}
 ]
+tableData:any;
+dummyTableData:any= false;
+noDataMessage:any; 
 
-  ngOnInit() {
-    this.tableData = [
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      }, { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-       { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      }, { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 10, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-       
-      // Add more data as needed
-     
-    ];
+actionButtons={
+  'ACTIVE':['view'],
+  'PUBLISHED':['view','edit', 'delete'],
+  'COMPLETED':['view']
+}
+  async ngOnInit() {
+    this.fetchSessionList()
+  }
+
+  async ionViewWillEnter() {
+    this.fetchSessionList()
+  }
+
+  onCLickEvent(data: any) {
+    this.receivedEventData = data;
+    switch(this.receivedEventData.action){
+      case 'mentor_name':
+        this.router.navigate([CommonRoutes.MENTOR_DETAILS,this.receivedEventData.element.mentor_id]);
+        break;
+      case 'edit':
+
+      case 'delete':
+
+      default:
+        this.router.navigate([CommonRoutes.SESSIONS_DETAILS,this.receivedEventData.element.id]);
+    }
+  }
+
+  onPaginatorChange(data:any) {
+    this.page = data.page;
+    this.limit = data.pageSize 
+    this.fetchSessionList()
+  }
+
+  onSorting(data:any){
+   this.sortingData = data;
+      this.fetchSessionList()
+  }
+
+  onSearch() {
+    this.page = 1;
+    this.fetchSessionList()
+  }
+  async onClickDownload($event) {
+    
+  }
+  async fetchSessionList() { 
+    var obj = { page: this.page, limit: this.limit, status: this.type, order:this.sortingData?.order, sort_by:this.sortingData?.sort_by , searchText: this.searchText };
+    var response = await this.adminWorkapceService.createdSessinBySessionManager(obj);
+    this.totalCount = response.count;
+    let data  = response.data
+    if(data && data.length){
+      data.forEach((ele) => {
+        ele.action = this.actionButtons[ele?.status?.value]
+        ele.status = ele?.status?.label;
+        ele.type = ele?.type?.label;
+      });
+    }
+    this.tableData = data;
+    this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND":"THIS_SPACE_LOOKS_EMPTY"
   }
 
 }
