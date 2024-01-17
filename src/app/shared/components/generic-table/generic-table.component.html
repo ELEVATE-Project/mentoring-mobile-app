@@ -1,7 +1,8 @@
 <div class="header-container">
   <div class="header">{{ headingText | translate}}</div>
-  <div class="download"  (click)="onClickDownload($event,download)">{{ download | translate}}</div>
-  <mat-paginator class="paginator" [length]="totalCount" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"
+  <ng-content></ng-content>
+
+  <mat-paginator class="paginator" [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
     (page)="onPageChange($event)">
   </mat-paginator>
 </div>
@@ -24,11 +25,11 @@
       </ng-container>
       <ng-container >
         <div *ngIf="column.type == 'text'">
-          <td mat-cell (click)="onCellClick(column,element[column.name],element)" *matCellDef="let element">{{
+          <td mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">{{
             element[column.name] }}</td>
         </div>
         <div *ngIf="column.type == 'object'">
-          <td mat-cell (click)="onCellClick(column,element[column.name],element)" *matCellDef="let element">{{
+          <td mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">{{
             element[column.name].label }}</td>
         </div>
         <div *ngIf="column.type == 'button'">
@@ -36,7 +37,7 @@
             <div class="d-flex flex-justify-space-between">
               <ion-grid>
                 <ion-row class="d-flex flex-justify-center">
-                  <ion-button class="button-container" color="white" (click)="onCellClick(column,buttonName,element)"
+                  <ion-button class="button-container" color="white" (click)="onCellClick(buttonName,column,element)"
                     *ngFor="let buttonName of element[column.name]">
                     {{ buttonName }}
                   </ion-button>
@@ -53,8 +54,8 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
   </table>
-  <div *ngIf="tableData.length == 0">
-    <app-no-data-found [messageHeader]="'NO_SESSIONS_CREATED'" [messageDescription]="'START_CREATING_SESSION'">
+  <div *ngIf="!(tableData?.length)">
+    <app-no-data-found [messageDescription]="noDataMessage">
       </app-no-data-found>
   </div>
 </div>

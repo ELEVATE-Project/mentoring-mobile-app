@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild, Output, EventEmitter, SimpleChange
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { PopoverController } from '@ionic/angular';
+import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
 
 @Component({
   selector: 'app-generic-table',
@@ -14,11 +15,13 @@ export class GenericTableComponent implements OnInit {
   @Input() columnData;
   @Input() tableData;
   @Input() headingText;
-  @Input() download;
   @Input() totalCount;
+  @Input() noDataMessage;
   @Output() onClickEvent = new EventEmitter();
   @Output() paginatorChanged = new EventEmitter();
   @Output() onSorting = new EventEmitter();
+  pageSize = paginatorConstants.defaultPageSize;
+  pageSizeOptions = paginatorConstants.pageSizeOptions;
   
   dataSource: MatTableDataSource<any>;
   displayedColumns:any;
@@ -34,9 +37,9 @@ export class GenericTableComponent implements OnInit {
     }
   }
 
-  onCellClick(column: any, columnName: any, element: any) {
+  onCellClick(action: any, columnName: any, element: any) {
     let value = {
-      column: column,
+      action:action,
       columnName: columnName,
       element: element
     }
@@ -46,10 +49,6 @@ export class GenericTableComponent implements OnInit {
   async onClickSorting(event: any,data: any) {
     this.popoverController.dismiss();
     this.onSorting.emit(data)
-  }
-
-  async onClickDownload($event, download) {
-    this.onClickEvent.emit(download)
   }
 
   onPageChange(event: any) {

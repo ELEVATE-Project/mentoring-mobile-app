@@ -41,6 +41,7 @@ export class ManageSessionComponent implements OnInit {
 ]
 tableData:any;
 dummyTableData:any= false;
+noDataMessage:any; 
 
 actionButtons={
   'ACTIVE':['view'],
@@ -57,13 +58,16 @@ actionButtons={
 
   onCLickEvent(data: any) {
     this.receivedEventData = data;
-    if(this.receivedEventData?.column?.name == 'mentor_name'){
-       this.router.navigate([CommonRoutes.MENTOR_DETAILS,this.receivedEventData.element.mentor_id]);
-    }else if(this.receivedEventData == 'DOWNLOAD'){
-    }else if(this.receivedEventData?.columnName == 'view'){
-      this.router.navigate([CommonRoutes.SESSIONS_DETAILS,this.receivedEventData.element.id]);
-    }else{
-      this.router.navigate([CommonRoutes.SESSIONS_DETAILS,this.receivedEventData.element.id]);
+    switch(this.receivedEventData.action){
+      case 'mentor_name':
+        this.router.navigate([CommonRoutes.MENTOR_DETAILS,this.receivedEventData.element.mentor_id]);
+        break;
+      case 'edit':
+
+      case 'delete':
+
+      default:
+        this.router.navigate([CommonRoutes.SESSIONS_DETAILS,this.receivedEventData.element.id]);
     }
   }
 
@@ -78,13 +82,19 @@ actionButtons={
       this.fetchSessionList()
   }
 
+  onSearch() {
+    this.page = 1;
+    this.fetchSessionList()
+  }
+  async onClickDownload($event) {
+    
+  }
   async fetchSessionList() { 
     var obj = { page: this.page, limit: this.limit, status: this.type, order:this.sortingData?.order, sort_by:this.sortingData?.sort_by , searchText: this.searchText };
     var response = await this.adminWorkapceService.createdSessinBySessionManager(obj);
     this.totalCount = response.count;
-    
     let data  = response.data
-    if(data.length>0){
+    if(data && data.length){
       data.forEach((ele) => {
         ele.action = this.actionButtons[ele?.status?.value]
         ele.status = ele?.status?.label;
@@ -92,5 +102,7 @@ actionButtons={
       });
     }
     this.tableData = data;
+    this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND":"THIS_SPACE_LOOKS_EMPTY"
   }
+
 }

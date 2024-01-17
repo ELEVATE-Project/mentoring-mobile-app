@@ -132,15 +132,6 @@ ion-popover {
   align-items: center;
   justify-content: flex-start;
 }
-.download{
-  display: grid;
-  align-items: center;
-  justify-content: flex-end;
-  font-weight:700;
-  color: #6da6f2;
-  text-decoration: underline;
-  cursor: pointer;
-}
 @media (max-width: 900px) {
   .header-container {
     display: grid;
