@@ -1,7 +1,6 @@
-<div class="header-container">
+<div class="header-container d-flex flex-justify-space-between">
   <div class="header">{{ headingText | translate}}</div>
   <ng-content></ng-content>
-
   <mat-paginator class="paginator" [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
     (page)="onPageChange($event)">
   </mat-paginator>
@@ -23,7 +22,7 @@
             </ion-popover>
           </span></th>
       </ng-container>
-      <ng-container >
+      <ng-container>
         <div *ngIf="column.type == 'text'">
           <td mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">{{
             element[column.name] }}</td>
@@ -37,10 +36,11 @@
             <div class="d-flex flex-justify-space-between">
               <ion-grid>
                 <ion-row class="d-flex flex-justify-center">
-                  <ion-button class="button-container" color="white" (click)="onCellClick(buttonName,column,element)"
-                    *ngFor="let buttonName of element[column.name]">
-                    {{ buttonName }}
-                  </ion-button>
+                  <div *ngFor="let buttonName of element[column.name]">
+                    <ion-button [class]="buttonName.cssColor" (click)="onCellClick(buttonName,column,element)">
+                      {{ buttonName.name | translate }}
+                    </ion-button>
+                  </div>
                 </ion-row>
               </ion-grid>
             </div>
@@ -48,7 +48,7 @@
         </div>
       </ng-container>
     </ng-container>
-    
+
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -56,6 +56,6 @@
   </table>
   <div *ngIf="!(tableData?.length)">
     <app-no-data-found [messageDescription]="noDataMessage">
-      </app-no-data-found>
+    </app-no-data-found>
   </div>
 </div>
