@@ -144,9 +144,9 @@ export class SessionDetailPage implements OnInit {
       let readableStartDate = moment.unix(response.start_date).toLocaleString();
       let currentTimeInSeconds=Math.floor(Date.now()/1000);
       if(response.is_enrolled){
-        this.isEnabled = ((response.start_date - currentTimeInSeconds) < 600 || response.status=='LIVE') ? true : false
+        this.isEnabled = ((response.start_date - currentTimeInSeconds) < 600 || response?.status?.value=='LIVE') ? true : false
       } else {
-        this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response.status=='LIVE')?true:false;
+        this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response?.status?.value=='LIVE')?true:false;
       }
       this.detailData.data = Object.assign({}, response);
       this.detailData.data.start_date = readableStartDate;
@@ -155,7 +155,7 @@ export class SessionDetailPage implements OnInit {
       this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
     }
-    if((response?.meeting_info?.platform == 'OFF') && this.isCreator && response.status=='PUBLISHED'){
+    if((response?.meeting_info?.platform == 'OFF') && this.isCreator && response?.status?.value=='PUBLISHED'){
       this.showToasts('ADD_MEETING_LINK', 0 , [
           {
             text: 'Add meeting link',
@@ -176,14 +176,14 @@ export class SessionDetailPage implements OnInit {
 
   setPageHeader(response) {
     let currentTimeInSeconds=Math.floor(Date.now()/1000);
-    this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response.status=='LIVE')?true:false;
-      this.headerConfig.share = response.status=="COMPLETED"?false:true;
+    this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response?.status?.value=='LIVE')?true:false;
+      this.headerConfig.share = response?.status?.value=="COMPLETED"?false:true;
       this.id = response.id;
       if(this.userDetails){
         this.isCreator = this.userDetails.id == response.mentor_id ? true : false;
       }
-      this.headerConfig.edit = (this.isCreator && response.status=="PUBLISHED"&& !this.isEnabled)?true:null;
-      this.headerConfig.delete = (this.isCreator && response.status=="PUBLISHED" && !this.isEnabled)?true:null;
+      this.headerConfig.edit = (this.isCreator && response?.status?.value=="PUBLISHED"&& !this.isEnabled)?true:null;
+      this.headerConfig.delete = (this.isCreator && response?.status?.value=="PUBLISHED" && !this.isEnabled)?true:null;
   }
 
   action(event) {

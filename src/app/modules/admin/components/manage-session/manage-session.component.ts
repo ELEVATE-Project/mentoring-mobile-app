@@ -171,4 +171,8 @@ export class ManageSessionComponent implements OnInit {
     this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
   }
 
+  createSession(){
+    this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION}`]);
+  }
+
 }

@@ -6,6 +6,8 @@ import { ManageListComponent } from "./components/manage-list/manage-list.compon
 import { ManageSessionComponent } from "./components/manage-session/manage-session.component";
 import { PermissionGuard } from "src/app/core/guards/permission/permission.guard";
 import { permissions , actions, manageSessionAction} from 'src/app/core/constants/permissionsConstant';
+import { CreateSessionPage } from "src/app/pages/create-session/create-session.page";
+import { MANAGERS_CREATE_SESSION_FORM } from "src/app/core/constants/formConstant";
 
 const routes: Routes = [
     {
@@ -26,6 +28,13 @@ const routes: Routes = [
         canActivate: [PermissionGuard],
         data: {
             permissions: { module: permissions.MANAGE_SESSION, action: manageSessionAction.MANAGE_ACTIONS },
+        }
+    },
+    {
+        path: CommonRoutes.MANAGERS_SESSION,
+        component: CreateSessionPage,
+        data: {
+            forms: { page: MANAGERS_CREATE_SESSION_FORM }
         }
     }
 ];

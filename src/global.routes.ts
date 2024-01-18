@@ -30,6 +30,6 @@ export class CommonRoutes {
     public static MANAGE_USER= 'manage-user';
     public static BULK_UPLOAD= 'bulk-upload';
     public static MANAGE_SESSION= 'manage-session';
-    
+    public static MANAGERS_SESSION = 'managers-create-session'
     
 }
