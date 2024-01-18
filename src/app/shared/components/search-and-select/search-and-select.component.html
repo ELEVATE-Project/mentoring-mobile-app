@@ -13,9 +13,9 @@
   </ion-popover>
 </div>
 <ion-item class="ion-margin-top">
-  <ion-chip (click)="showPopover(control.meta)" [ngClass]="{'color-red': selectedData}">
+  <ion-chip (click)="showPopover(control.meta)" [ngClass]="{'color-red': selectedData.length}" [disabled]="control?.disabled">
     <ion-icon class="icon" [name]="icon.name" [color]="icon.color" (click)="handleIconClick($event)"></ion-icon>
-    <ion-label *ngIf="control?.meta?.searchType==='mentee'">{{getMenteeLabel()}}</ion-label>
-    <ion-label *ngIf="control?.meta?.searchType==='mentor'">{{getMentorLabel()}}</ion-label>
+    <ion-label *ngIf="selectedData.length" class="capitalize">{{ control?.meta.multiSelect ? control?.meta?.labelWhenSelected : selectedData[0].name+',' }} &nbsp; {{ control?.meta.multiSelect ? selectedData.length : selectedData[0].organization }}</ion-label>
+    <ion-label *ngIf="!selectedData.length">{{control?.label}}</ion-label>
   </ion-chip>
 </ion-item>

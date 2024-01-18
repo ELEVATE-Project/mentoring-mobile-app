@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header *ngIf="filterData">
   <div class="ion-padding-start wrapper-class ion-padding-bottom">
     <ion-label class="header">{{"FILTER"|translate}}</ion-label>
     <ion-label class="underline" (click)="clearAll()">{{"CLEAR_ALL"|translate}}</ion-label>

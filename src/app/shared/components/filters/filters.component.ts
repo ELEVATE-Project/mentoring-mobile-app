@@ -15,6 +15,7 @@ export class FiltersComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.filterData)
     this.ogArrObj = _.cloneDeep(this.filterData);
   }
 

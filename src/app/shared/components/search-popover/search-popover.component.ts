@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { UtilService } from 'src/app/core/services';
+import * as _ from 'lodash';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
+import { HttpService, UtilService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-search-popover',
@@ -11,359 +13,122 @@ export class SearchPopoverComponent implements OnInit {
   @Input() control: any;
 
   columnData = [
-    {name:'no',displayName:'No.', sorting:false, sortingData:"dont know as of now"},
-    {name:'sessionName', displayName:'Session name',sorting:true, sortingData:"dont know as of now"},
-    {name:'type', displayName:'Type',sorting:false, sortingData:"dont know as of now"},
-    {name:'mentor',displayName:'Mentor', sorting:false, sortingData:"dont know as of now"},
-    {name:'date',displayName:'Date', sorting:true, sortingData:"dont know as of now"},
-    {name:'time', displayName:'Time',sorting:true, sortingData:"dont know as of now"},
-    {name:'duration',displayName:'Duration(min)', sorting:true, sortingData:"dont know as of now"},
-    {name:'menteeCount', displayName:'Mentee count',sorting:false, sortingData:"dont know as of now"},
-    {name:'status',displayName:'Status', sorting:false, sortingData:"dont know as of now"},
-    {name:'action', displayName:'Actions',sorting:false, sortingData:"dont know as of now"},
-]
-
-filterData:any = {
-  "organizations": [
-      {
-          "id": 1,
-          "name": "Default",
-          "code": "default",
-          "description": "Default organization description"
-      },
-      {
-          "id": 15,
-          "name": "navadhiti",
-          "code": "nav",
-          "description": "navadhiti organisation"
-      }
-  ],
-  "entity_types": [
-      {
-          "designation": [
-              {
-                  "label": "Designation",
-                  "entities": [
-                      {
-                          "id": 1,
-                          "entity_type_id": 1,
-                          "value": "hm",
-                          "label": "HM",
-                          "status": "ACTIVE",
-                          "type": "SYSTEM",
-                          "created_by": 0,
-                          "updated_by": null,
-                          "created_at": "2023-12-28T18:55:06.629Z",
-                          "updated_at": "2023-12-28T18:55:06.629Z",
-                          "deleted_at": null
-                      },
-                      {
-                          "id": 2,
-                          "entity_type_id": 1,
-                          "value": "deo",
-                          "label": "DEO",
-                          "status": "ACTIVE",
-                          "type": "SYSTEM",
-                          "created_by": 0,
-                          "updated_by": null,
-                          "created_at": "2023-12-28T18:55:06.629Z",
-                          "updated_at": "2023-12-28T18:55:06.629Z",
-                          "deleted_at": null
-                      }
-                  ]
-              }
-          ]
-      }
+    { name: 'index_number', displayName: 'No.', type: 'text' },
+    { name: 'name', displayName: 'Name', type: 'text', sortingData: [{ sort_by: 'title', order: 'ASC', label: 'A -> Z' }, { sort_by: 'title', order: 'DESC', label: 'Z -> A' }] },
+    { name: 'designation', displayName: 'Designation', type: 'array' },
+    { name: 'organization', displayName: 'Organisation', type: 'text' },
+    { name: 'email', displayName: 'E-mail ID', type: 'text' },
+    { name: 'action', displayName: 'Actions', type: 'button' }
   ]
-}
 
+  filterData;
+  tableData: any;
+  page = 1
+  limit = 5
+  searchText = '';
+  count: any;
+  actionButtons = {
+    'ADD': ['add'],
+    'REMOVE': ['remove']
+  }
+  selectedFilters:any = {};
+  selectedList: any=[];
 
+  constructor(private popoverController: PopoverController, private util: UtilService, private httpService: HttpService) { }
 
-// filterData = {
-//   data: {
-//     "organizations": [
-//       {
-//         "id": 1,
-//         "name": "Default",
-//         "code": "default",
-//         "description": "Default organization description"
-//       },
-//       {
-//         "id": 15,
-//         "name": "navadhiti",
-//         "code": "nav",
-//         "description": "navadhiti organisation"
-//       }
-//     ],
-//     "designation": [
-//       {
-//         "id": 1,
-//         "entity_type_id": 1,
-//         "value": "hm",
-//         "label": "HM",
-//         "status": "ACTIVE",
-//         "type": "SYSTEM",
-//         "created_by": 0,
-//         "updated_by": null,
-//         "created_at": "2023-12-28T18:55:06.629Z",
-//         "updated_at": "2023-12-28T18:55:06.629Z",
-//         "deleted_at": null
-//       },
-//       {
-//         "id": 2,
-//         "entity_type_id": 1,
-//         "value": "deo",
-//         "label": "DEO",
-//         "status": "ACTIVE",
-//         "type": "SYSTEM",
-//         "created_by": 0,
-//         "updated_by": null,
-//         "created_at": "2023-12-28T18:55:06.629Z",
-//         "updated_at": "2023-12-28T18:55:06.629Z",
-//         "deleted_at": null
-//       }
-//     ]
-//   },
-//   form: [
-//     {
-//       title: 'Designation',
-//       key: 'designation',
-//     },
-//     {
-//       title: 'Organization',
-//       key: 'organizations',
-//     }
-//   ]
-// }
-  tableData: { no: number; sessionName: string; type: string; mentor: string; date: string; time: string; duration: number; menteeCount: number; status: string; action: string; }[];
-  constructor(private popoverController: PopoverController, private util: UtilService) { }
-
-  ngOnInit() {
-    console.log(this.control)
+  async ngOnInit() {
+    this.tableData = await this.list()
+    this.filterData = await this.getFilters()
     this.filterData = this.util.getFormatedFilterData(this.filterData, this.control.meta)
-    
-    this.tableData = [
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      }, { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-       { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      }, { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 1, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-      { "no": 10, 
-      "sessionName": 'Micro improvements-1',
-       "type": 'private' ,
-       "mentor": 'Meno"tr name',
-       "date": '12-10-1014',
-       "time":'10:30',
-       "duration":60,
-       "menteeCount":25,
-       "status":'live',
-       "action":'live'
-      },
-       
-      // Add more data as needed
-     
-    ];
   }
 
-  closePopover(event){
-    
-    this.popoverController.dismiss(this.control.meta.multiSelect?[{name:"afnan", organisation: "tunerlabs"}]:'afnan', this.control.meta.searchType);
+  async getFilters() {
+    let url = ''
+    if (this.control.meta.filters.entity_types && this.control.meta.filters.entity_types.length > 0) {
+      const entityTypes = this.control.meta.filters.entity_types.map((type: any) => type.key).join(',');
+      url += `entity_types=${entityTypes}`;
+    }
+    if (this.control.meta.filters.organizations && this.control.meta.filters.organizations[0].isEnabled) {
+      url += `&organization=true`;
+    }
+    const config = {
+      url: urlConstants.API_URLS.FILTER_LIST + url,
+      payload: {},
+    };
+    try {
+      const data: any = await this.httpService.get(config);
+      return data.result
+    }
+    catch (error) {
+      return null;
+    }
   }
 
-  filtersChanged(event){
-    // integrate mentor/mentee list api here
-    console.log(event)
+  async list() {
+    const organizationsQueryParam = this.selectedFilters && this.selectedFilters.organizations
+    ? '&organization_ids=' + this.selectedFilters.organizations.map(org => org.id).join(',')
+    : '';
+    const designationQueryParam = this.selectedFilters && this.selectedFilters.designation
+        ? '&designation=' + this.selectedFilters.designation.map(des => des.value).join(',')
+        : '';
+    const queryString = organizationsQueryParam + designationQueryParam;
+    const config = {
+      url: urlConstants.API_URLS[this.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + this.searchText + queryString,
+      payload: {}
+    };
+    try {
+      const data: any = await this.httpService.get(config);
+      this.count = data.result.count
+      data.result.data.forEach((ele) => {
+        ele.action = this.actionButtons.ADD
+        ele.organization = ele?.organization?.name;
+      });
+      return data.result.data
+    }
+    catch (error) {
+      return null;
+    }
   }
 
+  closePopover(event) {
+    this.popoverController.dismiss(this.selectedList);
+  }
+
+  async filtersChanged(event) {
+    this.selectedFilters = event
+    this.tableData = await this.list()
+  }
+
+  async onSearch(){
+    this.tableData = await this.list()
+  }
+
+  onCLickEvent(data: any) {
+    switch(data.action){
+      case 'add':
+        if(!this.control.meta .multiSelect){
+          this.popoverController.dismiss([data.element], this.control)
+        } else {
+          const index = this.tableData.findIndex(item => item.id === data.element.id);
+          this.tableData[index].action = this.actionButtons.REMOVE
+          this.selectedList.push(data.element)
+        }
+        break;
+
+      case 'remove':
+        const index = this.tableData.findIndex(item => item.id === data.element.id);
+        this.tableData[index].action = this.actionButtons.ADD
+        const indexToRemove = this.selectedList.indexOf(data.element);
+        this.selectedList.splice(indexToRemove, 1)[0];
+
+      default:
+        
+    }
+  }
+
+ async onPaginatorChange(data:any) {
+    this.page = data.page;
+    this.limit = data.pageSize 
+    await this.list()
+  }
 }

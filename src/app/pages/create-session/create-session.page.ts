@@ -118,7 +118,7 @@ export class CreateSessionPage implements OnInit {
             "value": '',
             "class": "ion-no-margin",
             "type": "select",
-            "dependedChild": 'mentee_list',
+            "dependedChild": 'mentees',
             "position": "floating",
             "info": [{
               header: "Public session", message: "Discoverable. Mentees can enroll and attend"
@@ -146,18 +146,19 @@ export class CreateSessionPage implements OnInit {
               }],
           },  
           {
-            name: 'mentor_list',
+            name: 'mentor_id',
             label: 'Add mentor',
             value: '',
             class: 'ion-no-margin',
             type: 'search',
             position: 'floating',
+            disabled: false,
             meta: {
               multiSelect: false, 
               searchLabel: 'Search for mentor', 
               url: "MENTORS_LIST",
               filters: {
-                entity_types: [{key:'designation', label: 'Designation', type: 'radio'}],
+                entity_types: [{key:'designation', label: 'Designation', type: 'checkbox'}],
                 organizations: [{isEnabled: true, key: 'organizations', type: 'checkbox'}]
               }
             },
@@ -172,18 +173,19 @@ export class CreateSessionPage implements OnInit {
             },
           },
           {
-            name: 'mentee_list',
+            name: 'mentees',
             label: 'Add mentee',
             value: '',
             class: 'ion-no-margin',
+            disabled: false,
             type: 'search',
             meta: {
               multiSelect: true, 
               url: "MENTEES_LIST",
               searchLabel: 'Search for mentee', 
-              labelWhenSelected: 'Mentee count',
+              labelWhenSelected: 'Mentee Count',
               filters: {
-                entity_types: [{key:'designation', label: 'Designation', type: 'radio'}],
+                entity_types: [{key:'designation', label: 'Designation', type: 'checkbox'}],
                 organizations: [{isEnabled: true, key: 'organizations', type: 'checkbox'}]
               }
             },

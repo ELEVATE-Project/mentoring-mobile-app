@@ -145,7 +145,6 @@ export class UtilService {
 
   getFormatedFilterData(filterData, formData) {;
     const result = [];
-    
     for (const key in filterData) {
       if (key !== 'entity_types') {
         const title = key.charAt(0).toUpperCase() + key.slice(1);
@@ -158,19 +157,19 @@ export class UtilService {
         const type = formData.filters[key].find(obj => obj.key === name).type;
         result.push({ title, name, options, type });
       } else {
-        filterData[key].forEach(entityType => {
-          for (const entityKey in entityType) {
-            const title = entityType[entityKey][0].label;
-            const name = entityKey;
-            const type = formData.filters.entity_types.find(obj => obj.key === name).type;
-            const options = entityType[entityKey][0].entities.map(entity => ({
-                id: entity.id,
-                label: entity.label,
-                value: entity.value
-            }));
-            result.push({ title, name, options, type });
-          }
-        });
+        for (const filterKey in filterData[key]) {
+          filterData[key][filterKey].forEach(entityType => {
+              const title = entityType.label;
+              const name = filterKey;
+              const type = formData.filters.entity_types.find(obj => obj.key === name).type;
+              const options = entityType.entities.map(entity => ({
+                  id: entity.id,
+                  label: entity.label,
+                  value: entity.value
+              }));
+              result.push({ title, name, options, type });
+          });
+        }
       }
     }
     return result;

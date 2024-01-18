@@ -8,6 +8,7 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
+    canActivate: [PrivateGuard]
   },
   {
     path: CommonRoutes.AUTH,
