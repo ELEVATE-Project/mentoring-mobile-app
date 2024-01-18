@@ -35,6 +35,8 @@ import { GenericTableComponent } from './components/generic-table/generic-table.
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { HasPermissionDirective } from './directive/permission.directive';
+import { FilterTreeComponent } from './components/filter-tree/filter-tree.component';
+import { FilterPopupComponent } from './components/filter-popup/filter-popup.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { HasPermissionDirective } from './directive/permission.directive';
     JoinDialogBoxComponent,
     ModelComponent,
     GenericTableComponent,
-    HasPermissionDirective
+    HasPermissionDirective,
+    FilterTreeComponent,
+    FilterPopupComponent
   ],
   imports: [
     CommonModule,
@@ -100,7 +104,9 @@ import { HasPermissionDirective } from './directive/permission.directive';
     GenericTableComponent,
     MatTableModule,
     MatPaginatorModule,
-    HasPermissionDirective
+    HasPermissionDirective,
+    FilterTreeComponent,
+    FilterPopupComponent
   ],
 })
 export class SharedModule {}

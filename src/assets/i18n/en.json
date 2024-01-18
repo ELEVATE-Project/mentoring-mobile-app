@@ -234,5 +234,7 @@
     "DOWNLOAD":"Download",
     "SEARCH_RESULT_NOT_FOUND":"Search result not found",
     "THIS_SPACE_LOOKS_EMPTY":"This space looks empty",
-    "SSESSIONS_MENTOR_SEARCH_PLACEHOLDER":"Search for sessions,mentors"
+    "SSESSIONS_MENTOR_SEARCH_PLACEHOLDER":"Search for sessions,mentors",
+    "APPLY":"Apply",
+    "VIEW":"View"
 }
