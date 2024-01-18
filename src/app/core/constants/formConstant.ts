@@ -44,3 +44,8 @@ export const SAMPLE_CSV_DOWNLOAD_URL = {
 	"type": "sampleCsvDownload",
 	"sub_type": "sampleCsvDownload"
 }
+
+export const MANAGERS_CREATE_SESSION_FORM: IFORM = {
+	"type": "managersSession",
+	"sub_type": "managersSessionForm",
+}

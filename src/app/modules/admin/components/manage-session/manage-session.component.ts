@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LineElement } from 'chart.js/dist';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-manage-session',
@@ -14,7 +16,7 @@ export class ManageSessionComponent implements OnInit {
     headerColor: 'primary',
     label:'MANAGE_SESSION'
   };
-  constructor() { }
+  constructor(private router: Router) { }
   columnData = [
     {name:'no',displayName:'No.', sorting:false, sortingData:"dont know as of now"},
     {name:'sessionName', displayName:'Session name',sorting:true, sortingData:"dont know as of now"},
@@ -241,6 +243,10 @@ export class ManageSessionComponent implements OnInit {
       // Add more data as needed
      
     ];
+  }
+
+  createSession(){
+    this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION}`]);
   }
 
 }
