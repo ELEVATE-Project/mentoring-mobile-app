@@ -154,7 +154,8 @@ export class CreateSessionPage implements OnInit {
             position: 'floating',
             meta: {
               multiSelect: false, 
-              searchType: 'mentor',
+              searchLabel: 'Search for mentor', 
+              url: "MENTORS_LIST",
               filters: {
                 entity_types: [{key:'designation', label: 'Designation', type: 'radio'}],
                 organizations: [{isEnabled: true, key: 'organizations', type: 'checkbox'}]
@@ -178,7 +179,8 @@ export class CreateSessionPage implements OnInit {
             type: 'search',
             meta: {
               multiSelect: true, 
-              searchType: 'mentee',
+              url: "MENTEES_LIST",
+              searchLabel: 'Search for mentee', 
               labelWhenSelected: 'Mentee count',
               filters: {
                 entity_types: [{key:'designation', label: 'Designation', type: 'radio'}],
@@ -447,26 +449,25 @@ export class CreateSessionPage implements OnInit {
           let control = this.formData.controls.find(obj => obj.name === entityKey);
           form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey]
         });
-        console.log(form)
         if(!this.profileImageData.image){
           form.image=[]
         }
         this.form1.myForm.markAsPristine();
-        // let result = await this.sessionService.createSession(form, this.id);
-        // if (result) {
-        //   this.sessionDetails = _.isEmpty(result) ? this.sessionDetails : result;
-        //   this.isSubmited = true;
-        //   this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
-        //   this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
-        //   if(!this.id && result.id){
-        //     this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: result.id , type: 'segment'}, replaceUrl: true });
-        //   }else {
-        //     this.type = 'segment';
-        //   }
-        // } else {
-        //   this.profileImageData.image = this.lastUploadedImage;
-        //   this.profileImageData.isUploaded = false;
-        // }
+        let result = await this.sessionService.createSession(form, this.id);
+        if (result) {
+          this.sessionDetails = _.isEmpty(result) ? this.sessionDetails : result;
+          this.isSubmited = true;
+          this.firstStepperTitle = (this.id) ? "EDIT_SESSION_LABEL":"CREATE_NEW_SESSION";
+          this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
+          if(!this.id && result.id){
+            this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: result.id , type: 'segment'}, replaceUrl: true });
+          }else {
+            this.type = 'segment';
+          }
+        } else {
+          this.profileImageData.image = this.lastUploadedImage;
+          this.profileImageData.isUploaded = false;
+        }
       }
     } else {
       this.toast.showToast("Please fill all the mandatory fields", "danger");
@@ -586,15 +587,17 @@ export class CreateSessionPage implements OnInit {
   };
 
   formValueChanged(event){
+    let dependedControlIndex = this.formData.controls.findIndex(formControl => formControl.name === event.dependedChild)
+    let dependedControl = this.form1.myForm.get(event.dependedChild)
     if(event.value == 'public'){
-      this.formData.controls[event.dependedControlIndex].validators['required'] = false
-      event.dependedControl.setValidators(null);
-      event.dependedControl.setErrors(null)
-      event.dependedControl.updateValueAndValidity();
+      this.formData.controls[dependedControlIndex].validators['required'] = false
+      dependedControl.setValidators(null);
+      dependedControl.setErrors(null)
+      dependedControl.updateValueAndValidity();
     } else {
-      this.formData.controls[event.dependedControlIndex].validators['required'] = true
-      event.dependedControl.setValidators([Validators.required]);
-      event.dependedControl.updateValueAndValidity();
+      this.formData.controls[dependedControlIndex].validators['required'] = true
+      dependedControl.setValidators([Validators.required]);
+      dependedControl.updateValueAndValidity();
     }
   }
 }

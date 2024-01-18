@@ -156,8 +156,7 @@ export class UtilService {
           value: item.code
         }));
         const type = formData.filters[key].find(obj => obj.key === name).type;
-        const multiSelect = formData.multiSelect
-        result.push({ title, name, options, type, multiSelect});
+        result.push({ title, name, options, type });
       } else {
         filterData[key].forEach(entityType => {
           for (const entityKey in entityType) {
@@ -169,8 +168,7 @@ export class UtilService {
                 label: entity.label,
                 value: entity.value
             }));
-            const multiSelect = formData.multiSelect
-            result.push({ title, name, options, type, multiSelect });
+            result.push({ title, name, options, type });
           }
         });
       }

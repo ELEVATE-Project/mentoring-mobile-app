@@ -200,9 +200,6 @@ export class DynamicFormComponent implements OnInit {
     if(this.readonly){
       this.myForm.disable()
     }
-    this.myForm.valueChanges.subscribe((data)=>{
-      console.log(this.myForm)
-    })
   }
   compareWith(a, b) {
     a = _.flatten([a]);
@@ -253,8 +250,6 @@ export class DynamicFormComponent implements OnInit {
     if (indexToEdit !== -1) {
       this.jsonFormData.controls[indexToEdit].value = event.detail.value
     }
-    control.dependedControl = this.myForm.get(this.jsonFormData.controls[indexToEdit].dependedChild)
-    control.dependedControlIndex = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.dependedChild)
     this.formValueChanged.emit(control)
   }
   

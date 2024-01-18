@@ -8,7 +8,7 @@
   <div class="ion-padding-start ion-padding-top" *ngFor="let filter of filterData">
     <ion-label class="sub-header">{{filter?.title}}</ion-label>
     <div class="ion-padding-top d-flex flex-align-items-center" *ngFor="let data of filter.options">
-      <ion-checkbox slot="start" [(ngModel)]="data.selected" (ionChange)="onFilterChange(data)"></ion-checkbox>
+      <ion-checkbox slot="start" [(ngModel)]="data.selected" (ionChange)="onFilterChange()"></ion-checkbox>
       <ion-label class="ion-padding-start">{{data?.name || data?.label}}</ion-label>
     </div>
   </div>
