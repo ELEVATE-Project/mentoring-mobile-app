@@ -63,6 +63,12 @@ interface JsonFormControls {
   platformPlaceHolder?:string;
   showSelectAll?: boolean;
   multiple?:boolean;
+  placeHolder?: string;
+  dependedChild?: string;
+  info?: Array<object>;
+  meta?: object;
+  displayFormat?: string
+  dependedParent?:string;
 }
 export interface JsonFormData {
   controls: JsonFormControls[];
