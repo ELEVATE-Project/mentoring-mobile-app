@@ -37,6 +37,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { SearchAndSelectComponent } from './components/search-and-select/search-and-select.component';
 import { SearchPopoverComponent } from './components/search-popover/search-popover.component';
+import { HasPermissionDirective } from './directive/permission.directive';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { SearchPopoverComponent } from './components/search-popover/search-popov
     GenericTableComponent,
     SearchAndSelectComponent,
     SearchPopoverComponent,
-    FiltersComponent
+    FiltersComponent,
+    HasPermissionDirective
   ],
   imports: [
     CommonModule,
@@ -79,7 +81,7 @@ import { SearchPopoverComponent } from './components/search-popover/search-popov
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
-    NgxMatMomentModule, 
+    NgxMatMomentModule
   ],
   exports: [
     DynamicFormComponent,
@@ -106,7 +108,8 @@ import { SearchPopoverComponent } from './components/search-popover/search-popov
     MatPaginatorModule,
     SearchAndSelectComponent,
     SearchPopoverComponent,
-    FiltersComponent
+    FiltersComponent,
+    HasPermissionDirective
   ],
 })
 export class SharedModule {}

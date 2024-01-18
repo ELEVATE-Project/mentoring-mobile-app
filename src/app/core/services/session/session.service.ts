@@ -14,7 +14,6 @@ export class SessionService {
 
   constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private router: Router, private modalCtrl: ModalController) { }
 
-
   async createSession(formData, id?: string) {
     await this.loaderService.startLoader();
     const config = {
@@ -38,13 +37,13 @@ export class SessionService {
   async getAllSessionsAPI(obj) {
     //await this.loaderService.startLoader();
     let params;
-   if(obj.status){
-     params ='&status=' + obj.status + '&search=' + obj.searchText
-    }else{
-      params ='&search=' + obj.searchText
+    if (obj.status) {
+      params = '&status=' + obj.status + '&search=' + obj.searchText
+    } else {
+      params = '&search=' + obj.searchText
     }
     const config = {
-      url: urlConstants.API_URLS.CREATED_SESSIONS + obj.page + '&limit=' + obj.limit +params,
+      url: urlConstants.API_URLS.CREATED_SESSIONS + obj.page + '&limit=' + obj.limit + params,
       payload: {}
     };
     try {
@@ -55,23 +54,23 @@ export class SessionService {
       return {}
     }
     catch (error) {
-     // this.loaderService.stopLoader();
+      // this.loaderService.stopLoader();
       let res = []
       return res;
     }
   }
 
-async getSessionsList(obj) {
-  const config = {
-    url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj?.type + '&page=' + obj?.page + '&limit=' + obj?.limit + '&search=' + btoa(obj?.searchText),
-  };
-  try {
-    let data: any = await this.httpService.get(config);
-    return data;
+  async getSessionsList(obj) {
+    const config = {
+      url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj?.type + '&page=' + obj?.page + '&limit=' + obj?.limit + '&search=' + btoa(obj?.searchText),
+    };
+    try {
+      let data: any = await this.httpService.get(config);
+      return data;
+    }
+    catch (error) {
+    }
   }
-  catch (error) {
-  }
-}
 
   async getSessionDetailsAPI(id) {
     //await this.loaderService.startLoader();
@@ -155,7 +154,7 @@ async getSessionsList(obj) {
   }
 
   async joinSession(sessionData) {
-    let id = sessionData.sessionId?sessionData.sessionId: sessionData.id;
+    let id = sessionData.sessionId ? sessionData.sessionId : sessionData.id;
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.JOIN_SESSION + id,
@@ -165,12 +164,12 @@ async getSessionsList(obj) {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-          let modal = await this.modalCtrl.create({
-            component: JoinDialogBoxComponent,
-            componentProps: { data: data.result, sessionData : sessionData},
-            cssClass: 'example-modal'
-          });
-          modal.present()
+        let modal = await this.modalCtrl.create({
+          component: JoinDialogBoxComponent,
+          componentProps: { data: data.result, sessionData: sessionData },
+          cssClass: 'example-modal'
+        });
+        modal.present()
       }
     }
     catch (error) {
@@ -194,8 +193,8 @@ async getSessionsList(obj) {
     }
   }
 
-  async openBrowser(link, windowName:any = "_self") {
-    await Browser.open({ url: link, windowName:windowName });
+  async openBrowser(link, windowName: any = "_self") {
+    await Browser.open({ url: link, windowName: windowName });
     Browser.addListener('browserFinished', () => {
       console.log("exit");
     });
@@ -214,7 +213,7 @@ async getSessionsList(obj) {
     }
   }
 
-  async getUpcomingSessions(id){
+  async getUpcomingSessions(id) {
     const config = {
       url: urlConstants.API_URLS.UPCOMING_SESSIONS + id + "?page=1&limit=100",
       payload: {}
@@ -226,5 +225,4 @@ async getSessionsList(obj) {
     catch (error) {
     }
   }
-
 }

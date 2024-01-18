@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { ManageListComponent } from './components/manage-list/manage-list.component';
 import { ManageSessionComponent } from './components/manage-session/manage-session.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AdminComponent, ManageListComponent, ManageSessionComponent],
@@ -15,7 +16,9 @@ import { ManageSessionComponent } from './components/manage-session/manage-sessi
     SharedModule,
     IonicModule.forRoot(),
     AdminRoutingModule,
-    HttpClientModule
-  ]
+    HttpClientModule,
+    FormsModule
+  ],
+  providers: []
 })
 export class AdminModule { }
