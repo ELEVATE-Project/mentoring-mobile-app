@@ -228,5 +228,11 @@
     "USER_CANT_ACCESS_THIS_PROFILE":"You can’t access this mentor’s profile.",
     "USER_CANT_ACCESS_PROFILE_GO_TO_HOME_PAGE":"This mentor's profile is private. Go to the ‘All session’ tab to enroll for mentoring sessions that are available to you.",
     "SESSIONS":"Sessions",
-    "MANAGE_SESSION":"Manage session"
+    "MANAGE_SESSION":"Manage session",
+    "PLEASE_UPLOAD_IMAGE_FILE":"Please, upload image file.",
+    "SESSION_LIST":"Session list",
+    "DOWNLOAD":"Download",
+    "SEARCH_RESULT_NOT_FOUND":"Search result not found",
+    "THIS_SPACE_LOOKS_EMPTY":"This space looks empty",
+    "SSESSIONS_MENTOR_SEARCH_PLACEHOLDER":"Search for sessions,mentors"
 }

@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import {MatTableModule} from '@angular/material/table';
-
+import { PopoverController } from '@ionic/angular';
+import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
 
 @Component({
   selector: 'app-generic-table',
@@ -14,36 +14,49 @@ export class GenericTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @Input() columnData;
   @Input() tableData;
+  @Input() headingText;
+  @Input() totalCount;
+  @Input() noDataMessage;
+  @Output() onClickEvent = new EventEmitter();
+  @Output() paginatorChanged = new EventEmitter();
+  @Output() onSorting = new EventEmitter();
+  pageSize = paginatorConstants.defaultPageSize;
+  pageSizeOptions = paginatorConstants.pageSizeOptions;
+  
   dataSource: MatTableDataSource<any>;
   displayedColumns:any;
-  pageSizeOptions: number[] = [5, 10, 25, 100];
-  pageSize = this.pageSizeOptions[0];
- 
-  constructor() { }
- 
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+  constructor(public popoverController: PopoverController) { }
 
   ngOnInit() {
-    
-    console.log(this.columnData)
-  console.log(this.tableData)
-  // this.columnData = Object.keys(this.tableData[0]);
-  // console.log(this.columnData)
-  this.displayedColumns = this.columnData.map(column => column.name);
+    this.displayedColumns = this.columnData.map(column => column.name);
     this.dataSource = new MatTableDataSource(this.tableData);
   }
-
-  onCellClick(column:any,element:any){
-    console.log(column.name)
-    console.log(element)
-
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['tableData']) {
+      this.dataSource = new MatTableDataSource(this.tableData);
+    }
   }
 
-  onClickSorting(column:any){
-    console.log(column)
+  onCellClick(action: any, columnName: any, element: any) {
+    let value = {
+      action:action,
+      columnName: columnName,
+      element: element
+    }
+    this.onClickEvent.emit(value)
+  }
+
+  async onClickSorting(event: any,data: any) {
+    this.popoverController.dismiss();
+    this.onSorting.emit(data)
+  }
+
+  onPageChange(event: any) {
+    let data = {
+      page: event.pageIndex + 1,
+      pageSize: this.paginator.pageSize
+    }
+    this.paginatorChanged.emit(data);
   }
 
 }
