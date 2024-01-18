@@ -91,7 +91,6 @@ export class LoginPage implements OnInit {
 
   ionViewWillEnter() {
     this.activatedRoute.queryParams.subscribe(params => {
-      console.log(params)
       this.id = params.sessionId ? params.sessionId : this.id;
       this.mentorId = params.mentorId? params.mentorId:this.mentorId;
     });

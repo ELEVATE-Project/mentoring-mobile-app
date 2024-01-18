@@ -62,7 +62,6 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   }
   async ngOnInit() {
     const response = await this.form.getForm(EDIT_PROFILE_FORM);
-    console.log(response)
     this.profileImageData.isUploaded = true;
     this.formData = _.get(response, 'data.fields');
     this.entityNames = await this.form.getEntityNames(this.formData)
@@ -78,7 +77,6 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   }
 
   async canPageLeave() {
-    console.log("guard")
     if (this.form1 && !this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
       let texts: any;
       this.translate
