@@ -151,10 +151,10 @@ export class ManageSessionComponent implements OnInit {
     });
     modal.present()
   }
-  async onClickDownload() {
-    var obj = { status: this.type, order: this.sortingData?.order, sort_by: this.sortingData?.sort_by, searchText: this.searchText, filteredData:this.filteredDatas };
-     this.adminWorkapceService.downloadcreatedSessionsBySessionManager(obj);
-  }
+  // async onClickDownload() {
+  //   var obj = { status: this.type, order: this.sortingData?.order, sort_by: this.sortingData?.sort_by, searchText: this.searchText, filteredData:this.filteredDatas };
+  //    this.adminWorkapceService.downloadcreatedSessionsBySessionManager(obj);
+  // }
   async fetchSessionList() {
     var obj = { page: this.page, limit: this.limit, status: this.type, order: this.sortingData?.order, sort_by: this.sortingData?.sort_by, searchText: this.searchText, filteredData:this.filteredDatas };
     var response = await this.adminWorkapceService.createdSessionBySessionManager(obj);
