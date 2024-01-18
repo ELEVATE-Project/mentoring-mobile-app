@@ -25,6 +25,7 @@ const routes: Routes = [
     {
         path: CommonRoutes.MANAGE_SESSION,
         component: ManageSessionComponent,
+        canActivate: [PermissionGuard],
         data: {
             permissions: { module: permissions.MANAGE_SESSION, action: manageSessionAction.MANAGE_ACTIONS },
         }
