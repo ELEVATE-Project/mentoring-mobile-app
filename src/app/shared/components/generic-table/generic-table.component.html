@@ -40,10 +40,11 @@
             <div class="d-flex flex-justify-space-between">
               <ion-grid>
                 <ion-row class="d-flex flex-justify-center">
-                  <ion-button class="button-container" color="white" (click)="onCellClick(buttonName,column,element)"
-                    *ngFor="let buttonName of element[column.name]">
-                    {{ buttonName }}
-                  </ion-button>
+                  <div *ngFor="let buttonName of element[column.name]">
+                    <ion-button [class]="buttonName.cssColor" (click)="onCellClick(buttonName,column,element)">
+                      {{ buttonName.name }}
+                    </ion-button>
+                  </div>
                 </ion-row>
               </ion-grid>
             </div>

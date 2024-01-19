@@ -28,8 +28,8 @@ export class SearchPopoverComponent implements OnInit {
   searchText = '';
   count: any;
   actionButtons = {
-    'ADD': ['add'],
-    'REMOVE': ['remove']
+    'ADD': [{ name: 'add', cssColor: 'white-color' }],
+    'REMOVE': [{ name: 'remove', cssColor: 'primary-color' }],
   }
   selectedFilters:any = {};
   selectedList: any=[];
