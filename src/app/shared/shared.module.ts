@@ -19,8 +19,7 @@ import {
   FilterComponent,
   ExpandableCardComponent,
   PersonaSelectionCardComponent,
-  GenericProfileHeaderComponent,
-  FiltersComponent
+  GenericProfileHeaderComponent
 } from './components/index';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { MentorCardComponent } from './components/mentor-card/mentor-card.component';
@@ -67,7 +66,6 @@ import { FilterPopupComponent } from './components/filter-popup/filter-popup.com
     GenericTableComponent,
     SearchAndSelectComponent,
     SearchPopoverComponent,
-    FiltersComponent,
     HasPermissionDirective,
     FilterTreeComponent,
     FilterPopupComponent
@@ -112,7 +110,6 @@ import { FilterPopupComponent } from './components/filter-popup/filter-popup.com
     MatPaginatorModule,
     SearchAndSelectComponent,
     SearchPopoverComponent,
-    FiltersComponent,
     HasPermissionDirective,
     FilterTreeComponent,
     FilterPopupComponent
