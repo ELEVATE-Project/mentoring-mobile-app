@@ -77,7 +77,6 @@ export class MentorDirectoryPage implements OnInit {
 
       } else {
         this.mentors = this.mentors.concat(data.result.data);
-        console.log(this.mentors)
       }
       this.infinitescroll.disabled = this.mentorsCount == 0 ? true : false;
       this.mentorsCount = data.result.count;
@@ -87,7 +86,7 @@ export class MentorDirectoryPage implements OnInit {
       showLoader ? await this.loaderService.stopLoader() : '';
     }
   }
-  eventAction(event) {
+  eventAction(event){
     switch (event.type) {
       case 'cardSelect':
         this.router.navigate([CommonRoutes.MENTOR_DETAILS, event?.data?.id]);
@@ -99,7 +98,7 @@ export class MentorDirectoryPage implements OnInit {
     await this.getMentors(false);
     event.target.complete();
   }
-  onSearch() {
+  onSearch(){
     this.isLoaded = false;
     this.page = 1;
     if (this.searchText) {
@@ -114,5 +113,4 @@ export class MentorDirectoryPage implements OnInit {
       this.mentors = [];
     }
   }
- 
 }

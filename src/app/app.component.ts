@@ -232,7 +232,6 @@ export class AppComponent {
       }
       case 'CREATED_BY_ME': {
         this.router.navigate([`${CommonRoutes.CREATED_BY_ME}`]);
-        console.log("here");
         break;
       }
     }
