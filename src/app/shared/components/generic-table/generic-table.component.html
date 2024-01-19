@@ -1,9 +1,11 @@
 <div class="header-container d-flex flex-justify-space-between">
   <div class="header">{{ headingText | translate}}</div>
   <ng-content></ng-content>
-  <mat-paginator class="paginator" [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+  <div *ngIf="pageSize & pageSizeOptions">
+    <mat-paginator class="paginator" [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
     (page)="onPageChange($event)">
   </mat-paginator>
+  </div>
 </div>
 <div class="table-container ">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -28,9 +30,9 @@
             element[column.name] }}</td>
         </div>
         <div *ngIf="column.type == 'array'">
-          <td mat-cell (click)="onCellClick(column.name,a,element)" *matCellDef="let element">
-            <div *ngFor="let a of element[column.name]">
-              {{a.label}}
+          <td mat-cell (click)="onCellClick(column.name,element)" *matCellDef="let element">
+            <div *ngFor="let ele of element[column.name]">
+              {{ele.label}}
             </div>
           </td>
         </div>
