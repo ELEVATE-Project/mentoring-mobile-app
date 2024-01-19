@@ -3,9 +3,9 @@ import { AlertController, MenuController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from './core/constants/localStorage.keys';
 import * as _ from 'lodash-es';
-import { UtilService,DbService,UserService,LocalStorageService,AuthService,NetworkService} from './core/services';
+import { UtilService, DbService, UserService, LocalStorageService, AuthService, NetworkService } from './core/services';
 import { CommonRoutes } from 'src/global.routes';
-import { Router, NavigationEnd} from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { ProfileService } from './core/services/profile/profile.service';
 import { Location } from '@angular/common';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
@@ -22,22 +22,22 @@ import { PermissionService } from './core/services/permission/permission.service
 })
 export class AppComponent {
   showMenu: boolean = false;
- user;
- public appPages = [
-  { title: 'HOME', action: "home", icon: 'home', class:"hide-on-small-screen" , url: CommonRoutes.TABS+'/'+CommonRoutes.HOME},
-  { title: 'MENTORS', action: "mentor-directory", icon: 'people', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.MENTOR_DIRECTORY},
-  { title: 'DASHBOARD', action: "dashboard", icon: 'stats-chart', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.DASHBOARD },
-  { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP},
-  { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ},
-  { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
-  { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
-];
+  user;
+  public appPages = [
+    { title: 'HOME', action: "home", icon: 'home', class: "hide-on-small-screen", url: CommonRoutes.TABS + '/' + CommonRoutes.HOME },
+    { title: 'MENTORS', action: "mentor-directory", icon: 'people', class: "hide-on-small-screen", url: CommonRoutes.TABS + '/' + CommonRoutes.MENTOR_DIRECTORY },
+    { title: 'DASHBOARD', action: "dashboard", icon: 'stats-chart', class: "hide-on-small-screen", url: CommonRoutes.TABS + '/' + CommonRoutes.DASHBOARD },
+    { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP },
+    { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ },
+    { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam', url: CommonRoutes.HELP_VIDEOS },
+    { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
+  ];
 
- adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD}
+  adminPage = { title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase', class: '', url: CommonRoutes.ADMIN + '/' + CommonRoutes.ADMIN_DASHBOARD }
 
 
-  isMentor:boolean
-  isOrgAdmin:boolean
+  isMentor: boolean
+  isOrgAdmin: boolean
   showAlertBox = false;
   userRoles: any;
   userEventSubscription: any;
@@ -45,27 +45,27 @@ export class AppComponent {
   menuSubscription: any;
   routerSubscription: any;
   constructor(
-    private translate :TranslateService,
-    private platform : Platform,
+    private translate: TranslateService,
+    private platform: Platform,
     private localStorage: LocalStorageService,
-    public menuCtrl:MenuController,
-    private userService:UserService,
-    private utilService:UtilService,
-    private db:DbService,
+    public menuCtrl: MenuController,
+    private userService: UserService,
+    private utilService: UtilService,
+    private db: DbService,
     private router: Router,
-    private network:NetworkService,
-    private authService:AuthService,
+    private network: NetworkService,
+    private authService: AuthService,
     private profile: ProfileService,
-    private zone:NgZone,
+    private zone: NgZone,
     private _location: Location,
     private alert: AlertController,
     private screenOrientation: ScreenOrientation,
     private swUpdate: SwUpdate,
     private permissionService: PermissionService
   ) {
-    this.menuSubscription = this.utilService.canIonMenuShow.subscribe(data =>{
-        this.showMenu = data
-      }
+    this.menuSubscription = this.utilService.canIonMenuShow.subscribe(data => {
+      this.showMenu = data
+    }
     );
     this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -73,16 +73,16 @@ export class AppComponent {
       }
     });
     this.initializeApp();
-    if(Capacitor.isNativePlatform()){
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
+    if (Capacitor.isNativePlatform()) {
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     }
   }
 
-  ngOnInit(){
+  ngOnInit() {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.checkForUpdate().then((data) => {
-        if(data){
-          this.swUpdate.activateUpdate().then((data)=>{
+        if (data) {
+          this.swUpdate.activateUpdate().then((data) => {
             window.location.reload()
           })
         }
@@ -92,15 +92,15 @@ export class AppComponent {
   }
 
   shouldHideMenu(url: string): boolean {
-     if(url.includes('/auth')){
+    if (url.includes('/auth')) {
       return false;
-     }else{
-       return true
-     }
+    } else {
+      return true
+    }
   }
   subscribeBackButton() {
-    this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(10,async () => {
-      if (this._location.isCurrentPathEqualTo("/tabs/home")){
+    this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(10, async () => {
+      if (this._location.isCurrentPathEqualTo("/tabs/home")) {
         let texts: any;
         this.translate.get(['EXIT_CONFIRM_MESSAGE', 'CANCEL', 'CONFIRM']).subscribe(text => {
           texts = text;
@@ -118,11 +118,12 @@ export class AppComponent {
               text: texts['CONFIRM'],
               role: 'confirm',
               cssClass: "alert-button",
-              handler: () => { 
+              handler: () => {
                 navigator['app'].exitApp();
               }
             }
-          ]       });
+          ]
+        });
         await alert.present();
       } else {
         this._location.back();
@@ -133,27 +134,27 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.network.netWorkCheck();
-      setTimeout(async ()=>{
+      setTimeout(async () => {
         this.languageSetting();
         this.setHeader();
-        this.localStorage.getLocalData(localKeys.USER_DETAILS).then((userDetails)=>{
-          if(userDetails) {
+        this.localStorage.getLocalData(localKeys.USER_DETAILS).then((userDetails) => {
+          if (userDetails) {
             this.profile.getUserRole(userDetails)
             this.isOrgAdmin = this.profile.isOrgAdmin;
           }
           this.getUser();
         })
-      },0)
+      }, 0)
       this.db.init();
-      setTimeout(async ()=>{
+      setTimeout(async () => {
         this.userRoles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
-      },1000);
+      }, 1000);
       setTimeout(() => {
         document.querySelector('ion-menu')?.shadowRoot?.querySelector('.menu-inner')?.setAttribute('style', 'border-radius:8px 8px 0px 0px');
       }, 2000);
 
-      this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data=>{
-        if(data){
+      this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data => {
+        if (data) {
           this.isOrgAdmin = this.profile.isOrgAdmin;
           this.isMentor = this.profile.isMentor
           this.user = data;
@@ -167,7 +168,7 @@ export class AppComponent {
             this.router.navigateByUrl(slug);
           }
         });
-    });
+      });
     });
     this.subscribeBackButton();
   }
@@ -175,42 +176,42 @@ export class AppComponent {
     this.userService.getUserValue();
   }
   languageSetting() {
-    this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
-      if(data){
-        this.translate.use(data.value);
+    this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data => {
+      if (data) {
+        this.translate.use(data);
       } else {
-      this.setLanguage('en');
+        this.setLanguage('en');
       }
     }).catch(error => {
       this.setLanguage('en');
     })
   }
 
-  setLanguage(lang){
-    this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,lang).then(data =>{
+  setLanguage(lang) {
+    this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, lang).then(data => {
       this.translate.use(lang);
     }).catch(error => {
       this.translate.use(lang)
     })
   }
 
-  logout(){
+  logout() {
     let msg = {
       header: 'LOGOUT',
       message: 'LOGOUT_CONFIRM_MESSAGE',
-      cancel:'CANCEL',
-      submit:'LOGOUT'
+      cancel: 'CANCEL',
+      submit: 'LOGOUT'
     }
     this.utilService.alertPopup(msg).then(async (data) => {
-      if(data){
+      if (data) {
         await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, "en");
         this.translate.use("en")
         await this.authService.logoutAccount();
         this.menuCtrl.enable(false);
       }
-    }).catch(error => {})
+    }).catch(error => { })
   }
-  
+
   getUser() {
     this.profile.profileDetails(false).then(profileDetails => {
       this.isOrgAdmin = this.profile.isOrgAdmin;
@@ -218,7 +219,7 @@ export class AppComponent {
       this.isMentor = this.profile.isMentor;
     })
   }
-  goToProfilePage(){
+  goToProfilePage() {
     this.menuCtrl.toggle();
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
   }
@@ -226,17 +227,17 @@ export class AppComponent {
   async menuItemAction(menu) {
     switch (menu.title) {
       case 'LANGUAGE': {
-        this.alert.create({
-          
-        })
+        this.alert.create({});
         break;
       }
       case 'CREATED_BY_ME': {
         this.router.navigate([`${CommonRoutes.CREATED_BY_ME}`]);
+        console.log("here");
         break;
       }
     }
   }
+
 
   ngOnDestroy(): void {
     if (this.userEventSubscription) {
