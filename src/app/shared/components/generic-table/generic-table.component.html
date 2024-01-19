@@ -1,7 +1,7 @@
 <div class="header-container d-flex flex-justify-space-between">
   <div class="header">{{ headingText | translate}}</div>
   <ng-content></ng-content>
-  <div *ngIf="pageSize & pageSizeOptions">
+  <div *ngIf="pageSize && pageSizeOptions">
     <mat-paginator class="paginator" [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
     (page)="onPageChange($event)">
   </mat-paginator>
