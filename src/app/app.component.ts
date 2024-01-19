@@ -22,20 +22,20 @@ import { PermissionService } from './core/services/permission/permission.service
 })
 export class AppComponent {
   showMenu: boolean = false;
-  user;
-  public appPages = [
-   { title: 'HOME', action: "home", icon: 'home', class:"hide-on-small-screen" , url: CommonRoutes.TABS+'/'+CommonRoutes.HOME},
-   { title: 'MENTORS', action: "mentor-directory", icon: 'people', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.MENTOR_DIRECTORY},
-   { title: 'DASHBOARD', action: "dashboard", icon: 'stats-chart', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.DASHBOARD },
-   { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP},
-   { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ},
-   { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
-   { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
- ];
+ user;
+ public appPages = [
+  { title: 'HOME', action: "home", icon: 'home', class:"hide-on-small-screen" , url: CommonRoutes.TABS+'/'+CommonRoutes.HOME},
+  { title: 'MENTORS', action: "mentor-directory", icon: 'people', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.MENTOR_DIRECTORY},
+  { title: 'DASHBOARD', action: "dashboard", icon: 'stats-chart', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.DASHBOARD },
+  { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP},
+  { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ},
+  { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
+  { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
+];
 
-  adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD}
-  
-  
+ adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD}
+
+
   isMentor:boolean
   isOrgAdmin:boolean
   showAlertBox = false;
@@ -64,8 +64,8 @@ export class AppComponent {
     private permissionService: PermissionService
   ) {
     this.menuSubscription = this.utilService.canIonMenuShow.subscribe(data =>{
-      this.showMenu = data
-    }
+        this.showMenu = data
+      }
     );
     this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -74,7 +74,7 @@ export class AppComponent {
     });
     this.initializeApp();
     if(Capacitor.isNativePlatform()){
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
     }
   }
 
@@ -92,11 +92,11 @@ export class AppComponent {
   }
 
   shouldHideMenu(url: string): boolean {
-    if(url.includes('/auth')){
+     if(url.includes('/auth')){
       return false;
-    }else{
-      return true
-    }
+     }else{
+       return true
+     }
   }
   subscribeBackButton() {
     this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(10,async () => {
@@ -167,7 +167,7 @@ export class AppComponent {
             this.router.navigateByUrl(slug);
           }
         });
-      });
+    });
     });
     this.subscribeBackButton();
   }
@@ -208,9 +208,9 @@ export class AppComponent {
         await this.authService.logoutAccount();
         this.menuCtrl.enable(false);
       }
-    }).catch(error => { })
+    }).catch(error => {})
   }
-
+  
   getUser() {
     this.profile.profileDetails(false).then(profileDetails => {
       this.isOrgAdmin = this.profile.isOrgAdmin;
@@ -218,7 +218,7 @@ export class AppComponent {
       this.isMentor = this.profile.isMentor;
     })
   }
-  goToProfilePage() {
+  goToProfilePage(){
     this.menuCtrl.toggle();
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
   }
@@ -226,7 +226,9 @@ export class AppComponent {
   async menuItemAction(menu) {
     switch (menu.title) {
       case 'LANGUAGE': {
-        this.alert.create({});
+        this.alert.create({
+          
+        })
         break;
       }
       case 'CREATED_BY_ME': {
@@ -235,7 +237,6 @@ export class AppComponent {
       }
     }
   }
-
 
   ngOnDestroy(): void {
     if (this.userEventSubscription) {
