@@ -358,6 +358,11 @@ ion-searchbar {
       }
 }
 
+.search-popover-config {
+  --width: 75%;
+  --height: 75%;
+}
+
 .filter-modal{
   --max-height:430px;
   --max-width: 300px;

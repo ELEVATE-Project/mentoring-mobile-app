@@ -1,0 +1,26 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="padding-top-10">
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-align-items-center">
+        <ion-col class="d-flex flex-justify-center" size="11">
+          <ion-searchbar class="search-style" debounce="1000" [(ngModel)]="searchText" (ionChange)="onSearch()" placeholder="{{control.meta.searchLabel}}"></ion-searchbar>
+        </ion-col>
+        <ion-col size="1" class="ion-text-end">
+          <ion-icon class="close-button" name="close-outline" (click)="closePopover()"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-grid>
+    <ion-row class="ion-no-padding">
+      <ion-col size="3">
+        <app-filters *ngIf="filterData" [filterData]="filterData" (filtersChanged)="filtersChanged($event)"></app-filters>
+      </ion-col>
+      <ion-col size="9" class="ion-text-end" *ngIf="tableData">
+        <app-generic-table [columnData]="columnData"  [tableData]="tableData" [totalCount]="count" (onClickEvent)='onCLickEvent($event)' (paginatorChanged)="onPaginatorChange($event)" [noDataMessage]="noDataMessage"></app-generic-table>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

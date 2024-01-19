@@ -18,6 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { map } from 'rxjs/operators';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-session',
@@ -305,7 +306,23 @@ export class CreateSessionPage implements OnInit {
       })
     }
   }
+
   compareWithFn(o1, o2) {
     return o1 === o2;
   };
+
+  formValueChanged(event){
+    let dependedControlIndex = this.formData.controls.findIndex(formControl => formControl.name === event.dependedChild)
+    let dependedControl = this.form1.myForm.get(event.dependedChild)
+    if(event.value == 'public'){
+      this.formData.controls[dependedControlIndex].validators['required'] = false
+      dependedControl.setValidators(null);
+      dependedControl.setErrors(null)
+      dependedControl.updateValueAndValidity();
+    } else {
+      this.formData.controls[dependedControlIndex].validators['required'] = true
+      dependedControl.setValidators([Validators.required]);
+      dependedControl.updateValueAndValidity();
+    }
+  }
 }

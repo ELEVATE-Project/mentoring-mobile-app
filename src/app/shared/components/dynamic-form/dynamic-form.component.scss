@@ -76,3 +76,13 @@ mat-form-field {
 mat-datepicker-toggle {
   font-size: 20px;
 }
+
+.info {
+  font-size: 24px !important;
+  margin-top: 5px;
+  z-index: 1000;
+}
+
+.popover-header {
+  font-weight: bold;
+}
