@@ -1,0 +1,23 @@
+.header {
+    font-weight: bold;
+    font-size: 17px;
+    letter-spacing: 1px;
+    color:white
+}
+.close-icon{
+    font-size: 20px; 
+}
+.wrapper-class {
+    display: flex;
+    justify-content: space-between;
+    background-color:#af3f38;
+    color:white;
+    padding: 16px;
+}
+.footer{
+    display: flex;
+    justify-content: center;
+    background-color:#af3f38;
+    color:white;
+    padding: 16px;
+}

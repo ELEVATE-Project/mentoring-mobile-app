@@ -56,6 +56,7 @@ export const urlConstants = {
         CREATED_SESSION_BY_SESSION_MANAGER:"/mentoring/v1/manage-sessions/createdSessions?page=",
         MENTEES_LIST: "/mentoring/v1/mentees/list?page=",
         MENTORS_LIST: "/mentoring/v1/mentors/list?page=",
-        FILTER_LIST: "/mentoring/v1/profile/filterList?"
+        FILTER_LIST: "/mentoring/v1/profile/filterList?",
+        DOWNLOAD_CREATED_SESSION_LIST_BY_SESSION_MANAGER:"/mentoring/v1/manage-sessions/downloadSessions?"
     }
 };

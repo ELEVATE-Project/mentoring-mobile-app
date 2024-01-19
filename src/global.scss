@@ -362,3 +362,10 @@ ion-searchbar {
   --width: 75%;
   --height: 75%;
 }
+
+.filter-modal{
+  --max-height:430px;
+  --max-width: 300px;
+  --border-radius: 6px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+}

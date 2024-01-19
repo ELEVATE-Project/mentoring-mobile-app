@@ -38,6 +38,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { SearchAndSelectComponent } from './components/search-and-select/search-and-select.component';
 import { SearchPopoverComponent } from './components/search-popover/search-popover.component';
 import { HasPermissionDirective } from './directive/permission.directive';
+import { FilterTreeComponent } from './components/filter-tree/filter-tree.component';
+import { FilterPopupComponent } from './components/filter-popup/filter-popup.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,9 @@ import { HasPermissionDirective } from './directive/permission.directive';
     SearchAndSelectComponent,
     SearchPopoverComponent,
     FiltersComponent,
-    HasPermissionDirective
+    HasPermissionDirective,
+    FilterTreeComponent,
+    FilterPopupComponent
   ],
   imports: [
     CommonModule,
@@ -109,7 +113,9 @@ import { HasPermissionDirective } from './directive/permission.directive';
     SearchAndSelectComponent,
     SearchPopoverComponent,
     FiltersComponent,
-    HasPermissionDirective
+    HasPermissionDirective,
+    FilterTreeComponent,
+    FilterPopupComponent
   ],
 })
 export class SharedModule {}
