@@ -104,7 +104,8 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   onCLickEvent(data: any) {
-    switch(data.action){
+    console.log(data)
+    switch(data.action.name){
       case 'add':
         if(!this.control.meta .multiSelect){
           this.popoverController.dismiss([data.element], this.control)
