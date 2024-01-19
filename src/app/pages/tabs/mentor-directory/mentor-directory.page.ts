@@ -103,14 +103,8 @@ export class MentorDirectoryPage implements OnInit {
     this.page = 1;
     if (this.searchText) {
       this.router.navigate([CommonRoutes.TABS + '/' + CommonRoutes.MENTOR_DIRECTORY], { queryParams: { search: this.searchText } });
-      this.getMentors();
-      this.mentors = [];
-    }
-    else {
-      this.router.navigate([CommonRoutes.TABS + '/' + CommonRoutes.MENTOR_DIRECTORY],  )
-      this.searchText='' 
-      this.getMentors();
-      this.mentors = [];
-    }
+     } 
+    this.getMentors();
+    this.mentors = [];
   }
 }
