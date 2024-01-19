@@ -127,6 +127,7 @@
     "PROCEED":"Proceed",
     "SEARCH_SESSIONS": "Search session",
     "MENTOR_SEARCH_PLACEHOLDER":"Search for mentors",
+    "MENTEE_SEARCH_PLACEHOLDER":"Search for mentees",
     "DELETE_SESSION":"Delete Session",
     "CHOOSE_YOUR_LANGUAGE":"Choose your preferred language",
     "EDUCATION_QUALIFICATION":"Education qualification",
@@ -229,10 +230,15 @@
     "USER_CANT_ACCESS_PROFILE_GO_TO_HOME_PAGE":"This mentor's profile is private. Go to the ‘All session’ tab to enroll for mentoring sessions that are available to you.",
     "SESSIONS":"Sessions",
     "MANAGE_SESSION":"Manage session",
+    "FILTER": "Filter",
+    "CLEAR_ALL": "Clear all",
     "PLEASE_UPLOAD_IMAGE_FILE":"Please, upload image file.",
     "SESSION_LIST":"Session list",
     "DOWNLOAD":"Download",
     "SEARCH_RESULT_NOT_FOUND":"Search result not found",
     "THIS_SPACE_LOOKS_EMPTY":"This space looks empty",
-    "SSESSIONS_MENTOR_SEARCH_PLACEHOLDER":"Search for sessions,mentors"
+    "SSESSIONS_MENTOR_SEARCH_PLACEHOLDER":"Search for sessions,mentors",
+    "PORTAL_ONLY_TOAST_MESSAGE": "Portal is recommended for administrative tasks",
+    "APPLY":"Apply",
+    "VIEW":"View"
 }

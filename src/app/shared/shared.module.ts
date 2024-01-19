@@ -19,7 +19,7 @@ import {
   FilterComponent,
   ExpandableCardComponent,
   PersonaSelectionCardComponent,
-  GenericProfileHeaderComponent,
+  GenericProfileHeaderComponent
 } from './components/index';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { MentorCardComponent } from './components/mentor-card/mentor-card.component';
@@ -34,7 +34,11 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
 import { GenericTableComponent } from './components/generic-table/generic-table.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { SearchAndSelectComponent } from './components/search-and-select/search-and-select.component';
+import { SearchPopoverComponent } from './components/search-popover/search-popover.component';
 import { HasPermissionDirective } from './directive/permission.directive';
+import { FilterTreeComponent } from './components/filter-tree/filter-tree.component';
+import { FilterPopupComponent } from './components/filter-popup/filter-popup.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +64,11 @@ import { HasPermissionDirective } from './directive/permission.directive';
     JoinDialogBoxComponent,
     ModelComponent,
     GenericTableComponent,
-    HasPermissionDirective
+    SearchAndSelectComponent,
+    SearchPopoverComponent,
+    HasPermissionDirective,
+    FilterTreeComponent,
+    FilterPopupComponent
   ],
   imports: [
     CommonModule,
@@ -100,7 +108,11 @@ import { HasPermissionDirective } from './directive/permission.directive';
     GenericTableComponent,
     MatTableModule,
     MatPaginatorModule,
-    HasPermissionDirective
+    SearchAndSelectComponent,
+    SearchPopoverComponent,
+    HasPermissionDirective,
+    FilterTreeComponent,
+    FilterPopupComponent
   ],
 })
 export class SharedModule {}

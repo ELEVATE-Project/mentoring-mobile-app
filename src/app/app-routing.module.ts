@@ -3,11 +3,13 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { PublicGuard } from './core/guards/canActivate/public.guard';
 import { PrivateGuard } from './core/guards/private.guard';
+import { CREATE_SESSION_FORM } from './core/constants/formConstant';
 
 const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
+    canActivate: [PrivateGuard]
   },
   {
     path: CommonRoutes.AUTH,
@@ -32,7 +34,10 @@ const routes: Routes = [
   {
     path: CommonRoutes.CREATE_SESSION,
     loadChildren: () => import('./pages/create-session/create-session.module').then( m => m.CreateSessionPageModule),
-    canActivate: [PrivateGuard]
+    canActivate: [PrivateGuard],
+    data: {
+      forms: { page: CREATE_SESSION_FORM}
+  }
   },
   {
     path: CommonRoutes.CREATED_BY_ME,

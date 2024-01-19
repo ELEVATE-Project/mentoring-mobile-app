@@ -8,11 +8,19 @@
           myForm.get(control.name).touched && myForm.get(control.name).invalid
       }"
     >
-    <ion-label
-        position="stacked"
-        *ngIf="control.label !== '' && !['rating'].includes(control.type) && !['chip'].includes(control.type)" 
-        >{{ control.label }} <span *ngIf="control?.validators['required']==true" class="star-icon-red">*</span></ion-label
-      >
+    <div *ngIf="control.label !== '' && !['rating'].includes(control.type) && !['chip'].includes(control.type) && !['search'].includes(control.type)" style="display: flex; align-items: center;">
+      <ion-label position="stacked">
+        {{ control.label }}&nbsp;<span *ngIf="control?.validators['required']==true" class="star-icon-red">*</span>
+      </ion-label>
+      <ion-icon *ngIf="control?.info" id="{{control.name}}" class="info" name="information-circle"></ion-icon>
+      <ion-popover trigger="{{control.name}}" triggerAction="hover">
+        <ng-template>
+          <ion-content class="ion-padding">
+            <div class="ion-padding-bottom" *ngFor="let info of control.info"><span class="popover-header">{{info?.header}}:</span> {{info?.message}}</div>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+    </div>
       <ion-input
         *ngIf="
           control.type==='text' && control?.isNumberOnly
@@ -32,7 +40,6 @@
             'password',
             'email',
             'number',
-            'search',
             'tel',
             'url',
             'secretCode'
@@ -127,6 +134,11 @@
         [showAddOption]="control.meta.showAddOption"
         [validators]="control.validators"
       ></app-input-chip>
+      <app-search-and-select
+        *ngIf="control.type === 'search'"
+        [formControlName]="control.name"
+        [control]="control"
+      ></app-search-and-select>
       <ion-icon
         size="small"
         slot="end"
@@ -134,14 +146,6 @@
         *ngIf="control.type === 'password' || control.showPasswordIcon"
         class="icon"
         (click)="hideShowPassword(control)"
-      ></ion-icon>
-      <ion-icon 
-      slot="end"
-      size="small"
-      name="information-circle"
-      *ngIf="control.type === 'secretCode'"
-      class="icon"
-      (click)="alertToast()"
       ></ion-icon>
       <app-star-rating
         *ngIf="control.type === 'rating'"

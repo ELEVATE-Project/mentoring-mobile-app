@@ -37,7 +37,7 @@ export class GenericTableComponent implements OnInit {
     }
   }
 
-  onCellClick(action: any, columnName: any, element: any) {
+  onCellClick(action: any, columnName?: any, element?: any) {
     let value = {
       action:action,
       columnName: columnName,

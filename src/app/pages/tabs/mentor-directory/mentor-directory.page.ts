@@ -63,7 +63,7 @@ export class MentorDirectoryPage implements OnInit {
     this.isLoaded = false;
     showLoader ? await this.loaderService.startLoader() : '';
     const config = {
-      url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText),
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + '&directory=true',
       payload: {}
     };
     try {
