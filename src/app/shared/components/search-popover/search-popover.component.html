@@ -16,10 +16,10 @@
   <ion-grid>
     <ion-row class="ion-no-padding">
       <ion-col size="3">
-        <app-filters *ngIf="filterData" [filterData]="filterData" (filtersChanged)="filtersChanged($event)"></app-filters>
+        <app-filter-tree [enableFilterHeader]="true" *ngIf="filterData" [filterData]="filterData" (filtersChanged)="filtersChanged($event)"></app-filter-tree>
       </ion-col>
       <ion-col size="9" class="ion-text-end" *ngIf="tableData">
-        <app-generic-table [columnData]="columnData"  [tableData]="tableData" [totalCount]="count" (onClickEvent)='onCLickEvent($event)' (paginatorChanged)="onPaginatorChange($event)" [noDataMessage]="noDataMessage"></app-generic-table>
+        <app-generic-table  [columnData]="columnData"  [tableData]="tableData" [totalCount]="count" (onClickEvent)='onCLickEvent($event)' (paginatorChanged)="onPaginatorChange($event)" [noDataMessage]="noDataMessage"></app-generic-table>
       </ion-col>
     </ion-row>
   </ion-grid>

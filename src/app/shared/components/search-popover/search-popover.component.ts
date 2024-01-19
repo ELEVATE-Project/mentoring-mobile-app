@@ -11,7 +11,7 @@ import { HttpService, UtilService } from 'src/app/core/services';
 })
 export class SearchPopoverComponent implements OnInit {
   @Input() control: any;
-
+  showFilterHeader = true
   columnData = [
     { name: 'index_number', displayName: 'No.', type: 'text' },
     { name: 'name', displayName: 'Name', type: 'text', sortingData: [{ sort_by: 'title', order: 'ASC', label: 'A -> Z' }, { sort_by: 'title', order: 'DESC', label: 'Z -> A' }] },
@@ -33,6 +33,7 @@ export class SearchPopoverComponent implements OnInit {
   }
   selectedFilters:any = {};
   selectedList: any=[];
+  noDataMessage: string;
 
   constructor(private popoverController: PopoverController, private util: UtilService, private httpService: HttpService) { }
 
@@ -79,6 +80,7 @@ export class SearchPopoverComponent implements OnInit {
     try {
       const data: any = await this.httpService.get(config);
       this.count = data.result.count
+      this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
       data.result.data.forEach((ele) => {
         ele.action = this.actionButtons.ADD
         ele.organization = ele?.organization?.name;
@@ -90,7 +92,7 @@ export class SearchPopoverComponent implements OnInit {
     }
   }
 
-  closePopover(event) {
+  closePopover() {
     this.popoverController.dismiss(this.selectedList);
   }
 
