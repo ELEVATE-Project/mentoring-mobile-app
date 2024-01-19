@@ -90,7 +90,7 @@ export class SearchPopoverComponent implements OnInit {
     }
   }
 
-  closePopover(event) {
+  closePopover() {
     this.popoverController.dismiss(this.selectedList);
   }
 
