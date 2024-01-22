@@ -74,7 +74,7 @@ export class SearchPopoverComponent implements OnInit {
         : '';
     const queryString = organizationsQueryParam + designationQueryParam;
     const config = {
-      url: urlConstants.API_URLS[this.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + this.searchText + queryString,
+      url: urlConstants.API_URLS[this.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + btoa(this?.searchText) + queryString,
       payload: {}
     };
     try {
