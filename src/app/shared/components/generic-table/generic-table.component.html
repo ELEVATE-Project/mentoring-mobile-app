@@ -42,7 +42,7 @@
               <ion-grid>
                 <ion-row class="d-flex flex-justify-center">
                   <div *ngFor="let buttonName of element[column.name]">
-                    <ion-button [class]="buttonName.cssColor" (click)="onCellClick(buttonName,column,element)">
+                    <ion-button [class]="buttonName.cssColor" (click)="onCellClick(buttonName.name,column,element)">
                       {{ buttonName.name | translate }}
                     </ion-button>
                   </div>
