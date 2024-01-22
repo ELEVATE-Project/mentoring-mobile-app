@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent, IonInfiniteScroll } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import {
@@ -30,14 +30,21 @@ export class MentorDirectoryPage implements OnInit {
 
   mentors = [];
   mentorsCount;
-  isLoaded : boolean = false
+  isLoaded: boolean = false;
+
   constructor(
     private router: Router,
     private loaderService: LoaderService,
-    private httpService: HttpService
-  ) { }
+    private httpService: HttpService,
+    private route: ActivatedRoute
+  ) {
+  }
 
   ngOnInit() {
+    this.route.queryParamMap.subscribe((queryParams) => {
+      this.searchText = queryParams.get('search');
+      this.searchText = this.searchText === null ? '' : this.searchText;
+    });
   }
 
   ionViewWillEnter() {
@@ -54,7 +61,7 @@ export class MentorDirectoryPage implements OnInit {
 
   async getMentors(showLoader = true) {
     this.isLoaded = false;
-    showLoader ? await this.loaderService.startLoader(): '';
+    showLoader ? await this.loaderService.startLoader() : '';
     const config = {
       url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + '&directory=true',
       payload: {}
@@ -62,11 +69,12 @@ export class MentorDirectoryPage implements OnInit {
     try {
       let data: any = await this.httpService.get(config);
       this.isLoaded = true
-      showLoader ? await this.loaderService.stopLoader(): '';
-      if(this.mentors.length && this.mentors[this.mentors.length-1].key==data.result.data[0]?.key){
-        this.mentors[this.mentors.length-1].values = this.mentors[this.mentors.length-1].values.concat(data.result.data[0].values)
+      showLoader ? await this.loaderService.stopLoader() : '';
+      if (this.mentors.length && this.mentors[this.mentors.length - 1].key == data.result.data[0]?.key) {
+        this.mentors[this.mentors.length - 1].values = this.mentors[this.mentors.length - 1].values.concat(data.result.data[0].values)
         data.result.data.shift();
         this.mentors = this.mentors.concat(data.result.data);
+
       } else {
         this.mentors = this.mentors.concat(data.result.data);
       }
@@ -75,14 +83,13 @@ export class MentorDirectoryPage implements OnInit {
     }
     catch (error) {
       // this.isLoaded = true
-      showLoader ? await this.loaderService.stopLoader(): '';
+      showLoader ? await this.loaderService.stopLoader() : '';
     }
   }
-  eventAction(event) {
-    console.log(event, "event");
+  eventAction(event){
     switch (event.type) {
       case 'cardSelect':
-        this.router.navigate([CommonRoutes.MENTOR_DETAILS,event?.data?.id]);
+        this.router.navigate([CommonRoutes.MENTOR_DETAILS, event?.data?.id]);
         break;
     }
   }
@@ -91,9 +98,12 @@ export class MentorDirectoryPage implements OnInit {
     await this.getMentors(false);
     event.target.complete();
   }
-  onSearch() {
-    this.isLoaded = false
+  onSearch(){
+    this.isLoaded = false;
     this.page = 1;
+    if (this.searchText) {
+      this.router.navigate([CommonRoutes.TABS + '/' + CommonRoutes.MENTOR_DIRECTORY], { queryParams: { search: this.searchText } });
+     } 
     this.getMentors();
     this.mentors = [];
   }
