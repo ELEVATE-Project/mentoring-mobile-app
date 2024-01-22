@@ -11,7 +11,7 @@ export class AdminWorkapceService {
 
   async createdSessionBySessionManager(obj:any) {
     const config = {
-          url:  `${urlConstants.API_URLS.CREATED_SESSION_BY_SESSION_MANAGER}${obj.page}&limit=${obj?.limit}&order=${obj?.order || ''}&sort_by=${obj?.sort_by || ''}&status=${obj?.filteredData?.status || ''}&type=${obj?.filteredData?.type || ''}&search=${(obj?.searchText)}`
+          url:  `${urlConstants.API_URLS.CREATED_SESSION_BY_SESSION_MANAGER}${obj.page}&limit=${obj?.limit}&order=${obj?.order || ''}&sort_by=${obj?.sort_by || ''}&status=${obj?.filteredData?.status || ''}&type=${obj?.filteredData?.type || ''}&search=${btoa(obj?.searchText)}`
         };
     try {
       let result = await this.httpService.get(config);
