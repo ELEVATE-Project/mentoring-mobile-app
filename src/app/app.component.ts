@@ -44,6 +44,7 @@ export class AppComponent {
   backButtonSubscription: any;
   menuSubscription: any;
   routerSubscription: any;
+  activeUrl : string;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -89,6 +90,7 @@ export class AppComponent {
       });
     }
     this.permissionService.fetchPermissions();
+    this.setActiveTab();
   }
 
   shouldHideMenu(url: string): boolean {
@@ -236,6 +238,14 @@ export class AppComponent {
         break;
       }
     }
+  }
+
+  setActiveTab() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.activeUrl = this.router.url.substring(1);
+      }
+    });
   }
 
   ngOnDestroy(): void {

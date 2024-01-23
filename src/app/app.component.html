@@ -27,13 +27,13 @@
             <ion-menu-toggle auto-hide="false" [class]="adminPage?.class" *ngIf="isOrgAdmin">
               <ion-item [routerLink]="adminPage?.url" lines="none" detail="false" (click)="menuItemAction(adminPage)">
                 <ion-icon class="side-menu-icon" slot="start" [ios]="adminPage.icon + '-outline'" [md]="adminPage.icon + '-outline'"></ion-icon>
-                <ion-label class="sub-menu-list-label"><strong>{{ adminPage.title | translate}}</strong></ion-label>
+                <ion-label class="sub-menu-list-label"><strong [ngClass]="{'active': activeUrl === adminPage?.url}">{{ adminPage.title | translate}}</strong></ion-label>
               </ion-item>
             </ion-menu-toggle>
             <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index" [class]="p?.class">
               <ion-item [routerLink]="p.url" lines="none" detail="false" (click)="menuItemAction(p)">
                 <ion-icon class="side-menu-icon" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
-                <ion-label class="sub-menu-list-label"><strong>{{ p.title | translate}}</strong></ion-label>
+                <ion-label class="sub-menu-list-label"><strong [ngClass]="{'active': activeUrl === p.url}">{{ p.title | translate}}</strong></ion-label>
               </ion-item>
             </ion-menu-toggle>
           </ion-list> 
