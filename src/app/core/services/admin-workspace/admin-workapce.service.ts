@@ -27,7 +27,7 @@ export class AdminWorkapceService {
     }
   }
   deleteSession(id:any): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let msg = {
         header: 'DELETE_SESSION',
         message: 'DELETE_CONFIRM_MSG',
@@ -37,12 +37,16 @@ export class AdminWorkapceService {
       this.utilService.alertPopup(msg).then(async data => {
         if (data) {
           let result = await this.sessionService.deleteSession(id);
-          if (result.responseCode == "OK") {
+          if (result?.responseCode == "OK") {
           this.toast.showToast(result.message, "success");
           resolve(result); 
+          }else{
+            reject(result)
           }
         }
-      }).catch(error => { })
+      }).catch(error => { 
+        reject(error)
+      })
       
     });
   }

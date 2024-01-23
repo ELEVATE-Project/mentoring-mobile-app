@@ -114,10 +114,12 @@ export class ManageSessionComponent implements OnInit {
       case 'DELETE':
         await this.adminWorkapceService.deleteSession(this.receivedEventData.element.id)
         .then((data) => {
-          if(data.responseCode == "OK"){
+          if(data?.responseCode == "OK"){
             this.fetchSessionList()
           }
         })
+        .catch((error) => {
+        });
         break;
       default:
         this.router.navigate([CommonRoutes.SESSIONS_DETAILS, this.receivedEventData.element.id]);
