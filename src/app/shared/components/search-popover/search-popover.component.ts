@@ -74,7 +74,7 @@ export class SearchPopoverComponent implements OnInit {
         : '';
     const queryString = organizationsQueryParam + designationQueryParam;
     const config = {
-      url: urlConstants.API_URLS[this.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + this.searchText + queryString,
+      url: urlConstants.API_URLS[this.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + btoa(this?.searchText) + queryString,
       payload: {}
     };
     try {
@@ -106,7 +106,7 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   onCLickEvent(data: any) {
-    switch(data.action.name){
+    switch(data.action){
       case 'add':
         if(!this.control.meta .multiSelect){
           this.popoverController.dismiss([data.element], this.control)
@@ -131,6 +131,6 @@ export class SearchPopoverComponent implements OnInit {
  async onPaginatorChange(data:any) {
     this.page = data.page;
     this.limit = data.pageSize 
-    await this.list()
+    this.tableData = await this.list()
   }
 }

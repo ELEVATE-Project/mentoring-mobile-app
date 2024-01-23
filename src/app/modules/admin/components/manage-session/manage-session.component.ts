@@ -106,9 +106,10 @@ export class ManageSessionComponent implements OnInit {
       case 'mentor_name':
         this.router.navigate([CommonRoutes.MENTOR_DETAILS, this.receivedEventData.element.mentor_id]);
         break;
-      case 'edit':
-
-      case 'delete':
+      case "EDIT":
+        this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION}`], { queryParams: { id: this.receivedEventData.element.id }});
+        break;
+      case 'DELETE':
 
       default:
         this.router.navigate([CommonRoutes.SESSIONS_DETAILS, this.receivedEventData.element.id]);

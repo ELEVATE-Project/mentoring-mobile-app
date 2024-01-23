@@ -1,6 +1,6 @@
 <ion-card (click)="onCardClick(data)" class="session-card card-shadow-bottom">
-  <span class="status-badge d-flex flex-justify-center" *ngIf="data?.status == 'LIVE'">
-    {{data?.status | titlecase}}
+  <span class="status-badge d-flex flex-justify-center" *ngIf="data?.status?.value == 'LIVE'">
+    {{data?.status?.value| titlecase}}
   </span>
   <ion-grid class="ion-no-padding">
     <ion-row>
@@ -25,9 +25,9 @@
       <ion-row class="d-flex flex-align-items-center" style="padding-left: 10px;">
         <ion-icon name="calendar-number-outline"></ion-icon>
         <div>
-          <ion-label *ngIf="startDate && data?.status=='PUBLISHED'" class="platform-date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
-          <ion-label *ngIf="startDate && data?.status=='LIVE'" class="platform-date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
-          <ion-label *ngIf="endDate && data?.status=='COMPLETED'" class="platform-date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
+          <ion-label *ngIf="startDate && data?.status?.value=='PUBLISHED'" class="platform-date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+          <ion-label *ngIf="startDate && data?.status?.value=='LIVE'" class="platform-date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+          <ion-label *ngIf="endDate && data?.status?.value=='COMPLETED'" class="platform-date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
         </div> 
       </ion-row>
       <ion-row class="d-flex flex-justify-center meeting-platform" *ngIf="!(meetingPlatform?.platform == 'OFF' && isCreator) ">
@@ -49,7 +49,7 @@
       </ion-row>
     </ion-col>
     <ion-col class="d-flex flex-justify-flex-end flex-align-items-center" style="float: right;" size="4">
-      <ion-button *ngIf="data?.status!='COMPLETED'" class="button"  [disabled]="!buttonConfig?.isEnabled && buttonConfig?.label !='ENROLL'" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
+      <ion-button *ngIf="data?.status?.value!='COMPLETED'" class="button"  [disabled]="!buttonConfig?.isEnabled && buttonConfig?.label !='ENROLL'" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
     </ion-col>
   </ion-grid>
 </ion-card>
