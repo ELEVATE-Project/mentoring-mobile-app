@@ -83,7 +83,9 @@ import { FilterPopupComponent } from './components/filter-popup/filter-popup.com
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
-    NgxMatMomentModule
+    NgxMatMomentModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   exports: [
     DynamicFormComponent,
@@ -106,8 +108,6 @@ import { FilterPopupComponent } from './components/filter-popup/filter-popup.com
     MentorCardComponent,
     JoinDialogBoxComponent,
     GenericTableComponent,
-    MatTableModule,
-    MatPaginatorModule,
     SearchAndSelectComponent,
     SearchPopoverComponent,
     HasPermissionDirective,

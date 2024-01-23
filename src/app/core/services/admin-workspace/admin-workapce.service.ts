@@ -2,12 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpService } from '../http/http.service';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
+import { UtilService } from '../util/util.service';
+import { CommonRoutes } from 'src/global.routes';
+import { SessionService } from '../session/session.service';
+import { ToastService } from '../toast.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminWorkapceService {
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService,private utilService:UtilService, private sessionService:SessionService,private toast:ToastService, private router:Router) { }
 
   async createdSessionBySessionManager(obj:any) {
     const config = {
@@ -22,6 +27,24 @@ export class AdminWorkapceService {
       return false
     }
   }
+  deleteSession(id) {
+    let msg = {
+      header: 'DELETE_SESSION',
+      message: 'DELETE_CONFIRM_MSG',
+      cancel: "DON'T_DELETE",
+      submit: 'YES_DELETE'
+    }
+    this.utilService.alertPopup(msg).then(async data => {
+      if (data) {
+        let result = await this.sessionService.deleteSession(id);
+        if (result.responseCode == "OK") {
+        this.toast.showToast(result.message, "success");
+        this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.MANAGE_SESSION}`], { replaceUrl: true });
+        }
+      }
+    }).catch(error => { })
+  }
+
 
   // async downloadcreatedSessionsBySessionManager(obj:any){
   //   const config = {
