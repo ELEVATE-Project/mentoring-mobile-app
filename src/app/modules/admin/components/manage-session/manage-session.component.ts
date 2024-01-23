@@ -112,7 +112,12 @@ export class ManageSessionComponent implements OnInit {
         this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION}`], { queryParams: { id: this.receivedEventData.element.id }});
         break;
       case 'DELETE':
-         await this.adminWorkapceService.deleteSession(this.receivedEventData.element.id);
+        await this.adminWorkapceService.deleteSession(this.receivedEventData.element.id)
+        .then((data) => {
+          if(data.responseCode == "OK"){
+            this.fetchSessionList()
+          }
+        })
         break;
       default:
         this.router.navigate([CommonRoutes.SESSIONS_DETAILS, this.receivedEventData.element.id]);

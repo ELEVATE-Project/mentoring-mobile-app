@@ -3,7 +3,6 @@ import { HttpService } from '../http/http.service';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
 import { UtilService } from '../util/util.service';
-import { CommonRoutes } from 'src/global.routes';
 import { SessionService } from '../session/session.service';
 import { ToastService } from '../toast.service';
 import { Router } from '@angular/router';
@@ -27,24 +26,27 @@ export class AdminWorkapceService {
       return false
     }
   }
-  deleteSession(id) {
-    let msg = {
-      header: 'DELETE_SESSION',
-      message: 'DELETE_CONFIRM_MSG',
-      cancel: "DON'T_DELETE",
-      submit: 'YES_DELETE'
-    }
-    this.utilService.alertPopup(msg).then(async data => {
-      if (data) {
-        let result = await this.sessionService.deleteSession(id);
-        if (result.responseCode == "OK") {
-        this.toast.showToast(result.message, "success");
-        this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.MANAGE_SESSION}`], { replaceUrl: true });
-        }
+  deleteSession(id:any): Promise<any> {
+    return new Promise((resolve) => {
+      let msg = {
+        header: 'DELETE_SESSION',
+        message: 'DELETE_CONFIRM_MSG',
+        cancel: "DON'T_DELETE",
+        submit: 'YES_DELETE'
       }
-    }).catch(error => { })
+      this.utilService.alertPopup(msg).then(async data => {
+        if (data) {
+          let result = await this.sessionService.deleteSession(id);
+          if (result.responseCode == "OK") {
+          this.toast.showToast(result.message, "success");
+          resolve(result); 
+          }
+        }
+      }).catch(error => { })
+      
+    });
   }
-
+  
 
   // async downloadcreatedSessionsBySessionManager(obj:any){
   //   const config = {
