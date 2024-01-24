@@ -30,7 +30,7 @@ export class LanguagePage implements OnInit {
 
   ngOnInit() {
     this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
-      this.selectedLanguage = data;
+      this.selectedLanguage = data.value;
     })
   }
 

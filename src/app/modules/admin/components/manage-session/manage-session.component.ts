@@ -6,6 +6,8 @@ import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admi
 import { CommonRoutes } from 'src/global.routes';
 import { ModalController } from '@ionic/angular';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
+import { UtilService } from 'src/app/core/services';
+import { SessionService } from 'src/app/core/services/session/session.service';
 
 @Component({
   selector: 'app-manage-session',
@@ -20,7 +22,7 @@ export class ManageSessionComponent implements OnInit {
     // label: 'MANAGE_SESSION'
   };
   receivedEventData: any;
-  constructor(private adminWorkapceService: AdminWorkapceService, private router: Router, private modalCtrl: ModalController) { }
+  constructor(private adminWorkapceService: AdminWorkapceService, private router: Router, private modalCtrl: ModalController,private utilService:UtilService, private sessionService:SessionService) { }
   headingText = "SESSION_LIST"
   download = "DOWNLOAD";
   page = 1;
@@ -100,7 +102,7 @@ export class ManageSessionComponent implements OnInit {
     this.fetchSessionList()
   }
 
-  onCLickEvent(data: any) {
+  async onCLickEvent(data: any) {
     this.receivedEventData = data;
     switch (this.receivedEventData.action) {
       case 'mentor_name':
@@ -110,7 +112,15 @@ export class ManageSessionComponent implements OnInit {
         this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION}`], { queryParams: { id: this.receivedEventData.element.id }});
         break;
       case 'DELETE':
-
+        await this.adminWorkapceService.deleteSession(this.receivedEventData.element.id)
+        .then((data) => {
+          if(data?.responseCode == "OK"){
+            this.fetchSessionList()
+          }
+        })
+        .catch((error) => {
+        });
+        break;
       default:
         this.router.navigate([CommonRoutes.SESSIONS_DETAILS, this.receivedEventData.element.id]);
     }
@@ -175,5 +185,7 @@ export class ManageSessionComponent implements OnInit {
   createSession(){
     this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION}`]);
   }
+
+  
 
 }
