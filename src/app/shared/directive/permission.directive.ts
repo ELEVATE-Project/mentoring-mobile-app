@@ -6,11 +6,13 @@ import { PermissionService } from 'src/app/core/services/permission/permission.s
 })
 export class HasPermissionDirective {
   @Input() set appHasPermission( permissions: any ) {
-    if (this.permissionService.hasPermission(permissions)) {
-      this.viewContainer.createEmbeddedView(this.templateRef);
-    } else {
-      this.viewContainer.clear();
-    }
+    this.permissionService.hasPermission(permissions).then((hasPermission: boolean)=>{
+      if(hasPermission){
+        this.viewContainer.createEmbeddedView(this.templateRef);
+      }else{
+        this.viewContainer.clear();
+      }
+    })
   }
 
   constructor(
