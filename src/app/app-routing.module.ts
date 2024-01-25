@@ -3,9 +3,9 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { PublicGuard } from './core/guards/canActivate/public.guard';
 import { PrivateGuard } from './core/guards/private.guard';
+import { CREATE_SESSION_FORM } from './core/constants/formConstant';
 
 const routes: Routes = [
-
   {
     path: CommonRoutes.AUTH,
     loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthPageModule),

@@ -13,6 +13,7 @@ import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { environment } from 'src/environments/environment';
 import { Capacitor } from '@capacitor/core';
 import { SwUpdate } from '@angular/service-worker';
+import { PermissionService } from './core/services/permission/permission.service';
 
 @Component({
   selector: 'app-root',
@@ -59,7 +60,8 @@ export class AppComponent {
     private _location: Location,
     private alert: AlertController,
     private screenOrientation: ScreenOrientation,
-    private swUpdate: SwUpdate
+    private swUpdate: SwUpdate,
+    private permissionService: PermissionService
   ) {
     this.menuSubscription = this.utilService.canIonMenuShow.subscribe(data =>{
         this.showMenu = data
@@ -174,7 +176,7 @@ export class AppComponent {
   languageSetting() {
     this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
       if(data){
-        this.translate.use(data);
+        this.translate.use(data.value);
       } else {
       this.setLanguage('en');
       }

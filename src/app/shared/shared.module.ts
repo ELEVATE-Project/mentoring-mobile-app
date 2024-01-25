@@ -31,6 +31,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';                                              
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import { GenericTableComponent } from './components/generic-table/generic-table.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { SearchAndSelectComponent } from './components/search-and-select/search-and-select.component';
+import { SearchPopoverComponent } from './components/search-popover/search-popover.component';
+import { HasPermissionDirective } from './directive/permission.directive';
+import { FilterTreeComponent } from './components/filter-tree/filter-tree.component';
+import { FilterPopupComponent } from './components/filter-popup/filter-popup.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +62,13 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
     MentorCardComponent,
     NumberOnlyDirective,
     JoinDialogBoxComponent,
-    ModelComponent
+    ModelComponent,
+    GenericTableComponent,
+    SearchAndSelectComponent,
+    SearchPopoverComponent,
+    HasPermissionDirective,
+    FilterTreeComponent,
+    FilterPopupComponent
   ],
   imports: [
     CommonModule,
@@ -69,7 +83,9 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
-    NgxMatMomentModule, 
+    NgxMatMomentModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   exports: [
     DynamicFormComponent,
@@ -90,7 +106,13 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
     PersonaSelectionCardComponent,
     GenericProfileHeaderComponent,
     MentorCardComponent,
-    JoinDialogBoxComponent
+    JoinDialogBoxComponent,
+    GenericTableComponent,
+    SearchAndSelectComponent,
+    SearchPopoverComponent,
+    HasPermissionDirective,
+    FilterTreeComponent,
+    FilterPopupComponent
   ],
 })
 export class SharedModule {}

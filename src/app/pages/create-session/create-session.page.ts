@@ -15,9 +15,10 @@ import { AlertController, Platform } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
-import { CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
+import { PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { map } from 'rxjs/operators';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-session',
@@ -55,6 +56,7 @@ export class CreateSessionPage implements OnInit {
   sessionDetails: any;
   entityNames:any
   entityList:any;
+  params: any;
 
   constructor(
     private http: HttpClient,
@@ -70,12 +72,14 @@ export class CreateSessionPage implements OnInit {
     private alert: AlertController,
     private form: FormService,
     private changeDetRef: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private route:ActivatedRoute
   ) {
+    this.params = this.route.snapshot?.data?.forms?.page;
   }
   async ngOnInit() {
     const platformForm = await this.getPlatformFormDetails();
-    const result = await this.form.getForm(CREATE_SESSION_FORM);
+    const result = await this.form.getForm(this.params);
     this.formData = _.get(result, 'data.fields');
     this.entityNames = await this.form.getEntityNames(this.formData)
     this.entityList = await this.form.getEntities(this.entityNames, 'SESSION')
@@ -302,7 +306,23 @@ export class CreateSessionPage implements OnInit {
       })
     }
   }
+
   compareWithFn(o1, o2) {
     return o1 === o2;
   };
+
+  formValueChanged(event){
+    let dependedControlIndex = this.formData.controls.findIndex(formControl => formControl.name === event.dependedChild)
+    let dependedControl = this.form1.myForm.get(event.dependedChild)
+    if(event.value == 'public'){
+      this.formData.controls[dependedControlIndex].validators['required'] = false
+      dependedControl.setValidators(null);
+      dependedControl.setErrors(null)
+      dependedControl.updateValueAndValidity();
+    } else {
+      this.formData.controls[dependedControlIndex].validators['required'] = true
+      dependedControl.setValidators([Validators.required]);
+      dependedControl.updateValueAndValidity();
+    }
+  }
 }

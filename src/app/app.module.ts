@@ -5,6 +5,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CommonModule } from '@angular/common';
 import {
   TranslateLoader,
   TranslateModule,
@@ -21,6 +22,8 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { ServiceWorkerModule, SwUpdate } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -29,11 +32,14 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
+    CommonModule,
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     RouterModule,
     HttpClientModule,
+    MatTableModule,
+    MatPaginatorModule,
     IonicStorageModule.forRoot({
       name: 'mentoringApp',
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage],
