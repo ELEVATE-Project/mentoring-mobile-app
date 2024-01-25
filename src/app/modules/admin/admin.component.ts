@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
-import { permissions, actions, manageSessionAction } from 'src/app/core/constants/permissionsConstant';
+import { permissions, manageSessionAction, manageUserAction } from 'src/app/core/constants/permissionsConstant';
 
 @Component({
   selector: 'app-admin',
@@ -22,14 +22,14 @@ export class AdminComponent implements OnInit {
       url: CommonRoutes.ADMIN + '/' + CommonRoutes.MANAGE_USER,
       icon: 'people-outline',
       permission: permissions.MANAGE_USER,
-      actions: [actions.GET],
+      actions: manageUserAction.USER_ACTIONS,
     },
     {
       title: 'MANAGE_SESSION',
       url: CommonRoutes.ADMIN + '/' + CommonRoutes.MANAGE_SESSION,
       icon: 'people-outline',
       permission: permissions.MANAGE_SESSION,
-      actions: manageSessionAction.MANAGE_ACTIONS,
+      actions: manageSessionAction.SESSION_ACTIONS,
     },
   ];
 

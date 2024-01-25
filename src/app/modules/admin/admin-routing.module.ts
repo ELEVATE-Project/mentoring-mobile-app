@@ -5,7 +5,7 @@ import { CommonRoutes } from "src/global.routes";
 import { ManageListComponent } from "./components/manage-list/manage-list.component";
 import { ManageSessionComponent } from "./components/manage-session/manage-session.component";
 import { PermissionGuard } from "src/app/core/guards/permission/permission.guard";
-import { permissions , actions, manageSessionAction} from 'src/app/core/constants/permissionsConstant';
+import { permissions , actions, manageSessionAction, manageUserAction} from 'src/app/core/constants/permissionsConstant';
 import { CreateSessionPage } from "src/app/pages/create-session/create-session.page";
 import { MANAGERS_CREATE_SESSION_FORM } from "src/app/core/constants/formConstant";
 
@@ -19,7 +19,7 @@ const routes: Routes = [
         component: ManageListComponent,
         canActivate: [PermissionGuard],
         data: {
-            permissions: { module: permissions.MANAGE_USER, action: [actions.GET] },
+            permissions: { module: permissions.MANAGE_USER, action: manageUserAction.USER_ACTIONS },
           },
     },
     {
@@ -27,12 +27,12 @@ const routes: Routes = [
         component: ManageSessionComponent,
         canActivate: [PermissionGuard],
         data: {
-            permissions: { module: permissions.MANAGE_SESSION, action: manageSessionAction.MANAGE_ACTIONS },
+            permissions: { module: permissions.MANAGE_SESSION, action: manageSessionAction.SESSION_ACTIONS },
         }
     },
     {
         path: CommonRoutes.MANAGERS_SESSION,
-        component: CreateSessionPage,
+        loadChildren: () => import('../../pages/create-session/create-session.module').then( m => m.CreateSessionPageModule),
         data: {
             forms: { page: MANAGERS_CREATE_SESSION_FORM }
         }
