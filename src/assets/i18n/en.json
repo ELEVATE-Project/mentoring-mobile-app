@@ -240,5 +240,6 @@
     "SSESSIONS_MENTOR_SEARCH_PLACEHOLDER":"Search for sessions,mentors",
     "PORTAL_ONLY_TOAST_MESSAGE": "Portal is recommended for administrative tasks",
     "APPLY":"Apply",
-    "VIEW":"View"
+    "VIEW":"View",
+    "ASSIGNED": "Assigned"
 }

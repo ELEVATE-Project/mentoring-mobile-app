@@ -27,6 +27,21 @@
     .session-image{
         margin-right: 20px;
     }
+    .assigned-tag{
+        background: rgb(53, 120, 184);
+        min-width: 80px;
+        height: 24px;
+        color: var(--white);
+        padding: 1px;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        border-bottom-left-radius: 10px;
+        font-size: 10px;
+    }
+    .assigned-tag-icon{
+        padding-right: 2px;
+    }
 }
 .text-align {
     overflow: hidden;

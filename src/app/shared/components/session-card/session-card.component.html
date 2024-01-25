@@ -2,6 +2,10 @@
   <span class="status-badge d-flex flex-justify-center" *ngIf="data?.status?.value == 'LIVE'">
     {{data?.status?.value| titlecase}}
   </span>
+  <span class="assigned-tag d-flex flex-justify-center" *ngIf="data?.is_assigned">
+    <ion-icon class="assigned-tag-icon" name="person-circle-sharp"></ion-icon>
+    {{"ASSIGNED"|translate}}
+  </span>
   <ion-grid class="ion-no-padding">
     <ion-row>
       <div class="session-image">
