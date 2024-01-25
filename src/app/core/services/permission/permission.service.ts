@@ -34,7 +34,7 @@ export class PermissionService {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
             if(data) {
-              resolve(data.permissions);
+              resolve(data?.permissions);
             }
           })
       } catch (error) {}
