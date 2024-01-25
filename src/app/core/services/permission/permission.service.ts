@@ -34,13 +34,10 @@ export class PermissionService {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
             if(data) {
-              this.userPermissions = data.permissions;
-              resolve(this.userPermissions);
+              resolve(data.permissions);
             }
           })
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) {}
     });
     
   }
