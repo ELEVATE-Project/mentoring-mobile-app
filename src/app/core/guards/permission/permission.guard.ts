@@ -23,13 +23,13 @@ export class PermissionGuard implements CanActivate {
       this.isMobile = utilService.isMobile()
     }
 
-  canActivate(
+  async canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean {
+  ): Promise<any> {
     const permissions = route.data.permissions ? route.data.permissions : {};
     (permissions && this.isMobile) ? this.portalOnlyAlert(): '';
-    return this.permissionService.hasPermission(permissions);
+    return (await this.permissionService.hasPermission(permissions));
   }
 
   async portalOnlyAlert(){

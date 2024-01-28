@@ -264,4 +264,23 @@ export class HttpService {
       return true;
     }
   }
+
+ async getFile(requestParam: RequestParams){
+    
+    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+    const options = {
+      url: this.baseUrl + requestParam.url,
+      headers: headers,
+      params: {},
+    };
+    return CapacitorHttp.get(options)
+      .then((data: any) => {
+        if (data.status == 200) {
+          return data;
+        } else {
+          this.handleError(data)
+          return data;
+        }
+      });
+  }
 }

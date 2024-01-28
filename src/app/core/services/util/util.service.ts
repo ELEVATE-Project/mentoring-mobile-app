@@ -7,6 +7,7 @@ import { ISocialSharing } from '../../interface/soical-sharing-interface';
 import { ModelComponent } from 'src/app/shared/components/model/model.component';
 import * as Bowser from "bowser"
 import { Subject } from 'rxjs';
+import * as Papa from 'papaparse';
 
 @Injectable({
   providedIn: 'root',
@@ -173,5 +174,20 @@ export class UtilService {
       }
     }
     return result;
+  }
+
+  parseAndDownloadCSV(rawCSVData: string, fileName: string): void {
+    Papa.parse(rawCSVData, {
+      complete: (result) => {
+        const csvContent = Papa.unparse(result.data);
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(blob);
+        downloadLink.download = fileName;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      }
+    });
   }
 }
