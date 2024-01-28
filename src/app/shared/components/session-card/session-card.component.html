@@ -1,8 +1,8 @@
 <ion-card (click)="onCardClick(data)" class="session-card card-shadow-bottom">
-  <span class="status-badge d-flex flex-justify-center" *ngIf="data?.status?.value == 'LIVE'">
+  <span class="badge-container status-badge d-flex flex-justify-center" *ngIf="data?.status?.value == 'LIVE'" [ngClass]="{'live-tag': data?.status?.value == 'LIVE' && data?.is_assigned}">
     {{data?.status?.value| titlecase}}
   </span>
-  <span class="assigned-tag d-flex flex-justify-center" *ngIf="data?.is_assigned">
+  <span class="badge-container assigned-tag d-flex flex-justify-center" *ngIf="data?.is_assigned">
     <ion-icon class="assigned-tag-icon" name="person-circle-sharp"></ion-icon>
     {{"ASSIGNED"|translate}}
   </span>
