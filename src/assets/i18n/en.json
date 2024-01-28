@@ -244,5 +244,6 @@
     "MENTEE_COUNT":"Mentee count",
     "ASSIGNED_BY":"Assigned by",
     "INVITED_BY" : "Invited by",
-    "MENTEE_LIST":"Mentee list"
+    "MENTEE_LIST":"Mentee list",
+    "ASSIGNED": "Assigned"
 }

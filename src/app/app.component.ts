@@ -88,7 +88,6 @@ export class AppComponent {
         }
       });
     }
-    this.permissionService.fetchPermissions();
   }
 
   shouldHideMenu(url: string): boolean {
