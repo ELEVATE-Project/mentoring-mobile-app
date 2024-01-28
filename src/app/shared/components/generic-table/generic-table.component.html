@@ -1,8 +1,8 @@
 <div class="header-container d-flex flex-justify-space-between">
   <div class="header">{{ headingText | translate}}</div>
-  <div *ngIf="pageSize && pageSizeOptions" class="d-flex flex-justify-space-between">
+  <div *ngIf="pageSize && pageSizeOptions" class="d-flex flex-justify-space-between ion-padding">
     <ng-content></ng-content>
-    <mat-paginator class="paginator" [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+    <mat-paginator *ngIf="showPaginator" class="paginator" [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
     (page)="onPageChange($event)">
   </mat-paginator>
   </div>

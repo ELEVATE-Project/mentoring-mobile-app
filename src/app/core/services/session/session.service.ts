@@ -225,4 +225,18 @@ export class SessionService {
     catch (error) {
     }
   }
+
+  async getEnrolledMenteeList(id){
+    const config = {
+      url:  `${urlConstants.API_URLS.ENROLLED_MENTEES_LIST}${id || ''}`,
+      payload: {}
+    };
+    try {
+      let data = await this.httpService.get(config);
+      return data.result;
+    }
+    catch (error) {
+    }
+    
+  }
 }

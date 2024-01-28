@@ -1,0 +1,7 @@
+<ion-content>
+<div *ngIf="enrolledMenteeList">
+  <app-generic-table [headingText]="headingText" [columnData]="columnData" [tableData]="enrolledMenteeList" [showPaginator]="false">
+    <div class="download"  (click)="onClickDownload()">{{ download | translate}}</div>
+  </app-generic-table>
+</div>
+</ion-content>
