@@ -23,7 +23,7 @@
       </ion-item>
       <div class="d-flex ion-no-padding" *ngIf="sessionManagerText">
         <ion-icon class="person-container" name="person"></ion-icon>
-        <p class="manager-text-container">{{ sessionManagerText | translate}} <span>{{manager_name}}</span></p> 
+        <p class="manager-text-container">{{ sessionManagerText | translate}} <span>{{detailData.data.manager_name}}</span></p> 
       </div>
     </div>
     <app-generic-details [sessionData]='detailData' (onViewList)="onViewList($event)"></app-generic-details>
