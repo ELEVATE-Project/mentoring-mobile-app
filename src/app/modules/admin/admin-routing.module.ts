@@ -8,6 +8,7 @@ import { PermissionGuard } from "src/app/core/guards/permission/permission.guard
 import { permissions , actions, manageSessionAction} from 'src/app/core/constants/permissionsConstant';
 import { CreateSessionPage } from "src/app/pages/create-session/create-session.page";
 import { MANAGERS_CREATE_SESSION_FORM } from "src/app/core/constants/formConstant";
+import { PrivateGuard } from "src/app/core/guards/private.guard";
 
 const routes: Routes = [
     {
@@ -32,9 +33,10 @@ const routes: Routes = [
     },
     {
         path: CommonRoutes.MANAGERS_SESSION,
-        component: CreateSessionPage,
+        loadChildren: () => import('../../pages/create-session/create-session.module').then( m => m.CreateSessionPageModule),
+        canActivate: [PrivateGuard],
         data: {
-            forms: { page: MANAGERS_CREATE_SESSION_FORM }
+          forms: { page: MANAGERS_CREATE_SESSION_FORM}
         }
     }
 ];
