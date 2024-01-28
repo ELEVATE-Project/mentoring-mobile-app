@@ -64,5 +64,18 @@ export class AdminWorkapceService {
     } 
   }
 
+  async downloadMenteeList(id:any){
+    const config = {
+      url:  `${urlConstants.API_URLS.ENROLLED_MENTEES_LIST}${id}?csv=true`
+    };
+    try { 
+      let result = await this.httpService.getFile(config);
+      this.utilService.parseAndDownloadCSV(result.data, "manage_session_list")
+    }
+    catch (error) {  
+    } 
+  }
+
+
   
 }

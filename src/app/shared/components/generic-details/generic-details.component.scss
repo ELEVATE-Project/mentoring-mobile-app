@@ -21,3 +21,15 @@ ion-chip{
       color: var(--dark-grey);
       margin-bottom: 5px;
   }
+
+.view-mentee-list{
+    color: #832915;
+    border: 1px solid #832915;
+    border-radius: 10px;
+}
+.mentee-count{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10px;
+}
