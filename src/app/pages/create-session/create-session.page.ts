@@ -247,11 +247,14 @@ export class CreateSessionPage implements OnInit {
       this.formData.controls[i].value =
         existingData[this.formData.controls[i].name];
       if (this.formData.controls[i].type=='search'){
-        // this.formData.controls[i].meta.searchData = []
-        // this.formData.controls[i].meta.searchData.push({
-        //   label: existingData.mentor_name+ ', '+existingData.organization.name,
-        //   value: existingData[this.formData.controls[i].name]
-        // })
+        this.formData.controls[i].meta.session_id = this.id;
+        this.formData.controls[i].meta.searchData = []
+        if(!this.formData.controls[i].meta.multiSelect){
+          this.formData.controls[i].meta.searchData.push({
+            label: existingData.mentor_name+ ', '+existingData.organization.name,
+            value: existingData[this.formData.controls[i].name]
+          })
+        }
       }
       this.formData.controls[i].options = _.unionBy(
         this.formData.controls[i].options,
