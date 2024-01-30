@@ -245,5 +245,6 @@
     "ASSIGNED_BY":"Assigned by",
     "INVITED_BY" : "Invited by",
     "MENTEE_LIST":"Mentee list",
-    "ASSIGNED": "Assigned"
+    "ASSIGNED": "Assigned",
+    "INVITED": "Invited"
 }
