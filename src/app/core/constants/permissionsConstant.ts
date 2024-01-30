@@ -1,5 +1,5 @@
 export const permissions = {
-  MANAGE_USER: 'mentor_listing',
+  MANAGE_USER: 'manage_user',
   MANAGE_SESSION: 'manage_session',
 };
 export const actions = {
@@ -16,7 +16,7 @@ export const manageSessionAction = {
 };
 export const manageUserAction = {
   USER_ACTIONS: [
-    actions.GET,
+    actions.POST,
     actions.DELETE
   ],
 };
