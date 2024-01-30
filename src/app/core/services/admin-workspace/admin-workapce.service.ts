@@ -70,7 +70,7 @@ export class AdminWorkapceService {
     };
     try { 
       let result = await this.httpService.getFile(config);
-      this.utilService.parseAndDownloadCSV(result.data, "manage_session_list")
+      this.utilService.parseAndDownloadCSV(result.data, "enrolled_mentee_list")
     }
     catch (error) {  
     } 

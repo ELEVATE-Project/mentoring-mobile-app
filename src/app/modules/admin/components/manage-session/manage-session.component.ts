@@ -8,6 +8,7 @@ import { ModalController } from '@ionic/angular';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
 import { UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
+import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-popup/mentee-list-popup.component';
 
 @Component({
   selector: 'app-manage-session',
@@ -108,6 +109,19 @@ export class ManageSessionComponent implements OnInit {
       case 'mentor_name':
         this.router.navigate([CommonRoutes.MENTOR_DETAILS, this.receivedEventData.element.mentor_id]);
         break;
+      case "mentee_count":
+        let modal = await this.modalCtrl.create({
+          component: MenteeListPopupComponent, 
+          cssClass: 'search-popover-config',
+          componentProps: { id:this.receivedEventData.element.id }
+        });
+    
+        modal.onDidDismiss().then(async (dataReturned) => {
+       
+        });
+        modal.present()
+        break;
+
       case "EDIT":
         this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION}`], { queryParams: { id: this.receivedEventData.element.id }});
         break;
@@ -122,7 +136,7 @@ export class ManageSessionComponent implements OnInit {
         });
         break;
       default:
-        this.router.navigate([CommonRoutes.SESSIONS_DETAILS, this.receivedEventData.element.id]);
+        this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION_DETAILS}`, this.receivedEventData.element.id]);
     }
   }
 
@@ -176,6 +190,7 @@ export class ManageSessionComponent implements OnInit {
         ele.action = this.actionButtons[ele?.status?.value]
         ele.status = ele?.status?.label;
         ele.type = ele?.type?.label;
+        ele.duration_in_minutes =Math.round(ele?.duration_in_minutes) 
       });
     }
     this.tableData = data;

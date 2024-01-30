@@ -38,6 +38,10 @@ const routes: Routes = [
         data: {
           forms: { page: MANAGERS_CREATE_SESSION_FORM}
         }
+    },
+    {
+        path: CommonRoutes.MANAGERS_SESSION_DETAILS,
+        loadChildren: () => import('../../pages/session-detail/session-detail.module').then( m => m.SessionDetailPageModule),
     }
 ];
 
