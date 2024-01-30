@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { Capacitor } from '@capacitor/core';
 import { SwUpdate } from '@angular/service-worker';
 import { PermissionService } from './core/services/permission/permission.service';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-root',
@@ -24,16 +25,16 @@ export class AppComponent {
   showMenu: boolean = false;
  user;
  public appPages = [
-  { title: 'HOME', action: "home", icon: 'home', class:"hide-on-small-screen" , url: CommonRoutes.TABS+'/'+CommonRoutes.HOME},
-  { title: 'MENTORS', action: "mentor-directory", icon: 'people', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.MENTOR_DIRECTORY},
-  { title: 'DASHBOARD', action: "dashboard", icon: 'stats-chart', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.DASHBOARD },
-  { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP},
-  { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ},
-  { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
-  { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
+  { title: 'HOME', action: "home", icon: 'home', class:"hide-on-small-screen" , url: CommonRoutes.TABS+'/'+CommonRoutes.HOME, active: false},
+  { title: 'MENTORS', action: "mentor-directory", icon: 'people', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.MENTOR_DIRECTORY, active: false},
+  { title: 'DASHBOARD', action: "dashboard", icon: 'stats-chart', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.DASHBOARD, active: false},
+  { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP, active: false},
+  { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ, active: false},
+  { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS , active: false},
+  { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE, active: false },
 ];
 
- adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD}
+ adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD, active:false}
 
 
   isMentor:boolean
@@ -226,6 +227,10 @@ export class AppComponent {
   }
 
   async menuItemAction(menu) {
+    this.appPages.forEach((element) => {
+      element.active = false
+    })
+    menu.active = true
     switch (menu.title) {
       case 'LANGUAGE': {
         this.alert.create({
@@ -244,6 +249,9 @@ export class AppComponent {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.activeUrl = this.router.url.substring(1);
+        let currentUrl = this.activeUrl 
+        this.appPages.forEach((element) => {
+        })
       }
     });
   }
@@ -260,7 +268,7 @@ export class AppComponent {
     }
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
-    }
+    } 
   }
   @HostListener('window:popstate', ['$event'])
   onPopState(event: any) {
