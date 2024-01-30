@@ -77,7 +77,7 @@ export class AuthService {
     this.userService.userEvent.next(this.user);
     await this.localStorage.setLocalData(localKeys.USER_DETAILS, this.user);
     await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, this.user.preferred_language.value);
-    this.translate.use(this.user.preferred_language)
+    this.translate.use(this.user.preferred_language.value)
     return this.user;
   }
 
