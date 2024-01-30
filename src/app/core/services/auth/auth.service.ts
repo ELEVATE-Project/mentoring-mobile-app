@@ -76,7 +76,7 @@ export class AuthService {
     this.profileService.isMentor = (this.user?.user_roles[0]?.title === 'mentor')
     this.userService.userEvent.next(this.user);
     await this.localStorage.setLocalData(localKeys.USER_DETAILS, this.user);
-    await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, this.user.preferred_language);
+    await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, this.user.preferred_language.value);
     this.translate.use(this.user.preferred_language)
     return this.user;
   }

@@ -1,20 +1,22 @@
 export const permissions = {
-  MANAGE_USER: 'mentor-listing',
-  MANAGE_SESSION: 'manage-sessions',
+  MANAGE_USER: 'manage_user',
+  MANAGE_SESSION: 'manage_session',
 };
 export const actions = {
   GET: 'GET',
-  CREATE: 'CREATE',
-  EDIT: 'EDIT',
-  UPDATE: 'UPDATE',
-  ALL: 'ALL',
+  POST: 'POST',
+  DELETE: 'DELETE',
+  PATCH: 'PATCH',
+  PUT: "PUT",
 };
 export const manageSessionAction = {
-  MANAGE_ACTIONS: [
-    actions.ALL,
-    actions.CREATE,
-    actions.GET,
-    actions.EDIT,
-    actions.UPDATE,
+  SESSION_ACTIONS: [
+    actions.GET
+  ],
+};
+export const manageUserAction = {
+  USER_ACTIONS: [
+    actions.POST,
+    actions.DELETE
   ],
 };

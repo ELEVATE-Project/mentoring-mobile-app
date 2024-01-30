@@ -39,6 +39,7 @@ import { SearchPopoverComponent } from './components/search-popover/search-popov
 import { HasPermissionDirective } from './directive/permission.directive';
 import { FilterTreeComponent } from './components/filter-tree/filter-tree.component';
 import { FilterPopupComponent } from './components/filter-popup/filter-popup.component';
+import { MenteeListPopupComponent } from './components/mentee-list-popup/mentee-list-popup.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { FilterPopupComponent } from './components/filter-popup/filter-popup.com
     SearchPopoverComponent,
     HasPermissionDirective,
     FilterTreeComponent,
-    FilterPopupComponent
+    FilterPopupComponent,
+    MenteeListPopupComponent
   ],
   imports: [
     CommonModule,
@@ -112,7 +114,8 @@ import { FilterPopupComponent } from './components/filter-popup/filter-popup.com
     SearchPopoverComponent,
     HasPermissionDirective,
     FilterTreeComponent,
-    FilterPopupComponent
+    FilterPopupComponent,
+    MenteeListPopupComponent
   ],
 })
 export class SharedModule {}

@@ -54,3 +54,20 @@ ion-item {
 .image-container{
     height: 200px;
 }
+.person-container{
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10px;
+}
+
+.manager-text-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    color: rgb(0, 0, 0);
+    margin-left: 6px;
+    margin-bottom: 4px;
+}

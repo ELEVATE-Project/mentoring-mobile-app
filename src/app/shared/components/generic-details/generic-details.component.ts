@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-generic-details',
@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class GenericDetailsComponent implements OnInit {
   @Input() sessionData: any;
   @Input() isMentor: any;
+  @Output() onViewList = new EventEmitter();
 
   constructor() { }
   public isArray(arr:any ) {
@@ -16,4 +17,7 @@ export class GenericDetailsComponent implements OnInit {
 
   ngOnInit() {}
 
+  onClickViewList(){
+    this.onViewList.emit()
+  }
 }

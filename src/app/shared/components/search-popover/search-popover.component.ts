@@ -10,7 +10,7 @@ import { HttpService, UtilService } from 'src/app/core/services';
   styleUrls: ['./search-popover.component.scss'],
 })
 export class SearchPopoverComponent implements OnInit {
-  @Input() control: any;
+  @Input() data: any;
   showFilterHeader = true
   columnData = [
     { name: 'index_number', displayName: 'No.', type: 'text' },
@@ -18,6 +18,7 @@ export class SearchPopoverComponent implements OnInit {
     { name: 'designation', displayName: 'Designation', type: 'array' },
     { name: 'organization', displayName: 'Organisation', type: 'text' },
     { name: 'email', displayName: 'E-mail ID', type: 'text' },
+    { name: 'enrollment_type', displayName: 'Enrollment Type', type: 'text' },
     { name: 'action', displayName: 'Actions', type: 'button' }
   ]
 
@@ -38,18 +39,19 @@ export class SearchPopoverComponent implements OnInit {
   constructor(private popoverController: PopoverController, private util: UtilService, private httpService: HttpService) { }
 
   async ngOnInit() {
+    this.selectedList = this.data.selectedData ? this.data.selectedData : this.selectedList
     this.tableData = await this.list()
     this.filterData = await this.getFilters()
-    this.filterData = this.util.getFormatedFilterData(this.filterData, this.control.meta)
+    this.filterData = this.util.getFormatedFilterData(this.filterData, this.data.control.meta)
   }
 
   async getFilters() {
     let url = ''
-    if (this.control.meta.filters.entity_types && this.control.meta.filters.entity_types.length > 0) {
-      const entityTypes = this.control.meta.filters.entity_types.map((type: any) => type.key).join(',');
+    if (this.data.control.meta.filters.entity_types && this.data.control.meta.filters.entity_types.length > 0) {
+      const entityTypes = this.data.control.meta.filters.entity_types.map((type: any) => type.key).join(',');
       url += `entity_types=${entityTypes}`;
     }
-    if (this.control.meta.filters.organizations && this.control.meta.filters.organizations[0].isEnabled) {
+    if (this.data.control.meta.filters.organizations && this.data.control.meta.filters.organizations[0].isEnabled) {
       url += `&organization=true`;
     }
     const config = {
@@ -74,17 +76,23 @@ export class SearchPopoverComponent implements OnInit {
         : '';
     const queryString = organizationsQueryParam + designationQueryParam;
     const config = {
-      url: urlConstants.API_URLS[this.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + btoa(this?.searchText) + queryString,
+      url: urlConstants.API_URLS[this.data.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + queryString,
       payload: {}
     };
     try {
       const data: any = await this.httpService.get(config);
       this.count = data.result.count
       this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
+      let selectedIds =  _.map(this.data.selectedData, 'value');
       data.result.data.forEach((ele) => {
-        ele.action = this.actionButtons.ADD
+        ele.action = _.includes(selectedIds, ele.id) ? this.actionButtons.REMOVE : this.actionButtons.ADD;
         ele.organization = ele?.organization?.name;
       });
+      if(this.data.viewMode){
+        data.result.data = data.result.data.filter(obj1 =>
+          this.selectedList.some(obj2 => obj1.id === obj2.value)
+        );        
+      }
       return data.result.data
     }
     catch (error) {
@@ -108,21 +116,24 @@ export class SearchPopoverComponent implements OnInit {
   onCLickEvent(data: any) {
     switch(data.action){
       case 'add':
-        if(!this.control.meta .multiSelect){
-          this.popoverController.dismiss([data.element], this.control)
+        if(!this.data.control.meta .multiSelect){
+          this.popoverController.dismiss([{label: data.element.name+', '+data.element.organization, value: data.element.id}])
         } else {
           const index = this.tableData.findIndex(item => item.id === data.element.id);
           this.tableData[index].action = this.actionButtons.REMOVE
-          this.selectedList.push(data.element)
+          let addedData = {label: data.element.name, value: data.element.id}
+          this.selectedList.push(addedData)
         }
         break;
 
       case 'remove':
         const index = this.tableData.findIndex(item => item.id === data.element.id);
-        this.tableData[index].action = this.actionButtons.ADD
-        const indexToRemove = this.selectedList.indexOf(data.element);
-        this.selectedList.splice(indexToRemove, 1)[0];
-
+        if(this.data.viewMode) {
+          this.tableData = this.tableData.filter(obj => obj.id !== data.element.id);
+        } else {
+          this.tableData[index].action = this.actionButtons.ADD
+        }
+        this.selectedList = this.selectedList.filter(obj => obj.value !== data.element.id);
       default:
         
     }

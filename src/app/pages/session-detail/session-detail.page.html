@@ -21,15 +21,19 @@
         <ion-label *ngIf="startDate && detailData?.data?.status?.value=='LIVE'" class="date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
         <ion-label *ngIf="endDate && detailData?.data?.status?.value=='COMPLETED'" class="date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
       </ion-item>
+      <div class="d-flex ion-no-padding" *ngIf="sessionManagerText">
+        <ion-icon class="person-container" name="person"></ion-icon>
+        <p class="manager-text-container">{{ sessionManagerText | translate}} <span>{{detailData.data.manager_name}}</span></p> 
+      </div>
     </div>
-    <app-generic-details [sessionData]='detailData'></app-generic-details>
+    <app-generic-details [sessionData]='detailData' (onViewList)="onViewList($event)"></app-generic-details>
   </ion-col>
 </ion-row>
 </ion-grid>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border" *ngIf="isLoaded && !this.userCantAccess">
-  <ion-item *ngIf="isCreator; else elseBlockFooter">
+  <ion-item *ngIf="isConductor; else elseBlockFooter">
       <ion-button *ngIf="detailData?.data?.status?.value=='PUBLISHED' || detailData?.data?.status?.value=='LIVE'" [disabled]="!isEnabled || platformOff" class="load-more-button" expand="full"
       (click)="onStart(detailData?.data?.id)">{{"START_SESSIONS" | translate}}</ion-button>
     

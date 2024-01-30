@@ -28,7 +28,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   _selectAll;
   addIconDark = {name: 'add-outline', color: 'dark'}
   closeIconLight = {name: 'close-circle-sharp', color: 'light'}
-  selectedData: any;
+  selectedData=[];
   originalLabel: any;
   icon = this.addIconDark;
   value: any[];
@@ -43,12 +43,12 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   onTouched = () => { };
 
   ngOnInit() { 
-
     this.originalLabel = this.control.label
   }
 
   writeValue(value: any[]) {
-    this.selectedData = value;
+    this.selectedData = this.control.meta.searchData ? this.control.meta.searchData : []
+    this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
   }
   registerOnChange(onChange: any) {
     this.onChange = onChange;
@@ -66,20 +66,26 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
 
   async showPopover(event) {
     this.markAsTouched();
-    console.log(this.control)
     const popover = await this.popoverCtrl.create({
       component: SearchPopoverComponent,
       cssClass: 'search-popover-config',
+      backdropDismiss: false,
       componentProps: {
-        control: this.control
+        data: {
+          selectedData: this.selectedData,
+          control: this.control,
+          showFilter: true,
+          showSearch: true,
+          viewMode: false
+        }
       }
     });
 
     popover.onDidDismiss().then((data) => {
-      if (data.data.length) {
-        this.selectedData = data.data
-        this.onChange(this.control.meta.multiSelect ? data.data.map(obj => obj.id) : data.data[0].id)
-        
+      if (data.data) {
+        this.selectedData = data.data;
+        const values = this.control.meta.multiSelect ? data.data.map(obj => obj.value) : data.data[0].value;
+        this.onChange(values);
         this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
       }
     });
@@ -94,6 +100,34 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     event.stopPropagation()
   }
 
+  async viewSelectedList() {
+    this.markAsTouched();
+    const popover = await this.popoverCtrl.create({
+      component: SearchPopoverComponent,
+      cssClass: 'search-popover-config',
+      backdropDismiss: false,
+      componentProps: {
+        data: {
+          selectedData: this.selectedData,
+          control: this.control,
+          showFilter: false,
+          showSearch: false,
+          viewMode: true
+        }
+      }
+    });
+
+    popover.onDidDismiss().then((data) => {
+      if (data.data) {
+        this.selectedData = data.data
+        const values = this.selectedData.length
+        ? (this.control.meta.multiSelect ? this.selectedData.map(obj => obj.value) : this.selectedData[0].value)
+        : (this.control.meta.multiSelect ? [] : '');
+        this.onChange(values);
+      }
+    });
+    await popover.present();
+  }
   // Your component code
 handleIconClick(event: Event): void {
   if (this.selectedData) {

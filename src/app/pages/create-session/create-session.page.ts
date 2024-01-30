@@ -246,6 +246,13 @@ export class CreateSessionPage implements OnInit {
     for (let i = 0; i < this.formData.controls.length; i++) {
       this.formData.controls[i].value =
         existingData[this.formData.controls[i].name];
+      if (this.formData.controls[i].type=='search'){
+        // this.formData.controls[i].meta.searchData = []
+        // this.formData.controls[i].meta.searchData.push({
+        //   label: existingData.mentor_name+ ', '+existingData.organization.name,
+        //   value: existingData[this.formData.controls[i].name]
+        // })
+      }
       this.formData.controls[i].options = _.unionBy(
         this.formData.controls[i].options,
         this.formData.controls[i].value, 'value'
@@ -314,7 +321,7 @@ export class CreateSessionPage implements OnInit {
   formValueChanged(event){
     let dependedControlIndex = this.formData.controls.findIndex(formControl => formControl.name === event.dependedChild)
     let dependedControl = this.form1.myForm.get(event.dependedChild)
-    if(event.value == 'public'){
+    if(event.value == "PUBLIC"){
       this.formData.controls[dependedControlIndex].validators['required'] = false
       dependedControl.setValidators(null);
       dependedControl.setErrors(null)
