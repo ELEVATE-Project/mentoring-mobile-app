@@ -76,7 +76,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
           control: this.control,
           showFilter: true,
           showSearch: true,
-          viewMode: false
+          viewListMode: false
         }
       }
     });
@@ -84,7 +84,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     popover.onDidDismiss().then((data) => {
       if (data.data) {
         this.selectedData = data.data;
-        const values = this.control.meta.multiSelect ? data.data.map(obj => obj.value) : data.data[0].value;
+        const values = this.control.meta.multiSelect ? data.data.map(obj => obj.id) : data.data[0].id;
         this.onChange(values);
         this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
       }
@@ -112,7 +112,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
           control: this.control,
           showFilter: false,
           showSearch: false,
-          viewMode: true
+          viewListMode: true
         }
       }
     });
@@ -121,7 +121,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
       if (data.data) {
         this.selectedData = data.data
         const values = this.selectedData.length
-        ? (this.control.meta.multiSelect ? this.selectedData.map(obj => obj.value) : this.selectedData[0].value)
+        ? (this.control.meta.multiSelect ? this.selectedData.map(obj => obj.id) : this.selectedData[0].id)
         : (this.control.meta.multiSelect ? [] : '');
         this.onChange(values);
       }

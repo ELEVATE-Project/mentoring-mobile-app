@@ -40,9 +40,14 @@ export class SearchPopoverComponent implements OnInit {
 
   async ngOnInit() {
     this.selectedList = this.data.selectedData ? this.data.selectedData : this.selectedList
-    this.tableData = await this.list()
-    this.filterData = await this.getFilters()
-    this.filterData = this.util.getFormatedFilterData(this.filterData, this.data.control.meta)
+    if (this.data.viewListMode) {
+      this.tableData = this.selectedList
+      this.filterData = [];
+    } else {
+      this.tableData = await this.getMenteelist();
+      this.filterData = await this.getFilters();
+      this.filterData = this.util.getFormatedFilterData(this.filterData, this.data.control.meta);
+    }    
   }
 
   async getFilters() {
@@ -67,7 +72,7 @@ export class SearchPopoverComponent implements OnInit {
     }
   }
 
-  async list() {
+  async getMenteelist() {
     const organizationsQueryParam = this.selectedFilters && this.selectedFilters.organizations
     ? '&organization_ids=' + this.selectedFilters.organizations.map(org => org.id).join(',')
     : '';
@@ -83,16 +88,11 @@ export class SearchPopoverComponent implements OnInit {
       const data: any = await this.httpService.get(config);
       this.count = data.result.count
       this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
-      let selectedIds =  _.map(this.data.selectedData, 'value');
+      let selectedIds =  _.map(this.selectedList, 'id');
       data.result.data.forEach((ele) => {
         ele.action = _.includes(selectedIds, ele.id) ? this.actionButtons.REMOVE : this.actionButtons.ADD;
         ele.organization = ele?.organization?.name;
       });
-      if(this.data.viewMode){
-        data.result.data = data.result.data.filter(obj1 =>
-          this.selectedList.some(obj2 => obj1.id === obj2.value)
-        );        
-      }
       return data.result.data
     }
     catch (error) {
@@ -106,34 +106,34 @@ export class SearchPopoverComponent implements OnInit {
 
   async filtersChanged(event) {
     this.selectedFilters = event
-    this.tableData = await this.list()
+    this.tableData = await this.getMenteelist()
   }
 
   async onSearch(){
-    this.tableData = await this.list()
+    this.tableData = await this.getMenteelist()
   }
 
   onCLickEvent(data: any) {
     switch(data.action){
       case 'add':
         if(!this.data.control.meta .multiSelect){
-          this.popoverController.dismiss([{label: data.element.name+', '+data.element.organization, value: data.element.id}])
+          this.popoverController.dismiss([{label: data.element.name+', '+data.element.organization, id: data.element.id, data: data.element}])
         } else {
           const index = this.tableData.findIndex(item => item.id === data.element.id);
           this.tableData[index].action = this.actionButtons.REMOVE
-          let addedData = {label: data.element.name, value: data.element.id}
+          let addedData = data.element
           this.selectedList.push(addedData)
         }
         break;
 
       case 'remove':
         const index = this.tableData.findIndex(item => item.id === data.element.id);
-        if(this.data.viewMode) {
+        if(this.data.viewListMode) {
           this.tableData = this.tableData.filter(obj => obj.id !== data.element.id);
         } else {
           this.tableData[index].action = this.actionButtons.ADD
         }
-        this.selectedList = this.selectedList.filter(obj => obj.value !== data.element.id);
+        this.selectedList = this.selectedList.filter(obj => obj.id !== data.element.id);
       default:
         
     }
@@ -142,6 +142,6 @@ export class SearchPopoverComponent implements OnInit {
  async onPaginatorChange(data:any) {
     this.page = data.page;
     this.limit = data.pageSize 
-    this.tableData = await this.list()
+    this.tableData = await this.getMenteelist()
   }
 }
