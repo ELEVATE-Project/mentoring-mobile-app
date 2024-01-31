@@ -42,7 +42,7 @@ export class MenteeListPopupComponent implements OnInit {
     let data = await this.sessionService.getEnrolledMenteeList(this.id)
     if (data) {
       data.forEach((ele) => {
-        ele.organization = ele?.organization?.label;
+        ele.organization = ele?.organization?.name;
       });
     }
     this.enrolledMenteeList = data;

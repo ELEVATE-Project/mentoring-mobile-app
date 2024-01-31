@@ -21,7 +21,7 @@
         <ion-label *ngIf="startDate && detailData?.data?.status?.value=='LIVE'" class="date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
         <ion-label *ngIf="endDate && detailData?.data?.status?.value=='COMPLETED'" class="date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
       </ion-item>
-      <div class="d-flex ion-no-padding" *ngIf="sessionManagerText">
+      <div class="d-flex ion-no-padding" *ngIf="sessionManagerText && detailData.data.manager_name">
         <ion-icon class="person-container" name="person"></ion-icon>
         <p class="manager-text-container">{{ sessionManagerText | translate}} <span>{{detailData.data.manager_name}}</span></p> 
       </div>

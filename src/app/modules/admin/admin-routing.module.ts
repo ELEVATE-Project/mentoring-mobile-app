@@ -39,6 +39,10 @@ const routes: Routes = [
           forms: { page: MANAGERS_CREATE_SESSION_FORM},
           permissions: { module: permissions.MANAGE_SESSION, action: manageSessionAction.SESSION_ACTIONS },
         }
+    },
+    {
+        path: CommonRoutes.MANAGERS_SESSION_DETAILS,
+        loadChildren: () => import('../../pages/session-detail/session-detail.module').then( m => m.SessionDetailPageModule),
     }
 ];
 
