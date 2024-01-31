@@ -41,6 +41,10 @@ export class SearchPopoverComponent implements OnInit {
   async ngOnInit() {
     this.selectedList = this.data.selectedData ? this.data.selectedData : this.selectedList
     if (this.data.viewListMode) {
+      this.selectedList.forEach((ele) => {
+        ele.action = this.actionButtons.REMOVE;
+        ele.organization = ele?.organization?.name;
+      });
       this.tableData = this.selectedList
       this.filterData = [];
     } else {
