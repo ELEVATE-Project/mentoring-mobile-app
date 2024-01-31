@@ -246,38 +246,33 @@ export class AppComponent {
 
   setActiveTab() {
     this.router.events.subscribe(event => {
-      if(event instanceof NavigationEnd) {
+      if (event instanceof NavigationEnd) {
         this.activeUrl = this.router.url.substring(1);
         //using the children array from apppage object
         this.appPages.forEach((element) => {
           let checkUrl = [];
-          if (element.childrens && element.childrens.length > 0) {
-            element.childrens.forEach((el) => {
-              checkUrl.push(el);
-            });
-            const isChildActive = checkUrl.some((child) => this.activeUrl.includes(child));
-            if (isChildActive) {
-              element.active = element.title === 'MENTORS' || element.title === 'HOME';
-            } else {
+          switch (true) {
+            case (element.childrens && element.childrens.length > 0):
+              element.childrens.forEach((el) => {
+                checkUrl.push(el);
+              });
+              const isChildActive = checkUrl.some((child) => this.activeUrl.includes(child));
+              element.active = (isChildActive && (element.title === 'MENTORS' || element.title === 'HOME') ) || (this.activeUrl === element.url)
+              break;
+            default:
               element.active = this.activeUrl === element.url;
-            }
-          }
-          else {
-            element.active = this.activeUrl === element.url
           }
         });
-        let adminUrl = []
+        let adminUrl = [];
         this.adminPage.childrens.forEach((el) => {
           adminUrl.push(el);
         });
         const isAdminChildActive = adminUrl.some((child) => this.activeUrl.includes(child));
-        if(isAdminChildActive) {
-          this.adminPage.active = this.adminPage.title === 'ADMIN_WORKSPACE'
-        }
+        this.adminPage.active = isAdminChildActive && (this.adminPage.title === 'ADMIN_WORKSPACE');
       }
     })
   }
-
+  
   ngOnDestroy(): void {
     if (this.userEventSubscription) {
       this.userEventSubscription.unsubscribe();
