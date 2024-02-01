@@ -31,19 +31,6 @@ const routes: Routes = [
             permissions: { module: permissions.MANAGE_SESSION, action: manageSessionAction.SESSION_ACTIONS },
         }
     },
-    {
-        path: CommonRoutes.MANAGERS_SESSION,
-        loadChildren: () => import('../../pages/create-session/create-session.module').then( m => m.CreateSessionPageModule),
-        canActivate: [PermissionGuard],
-        data: {
-          forms: { page: MANAGERS_CREATE_SESSION_FORM},
-          permissions: { module: permissions.MANAGE_SESSION, action: manageSessionAction.SESSION_ACTIONS },
-        }
-    },
-    {
-        path: CommonRoutes.MANAGERS_SESSION_DETAILS,
-        loadChildren: () => import('../../pages/session-detail/session-detail.module').then( m => m.SessionDetailPageModule),
-    }
 ];
 
 @NgModule({
