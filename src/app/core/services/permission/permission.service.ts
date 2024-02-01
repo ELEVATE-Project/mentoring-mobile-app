@@ -12,11 +12,7 @@ export class PermissionService {
   constructor(private localStorage: LocalStorageService){}
 
   async hasPermission(permissions: any): Promise <boolean> {
-    if(!this.userPermissions.length){
-      await this.fetchPermissions().then((res) =>{
-        this.userPermissions = res;
-      })
-    }
+    await this.fetchPermissions();
     for (let userPermission of this.userPermissions) {
       if (permissions && userPermission.request_type.length && permissions.module === userPermission.module) {
         if (permissions.action.every((value: any) => userPermission.request_type.includes(value))) {
@@ -34,11 +30,15 @@ export class PermissionService {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
             if(data) {
+              this.userPermissions = data?.permissions;
               resolve(data?.permissions);
             }
           })
       } catch (error) {}
     });
     
+  }
+  hasAdminAcess(permissionArray,userPermissions): boolean {
+    return permissionArray.some(action => userPermissions.some(permission => permission.module === action.module));
   }
 }

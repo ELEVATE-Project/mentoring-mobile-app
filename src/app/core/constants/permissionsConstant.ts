@@ -20,3 +20,13 @@ export const manageUserAction = {
     actions.DELETE
   ],
 };
+export const permissionModule = {
+  MODULES: [
+    {
+      module: permissions.MANAGE_USER
+    },
+    {
+      module: permissions.MANAGE_SESSION
+    }
+  ]
+}

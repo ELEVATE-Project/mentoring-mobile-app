@@ -21,7 +21,6 @@ import { FormService } from 'src/app/core/services/form/form.service';
 })
 export class ProfileService {
   isMentor: boolean;
-  isOrgAdmin: any;
   constructor(
     private httpService: HttpService,
     private loaderService: LoaderService,
@@ -162,7 +161,6 @@ export class ProfileService {
       return item['title'];
     });
     this.isMentor = roles.includes('mentor')?true:false;
-    this.isOrgAdmin = roles.includes('org_admin')?true:false;
     return roles
   }
 
