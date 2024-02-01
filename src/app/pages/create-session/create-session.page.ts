@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AttachmentService, LoaderService, ToastService } from 'src/app/core/services';
+import { AttachmentService, LoaderService, ToastService, UtilService } from 'src/app/core/services';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import {
@@ -15,10 +15,12 @@ import { AlertController, Platform } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
-import { PLATFORMS } from 'src/app/core/constants/formConstant';
+import { CREATE_SESSION_FORM, MANAGERS_CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { map } from 'rxjs/operators';
 import { Validators } from '@angular/forms';
+import { manageSessionAction, permissions } from 'src/app/core/constants/permissionsConstant';
+import { PermissionService } from 'src/app/core/services/permission/permission.service';
 
 @Component({
   selector: 'app-create-session',
@@ -73,11 +75,13 @@ export class CreateSessionPage implements OnInit {
     private form: FormService,
     private changeDetRef: ChangeDetectorRef,
     private router: Router,
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private utilService:UtilService,
+    private permissionService:PermissionService
   ) {
-    this.params = this.route.snapshot?.data?.forms?.page;
   }
   async ngOnInit() {
+    let formPage =(await this.permissionService.hasPermission({ module: permissions.MANAGE_SESSION, action: manageSessionAction.SESSION_ACTIONS })) ? MANAGERS_CREATE_SESSION_FORM : CREATE_SESSION_FORM
     const platformForm = await this.getPlatformFormDetails();
     // const result = await this.form.getForm(this.params);
     // this.formData = _.get(result, 'data.fields');

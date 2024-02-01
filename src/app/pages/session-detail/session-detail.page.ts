@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { App, AppState } from '@capacitor/app';
 import { Clipboard } from '@capacitor/clipboard';
 import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-popup/mentee-list-popup.component';
+import { EventListenerFocusTrapInertStrategy } from '@angular/cdk/a11y';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class SessionDetailPage implements OnInit {
   userCantAccess:any = true;
   enrolledMenteeList:any;
   sessionManagerText="";
+ activeUrl:any;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -171,15 +173,15 @@ export class SessionDetailPage implements OnInit {
       this.startDate = (response.start_date>0)?moment.unix(response.start_date).toLocaleString():this.startDate;
       this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
-      if(this.isCreator){
+      if((this.isCreator || this.isConductor) && !this.detailData.form.some(obj => obj.title === 'MENTEE_COUNT')){
+        
         this.detailData.form.push(
           {
             title: 'MENTEE_COUNT',
             key: 'mentee_count',
           },
         );
-      }
-     
+      } 
     }
     if((response?.meeting_info?.platform == 'OFF') && this.isConductor && response?.status?.value=='PUBLISHED'){
       this.showToasts('ADD_MEETING_LINK', 0 , [
@@ -203,7 +205,7 @@ export class SessionDetailPage implements OnInit {
   setPageHeader(response) {
     let currentTimeInSeconds=Math.floor(Date.now()/1000);
     this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response?.status?.value=='LIVE')?true:false;
-      this.headerConfig.share = response?.status?.value=="COMPLETED"?false:true;
+      this.headerConfig.share = (response?.status?.value=="COMPLETED" || response.type.value == "PRIVATE")?false:true;
       this.id = response.id;
       if(this.userDetails){
         this.isConductor = this.userDetails.id == response.mentor_id ? true : false;
@@ -253,7 +255,12 @@ export class SessionDetailPage implements OnInit {
   };
 
   editSession() {
-    this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id } });
+    this.activeUrl = this.router.url;
+    if(this.activeUrl.includes('/admin/managers-session-details')){
+      this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION}`], { queryParams: { id: this.id }});
+    }else{
+      this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id } });
+    }
   }
 
   deleteSession() {
@@ -342,7 +349,7 @@ export class SessionDetailPage implements OnInit {
   async onViewList($event){
      
     let modal = await this.modalCtrl.create({
-      component: MenteeListPopupComponent,
+      component: MenteeListPopupComponent, 
       cssClass: 'search-popover-config',
       componentProps: { id:this.id }
     });

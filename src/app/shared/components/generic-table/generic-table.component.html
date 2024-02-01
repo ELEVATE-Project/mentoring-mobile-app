@@ -27,7 +27,7 @@
       <ng-container>
         <div *ngIf="column.type == 'text'">
           <td mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">{{
-            element[column.name] }}</td>
+            element[column.name] | translate }}</td>
         </div>
         <div *ngIf="column.type == 'array'">
           <td mat-cell (click)="onCellClick(column.name,element)" *matCellDef="let element">
