@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
 import { Capacitor } from '@capacitor/core';
 import { SwUpdate } from '@angular/service-worker';
 import { PermissionService } from './core/services/permission/permission.service';
-import { permissions } from './core/constants/permissionsConstant';
+import { permissionModule } from './core/constants/permissionsConstant';
 
 @Component({
   selector: 'app-root',
@@ -36,14 +36,7 @@ export class AppComponent {
 
  adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD}
 
- actionsArrays: any[] = [
-  {
-    module: permissions.MANAGE_USER
-  },
-  {
-    module: permissions.MANAGE_SESSION
-  }
- ]
+ actionsArrays: any[] = permissionModule.MODULES;
 
   isMentor:boolean
   showAlertBox = false;
@@ -164,7 +157,7 @@ export class AppComponent {
         if(data){
           this.isMentor = this.profile.isMentor
           this.user = data;
-          this.adminAccess = this.permissionService.hasAdminAcess(this.actionsArrays,data?.permissions);
+          // this.adminAccess = this.permissionService.hasAdminAcess(this.actionsArrays,data?.permissions);
         }
       })
       App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
