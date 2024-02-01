@@ -251,7 +251,6 @@ export class CreateSessionPage implements OnInit {
       this.formData.controls[i].value =
         existingData[this.formData.controls[i].name];
       if (this.formData.controls[i].type=='search'){
-        this.formData.controls[i].meta.session_id = this.id;
         if(this.formData.controls[i].meta.multiSelect){
           this.formData.controls[i].meta.searchData = existingData[this.formData.controls[i].name]
           this.formData.controls[i].value = this.formData.controls[i].meta.searchData.map(obj => obj.id);
