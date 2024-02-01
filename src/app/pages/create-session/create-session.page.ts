@@ -18,7 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CREATE_SESSION_FORM, MANAGERS_CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { map } from 'rxjs/operators';
-import { AbstractControl, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { manageSessionAction, permissions } from 'src/app/core/constants/permissionsConstant';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 
@@ -339,7 +339,7 @@ export class CreateSessionPage implements OnInit {
     }
   }
   
-  setControlValidity(index: number, control: AbstractControl, required: boolean) {
+  setControlValidity(index, control, required) {
     this.formData.controls[index].validators['required'] = required;
     control.setValidators(required ? [Validators.required] : null);
     control.updateValueAndValidity();
