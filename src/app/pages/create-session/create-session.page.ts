@@ -85,7 +85,6 @@ export class CreateSessionPage implements OnInit {
     const platformForm = await this.getPlatformFormDetails();
     const result = await this.form.getForm(formConfig);
     this.formData = _.get(result, 'data.fields');
-    console.log(this.formData)
     this.entityNames = await this.form.getEntityNames(this.formData)
     this.entityList = await this.form.getEntities(this.entityNames, 'SESSION')
     this.formData = await this.form.populateEntity(this.formData,this.entityList)
