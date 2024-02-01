@@ -24,16 +24,16 @@ export class AppComponent {
   showMenu: boolean = false;
  user;
  public appPages = [
-  { title: 'HOME', action: "home", icon: 'home', class:"hide-on-small-screen" , url: CommonRoutes.TABS+'/'+CommonRoutes.HOME},
-  { title: 'MENTORS', action: "mentor-directory", icon: 'people', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.MENTOR_DIRECTORY},
-  { title: 'DASHBOARD', action: "dashboard", icon: 'stats-chart', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.DASHBOARD },
-  { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP},
-  { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ},
-  { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
-  { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
+  { title: 'HOME', action: "home", icon: 'home', class:"hide-on-small-screen" , url: CommonRoutes.TABS+'/'+CommonRoutes.HOME, active: false, childrens : ['session-detail', 'home-search']},
+  { title: 'MENTORS', action: "mentor-directory", icon: 'people', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.MENTOR_DIRECTORY, active: false, childrens : ['mentor-profile', 'mentor-directory?search']},
+  { title: 'DASHBOARD', action: "dashboard", icon: 'stats-chart', class:"hide-on-small-screen", url: CommonRoutes.TABS+'/'+CommonRoutes.DASHBOARD, active: false},
+  { title: 'HELP', action: "help", icon: 'help-circle', url: CommonRoutes.HELP, active: false},
+  { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ, active: false},
+  { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS , active: false},
+  { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE, active: false },
 ];
 
- adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD}
+ adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD, active:false, childrens : ['manage-user', 'manage-session', 'admin']}
 
 
   isMentor:boolean
@@ -44,6 +44,7 @@ export class AppComponent {
   backButtonSubscription: any;
   menuSubscription: any;
   routerSubscription: any;
+  activeUrl : string;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -88,8 +89,10 @@ export class AppComponent {
         }
       });
     }
+    this.permissionService.fetchPermissions();
+    this.setActiveTab();
   }
-
+  
   shouldHideMenu(url: string): boolean {
      if(url.includes('/auth')){
       return false;
@@ -223,6 +226,10 @@ export class AppComponent {
   }
 
   async menuItemAction(menu) {
+    this.appPages.forEach((element) => {
+      element.active = false
+    })
+    menu.active = true
     switch (menu.title) {
       case 'LANGUAGE': {
         this.alert.create({
@@ -237,6 +244,35 @@ export class AppComponent {
     }
   }
 
+  setActiveTab() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.activeUrl = this.router.url.substring(1);
+        //using the children array from apppage object
+        this.appPages.forEach((element) => {
+          let checkUrl = [];
+          switch (true) {
+            case (element.childrens && element.childrens.length > 0):
+              element.childrens.forEach((el) => {
+                checkUrl.push(el);
+              });
+              const isChildActive = checkUrl.some((child) => this.activeUrl.includes(child));
+              element.active = (isChildActive && (element.title === 'MENTORS' || element.title === 'HOME') ) || (this.activeUrl === element.url)
+              break;
+            default:
+              element.active = this.activeUrl === element.url;
+          }
+        });
+        let adminUrl = [];
+        this.adminPage.childrens.forEach((el) => {
+          adminUrl.push(el);
+        });
+        const isAdminChildActive = adminUrl.some((child) => this.activeUrl.includes(child));
+        this.adminPage.active = isAdminChildActive && (this.adminPage.title === 'ADMIN_WORKSPACE');
+      }
+    })
+  }
+  
   ngOnDestroy(): void {
     if (this.userEventSubscription) {
       this.userEventSubscription.unsubscribe();
@@ -249,7 +285,7 @@ export class AppComponent {
     }
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
-    }
+    } 
   }
   @HostListener('window:popstate', ['$event'])
   onPopState(event: any) {
