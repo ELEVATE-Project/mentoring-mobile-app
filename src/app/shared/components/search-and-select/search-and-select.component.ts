@@ -3,7 +3,7 @@ import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-import { PopoverController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash-es';
 import { SearchPopoverComponent } from '../search-popover/search-popover.component';
@@ -34,7 +34,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   value: any[];
 
   constructor(
-    private popoverCtrl: PopoverController,
+    private modalCtrl: ModalController,
     private translateService: TranslateService
   ) { }
 
@@ -66,7 +66,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
 
   async showPopover(event) {
     this.markAsTouched();
-    const popover = await this.popoverCtrl.create({
+    const popover = await this.modalCtrl.create({
       component: SearchPopoverComponent,
       cssClass: 'search-popover-config',
       backdropDismiss: false,
@@ -102,7 +102,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
 
   async viewSelectedList() {
     this.markAsTouched();
-    const popover = await this.popoverCtrl.create({
+    const popover = await this.modalCtrl.create({
       component: SearchPopoverComponent,
       cssClass: 'search-popover-config',
       backdropDismiss: false,
@@ -124,6 +124,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
         ? (this.control.meta.multiSelect ? this.selectedData.map(obj => obj.id) : this.selectedData[0].id)
         : (this.control.meta.multiSelect ? [] : '');
         this.onChange(values);
+        this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
       }
     });
     await popover.present();

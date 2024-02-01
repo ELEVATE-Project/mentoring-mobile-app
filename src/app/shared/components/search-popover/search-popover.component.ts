@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import * as _ from 'lodash';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, UtilService } from 'src/app/core/services';
@@ -18,7 +18,7 @@ export class SearchPopoverComponent implements OnInit {
     { name: 'designation', displayName: 'Designation', type: 'array' },
     { name: 'organization', displayName: 'Organisation', type: 'text' },
     { name: 'email', displayName: 'E-mail ID', type: 'text' },
-    { name: 'enrollment_type', displayName: 'Enrollment Type', type: 'text' },
+    { name: 'type', displayName: 'Enrollment Type', type: 'text' },
     { name: 'action', displayName: 'Actions', type: 'button' }
   ]
 
@@ -36,7 +36,7 @@ export class SearchPopoverComponent implements OnInit {
   selectedList: any=[];
   noDataMessage: string;
 
-  constructor(private popoverController: PopoverController, private util: UtilService, private httpService: HttpService) { }
+  constructor(private modalController: ModalController, private util: UtilService, private httpService: HttpService) { }
 
   async ngOnInit() {
     this.selectedList = this.data.selectedData ? this.data.selectedData : this.selectedList
@@ -105,7 +105,7 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   closePopover() {
-    this.popoverController.dismiss(this.selectedList);
+    this.modalController.dismiss(this.selectedList);
   }
 
   async filtersChanged(event) {
@@ -121,7 +121,7 @@ export class SearchPopoverComponent implements OnInit {
     switch(data.action){
       case 'add':
         if(!this.data.control.meta .multiSelect){
-          this.popoverController.dismiss([{label: data.element.name+', '+data.element.organization, id: data.element.id, data: data.element}])
+          this.modalController.dismiss([{label: data.element.name+', '+data.element.organization, id: data.element.id, data: data.element}])
         } else {
           const index = this.tableData.findIndex(item => item.id === data.element.id);
           this.tableData[index].action = this.actionButtons.REMOVE

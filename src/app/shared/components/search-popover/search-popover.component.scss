@@ -10,5 +10,6 @@
     margin: 15px;
 }
 .col-width-25 {
-    width: 25%;
+    max-width: 25%;
+    overflow: scroll;
 }
