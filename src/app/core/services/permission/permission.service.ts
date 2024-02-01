@@ -38,4 +38,7 @@ export class PermissionService {
     });
     
   }
+  hasAdminAcess(permissionArray,userPermissions): boolean {
+    return permissionArray.some(action => userPermissions.some(permission => permission.module === action.module));
+  }
 }
