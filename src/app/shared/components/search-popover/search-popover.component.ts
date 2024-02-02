@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import * as _ from 'lodash';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, UtilService } from 'src/app/core/services';
@@ -18,7 +18,7 @@ export class SearchPopoverComponent implements OnInit {
     { name: 'designation', displayName: 'Designation', type: 'array' },
     { name: 'organization', displayName: 'Organisation', type: 'text' },
     { name: 'email', displayName: 'E-mail ID', type: 'text' },
-    { name: 'enrollment_type', displayName: 'Enrollment Type', type: 'text' },
+    { name: 'type', displayName: 'Enrollment Type', type: 'text' },
     { name: 'action', displayName: 'Actions', type: 'button' }
   ]
 
@@ -36,13 +36,22 @@ export class SearchPopoverComponent implements OnInit {
   selectedList: any=[];
   noDataMessage: string;
 
-  constructor(private popoverController: PopoverController, private util: UtilService, private httpService: HttpService) { }
+  constructor(private modalController: ModalController, private util: UtilService, private httpService: HttpService) { }
 
   async ngOnInit() {
     this.selectedList = this.data.selectedData ? this.data.selectedData : this.selectedList
-    this.tableData = await this.list()
-    this.filterData = await this.getFilters()
-    this.filterData = this.util.getFormatedFilterData(this.filterData, this.data.control.meta)
+    if (this.data.viewListMode) {
+      this.selectedList.forEach((ele) => {
+        ele.action = this.actionButtons.REMOVE;
+        ele.organization = ele?.organization?.name;
+      });
+      this.tableData = this.selectedList
+      this.filterData = [];
+    } else {
+      this.tableData = await this.getMenteelist();
+      this.filterData = await this.getFilters();
+      this.filterData = this.util.getFormatedFilterData(this.filterData, this.data.control.meta);
+    }    
   }
 
   async getFilters() {
@@ -67,7 +76,7 @@ export class SearchPopoverComponent implements OnInit {
     }
   }
 
-  async list() {
+  async getMenteelist() {
     const organizationsQueryParam = this.selectedFilters && this.selectedFilters.organizations
     ? '&organization_ids=' + this.selectedFilters.organizations.map(org => org.id).join(',')
     : '';
@@ -83,16 +92,11 @@ export class SearchPopoverComponent implements OnInit {
       const data: any = await this.httpService.get(config);
       this.count = data.result.count
       this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
-      let selectedIds =  _.map(this.data.selectedData, 'value');
+      let selectedIds =  _.map(this.selectedList, 'id');
       data.result.data.forEach((ele) => {
         ele.action = _.includes(selectedIds, ele.id) ? this.actionButtons.REMOVE : this.actionButtons.ADD;
         ele.organization = ele?.organization?.name;
       });
-      if(this.data.viewMode){
-        data.result.data = data.result.data.filter(obj1 =>
-          this.selectedList.some(obj2 => obj1.id === obj2.value)
-        );        
-      }
       return data.result.data
     }
     catch (error) {
@@ -101,39 +105,39 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   closePopover() {
-    this.popoverController.dismiss(this.selectedList);
+    this.modalController.dismiss(this.selectedList);
   }
 
   async filtersChanged(event) {
     this.selectedFilters = event
-    this.tableData = await this.list()
+    this.tableData = await this.getMenteelist()
   }
 
   async onSearch(){
-    this.tableData = await this.list()
+    this.tableData = await this.getMenteelist()
   }
 
   onCLickEvent(data: any) {
     switch(data.action){
       case 'add':
         if(!this.data.control.meta .multiSelect){
-          this.popoverController.dismiss([{label: data.element.name+', '+data.element.organization, value: data.element.id}])
+          this.modalController.dismiss([{label: data.element.name+', '+data.element.organization, id: data.element.id, data: data.element}])
         } else {
           const index = this.tableData.findIndex(item => item.id === data.element.id);
           this.tableData[index].action = this.actionButtons.REMOVE
-          let addedData = {label: data.element.name, value: data.element.id}
+          let addedData = data.element
           this.selectedList.push(addedData)
         }
         break;
 
       case 'remove':
         const index = this.tableData.findIndex(item => item.id === data.element.id);
-        if(this.data.viewMode) {
+        if(this.data.viewListMode) {
           this.tableData = this.tableData.filter(obj => obj.id !== data.element.id);
         } else {
           this.tableData[index].action = this.actionButtons.ADD
         }
-        this.selectedList = this.selectedList.filter(obj => obj.value !== data.element.id);
+        this.selectedList = this.selectedList.filter(obj => obj.id !== data.element.id);
       default:
         
     }
@@ -142,6 +146,6 @@ export class SearchPopoverComponent implements OnInit {
  async onPaginatorChange(data:any) {
     this.page = data.page;
     this.limit = data.pageSize 
-    this.tableData = await this.list()
+    this.tableData = await this.getMenteelist()
   }
 }

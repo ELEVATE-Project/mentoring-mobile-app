@@ -18,7 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CREATE_SESSION_FORM, MANAGERS_CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { map } from 'rxjs/operators';
-import { Validators } from '@angular/forms';
+import { AbstractControl, Validators } from '@angular/forms';
 import { manageSessionAction, permissions } from 'src/app/core/constants/permissionsConstant';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 
@@ -81,9 +81,9 @@ export class CreateSessionPage implements OnInit {
   ) {
   }
   async ngOnInit() {
-    let formPage =(await this.permissionService.hasPermission({ module: permissions.MANAGE_SESSION, action: manageSessionAction.SESSION_ACTIONS })) ? MANAGERS_CREATE_SESSION_FORM : CREATE_SESSION_FORM
+    let formConfig =(await this.permissionService.hasPermission({ module: permissions.MANAGE_SESSION, action: manageSessionAction.SESSION_ACTIONS })) ? MANAGERS_CREATE_SESSION_FORM : CREATE_SESSION_FORM
     const platformForm = await this.getPlatformFormDetails();
-    const result = await this.form.getForm(formPage);
+    const result = await this.form.getForm(formConfig);
     this.formData = _.get(result, 'data.fields');
     this.entityNames = await this.form.getEntityNames(this.formData)
     this.entityList = await this.form.getEntities(this.entityNames, 'SESSION')
@@ -246,16 +246,23 @@ export class CreateSessionPage implements OnInit {
         }
       }
     }
-    
     for (let i = 0; i < this.formData.controls.length; i++) {
       this.formData.controls[i].value =
         existingData[this.formData.controls[i].name];
       if (this.formData.controls[i].type=='search'){
-        // this.formData.controls[i].meta.searchData = []
-        // this.formData.controls[i].meta.searchData.push({
-        //   label: existingData.mentor_name+ ', '+existingData.organization.name,
-        //   value: existingData[this.formData.controls[i].name]
-        // })
+        if(this.formData.controls[i].meta.multiSelect){
+          this.formData.controls[i].meta.searchData = existingData[this.formData.controls[i].name]
+          this.formData.controls[i].value = this.formData.controls[i].meta.searchData.map(obj => obj.id);
+        } else {
+          this.formData.controls[i].meta.searchData.push({
+            label: existingData.mentor_name+ ', '+existingData.organization.name,
+            id: existingData[this.formData.controls[i].name]
+          })
+        }
+      }
+      if(this.formData.controls[i].dependedChild && existingData[this.formData.controls[i].name].value=='PUBLIC'){
+        let dependedChildIndex = this.formData.controls.findIndex(formControl => formControl.name === this.formData.controls[i].dependedChild)
+        this.formData.controls[dependedChildIndex].validators['required']=false
       }
       this.formData.controls[i].options = _.unionBy(
         this.formData.controls[i].options,
@@ -325,15 +332,16 @@ export class CreateSessionPage implements OnInit {
   formValueChanged(event){
     let dependedControlIndex = this.formData.controls.findIndex(formControl => formControl.name === event.dependedChild)
     let dependedControl = this.form1.myForm.get(event.dependedChild)
-    if(event.value == "PUBLIC"){
-      this.formData.controls[dependedControlIndex].validators['required'] = false
-      dependedControl.setValidators(null);
-      dependedControl.setErrors(null)
-      dependedControl.updateValueAndValidity();
+    if(event.value === "PUBLIC") {
+      this.setControlValidity(dependedControlIndex, dependedControl, false);
     } else {
-      this.formData.controls[dependedControlIndex].validators['required'] = true
-      dependedControl.setValidators([Validators.required]);
-      dependedControl.updateValueAndValidity();
+      this.setControlValidity(dependedControlIndex, dependedControl, true);
     }
+  }
+  
+  setControlValidity(index: number, control: AbstractControl, required: boolean) {
+    this.formData.controls[index].validators['required'] = required;
+    control.setValidators(required ? [Validators.required] : null);
+    control.updateValueAndValidity();
   }
 }

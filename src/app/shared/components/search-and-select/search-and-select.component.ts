@@ -3,7 +3,7 @@ import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-import { PopoverController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash-es';
 import { SearchPopoverComponent } from '../search-popover/search-popover.component';
@@ -34,7 +34,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   value: any[];
 
   constructor(
-    private popoverCtrl: PopoverController,
+    private modalCtrl: ModalController,
     private translateService: TranslateService
   ) { }
 
@@ -66,7 +66,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
 
   async showPopover(event) {
     this.markAsTouched();
-    const popover = await this.popoverCtrl.create({
+    const popover = await this.modalCtrl.create({
       component: SearchPopoverComponent,
       cssClass: 'search-popover-config',
       backdropDismiss: false,
@@ -76,7 +76,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
           control: this.control,
           showFilter: true,
           showSearch: true,
-          viewMode: false
+          viewListMode: false
         }
       }
     });
@@ -84,7 +84,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     popover.onDidDismiss().then((data) => {
       if (data.data) {
         this.selectedData = data.data;
-        const values = this.control.meta.multiSelect ? data.data.map(obj => obj.value) : data.data[0].value;
+        const values = this.control.meta.multiSelect ? data.data.map(obj => obj.id) : data.data[0].id;
         this.onChange(values);
         this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
       }
@@ -102,7 +102,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
 
   async viewSelectedList() {
     this.markAsTouched();
-    const popover = await this.popoverCtrl.create({
+    const popover = await this.modalCtrl.create({
       component: SearchPopoverComponent,
       cssClass: 'search-popover-config',
       backdropDismiss: false,
@@ -112,7 +112,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
           control: this.control,
           showFilter: false,
           showSearch: false,
-          viewMode: true
+          viewListMode: true
         }
       }
     });
@@ -121,9 +121,10 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
       if (data.data) {
         this.selectedData = data.data
         const values = this.selectedData.length
-        ? (this.control.meta.multiSelect ? this.selectedData.map(obj => obj.value) : this.selectedData[0].value)
+        ? (this.control.meta.multiSelect ? this.selectedData.map(obj => obj.id) : this.selectedData[0].id)
         : (this.control.meta.multiSelect ? [] : '');
         this.onChange(values);
+        this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
       }
     });
     await popover.present();

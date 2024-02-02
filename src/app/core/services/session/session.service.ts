@@ -75,7 +75,7 @@ export class SessionService {
   async getSessionDetailsAPI(id) {
     //await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.GET_SESSION_DETAILS + id,
+      url: urlConstants.API_URLS.GET_SESSION_DETAILS + id + '?get_mentees='+true,
       payload: {}
     };
     try {
