@@ -1,6 +1,6 @@
 <ion-content>
 <div *ngIf="enrolledMenteeList">
-  <div class="d-flex justify-content-end">
+  <div class="close-icon" (click)="closePopup()">
     <ion-icon name="close"></ion-icon>
   </div>
   <app-generic-table [headingText]="headingText" [columnData]="columnData" [tableData]="enrolledMenteeList" [showPaginator]="false">

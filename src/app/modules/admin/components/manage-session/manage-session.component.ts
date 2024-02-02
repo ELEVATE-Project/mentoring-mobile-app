@@ -61,10 +61,6 @@ export class ManageSessionComponent implements OnInit {
           {
             "label": "Completed",
             "value": "COMPLETED"
-          },
-          {
-            "label": "Deleted",
-            "value": "DELETED"
           }
         ],
         "type": "checkbox"
@@ -92,7 +88,9 @@ export class ManageSessionComponent implements OnInit {
   actionButtons = {
     'ACTIVE': [{ name: 'VIEW', cssColor: 'white-color' }],
     'PUBLISHED': [{ name: 'VIEW', cssColor: 'white-color' }, { name: 'EDIT', cssColor: 'white-color' }, { name: 'DELETE', cssColor: 'white-color' }],
-    'COMPLETED': [{ name: 'VIEW', cssColor: 'white-color' }]
+    'COMPLETED': [{ name: 'VIEW', cssColor: 'white-color' }],
+    'LIVE': [{ name: 'VIEW', cssColor: 'white-color' }],
+    'UPCOMING': [{ name: 'VIEW', cssColor: 'white-color' }, { name: 'EDIT', cssColor: 'white-color' }, { name: 'DELETE', cssColor: 'white-color' }],
   }
 
   async ngOnInit() {
