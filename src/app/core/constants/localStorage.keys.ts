@@ -4,5 +4,6 @@ export const localKeys = {
     TOKEN:'token',
     IS_ROLE_REQUESTED: 'isRoleRequested',
     USER_ROLES: 'userRoles',
-    IS_BECOME_MENTOR_TILE_CLOSED:'isBecomeMentorTileClosed'
+    IS_BECOME_MENTOR_TILE_CLOSED:'isBecomeMentorTileClosed',
+    MAX_MENTEE_ENROLLMENT_COUNT: 'maxMenteeEnrollmentCount'
 }
