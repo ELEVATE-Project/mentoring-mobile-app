@@ -19,7 +19,6 @@ export const urlConstants = {
         UPCOMING_SESSIONS:"/mentoring/v1/mentors/upcomingSessions/",
         SHARE_MENTOR_PROFILE:"/mentoring/v1/mentors/share/",
         REPORT_ISSUE:"/mentoring/v1/issues/create",
-        GET_MAIL_INFO:"/mentoring/v1/platform/config",
         PROFILE_READ: "/mentoring/v1/profile/read",
         CREATED_SESSIONS: "/mentoring/v1/mentors/createdSessions?page=",
         MENTORS_DIRECTORY_LIST: "/mentoring/v1/mentors/list?page=",
@@ -59,5 +58,6 @@ export const urlConstants = {
         FILTER_LIST: "/mentoring/v1/profile/filterList?",
         DOWNLOAD_CREATED_SESSION_LIST_BY_SESSION_MANAGER:"/mentoring/v1/manage-sessions/downloadSessions?",
         ENROLLED_MENTEES_LIST:"/mentoring/v1/sessions/enrolledMentees/",
+        GET_PLATFORM_CONFIG: "/mentoring/v1/platform/config"
     }
 };
