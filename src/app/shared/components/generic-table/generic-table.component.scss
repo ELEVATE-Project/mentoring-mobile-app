@@ -57,12 +57,14 @@ margin: 0 10px;
   color: #ffffff;
   --background: #832915;
   height: 30px;
+  min-width: 80px;
   padding: 0%;
 }
 .white-color{
   --background: white;
   color: #5e5d5d;
   height: 30px;
+  min-width: 80px;
   padding: 0%;
 }
 th.mat-header-cell, td.mat-cell, td.mat-footer-cell {

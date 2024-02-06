@@ -29,8 +29,8 @@ export class SearchPopoverComponent implements OnInit {
   searchText = '';
   count: any;
   actionButtons = {
-    'ADD': [{ name: 'add', cssColor: 'white-color' }],
-    'REMOVE': [{ name: 'remove', cssColor: 'primary-color' }],
+    'ADD': [{ name: 'ADD', cssColor: 'white-color' }],
+    'REMOVE': [{ name: 'REMOVE', cssColor: 'primary-color' }],
   }
   selectedFilters:any = {};
   selectedList: any=[];
@@ -119,7 +119,7 @@ export class SearchPopoverComponent implements OnInit {
 
   onCLickEvent(data: any) {
     switch(data.action){
-      case 'add':
+      case 'ADD':
         if(!this.data.control.meta .multiSelect){
           this.modalController.dismiss([{label: data.element.name+', '+data.element.organization, id: data.element.id, data: data.element}])
         } else {
@@ -130,7 +130,7 @@ export class SearchPopoverComponent implements OnInit {
         }
         break;
 
-      case 'remove':
+      case 'REMOVE':
         const index = this.tableData.findIndex(item => item.id === data.element.id);
         if(this.data.viewListMode) {
           this.tableData = this.tableData.filter(obj => obj.id !== data.element.id);
