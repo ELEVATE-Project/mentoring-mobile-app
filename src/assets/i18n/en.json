@@ -247,5 +247,6 @@
     "MENTEE_LIST":"Mentee list",
     "ASSIGNED": "Assigned",
     "INVITED":"Invited",
-    "ENROLLED":"Enrolled"
+    "ENROLLED":"Enrolled",
+    "REMOVE":"Remove"
 }

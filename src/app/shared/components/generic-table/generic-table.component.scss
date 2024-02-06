@@ -57,12 +57,14 @@ margin: 0 10px;
   color: #ffffff;
   --background: #832915;
   height: 30px;
+  min-width: 80px;
   padding: 0%;
 }
 .white-color{
   --background: white;
   color: #5e5d5d;
   height: 30px;
+  min-width: 80px;
   padding: 0%;
 }
 th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
@@ -131,4 +133,19 @@ ion-popover {
   --padding-end: var(--ion-padding, 0px);
   --padding-top: var(--ion-padding, 0px);
   --padding-bottom: var(--ion-padding, 0px);
+}
+
+.img{
+  width: 15px;
+  height: 15px;
+}
+.column-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.sorting-icon{
+  padding-top: 5px;
 }
