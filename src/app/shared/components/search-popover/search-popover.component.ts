@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import * as _ from 'lodash';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
@@ -38,7 +38,21 @@ export class SearchPopoverComponent implements OnInit {
   selectedList: any=[];
   noDataMessage: string;
 
-  constructor(private modalController: ModalController, private toast: ToastService, private localStorage: LocalStorageService, private util: UtilService, private httpService: HttpService) { }
+  constructor(private platform: Platform, private modalController: ModalController, private toast: ToastService, private localStorage: LocalStorageService, private util: UtilService, private httpService: HttpService) { 
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.handleBackButton();
+    });
+    window.addEventListener('popstate', () => {
+      this.handleBackButton();
+    });
+  }
+
+  async handleBackButton() {
+    const modal = await this.modalController.getTop();
+    if (modal) {
+      await modal.dismiss();
+    }
+  }
 
   async ngOnInit() {
     this.maxCount = await this.localStorage.getLocalData(localKeys[this.data.control.meta.maxCount])
