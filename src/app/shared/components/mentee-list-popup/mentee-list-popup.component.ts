@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admin-workapce.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 
@@ -25,7 +26,7 @@ export class MenteeListPopupComponent implements OnInit {
   page:any;
   limit:any
  
-  constructor(private sessionService: SessionService,private adminWorkapceService: AdminWorkapceService) { }
+  constructor(private sessionService: SessionService,private adminWorkapceService: AdminWorkapceService,private modalController: ModalController) { }
 
   ngOnInit() {
     this.fetchMenteeList()
@@ -46,6 +47,10 @@ export class MenteeListPopupComponent implements OnInit {
       });
     }
     this.enrolledMenteeList = data;
+  }
+
+  closePopup(){
+    this.modalController.dismiss();
   }
 
   // onPaginatorChange(data: any) {
