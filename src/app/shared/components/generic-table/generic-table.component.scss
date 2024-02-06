@@ -148,3 +148,13 @@ ion-popover {
 display: flex;
 flex-direction: column;
 }
+.column-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.sorting-icon{
+  padding-top: 5px;
+}
