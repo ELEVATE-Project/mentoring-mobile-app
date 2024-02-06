@@ -12,7 +12,10 @@
     <ng-container *ngFor="let column of columnData" [matColumnDef]="column.name">
       <ng-container>
         <th mat-header-cell *matHeaderCellDef>{{ column.displayName }} <span *ngIf="column.sortingData">
-            <ion-icon [id]="column.displayName" class="info" name="arrow-up"></ion-icon>
+            <!-- <ion-icon [id]="column.displayName" class="info" name="arrow-up"></ion-icon> -->
+            <!-- <div class="img-container"> -->
+              <img class="img" [id]="column.displayName" src="../../../../assets/images/swap-vertical.svg" />
+            <!-- </div> -->
             <ion-popover [trigger]="column.displayName" triggerAction="click">
               <ng-template class="popover-container">
                 <ion-content class="ion-padding popover-container">

@@ -132,3 +132,17 @@ ion-popover {
   --padding-top: var(--ion-padding, 0px);
   --padding-bottom: var(--ion-padding, 0px);
 }
+
+.img{
+  width: 15px;
+  height: 15px;
+}
+.img-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.heading-container{
+display: flex;
+flex-direction: column;
+}
