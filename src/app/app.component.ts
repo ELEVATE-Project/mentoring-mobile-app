@@ -158,7 +158,7 @@ export class AppComponent {
         if(data){
           this.isMentor = this.profile.isMentor
           this.user = data;
-          // this.adminAccess = this.permissionService.hasAdminAcess(this.actionsArrays,data?.permissions);
+          this.adminAccess = this.permissionService.hasAdminAcess(this.actionsArrays,data?.permissions);
         }
       })
       App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {

@@ -151,7 +151,6 @@ export class EditProfilePage implements OnInit, isDeactivatable {
       this.profileImageData.haveValidationError = true;
     }
   }
-
   upload(data, uploadUrl) {
     return this.attachment.cloudImageUpload(data, uploadUrl).pipe(
       map((resp => {
