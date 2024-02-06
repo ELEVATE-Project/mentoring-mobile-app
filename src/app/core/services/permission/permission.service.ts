@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from '../localstorage.service';
 import { localKeys } from '../../constants/localStorage.keys';
+import { actions } from '../../constants/permissionsConstant';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,8 @@ export class PermissionService {
     await this.fetchPermissions();
     for (let userPermission of this.userPermissions) {
       if (permissions && userPermission.request_type.length && permissions.module === userPermission.module) {
-        if (permissions.action.every((value: any) => userPermission.request_type.includes(value))) {
+        const permissionRequired = (permissions?.action?.length) ? (permissions?.action[0]) : actions.GET;
+        if (userPermission.request_type.includes(permissionRequired)) {
           return true;
         } else {
           return false;
