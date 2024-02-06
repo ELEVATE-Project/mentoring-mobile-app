@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import * as _ from 'lodash';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService, UtilService } from 'src/app/core/services';
+import { HttpService, LocalStorageService, ToastService, UtilService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-search-popover',
@@ -28,17 +29,19 @@ export class SearchPopoverComponent implements OnInit {
   limit = 5
   searchText = '';
   count: any;
+  maxCount;
   actionButtons = {
-    'ADD': [{ name: 'add', cssColor: 'white-color' }],
-    'REMOVE': [{ name: 'remove', cssColor: 'primary-color' }],
+    'ADD': [{ name: 'Add', cssColor: 'white-color' }],
+    'REMOVE': [{ name: 'Remove', cssColor: 'primary-color' }],
   }
   selectedFilters:any = {};
   selectedList: any=[];
   noDataMessage: string;
 
-  constructor(private modalController: ModalController, private util: UtilService, private httpService: HttpService) { }
+  constructor(private modalController: ModalController, private toast: ToastService, private localStorage: LocalStorageService, private util: UtilService, private httpService: HttpService) { }
 
   async ngOnInit() {
+    this.maxCount = await this.localStorage.getLocalData(localKeys[this.data.control.meta.maxCount])
     this.selectedList = this.data.selectedData ? this.data.selectedData : this.selectedList
     if (this.data.viewListMode) {
       this.selectedList.forEach((ele) => {
@@ -49,8 +52,8 @@ export class SearchPopoverComponent implements OnInit {
       this.filterData = [];
     } else {
       this.tableData = await this.getMenteelist();
-      this.filterData = await this.getFilters();
-      this.filterData = this.util.getFormatedFilterData(this.filterData, this.data.control.meta);
+      this.filterData = this.data.isMobile ? [] : await this.getFilters();
+      this.filterData = this.data.isMobile ? [] : this.util.getFormatedFilterData(this.filterData, this.data.control.meta);
     }    
   }
 
@@ -117,20 +120,24 @@ export class SearchPopoverComponent implements OnInit {
     this.tableData = await this.getMenteelist()
   }
 
-  onCLickEvent(data: any) {
+  onButtonCLick(data: any) {
     switch(data.action){
-      case 'add':
+      case 'Add':
         if(!this.data.control.meta .multiSelect){
           this.modalController.dismiss([{label: data.element.name+', '+data.element.organization, id: data.element.id, data: data.element}])
         } else {
-          const index = this.tableData.findIndex(item => item.id === data.element.id);
-          this.tableData[index].action = this.actionButtons.REMOVE
-          let addedData = data.element
-          this.selectedList.push(addedData)
+          if(this.maxCount && this.maxCount>this.selectedList.length){
+            const index = this.tableData.findIndex(item => item.id === data.element.id);
+            this.tableData[index].action = this.actionButtons.REMOVE
+            let addedData = data.element
+            this.selectedList.push(addedData)
+          } else {
+            this.toast.showToast("Session seat limit exceed","danger")
+          }
         }
         break;
 
-      case 'remove':
+      case 'Remove':
         const index = this.tableData.findIndex(item => item.id === data.element.id);
         if(this.data.viewListMode) {
           this.tableData = this.tableData.filter(obj => obj.id !== data.element.id);
@@ -143,9 +150,15 @@ export class SearchPopoverComponent implements OnInit {
     }
   }
 
- async onPaginatorChange(data:any) {
-    this.page = data.page;
-    this.limit = data.pageSize 
-    this.tableData = await this.getMenteelist()
+  async onPaginatorChange(data:any) {
+    if(this.data.isMobile){
+      this.page = this.page+1;
+      this.limit = data.pageSize 
+      this.tableData = this.tableData.concat(await this.getMenteelist())
+    } else {
+      this.page = data.page;
+      this.limit = data.pageSize 
+      this.tableData = await this.getMenteelist()
+    }
   }
 }
