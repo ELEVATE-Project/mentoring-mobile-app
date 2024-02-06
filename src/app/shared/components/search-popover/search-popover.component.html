@@ -1,6 +1,6 @@
 <ion-toolbar position="top">
   <div class="container">
-    <div class="search-col">
+    <div class="search-col d-flex flex-justify-center">
       <ion-searchbar *ngIf="data.showSearch" class="search-style" debounce="1000" [(ngModel)]="searchText"
         (ionChange)="onSearch()" placeholder="{{data.control.meta.searchLabel}}"></ion-searchbar>
     </div>
@@ -9,7 +9,7 @@
     </div>
   </div>
 </ion-toolbar>
-<ion-grid *ngIf="!data.isMobile;">
+<ion-grid class="ion-no-margin" *ngIf="!data.isMobile;">
   <ion-row>
     <ion-col class="col-width-25" *ngIf="data.showFilter">
       <app-filter-tree [enableFilterHeader]="true" *ngIf="filterData" [filterData]="filterData"
