@@ -1,6 +1,6 @@
 export const permissions = {
   MANAGE_USER: 'manage_user',
-  MANAGE_SESSION: 'manage_session',
+  MANAGE_SESSION: 'manage-sessions',
 };
 export const actions = {
   GET: 'GET',
@@ -11,7 +11,11 @@ export const actions = {
 };
 export const manageSessionAction = {
   SESSION_ACTIONS: [
-    actions.GET
+    actions.GET,
+    actions.POST,
+    actions.PUT,
+    actions.PATCH,
+    actions.DELETE
   ],
 };
 export const manageUserAction = {
