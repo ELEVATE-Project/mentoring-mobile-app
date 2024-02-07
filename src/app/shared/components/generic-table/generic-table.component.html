@@ -11,8 +11,9 @@
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container *ngFor="let column of columnData" [matColumnDef]="column.name">
       <ng-container>
-        <th mat-header-cell *matHeaderCellDef>{{ column.displayName }} <span *ngIf="column.sortingData">
-            <ion-icon [id]="column.displayName" class="info" name="arrow-up"></ion-icon>
+        <th mat-header-cell *matHeaderCellDef ><div class="column-header">
+          {{ column.displayName }} <div class="sorting-icon" *ngIf="column.sortingData">
+            <img class="img" [id]="column.displayName" src="../../../../assets/images/swap-vertical.svg" />
             <ion-popover [trigger]="column.displayName" triggerAction="click">
               <ng-template class="popover-container">
                 <ion-content class="ion-padding popover-container">
@@ -22,12 +23,13 @@
                 </ion-content>
               </ng-template>
             </ion-popover>
-          </span></th>
+          </div>
+        </div></th>
       </ng-container>
       <ng-container>
         <div *ngIf="column.type == 'text'">
-          <td mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">{{
-            element[column.name] | translate }}</td>
+          <td mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element" >
+            <div class="cell-text">{{element[column.name] | translate }}</div></td>
         </div>
         <div *ngIf="column.type == 'array'">
           <td mat-cell (click)="onCellClick(column.name,element)" *matCellDef="let element">

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from '../localstorage.service';
 import { localKeys } from '../../constants/localStorage.keys';
+import { urlConstants } from '../../constants/urlConstants';
+import { HttpService } from '../http/http.service';
 import { actions } from '../../constants/permissionsConstant';
 
 @Injectable({
@@ -10,7 +12,7 @@ export class PermissionService {
 
   userPermissions:any = [];
 
-  constructor(private localStorage: LocalStorageService){}
+  constructor(private localStorage: LocalStorageService, private httpService: HttpService){}
 
   async hasPermission(permissions: any): Promise <boolean> {
     await this.fetchPermissions();
@@ -42,5 +44,23 @@ export class PermissionService {
   }
   hasAdminAcess(permissionArray,userPermissions): boolean {
     return permissionArray.some(action => userPermissions.some(permission => permission.module === action.module));
+  }
+
+  async getPlatformConfig() {
+    const config = {
+      url: urlConstants.API_URLS.GET_PLATFORM_CONFIG,
+      payload: {},
+    };
+    try {
+      const data: any = await this.httpService.get(config);
+      this.setConfigInLocal(data.result)
+    }
+    catch (error) {
+      return null;
+    }
+  }
+
+  setConfigInLocal(result: any) {
+    this.localStorage.setLocalData(localKeys.MAX_MENTEE_ENROLLMENT_COUNT, result.session_mentee_limit);
   }
 }

@@ -7,3 +7,13 @@
     text-decoration: underline;
     cursor: pointer;
   }
+
+  .close-icon{
+    display: flex;
+    cursor: pointer;
+    justify-content: end;
+    align-items: end;
+    font-size: 24px;
+    padding: 8px;
+    margin: 0;
+  }

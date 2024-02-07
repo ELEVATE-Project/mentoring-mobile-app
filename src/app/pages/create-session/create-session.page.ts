@@ -18,7 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CREATE_SESSION_FORM, MANAGERS_CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { map } from 'rxjs/operators';
-import { AbstractControl, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { manageSessionAction, permissions } from 'src/app/core/constants/permissionsConstant';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 
@@ -260,9 +260,13 @@ export class CreateSessionPage implements OnInit {
           })
         }
       }
-      if(this.formData.controls[i].dependedChild && existingData[this.formData.controls[i].name].value=='PUBLIC'){
-        let dependedChildIndex = this.formData.controls.findIndex(formControl => formControl.name === this.formData.controls[i].dependedChild)
-        this.formData.controls[dependedChildIndex].validators['required']=false
+      let dependedChildIndex = this.formData.controls.findIndex(formControl => formControl.name === this.formData.controls[i].dependedChild)
+      if(this.formData.controls[i].dependedChild){
+        if(existingData[this.formData.controls[i].name].value=='PUBLIC'){
+          this.formData.controls[dependedChildIndex].validators['required']=false
+        } else {
+          this.formData.controls[dependedChildIndex].disabled = this.formData.controls[i].type === 'search' ? true : this.formData.controls[i].disabled
+        }
       }
       this.formData.controls[i].options = _.unionBy(
         this.formData.controls[i].options,
@@ -319,7 +323,7 @@ export class CreateSessionPage implements OnInit {
         }
 
       }}
-      this.sessionService.createSession(meetingInfo,this.id).then(()=>{
+      this.sessionService.createSession(meetingInfo,this.id+'?notifyUser=false').then(()=>{
         this.router.navigate([`/${"session-detail"}/${this.id}`],{replaceUrl: true})
       })
     }
@@ -339,8 +343,9 @@ export class CreateSessionPage implements OnInit {
     }
   }
   
-  setControlValidity(index: number, control: AbstractControl, required: boolean) {
+  setControlValidity(index, control, required) {
     this.formData.controls[index].validators['required'] = required;
+    this.formData.controls[index].disabled = false;
     control.setValidators(required ? [Validators.required] : null);
     control.updateValueAndValidity();
   }

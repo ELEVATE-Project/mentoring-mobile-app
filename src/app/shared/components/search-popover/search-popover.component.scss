@@ -11,5 +11,61 @@
 }
 .col-width-25 {
     max-width: 25%;
-    overflow: scroll;
 }
+
+.card-wrapper {
+    padding: 10px;
+    margin: 10px;
+    background-color: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 14px;
+  }
+
+  .primary-color{
+    color: #ffffff;
+    --background: #832915;
+    height: 30px;
+    padding: 0%;
+  }
+  .white-color{
+    --background: white;
+    color: #5e5d5d;
+    height: 30px;
+    padding: 0%;
+  }
+  .card-data {
+    margin: 0px;
+    padding: 8px;
+  }
+  .card-header {
+    font-weight: bold;
+    padding: 8px;
+  }
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .search-col {
+    flex: 11;
+    margin-left: 5px;
+  }
+  
+  .close-col {
+    flex: 1;
+    text-align: end;
+  }
+
+  .card-button {
+    width: 300px;
+  }
+
+  .scrollable-col {
+    padding-bottom: 20px;
+    min-width: 800px;
+    height: 500px;
+    overflow: auto;
+    overflow: scroll;
+  }
+  

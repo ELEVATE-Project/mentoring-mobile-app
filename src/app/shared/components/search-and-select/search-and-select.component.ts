@@ -32,6 +32,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   originalLabel: any;
   icon = this.addIconDark;
   value: any[];
+  isMobile: any;
 
   constructor(
     private modalCtrl: ModalController,
@@ -43,7 +44,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   onTouched = () => { };
 
   ngOnInit() { 
-    this.originalLabel = this.control.label
+    this.originalLabel = this.control.label;
+    this.isMobile = window.innerWidth <= 800;
   }
 
   writeValue(value: any[]) {
@@ -76,7 +78,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
           control: this.control,
           showFilter: true,
           showSearch: true,
-          viewListMode: false
+          viewListMode: false,
+          isMobile: this.isMobile
         }
       }
     });
@@ -112,7 +115,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
           control: this.control,
           showFilter: false,
           showSearch: false,
-          viewListMode: true
+          viewListMode: true,
+          isMobile: this.isMobile
         }
       }
     });
