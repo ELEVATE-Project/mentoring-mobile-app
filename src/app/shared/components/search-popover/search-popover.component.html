@@ -16,9 +16,11 @@
         (filtersChanged)="filtersChanged($event)"></app-filter-tree>
     </ion-col>
     <ion-col class="ion-text-end" *ngIf="tableData">
+      <div class="scrollable-col">
       <app-generic-table [columnData]="columnData" [tableData]="tableData"
         [totalCount]="count" (onClickEvent)='onButtonCLick($event)' (paginatorChanged)="onPaginatorChange($event)"
         [noDataMessage]="noDataMessage" [showPaginator]="true"></app-generic-table>
+      </div>
     </ion-col>
   </ion-row>
 </ion-grid>

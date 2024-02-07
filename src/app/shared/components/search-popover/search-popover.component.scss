@@ -60,4 +60,12 @@
   .card-button {
     width: 300px;
   }
+
+  .scrollable-col {
+    padding-bottom: 20px;
+    min-width: 800px;
+    height: 500px;
+    overflow: auto;
+    overflow: scroll;
+  }
   
