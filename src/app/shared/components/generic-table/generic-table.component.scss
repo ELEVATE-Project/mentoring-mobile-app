@@ -149,3 +149,13 @@ ion-popover {
 .sorting-icon{
   padding-top: 5px;
 }
+.cell-text{
+  overflow: hidden;
+  max-width: 200px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  max-height: 400px;
+  white-space: normal;
+}

@@ -28,8 +28,8 @@
       </ng-container>
       <ng-container>
         <div *ngIf="column.type == 'text'">
-          <td mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">{{
-            element[column.name] | translate }}</td>
+          <td mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element" >
+            <div class="cell-text">{{element[column.name] | translate }}</div></td>
         </div>
         <div *ngIf="column.type == 'array'">
           <td mat-cell (click)="onCellClick(column.name,element)" *matCellDef="let element">
