@@ -59,7 +59,7 @@ export class SearchPopoverComponent implements OnInit {
     this.selectedList = this.data.selectedData ? this.data.selectedData : this.selectedList
     if (this.data.viewListMode) {
       this.selectedList.forEach((ele) => {
-        ele.action = this.actionButtons.REMOVE;
+        ele.action = ele.type=='ENROLLED' ? [] : this.actionButtons.REMOVE;
         ele.organization = ele?.organization?.name;
       });
       this.tableData = this.selectedList
@@ -111,7 +111,7 @@ export class SearchPopoverComponent implements OnInit {
       this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
       let selectedIds =  _.map(this.selectedList, 'id');
       data.result.data.forEach((ele) => {
-        ele.action = _.includes(selectedIds, ele.id) ? this.actionButtons.REMOVE : this.actionButtons.ADD;
+        ele.action = _.includes(selectedIds, ele.id) ? (ele.type === 'ENROLLED' ? [] : this.actionButtons.REMOVE) : this.actionButtons.ADD;
         ele.organization = ele?.organization?.name;
       });
       return data.result.data
