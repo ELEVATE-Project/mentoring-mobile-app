@@ -14,10 +14,10 @@ export class SessionService {
 
   constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private router: Router, private modalCtrl: ModalController) { }
 
-  async createSession(formData, id?: string) {
+  async createSession(formData, queryParams?: string) {
     await this.loaderService.startLoader();
     const config = {
-      url: id == null ? urlConstants.API_URLS.CREATE_SESSION : urlConstants.API_URLS.CREATE_SESSION + `/${id}`,
+      url: queryParams == null ? urlConstants.API_URLS.CREATE_SESSION : urlConstants.API_URLS.CREATE_SESSION + `/${queryParams}`,
       payload: formData
     };
     try {

@@ -39,6 +39,7 @@ export class SessionDetailPage implements OnInit {
   enrolledMenteeList:any;
   sessionManagerText="";
  activeUrl:any;
+ isNotInvited: any;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -155,7 +156,8 @@ export class SessionDetailPage implements OnInit {
     this.userCantAccess = response?.responseCode == 'OK' ? false:true
     this.isCreator = response.result.created_by == this.userDetails.id ? true:false;
     this.isConductor = this.userDetails.id == response.result.mentor_id ? true : false;
-    this.sessionManagerText =  this.isConductor ? "ASSIGNED_BY":"INVITED_BY"
+    this.sessionManagerText =  this.isConductor ? "ASSIGNED_BY":"INVITED_BY";
+    this.isNotInvited = response?.result?.enrolment_type === 'INVITED'? false : true;
     if (!this.userCantAccess) {
       response = response.result;
       this.setPageHeader(response);
