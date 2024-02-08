@@ -1,6 +1,6 @@
 export const permissions = {
-  MANAGE_USER: 'org-admin',
-  MANAGE_SESSION: 'manage-sessions',
+  MANAGE_USER: 'manage_user',
+  MANAGE_SESSION: 'manage_session',
 };
 export const actions = {
   GET: 'GET',
