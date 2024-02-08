@@ -1,5 +1,5 @@
 <div class="d-flex flex-align-items-center;">
-  <ion-label position="stacked" class="head-label">
+  <ion-label position="stacked" class="head-label" [ngClass]="{'disabled-label':control?.disabled}">
     {{ control.label }}&nbsp;<span *ngIf="control?.validators['required']==true" class="star-icon-red">*</span>
   </ion-label>
   <ion-icon *ngIf="control?.info" [id]="control.name" class="info" name="information-circle"></ion-icon>

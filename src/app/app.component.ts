@@ -140,7 +140,7 @@ export class AppComponent {
         this.localStorage.getLocalData(localKeys.USER_DETAILS).then((userDetails)=>{
           if(userDetails) {
             this.profile.getUserRole(userDetails)
-            this.adminAccess = this.permissionService.hasAdminAcess(this.actionsArrays,userDetails?.permissions);
+            this.adminAccess = userDetails.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,userDetails?.permissions) : false;
           }
           this.getUser();
         })
@@ -158,7 +158,7 @@ export class AppComponent {
         if(data){
           this.isMentor = this.profile.isMentor
           this.user = data;
-          this.adminAccess = this.permissionService.hasAdminAcess(this.actionsArrays,data?.permissions);
+          this.adminAccess = data.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,data?.permissions) : false;
         }
       })
       App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
@@ -215,7 +215,7 @@ export class AppComponent {
   
   getUser() {
     this.profile.profileDetails(false).then(profileDetails => {
-      this.adminAccess = this.permissionService.hasAdminAcess(this.actionsArrays,profileDetails?.permissions);
+      this.adminAccess = profileDetails.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,profileDetails?.permissions) : false;
       this.user = profileDetails;
       this.isMentor = this.profile.isMentor;
     })
