@@ -86,3 +86,14 @@ mat-datepicker-toggle {
 .popover-header {
   font-weight: bold;
 }
+
+.ion-padding{
+  text-wrap: wrap;
+  overflow-wrap: break-word;
+}
+
+ion-popover {
+  &::part(content) {
+    max-width: 300px;
+  }
+}
