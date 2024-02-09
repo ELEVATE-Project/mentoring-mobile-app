@@ -169,7 +169,7 @@ export class CreateSessionPage implements OnInit {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
         this.getImageUploadUrl(this.localImage);
       } else {
-        const form = Object.assign({}, this.form1.myForm.value);
+        const form = Object.assign({}, this.form1.myForm.getRawValue());
         form.start_date = form.start_date.unix().toString();
         form.end_date = form.end_date.unix().toString();
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -250,22 +250,28 @@ export class CreateSessionPage implements OnInit {
       this.formData.controls[i].value =
         existingData[this.formData.controls[i].name];
       if (this.formData.controls[i].type=='search'){
+        this.formData.controls[i].id = this.id;
         if(this.formData.controls[i].meta.multiSelect){
           this.formData.controls[i].meta.searchData = existingData[this.formData.controls[i].name]
           this.formData.controls[i].value = this.formData.controls[i].meta.searchData.map(obj => obj.id);
         } else {
           this.formData.controls[i].meta.searchData.push({
-            label: existingData.mentor_name+ ', '+existingData.organization.name,
+            label: `${existingData.mentor_name}, ${existingData.organization.name}`,
             id: existingData[this.formData.controls[i].name]
-          })
+          });
+        }
+        if(!this.formData.controls[i].meta.disableIfSelected) {
+          this.formData.controls[i].disabled = false;
+        }
+        if(this.formData.controls[i].meta.disableIfSelected&&this.formData.controls[i].value){
+          this.formData.controls[i].disabled = true;
         }
       }
       let dependedChildIndex = this.formData.controls.findIndex(formControl => formControl.name === this.formData.controls[i].dependedChild)
-      if(this.formData.controls[i].dependedChild){
-        if(existingData[this.formData.controls[i].name].value=='PUBLIC'){
-          this.formData.controls[dependedChildIndex].validators['required']=false
-        } else {
-          this.formData.controls[dependedChildIndex].disabled = this.formData.controls[i].type === 'search' ? true : this.formData.controls[i].disabled
+      if(this.formData.controls[i].dependedChild && this.formData.controls[i].name === 'type'){
+        if(existingData[this.formData.controls[i].name].value){
+          this.formData.controls[i].disabled = true;
+          this.formData.controls[dependedChildIndex].validators['required']= existingData[this.formData.controls[i].name].value=='PUBLIC' ? false : true
         }
       }
       this.formData.controls[i].options = _.unionBy(
@@ -341,6 +347,11 @@ export class CreateSessionPage implements OnInit {
     } else {
       this.setControlValidity(dependedControlIndex, dependedControl, true);
     }
+    this.formData.controls.forEach(control => {
+      if (event.meta.disabledChildren.includes(control.name)) {
+        control.disabled = false;
+      }
+    })
   }
   
   setControlValidity(index, control, required) {

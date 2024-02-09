@@ -46,10 +46,11 @@ interface JsonFormErrorMessages {
 }
 
 interface JsonFormControls {
+  id?: any;
   searchData?: Array<object>;
   name: string;
   label: string;
-  value: string;
+  value: any;
   type: string;
   class: string;
   position: string;

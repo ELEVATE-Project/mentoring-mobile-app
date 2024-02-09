@@ -7,6 +7,7 @@ import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dy
 import { CommonRoutes } from 'src/global.routes';
 import { environment } from 'src/environments/environment';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
   selector: 'app-login',
@@ -136,7 +137,8 @@ export class LoginPage implements OnInit {
   }
   getMailInfo(){
     this.authService.getMailInfo().then((result:any) =>{
-      this.supportInfo = result
+      this.supportInfo = result.report_issue
+      this.localStorage.setLocalData(localKeys.MAX_MENTEE_ENROLLMENT_COUNT, result.session_mentee_limit);
     })
 }
 }

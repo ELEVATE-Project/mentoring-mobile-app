@@ -47,7 +47,7 @@ export const urlConstants = {
             SESSION: "/mentoring/v1/entity-type/read"
         },
         REQUEST_TO_BECOME_MENTOR: "/user/v1/organization/requestOrgRole",
-        LIST_ORG_ROLES: "/user/v1/userRole/list",
+        LIST_ORG_ROLES: "/user/v1/user-role/list",
         ADMIN_MENTOR_REQUEST_LIST: "/user/v1/org-admin/getRequests",
         ADMIN_UPDATE_REQUEST: "/user/v1/org-admin/updateRequestStatus",
         ADMIN_BULK_UPLOAD: "/user/v1/org-admin/bulkUserCreate",
