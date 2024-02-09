@@ -1,8 +1,11 @@
 .main-wrapper{
-    margin : 10px 15px 0px 15px
+    margin : 10px 15px 0px 15px;
+    padding-bottom: 40px;
 }
 .load-more-button{
     height: 50px;
+    width: 100%;
+    font-size: 15px !important;
 }
 .session-btn{
     margin: 10px,;
@@ -11,7 +14,7 @@
 }
 .title-font{
     font-size: 19px;
-    margin-top: 25px;
+    margin-top: 0px;
 }
 .field-wrapper{
     margin: 5px 10px 0px 15px;
@@ -39,5 +42,15 @@
 img{
     width: 93%;
     border-radius: 10px;
-    height: 220px;
+}
+ion-item {
+    --padding-end: 0px;
+    --inner-padding-end: 0px;
+    --padding-start: 0px;
+  }
+.join-button{
+    background: var(--white);
+}
+.image-container{
+    height: 200px;
 }

@@ -22,7 +22,7 @@ export class HelpVideoPage implements OnInit {
 
   async ngOnInit() {
     let result = await this.form.getForm(HELP_VIDEOS);
-    this.items = result.result.data.fields.controls;
+    this.items = result.data.fields.controls;
   }
 
   goToHome() {

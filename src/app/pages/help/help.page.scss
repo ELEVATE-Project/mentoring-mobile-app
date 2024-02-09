@@ -9,10 +9,13 @@
   .field-spacing {
     margin-top: 30px;
   }
-  ion-button{
-      height: 50px;
-      font-weight: bold;
-  }
   .input{
       margin-top: 10px;
+  }
+  ion-select::part(text) {
+    color: var(--black);
+  }
+  .select {
+    padding: unset;
+    width: 100%;
   }

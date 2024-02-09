@@ -63,9 +63,16 @@ ion-label {
 .fields{
   margin-bottom: 5px;
 }
-textarea{
+ion-textarea{
   width: 100%;
   border: none;
   margin-top: 10px;
   outline: none;
+}
+mat-form-field {
+  width: 100%;
+}
+
+mat-datepicker-toggle {
+  font-size: 20px;
 }

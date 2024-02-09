@@ -1,8 +1,9 @@
 .session-card{
     padding: 8px 6px;
     border-radius: 10px;
+    height: 150px;
     .card-avatar{
-    margin: auto 0px 3px;
+    margin-right: 20px;
     .thumbnail-image{
         width: 57px;
         height: 57px;
@@ -37,4 +38,17 @@ justify-content: flex-end;
 }
 .icon-position{
     vertical-align: middle;
+}
+.align-area-of-expertise{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    color: rgb(41, 41, 41);
+    white-space: pre-line;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+.area-of-expertise-container{
+    height: 75px;
 }

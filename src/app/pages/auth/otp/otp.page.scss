@@ -11,6 +11,7 @@
   font-size: 12px;
   margin-top: 15px;
   margin-left: 5px;
+  text-align: center;
 }
 ion-button{
   width: 80%;
@@ -19,8 +20,9 @@ ion-button{
 }
 .underline{
   text-decoration: underline;
-  text-decoration-color: rgb(108, 147, 206);
-  color: rgb(108, 147, 206);
+  color: rgb(143, 143, 143);
+  padding: 5px;
+  pointer-events: none;
   text-align: center;
 }
 .disabled{
@@ -43,4 +45,26 @@ ion-button{
 
 .align-content-center{
   margin-top: 15%;
+}
+
+.t-and-c {
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.t-and-c-text{
+  padding-left: 10px;
+  margin: unset;
+}
+
+.enable {
+  color: rgb(108, 147, 206);;
+  cursor: pointer;
+  pointer-events: all;
+}
+.check-box{
+  margin-inline-end: unset;
 }

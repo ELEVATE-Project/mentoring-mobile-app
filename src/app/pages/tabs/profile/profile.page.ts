@@ -18,7 +18,7 @@ export class ProfilePage implements OnInit {
   formData: any = {
     form: [
       { title: 'SESSIONS_ATTENDED',
-        key: 'sessionsAttended',
+        key: 'sessions_attended',
       },
       {
         title: 'ABOUT',
@@ -29,30 +29,42 @@ export class ProfilePage implements OnInit {
         key: 'designation',
       },
       {
+        title: "ORGANIZATION",
+        key: "organizationName"
+      },
+      {
         title: 'YEAR_OF_EXPERIENCE',
         key: 'experience',
       },
       {
         title: "KEY_AREAS_OF_EXPERTISE",
-        key: "areasOfExpertise"
+        key: "area_of_expertise"
       },
       {
         title: "EDUCATION_QUALIFICATION",
-        key: "educationQualification"
+        key: "education_qualification"
+      },
+      {
+        title: 'LANGUAGES',
+        key: 'languages',
       },
       {
         title: "EMAIL_ID",
         key: "emailId"
-      },
+      }
     ],
     menteeForm:['SESSIONS_ATTENDED'],
     data: {},
   };
-  public buttonConfig = {
-    label: "EDIT_PROFILE",
-    action: "edit"
-    
-  }
+  
+public buttonConfig = {
+  buttons: [
+    {
+      label: "EDIT_PROFILE",
+      action: "edit"
+    }
+  ]
+}
   showProfileDetails: boolean = false;
   username: boolean = true;
   data: any;
@@ -62,9 +74,16 @@ export class ProfilePage implements OnInit {
     headerColor: 'primary',
     label:'PROFILE'
   };
+  becomeAMentorButton ={
+    label: "BECOME_A_MENTOR",
+    action: "role"
+    
+  }
   sessionData={}
   user: any;
   visited:boolean;
+  isMentor: boolean;
+  isMentorButtonPushed: boolean = false;
   constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private router: Router, private localStorage:LocalStorageService) { }
 
   ngOnInit() {
@@ -72,36 +91,45 @@ export class ProfilePage implements OnInit {
   }
   async ionViewWillEnter() {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    this.fetchProfileDetails();
+    if(this.user){
+      await this.profileService.getUserRole(this.user)
+    }
+    if(!this.profileService.isMentor&&!await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)&&!this.isMentorButtonPushed) {
+      this.buttonConfig.buttons.push(this.becomeAMentorButton)
+      this.isMentorButtonPushed = true;
+    }
+    this.formData.data = this.user;
+    this.formData.data.emailId = this.user.email.address;
+    this.formData.data.organizationName = this.user?.organization?.name;
+    this.isMentor = this.profileService.isMentor;
+    if (!this.formData?.data?.about) {
+      (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
+      this.visited=true;
+    }
+    this.showProfileDetails = true;
     this.gotToTop();
+    this.profileDetailsApi();
   }
 
   gotToTop() {
     this.content.scrollToTop(1000);
   }
 
-  async fetchProfileDetails() {
-    var response = await this.profileService.getProfileDetailsFromAPI(this.user.isAMentor,this.user._id);
-    this.formData.data = response;
-    this.formData.data.emailId = response.email.address;
-    if (this.formData?.data?.about) {
-      this.showProfileDetails = true;
-    } else {
-      (!this.visited)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
-      this.visited=true;
-    }
-  }
 
   async doRefresh(event){
-    var result = await this.profileService.getProfileDetailsFromAPI(this.user.isAMentor,this.user._id);
-    if(result){
-      this.formData.data = result;
-      this.formData.data.emailId = result.email.address;
-    }
+    this.profileDetailsApi();
     event.target.complete();
   }
 
   feedback() {
     this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
+  }
+  async profileDetailsApi(){
+    var result = await this.profileService.getProfileDetailsFromAPI();
+    if(result){
+      this.formData.data = result;
+      this.formData.data.emailId = result.email;
+      this.formData.data.organizationName = this.user.organization?.name;
+    }
   }
 }

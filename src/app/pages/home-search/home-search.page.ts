@@ -27,7 +27,7 @@ export class HomeSearchPage implements OnInit {
   }
   async getMentorList() {
     const config = {
-      url: urlConstants.API_URLS.MENTORS_DIRECTORY+'&search=' + btoa(this.searchText),
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST+'&search=' + btoa(this.searchText),
       payload: {}
     };
     try {
@@ -48,13 +48,22 @@ export class HomeSearchPage implements OnInit {
       searchText : this.searchText,
     }
     let data = await this.sessionService.getSessionsList(obj);
-    this.results = data?.result[0]?.data;
+    this.results = data?.result?.data;
     this.noResults = (this.results.length)?false:true;
     this.searching = false;
   }
 
-  checkInput(){
-    this.searchText=this.searchText.replace(/^ +/gm, '')
+  checkInput(event: any){
+    if(event.keyCode == 13){
+      this.search();
+    }
+  }
+  cancelSearch(event: any){
+    this.searching = true
+    this.results = []
+  }
+  trimLeft(inputString: string): string {
+    return this.searchText = inputString.replace(/^\s+/, '');
   }
 
   search(){
@@ -82,17 +91,17 @@ export class HomeSearchPage implements OnInit {
   async onSessionAction(event){
     switch (event.type) {
       case 'cardSelect':
-        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`])
+        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`])
         break;
 
       case 'joinAction':
-        (event.data.sessionId)?await this.sessionService.joinSession(event.data.sessionId):await this.sessionService.joinSession(event.data._id);
+        this.sessionService.joinSession(event.data)
         this.search();
         break;
 
       case 'enrollAction':
         console.log("enrolled")
-        let enrollResult = await this.sessionService.enrollSession(event.data._id);
+        let enrollResult = await this.sessionService.enrollSession(event.data.id);
         if(enrollResult.result){
           this.toast.showToast(enrollResult.message, "success")
           this.search();
@@ -107,7 +116,8 @@ export class HomeSearchPage implements OnInit {
   }
 
   eventAction(event){
-    this.router.navigate([CommonRoutes.MENTOR_DETAILS,event.data._id]);
+    console.log(event)
+    this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${event.data.id}`])
   }
 
 }

@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { UUID } from 'angular2-uuid';
 import * as _ from 'lodash-es';
 
 @Component({
@@ -117,6 +116,9 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
           name: 'chip',
           type: 'text',
           placeholder: 'Enter ' + `${this.lowerCaseLabel}`,
+          attributes: {
+            maxlength: 50,
+          }
         },
       ],
       buttons: [
@@ -132,7 +134,7 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
             if (alertData?.chip !== "") {
               let obj = {
                 label: alertData.chip,
-                value: UUID.UUID(),
+                value: alertData.chip
               };
               this.chips.push(obj);
               this.onChipClick(obj);

@@ -1,0 +1,42 @@
+---
+- hosts: elevate
+  vars:
+    project_path: /opt/frontend/mentoring-mobile-app
+    root_path: /opt/frontend
+  tasks:
+    - name: Slurp host file
+      slurp:
+        src: "/opt/backend/deployment/.token"
+      register: slurpfile
+    - name: Run vault credentials
+      shell: "curl --location --request GET '{{ vaultAddress }}mentored-portal' --header 'X-Vault-Token: {{ slurpfile['content'] | b64decode }}' | jq '.data' > '{{root_path}}/data2.json'"
+      register: vaultCurl
+    - name: Change directory
+      shell: cd {{project_path}}
+    - name: Fetch the latest code
+      git:
+        repo: https://github.com/ELEVATE-Project/mentoring-mobile-app
+        dest: "{{project_path}}"
+        version: "{{gitBranch}}"
+        force: yes
+    - name: Update npm
+      shell: cd {{project_path}} && npm i --force
+    - name: Set permission
+      shell: chmod 744 {{ project_path }}/src/scripts/json2env.sh
+    - name: Generate .env
+      shell: cat {{root_path}}/data2.json | jq '.data' > {{ project_path }}/src/environments/environment.ts && sed -i '1s/^/export const environment = \n/' {{ project_path }}/src/environments/environment.ts
+      register: envConfig
+    - debug: msg=" cred {{ envConfig }} "
+    - name: Change directory
+      shell: chdir {{project_path}}
+    - name: Fetch pm2 config file
+      shell: "curl --location --request GET '{{ vaultAddress }}portalPm2Config' --header 'X-Vault-Token: {{ slurpfile['content'] | b64decode }}' | jq '.data.data' > '{{ project_path }}/pm2.config.json'"
+      register: pm2
+    - name: Change directory
+      shell: cd {{project_path}}
+    - name: Remove www folder
+      shell: rm -rf www
+    - name: Build pwa app
+      shell: cd {{project_path}} && ionic build --prod
+    - name: Start pm2
+      shell: cd {{project_path}} && pm2 start pm2.config.json

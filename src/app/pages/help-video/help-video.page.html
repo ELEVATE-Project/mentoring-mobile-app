@@ -2,8 +2,8 @@
 <ion-content fullscreen>
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let item of items">
-      <ion-card [href]="item?.value" class="ion-text-center card-content">
+      <ion-col *ngFor="let item of items" padding size-xs="12" size-sm="6" size-md="4" size-lg="3" align-self-stretch>
+      <ion-card [href]="item?.value" class="card-content">
           <div>
             <img [src]="item?.options[0]" class="image-responsive image-content">
           </div>
@@ -15,6 +15,6 @@
     </ion-row>
   </ion-grid>
 </ion-content>
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border footer-button">
   <ion-button (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>
 </ion-footer>

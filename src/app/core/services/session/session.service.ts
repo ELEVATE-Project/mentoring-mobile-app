@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpService, LoaderService, ToastService } from '..';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { Browser } from '@capacitor/browser';
 import { Router } from '@angular/router';
+import { JoinDialogBoxComponent } from 'src/app/shared/components/join-dialog-box/join-dialog-box.component';
+import { ModalController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
-  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private inAppBrowser: InAppBrowser, private router: Router) { }
+  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private router: Router, private modalCtrl: ModalController) { }
 
 
   async createSession(formData, id?: string) {
@@ -29,6 +31,7 @@ export class SessionService {
     }
     catch (error) {
       this.loaderService.stopLoader();
+      return false
     }
   }
 
@@ -41,14 +44,15 @@ export class SessionService {
       params ='&search=' + obj.searchText
     }
     const config = {
-      url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj.page + '&limit=' + obj.limit +params,
+      url: urlConstants.API_URLS.CREATED_SESSIONS + obj.page + '&limit=' + obj.limit +params,
       payload: {}
     };
     try {
       let data = await this.httpService.get(config);
       let result = _.get(data, 'result');
-      //this.loaderService.stopLoader();
+      this.loaderService.stopLoader();
       return result;
+      return {}
     }
     catch (error) {
      // this.loaderService.stopLoader();
@@ -59,7 +63,7 @@ export class SessionService {
 
 async getSessionsList(obj) {
   const config = {
-    url: urlConstants.API_URLS.SESSIONS + obj?.type + '&page=' + obj?.page + '&limit=' + obj?.limit + '&search=' + btoa(obj?.searchText),
+    url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj?.type + '&page=' + obj?.page + '&limit=' + obj?.limit + '&search=' + btoa(obj?.searchText),
   };
   try {
     let data: any = await this.httpService.get(config);
@@ -77,9 +81,8 @@ async getSessionsList(obj) {
     };
     try {
       let data = await this.httpService.get(config);
-      let result = _.get(data, 'result');
       //this.loaderService.stopLoader();
-      return result;
+      return data;
     }
     catch (error) {
       //this.loaderService.stopLoader();
@@ -136,10 +139,10 @@ async getSessionsList(obj) {
       payload: {}
     };
     try {
-      let data = await this.httpService.get(config);
+      let data = await this.httpService.post(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-        this.openBrowser(data.result.link);
+        await this.openBrowser(data.result.link);
         return true;
       } else {
         return false;
@@ -151,7 +154,8 @@ async getSessionsList(obj) {
     }
   }
 
-  async joinSession(id) {
+  async joinSession(sessionData) {
+    let id = sessionData.sessionId?sessionData.sessionId: sessionData.id;
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.JOIN_SESSION + id,
@@ -161,7 +165,12 @@ async getSessionsList(obj) {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
       if (data.responseCode == "OK") {
-        this.openBrowser(data.result.link);
+          let modal = await this.modalCtrl.create({
+            component: JoinDialogBoxComponent,
+            componentProps: { data: data.result, sessionData : sessionData},
+            cssClass: 'example-modal'
+          });
+          modal.present()
       }
     }
     catch (error) {
@@ -185,11 +194,10 @@ async getSessionsList(obj) {
     }
   }
 
-  openBrowser(link) {
-    let browser = this.inAppBrowser.create(link, `_system`);
-    browser.on('exit').subscribe(() => {
-    }, err => {
-      console.error(err);
+  async openBrowser(link, windowName:any = "_self") {
+    await Browser.open({ url: link, windowName:windowName });
+    Browser.addListener('browserFinished', () => {
+      console.log("exit");
     });
   }
 
@@ -212,8 +220,8 @@ async getSessionsList(obj) {
       payload: {}
     };
     try {
-      let data = await this.httpService.post(config);
-      return data.result[0].data;
+      let data = await this.httpService.get(config);
+      return data.result.data;
     }
     catch (error) {
     }

@@ -6,6 +6,7 @@ import {
   LoaderService,
   LocalStorageService,
   ToastService,
+  UtilService,
 } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 import { localKeys } from '../../constants/localStorage.keys';
@@ -13,11 +14,14 @@ import * as _ from 'lodash-es';
 import { Location } from '@angular/common';
 import { UserService } from '../user/user.service';
 import { AuthService } from '../auth/auth.service';
+import { FormService } from 'src/app/core/services/form/form.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
+  isMentor: boolean;
+  isOrgAdmin: any;
   constructor(
     private httpService: HttpService,
     private loaderService: LoaderService,
@@ -25,8 +29,10 @@ export class ProfileService {
     private toast: ToastService,
     private localStorage: LocalStorageService,
     private _location: Location,
+    private utilService:UtilService,
     private userService: UserService,
-    private injector: Injector
+    private injector: Injector,
+    private form: FormService
   ) { }
   async profileUpdate(formData, showToast=true) {
     await this.loaderService.startLoader();
@@ -35,32 +41,19 @@ export class ProfileService {
       payload: formData,
     };
     try {
-      let data: any = await this.httpService.post(config);
+      let data: any = await this.httpService.patch(config);
       let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+      let profileData = await this.getProfileDetailsFromAPI();
       userDetails.user = null;
-      let profileData = await this.getProfileDetailsAPI();
-      await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileData);
-      this.userService.userEvent.next(profileData);
+      let profileDatas = await {...userDetails, ...profileData};
+      await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileDatas);
+      this.userService.userEvent.next(profileDatas);
       this.loaderService.stopLoader();
       this._location.back();
       (showToast)?this.toast.showToast(data.message, "success"):null;
     }
     catch (error) {
       this.loaderService.stopLoader();
-    }
-  }
-  async getProfileDetailsAPI() {
-    const config = {
-      url: urlConstants.API_URLS.PROFILE_DETAILS,
-      payload: {}
-    };
-    try {
-      let data: any = await this.httpService.get(config);
-      data = _.get(data, 'result');
-      this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
-      return data;
-    }
-    catch (error) {
     }
   }
 
@@ -70,16 +63,11 @@ export class ProfileService {
       try {
         this.localStorage.getLocalData(localKeys.USER_DETAILS)
           .then(async (data) => {
-            if (data) {
-              //showLoader ? this.loaderService.stopLoader() : null;
-              resolve(data);
-            } else {
-              var res = await this.getProfileDetailsAPI();
-              await this.localStorage.setLocalData(localKeys.USER_DETAILS, res);
-              data = _.get(data, 'user');
-             // showLoader ? this.loaderService.stopLoader() : null;
+            if(data) {
+              await this.getUserRole(data)
               resolve(data);
             }
+            //showLoader ? this.loaderService.stopLoader() : null;
           })
       } catch (error) {
        // showLoader ? this.loaderService.stopLoader() : showLoader;
@@ -153,18 +141,56 @@ export class ProfileService {
     }
   }
 
-  async getProfileDetailsFromAPI(isAMentor, id, showLoader=true){
+  async getProfileDetailsFromAPI(){
     const config = {
-      url: (isAMentor)?urlConstants.API_URLS.MENTOR_PROFILE_DETAILS+id:urlConstants.API_URLS.MENTEE_PROFILE_DETAILS+id,
+      url: urlConstants.API_URLS.PROFILE_READ,
       payload: {}
     };
     try {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
+      await this.localStorage.setLocalData(localKeys.USER_ROLES, this.getUserRole(data))
       return data;
     }
     catch (error) {
     }
   }
+
+  getUserRole(userDetails) {
+    var roles = userDetails.user_roles.map(function(item) {
+      return item['title'];
+    });
+    this.isMentor = roles.includes('mentor')?true:false;
+    this.isOrgAdmin = roles.includes('org_admin')?true:false;
+    return roles
+  }
+
+  async upDateProfilePopup(msg:any = {header: 'UPDATE_PROFILE',message: 'PLEASE_UPDATE_YOUR_PROFILE_IN_ORDER_TO_PROCEED',cancel:'UPDATE',submit:'CANCEL'}){
+    this.utilService.alertPopup(msg).then(async (data) => {
+      if(!data){
+        this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+      }
+    }).catch(error => {})
+  }
+
+  async prefillData(requestDetails: any,entityNames:any,formData:any,showAddOption:any=true) {
+    let existingData = requestDetails;
+    if(requestDetails?.about){
+       existingData = await this.form.formatEntityOptions(requestDetails,entityNames)
+    }
+    for (let i = 0; i < formData.controls.length; i++) {
+      if(formData.controls[i].type == 'chip'){
+        formData.controls[i].meta.showAddOption = showAddOption;
+      }
+      formData.controls[i].value = existingData[formData.controls[i].name] ? existingData[formData.controls[i].name] : '';
+      formData.controls[i].options = _.unionBy(
+        formData.controls[i].options,
+        formData.controls[i].value,
+        'value'
+      );
+    }
+  }
+
+
 }

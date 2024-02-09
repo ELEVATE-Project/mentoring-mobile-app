@@ -1,3 +1,4 @@
+import { DataSource } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
@@ -19,9 +20,15 @@ export class MentorDetailsPage implements OnInit {
   };
 
   public buttonConfig = {
-    label: "SHARE_PROFILE",
-    action: "share"
-
+    meta : { 
+      id: null
+    },
+    buttons: [
+      {
+        label: "SHARE_PROFILE",
+        action: "share",
+      }
+    ]
   }
 
   detailData = {
@@ -35,27 +42,39 @@ export class MentorDetailsPage implements OnInit {
         key: "designation"
       },
       {
+        title: "ORGANIZATION",
+        key: "organizationName"
+      },
+      {
         title: 'YEAR_OF_EXPERIENCE',
         key: 'experience',
       },
       {
         title: 'KEY_AREAS_OF_EXPERTISE',
-        key: 'areasOfExpertise',
+        key: 'area_of_expertise',
       },
       {
         title: "EDUCATION_QUALIFICATION",
-        key: "educationQualification"
+        key: "education_qualification"
+      },
+      {
+        title: "LANGUAGES",
+        key: "languages" 
       }
     ],
     data: {
       rating: {
         average:0
       },
-      sessionsHosted:0 
+      sessions_hosted:0 ,
+      organizationName:""
     },
   };
+  userCantAccess:any;
+  isloaded:boolean=false
   segmentValue = "about";
   upcomingSessions;
+  mentorProfileData:any;
   constructor(
     private routerParams: ActivatedRoute,
     private httpService: HttpService,
@@ -63,10 +82,10 @@ export class MentorDetailsPage implements OnInit {
     private sessionService: SessionService,
     private userService: UserService,
     private localStorage:LocalStorageService,
-    private toastService:ToastService
+    private toast:ToastService
   ) {
     routerParams.params.subscribe(params => {
-      this.mentorId = params.id;
+      this.mentorId = this.buttonConfig.meta.id = params.id;
       this.userService.getUserValue().then(async (result) => {
         if (result) {
           this.getMentor();
@@ -84,14 +103,21 @@ export class MentorDetailsPage implements OnInit {
   }
   async getMentor() {
     let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    // this.mentorId=user._id;
+    this.mentorProfileData = await this.getMentorDetails()
+    this.isloaded = true
+    this.userCantAccess = this.mentorProfileData?.responseCode == 'OK' ? false:true
+      this.detailData.data = this.mentorProfileData?.result;
+      this.detailData.data.organizationName = this.mentorProfileData?.result?.organization.name;
+  }
+
+  async getMentorDetails(){
     const config = {
-      url: urlConstants.API_URLS.MENTOR_PROFILE_DETAILS + this.mentorId,
+      url: urlConstants.API_URLS.MENTORS_PROFILE_DETAILS + this.mentorId,
       payload: {}
     };
     try {
-      let data: any = await this.httpService.get(config);
-      this.detailData.data = data.result;
+      let data = await this.httpService.get(config);
+      return data;
     }
     catch (error) {
     }
@@ -108,17 +134,20 @@ export class MentorDetailsPage implements OnInit {
   async onAction(event){
     switch (event.type) {
       case 'cardSelect':
-        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
+        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
         break;
 
       case 'joinAction':
-        await this.sessionService.joinSession(event.data._id);
+        await this.sessionService.joinSession(event.data);
         this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
         break;
 
-      case 'enrollAction':
-        await this.sessionService.enrollSession(event.data._id);
-        this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+        case 'enrollAction':
+        let enrollResult = await this.sessionService.enrollSession(event.data.id);
+        if(enrollResult.result){
+          this.toast.showToast(enrollResult.message, "success")
+          this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+        }
         break;
     }
   }

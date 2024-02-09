@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { Chart } from 'chart.js/auto';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService } from 'src/app/core/services';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
@@ -12,6 +13,8 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 })
 export class DashboardPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
+  @ViewChild('pieChart') pieChart: ElementRef;
+  public chart: any;
   segment: any;
   dataAvailable;
   isMentor:boolean;
@@ -31,41 +34,22 @@ export class DashboardPage implements OnInit {
     }
   ];
   loading: boolean = false;
-  chartData: any = {
-    chart: {
-      data: {
-        labels: [],
-        datasets: [
-          {
-            data: [],
-            backgroundColor: ['#ffab00', '#BEBEBE']
-          }
-        ]
-      }
-    }
-  };
+  chartData: any;
 
-  constructor( 
+  constructor(
     private translate: TranslateService,
     private profile: ProfileService,
-    private apiService: HttpService ) { }
+    private apiService: HttpService) { }
 
-    ngOnInit() {
-     
-    }
+  ngOnInit() {
+    this.isMentor = this.profile.isMentor;
+    this.segment = this.isMentor ? "mentor" : "mentee";
+    this.dataAvailable = true;
+    this.getReports();
+  }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.gotToTop();
-    this.dataAvailable = false;
-    if(typeof this.isMentor === "undefined"){
-      this.profile.profileDetails().then(profileDetails => {
-        this.isMentor = profileDetails?.isAMentor;
-        this.segment= this.isMentor ? "mentor":"mentee";
-        this.getReports();
-      })
-    } else {
-      this.getReports();
-    }
   }
 
   gotToTop() {
@@ -75,12 +59,15 @@ export class DashboardPage implements OnInit {
   segmentChanged(ev: any) {
     console.log('Segment changed', ev);
     this.segment = ev.detail.value;
+    this.chart.destroy();
+    this.dataAvailable = true;
     this.getReports();
   }
 
   filterChangeHandler(event: any) {
-    console.log('Filter changed', event);
     this.selectedFilter = event.target.value;
+    this.chart.destroy();
+    this.dataAvailable = true;
     this.getReports();
   }
 
@@ -91,7 +78,6 @@ export class DashboardPage implements OnInit {
   };
 
   getReports() {
-    this.loading = true;
     const url = this.segment === 'mentor' ? urlConstants.API_URLS.MENTOR_REPORTS : urlConstants.API_URLS.MENTEE_REPORTS;
     const config = {
       url: url+this.selectedFilter.toUpperCase(),
@@ -101,21 +87,31 @@ export class DashboardPage implements OnInit {
       texts = text;
     })
     this.apiService.get(config).then(success => {
-      let chartObj;
-      console.log(success)
-        this.chartData.chart.data.labels.length = 0;
-        this.chartData.chart.data.datasets[0].data.length = 0;
-      if(this.segment === 'mentor'){
-        this.chartData.chart.data.labels.push(texts['TOTAL_SESSION_CREATED'], texts['TOTAL_SESSION_CONDUCTED'])
-        this.chartData.chart.data.datasets[0].data.push(success.result.totalSessionCreated || 0, success.result.totalsessionHosted || 0);
-      } else {
-        this.chartData.chart.data.labels.push(texts['TOTAL_SESSION_ENROLLED'], texts['TOTAL_SESSION_ATTENDED'])
-        this.chartData.chart.data.datasets[0].data.push(success.result.totalSessionEnrolled || 0, success.result.totalsessionsAttended || 0);
-      }
-      this.dataAvailable=(this.chartData.chart.data.datasets[0].data[0]===0&&this.chartData.chart.data.datasets[0].data[1]===0) ? false:true;
-      this.loading = false;
+      this.chartData = success.result;
+      this.createChart();
     }).catch(error => {
-      this.loading = false;
     })
+  }
+
+  createChart() {
+    this.chart = new Chart('MyChart', {
+      type: 'pie',
+      data: {
+        labels: this.segment === 'mentor' ? ['Total sessions created', 'Total sessions conducted'] : ['Total sessions enrolled', 'Total sessions attended'],
+        datasets: [{
+          label: 'Total',
+          data: this.segment === 'mentor' ? [this.chartData.total_session_created, this.chartData.total_session_hosted] : [this.chartData.total_session_enrolled, this.chartData.total_session_attended],
+          backgroundColor: [
+            '#ffdf00', '#7b7b7b'
+          ],
+          hoverOffset: 4
+        }],
+      },
+      options: {
+        aspectRatio: 1.5,
+        responsive: true,
+      }
+    });
+    this.dataAvailable = (this.chartData?.total_session_created == 0 || this.chartData?.total_session_enrolled == 0) ? false : true
   }
 }

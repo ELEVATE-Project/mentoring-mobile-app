@@ -10,8 +10,10 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { HttpService, LoaderService, LocalStorageService, ToastService, UserService, UtilService } from 'src/app/core/services';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
-import { Location } from '@angular/common';
 import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-conditions.page';
+import { App, AppState } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
+
 
 @Component({
   selector: 'app-home',
@@ -27,7 +29,9 @@ export class HomePage implements OnInit {
   limit = 100;
   sessions;
   sessionsCount = 0;
-  status = "published,live";
+  isNativeApp = Capacitor.isNativePlatform()
+  status = "PUBLISHED,LIVE";
+  showBecomeMentorCard = false;
   @ViewChild(IonContent) content: IonContent;
 
   public headerConfig: any = {
@@ -40,6 +44,8 @@ export class HomePage implements OnInit {
   public mentorSegmentButton = ["created-sessions"]
   selectedSegment = "all-sessions";
   createdSessions: any;
+  isMentor: boolean;
+  userEventSubscription: any;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -51,15 +57,34 @@ export class HomePage implements OnInit {
     private modalController: ModalController,
     private userService: UserService,
     private localStorage: LocalStorageService,
-    private toast:ToastService) { }
+    private toast: ToastService) { }
 
   ngOnInit() {
+    this.isMentor = this.profileService.isMentor
+    App.addListener('appStateChange', (state: AppState) => {
+      this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
+        if (state.isActive == true && data) {
+          this.getSessions();
+          if(this.profileService.isMentor){
+            this.getCreatedSessionDetails();
+          }
+        }
+      })
+    });
     this.getUser();
-    this.userService.userEventEmitted$.subscribe(data => {
+    let isRoleRequested = this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
+    let isBecomeMentorTileClosed = this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
+    this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor || isBecomeMentorTileClosed ? false : true;
+    if(this.profileService.isMentor){
+      this.getCreatedSessionDetails();
+    }
+    this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data => {
       if (data) {
+        this.isMentor = this.profileService.isMentor
         this.user = data;
       }
     })
+    this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
   }
   gotToTop() {
     this.content.scrollToTop(1000);
@@ -68,34 +93,44 @@ export class HomePage implements OnInit {
   async ionViewWillEnter() {
     this.getSessions();
     this.gotToTop();
+    let isRoleRequested = await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
+    let isBecomeMentorTileClosed =await this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
+    this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor || isBecomeMentorTileClosed ? false : true;
     var obj = { page: this.page, limit: this.limit, searchText: "" };
-    this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+    this.isMentor = this.profileService.isMentor;
+    this.createdSessions = this.isMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
   }
   async eventAction(event) {
-    switch (event.type) {
-      case 'cardSelect':
-        (this.selectedSegment=="my-sessions")?this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.sessionId}`]):this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data._id}`]);
-        break;
+    if (this.user.about) {
+      switch (event.type) {
+        case 'cardSelect':
+          this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
+          break;
 
-      case 'joinAction':
-        (event.data.sessionId)?await this.sessionService.joinSession(event.data.sessionId):await this.sessionService.joinSession(event.data._id);
-        this.getSessions();
-        break;
-
-      case 'enrollAction':
-        let enrollResult = await this.sessionService.enrollSession(event.data._id);
-        if(enrollResult.result){
-          this.toast.showToast(enrollResult.message, "success")
+        case 'joinAction':
+          await this.sessionService.joinSession(event.data)
           this.getSessions();
-        }
-        break;
+          break;
 
-      case 'startAction':
-        this.sessionService.startSession(event.data._id).then(async ()=>{
-          var obj = { page: this.page, limit: this.limit, searchText: "" };
-          this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
-        })
-        break;
+        case 'enrollAction':
+          let enrollResult = await this.sessionService.enrollSession(event.data.id);
+          if (enrollResult.result) {
+            this.toast.showToast(enrollResult.message, "success")
+            this.getSessions();
+          }
+          break;
+
+        case 'startAction':
+          this.sessionService.startSession(event.data.id).then(async () => {
+            var obj = { page: this.page, limit: this.limit, searchText: "" };
+            if(this.profileService.isMentor){
+              this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
+            }
+          })
+          break;
+      }
+    } else {
+      this.profileService.upDateProfilePopup()
     }
   }
   viewMore(data) {
@@ -107,9 +142,10 @@ export class HomePage implements OnInit {
   }
   getUser() {
     this.profileService.profileDetails().then(data => {
+      this.isMentor = this.profileService.isMentor
       this.user = data
-      if (!this.user?.hasAcceptedTAndC) {
-        this.openModal();
+      if (!this.user?.terms_and_conditions) {
+        // this.openModal();
       }
     })
   }
@@ -138,11 +174,38 @@ export class HomePage implements OnInit {
     this.selectedSegment = event.name;
   }
   async createSession() {
-    let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    if (userDetails?.about) {
-      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]);
+    if (this.user?.about != null) {
+      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]); 
     } else {
-      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
+      this.profileService.upDateProfilePopup()
+    }
+  }
+
+  async becomeMentor() {
+    if(this.user?.about != null){
+      this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);   
+    } else{
+      this.profileService.upDateProfilePopup()
+    }
+  }
+
+  async closeCard() {
+    this.showBecomeMentorCard = false;
+    await this.localStorage.setLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED, true)
+  }
+
+  getCreatedSessionDetails() {
+    if (this.isMentor) {
+      var obj = { page: this.page, limit: this.limit, searchText: "" };
+      this.sessionService.getAllSessionsAPI(obj).then((data) => {
+        this.createdSessions = data;
+      })
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.userEventSubscription) {
+      this.userEventSubscription.unsubscribe();
     }
   }
 }

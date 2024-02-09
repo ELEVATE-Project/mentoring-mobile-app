@@ -20,8 +20,9 @@
         [type]="control.type"
         [formControlName]="control.name"
         [value]="control.value"
+        autocomplete="new-password"
         [maxlength]="control?.validators?.maxLength"
-        (keydown)="removeSpace($event)"
+        (ionChange)="removeSpace($event)"
         numberOnly
       ></ion-input>
       <ion-input
@@ -40,16 +41,21 @@
         [type]="control.type"
         [formControlName]="control.name"
         [value]="control.value"
+        autocomplete="new-password"
         [maxlength]="control?.validators?.maxLength"
-        (keydown)="removeSpace($event)"
+        (ionChange)="removeSpace($event)"
+        [placeholder]="control.platformPlaceHolder"
+        (keyup.enter)="onEnterPress($event)"
       ></ion-input>
-      <textarea
+      <ion-textarea
         *ngIf="control.type === 'textarea'"
         [formControlName]="control.name"
         [value]="control.value"
+        autocomplete="new-password"
         [maxlength]="control?.validators?.maxLength"
-        (keydown)="removeSpace($event)"
-      ></textarea>
+        (ionChange)="removeSpace($event)"
+        [placeholder]="control.platformPlaceHolder"
+      ></ion-textarea>
       <ion-checkbox
         *ngIf="control.type === 'checkbox'"
         [formControlName]="control.name"
@@ -73,27 +79,41 @@
         ></ion-icon>
         <ion-icon slot="end" [name]="control.options.icon"></ion-icon>
       </ion-range>
-      <ion-input
-        *ngIf="control.type === 'date'"
-        type="datetime-local"
-        [formControlName]="control.name"
-        [value]="control.value"
-        [min]="(control.name === dependedChild)?dependedChildDate:currentDate"
-        [max]="(dependedParentDate && control.name === dependedParent)?dependedParentDate:maxDate"
-        (ionChange)="dateSelected($event, control)"
-      ></ion-input>
+      <mat-form-field *ngIf="control.type === 'date'" appearance="fill">
+        <input matInput [ngxMatDatetimePicker]="picker" 
+          [formControlName]="control.name"
+          [value]="control.value"
+          [min]="(control.name === dependedChild)?dependedChildDate:currentDate"
+          [max]="maxDate"
+          autocomplete="new-password"
+          [disabled]="control?.disabled"
+          (dateChange)="dateSelected($event, control)"
+          (click)="dateInputClick(control,picker)">
+        <mat-datepicker-toggle matSuffix [for]="$any(picker)">
+        </mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #picker 
+          [showSpinners]="showSpinners" 
+          [showSeconds]="showSeconds"
+          [stepHour]="stepHour" [stepMinute]="stepMinute" 
+          [stepSecond]="stepSecond"
+          [touchUi]="touchUi"
+          [enableMeridian]="enableMeridian"
+          [color]="color">
+        </ngx-mat-datetime-picker>
+      </mat-form-field> 
       <ion-select
         *ngIf="control.type === 'select'"
         [multiple]="control.multiple"
         [formControlName]="control.name"
         [compareWith]="compareWith"
-        [value]="control.value[0]"
+        [selectedText]="control?.value?.label"
         [okText]="'OK' | translate"
+        (ionChange)="selectionChanged(control,$event)"
         [cancelText]="'CANCEL' | translate"
       >
         <ion-select-option
           *ngFor="let option of control.options"
-          [value]="[option]"
+          [value]="option.value"
           >{{ option.label }}</ion-select-option
         >
       </ion-select>
@@ -102,8 +122,9 @@
         [formControlName]="control.name"
         [label]="control.alertLabel?control.alertLabel:control.label"
         [chips]="control.options"
-        [showSelectAll]="control.showSelectAll"
-        [showAddOption]="control.showAddOption"
+        autocomplete="new-password"
+        [showSelectAll]="control.meta.showSelectAll"
+        [showAddOption]="control.meta.showAddOption"
         [validators]="control.validators"
       ></app-input-chip>
       <ion-icon
@@ -126,14 +147,16 @@
         *ngIf="control.type === 'rating'"
         [formControlName]="control.name"
         [label]="control.label"
-        [numberOfStars]="control.noOfstars"
+        [numberOfStars]="control.no_of_stars"
       ></app-star-rating>
     </ion-item>
     <small class="error-msg d-flex error-msg flex-align-items-center" >
       <div *ngIf="myForm.get(control.name).touched && myForm.get(control.name).invalid ">
         <ion-icon name="alert-circle-outline"></ion-icon>
-        <span *ngIf="control.errorMessage" class="mx-10">{{control?.errorMessage}}</span>
-        <span *ngIf="!control.errorMessage" class="mx-10">Enter {{control?.label}}</span>
+         <span *ngIf="control?.errorMessage[(myForm.get(control.name).errors | keyvalue)[0].key]" class="mx-10">
+          {{ control?.errorMessage[(myForm.get(control.name).errors | keyvalue)[0].key] }}
+        </span>
+        <span *ngIf="!control?.errorMessage[(myForm.get(control.name).errors | keyvalue)[0].key]" class="mx-10">Enter {{control?.label}}</span> 
       </div>
     </small>
   </div>

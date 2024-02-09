@@ -1,0 +1,17 @@
+{
+  "apps": [
+    {
+      "name": "MentorED",
+      "script": "server.js",
+      "args": [],
+      "instances": "1",
+      "exec_mode": "cluster",
+      "watch": false,
+      "merge_logs": true,
+      "env": {
+        "NODE_ENV": "production",
+        "PORT": 7601
+      }
+    }
+  ]
+}

@@ -15,6 +15,7 @@
   width: 100%;
   text-align: left;
   font-size: 13px;
+  text-align: center;
 }
 
 .text-bold {
@@ -26,6 +27,7 @@
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 10%;
+  cursor: pointer;
 }
 
 .sub-heading{
@@ -36,4 +38,20 @@
 .link{
   text-decoration: none;
   color: var(--black);
+}
+
+.login-content{
+  width: fit-content;
+
+}
+
+.mail-to-container{
+  margin-top: 5px;
+  text-align: center;
+}
+
+.email{
+  user-select: all;
+  font-size: bold;
+  font-weight: 500;
 }

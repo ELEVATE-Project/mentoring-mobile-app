@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { IonTabs, Platform } from '@ionic/angular';
+import { IonTabs } from '@ionic/angular';
 
 @Component({
   selector: 'app-tabs',
@@ -10,9 +9,9 @@ import { IonTabs, Platform } from '@ionic/angular';
 export class TabsPage {
   private activeTab?: HTMLElement;
   subscription: any;
-  constructor(private platform: Platform, private router: Router) { }
+  constructor() {}
   tabChange(tabsRef: IonTabs) {
-    this.activeTab = tabsRef.outlet.activatedView.element;
+    this.activeTab = tabsRef?.outlet?.activatedView?.element;
   }
   ionViewWillLeave() {
     this.propagateToActiveTab('ionViewWillLeave');

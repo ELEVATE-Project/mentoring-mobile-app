@@ -1,23 +1,28 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-content class="ion-padding">
-  <app-generic-header [labels]="labels"></app-generic-header>
-  <section>
-    <app-dynamic-form [jsonFormData]="formData" #form1></app-dynamic-form>
-  </section>
+  <ion-grid>
+    <ion-row class="d-flex flex-justify-center">
+      <ion-col padding size-xs="12" size-sm="12" size-md="6" size-lg="6" align-self-stretch>
+        <app-generic-header [labels]="labels"></app-generic-header>
+        <section>
+          <app-dynamic-form [jsonFormData]="formData" (onEnter)="onSubmit()" #form1></app-dynamic-form>
+        </section>
+        <div class="mx-10">
+          <section submitButton [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}">
+            <div class="d-flex flex-justify-center">
+              <ion-button class="mx-0 onboard-button" shape="round" (click)="onSubmit()"
+                expand="block" size="large" [disabled]="!form1.myForm.valid">
+                {{"SIGN_UP"|translate}}</ion-button>
+            </div>
+          </section>
+          <section class="btn-section">
+            <p class="text-config">{{"ALREADY_HAVE_ACCOUNT"|translate}}</p>
+            <div class="d-flex flex-justify-center">
+              <p class="underline" (click)="onLogin()">{{"LOGIN"|translate}}</p>
+            </div>
+          </section>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
-<div class="mx-10">
-  <section submitButton [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}">
-    <div class="d-flex flex-justify-center">
-    <ion-button *ngIf="isAMentor" class="mx-0 onboard-button" shape="round" (click)="onSubmit()" expand="block" size="large" [disabled]="!form1.myForm.valid">
-      {{"SIGN_UP_AS_MENTOR"|translate}}</ion-button>
-    <ion-button *ngIf="!isAMentor" class="mx-0 onboard-button" shape="round" (click)="onSubmit()" expand="block" size="large" [disabled]="!form1.myForm.valid">
-      {{"SIGN_UP_AS_MENTEE"|translate}}</ion-button>
-    </div>
-  </section>
-  <section class="btn-section">
-    <p class="text-config">{{"ALREADY_HAVE_ACCOUNT"|translate}}</p>
-    <div class="d-flex flex-justify-center">
-      <p class="underline" (click)="onLogin()">{{"LOGIN"|translate}}</p>
-    </div>
-</section>
-  </div>

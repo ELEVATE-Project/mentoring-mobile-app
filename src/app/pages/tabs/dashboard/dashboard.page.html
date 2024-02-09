@@ -2,6 +2,9 @@
 
 
 <ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row class="d-flex  ion-justify-content-center">
+      <ion-col padding size-xs="12" size-sm="12" size-md="10" size-lg="10">
   <div>
     <ion-toolbar *ngIf="isMentor">
       <ion-segment [value]="segment" swipeGesture="true" (ionChange)="segmentChanged($event)">
@@ -32,7 +35,7 @@
             <ion-col class="bg-lite">
               <p class="stat-title">
                 {{'TOTAL_SESSION_CREATED' | translate}}
-                <span>{{chartData.chart.data.datasets[0].data[0]}}</span>
+                <span>{{ chartData?.total_session_created }}</span>
               </p>
             </ion-col>
             <ion-col size=".5">
@@ -40,18 +43,20 @@
             <ion-col class="bg-lite">
               <p class="stat-title">
                 {{'TOTAL_SESSION_CONDUCTED' | translate}}
-                <span>{{chartData.chart.data.datasets[0].data[1]}}</span>
+                <span>{{ chartData?.total_session_hosted }}</span>
               </p>
             </ion-col>
           </ion-row>
-          <sl-pie-chart *ngIf="!loading" [data]="chartData"></sl-pie-chart>
+          <div class="my-chart" fxFlex *ngIf="dataAvailable">
+            <canvas id="MyChart">{{ chart }}</canvas>
+          </div>
         </div>
         <div *ngSwitchCase="'mentee'">
           <ion-row class="stat-box">
             <ion-col class="bg-lite">
               <p class="stat-title">
                 {{'TOTAL_SESSION_ENROLLED' | translate}}
-                <span>{{chartData.chart.data.datasets[0].data[0]}}</span>
+                <span>{{ chartData?.total_session_enrolled }}</span>
               </p>
             </ion-col>
             <ion-col size=".5">
@@ -59,22 +64,26 @@
             <ion-col class="bg-lite">
               <p class="stat-title">
                 {{'TOTAL_SESSION_ATTENDED' | translate}}
-                <span>{{chartData.chart.data.datasets[0].data[1]}}</span>
+                <span>{{ chartData?.total_session_attended }}</span>
               </p>
             </ion-col>
           </ion-row>
-          <div *ngIf="chartData">
-            <sl-pie-chart *ngIf="!loading" [data]="chartData"></sl-pie-chart>
-          </div>
+        </div>
+        <div class="my-chart" fxFlex *ngIf="dataAvailable">
+          <canvas id="MyChart">{{ chart }}</canvas>
         </div>
       </div>
-      <div class="empty-state-container" *ngIf="!dataAvailable && !loading">
+      <div class="empty-state-container" *ngIf="!dataAvailable">
         <app-no-data-found [messageHeader]="'NO_DATA_AVAILABLE'"></app-no-data-found>
       </div>
     </div>
 
   </div>
+</ion-col>
+</ion-row>
+</ion-grid>
 </ion-content>
+
 
 <ion-footer class="ion-no-border">
 </ion-footer>

@@ -24,6 +24,13 @@ import {
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { MentorCardComponent } from './components/mentor-card/mentor-card.component';
 import { NumberOnlyDirective } from './directive/onlyNumbers';
+import { JoinDialogBoxComponent } from './components/join-dialog-box/join-dialog-box.component';
+import { ModelComponent } from './components/model/model.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';                                              
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 
 @NgModule({
   declarations: [
@@ -45,7 +52,9 @@ import { NumberOnlyDirective } from './directive/onlyNumbers';
     PersonaSelectionCardComponent,
     GenericProfileHeaderComponent,
     MentorCardComponent,
-    NumberOnlyDirective
+    NumberOnlyDirective,
+    JoinDialogBoxComponent,
+    ModelComponent
   ],
   imports: [
     CommonModule,
@@ -53,6 +62,14 @@ import { NumberOnlyDirective } from './directive/onlyNumbers';
     IonicModule,
     TranslateModule,
     FormsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    NgxMatMomentModule, 
   ],
   exports: [
     DynamicFormComponent,
@@ -72,7 +89,8 @@ import { NumberOnlyDirective } from './directive/onlyNumbers';
     SafeHtmlPipe,
     PersonaSelectionCardComponent,
     GenericProfileHeaderComponent,
-    MentorCardComponent
+    MentorCardComponent,
+    JoinDialogBoxComponent
   ],
 })
 export class SharedModule {}
