@@ -30,6 +30,7 @@ export class SearchPopoverComponent implements OnInit {
   searchText = '';
   count: any;
   maxCount;
+  sortingData;
   actionButtons = {
     'ADD': [{ name: 'ADD', cssColor: 'white-color' }],
     'REMOVE': [{ name: 'REMOVE', cssColor: 'primary-color' }],
@@ -100,7 +101,8 @@ export class SearchPopoverComponent implements OnInit {
     const designationQueryParam = this.selectedFilters && this.selectedFilters.designation
         ? '&designation=' + this.selectedFilters.designation.map(des => des.value).join(',')
         : '';
-    const queryString = organizationsQueryParam + designationQueryParam;
+    const sorting = `&order=${this.sortingData?.order || ''}&sort_by=${this.sortingData?.sort_by || ''}`;
+    const queryString = organizationsQueryParam + designationQueryParam + sorting
     const config = {
       url: urlConstants.API_URLS[this.data.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + queryString,
       payload: {}
@@ -174,5 +176,10 @@ export class SearchPopoverComponent implements OnInit {
       this.limit = data.pageSize 
       this.tableData = await this.getMenteelist()
     }
+  }
+
+  onSorting(data: any) {
+    this.sortingData = data;
+    this.getMenteelist()
   }
 }

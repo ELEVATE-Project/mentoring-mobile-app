@@ -52,7 +52,7 @@ export class ManageSessionComponent implements OnInit {
         "options": [
           {
             "label": "Upcoming",
-            "value": "UPCOMING"
+            "value": "PUBLISHED"
           },
           {
             "label": "Live",
