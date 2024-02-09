@@ -169,7 +169,7 @@ export class CreateSessionPage implements OnInit {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
         this.getImageUploadUrl(this.localImage);
       } else {
-        const form = Object.assign({}, this.form1.myForm.value);
+        const form = Object.assign({}, this.form1.myForm.getRawValue());
         form.start_date = form.start_date.unix().toString();
         form.end_date = form.end_date.unix().toString();
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -250,6 +250,7 @@ export class CreateSessionPage implements OnInit {
       this.formData.controls[i].value =
         existingData[this.formData.controls[i].name];
       if (this.formData.controls[i].type=='search'){
+        this.formData.controls[i].id = this.id;
         if(this.formData.controls[i].meta.multiSelect){
           this.formData.controls[i].meta.searchData = existingData[this.formData.controls[i].name]
           this.formData.controls[i].value = this.formData.controls[i].meta.searchData.map(obj => obj.id);
