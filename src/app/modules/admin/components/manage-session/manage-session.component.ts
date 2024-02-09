@@ -32,6 +32,7 @@ export class ManageSessionComponent implements OnInit {
   type = "";
   totalCount: any;
   sortingData: any;
+  setPaginatorToFirstpage:any = false;
   columnData = [
     { name: 'index_number', displayName: 'No.', type: 'text' },
     { name: 'title', displayName: 'Session name', type: 'text', sortingData: [{ sort_by: 'title', order: 'ASC', label: 'A -> Z' }, { sort_by: 'title', order: 'DESC', label: 'Z -> A' }] },
@@ -139,6 +140,7 @@ export class ManageSessionComponent implements OnInit {
   }
 
   onPaginatorChange(data: any) {
+    this.setPaginatorToFirstpage= false;
     this.page = data.page;
     this.limit = data.pageSize
     this.fetchSessionList()
@@ -146,11 +148,14 @@ export class ManageSessionComponent implements OnInit {
 
   onSorting(data: any) {
     this.sortingData = data;
+    this.page=1;
+    this.setPaginatorToFirstpage= true
     this.fetchSessionList()
   }
 
   onSearch() {
     this.page = 1;
+    this.setPaginatorToFirstpage = true
     this.fetchSessionList()
   }
 
@@ -170,6 +175,8 @@ export class ManageSessionComponent implements OnInit {
           }
         }
       }
+      this.page = 1;
+      this.setPaginatorToFirstpage = true
       this.fetchSessionList()
     });
     modal.present()

@@ -31,6 +31,7 @@ export class SearchPopoverComponent implements OnInit {
   count: any;
   maxCount;
   sortingData;
+  setPaginatorToFirstpage:any = false;
   actionButtons = {
     'ADD': [{ name: 'ADD', cssColor: 'white-color' }],
     'REMOVE': [{ name: 'REMOVE', cssColor: 'primary-color' }],
@@ -133,6 +134,8 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   async onSearch(){
+    this.page=1;
+    this.setPaginatorToFirstpage= true
     this.tableData = await this.getMenteelist()
   }
 
@@ -167,6 +170,7 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   async onPaginatorChange(data:any) {
+    this.setPaginatorToFirstpage= false;
     if(this.data.isMobile){
       this.page = this.page+1;
       this.limit = data.pageSize 
@@ -179,6 +183,8 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   onSorting(data: any) {
+    this.page=1;
+    this.setPaginatorToFirstpage= true
     this.sortingData = data;
     this.getMenteelist()
   }
