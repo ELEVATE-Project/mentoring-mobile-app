@@ -15,7 +15,7 @@ export class SearchPopoverComponent implements OnInit {
   showFilterHeader = true
   columnData = [
     { name: 'index_number', displayName: 'No.', type: 'text' },
-    { name: 'name', displayName: 'Name', type: 'text', sortingData: [{ sort_by: 'title', order: 'ASC', label: 'A -> Z' }, { sort_by: 'title', order: 'DESC', label: 'Z -> A' }] },
+    { name: 'name', displayName: 'Name', type: 'text', sortingData: [{ sort_by: 'name', order: 'ASC', label: 'A -> Z' }, { sort_by: 'name', order: 'DESC', label: 'Z -> A' }] },
     { name: 'designation', displayName: 'Designation', type: 'array' },
     { name: 'organization', displayName: 'Organisation', type: 'text' },
     { name: 'email', displayName: 'E-mail ID', type: 'text' },
@@ -183,6 +183,7 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   onSorting(data: any) {
+    console.log(data)
     this.page=1;
     this.setPaginatorToFirstpage= true
     this.sortingData = data;
