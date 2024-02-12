@@ -100,7 +100,10 @@ export class SearchPopoverComponent implements OnInit {
     const designationQueryParam = this.selectedFilters && this.selectedFilters.designation
         ? '&designation=' + this.selectedFilters.designation.map(des => des.value).join(',')
         : '';
-    const queryString = organizationsQueryParam + designationQueryParam;
+    let queryString = organizationsQueryParam + designationQueryParam;
+    if(this.data.control.id){
+      queryString = queryString + '&session_id=' + this.data.control.id
+    }
     const config = {
       url: urlConstants.API_URLS[this.data.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + queryString,
       payload: {}
@@ -111,7 +114,8 @@ export class SearchPopoverComponent implements OnInit {
       this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
       let selectedIds =  _.map(this.selectedList, 'id');
       data.result.data.forEach((ele) => {
-        ele.action = _.includes(selectedIds, ele.id) ? (ele.type === 'ENROLLED' ? [] : this.actionButtons.REMOVE) : this.actionButtons.ADD;
+        ele.action = _.includes(selectedIds, ele.id) ? (ele.enrolled_type === 'ENROLLED' ? [] : this.actionButtons.REMOVE) : this.actionButtons.ADD;
+        ele.type = ele?.enrolled_type
         ele.organization = ele?.organization?.name;
       });
       return data.result.data
