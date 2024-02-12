@@ -81,6 +81,8 @@ mat-datepicker-toggle {
   font-size: 24px !important;
   margin-top: 18px;
   z-index: 1000;
+  left : 95px;
+  position: absolute;
 }
 
 .popover-header {
@@ -94,6 +96,6 @@ mat-datepicker-toggle {
 
 ion-popover {
   &::part(content) {
-    max-width: 300px;
+    width: 300px;
   }
 }
