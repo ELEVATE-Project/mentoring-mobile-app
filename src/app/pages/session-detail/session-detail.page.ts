@@ -84,10 +84,6 @@ export class SessionDetailPage implements OnInit {
         title: 'MEDIUM',
         key: 'medium',
       },
-      {
-        title: 'MENTOR',
-        key: 'mentor_name',
-      },
       
     ],
     data: {
@@ -146,6 +142,7 @@ export class SessionDetailPage implements OnInit {
       isCreator:false,
       isConductor:false,
       manager_name:"",
+      mentor_designation:[]
     },
   };
 
@@ -175,6 +172,15 @@ export class SessionDetailPage implements OnInit {
       this.startDate = (response.start_date>0)?moment.unix(response.start_date).toLocaleString():this.startDate;
       this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
+      if((!this.isConductor)){
+        this.detailData.data.mentor_designation = response.mentor_designation.map(designation => designation.label).join(', ');
+        this.detailData.form.push(
+          {
+            title: 'MENTOR',
+            key: 'mentor_name',
+          },
+        );
+      } 
       if((this.isCreator || this.isConductor) && !this.detailData.form.some(obj => obj.title === 'MENTEE_COUNT')){
         
         this.detailData.form.push(

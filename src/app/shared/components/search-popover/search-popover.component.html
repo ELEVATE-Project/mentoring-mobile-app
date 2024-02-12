@@ -11,15 +11,17 @@
 </ion-toolbar>
 <ion-grid class="ion-no-margin" *ngIf="!data.isMobile;">
   <ion-row>
-    <ion-col class="col-width-25" *ngIf="data.showFilter">
-      <app-filter-tree [enableFilterHeader]="true" *ngIf="filterData" [filterData]="filterData"
+    <ion-col class="col-width-25" *ngIf="data.showFilter && tableData">
+      <div class="scrollable-filter">
+        <app-filter-tree [enableFilterHeader]="true" *ngIf="filterData" [filterData]="filterData"
         (filtersChanged)="filtersChanged($event)"></app-filter-tree>
+      </div>
     </ion-col>
     <ion-col class="ion-text-end" *ngIf="tableData">
-      <div class="scrollable-col">
-      <app-generic-table [columnData]="columnData" [tableData]="tableData"
-        [totalCount]="count" (onClickEvent)='onButtonCLick($event)' (paginatorChanged)="onPaginatorChange($event)"
-        [noDataMessage]="noDataMessage" [showPaginator]="true"></app-generic-table>
+      <div class="scrollable-table ">
+      <app-generic-table [headingText]="this.data.control.meta.url" [columnData]="columnData" [tableData]="tableData"
+        [totalCount]="count" (onClickEvent)='onButtonCLick($event)' (paginatorChanged)="onPaginatorChange($event)" (onSorting)="onSorting($event)" 
+        [noDataMessage]="noDataMessage" [setPaginatorToFirstpage]="setPaginatorToFirstpage" [showPaginator]="true"></app-generic-table>
       </div>
     </ion-col>
   </ion-row>

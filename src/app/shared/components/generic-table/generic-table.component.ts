@@ -18,6 +18,7 @@ export class GenericTableComponent implements OnInit {
   @Input() totalCount;
   @Input() noDataMessage;
   @Input() showPaginator
+  @Input() setPaginatorToFirstpage
   @Output() onClickEvent = new EventEmitter();
   @Output() paginatorChanged = new EventEmitter();
   @Output() onSorting = new EventEmitter();
@@ -33,6 +34,9 @@ export class GenericTableComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.tableData);
   }
   ngOnChanges(changes: SimpleChanges) {
+    if(this.setPaginatorToFirstpage){
+      this.paginator.firstPage();
+    }
     if (changes['tableData']) {
       this.dataSource = new MatTableDataSource(this.tableData);
     }

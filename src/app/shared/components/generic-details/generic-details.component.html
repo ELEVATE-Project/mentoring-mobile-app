@@ -19,6 +19,14 @@
       </div>
     </ng-template>
     <ng-template #elseBlock4>
+      <div *ngIf="item?.key=='mentor_name';else elseBlock5">
+        <p>{{sessionData.data[item.key] }}</p>
+        <div>
+          {{sessionData.data.mentor_designation}}
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #elseBlock5>
       <p *ngIf="item?.key=='experience'" class="value">{{sessionData.data[item.key]}} {{"YEARS"|translate}}</p>
       <p *ngIf="item?.key!='experience'" class="value">{{sessionData.data[item.key]}}</p>
     </ng-template>
