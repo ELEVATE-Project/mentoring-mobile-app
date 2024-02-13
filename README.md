@@ -1,56 +1,32 @@
-CONTENTS OF THIS FILE
+# Customizing the PWA
+
+Contents
 ---------------------
 
  * Dependencies
  * Command-line setup
  * Project setup
- * Build MentorED
- * Debug MentorED
- * Hashicorp Vault Setup
+ * Build Mentor
+ * Debug Mentor
+ * HashiCorp Vault setup
  * Jenkins Pipeline
  * Ansible Deployment Script
- * Env Files, Server.js And Pm2 Config Files
+ * Environment files, Server.js, and pm2.config.json
 
 
-DEPENDENCIES
+Dependencies
 ------------
 
-* Ionic:
+| Requirement         | Description    |
+|--------------|-----------|
+| Ionic CLI|Version 7.1.1 (/usr/local/lib/node_modules/@ionic/cli)|
+| Ionic Framework | <ul><li>@ionic/angular 6.7.5</li> <li>@angular-devkit/build-angular : 13.2.6 </li><li> @angular-devkit/schematics : 13.2.6 </li><li>@angular/cli : 13.2.6 </li><li> @ionic/angular-toolkit : 6.1.0 </li></ul>|
+| Capacitor | <ul><li>Capacitor CLI : 5.5.1 </li><li>@capacitor/android : 5.5.1 </li><li>@capacitor/core : 5.5.1 </li><li>@capacitor/ios : 5.5.1 </li></ul>|
+| Cordova | <ul><li>Cordova CLI : 11.0.0</li><li>Cordova Platforms : none</li><li>Cordova Plugins : no whitelisted plugins (0 plugins total)</li></ul>|
+| Utility | <ul><li>cordova-res : 0.15.4</li><li>native-run : 1.7.4 </li></ul>
+| System | <ul><li>Android SDK Tools : 26.1.1</li><li><a href="https://nodejs.org/">Node.js®</a>: v18.18.2</li><li>npm: 10.2.0</li><li>OS : Linux 5.13</li></ul>|
 
-   Ionic CLI                     : 7.1.1 (/usr/local/lib/node_modules/@ionic/cli)
-   Ionic Framework               : @ionic/angular 6.7.5
-   @angular-devkit/build-angular : 13.2.6
-   @angular-devkit/schematics    : 13.2.6
-   @angular/cli                  : 13.2.6
-   @ionic/angular-toolkit        : 6.1.0
-
-* Capacitor:
-
-   Capacitor CLI      : 5.5.1
-   @capacitor/android : 5.5.1
-   @capacitor/core    : 5.5.1
-   @capacitor/ios     : 5.5.1
-
-* Cordova:
-
-   Cordova CLI       : 11.0.0
-   Cordova Platforms : none
-   Cordova Plugins   : no whitelisted plugins (0 plugins total)
-
-* Utility:
-
-   cordova-res : 0.15.4
-   native-run  : 1.7.4
-
-* System:
-
-   Android SDK Tools : 26.1.1
-   NodeJS            : v18.18.2 (you can download from https://nodejs.org/)
-   npm               : 10.2.0
-   OS                : Linux 5.13
-
-
-CLI SETUP
+CLI Setup
 ---------
 
 - npm install -g ionic
@@ -59,16 +35,16 @@ CLI SETUP
 - npm install @capacitor/cli --save-dev
 
 
-PROJECT SETUP
+Project Setup
 -------------
 
-- git clone the repo (https://github.com/ELEVATE-Prjoect/mentoring-mobile-app.git)
-- Checkout to latest branch.(currently release-2.5.0)
-- Add environment files inside src/environments
-- Go to project folder and run npm i
+1. Clone the [repository](https://github.com/ELEVATE-Project/mentoring-mobile-app.git).
+2. Change to the latest GitHub branch (**release-2.5.0**).
+3. Add environment files into the src/environments folder.
+4. Go to the project folder and run `npm i`.
 
 
-BUILD MENTORED
+Build Mentor
 --------------
 
 - Run npx cap sync
@@ -77,17 +53,17 @@ BUILD MENTORED
 - Run ionic serve to serve the project in local
 
 
-DEBUG MENTORED
+Debug Mentor
 --------------
 
-- Open the running app in browser
-- Start inspecting using chrome dev tools or any alternatives
+- Open the running app in the browser.
+- Start inspecting using Chrome dev tools or any alternatives.
 
-HASHICORP VAULT SETUP
+HashiCorp Vault Setup
 ---------------------
 
 
-JENKINS PIPELINE
+Jenkins Pipeline
 ----------------
 
 For automating your app deployment, you can use Jenkins. You can create a Jenkins job and run that job each time you want a deployment.
@@ -122,7 +98,7 @@ For that you can create a Jenkins job and add a pipeline script for the job insi
 
 This pipeline will help to fetch the latest code from the given branch in repo and run the ansible script which we are about to create for building and deploying our application.
 
-ANSIBLE DEPLOYMENT SCRIPT
+Ansible Deployment Script
 -------------------------
 
 Add an ansible script inside the ‘deployment’ folder in the root folder of your project. And add that path in your jenkins pipeline. When you run the job in jenkins, this script will get executed step by step till the end. Please update all the necessary details in the below example.
@@ -188,8 +164,8 @@ This script will convert the fetched data from hashicorp to env files.
 
 
 
-ENV FILES, SERVER.JS AND PM2 CONFIG FILES
------------------------------------------
+Structure of Environment file, Server.js, and pm2.config.json
+-------------------------------------------------------------
 
 For deploying your application, you need an Environment file, Server.js, and a pm2.config.json file. Adding structure of those below for reference.
 
