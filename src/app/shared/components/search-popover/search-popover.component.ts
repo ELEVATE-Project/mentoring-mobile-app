@@ -19,7 +19,7 @@ export class SearchPopoverComponent implements OnInit {
     { name: 'designation', displayName: 'Designation', type: 'array' },
     { name: 'organization', displayName: 'Organisation', type: 'text' },
     { name: 'email', displayName: 'E-mail ID', type: 'text' },
-    { name: 'type', displayName: 'Enrollment Type', type: 'text' },
+    { name: 'type', displayName: 'Enrollment type', type: 'text' },
     { name: 'action', displayName: 'Actions', type: 'button' }
   ]
 
