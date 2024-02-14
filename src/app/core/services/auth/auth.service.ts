@@ -39,7 +39,9 @@ export class AuthService {
     };
     try {
       let data: any = await this.httpService.post(config);
-      this.setUserInLocal(data);
+      await this.setUserInLocal(data);
+      let user = await this.profileService.getProfileDetailsFromAPI();
+      this.userService.userEvent.next(user);
       this.loaderService.stopLoader();
       return data.result.user;
     }
@@ -74,8 +76,6 @@ export class AuthService {
     await this.localStorage.setLocalData(localKeys.USER_ROLES, this.profileService.getUserRole(this.user))
     await this.profileService.getUserRole(this.user);
     this.profileService.isMentor = (this.user?.user_roles[0]?.title === 'mentor')
-    this.userService.userEvent.next(this.user);
-    await this.localStorage.setLocalData(localKeys.USER_DETAILS, this.user);
     await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, this.user.preferred_language.value);
     this.translate.use(this.user.preferred_language.value)
     return this.user;
