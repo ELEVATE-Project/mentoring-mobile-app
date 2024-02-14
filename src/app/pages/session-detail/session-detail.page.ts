@@ -172,8 +172,8 @@ export class SessionDetailPage implements OnInit {
       this.startDate = (response.start_date>0)?moment.unix(response.start_date).toLocaleString():this.startDate;
       this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
-      if((!this.isConductor)){
-        this.detailData.data.mentor_designation = response.mentor_designation.map(designation => designation.label).join(', ');
+      this.detailData.data.mentor_designation = response.mentor_designation.map(designation => designation.label).join(', ');
+      if((!this.isConductor && !this.detailData.form.some(obj => obj.title === 'MENTOR'))){
         this.detailData.form.push(
           {
             title: 'MENTOR',
