@@ -133,6 +133,8 @@ ion-popover {
   --padding-end: var(--ion-padding, 0px);
   --padding-top: var(--ion-padding, 0px);
   --padding-bottom: var(--ion-padding, 0px);
+  padding-top: var(--ion-padding, 0px);
+  padding-bottom: var(--ion-padding, 0px);
 }
 
 .img{
@@ -145,11 +147,13 @@ ion-popover {
   justify-content: center;
   align-items: center;
   gap: 5px;
+  padding: 10px;
 }
 .sorting-icon{
   padding-top: 5px;
 }
 .cell-text{
+  padding: 0px 5px;
   overflow: hidden;
   max-width: 200px;
   text-overflow: ellipsis;

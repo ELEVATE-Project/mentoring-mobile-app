@@ -15,7 +15,7 @@ export class SearchPopoverComponent implements OnInit {
   showFilterHeader = true
   columnData = [
     { name: 'index_number', displayName: 'No.', type: 'text' },
-    { name: 'name', displayName: 'Name', type: 'text', sortingData: [{ sort_by: 'title', order: 'ASC', label: 'A -> Z' }, { sort_by: 'title', order: 'DESC', label: 'Z -> A' }] },
+    { name: 'name', displayName: 'Name', type: 'text', sortingData: [{ sort_by: 'name', order: 'ASC', label: 'A -> Z' }, { sort_by: 'name', order: 'DESC', label: 'Z -> A' }] },
     { name: 'designation', displayName: 'Designation', type: 'array' },
     { name: 'organization', displayName: 'Organisation', type: 'text' },
     { name: 'email', displayName: 'E-mail ID', type: 'text' },
@@ -30,6 +30,8 @@ export class SearchPopoverComponent implements OnInit {
   searchText = '';
   count: any;
   maxCount;
+  sortingData;
+  setPaginatorToFirstpage:any = false;
   actionButtons = {
     'ADD': [{ name: 'ADD', cssColor: 'white-color' }],
     'REMOVE': [{ name: 'REMOVE', cssColor: 'primary-color' }],
@@ -104,6 +106,8 @@ export class SearchPopoverComponent implements OnInit {
     if(this.data.control.id){
       queryString = queryString + '&session_id=' + this.data.control.id
     }
+    const sorting = `&order=${this.sortingData?.order || ''}&sort_by=${this.sortingData?.sort_by || ''}`;
+    queryString = queryString + sorting
     const config = {
       url: urlConstants.API_URLS[this.data.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + queryString,
       payload: {}
@@ -135,6 +139,8 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   async onSearch(){
+    this.page=1;
+    this.setPaginatorToFirstpage= true
     this.tableData = await this.getMenteelist()
   }
 
@@ -169,6 +175,7 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   async onPaginatorChange(data:any) {
+    this.setPaginatorToFirstpage= false;
     if(this.data.isMobile){
       this.page = this.page+1;
       this.limit = data.pageSize 
@@ -178,5 +185,13 @@ export class SearchPopoverComponent implements OnInit {
       this.limit = data.pageSize 
       this.tableData = await this.getMenteelist()
     }
+  }
+
+  onSorting(data: any) {
+    console.log(data)
+    this.page=1;
+    this.setPaginatorToFirstpage= true
+    this.sortingData = data;
+    this.getMenteelist()
   }
 }
