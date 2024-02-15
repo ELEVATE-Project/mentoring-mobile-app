@@ -191,7 +191,7 @@ export class SessionDetailPage implements OnInit {
         );
       } 
     }
-    if((response?.meeting_info?.platform == 'OFF') && this.isConductor && response?.status?.value=='PUBLISHED'){
+    if((response?.meeting_info?.platform == 'OFF') && this.isCreator && response?.status?.value=='PUBLISHED'){
       this.showToasts('ADD_MEETING_LINK', 0 , [
           {
             text: 'Add meeting link',
