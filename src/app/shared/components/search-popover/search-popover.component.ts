@@ -62,7 +62,6 @@ export class SearchPopoverComponent implements OnInit {
     if (this.data.viewListMode) {
       this.selectedList.forEach((ele) => {
         ele.action = ele.type=='ENROLLED' ? [] : this.actionButtons.REMOVE;
-        ele.organization = ele?.organization?.name;
       });
       this.tableData = this.selectedList
       this.filterData = [];
