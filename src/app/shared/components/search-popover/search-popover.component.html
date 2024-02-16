@@ -27,15 +27,21 @@
   </ion-row>
 </ion-grid>
 <ion-content *ngIf="data.isMobile;">
-    <div class="card-wrapper" *ngFor="let data of tableData">
-      <ion-header class="card-header">{{data.name}}</ion-header>
-      <ion-label class="card-data">{{data.email}}</ion-label>
-      <ion-col class="d-flex flex-justify-center">
-        <ion-button *ngFor="let button of data.action" [class]="button.cssColor" class="card-button"
-          (click)="onButtonCLick({'action': button.name, 'element': data})">
-          {{ button.name | translate }}
-        </ion-button>
-      </ion-col>
+    <div *ngIf="tableData.length;">
+      <div class="card-wrapper" *ngFor="let data of tableData">
+        <ion-header class="card-header">{{data.name}}</ion-header>
+        <ion-label class="card-data">{{data.email}}</ion-label>
+        <ion-col class="d-flex flex-justify-center">
+          <ion-button *ngFor="let button of data.action" [class]="button.cssColor" class="card-button"
+            (click)="onButtonCLick({'action': button.name, 'element': data})">
+            {{ button.name | translate }}
+          </ion-button>
+        </ion-col>
+      </div>
+    </div>
+    <div *ngIf="!tableData?.length">
+      <app-no-data-found [messageDescription]="noDataMessage">
+      </app-no-data-found>
     </div>
 </ion-content>
 <ion-footer *ngIf="data.isMobile;">

@@ -25,10 +25,12 @@ export class MenteeListPopupComponent implements OnInit {
   totalCount:any;
   page:any;
   limit:any
+  isMobile: boolean;
  
   constructor(private sessionService: SessionService,private adminWorkapceService: AdminWorkapceService,private modalController: ModalController) { }
 
   ngOnInit() {
+    this.isMobile = window.innerWidth <= 800;
     this.fetchMenteeList()
   }
 
