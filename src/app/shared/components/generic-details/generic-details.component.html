@@ -15,7 +15,7 @@
     <ng-template #elseBlock3>
       <div class="d-flex" *ngIf="item?.key=='mentee_count';else elseBlock4">
         <p class="mentee-count">{{sessionData.data[item.key] }}</p>
-        <ion-button *ngIf="sessionData.data[item.key]" class="view-mentee-list" color="white" (click)="onClickViewList()">View list</ion-button>
+        <ion-button class="view-mentee-list" color="white" (click)="onClickViewList()">View list</ion-button>
       </div>
     </ng-template>
     <ng-template #elseBlock4>
