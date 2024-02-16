@@ -27,7 +27,7 @@
   </ion-row>
 </ion-grid>
 <ion-content *ngIf="data.isMobile;">
-    <div *ngIf="tableData.length;">
+    <div *ngIf="tableData">
       <div class="card-wrapper" *ngFor="let data of tableData">
         <ion-header class="card-header">{{data.name}}</ion-header>
         <ion-label class="card-data">{{data.email}}</ion-label>
@@ -38,10 +38,10 @@
           </ion-button>
         </ion-col>
       </div>
-    </div>
-    <div *ngIf="!tableData?.length">
-      <app-no-data-found [messageDescription]="noDataMessage">
-      </app-no-data-found>
+      <div *ngIf="!tableData?.length">
+        <app-no-data-found [messageDescription]="noDataMessage">
+        </app-no-data-found>
+      </div>
     </div>
 </ion-content>
 <ion-footer *ngIf="data.isMobile;">

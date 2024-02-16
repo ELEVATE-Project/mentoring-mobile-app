@@ -20,6 +20,7 @@ export class SessionCardComponent implements OnInit {
   @ViewChild(IonModal) modal: IonModal;
   startDate: string;
   isCreator: boolean;
+  isConductor:boolean;
   buttonConfig;
   userData: any;
   endDate: string;
@@ -31,27 +32,33 @@ export class SessionCardComponent implements OnInit {
   async ngOnInit() {
     App.addListener('appStateChange', (state: AppState) => {
       if (state.isActive == true) {
-        this.setButtonConfig(this.isCreator);
+        this.setButtonConfig(this.isCreator,this.isConductor);
       }
     });
     this.meetingPlatform = (this.data?.meeting_info);
     this.isCreator = await this.checkIfCreator();
-    this.setButtonConfig(this.isCreator);
+    this.isConductor = await this.checkIfConductor();
+    this.setButtonConfig(this.isCreator,this.isConductor);
     this.startDate = (this.data.start_date>0)?moment.unix(this.data.start_date).toLocaleString():this.startDate;
     this.endDate = (this.data.end_date>0)?moment.unix(this.data.end_date).toLocaleString():this.endDate;
   }
  
-  setButtonConfig(isCreator: boolean) {
+  setButtonConfig(isCreator: boolean, isConductor:boolean) {
     let currentTimeInSeconds=Math.floor(Date.now()/1000);
-    if(isCreator){
+    if(isCreator || isConductor){
       this.buttonConfig={label:"START",type:"startAction"};
     } else {
-      this.buttonConfig=(!isCreator&&this.data.is_enrolled || this.isEnrolled)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
+      this.buttonConfig=(!isCreator && !isConductor &&this.data.is_enrolled || this.isEnrolled)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
     }
     this.buttonConfig.isEnabled = ((this.data.start_date - currentTimeInSeconds) < 600 && !(this.data?.meeting_info?.platform == 'OFF')) ? true : false
   }
 
   async checkIfCreator() {
+    this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    return (this.data.created_by == this.userData.id) ?true : false;
+  }
+
+  async checkIfConductor() {
     this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
     return (this.data.mentor_id == this.userData.id) ?true : false;
   }
