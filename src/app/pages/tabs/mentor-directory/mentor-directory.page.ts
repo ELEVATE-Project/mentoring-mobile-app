@@ -60,7 +60,6 @@ export class MentorDirectoryPage implements OnInit {
   }
 
   async getMentors(showLoader = true) {
-    this.isLoaded = false;
     showLoader ? await this.loaderService.startLoader() : '';
     const config = {
       url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + '&directory=true',
@@ -82,7 +81,7 @@ export class MentorDirectoryPage implements OnInit {
       this.mentorsCount = data.result.count;
     }
     catch (error) {
-      // this.isLoaded = true
+      this.isLoaded = true
       showLoader ? await this.loaderService.stopLoader() : '';
     }
   }
