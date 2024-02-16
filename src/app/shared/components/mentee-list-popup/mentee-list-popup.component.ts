@@ -26,6 +26,7 @@ export class MenteeListPopupComponent implements OnInit {
   page:any;
   limit:any
   isMobile: boolean;
+  noDataMessage = 'NO_DATA_AVAILABLE';
  
   constructor(private sessionService: SessionService,private adminWorkapceService: AdminWorkapceService,private modalController: ModalController) { }
 
