@@ -10,10 +10,6 @@
         <ion-label class="card-data d-flex flex-justify-center">{{data.email}}</ion-label>
       </div>
     </div>
-    <div *ngIf="!enrolledMenteeList?.length">
-      <app-no-data-found [messageDescription]="noDataMessage">
-      </app-no-data-found>
-    </div>
   </div>
   <div *ngIf="!isMobile;">
     <app-generic-table [headingText]="headingText" [columnData]="columnData" [tableData]="enrolledMenteeList" [showPaginator]="false">
