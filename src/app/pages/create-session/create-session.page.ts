@@ -237,7 +237,7 @@ export class CreateSessionPage implements OnInit {
         let obj = this?.meetingPlatforms[j]?.form?.controls.find( (link:any) => link?.name == 'link')
         let meetingId = this?.meetingPlatforms[j]?.form?.controls.find( (meetingId:any) => meetingId?.name == 'meetingId')
         let password = this?.meetingPlatforms[j]?.form?.controls.find( (password:any) => password?.name == 'password')
-        if(existingData.meeting_info.link){
+        if(obj && existingData?.meeting_info?.link){
           obj.value = existingData?.meeting_info?.link;
         }
         if(existingData?.meeting_info?.meta?.meetingId){
