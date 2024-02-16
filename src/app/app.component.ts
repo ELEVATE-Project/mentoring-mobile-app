@@ -13,6 +13,8 @@ import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { environment } from 'src/environments/environment';
 import { Capacitor } from '@capacitor/core';
 import { SwUpdate } from '@angular/service-worker';
+import { PermissionService } from './core/services/permission/permission.service';
+import { permissionModule } from './core/constants/permissionsConstant';
 
 @Component({
   selector: 'app-root',
@@ -34,15 +36,16 @@ export class AppComponent {
 
  adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD}
 
+ actionsArrays: any[] = permissionModule.MODULES;
 
   isMentor:boolean
-  isOrgAdmin:boolean
   showAlertBox = false;
   userRoles: any;
   userEventSubscription: any;
   backButtonSubscription: any;
   menuSubscription: any;
   routerSubscription: any;
+  adminAccess: boolean;
   constructor(
     private translate :TranslateService,
     private platform : Platform,
@@ -59,7 +62,8 @@ export class AppComponent {
     private _location: Location,
     private alert: AlertController,
     private screenOrientation: ScreenOrientation,
-    private swUpdate: SwUpdate
+    private swUpdate: SwUpdate,
+    private permissionService: PermissionService
   ) {
     this.menuSubscription = this.utilService.canIonMenuShow.subscribe(data =>{
         this.showMenu = data
@@ -136,7 +140,7 @@ export class AppComponent {
         this.localStorage.getLocalData(localKeys.USER_DETAILS).then((userDetails)=>{
           if(userDetails) {
             this.profile.getUserRole(userDetails)
-            this.isOrgAdmin = this.profile.isOrgAdmin;
+            this.adminAccess = userDetails.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,userDetails?.permissions) : false;
           }
           this.getUser();
         })
@@ -147,13 +151,14 @@ export class AppComponent {
       },1000);
       setTimeout(() => {
         document.querySelector('ion-menu')?.shadowRoot?.querySelector('.menu-inner')?.setAttribute('style', 'border-radius:8px 8px 0px 0px');
+        this.permissionService.getPlatformConfig();
       }, 2000);
 
       this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data=>{
         if(data){
-          this.isOrgAdmin = this.profile.isOrgAdmin;
           this.isMentor = this.profile.isMentor
           this.user = data;
+          this.adminAccess = data.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,data?.permissions) : false;
         }
       })
       App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
@@ -210,7 +215,7 @@ export class AppComponent {
   
   getUser() {
     this.profile.profileDetails(false).then(profileDetails => {
-      this.isOrgAdmin = this.profile.isOrgAdmin;
+      this.adminAccess = profileDetails.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,profileDetails?.permissions) : false;
       this.user = profileDetails;
       this.isMentor = this.profile.isMentor;
     })

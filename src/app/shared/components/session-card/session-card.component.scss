@@ -7,10 +7,9 @@
         height: 57px;
         border-radius: 50%;
     }
-    .status-badge {
-        background: var(--green);
-        min-width: 60px;
-        height: 16px;
+    .badge-container {
+        min-width: 80px;
+        height: 24px;
         color: var(--white);
         padding: 1px;
         position: absolute;
@@ -19,6 +18,9 @@
         border-bottom-left-radius: 10px;
         font-size: 10px;
     }
+    .status-badge {
+        background: var(--green);
+    }
     h5 {
         margin-bottom: 5px;
         margin-top: 0px;
@@ -26,6 +28,24 @@
     }
     .session-image{
         margin-right: 20px;
+    }
+    .assigned-tag{
+        background: rgb(53, 120, 184);
+    }
+    .assigned-tag-icon{
+        padding-right: 2px;
+    }
+    .live-tag{
+        background: var(--green);
+        min-width: 80px;
+        height: 24px;
+        color: var(--white);
+        padding: 1px;
+        position: absolute;
+        right: 70px;
+        top: 0px;
+        border-bottom-left-radius: 10px;
+        font-size: 10px;
     }
 }
 .text-align {

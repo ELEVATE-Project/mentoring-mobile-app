@@ -38,7 +38,7 @@ export class OrganisationService {
     };
     try {
       let data: any = await this.httpService.get(config);
-      return data.result.find(role => role.title === requestedRole);
+      return data.result.data.find(role => role.title === requestedRole);
     }
     catch (error) {
     }

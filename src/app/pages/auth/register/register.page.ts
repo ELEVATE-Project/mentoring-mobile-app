@@ -121,6 +121,7 @@ export class RegisterPage implements OnInit {
   }
 
   async translateText() {
+    this.translateService.setDefaultLang('en');
     this.translateService.get(this.labels).subscribe(translatedLabel => {
       let labelKeys = Object.keys(translatedLabel);
       labelKeys.forEach((key) => {

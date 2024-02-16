@@ -7,6 +7,7 @@ import { ISocialSharing } from '../../interface/soical-sharing-interface';
 import { ModelComponent } from 'src/app/shared/components/model/model.component';
 import * as Bowser from "bowser"
 import { Subject } from 'rxjs';
+import * as Papa from 'papaparse';
 
 @Injectable({
   providedIn: 'root',
@@ -141,5 +142,52 @@ export class UtilService {
 
   isMobile(){
     return /iPhone|iPad|iPod|Android/i.test(window.navigator.userAgent);
+  }
+
+  getFormatedFilterData(filterData, formData) {;
+    const result = [];
+    for (const key in filterData) {
+      if (key !== 'entity_types') {
+        const title = key.charAt(0).toUpperCase() + key.slice(1);
+        const name = key;
+        const options = filterData[key].map(item => ({
+          id: item.id,
+          label: item.name,
+          value: item.code
+        }));
+        const type = formData.filters[key].find(obj => obj.key === name).type;
+        result.push({ title, name, options, type });
+      } else {
+        for (const filterKey in filterData[key]) {
+          filterData[key][filterKey].forEach(entityType => {
+              const title = entityType.label;
+              const name = filterKey;
+              const type = formData.filters.entity_types.find(obj => obj.key === name).type;
+              const options = entityType.entities.map(entity => ({
+                  id: entity.id,
+                  label: entity.label,
+                  value: entity.value
+              }));
+              result.push({ title, name, options, type });
+          });
+        }
+      }
+    }
+    return result;
+  }
+
+  parseAndDownloadCSV(rawCSVData: string, fileName: string): void {
+    Papa.parse(rawCSVData, {
+      complete: (result) => {
+        const csvContent = Papa.unparse(result.data);
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(blob);
+        downloadLink.download = fileName;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      }
+    });
   }
 }

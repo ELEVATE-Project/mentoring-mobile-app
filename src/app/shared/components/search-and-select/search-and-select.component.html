@@ -1,0 +1,25 @@
+<div class="d-flex flex-align-items-center;">
+  <ion-label position="stacked" class="head-label" [ngClass]="{'disabled-label':control?.disabled}">
+    {{ control.label }}&nbsp;<span *ngIf="control?.validators['required']==true" class="star-icon-red">*</span>
+  </ion-label>
+  <ion-icon *ngIf="control?.info" [id]="control.name" class="info" name="information-circle"></ion-icon>
+  <ion-popover [trigger]="control.name" triggerAction="hover">
+    <ng-template>
+      <ion-content class="ion-padding">
+        <div class="ion-padding-bottom" *ngFor="let info of control.info">
+          <span *ngIf="info?.header" class="popover-header">{{info?.header}}:</span> {{info?.message}}</div>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+</div>
+<div class="ion-margin-top">
+  <ion-chip *ngIf="control?.meta.multiSelect && selectedData.length" (click)="showPopover(control.meta)" [disabled]="control?.disabled">
+    <ion-icon class="icon" name="add-outline" color="dark"></ion-icon>
+    <ion-label>{{control?.meta.labelForAddButton}}</ion-label>
+  </ion-chip>
+  <ion-chip (click)="control?.meta.multiSelect && selectedData.length ? viewSelectedList() : showPopover(control.meta)" [ngClass]="{'color-red': selectedData.length}" [disabled]="control?.disabled">
+    <ion-icon class="icon" [name]="icon.name" [color]="icon.color" (click)="handleIconClick($event)"></ion-icon>
+    <ion-label *ngIf="selectedData.length" class="capitalize">{{control?.meta.multiSelect ? control?.meta?.labelForListButton : selectedData[0]?.label}}&nbsp; {{ control?.meta.multiSelect ? selectedData.length : '' }}</ion-label>
+    <ion-label *ngIf="!selectedData.length">{{control?.label}}</ion-label>
+  </ion-chip>
+</div>
