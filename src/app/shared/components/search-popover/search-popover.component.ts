@@ -14,7 +14,6 @@ export class SearchPopoverComponent implements OnInit {
   @Input() data: any;
   showFilterHeader = true
   columnData = [
-    { name: 'index_number', displayName: 'No.', type: 'text' },
     { name: 'name', displayName: 'Name', type: 'text' },
     { name: 'designation', displayName: 'Designation', type: 'array' },
     { name: 'organization', displayName: 'Organisation', type: 'text' },
@@ -190,7 +189,6 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   onSorting(data: any) {
-    console.log(data)
     this.page=1;
     this.setPaginatorToFirstpage= true
     this.sortingData = data;

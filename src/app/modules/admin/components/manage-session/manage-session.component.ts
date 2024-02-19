@@ -9,6 +9,7 @@ import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/fil
 import { UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-popup/mentee-list-popup.component';
+import *  as moment from 'moment';
 
 @Component({
   selector: 'app-manage-session',
@@ -34,7 +35,6 @@ export class ManageSessionComponent implements OnInit {
   sortingData: any;
   setPaginatorToFirstpage:any = false;
   columnData = [
-    { name: 'index_number', displayName: 'No.', type: 'text' },
     { name: 'title', displayName: 'Session name', type: 'text', sortingData: [{ sort_by: 'title', order: 'ASC', label: 'A -> Z' }, { sort_by: 'title', order: 'DESC', label: 'Z -> A' }] },
     { name: 'type', displayName: 'Type', type: 'text' },
     { name: 'mentor_name', displayName: 'Mentor', type: 'text' },
@@ -87,11 +87,8 @@ export class ManageSessionComponent implements OnInit {
   noDataMessage: any;
   filteredDatas = []
   actionButtons = {
-    'ACTIVE': [{ name: 'VIEW', cssColor: 'white-color' }],
-    'PUBLISHED': [{ name: 'VIEW', cssColor: 'white-color' }, { name: 'EDIT', cssColor: 'white-color' }, { name: 'DELETE', cssColor: 'white-color' }],
-    'COMPLETED': [{ name: 'VIEW', cssColor: 'white-color' }],
-    'LIVE': [{ name: 'VIEW', cssColor: 'white-color' }],
-    'UPCOMING': [{ name: 'VIEW', cssColor: 'white-color' }, { name: 'EDIT', cssColor: 'white-color' }, { name: 'DELETE', cssColor: 'white-color' }],
+    'ACTIVE': [{ icon: 'eye', cssColor: 'white-color' , action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}, { icon: 'trash', cssColor: 'white-color',action:'DELETE' }],
+    'COMPLETED': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}]
   }
 
   async ngOnInit() {
@@ -192,7 +189,12 @@ export class ManageSessionComponent implements OnInit {
     let data = response.data
     if (data && data.length) {
       data.forEach((ele) => {
-        ele.action = this.actionButtons[ele?.status?.value]
+        let currentTimeInSeconds=Math.floor(Date.now()/1000);
+        let setButton = ele?.status?.value != 'COMPLETED' && ele.end_date > currentTimeInSeconds ? 'ACTIVE' : 'COMPLETED';
+        let date = ele.start_date;
+        ele.start_date = moment.unix(date).format('DD-MMM-YYYY')
+        ele.start_time = moment.unix(date).format('h:mm A')
+        ele.action = this.actionButtons[setButton]
         ele.status = ele?.status?.label;
         ele.type = ele?.type?.label;
         ele.duration_in_minutes =Math.round(ele?.duration_in_minutes) 
