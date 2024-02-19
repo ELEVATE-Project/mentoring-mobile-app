@@ -7,6 +7,14 @@
     text-decoration: underline;
     cursor: pointer;
   }
+  
+  .mob-download{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    padding: 18px;
+    margin: 0;
+  }
 
   .close-icon{
     display: flex;

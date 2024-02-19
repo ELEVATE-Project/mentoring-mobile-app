@@ -13,7 +13,7 @@
   </div>
   <div *ngIf="uploadImage" class="d-flex flex-justify-center">
     <input type="file" (change)="upload($event)" #fileUpload accept="image/*" hidden>
-    <ion-button *ngIf="!profileImageData?.image ; else removePhoto; " fill="clear" expand="block"
+    <ion-button *ngIf="!profileImageData?.image || profileImageData?.image==''; else removePhoto; " fill="clear" expand="block"
       class="add-image-button" (click)="uploadPhoto('ADD_PHOTO'); clearFileInput();">
       {{ "ADD_PHOTO" | translate }}
     </ion-button>
