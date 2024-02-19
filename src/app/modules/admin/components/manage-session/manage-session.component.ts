@@ -190,7 +190,7 @@ export class ManageSessionComponent implements OnInit {
     if (data && data.length) {
       data.forEach((ele) => {
         let currentTimeInSeconds=Math.floor(Date.now()/1000);
-        let setButton = ele?.status?.value == 'COMPLETED' && ele.end_date < currentTimeInSeconds ? 'COMPLETED' : 'ACTIVE';
+        let setButton = ele?.status?.value != 'COMPLETED' && ele.end_date > currentTimeInSeconds ? 'ACTIVE' : 'COMPLETED';
         let date = ele.start_date;
         ele.start_date = moment.unix(date).format('DD-MMM-YYYY')
         ele.start_time = moment.unix(date).format('h:mm A')
