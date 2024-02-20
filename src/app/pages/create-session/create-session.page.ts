@@ -329,7 +329,7 @@ export class CreateSessionPage implements OnInit {
         }
 
       }}
-      this.sessionService.createSession(meetingInfo,this.id+'?notifyUser=false').then(()=>{
+      this.sessionService.createSession(meetingInfo,this.id).then(()=>{
         this.router.navigate([`/${"session-detail"}/${this.id}`],{replaceUrl: true})
       })
     }
