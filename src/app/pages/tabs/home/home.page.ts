@@ -40,7 +40,7 @@ export class HomePage implements OnInit {
     headerColor: 'primary',
     // label:'MENU'
   };
-  public segmentButtons = [{ name: "all-sessions", label: "ALL_SESSIONS" }, { name: "created-sessions", label: "CREATED_SESSIONS" }, { name: "my-sessions", label: "ENROLLED_SESSIONS" }]
+  public segmentButtons = [{ name: "all-sessions", label: "ALL_SESSIONS" }, { name: "created-sessions", label: "MY_MENTORING_SESSIONS" }, { name: "my-sessions", label: "ENROLLED_SESSIONS" }]
   public mentorSegmentButton = ["created-sessions"]
   selectedSegment = "all-sessions";
   createdSessions: any;

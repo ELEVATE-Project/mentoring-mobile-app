@@ -45,7 +45,7 @@ export class SessionCardComponent implements OnInit {
  
   setButtonConfig(isCreator: boolean, isConductor:boolean) {
     let currentTimeInSeconds=Math.floor(Date.now()/1000);
-    if(isCreator || isConductor){
+    if(isConductor){
       this.buttonConfig={label:"START",type:"startAction"};
     } else {
       this.buttonConfig=(!isCreator && !isConductor &&this.data.is_enrolled || this.isEnrolled)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};

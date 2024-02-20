@@ -251,5 +251,6 @@
     "REMOVE":"Remove",
     "MENTORS_LIST":"Mentor list",
     "MENTEES_LIST":"Mentee list",
-    "TOTAL_SESSION_ASSIGNED": "Total sessions assigned"
+    "TOTAL_SESSION_ASSIGNED": "Total sessions assigned",
+    "MY_MENTORING_SESSIONS":"My mentoring sessions"
 }
