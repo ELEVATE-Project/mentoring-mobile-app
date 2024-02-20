@@ -31,11 +31,17 @@
 
       <div [ngSwitch]="segment"  *ngIf="dataAvailable">
         <div *ngSwitchCase="'mentor'">
-          <ion-row class="stat-box">
+          <ion-row class="stat-box ion-justify-content-between">
             <ion-col class="bg-lite">
               <p class="stat-title">
                 {{'TOTAL_SESSION_CREATED' | translate}}
                 <span>{{ chartData?.total_session_created }}</span>
+              </p>
+            </ion-col>
+            <ion-col class="bg-lite">
+              <p class="stat-title">
+                {{'TOTAL_SESSION_ASSIGNED' | translate}}
+                <span>{{ chartData?.total_session_assigned }}</span>
               </p>
             </ion-col>
             <ion-col size=".5">
@@ -46,6 +52,8 @@
                 <span>{{ chartData?.total_session_hosted }}</span>
               </p>
             </ion-col>
+          </ion-row>
+          <ion-row>
           </ion-row>
           <div class="my-chart" fxFlex *ngIf="dataAvailable">
             <canvas id="MyChart">{{ chart }}</canvas>

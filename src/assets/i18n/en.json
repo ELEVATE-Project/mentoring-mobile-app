@@ -250,5 +250,6 @@
     "ENROLLED":"Enrolled",
     "REMOVE":"Remove",
     "MENTORS_LIST":"Mentor list",
-    "MENTEES_LIST":"Mentee list"
+    "MENTEES_LIST":"Mentee list",
+    "TOTAL_SESSION_ASSIGNED": "Total sessions assigned"
 }
