@@ -97,12 +97,12 @@ export class DashboardPage implements OnInit {
     this.chart = new Chart('MyChart', {
       type: 'pie',
       data: {
-        labels: this.segment === 'mentor' ? ['Total sessions created', 'Total sessions conducted'] : ['Total sessions enrolled', 'Total sessions attended'],
+        labels: this.segment === 'mentor' ? ['Total sessions created', 'Total sessions conducted', 'Total sessions assigned'] : ['Total sessions enrolled', 'Total sessions attended'],
         datasets: [{
           label: 'Total',
-          data: this.segment === 'mentor' ? [this.chartData.total_session_created, this.chartData.total_session_hosted] : [this.chartData.total_session_enrolled, this.chartData.total_session_attended],
+          data: this.segment === 'mentor' ? [this.chartData.total_session_created, this.chartData.total_session_hosted, this.chartData.total_session_assigned] : [this.chartData.total_session_enrolled, this.chartData.total_session_attended],
           backgroundColor: [
-            '#ffdf00', '#7b7b7b'
+            '#ffdf00', '#7b7b7b', '#7aa5eb'
           ],
           hoverOffset: 4
         }],
