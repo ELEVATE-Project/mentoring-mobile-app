@@ -87,7 +87,8 @@ export class ManageSessionComponent implements OnInit {
   noDataMessage: any;
   filteredDatas = []
   actionButtons = {
-    'ACTIVE': [{ icon: 'eye', cssColor: 'white-color' , action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}, { icon: 'trash', cssColor: 'white-color',action:'DELETE' }],
+    'UPCOMING': [{ icon: 'eye', cssColor: 'white-color' , action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}, { icon: 'trash', cssColor: 'white-color',action:'DELETE' }],
+    'LIVE': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}],
     'COMPLETED': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}]
   }
 
@@ -190,7 +191,7 @@ export class ManageSessionComponent implements OnInit {
     if (data && data.length) {
       data.forEach((ele) => {
         let currentTimeInSeconds=Math.floor(Date.now()/1000);
-        let setButton = ele?.status?.value != 'COMPLETED' && ele.end_date > currentTimeInSeconds ? 'ACTIVE' : 'COMPLETED';
+        let setButton = (ele?.status?.value == 'PUBLISHED' && ele.end_date > currentTimeInSeconds) ? 'UPCOMING' :(ele?.status?.value == 'LIVE' && ele.end_date > currentTimeInSeconds) ? 'LIVE' : 'COMPLETED';
         let date = ele.start_date;
         ele.start_date = moment.unix(date).format('DD-MMM-YYYY')
         ele.start_time = moment.unix(date).format('h:mm A')
