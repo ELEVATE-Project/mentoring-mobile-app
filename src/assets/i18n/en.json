@@ -252,5 +252,8 @@
     "MENTORS_LIST":"Mentor list",
     "MENTEES_LIST":"Mentee list",
     "TOTAL_SESSION_ASSIGNED": "Total sessions assigned",
-    "MY_MENTORING_SESSIONS":"My mentoring sessions"
+    "MY_MENTORING_SESSIONS":"My mentoring sessions",
+    "THIS_WEEK": "This week",
+    "THIS_MONTH": "This month",
+    "THIS_QUARTER": "This quarter"
 }
