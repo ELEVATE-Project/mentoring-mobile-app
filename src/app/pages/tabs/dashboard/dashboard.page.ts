@@ -94,6 +94,13 @@ export class DashboardPage implements OnInit {
   }
 
   createChart() {
+    const maxDataValue = Math.max(
+      ...(
+          this.segment === 'mentor' ?
+          [this.chartData.total_session_created, this.chartData.total_session_assigned, this.chartData.total_session_hosted] :
+          [this.chartData.total_session_enrolled, this.chartData.total_session_attended]
+      )
+  );
     this.chart = new Chart('MyChart', {
       type: this.segment === 'mentor' ? 'bar': 'pie',
       data: {
@@ -117,7 +124,7 @@ export class DashboardPage implements OnInit {
         scales: this.segment === 'mentor' ?{
           y: {
             ticks: {
-              stepSize: 1,
+              stepSize: this.calculateStepSize(maxDataValue),
             },
             grid: {
               display: false,
@@ -132,5 +139,10 @@ export class DashboardPage implements OnInit {
       }
     });
     this.dataAvailable = (this.chartData?.total_session_created == 0 || this.chartData?.total_session_enrolled == 0) ? false : true
+  }
+
+  calculateStepSize(maxDataValue) {
+
+    return Math.ceil(maxDataValue / 5);
   }
 }
