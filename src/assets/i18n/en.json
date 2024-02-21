@@ -252,5 +252,6 @@
     "MENTORS_LIST":"Mentor list",
     "MENTEES_LIST":"Mentee list",
     "TOTAL_SESSION_ASSIGNED": "Total sessions assigned",
-    "MY_MENTORING_SESSIONS":"My mentoring sessions"
+    "MY_MENTORING_SESSIONS":"My mentoring sessions",
+    "INPUT_CHIP_ERROR_TOAST_MESSAGE": "This field must not contain special characters other than underscores."
 }

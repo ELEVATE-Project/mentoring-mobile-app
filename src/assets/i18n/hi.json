@@ -253,5 +253,6 @@
     "ENROLLED":"दाखिला लिया गया",
     "REMOVE":"हटाएं",
     "MENTORS_LIST":"मेंटर सूची",
-    "MENTEES_LIST":"मेंटी सूची"
+    "MENTEES_LIST":"मेंटी सूची",
+    "INPUT_CHIP_ERROR_TOAST_MESSAGE": "इस फ़ील्ड में अंडरस्कोर के अलावा अन्य विशेष वर्ण नहीं होने चाहिए"
 }
