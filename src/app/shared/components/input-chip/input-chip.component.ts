@@ -9,6 +9,7 @@ import {
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash-es';
+import { ToastService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-input-chip',
@@ -36,7 +37,8 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
 
   constructor(
     private alertController: AlertController,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private toast: ToastService,
   ) { }
 
   onChange = (quantity) => { };
@@ -131,13 +133,17 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
         {
           text: this.translateService.instant('OK'),
           handler: (alertData) => {
-            if (alertData?.chip !== "") {
+            const regexPattern = /[^A-Za-z0-9\s_]/;
+            if (alertData?.chip !== "" && !regexPattern.test(alertData.chip)) {
               let obj = {
                 label: alertData.chip,
                 value: alertData.chip
               };
               this.chips.push(obj);
               this.onChipClick(obj);
+            }else {
+              this.toast.showToast("This field can only contain alphabets and underscores.", "danger");
+              return false
             }
           },
         },
