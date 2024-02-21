@@ -142,7 +142,7 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
               this.chips.push(obj);
               this.onChipClick(obj);
             }else {
-              this.toast.showToast("This field can only contain alphabets and underscores.", "danger");
+              this.toast.showToast("INPUT_CHIP_ERROR_TOAST_MESSAGE", "danger");
               return false
             }
           },
