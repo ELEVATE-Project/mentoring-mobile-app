@@ -82,7 +82,7 @@ export class SearchPopoverComponent implements OnInit {
       url += `&organization=true`;
     }
     const config = {
-      url: urlConstants.API_URLS.FILTER_LIST + url,
+      url: urlConstants.API_URLS.FILTER_LIST + url + '&filter_type=' + this.data.control.meta.filterType,
       payload: {},
     };
     try {

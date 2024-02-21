@@ -21,15 +21,15 @@ export class DashboardPage implements OnInit {
   selectedFilter = "WEEKLY";
   filter: any = [
     {
-      key: 'WEEKLY',
+      label: 'THIS_WEEK',
       value: 'WEEKLY'
     },
     {
-      key: 'MONTHLY',
+      label: 'THIS_MONTH',
       value: 'MONTHLY'
     },
     {
-      key: 'QUARTERLY',
+      label: 'THIS_QUARTER',
       value: 'QUARTERLY'
     }
   ];
@@ -94,24 +94,55 @@ export class DashboardPage implements OnInit {
   }
 
   createChart() {
+    const maxDataValue = Math.max(
+      ...(
+          this.segment === 'mentor' ?
+          [this.chartData.total_session_created, this.chartData.total_session_assigned, this.chartData.total_session_hosted] :
+          [this.chartData.total_session_enrolled, this.chartData.total_session_attended]
+      )
+  );
     this.chart = new Chart('MyChart', {
-      type: 'pie',
+      type: this.segment === 'mentor' ? 'bar': 'pie',
       data: {
-        labels: this.segment === 'mentor' ? ['Total sessions created', 'Total sessions conducted', 'Total sessions assigned'] : ['Total sessions enrolled', 'Total sessions attended'],
+        labels: this.segment === 'mentor' ? ['Total sessions created', 'Total sessions assigned', 'Total sessions conducted'] : ['Total sessions enrolled', 'Total sessions attended'],
         datasets: [{
-          label: 'Total',
-          data: this.segment === 'mentor' ? [this.chartData.total_session_created, this.chartData.total_session_hosted, this.chartData.total_session_assigned] : [this.chartData.total_session_enrolled, this.chartData.total_session_attended],
-          backgroundColor: [
-            '#ffdf00', '#7b7b7b', '#7aa5eb'
-          ],
-          hoverOffset: 4
+          label: '',
+          data: this.segment === 'mentor' ? [this.chartData.total_session_created, this.chartData.total_session_assigned,  this.chartData.total_session_hosted,] : [this.chartData.total_session_enrolled, this.chartData.total_session_attended],
+          backgroundColor: this.segment === 'mentor' ?['#4e81bd', '#fdc107', '#5ab251']: ['#ffdf00', '#7b7b7b'],
+          borderWidth: 1,
+          barThickness: 50,
         }],
       },
       options: {
-        aspectRatio: 1.5,
         responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          }
+        },
+        scales: this.segment === 'mentor' ?{
+          y: {
+            ticks: {
+              stepSize: this.calculateStepSize(maxDataValue),
+            },
+            grid: {
+              display: false,
+            },
+          },
+          x:{
+            grid: {
+              display: false,
+            },
+          }
+        }:{}
       }
     });
     this.dataAvailable = (this.chartData?.total_session_created == 0 || this.chartData?.total_session_enrolled == 0) ? false : true
+  }
+
+  calculateStepSize(maxDataValue) {
+
+    return Math.ceil(maxDataValue / 5);
   }
 }
