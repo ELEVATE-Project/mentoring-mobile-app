@@ -138,7 +138,7 @@ export class DashboardPage implements OnInit {
         }:{}
       }
     });
-    this.dataAvailable = (this.chartData?.total_session_created == 0 || this.chartData?.total_session_enrolled == 0) ? false : true
+    this.dataAvailable = !!(this.chartData?.total_session_created ||this.chartData?.total_session_enrolled ||this.chartData?.total_session_assigned ||this.chartData?.total_session_hosted);
   }
 
   calculateStepSize(maxDataValue) {
