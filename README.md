@@ -29,11 +29,29 @@ Dependencies
 CLI Setup
 ---------
 
-- npm install -g ionic
-- npm install -g @ionic/cli
-- npm install @capacitor/core
-- npm install @capacitor/cli --save-dev
+1. Install the Ionic framework.
 
+    ```
+    npm install -g ionic
+    ```
+
+2. Install the Ionic client.
+
+    ```
+    npm install -g @ionic/cli
+    ```
+
+3. Install the Capacitor Core.
+
+    ```
+    npm install @capacitor/core
+    ```
+
+4. Install the Capacitor runtime Client.
+
+    ```
+    npm install @capacitor/cli --save-dev 
+    ```
 
 Project Setup
 -------------
@@ -47,17 +65,39 @@ Project Setup
 Build Mentor
 --------------
 
-- Run npx cap sync
-- Run ionic build
-- Run ionic cap sync
-- Run ionic serve to serve the project in local
+1. To add the Capacitor plugin, run the following command:
 
+    ```
+    npx cap sync  
+
+    ```
+
+2. To run a development build, run the following command:
+
+    ```
+    ionic build
+
+    ```
+
+3. To perform an Ionic build and update any Capacitor plugins or dependencies, run the capacitor sync command.  
+
+    ```
+    ionic cap sync
+
+    ```
+
+4. Run the project on your local system using the following command:
+
+    ```
+    ionic serve
+
+    ```
 
 Debug Mentor
 --------------
 
-- Open the running app in the browser.
-- Start inspecting using Chrome dev tools or any alternatives.
+1. Open the running app in the browser.
+2. Start inspecting using Chrome dev tools or any alternatives.
 
 HashiCorp Vault Setup
 ---------------------
@@ -101,9 +141,7 @@ This pipeline will help to fetch the latest code from the given branch in repo a
 Ansible Deployment Script
 -------------------------
 
-Add an ansible script inside the ‘deployment’ folder in the root folder of your project. And add that path in your jenkins pipeline. When you run the job in jenkins, this script will get executed step by step till the end. Please update all the necessary details in the below example.
-
-Eg :
+Add an ansible script inside the ‘deployment’ folder in the root folder of your project. And add that path in your jenkins pipeline. When you run the job in jenkins, this script will get executed step by step till the end. Please update all the necessary details in the following example:
 
    - hosts: “<your-host>”
    vars:
@@ -167,8 +205,11 @@ This script will convert the fetched data from hashicorp to env files.
 Structure of Environment file, Server.js, and pm2.config.json
 -------------------------------------------------------------
 
-For deploying your application, you need an Environment file, Server.js, and a pm2.config.json file. Adding structure of those below for reference.
+For deploying your application, you need an Environment file, Server.js, and a pm2.config.json file.
 
+### Structure of environment.ts File
+
+ ```jsx
    export const environment = {
       production: true / false,
       name: "<name>",
@@ -180,9 +221,11 @@ For deploying your application, you need an Environment file, Server.js, and a p
       privacyPolicyUrl: "<privacy-policy-url>",
       termsOfServiceUrl: "<term-of-service-url>",
    };
+```
 
-* pm2.config.json file structure :
+### Structure of pm2.config.json File
 
+```json
    {
    "apps": [
       {
@@ -200,10 +243,11 @@ For deploying your application, you need an Environment file, Server.js, and a p
       }
    ]
    }
+```
 
+### Structure of Server.js File
 
-* Server.js file structure:
-
+```jsx
    const express = require('express');
    const path = require('path');
    const app = express();
@@ -221,3 +265,4 @@ For deploying your application, you need an Environment file, Server.js, and a p
    app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
    });
+```
