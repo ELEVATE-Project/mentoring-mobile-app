@@ -133,20 +133,22 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
         {
           text: this.translateService.instant('OK'),
           handler: (alertData) => {
-            const regexPattern = /[^A-Za-z0-9\s_]/;
-            if (alertData?.chip !== "" && !regexPattern.test(alertData.chip)) {
-              let obj = {
-                label: alertData.chip,
-                value: alertData.chip
-              };
-              this.chips.push(obj);
-              this.onChipClick(obj);
-            }else {
-              this.toast.showToast("INPUT_CHIP_ERROR_TOAST_MESSAGE", "danger");
-              return false
-            }
-          },
-        },
+              const regexPattern = /[^A-Za-z0-9\s_]/;
+              const filteredChip = alertData?.chip.trim();
+              if (filteredChip !== "" && !regexPattern.test(filteredChip)) {
+                  let obj = {
+                      label: filteredChip,
+                      value: filteredChip
+                  };
+                  this.chips.push(obj);
+                  this.onChipClick(obj);
+              } else {
+                  this.toast.showToast("INPUT_CHIP_ERROR_TOAST_MESSAGE", "danger");
+                  return false;
+              }
+          }
+      }
+      
       ],
     });
     await alert.present();
