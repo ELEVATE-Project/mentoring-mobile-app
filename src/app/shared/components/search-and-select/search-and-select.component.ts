@@ -45,7 +45,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit() { 
     this.originalLabel = this.control.label;
-    this.isMobile = window.innerWidth <= 950;
+    this.isMobile = window.innerWidth <= 800;
   }
 
   writeValue(value: any[]) {
