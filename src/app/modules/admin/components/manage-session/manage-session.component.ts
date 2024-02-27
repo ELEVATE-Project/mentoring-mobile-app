@@ -9,6 +9,7 @@ import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/fil
 import { UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-popup/mentee-list-popup.component';
+import *  as moment from 'moment';
 
 @Component({
   selector: 'app-manage-session',
@@ -32,8 +33,8 @@ export class ManageSessionComponent implements OnInit {
   type = "";
   totalCount: any;
   sortingData: any;
+  setPaginatorToFirstpage:any = false;
   columnData = [
-    { name: 'index_number', displayName: 'No.', type: 'text' },
     { name: 'title', displayName: 'Session name', type: 'text', sortingData: [{ sort_by: 'title', order: 'ASC', label: 'A -> Z' }, { sort_by: 'title', order: 'DESC', label: 'Z -> A' }] },
     { name: 'type', displayName: 'Type', type: 'text' },
     { name: 'mentor_name', displayName: 'Mentor', type: 'text' },
@@ -52,7 +53,7 @@ export class ManageSessionComponent implements OnInit {
         "options": [
           {
             "label": "Upcoming",
-            "value": "UPCOMING"
+            "value": "PUBLISHED"
           },
           {
             "label": "Live",
@@ -61,10 +62,6 @@ export class ManageSessionComponent implements OnInit {
           {
             "label": "Completed",
             "value": "COMPLETED"
-          },
-          {
-            "label": "Deleted",
-            "value": "DELETED"
           }
         ],
         "type": "checkbox"
@@ -90,9 +87,9 @@ export class ManageSessionComponent implements OnInit {
   noDataMessage: any;
   filteredDatas = []
   actionButtons = {
-    'ACTIVE': [{ name: 'VIEW', cssColor: 'white-color' }],
-    'PUBLISHED': [{ name: 'VIEW', cssColor: 'white-color' }, { name: 'EDIT', cssColor: 'white-color' }, { name: 'DELETE', cssColor: 'white-color' }],
-    'COMPLETED': [{ name: 'VIEW', cssColor: 'white-color' }]
+    'UPCOMING': [{ icon: 'eye', cssColor: 'white-color' , action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}, { icon: 'trash', cssColor: 'white-color',action:'DELETE' }],
+    'LIVE': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}],
+    'COMPLETED': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}]
   }
 
   async ngOnInit() {
@@ -123,7 +120,7 @@ export class ManageSessionComponent implements OnInit {
         break;
 
       case "EDIT":
-        this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION}`], { queryParams: { id: this.receivedEventData.element.id }});
+        this.router.navigate([`${CommonRoutes.CREATE_SESSION}`], { queryParams: { id: this.receivedEventData.element.id }});
         break;
       case 'DELETE':
         await this.adminWorkapceService.deleteSession(this.receivedEventData.element.id)
@@ -136,11 +133,12 @@ export class ManageSessionComponent implements OnInit {
         });
         break;
       default:
-        this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION_DETAILS}`, this.receivedEventData.element.id]);
+        this.router.navigate([`${CommonRoutes.SESSIONS_DETAILS}`, this.receivedEventData.element.id]);
     }
   }
 
   onPaginatorChange(data: any) {
+    this.setPaginatorToFirstpage= false;
     this.page = data.page;
     this.limit = data.pageSize
     this.fetchSessionList()
@@ -148,11 +146,14 @@ export class ManageSessionComponent implements OnInit {
 
   onSorting(data: any) {
     this.sortingData = data;
+    this.page=1;
+    this.setPaginatorToFirstpage= true
     this.fetchSessionList()
   }
 
   onSearch() {
     this.page = 1;
+    this.setPaginatorToFirstpage = true
     this.fetchSessionList()
   }
 
@@ -172,6 +173,8 @@ export class ManageSessionComponent implements OnInit {
           }
         }
       }
+      this.page = 1;
+      this.setPaginatorToFirstpage = true
       this.fetchSessionList()
     });
     modal.present()
@@ -187,7 +190,12 @@ export class ManageSessionComponent implements OnInit {
     let data = response.data
     if (data && data.length) {
       data.forEach((ele) => {
-        ele.action = this.actionButtons[ele?.status?.value]
+        let currentTimeInSeconds=Math.floor(Date.now()/1000);
+        let setButton = (ele?.status?.value == 'PUBLISHED' && ele.end_date > currentTimeInSeconds) ? 'UPCOMING' :(ele?.status?.value == 'LIVE' && ele.end_date > currentTimeInSeconds) ? 'LIVE' : 'COMPLETED';
+        let date = ele.start_date;
+        ele.start_date = moment.unix(date).format('DD-MMM-YYYY')
+        ele.start_time = moment.unix(date).format('h:mm A')
+        ele.action = this.actionButtons[setButton]
         ele.status = ele?.status?.label;
         ele.type = ele?.type?.label;
         ele.duration_in_minutes =Math.round(ele?.duration_in_minutes) 
@@ -198,7 +206,7 @@ export class ManageSessionComponent implements OnInit {
   }
 
   createSession(){
-    this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION}`]);
+    this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]);
   }
 
   

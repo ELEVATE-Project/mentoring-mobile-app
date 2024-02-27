@@ -247,5 +247,14 @@
     "MENTEE_LIST":"Mentee list",
     "ASSIGNED": "Assigned",
     "INVITED":"Invited",
-    "ENROLLED":"Enrolled"
+    "ENROLLED":"Enrolled",
+    "REMOVE":"Remove",
+    "MENTORS_LIST":"Mentor list",
+    "MENTEES_LIST":"Mentee list",
+    "TOTAL_SESSION_ASSIGNED": "Total sessions assigned",
+    "MY_MENTORING_SESSIONS":"My mentoring sessions",
+    "INPUT_CHIP_ERROR_TOAST_MESSAGE": "This field must not contain special characters other than underscores.",
+    "THIS_WEEK": "This week",
+    "THIS_MONTH": "This month",
+    "THIS_QUARTER": "This quarter"
 }

@@ -2,11 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthService, LocalStorageService, UtilService } from 'src/app/core/services';
+import { AuthService, LocalStorageService, UserService, UtilService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 import { environment } from 'src/environments/environment';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
   selector: 'app-login',
@@ -68,7 +69,7 @@ export class LoginPage implements OnInit {
   termsOfServiceUrl = environment.termsOfServiceUrl;
   constructor(private authService: AuthService, private router: Router,private utilService: UtilService,
               private menuCtrl: MenuController, private activatedRoute: ActivatedRoute,private profileService: ProfileService,
-              private translateService: TranslateService, private localStorage: LocalStorageService) {
+              private translateService: TranslateService, private localStorage: LocalStorageService, private userService: UserService) {
     this.menuCtrl.enable(false);
   }
 
@@ -103,7 +104,8 @@ export class LoginPage implements OnInit {
       this.userDetails = await this.authService.loginAccount(this.form1.myForm.value);
       if (this.userDetails !== null) {
         this.utilService.ionMenuShow(true)
-        await this.profileService.getProfileDetailsFromAPI();
+        let user = await this.profileService.getProfileDetailsFromAPI();
+        this.userService.userEvent.next(user);
         if (this.id) {
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
           this.menuCtrl.enable(true);
@@ -136,7 +138,8 @@ export class LoginPage implements OnInit {
   }
   getMailInfo(){
     this.authService.getMailInfo().then((result:any) =>{
-      this.supportInfo = result
+      this.supportInfo = result.report_issue
+      this.localStorage.setLocalData(localKeys.MAX_MENTEE_ENROLLMENT_COUNT, result.session_mentee_limit);
     })
 }
 }

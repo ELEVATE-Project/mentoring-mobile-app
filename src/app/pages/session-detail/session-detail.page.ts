@@ -39,6 +39,7 @@ export class SessionDetailPage implements OnInit {
   enrolledMenteeList:any;
   sessionManagerText="";
  activeUrl:any;
+ isNotInvited: any;
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -82,10 +83,6 @@ export class SessionDetailPage implements OnInit {
       {
         title: 'MEDIUM',
         key: 'medium',
-      },
-      {
-        title: 'MENTOR',
-        key: 'mentor_name',
       },
       
     ],
@@ -145,6 +142,7 @@ export class SessionDetailPage implements OnInit {
       isCreator:false,
       isConductor:false,
       manager_name:"",
+      mentor_designation:[]
     },
   };
 
@@ -155,7 +153,8 @@ export class SessionDetailPage implements OnInit {
     this.userCantAccess = response?.responseCode == 'OK' ? false:true
     this.isCreator = response.result.created_by == this.userDetails.id ? true:false;
     this.isConductor = this.userDetails.id == response.result.mentor_id ? true : false;
-    this.sessionManagerText =  this.isConductor ? "ASSIGNED_BY":"INVITED_BY"
+    this.sessionManagerText =  this.isConductor ? "ASSIGNED_BY":"INVITED_BY";
+    this.isNotInvited = response?.result?.enrolment_type === 'INVITED'? false : true;
     if (!this.userCantAccess) {
       response = response.result;
       this.setPageHeader(response);
@@ -173,6 +172,15 @@ export class SessionDetailPage implements OnInit {
       this.startDate = (response.start_date>0)?moment.unix(response.start_date).toLocaleString():this.startDate;
       this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
+      this.detailData.data.mentor_designation = response.mentor_designation.map(designation => designation.label).join(', ');
+      if((!this.isConductor && !this.detailData.form.some(obj => obj.title === 'MENTOR'))){
+        this.detailData.form.push(
+          {
+            title: 'MENTOR',
+            key: 'mentor_name',
+          },
+        );
+      } 
       if((this.isCreator || this.isConductor) && !this.detailData.form.some(obj => obj.title === 'MENTEE_COUNT')){
         
         this.detailData.form.push(
@@ -183,7 +191,7 @@ export class SessionDetailPage implements OnInit {
         );
       } 
     }
-    if((response?.meeting_info?.platform == 'OFF') && this.isConductor && response?.status?.value=='PUBLISHED'){
+    if((response?.meeting_info?.platform == 'OFF') && this.isCreator && response?.status?.value=='PUBLISHED'){
       this.showToasts('ADD_MEETING_LINK', 0 , [
           {
             text: 'Add meeting link',
@@ -210,8 +218,8 @@ export class SessionDetailPage implements OnInit {
       if(this.userDetails){
         this.isConductor = this.userDetails.id == response.mentor_id ? true : false;
       }
-      this.headerConfig.edit = (this.isCreator && response?.status?.value=="PUBLISHED"&& !this.isEnabled)?true:null;
-      this.headerConfig.delete = (this.isCreator && response?.status?.value=="PUBLISHED" && !this.isEnabled)?true:null;
+      this.headerConfig.edit = (this.isCreator && response?.status?.value !="COMPLETED"&& ((response.end_date>currentTimeInSeconds)))?true:null;
+      this.headerConfig.delete = (this.isCreator && response?.status?.value !="COMPLETED" && response?.status?.value !="LIVE" &&  ((response.end_date>currentTimeInSeconds)))?true:null;
   }
 
   action(event) {

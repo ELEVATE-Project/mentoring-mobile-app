@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admin-workapce.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 
@@ -24,10 +25,13 @@ export class MenteeListPopupComponent implements OnInit {
   totalCount:any;
   page:any;
   limit:any
+  isMobile: boolean;
+  noDataMessage = 'NO_DATA_AVAILABLE';
  
-  constructor(private sessionService: SessionService,private adminWorkapceService: AdminWorkapceService) { }
+  constructor(private sessionService: SessionService,private adminWorkapceService: AdminWorkapceService,private modalController: ModalController) { }
 
   ngOnInit() {
+    this.isMobile = window.innerWidth <= 800;
     this.fetchMenteeList()
   }
 
@@ -46,6 +50,10 @@ export class MenteeListPopupComponent implements OnInit {
       });
     }
     this.enrolledMenteeList = data;
+  }
+
+  closePopup(){
+    this.modalController.dismiss();
   }
 
   // onPaginatorChange(data: any) {

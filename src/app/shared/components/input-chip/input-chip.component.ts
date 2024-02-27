@@ -9,6 +9,7 @@ import {
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash-es';
+import { ToastService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-input-chip',
@@ -36,7 +37,8 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
 
   constructor(
     private alertController: AlertController,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private toast: ToastService,
   ) { }
 
   onChange = (quantity) => { };
@@ -131,16 +133,22 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
         {
           text: this.translateService.instant('OK'),
           handler: (alertData) => {
-            if (alertData?.chip !== "") {
-              let obj = {
-                label: alertData.chip,
-                value: alertData.chip
-              };
-              this.chips.push(obj);
-              this.onChipClick(obj);
-            }
-          },
-        },
+              const regexPattern = /[^A-Za-z0-9\s_]/;
+              const filteredChip = alertData?.chip.trim();
+              if (filteredChip !== "" && !regexPattern.test(filteredChip)) {
+                  let obj = {
+                      label: filteredChip,
+                      value: filteredChip
+                  };
+                  this.chips.push(obj);
+                  this.onChipClick(obj);
+              } else {
+                  this.toast.showToast("INPUT_CHIP_ERROR_TOAST_MESSAGE", "danger");
+                  return false;
+              }
+          }
+      }
+      
       ],
     });
     await alert.present();

@@ -1,6 +1,6 @@
 export const permissions = {
-  MANAGE_USER: 'manage_user',
-  MANAGE_SESSION: 'manage_session',
+  MANAGE_USER: 'org-admin',
+  MANAGE_SESSION: 'manage-sessions',
 };
 export const actions = {
   GET: 'GET',
@@ -10,13 +10,18 @@ export const actions = {
   PUT: "PUT",
 };
 export const manageSessionAction = {
-  SESSION_ACTIONS: [
-    actions.GET
-  ],
+  SESSION_ACTIONS: []
 };
 export const manageUserAction = {
-  USER_ACTIONS: [
-    actions.POST,
-    actions.DELETE
-  ],
+  USER_ACTIONS: [],
 };
+export const permissionModule = {
+  MODULES: [
+    {
+      module: permissions.MANAGE_USER
+    },
+    {
+      module: permissions.MANAGE_SESSION
+    }
+  ]
+}

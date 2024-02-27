@@ -24,6 +24,11 @@ export class ProfileImageComponent implements OnInit {
 
   ngOnInit() { }
 
+  clearFileInput() {
+    if (this.fileUpload) {
+      this.fileUpload.nativeElement.value = '';
+    }
+  }
   async uploadPhoto(source: string) {
     switch (source) {
       case 'CAMERA':
@@ -37,7 +42,8 @@ export class ProfileImageComponent implements OnInit {
         break;
 
       case 'REMOVE_PHOTO':
-        this.imageRemoveEvent.emit(this.profileImageData.data)
+        this.imageRemoveEvent.emit()
+        this.toast.showToast("REMOVE_CURRENT_PHOTO", "success")
         break;
 
       default:

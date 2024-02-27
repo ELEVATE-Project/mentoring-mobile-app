@@ -49,6 +49,7 @@ export class FeedbackPage implements OnInit {
     this.isMentor = user.id === response.mentor_id ? true : false;
     this.formItems()
     this.formData.controls = this.sessionData.form;
+    this.formData.controls.forEach(element=> element.name = String(element.id))
     this.feedbackData.feedback_as = this.isMentor ? "mentor" : "mentee";
   }
 

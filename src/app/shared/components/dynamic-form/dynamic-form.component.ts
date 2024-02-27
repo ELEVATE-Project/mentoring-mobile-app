@@ -46,9 +46,11 @@ interface JsonFormErrorMessages {
 }
 
 interface JsonFormControls {
+  id?: any;
+  searchData?: Array<object>;
   name: string;
   label: string;
-  value: string;
+  value: any;
   type: string;
   class: string;
   position: string;
@@ -68,7 +70,7 @@ interface JsonFormControls {
   displayFormat?: string;
   dependedChild?: string;
   dependedParent?: string;
-  meta?: Object;
+  meta?: any;
   multiSelect?: boolean;
   info?: Array<object>
 }

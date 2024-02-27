@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AttachmentService, LoaderService, ToastService } from 'src/app/core/services';
+import { AttachmentService, LoaderService, ToastService, UtilService } from 'src/app/core/services';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import {
@@ -15,10 +15,12 @@ import { AlertController, Platform } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
-import { PLATFORMS } from 'src/app/core/constants/formConstant';
+import { CREATE_SESSION_FORM, MANAGERS_CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { map } from 'rxjs/operators';
 import { Validators } from '@angular/forms';
+import { manageSessionAction, permissions } from 'src/app/core/constants/permissionsConstant';
+import { PermissionService } from 'src/app/core/services/permission/permission.service';
 
 @Component({
   selector: 'app-create-session',
@@ -73,13 +75,15 @@ export class CreateSessionPage implements OnInit {
     private form: FormService,
     private changeDetRef: ChangeDetectorRef,
     private router: Router,
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private utilService:UtilService,
+    private permissionService:PermissionService
   ) {
-    this.params = this.route.snapshot?.data?.forms?.page;
   }
   async ngOnInit() {
+    let formConfig =(await this.permissionService.hasPermission({ module: permissions.MANAGE_SESSION, action: manageSessionAction.SESSION_ACTIONS })) ? MANAGERS_CREATE_SESSION_FORM : CREATE_SESSION_FORM
     const platformForm = await this.getPlatformFormDetails();
-    const result = await this.form.getForm(this.params);
+    const result = await this.form.getForm(formConfig);
     this.formData = _.get(result, 'data.fields');
     this.entityNames = await this.form.getEntityNames(this.formData)
     this.entityList = await this.form.getEntities(this.entityNames, 'SESSION')
@@ -165,7 +169,7 @@ export class CreateSessionPage implements OnInit {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
         this.getImageUploadUrl(this.localImage);
       } else {
-        const form = Object.assign({}, this.form1.myForm.value);
+        const form = Object.assign({}, {...this.form1.myForm.getRawValue(), ...this.form1.myForm.value});
         form.start_date = form.start_date.unix().toString();
         form.end_date = form.end_date.unix().toString();
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -233,7 +237,7 @@ export class CreateSessionPage implements OnInit {
         let obj = this?.meetingPlatforms[j]?.form?.controls.find( (link:any) => link?.name == 'link')
         let meetingId = this?.meetingPlatforms[j]?.form?.controls.find( (meetingId:any) => meetingId?.name == 'meetingId')
         let password = this?.meetingPlatforms[j]?.form?.controls.find( (password:any) => password?.name == 'password')
-        if(existingData.meeting_info.link){
+        if(obj && existingData?.meeting_info?.link){
           obj.value = existingData?.meeting_info?.link;
         }
         if(existingData?.meeting_info?.meta?.meetingId){
@@ -242,16 +246,33 @@ export class CreateSessionPage implements OnInit {
         }
       }
     }
-    
     for (let i = 0; i < this.formData.controls.length; i++) {
       this.formData.controls[i].value =
         existingData[this.formData.controls[i].name];
       if (this.formData.controls[i].type=='search'){
-        // this.formData.controls[i].meta.searchData = []
-        // this.formData.controls[i].meta.searchData.push({
-        //   label: existingData.mentor_name+ ', '+existingData.organization.name,
-        //   value: existingData[this.formData.controls[i].name]
-        // })
+        this.formData.controls[i].id = this.id;
+        if(this.formData.controls[i].meta.multiSelect){
+          this.formData.controls[i].meta.searchData = existingData[this.formData.controls[i].name]
+          this.formData.controls[i].value = this.formData.controls[i].meta.searchData.map(obj => obj.id);
+        } else {
+          this.formData.controls[i].meta.searchData.push({
+            label: `${existingData.mentor_name}, ${existingData.organization.name}`,
+            id: existingData[this.formData.controls[i].name]
+          });
+        }
+        if(!this.formData.controls[i].meta.disableIfSelected) {
+          this.formData.controls[i].disabled = false;
+        }
+        if(this.formData.controls[i].meta.disableIfSelected&&this.formData.controls[i].value){
+          this.formData.controls[i].disabled = true;
+        }
+      }
+      let dependedChildIndex = this.formData.controls.findIndex(formControl => formControl.name === this.formData.controls[i].dependedChild)
+      if(this.formData.controls[i].dependedChild && this.formData.controls[i].name === 'type'){
+        if(existingData[this.formData.controls[i].name].value){
+          this.formData.controls[i].disabled = true;
+          this.formData.controls[dependedChildIndex].validators['required']= existingData[this.formData.controls[i].name].value=='PUBLIC' ? false : true
+        }
       }
       this.formData.controls[i].options = _.unionBy(
         this.formData.controls[i].options,
@@ -321,15 +342,22 @@ export class CreateSessionPage implements OnInit {
   formValueChanged(event){
     let dependedControlIndex = this.formData.controls.findIndex(formControl => formControl.name === event.dependedChild)
     let dependedControl = this.form1.myForm.get(event.dependedChild)
-    if(event.value == "PUBLIC"){
-      this.formData.controls[dependedControlIndex].validators['required'] = false
-      dependedControl.setValidators(null);
-      dependedControl.setErrors(null)
-      dependedControl.updateValueAndValidity();
+    if(event.value === "PUBLIC") {
+      this.setControlValidity(dependedControlIndex, dependedControl, false);
     } else {
-      this.formData.controls[dependedControlIndex].validators['required'] = true
-      dependedControl.setValidators([Validators.required]);
-      dependedControl.updateValueAndValidity();
+      this.setControlValidity(dependedControlIndex, dependedControl, true);
     }
+    this.formData.controls.forEach(control => {
+      if (event.meta.disabledChildren.includes(control.name)) {
+        control.disabled = false;
+      }
+    })
+  }
+  
+  setControlValidity(index, control, required) {
+    this.formData.controls[index].validators['required'] = required;
+    this.formData.controls[index].disabled = false;
+    control.setValidators(required ? [Validators.required] : null);
+    control.updateValueAndValidity();
   }
 }

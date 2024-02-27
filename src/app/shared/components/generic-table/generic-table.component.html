@@ -2,32 +2,39 @@
   <div class="header">{{ headingText | translate}}</div>
   <div *ngIf="pageSize && pageSizeOptions" class="d-flex flex-justify-space-between ion-padding">
     <ng-content></ng-content>
-    <mat-paginator *ngIf="showPaginator" class="paginator" [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-    (page)="onPageChange($event)">
-  </mat-paginator>
+    <mat-paginator *ngIf="showPaginator" class="paginator" [length]="totalCount" [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)">
+    </mat-paginator>
   </div>
 </div>
 <div class="table-container ">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container *ngFor="let column of columnData" [matColumnDef]="column.name">
       <ng-container>
-        <th mat-header-cell *matHeaderCellDef>{{ column.displayName }} <span *ngIf="column.sortingData">
-            <ion-icon [id]="column.displayName" class="info" name="arrow-up"></ion-icon>
-            <ion-popover [trigger]="column.displayName" triggerAction="click">
-              <ng-template class="popover-container">
-                <ion-content class="ion-padding popover-container">
-                  <div class="popover-div d-flex flex-justify-center" *ngFor="let data of column.sortingData">
-                    <span (click)="onClickSorting($event,data)" class="popover-header">{{data.label}}</span>
-                  </div>
-                </ion-content>
-              </ng-template>
-            </ion-popover>
-          </span></th>
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="column-header"
+            [ngClass]="(column.name == 'title' || column.name == 'name') ? 'column-name':'column-header'">
+            {{ column.displayName }} <div class="sorting-icon" *ngIf="column.sortingData">
+              <img class="img" [id]="column.displayName" src="../../../../assets/images/swap-vertical.svg" />
+              <ion-popover [trigger]="column.displayName" triggerAction="click">
+                <ng-template class="popover-container">
+                  <ion-content class="ion-padding popover-container">
+                    <div class="popover-div d-flex flex-justify-center" *ngFor="let data of column.sortingData">
+                      <span (click)="onClickSorting($event,data)" class="popover-header">{{data.label}}</span>
+                    </div>
+                  </ion-content>
+                </ng-template>
+              </ion-popover>
+            </div>
+          </div>
+        </th>
       </ng-container>
       <ng-container>
         <div *ngIf="column.type == 'text'">
-          <td mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">{{
-            element[column.name] | translate }}</td>
+          <td mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">
+            <div class="cell-text" [ngClass]="{'session-name': column.name == 'title' || column.name == 'name'}">
+              {{element[column.name] | translate }}</div>
+          </td>
         </div>
         <div *ngIf="column.type == 'array'">
           <td mat-cell (click)="onCellClick(column.name,element)" *matCellDef="let element">
@@ -42,8 +49,13 @@
               <ion-grid>
                 <ion-row class="d-flex flex-justify-center">
                   <div *ngFor="let buttonName of element[column.name]">
-                    <ion-button [class]="buttonName.cssColor" (click)="onCellClick(buttonName.name,column,element)">
+                    <ion-button *ngIf="buttonName.name" [class]="buttonName.cssColor"
+                      (click)="onCellClick(buttonName.name,column,element)">
                       {{ buttonName.name | translate }}
+                    </ion-button>
+                    <ion-button *ngIf="buttonName.icon" [class]="buttonName.cssColor"
+                      (click)="onCellClick( buttonName.action,column,element)">
+                      <ion-icon *ngIf="buttonName.icon" [icon]=" buttonName.icon"></ion-icon>
                     </ion-button>
                   </div>
                 </ion-row>

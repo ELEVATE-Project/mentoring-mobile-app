@@ -1,12 +1,12 @@
 <ion-card (click)="onCardClick(data)" class="session-card card-shadow-bottom">
-  <span class="badge-container status-badge d-flex flex-justify-center" *ngIf="data?.status?.value == 'LIVE'" [ngClass]="{'live-tag': data?.status?.value == 'LIVE' && data?.is_assigned || data?.enrolled_type}">
+  <span class="badge-container status-badge d-flex flex-justify-center" *ngIf="data?.status?.value == 'LIVE'" [ngClass]="{'live-tag': data?.status?.value == 'LIVE' && data?.is_assigned || data?.enrolled_type === 'INVITED'}">
     {{data?.status?.value| titlecase}}
   </span>
   <span class="badge-container assigned-tag d-flex flex-justify-center" *ngIf="data?.is_assigned">
     <ion-icon class="assigned-tag-icon" name="person-circle-sharp"></ion-icon>
     {{"ASSIGNED"|translate}}
   </span>
-  <span class="badge-container assigned-tag d-flex flex-justify-center" *ngIf="data?.enrolled_type">
+  <span class="badge-container assigned-tag d-flex flex-justify-center" *ngIf="data?.enrolled_type === 'INVITED'">
     <ion-icon class="assigned-tag-icon" name="person-circle-sharp"></ion-icon>
     {{"INVITED"|translate}}
   </span>

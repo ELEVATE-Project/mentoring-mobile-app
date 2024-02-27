@@ -1,21 +1,17 @@
 import { Component, HostListener } from '@angular/core';
 import {  MenuController } from '@ionic/angular';
 import * as _ from 'lodash-es';
-import { AuthService, DbService, LocalStorageService, NetworkService, UserService, UtilService } from 'src/app/core/services';
-
+import { UtilService } from 'src/app/core/services';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { Capacitor } from '@capacitor/core';
 import { SwUpdate } from '@angular/service-worker';
-
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  routerSubscription: any;
   constructor(
-    private localStorage: LocalStorageService,
     public menuCtrl:MenuController,
     private utilService:UtilService,
     private screenOrientation: ScreenOrientation,
@@ -38,13 +34,6 @@ export class AppComponent {
     }
   }
 
-
-
-  ngOnDestroy(): void {
-    if (this.routerSubscription) {
-      this.routerSubscription.unsubscribe();
-    }
-  }
   @HostListener('window:popstate', ['$event'])
   onPopState(event: any) {
     this.utilService.alertClose()

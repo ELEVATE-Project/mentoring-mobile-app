@@ -4,7 +4,7 @@
       *ngIf="!profileImageData?.image || profileImageData?.image==''; else Img; let image">
       <img class="thumbnail-image" src="../../../../assets/prof-img/user.png" />
       <div class="camera-icon-container" *ngIf="isMobile">
-        <ion-icon name="camera" class="camera-icon" (click)="uploadPhoto('CAMERA')"></ion-icon>
+        <ion-icon name="camera" class="camera-icon" (click)="uploadPhoto('CAMERA'); clearFileInput();"></ion-icon>
       </div>
     </div>
     <ng-template #Img>
@@ -13,8 +13,8 @@
   </div>
   <div *ngIf="uploadImage" class="d-flex flex-justify-center">
     <input type="file" (change)="upload($event)" #fileUpload accept="image/*" hidden>
-    <ion-button *ngIf="!profileImageData?.image ; else removePhoto; " fill="clear" expand="block"
-      class="add-image-button" (click)="uploadPhoto('ADD_PHOTO')">
+    <ion-button *ngIf="!profileImageData?.image || profileImageData?.image==''; else removePhoto; " fill="clear" expand="block"
+      class="add-image-button" (click)="uploadPhoto('ADD_PHOTO'); clearFileInput();">
       {{ "ADD_PHOTO" | translate }}
     </ion-button>
     <ng-template #removePhoto>

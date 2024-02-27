@@ -16,8 +16,10 @@ ion-chip {
 
  .info {
     font-size: 24px !important;
-    margin-top: 5px;
+    margin-top: 6px;
     z-index: 1000;
+    left : 95px;
+    position: absolute;
   }
 
   .color-red {
@@ -29,4 +31,12 @@ ion-chip {
   }
   .capitalize {
     text-transform: capitalize;
+  }
+  .disabled-label{
+    color: #a4a4a4
+  }
+  ion-popover {
+    &::part(content) {
+      width: 300px;
+    }
   }
