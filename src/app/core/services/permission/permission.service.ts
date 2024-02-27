@@ -54,6 +54,7 @@ export class PermissionService {
     try {
       const data: any = await this.httpService.get(config);
       this.setConfigInLocal(data.result)
+      return data
     }
     catch (error) {
       return null;

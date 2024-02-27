@@ -44,6 +44,7 @@ import { BulkUploadComponent } from './components/bulk-upload/bulk-upload.compon
 import { UserListModalComponent } from './components/user-list-modal/user-list-modal.component';
 import { snakeCaseToUpperCasePipe } from '../core/pipes/snake-case-to-normal-case.pipe';
 import { AllowTemplateViewDirective } from './directive/allowTemplate.directive';
+import { GenericSearchComponent } from './components/generic-search/generic-search.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { AllowTemplateViewDirective } from './directive/allowTemplate.directive'
     BulkUploadComponent,
     UserListModalComponent,
     snakeCaseToUpperCasePipe,
-    AllowTemplateViewDirective
+    AllowTemplateViewDirective,
+    GenericSearchComponent
   ],
   imports: [
     CommonModule,
@@ -127,7 +129,8 @@ import { AllowTemplateViewDirective } from './directive/allowTemplate.directive'
     BulkUploadComponent,
     UserListModalComponent,
     snakeCaseToUpperCasePipe,
-    AllowTemplateViewDirective
+    AllowTemplateViewDirective,
+    GenericSearchComponent
   ],
 })
 export class SharedModule {}
