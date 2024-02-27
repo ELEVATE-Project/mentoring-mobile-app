@@ -1,5 +1,4 @@
-<ion-app>
-  <ion-split-pane contentId="main-content">
+<ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" menuId="side-menu" type="overlay" swipeGesture="false" class="width-20">
       <ion-header  [translucent]="true" class="ion-no-border">
         <div *ngIf="user" >
@@ -24,7 +23,7 @@
       <ion-content *ngIf="user" fullscreen>
         <div class="menu-css">
           <ion-list lines="none" class="sub-menu-list">
-            <ion-menu-toggle auto-hide="false" [class]="adminPage?.class" *ngIf="isOrgAdmin">
+            <ion-menu-toggle auto-hide="false" [class]="adminPage?.class" *ngIf="adminAccess">
               <ion-item [routerLink]="adminPage?.url" lines="none" detail="false" (click)="menuItemAction(adminPage)">
                 <ion-icon class="side-menu-icon" slot="start" [ios]="adminPage.icon + '-outline'" [md]="adminPage.icon + '-outline'"></ion-icon>
                 <ion-label class="sub-menu-list-label"><strong>{{ adminPage.title | translate}}</strong></ion-label>
@@ -52,4 +51,3 @@
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
-</ion-app>
