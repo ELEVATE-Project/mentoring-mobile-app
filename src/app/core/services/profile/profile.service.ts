@@ -15,6 +15,7 @@ import { Location } from '@angular/common';
 import { UserService } from '../user/user.service';
 import { AuthService } from '../auth/auth.service';
 import { FormService } from 'src/app/core/services/form/form.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +32,8 @@ export class ProfileService {
     private utilService:UtilService,
     private userService: UserService,
     private injector: Injector,
-    private form: FormService
+    private form: FormService,
+    private translate: TranslateService
   ) { }
   async profileUpdate(formData, showToast=true) {
     await this.loaderService.startLoader();

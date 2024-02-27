@@ -100,7 +100,6 @@ export class HomeSearchPage implements OnInit {
         break;
 
       case 'enrollAction':
-        console.log("enrolled")
         let enrollResult = await this.sessionService.enrollSession(event.data.id);
         if(enrollResult.result){
           this.toast.showToast(enrollResult.message, "success")
@@ -116,7 +115,6 @@ export class HomeSearchPage implements OnInit {
   }
 
   eventAction(event){
-    console.log(event)
     this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${event.data.id}`])
   }
 
