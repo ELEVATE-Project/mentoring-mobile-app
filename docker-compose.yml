@@ -1,0 +1,19 @@
+version: '3'
+services:
+  portal:
+    build: 
+      context: '.'
+      dockerfile: Dockerfile
+    container_name: portal
+    ports:
+      - '8100:8100'
+    volumes:
+      - /home/lenovo/workspace/frontend/environment.ts:/app/src/environments/environment.ts
+    command: >
+      /bin/bash -c "ionic build --prod && ionic serve --host 0.0.0.0"
+    networks:
+      - elevate_net
+
+networks:
+  elevate_net:
+    external: false

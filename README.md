@@ -1,109 +1,93 @@
-# Customizing the PWA
-
-Contents
+CONTENTS OF THIS FILE
 ---------------------
 
  * Dependencies
  * Command-line setup
  * Project setup
- * Build Mentor
- * Debug Mentor
- * HashiCorp Vault setup
+ * Build MentorED
+ * Debug MentorED
+ * Hashicorp Vault Setup
  * Jenkins Pipeline
  * Ansible Deployment Script
- * Environment files, Server.js, and pm2.config.json
+ * Env Files, Server.js And Pm2 Config Files
 
 
-Dependencies
+DEPENDENCIES
 ------------
 
-| Requirement         | Description    |
-|--------------|-----------|
-| Ionic CLI|Version 7.1.1 (/usr/local/lib/node_modules/@ionic/cli)|
-| Ionic Framework | <ul><li>@ionic/angular 6.7.5</li> <li>@angular-devkit/build-angular : 13.2.6 </li><li> @angular-devkit/schematics : 13.2.6 </li><li>@angular/cli : 13.2.6 </li><li> @ionic/angular-toolkit : 6.1.0 </li></ul>|
-| Capacitor | <ul><li>Capacitor CLI : 5.5.1 </li><li>@capacitor/android : 5.5.1 </li><li>@capacitor/core : 5.5.1 </li><li>@capacitor/ios : 5.5.1 </li></ul>|
-| Cordova | <ul><li>Cordova CLI : 11.0.0</li><li>Cordova Platforms : none</li><li>Cordova Plugins : no whitelisted plugins (0 plugins total)</li></ul>|
-| Utility | <ul><li>cordova-res : 0.15.4</li><li>native-run : 1.7.4 </li></ul>
-| System | <ul><li>Android SDK Tools : 26.1.1</li><li><a href="https://nodejs.org/">Node.js®</a>: v18.18.2</li><li>npm: 10.2.0</li><li>OS : Linux 5.13</li></ul>|
+* Ionic:
 
-CLI Setup
+   Ionic CLI                     : 7.1.1 (/usr/local/lib/node_modules/@ionic/cli)
+   Ionic Framework               : @ionic/angular 6.7.5
+   @angular-devkit/build-angular : 13.2.6
+   @angular-devkit/schematics    : 13.2.6
+   @angular/cli                  : 13.2.6
+   @ionic/angular-toolkit        : 6.1.0
+
+* Capacitor:
+
+   Capacitor CLI      : 5.5.1
+   @capacitor/android : 5.5.1
+   @capacitor/core    : 5.5.1
+   @capacitor/ios     : 5.5.1
+
+* Cordova:
+
+   Cordova CLI       : 11.0.0
+   Cordova Platforms : none
+   Cordova Plugins   : no whitelisted plugins (0 plugins total)
+
+* Utility:
+
+   cordova-res : 0.15.4
+   native-run  : 1.7.4
+
+* System:
+
+   Android SDK Tools : 26.1.1
+   NodeJS            : v18.18.2 (you can download from https://nodejs.org/)
+   npm               : 10.2.0
+   OS                : Linux 5.13
+
+
+CLI SETUP
 ---------
 
-1. Install the Ionic framework.
+- npm install -g ionic
+- npm install -g @ionic/cli
+- npm install @capacitor/core
+- npm install @capacitor/cli --save-dev
 
-    ```
-    npm install -g ionic
-    ```
 
-2. Install the Ionic client.
-
-    ```
-    npm install -g @ionic/cli
-    ```
-
-3. Install the Capacitor Core.
-
-    ```
-    npm install @capacitor/core
-    ```
-
-4. Install the Capacitor runtime Client.
-
-    ```
-    npm install @capacitor/cli --save-dev 
-    ```
-
-Project Setup
+PROJECT SETUP
 -------------
 
-1. Clone the [repository](https://github.com/ELEVATE-Project/mentoring-mobile-app.git).
-2. Change to the latest GitHub branch (**release-2.5.0**).
-3. Add environment files into the src/environments folder.
-4. Go to the project folder and run `npm i`.
+- git clone the repo (https://github.com/ELEVATE-Prjoect/mentoring-mobile-app.git)
+- Checkout to latest branch.(currently release-2.5.0)
+- Add environment files inside src/environments
+- Go to project folder and run npm i
 
 
-Build Mentor
+BUILD MENTORED
 --------------
 
-1. To add the Capacitor plugin, run the following command:
+- Run npx cap sync
+- Run ionic build
+- Run ionic cap sync
+- Run ionic serve to serve the project in local
 
-    ```
-    npx cap sync  
 
-    ```
-
-2. To run a development build, run the following command:
-
-    ```
-    ionic build
-
-    ```
-
-3. To perform an Ionic build and update any Capacitor plugins or dependencies, run the capacitor sync command.  
-
-    ```
-    ionic cap sync
-
-    ```
-
-4. Run the project on your local system using the following command:
-
-    ```
-    ionic serve
-
-    ```
-
-Debug Mentor
+DEBUG MENTORED
 --------------
 
-1. Open the running app in the browser.
-2. Start inspecting using Chrome dev tools or any alternatives.
+- Open the running app in browser
+- Start inspecting using chrome dev tools or any alternatives
 
-HashiCorp Vault Setup
+HASHICORP VAULT SETUP
 ---------------------
 
 
-Jenkins Pipeline
+JENKINS PIPELINE
 ----------------
 
 For automating your app deployment, you can use Jenkins. You can create a Jenkins job and run that job each time you want a deployment.
@@ -138,10 +122,12 @@ For that you can create a Jenkins job and add a pipeline script for the job insi
 
 This pipeline will help to fetch the latest code from the given branch in repo and run the ansible script which we are about to create for building and deploying our application.
 
-Ansible Deployment Script
+ANSIBLE DEPLOYMENT SCRIPT
 -------------------------
 
-Add an ansible script inside the ‘deployment’ folder in the root folder of your project. And add that path in your jenkins pipeline. When you run the job in jenkins, this script will get executed step by step till the end. Please update all the necessary details in the following example:
+Add an ansible script inside the ‘deployment’ folder in the root folder of your project. And add that path in your jenkins pipeline. When you run the job in jenkins, this script will get executed step by step till the end. Please update all the necessary details in the below example.
+
+Eg :
 
    - hosts: “<your-host>”
    vars:
@@ -202,14 +188,11 @@ This script will convert the fetched data from hashicorp to env files.
 
 
 
-Structure of Environment file, Server.js, and pm2.config.json
--------------------------------------------------------------
+ENV FILES, SERVER.JS AND PM2 CONFIG FILES
+-----------------------------------------
 
-For deploying your application, you need an Environment file, Server.js, and a pm2.config.json file.
+For deploying your application, you need an Environment file, Server.js, and a pm2.config.json file. Adding structure of those below for reference.
 
-### Structure of environment.ts File
-
- ```jsx
    export const environment = {
       production: true / false,
       name: "<name>",
@@ -221,11 +204,9 @@ For deploying your application, you need an Environment file, Server.js, and a p
       privacyPolicyUrl: "<privacy-policy-url>",
       termsOfServiceUrl: "<term-of-service-url>",
    };
-```
 
-### Structure of pm2.config.json File
+* pm2.config.json file structure :
 
-```json
    {
    "apps": [
       {
@@ -243,11 +224,10 @@ For deploying your application, you need an Environment file, Server.js, and a p
       }
    ]
    }
-```
 
-### Structure of Server.js File
 
-```jsx
+* Server.js file structure:
+
    const express = require('express');
    const path = require('path');
    const app = express();
@@ -265,4 +245,55 @@ For deploying your application, you need an Environment file, Server.js, and a p
    app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
    });
-```
+
+PROJECT SETUP WITH DOCKER
+---------------------
+Please follow the steps below to run the application using Docker:
+* Clone the repository from GitHub using the following command: 
+    ```bash
+    git clone https://github.com/ELEVATE-Prjoect/mentoring-mobile-app.git
+    ```
+* Checkout to the latest branch, which is currently release-2.5.0.
+* Navigate back from the mentoring-mobile-app folder and create an environment.ts file. Copy and paste the environment variables provided below into this file:
+    ```bash
+    // This file can be replaced during build by using the `fileReplacements` array.
+    // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
+    // The list of file replacements can be found in `angular.json`.
+    
+    export const environment = {
+      production: true,
+      name: 'debug environment',
+      staging: false,
+      dev: false,
+      baseUrl: 'http://localhost:3569', //backend node application url
+      sqliteDBName: 'mentoring.db',
+      deepLinkUrl: 'https://mentored.shikshalokam.org',
+      privacyPolicyUrl:'https://shikshalokam.org/mentoring/privacy-policy',
+      termsOfServiceUrl:'https://shikshalokam.org/mentoring/term-of-use'
+    };
+    
+    
+    /*
+     * For easier debugging in development mode, you can import the following file
+     * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
+     *
+     * This import should be commented out in production mode because it will have a negative impact
+     * on performance if an error is thrown.
+     */
+    // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+    ```
+ * Navigate to the mentoring-mobile-app directory, Open the docker-compose.yml file and within the docker-compose.yml file, locate the volumes section.
+ * In the docker-compose.yml file, replace <exact-path> with the exact file path of the environment.ts file in your system under the volumes section
+     ```bash
+     volumes:
+      - <exact-path>/environment.ts:/app/src/environments/environment.ts
+     ```
+ * Run Docker using the following command:
+    ```bash
+    cd mentoring-mobile-app
+    docker-compose -f docker-compose.yml up
+    ```
+ * To stop Docker, use the following command:
+    ```bash
+    docker-compose -f docker-compose.yml down
+    ```
