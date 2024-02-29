@@ -99,7 +99,9 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.post(config);
       let authService = this.injector.get(AuthService);
-      let userData = authService.setUserInLocal(data);
+      let userData = await authService.setUserInLocal(data);
+      let user = await this.getProfileDetailsFromAPI();
+      this.userService.userEvent.next(user);
       this.loaderService.stopLoader();
       this.toast.showToast(data.message, "success");
       return userData;
