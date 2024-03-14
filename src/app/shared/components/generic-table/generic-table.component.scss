@@ -166,6 +166,7 @@ ion-popover {
   max-height: 400px;
   white-space: normal;
   font-size: 13px;
+  min-width: max-content;
 }
 .session-name{
   text-align:left;
