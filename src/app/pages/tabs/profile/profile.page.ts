@@ -27,10 +27,6 @@ export class ProfilePage implements OnInit {
         key: 'about',
       },
       {
-        title: 'DESIGNATION',
-        key: 'designation',
-      },
-      {
         title: "ORGANIZATION",
         key: "organizationName"
       },
@@ -39,16 +35,8 @@ export class ProfilePage implements OnInit {
         key: 'experience',
       },
       {
-        title: "KEY_AREAS_OF_EXPERTISE",
-        key: "area_of_expertise"
-      },
-      {
         title: "EDUCATION_QUALIFICATION",
         key: "education_qualification"
-      },
-      {
-        title: 'LANGUAGES',
-        key: 'languages',
       },
       {
         title: "EMAIL_ID",
