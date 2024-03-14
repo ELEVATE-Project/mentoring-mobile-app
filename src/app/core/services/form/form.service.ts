@@ -42,12 +42,12 @@ export class FormService {
   async getEntities(entityTypes, type) {
     const config = {
       url: urlConstants.API_URLS.GET_ENTITY_LIST[type],
-      payload: { value: entityTypes }
+      payload: entityTypes.length ? { value: entityTypes } : {}
     };
     try {
       let data = await this.http.post(config);
       let result = _.get(data, 'result.entity_types');
-      return result;
+      return result? result:data;
     }
     catch (error) {
     }
