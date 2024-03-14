@@ -7,6 +7,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { LocalStorageService } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { Router } from '@angular/router';
+import { FormService } from 'src/app/core/services/form/form.service';
+import { EDIT_PROFILE_FORM } from 'src/app/core/constants/formConstant';
 
 @Component({
   selector: 'app-profile',
@@ -84,7 +86,7 @@ public buttonConfig = {
   visited:boolean;
   isMentor: boolean;
   isMentorButtonPushed: boolean = false;
-  constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private router: Router, private localStorage:LocalStorageService) { }
+  constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private router: Router, private localStorage:LocalStorageService,private form: FormService) { }
 
   ngOnInit() {
     this.visited = false;
@@ -125,7 +127,20 @@ public buttonConfig = {
     this.navCtrl.navigateForward([CommonRoutes.FEEDBACK]);
   }
   async profileDetailsApi(){
+    const response = await this.form.getForm(EDIT_PROFILE_FORM);
     var result = await this.profileService.getProfileDetailsFromAPI();
+    response.data.fields.controls.forEach(entity => {
+      Object.entries(result).forEach(([key, value]) => {
+        if(entity.type=='chip' &&   entity.name == key && !this.formData.form.some(obj => obj.key === entity.name)){
+          this.formData.form.push(
+            {
+              title: entity.label,
+              key: entity.name
+            }
+        )}
+      });
+
+    });
     if(result){
       this.formData.data = result;
       this.formData.data.emailId = result.email;
