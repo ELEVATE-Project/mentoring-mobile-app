@@ -59,6 +59,7 @@ export class CreateSessionPage implements OnInit {
   entityNames:any
   entityList:any;
   params: any;
+  editSessionDisable: boolean;
 
   constructor(
     private http: HttpClient,
@@ -100,7 +101,7 @@ export class CreateSessionPage implements OnInit {
         this.showForm = true;
       }
     });
-    this.isSubmited = false; //to be removed
+    this.isSubmited = true; //to be removed
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
   }
@@ -113,6 +114,7 @@ export class CreateSessionPage implements OnInit {
         response.start_date = moment.unix(response.start_date);
         response.end_date = moment.unix(response.end_date);
         this.preFillData(response);
+        this.editSessionDisable = (this.sessionDetails?.status?.value=='LIVE')
   }
 
   async getPlatformFormDetails() {
