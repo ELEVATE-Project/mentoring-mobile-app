@@ -4,7 +4,7 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
 import { TranslateService } from '@ngx-translate/core';
-import { LocalStorageService } from 'src/app/core/services';
+import { LocalStorageService, UtilService } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { Router } from '@angular/router';
 
@@ -84,7 +84,7 @@ public buttonConfig = {
   visited:boolean;
   isMentor: boolean;
   isMentorButtonPushed: boolean = false;
-  constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private router: Router, private localStorage:LocalStorageService) { }
+  constructor(public navCtrl: NavController, private profileService: ProfileService, private translate: TranslateService, private router: Router, private localStorage:LocalStorageService, private utilService: UtilService) { }
 
   ngOnInit() {
     this.visited = false;
@@ -131,5 +131,13 @@ public buttonConfig = {
       this.formData.data.emailId = result.email;
       this.formData.data.organizationName = this.user.organization?.name;
     }
+  }
+
+  async upDateProfilePopup(msg:any = {header: 'UPDATE_PROFILE',message: 'PLEASE_UPDATE_YOUR_PROFILE_IN_ORDER_TO_PROCEED',cancel:'UPDATE',submit:'CANCEL'}){
+    this.utilService.alertPopup(msg).then(async (data) => {
+      if(!data){
+        this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+      }
+    }).catch(error => {})
   }
 }
