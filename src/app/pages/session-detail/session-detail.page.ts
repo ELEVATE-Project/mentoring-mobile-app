@@ -12,7 +12,8 @@ import { App, AppState } from '@capacitor/app';
 import { Clipboard } from '@capacitor/clipboard';
 import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-popup/mentee-list-popup.component';
 import { EventListenerFocusTrapInertStrategy } from '@angular/cdk/a11y';
-
+import { PermissionService } from 'src/app/core/services/permission/permission.service';
+import { FormService } from 'src/app/core/services/form/form.service';
 
 @Component({
   selector: 'app-session-detail',
@@ -43,7 +44,7 @@ export class SessionDetailPage implements OnInit {
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
-    private utilService: UtilService, private toast: ToastService, private user: UserService ,private toaster: ToastController,private translate : TranslateService,private modalCtrl: ModalController) {
+    private utilService: UtilService, private toast: ToastService, private user: UserService ,private toaster: ToastController,private translate : TranslateService,private modalCtrl: ModalController, private permissionService:PermissionService, private form: FormService) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
     this.isMobile = utilService.isMobile()
   }
@@ -72,19 +73,6 @@ export class SessionDetailPage implements OnInit {
         title: "MEETING_PLATFORM",
         key: "meeting_info",
       },
-      {
-        title: 'RECOMMENDED_FOR',
-        key: 'recommended_for',
-      },
-      {
-        title: "CATEGORIES",
-        key: "categories"
-      },
-      {
-        title: 'MEDIUM',
-        key: 'medium',
-      },
-      
     ],
     data: {
       id:'',
@@ -147,7 +135,20 @@ export class SessionDetailPage implements OnInit {
   };
 
   async fetchSessionDetails() { 
+    let entityList = await this.form.getEntities({}, 'SESSION')
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
+    entityList.result.forEach(entity => {
+      Object.entries(response.result).forEach(([key, value]) => {
+        if(Array.isArray(value) &&   entity.value == key && !this.detailData.form.some(obj => obj.key === entity.value) ){
+          this.detailData.form.push(
+            {
+                title: entity.label,
+                key: entity.value,
+              },
+          )
+        }
+      });
+    });
     this.sessionDatas = response?.result;
     this.isLoaded = true ;
     this.userCantAccess = response?.responseCode == 'OK' ? false:true
@@ -172,7 +173,7 @@ export class SessionDetailPage implements OnInit {
       this.startDate = (response.start_date>0)?moment.unix(response.start_date).toLocaleString():this.startDate;
       this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
-      this.detailData.data.mentor_designation = response.mentor_designation.map(designation => designation.label).join(', ');
+      this.detailData.data.mentor_designation = response?.mentor_designation.map(designation => designation?.label).join(', ');
       if((!this.isConductor && !this.detailData.form.some(obj => obj.title === 'MENTOR'))){
         this.detailData.form.push(
           {

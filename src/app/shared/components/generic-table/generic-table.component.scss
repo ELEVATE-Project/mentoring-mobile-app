@@ -156,7 +156,7 @@ ion-popover {
   padding-top: 5px;
 }
 .cell-text{
-  padding: 0px 5px;
+  padding: 0px 2px;
   overflow: hidden;
   max-width: 200px;
   text-overflow: ellipsis;
@@ -165,7 +165,8 @@ ion-popover {
   -webkit-line-clamp: 1;
   max-height: 400px;
   white-space: normal;
- 
+  font-size: 13px;
+  min-width: max-content;
 }
 .session-name{
   text-align:left;
