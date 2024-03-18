@@ -1,5 +1,7 @@
 # Customizing the PWA
 
+The Mentor PWA is developed using the Ionic framework. This document provides instructions on setting up the development environment.
+
 Contents
 ---------------------
 
@@ -26,8 +28,8 @@ Dependencies
 | Utility | <ul><li>cordova-res : 0.15.4</li><li>native-run : 1.7.4 </li></ul>
 | System | <ul><li>Android SDK Tools : 26.1.1</li><li><a href="https://nodejs.org/">Node.js®</a>: v18.18.2</li><li>npm: 10.2.0</li><li>OS : Linux 5.13</li></ul>|
 
-CLI Setup
----------
+Setting up the CLI
+------------------
 
 1. Install the Ionic framework.
 
@@ -53,8 +55,8 @@ CLI Setup
     npm install @capacitor/cli --save-dev 
     ```
 
-Project Setup
--------------
+Setting up the Project
+----------------------
 
 1. Clone the [repository](https://github.com/ELEVATE-Project/mentoring-mobile-app.git).
 2. Change to the latest GitHub branch (**release-2.5.0**).
@@ -62,8 +64,8 @@ Project Setup
 4. Go to the project folder and run `npm i`.
 
 
-Build Mentor
---------------
+Building the Mentor App
+-----------------------
 
 1. To add the Capacitor plugin, run the following command:
 
@@ -93,114 +95,119 @@ Build Mentor
 
     ```
 
-Debug Mentor
---------------
+Debugging the Mentor App
+------------------------
 
 1. Open the running app in the browser.
 2. Start inspecting using Chrome dev tools or any alternatives.
 
-HashiCorp Vault Setup
----------------------
+Setting up the HashiCorp Vault
+------------------------------
 
+After setting up the HashiCorp Vault, you must add the Vault address to the Jenkins® Pipeline script and Ansible® deployment script.
 
-Jenkins Pipeline
-----------------
+Creating a Jenkins Job
+----------------------
+To automate your app deployment using Jenkins, do as follows:
 
-For automating your app deployment, you can use Jenkins. You can create a Jenkins job and run that job each time you want a deployment.
-For that you can create a Jenkins job and add a pipeline script for the job inside the job’s ‘Configure’ section. For example, see below.
+1. Create a Jenkins job each time you want a deployment. 
 
-   pipeline { agent any
-      options {
-         disableConcurrentBuilds()
-            }
-      stages {
-         stage("git"){
-               steps{
-                  
-                  git branch: '<branch-name>', url: '<github-repo-url>'
-               }
-               
-         }
-         stage("ansible run"){
-               steps{
-                  
-                     ansiblePlaybook becomeUser: 'jenkins', 
-                     credentialsId:’your-cred-id’, 
-                     extras: "-e vaultAddress=<your-hashicorp-vault-address> -e gitBranch=<git-branch>", 
-                     installation: 'ansible', 
-                     inventory: '<path-to-your-inventory>', 
-                     playbook: '<path-to-your-ansible-script>'
-               }
-               
-         }
-   }
-   }
+2. Add the pipeline script for the job inside the job’s **Configure** section. This pipeline will fetch the latest code from the given branch in the repository and run the [Ansible script](#deploying-the-application-using-an-ansible-script).
 
-This pipeline will help to fetch the latest code from the given branch in repo and run the ansible script which we are about to create for building and deploying our application.
+    ```
+       pipeline { agent any
+          options {
+             disableConcurrentBuilds()
+                }
+          stages {
+             stage("git"){
+                   steps{
+                      
+                      git branch: '<branch-name>', url: '<github-repo-url>'
+                   }
+                   
+             }
+             stage("ansible run"){
+                   steps{
+                      
+                         ansiblePlaybook becomeUser: 'jenkins', 
+                         credentialsId:’your-cred-id’, 
+                         extras: "-e vaultAddress=<your-hashicorp-vault-address> -e gitBranch=<git-branch>", 
+                         installation: 'ansible', 
+                         inventory: '<path-to-your-inventory>', 
+                         playbook: '<path-to-your-ansible-script>'
+                   }
+                   
+             }
+       }
+       }
+    ```
 
-Ansible Deployment Script
--------------------------
+Deploying the Application Using an Ansible Script
+-------------------------------------------------
 
-Add an ansible script inside the ‘deployment’ folder in the root folder of your project. And add that path in your jenkins pipeline. When you run the job in jenkins, this script will get executed step by step till the end. Please update all the necessary details in the following example:
+To build and deploy the application using an Ansible script, do as follows:
 
-   - hosts: “<your-host>”
-   vars:
-   project_path: <path-to-the-project-in-server>
-   root_path: <path-to-the-parent-folder-of-project>
-   //Add variables here if needed. (Remove this line in your code)
-   tasks:
-   - name: Get the token for Hashicorp vault
-      slurp:
-      src: "<path-to-hashicorp-vault-token>"
-      register: slurpfile
-   - name: Run vault credentials and get the environment related secrets stored in hashicorp vault
-      shell: "curl --location --request GET '{{ vaultAddress }}<environment-files-folder-name>' --header 'X-Vault-Token: {{ slurpfile['content'] | b64decode }}' | jq '.data' > '{{root_path}}/data2.json'"
-      register: vaultCurl
-   - name: Change directory
-      shell: cd {{project_path}}
-   - name: Fetch the latest code
-      git:
-      repo: git-url
-      dest: "{{project_path}}"
-      version: "{{gitBranch}}"
-      force: yes
-   - name: Update npm
-      shell: cd {{project_path}} && npm i --force
-   - name: Set permission
-      shell: chmod 744 {{ project_path }}/src/scripts/json2env.sh
-   - name: Generate .env and store it in environment folder
-      shell: cat {{root_path}}/data2.json | jq '.data' > {{ project_path }}/src/environments/environment.ts && sed -i '1s/^/export const environment = \n/' {{ project_path }}/src/environments/environment.ts
-      register: envConfig
-   - debug: msg=" cred {{ envConfig }} "
-   - name: Change directory
-      shell: chdir {{project_path}}
-   - name: Fetch pm2 config file from Hashicorp vault
-      shell: "curl --location --request GET '{{ vaultAddress }}<pm2-config-file-folder>' --header 'X-Vault-Token: {{ slurpfile['content'] | b64decode }}' | jq '.data.data' > '{{ project_path }}/pm2.config.json'"
-      register: pm2
-   - name: Change directory
-      shell: cd {{project_path}}
-   - name: Remove www folder
-      shell: rm -rf www
-   - name: Build pwa app to deploy
-      shell: cd {{project_path}} && ionic build --prod
-   - name: Start pm2 with pm2 config file and finish deployment
-      shell: cd {{project_path}} && pm2 start pm2.config.json
+1. Add an Ansible script to the **deployment** folder in the root folder of your project.
 
+   >**Note**: Update the script with details (such as paths) that are specific to your project.  
+    
+    ```
+    - hosts: <your-host>
+       vars:
+       project_path: <path-to-the-project-in-server>
+       root_path: <path-to-the-parent-folder-of-project>
+       //Add variables here if needed. (Remove this line in your code)
+      tasks:
+        - name: Slurp host file
+          slurp:
+            src: "<path-to-hashicorp-vault-token>"
+          register: slurpfile
+        - name: Run the HashiCorp Vault credentials
+          shell: "curl --location --request GET '{{ vaultAddress }}mentored-portal' --header 'X-Vault-Token: {{ slurpfile['content'] | b64decode }}' | jq '.data' > '{{root_path}}/data2.json'"
+          register: vaultCurl
+        - name: Change directory
+          shell: cd {{project_path}}
+        - name: Fetch the latest code
+          git:
+            repo: https://github.com/ELEVATE-Project/mentoring-mobile-app
+            dest: "{{project_path}}"
+            version: "{{gitBranch}}"
+            force: yes
+        - name: Update npm
+          shell: cd {{project_path}} && npm i --force
+        - name: Set permission
+          shell: chmod 744 {{ project_path }}/src/scripts/json2env.sh
+        - name: Generate .env
+          shell: cat {{root_path}}/data2.json | jq '.data' > {{ project_path }}/src/environments/environment.ts && sed -i '1s/^/export const environment = \n/' {{ project_path }}/src/environments/environment.ts
+          register: envConfig
+        - debug: msg=" cred {{ envConfig }} "
+        - name: Change directory
+          shell: chdir {{project_path}}
+        - name: Fetch pm2 config file
+          shell: "curl --location --request GET '{{ vaultAddress }}portalPm2Config' --header 'X-Vault-Token: {{ slurpfile['content'] | b64decode }}' | jq '.data.data' > '{{ project_path }}/pm2.config.json'"
+          register: pm2
+        - name: Change directory
+          shell: cd {{project_path}}
+        - name: Remove www folder
+          shell: rm -rf www
+        - name: Build pwa app
+          shell: cd {{project_path}} && ionic build --prod
+        - name: Start pm2
+          shell: cd {{project_path}} && pm2 start pm2.config.json
+    ```
 
-Please remove all the unwanted lines.
+3. Add the script's path to the [Jenkins Pipeline script](#creating-a-jenkins-job). When you run the Jenkins job, the script is executed.
 
-You also have to add a script inside /src/scripts/json2env.sh
+4. To convert the JSON file that was fetched from the HashiCorp Vault to an env format, add the following script to ```/src/scripts/json2env.sh.```:
 
+    ```
+    #!/bin/sh
 
-   #!/bin/sh
-
-   tr -d '\n' |
-   grep -o '"[A-Za-z\_][A-Za-z_0-9]\+"\s*:\s*\("[^"]\+"\|[0-9\.]\+\|true\|false\|null\)' |
-   sed 's/"\(._\)"\s_:\s\*"\?\([^"]\+\)"\?/\1= "\2"/'
-
-This script will convert the fetched data from hashicorp to env files.
-
-
+    tr -d '\n' |
+    grep -o '"[A-Za-z\_][A-Za-z_0-9]\+"\s*:\s*\("[^"]\+"\|[0-9\.]\+\|true\|false\|null\)' |
+    sed 's/"\(._\)"\s_:\s\*"\?\([^"]\+\)"\?/\1= "\2"/'
+    ```
 
 Structure of Environment file, Server.js, and pm2.config.json
 -------------------------------------------------------------
