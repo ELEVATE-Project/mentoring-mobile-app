@@ -171,7 +171,7 @@ export class SearchPopoverComponent implements OnInit {
         break;
 
       case 'REMOVE':
-        this.countSelectedList = (this.user.id == data.element.id) ?this.countSelectedList : this.countSelectedList+1
+        this.countSelectedList = (this.user.id == data.element.id) ?this.countSelectedList : this.countSelectedList-1
         const index = this.tableData.findIndex(item => item.id === data.element.id);
         if(this.data.viewListMode) {
           this.tableData = this.tableData.filter(obj => obj.id !== data.element.id);
