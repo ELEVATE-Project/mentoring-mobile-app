@@ -29,6 +29,8 @@ export class SearchPopoverComponent implements OnInit {
   searchText = '';
   count: any;
   maxCount;
+  countSelectedList:any = 0 ;
+  user;
   sortingData;
   setPaginatorToFirstpage:any = false;
   actionButtons = {
@@ -57,6 +59,7 @@ export class SearchPopoverComponent implements OnInit {
 
   async ngOnInit() {
     this.maxCount = await this.localStorage.getLocalData(localKeys[this.data.control.meta.maxCount])
+    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.selectedList = this.data.selectedData ? this.data.selectedData : this.selectedList
     if (this.data.viewListMode) {
       this.selectedList.forEach((ele) => {
@@ -146,12 +149,17 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   onButtonCLick(data: any) {
+    if (this.selectedList.length) {
+      const sessionManager = this.selectedList.some(element => this.user.id === element.id);
+      this.countSelectedList = sessionManager ? this.selectedList.length - 1 : this.selectedList.length;
+    }
     switch(data.action){
       case 'ADD':
+        this.countSelectedList = (this.user.id == data.element.id) ?this.countSelectedList : this.countSelectedList+1
         if(!this.data.control.meta .multiSelect){
           this.modalController.dismiss([{label: data.element.name+', '+data.element.organization, id: data.element.id, data: data.element}])
         } else {
-          if(this.maxCount && this.maxCount>this.selectedList.length){
+          if(this.maxCount && this.maxCount>=this.countSelectedList){
             const index = this.tableData.findIndex(item => item.id === data.element.id);
             this.tableData[index].action = this.actionButtons.REMOVE
             let addedData = data.element
@@ -163,6 +171,7 @@ export class SearchPopoverComponent implements OnInit {
         break;
 
       case 'REMOVE':
+        this.countSelectedList = this.countSelectedList -1
         const index = this.tableData.findIndex(item => item.id === data.element.id);
         if(this.data.viewListMode) {
           this.tableData = this.tableData.filter(obj => obj.id !== data.element.id);
