@@ -54,6 +54,7 @@ export class LoginPage implements OnInit {
   };
   id: any;
   userDetails: any;
+  recaptchaResolved: boolean = false;
   public headerConfig: any = {
     backButton: {
       label: '',
@@ -141,5 +142,9 @@ export class LoginPage implements OnInit {
       this.supportInfo = result.report_issue
       this.localStorage.setLocalData(localKeys.MAX_MENTEE_ENROLLMENT_COUNT, result.session_mentee_limit);
     })
+}
+
+onCaptchaResolved(token: string) {
+  this.recaptchaResolved = true;
 }
 }
