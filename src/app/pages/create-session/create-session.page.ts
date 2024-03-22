@@ -90,6 +90,7 @@ export class CreateSessionPage implements OnInit {
     this.entityList = await this.form.getEntities(this.entityNames, 'SESSION')
     this.formData = await this.form.populateEntity(this.formData,this.entityList)
     this.changeDetRef.detectChanges();
+    this.permissionService.getPlatformConfig();
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.id = params?.get('id');
       this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
