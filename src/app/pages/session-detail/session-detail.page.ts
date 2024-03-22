@@ -265,11 +265,7 @@ export class SessionDetailPage implements OnInit {
 
   editSession() {
     this.activeUrl = this.router.url;
-    if(this.activeUrl.includes('/admin/managers-session-details')){
-      this.router.navigate([`${CommonRoutes.ADMIN}/${CommonRoutes.MANAGERS_SESSION}`], { queryParams: { id: this.id }});
-    }else{
-      this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id } });
-    }
+    (this.sessionDatas?.status?.value=='LIVE') ? this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'} }) : this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id } });
   }
 
   deleteSession() {
