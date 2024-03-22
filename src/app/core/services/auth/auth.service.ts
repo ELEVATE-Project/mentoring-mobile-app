@@ -120,13 +120,4 @@ export class AuthService {
     }
   }
 
-  async getMailInfo(){
-    const config = {
-      url: urlConstants.API_URLS.GET_PLATFORM_CONFIG
-    };
-    let data: any = await this.httpService.get(config);
-    let result = _.get(data, 'result');
-    return result;
-  }
-
 }
