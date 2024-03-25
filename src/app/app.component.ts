@@ -151,7 +151,6 @@ export class AppComponent {
       },1000);
       setTimeout(() => {
         document.querySelector('ion-menu')?.shadowRoot?.querySelector('.menu-inner')?.setAttribute('style', 'border-radius:8px 8px 0px 0px');
-        this.permissionService.getPlatformConfig();
       }, 2000);
 
       this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data=>{

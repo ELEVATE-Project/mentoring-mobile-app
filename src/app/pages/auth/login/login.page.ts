@@ -65,7 +65,7 @@ export class LoginPage implements OnInit {
   };
   labels = ["LOGIN_TO_MENTOR_ED"];
   mentorId: any;
-  supportInfo: any;
+  supportEmail: any = environment.supportEmail;
   privacyPolicyUrl =environment.privacyPolicyUrl;
   termsOfServiceUrl = environment.termsOfServiceUrl;
   constructor(private authService: AuthService, private router: Router,private utilService: UtilService,
@@ -76,7 +76,6 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.translateText();
-    this.getMailInfo();
   }
 
   async translateText() {
@@ -137,12 +136,7 @@ export class LoginPage implements OnInit {
   goToSignup() {
     this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.REGISTER}`]);
   }
-  getMailInfo(){
-    this.authService.getMailInfo().then((result:any) =>{
-      this.supportInfo = result.report_issue
-      this.localStorage.setLocalData(localKeys.MAX_MENTEE_ENROLLMENT_COUNT, result.session_mentee_limit);
-    })
-}
+
 
 onCaptchaResolved(token: string) {
   this.recaptchaResolved = true;
