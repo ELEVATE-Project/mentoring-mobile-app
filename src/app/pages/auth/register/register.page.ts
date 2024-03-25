@@ -60,13 +60,13 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         errorMessage:{
           required: "Enter password",
-          minlength:"Please enter minimum 8 characters.",
+          minlength:"Please enter minimum 10 characters.",
           pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
         },
         validators: {
           required: true,
-          minLength: 8,
-          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength: 10,
+          pattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%$&()\\-`.+,/""]).{10,}$',
         },
       },
       {
@@ -78,13 +78,13 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         errorMessage:{
           required: "Re-enter password",
-          minlength:"Please enter minimum 8 characters.",
+          minlength:"Please enter minimum 10 characters.",
           pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
         },
         validators: {
           required: true,
-          minLength: 8,
-          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength: 10,
+          pattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%$&()\\-`.+,/""]).{10,}$',
         }
       }
     ]
