@@ -5,16 +5,15 @@ The Mentor PWA is developed using the Ionic framework. This document provides in
 Contents
 ---------------------
 
- * Dependencies
- * Command-line setup
- * Project setup
- * Build Mentor
- * Debug Mentor
- * HashiCorp Vault setup
- * Jenkins Pipeline
- * Ansible Deployment Script
- * Environment files, Server.js, and pm2.config.json
-
+ * [Dependencies](#dependencies)
+ * [Setting up the CLI](#setting-up-the-cli)
+ * [Setting up the Project](#setting-up-the-project)
+ * [Building the Application](#building-the-application)
+ * [Debugging the Application](#debugging-the-application)
+ * [Setting up the HashiCorp® Vault](#setting-up-the-hashicorp-vault)
+ * [Creating a Jenkins® Job](#creating-a-jenkins-job)
+ * [Deploying the Application Using an Ansible® Script](#deploying-the-application-using-an-ansible-script)
+ * [Structure of Environment file, Server.js, and pm2.config.json](#structure-of-environment-file-serverjs-and-pm2configjson)
 
 Dependencies
 ------------
@@ -64,8 +63,8 @@ Setting up the Project
 4. Go to the project folder and run `npm i`.
 
 
-Building the Mentor App
------------------------
+Building the Application
+------------------------
 
 1. To add the Capacitor plugin, run the following command:
 
@@ -95,8 +94,8 @@ Building the Mentor App
 
     ```
 
-Debugging the Mentor App
-------------------------
+Debugging the Application
+-------------------------
 
 1. Open the running app in the browser.
 2. Start inspecting using Chrome dev tools or any alternatives.
@@ -104,7 +103,7 @@ Debugging the Mentor App
 Setting up the HashiCorp Vault
 ------------------------------
 
-After setting up the HashiCorp Vault, you must add the Vault address to the Jenkins® Pipeline script and Ansible® deployment script.
+After setting up the HashiCorp Vault, you must add the Vault address to the Jenkins Pipeline script and Ansible deployment script.
 
 Creating a Jenkins Job
 ----------------------
