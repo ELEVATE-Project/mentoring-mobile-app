@@ -139,6 +139,6 @@ export class LoginPage implements OnInit {
 
 
 onCaptchaResolved(token: string) {
-  this.recaptchaResolved = true;
+  this.recaptchaResolved = token?  true: false;
 }
 }
