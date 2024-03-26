@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { TranslateService } from '@ngx-translate/core';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -60,13 +61,13 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         errorMessage:{
           required: "Enter password",
-          minlength:"Please enter minimum 10 characters.",
-          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+          minlength:environment.password.minLength ? "Please enter minimum " + environment.password.minLength+" characters.":"Please enter minimum 8 characters.",
+          pattern: environment.password.errorMessage ? environment.password.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         validators: {
           required: true,
-          minLength: 10,
-          pattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%$&()\\-`.+,/""]).{10,}$',
+          minLength:environment.password.minLength? environment.password.minLength: 8,
+          pattern: environment.password.rejectPattern ? environment.password.rejectPattern :"^[^0-9!@#%$&()\\-`.+,/\"]*$"
         },
       },
       {
@@ -78,13 +79,13 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         errorMessage:{
           required: "Re-enter password",
-          minlength:"Please enter minimum 10 characters.",
-          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+          minlength:environment.password.minLength ? "Please enter minimum " + environment.password.minLength+" characters.":"Please enter minimum 8 characters.",
+          pattern: environment.password.errorMessage ? environment.password.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         validators: {
           required: true,
-          minLength: 10,
-          pattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%$&()\\-`.+,/""]).{10,}$',
+          minLength: environment.password.minLength ? environment.password.minLength:8,
+          pattern: environment.password.rejectPattern ? environment.password.rejectPattern :"^[^0-9!@#%$&()\\-`.+,/\"]*$"
         }
       }
     ]
