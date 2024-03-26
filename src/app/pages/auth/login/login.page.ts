@@ -43,11 +43,13 @@ export class LoginPage implements OnInit {
         position: 'floating',
         errorMessage:{
           required: "Enter password",
-          minlength: "Password should contain minimum of 8 characters"
+          minlength:environment.password.minLength ? "Please enter minimum " + environment.password.minLength+" characters.":"Please enter minimum 8 characters.",
+          pattern: environment.password.errorMessage ? environment.password.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         validators: {
           required: true,
-          minLength: 8,
+          minLength:environment.password.minLength? environment.password.minLength: 8,
+          pattern: environment.password.rejectPattern ? environment.password.rejectPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
     ],

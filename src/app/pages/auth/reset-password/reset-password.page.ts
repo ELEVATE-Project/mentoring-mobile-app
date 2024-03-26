@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { ToastService } from 'src/app/core/services';
 import { TranslateService } from '@ngx-translate/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-reset-password',
@@ -40,14 +41,14 @@ export class ResetPasswordPage implements OnInit {
         type: 'password',
         errorMessage:{
           required: "Enter new password",
-          minlength:"Please enter minimum 8 characters.",
-          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+          minlength:environment.password.minLength ? "Please enter minimum " + environment.password.minLength+" characters.":"Please enter minimum 8 characters.",
+          pattern: environment.password.errorMessage ? environment.password.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         position: 'floating',
         validators: {
           required: true,
-          minLength: 8,
-          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength:environment.password.minLength? environment.password.minLength: 8,
+          pattern: environment.password.rejectPattern ? environment.password.rejectPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
       {
@@ -58,14 +59,14 @@ export class ResetPasswordPage implements OnInit {
         type: 'password',
         errorMessage:{
           required: "Re-enter new password",
-          minlength:"Please enter minimum 8 characters.",
-          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+          minlength:environment.password.minLength ? "Please enter minimum " + environment.password.minLength+" characters.":"Please enter minimum 8 characters.",
+          pattern: environment.password.errorMessage ? environment.password.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         position: 'floating',
         validators: {
           required: true,
-          minLength: 8,
-          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength:environment.password.minLength? environment.password.minLength: 8,
+          pattern: environment.password.rejectPattern ? environment.password.rejectPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
     ],
