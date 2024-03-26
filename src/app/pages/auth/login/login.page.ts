@@ -49,7 +49,7 @@ export class LoginPage implements OnInit {
         validators: {
           required: true,
           minLength:environment.password.minLength? environment.password.minLength: 8,
-          pattern: environment.password.rejectPattern ? environment.password.rejectPattern :"^[^0-9!@#%$&()\\-`.+,/\"]*$"
+          pattern: environment.password.rejectPattern ? environment.password.rejectPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
     ],
