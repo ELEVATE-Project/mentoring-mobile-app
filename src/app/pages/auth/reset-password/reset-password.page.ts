@@ -41,14 +41,14 @@ export class ResetPasswordPage implements OnInit {
         type: 'password',
         errorMessage:{
           required: "Enter new password",
-          minlength:environment.password.minLength ? "Please enter minimum " + environment.password.minLength+" characters.":"Please enter minimum 8 characters.",
-          pattern: environment.password.errorMessage ? environment.password.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
+          minlength:(environment as any)?.password?.minLength ? "Please enter minimum " + (environment as any)?.password?.minLength+" characters.":"Please enter minimum 8 characters.",
+          pattern: (environment as any)?.password?.errorMessage ? (environment as any)?.password?.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         position: 'floating',
         validators: {
           required: true,
-          minLength:environment.password.minLength? environment.password.minLength: 8,
-          pattern: environment.password.rejectPattern ? environment.password.rejectPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength:(environment as any)?.password?.minLength? (environment as any)?.password?.minLength: 8,
+          pattern: (environment as any)?.password?.regexPattern ? (environment as any)?.password?.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
       {
@@ -59,14 +59,14 @@ export class ResetPasswordPage implements OnInit {
         type: 'password',
         errorMessage:{
           required: "Re-enter new password",
-          minlength:environment.password.minLength ? "Please enter minimum " + environment.password.minLength+" characters.":"Please enter minimum 8 characters.",
-          pattern: environment.password.errorMessage ? environment.password.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
+          minlength:(environment as any)?.password?.minLength ? "Please enter minimum " + (environment as any)?.password?.minLength+" characters.":"Please enter minimum 8 characters.",
+          pattern: (environment as any)?.password?.errorMessage ? (environment as any)?.password?.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         position: 'floating',
         validators: {
           required: true,
-          minLength:environment.password.minLength? environment.password.minLength: 8,
-          pattern: environment.password.rejectPattern ? environment.password.rejectPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength:(environment as any)?.password?.minLength? (environment as any)?.password?.minLength: 8,
+          pattern: (environment as any)?.password?.regexPattern ? (environment as any)?.password?.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
     ],
