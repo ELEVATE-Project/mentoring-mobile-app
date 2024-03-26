@@ -92,6 +92,11 @@ const routes: Routes = [
     canActivate: [PrivateGuard]
   },
   {
+    path: CommonRoutes.CHANGE_PASSWORD,
+    loadChildren: () => import('./pages/change-password/change-password.module').then( m => m.ChangePasswordPageModule),
+    canActivate: [PrivateGuard]
+  },
+  {
     path:'**', redirectTo:'',pathMatch:'full'
   }
 ];
