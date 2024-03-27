@@ -14,6 +14,8 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
 import { CapacitorHttp } from '@capacitor/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Device } from '@capacitor/device';
+import * as Bowser from "bowser"
 
 
 @Injectable({
@@ -23,6 +25,7 @@ export class HttpService {
   baseUrl;
   isFeedbackTriggered = false;
   isAlertOpen: any = false;
+  metaData: { browserName: string; browserVersion: string; osName: string; platformType: string; type: string; id: string };
   constructor(
     private userService: UserService,
     private network: NetworkService,
@@ -38,14 +41,25 @@ export class HttpService {
   }
 
   async setHeaders() {
+    const browser = Bowser.getParser(window.navigator.userAgent);
+    const deviceId = (await Device.getId()).identifier;
     let token = await this.getToken();
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const acceptLanguage = await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE);
+    const metaData = {
+      browserName: browser.getBrowserName(),
+      browserVersion: browser.getBrowserVersion(),
+      osName: browser.getOSName(),
+      platformType: browser.getPlatformType(),
+      type: '',
+      id: deviceId
+    }
     const headers = {
       'X-auth-token': token ? token : "",
       'Content-Type': 'application/json',
       'timeZone': timezone,
-      'accept-language':acceptLanguage
+      'accept-language':acceptLanguage,
+      'device-info': metaData
     }
     return headers;
   }
@@ -61,6 +75,7 @@ export class HttpService {
       headers: headers,
       data: body,
     };
+    console.log(options)
     return CapacitorHttp.post(options)
       .then((data: any) => {
         let result: any = data.data;
@@ -283,4 +298,9 @@ export class HttpService {
         }
       });
   }
+  logDeviceInfo = async () => {
+    const info = await Device.getInfo();
+    const id = await Device.getId()
+    console.log(info, id);
+  };
 }
