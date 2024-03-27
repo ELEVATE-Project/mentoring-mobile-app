@@ -50,11 +50,12 @@ export class AuthService {
     }
   }
 
-  async loginAccount(formData) {
+  async loginAccount(formData,captchaToken) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.ACCOUNT_LOGIN,
       payload: formData,
+      headers:{'captcha-token' : captchaToken}
     };
     try {
       const data: any = await this.httpService.post(config);

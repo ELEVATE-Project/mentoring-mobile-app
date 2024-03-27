@@ -11,7 +11,7 @@
         </section>
         <section>
           <div class="d-flex flex-justify-center">
-            <re-captcha (resolved)="onCaptchaResolved($event)" siteKey="6LdT1J8pAAAAAAwWqoAX_O_8PHF43ps8ZFLkcp7f" ></re-captcha>
+            <re-captcha (resolved)="onCaptchaResolved($event)" [siteKey]="siteKey" ></re-captcha>
           </div>
         </section>
         <section [ngClass]="{'btn-disabled': (form1.myForm.invalid || !recaptchaResolved), 'btn-valid':(form1.myForm.valid && recaptchaResolved)}">
