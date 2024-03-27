@@ -89,10 +89,9 @@ public headerConfig: any = {
     let formJson = this.form1.myForm.value;
     if (this.form1.myForm.valid) {
       if (_.isEqual(formJson.password, formJson.newPassword)){
-        console.log('submit',formJson,this.form1.myForm.valid)
-        this.authService.logoutAccount();
+        this.authService.changePassword({oldPassword: formJson.oldPassword, newPassword: formJson.newPassword});
       }else {
-        this.toastService.showToast('Please enter the same password', 'danger');
+        this.toastService.showToast('ENTER_SAME_PASSWORD', 'danger');
       }
     }
   }
