@@ -258,5 +258,6 @@
     "THIS_MONTH": "This month",
     "THIS_QUARTER": "This quarter",
     "CHANGE_PASSWORD": "Change password",
-    "LOGIN_ACTIVITY": "Login activity"
+    "LOGIN_ACTIVITY": "Login activity",
+    "ENTER_SAME_PASSWORD": "Please enter the same password"
 }

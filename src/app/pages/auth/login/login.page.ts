@@ -43,11 +43,9 @@ export class LoginPage implements OnInit {
         position: 'floating',
         errorMessage:{
           required: "Enter password",
-          minlength: "Password should contain minimum of 8 characters"
         },
         validators: {
           required: true,
-          minLength: 8,
         },
       },
     ],
