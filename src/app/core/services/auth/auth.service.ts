@@ -120,4 +120,20 @@ export class AuthService {
     }
   }
 
+  async changePassword(formData){
+    const config = {
+      url: urlConstants.API_URLS.CHANGE_PASSWORD,
+      payload: formData,
+    };
+    try {
+      let data = await this.httpService.post(config);
+      if(data && data.message){
+        await this.logoutAccount();
+        this.toast.showToast(data.message, "success");
+      }
+    }
+    catch (error) {
+    }
+  }
+
 }
