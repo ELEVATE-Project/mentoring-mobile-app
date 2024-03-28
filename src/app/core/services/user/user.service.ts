@@ -35,9 +35,7 @@ export class UserService {
     const tokenDecoded: any = jwt_decode(token);
     const tokenExpiryTime = moment(tokenDecoded.exp * 1000);
     const currentTime = moment(Date.now());
-    const duration = moment.duration(tokenExpiryTime.diff(currentTime));
-    const hourDifference = duration.asHours();
-    return (hourDifference < 2) ? false : true;
+    return currentTime.isBefore(tokenExpiryTime);
   }
   
 }
