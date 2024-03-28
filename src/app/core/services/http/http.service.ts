@@ -54,7 +54,8 @@ export class HttpService {
     if (!this.checkNetworkAvailability()) {
       throw Error(null);
     }
-    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+    let defaultHeaders = await this.setHeaders();
+    const headers = requestParam.headers ?  { ...requestParam.headers, ...defaultHeaders } : defaultHeaders;
     let body = requestParam.payload ? requestParam.payload : {};
     const options = {
       url: this.baseUrl + requestParam.url,

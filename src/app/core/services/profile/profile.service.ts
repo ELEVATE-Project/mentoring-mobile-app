@@ -90,11 +90,12 @@ export class ProfileService {
       this.loaderService.stopLoader();
     }
   }
-  async updatePassword(formData) {
+  async updatePassword(formData,captchaToken) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.RESET_PASSWORD,
-      payload: formData
+      payload: formData,
+      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
     };
     try {
       let data: any = await this.httpService.post(config);
@@ -108,6 +109,7 @@ export class ProfileService {
     }
     catch (error) {
       this.loaderService.stopLoader();
+      return null;
     }
   }
   async registrationOtp(formData) {

@@ -8,6 +8,7 @@ import { CommonRoutes } from 'src/global.routes';
 import { environment } from 'src/environments/environment';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 })
 export class LoginPage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;
+  @ViewChild(RecaptchaComponent) captchaComponent: RecaptchaComponent;
   formData: JsonFormData = {
     controls: [
       {
@@ -50,10 +52,10 @@ export class LoginPage implements OnInit {
       },
     ],
   };
-  siteKey = (environment as any)?.siteKey ? (environment as any)?.siteKey  :""
+  siteKey = (environment as any)?.recaptchaSiteKey ? (environment as any)?.recaptchaSiteKey  :""
   id: any;
   userDetails: any;
-  recaptchaResolved: boolean = false;
+  recaptchaResolved: boolean = this.siteKey ? false : true;
   public headerConfig: any = {
     backButton: {
       label: '',
@@ -62,7 +64,7 @@ export class LoginPage implements OnInit {
     notification: false,
     signupButton: true
   };
-  captchaToken:any;
+  captchaToken:any="";
   labels = ["LOGIN_TO_MENTOR_ED"];
   mentorId: any;
   supportEmail: any = environment.supportEmail;
@@ -100,9 +102,11 @@ export class LoginPage implements OnInit {
 
   async onSubmit() {
     this.form1.onSubmit();
-    if (this.form1.myForm.valid && this.captchaToken) {
+    if (this.form1.myForm.valid) {
       this.userDetails = await this.authService.loginAccount(this.form1.myForm.value,this.captchaToken);
-      if (this.userDetails !== null) {
+      if(this.userDetails === null && this.captchaToken){
+        this.captchaComponent.reset();
+      }else if (this.userDetails !== null) {
         this.utilService.ionMenuShow(true)
         let user = await this.profileService.getProfileDetailsFromAPI();
         this.userService.userEvent.next(user);
