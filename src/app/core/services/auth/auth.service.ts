@@ -31,11 +31,13 @@ export class AuthService {
     private db: DbService
   ) { }
 
-  async createAccount(formData) {
+  async createAccount(formData,captchaToken) {
+    let headers = await this.setHeaders(captchaToken)
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.CREATE_ACCOUNT,
       payload: formData,
+      headers: headers
     };
     try {
       let data: any = await this.httpService.post(config);
@@ -47,22 +49,17 @@ export class AuthService {
     }
     catch (error) {
       this.loaderService.stopLoader();
+      return null
     }
   }
 
   async loginAccount(formData,captchaToken) {
+    let headers = await this.setHeaders(captchaToken)
     await this.loaderService.startLoader();
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const acceptLanguage = await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE);
     const config = {
       url: urlConstants.API_URLS.ACCOUNT_LOGIN,
       payload: formData,
-      headers: {
-        'captcha-token': captchaToken,
-        'Content-Type': 'application/json',
-        'timeZone': timezone,
-        'accept-language': acceptLanguage
-      }
+      headers: headers
     };
     try {
       const data: any = await this.httpService.post(config);
@@ -146,6 +143,17 @@ export class AuthService {
     this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
       replaceUrl: true
     });
+  }
+
+  async setHeaders(captchaToken){
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const acceptLanguage = await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE);
+    return {
+      'captcha-token': captchaToken,
+      'Content-Type': 'application/json',
+      'timeZone': timezone,
+      'accept-language': acceptLanguage
+    }
   }
 
 }

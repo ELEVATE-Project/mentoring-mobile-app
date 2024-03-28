@@ -90,11 +90,19 @@ export class ProfileService {
       this.loaderService.stopLoader();
     }
   }
-  async updatePassword(formData) {
+  async updatePassword(formData,captchaToken) {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const acceptLanguage = await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE);
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.RESET_PASSWORD,
-      payload: formData
+      payload: formData,
+      headers: {
+        'captcha-token': captchaToken,
+        'Content-Type': 'application/json',
+        'timeZone': timezone,
+        'accept-language': acceptLanguage
+      }
     };
     try {
       let data: any = await this.httpService.post(config);
@@ -108,6 +116,7 @@ export class ProfileService {
     }
     catch (error) {
       this.loaderService.stopLoader();
+      return null;
     }
   }
   async registrationOtp(formData) {
