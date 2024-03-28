@@ -21,6 +21,6 @@ import { RecaptchaModule, RECAPTCHA_SETTINGS, RecaptchaSettings, RecaptchaLoader
     CoreModule,
     RecaptchaModule,
   ],
-  declarations: [LoginPage],
+  declarations: [LoginPage]
 })
 export class LoginPageModule {}
