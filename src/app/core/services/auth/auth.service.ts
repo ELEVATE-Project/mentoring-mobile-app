@@ -31,8 +31,8 @@ export class AuthService {
     private db: DbService
   ) { }
 
-  async createAccount(formData,captchaToken) {
-    let headers = await this.setHeaders(captchaToken)
+  async createAccount(formData,captchaToken:any) {
+    let headers = captchaToken ? await this.setHeaders(captchaToken):{}
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.CREATE_ACCOUNT,
@@ -53,8 +53,8 @@ export class AuthService {
     }
   }
 
-  async loginAccount(formData,captchaToken) {
-    let headers = await this.setHeaders(captchaToken)
+  async loginAccount(formData,captchaToken:any) {
+    let headers = captchaToken ? await this.setHeaders(captchaToken):{}
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.ACCOUNT_LOGIN,

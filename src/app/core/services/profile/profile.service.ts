@@ -97,12 +97,12 @@ export class ProfileService {
     const config = {
       url: urlConstants.API_URLS.RESET_PASSWORD,
       payload: formData,
-      headers: {
+      headers: captchaToken ?{
         'captcha-token': captchaToken,
         'Content-Type': 'application/json',
         'timeZone': timezone,
         'accept-language': acceptLanguage
-      }
+      }: {}
     };
     try {
       let data: any = await this.httpService.post(config);

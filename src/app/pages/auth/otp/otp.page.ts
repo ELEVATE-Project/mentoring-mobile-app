@@ -46,7 +46,7 @@ export class OtpPage implements OnInit {
   checked: boolean = false;
   privacyPolicyUrl =environment.privacyPolicyUrl;
   termsOfServiceUrl = environment.termsOfServiceUrl;
-  captchaToken:any;
+  captchaToken:any="";
   recaptchaResolved: boolean = this.siteKey ? false : true;
   
 

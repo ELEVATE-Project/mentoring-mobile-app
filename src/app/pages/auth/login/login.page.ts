@@ -64,7 +64,7 @@ export class LoginPage implements OnInit {
     notification: false,
     signupButton: true
   };
-  captchaToken:any;
+  captchaToken:any="";
   labels = ["LOGIN_TO_MENTOR_ED"];
   mentorId: any;
   supportEmail: any = environment.supportEmail;
@@ -102,9 +102,9 @@ export class LoginPage implements OnInit {
 
   async onSubmit() {
     this.form1.onSubmit();
-    if (this.form1.myForm.valid && this.captchaToken) {
+    if (this.form1.myForm.valid) {
       this.userDetails = await this.authService.loginAccount(this.form1.myForm.value,this.captchaToken);
-      if(this.userDetails === null){
+      if(this.userDetails === null && this.captchaToken){
         this.captchaComponent.reset();
       }else if (this.userDetails !== null) {
         this.utilService.ionMenuShow(true)
