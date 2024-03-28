@@ -10,7 +10,7 @@
           <app-dynamic-form [jsonFormData]="formData" (onEnter)="onSubmit()" #form1> </app-dynamic-form>
         </section>
         <section>
-          <div class="d-flex flex-justify-center">
+          <div *ngIf="siteKey" class="d-flex flex-justify-center">
             <re-captcha (resolved)="onCaptchaResolved($event)" [siteKey]="siteKey" ></re-captcha>
           </div>
         </section>
