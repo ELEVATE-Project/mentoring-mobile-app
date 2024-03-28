@@ -26,7 +26,7 @@ export class OtpPage implements OnInit {
       'border-radius': '8px'
     }
   };
-  siteKey = (environment as any)?.siteKey ? (environment as any)?.siteKey  :""
+  siteKey = (environment as any)?.recaptchaSiteKey ? (environment as any)?.recaptchaSiteKey  :""
   resetPasswordData = { email: null, password: null, otp: null };
   public headerConfig: any = {
     // menu: true,

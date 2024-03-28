@@ -32,12 +32,11 @@ export class AuthService {
   ) { }
 
   async createAccount(formData,captchaToken:any) {
-    let headers = await this.setHeaders(captchaToken)
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.CREATE_ACCOUNT,
       payload: formData,
-      headers: headers
+      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
     };
     try {
       let data: any = await this.httpService.post(config);
@@ -54,12 +53,11 @@ export class AuthService {
   }
 
   async loginAccount(formData,captchaToken:any) {
-    let headers = await this.setHeaders(captchaToken)
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.ACCOUNT_LOGIN,
       payload: formData,
-      headers: headers
+      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
     };
     try {
       const data: any = await this.httpService.post(config);
@@ -144,16 +142,4 @@ export class AuthService {
       replaceUrl: true
     });
   }
-
-  async setHeaders(captchaToken){
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const acceptLanguage = await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE);
-    return {
-      'captcha-token': captchaToken,
-      'Content-Type': 'application/json',
-      'timeZone': timezone,
-      'accept-language': acceptLanguage
-    }
-  }
-
 }
