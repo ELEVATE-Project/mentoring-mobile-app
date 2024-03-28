@@ -24,6 +24,7 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -59,6 +60,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
       registrationStrategy: 'registerWhenStable:30000'
     }),
     BrowserAnimationsModule,
+    RecaptchaModule,
   ],
 
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

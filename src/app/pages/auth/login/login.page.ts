@@ -50,8 +50,10 @@ export class LoginPage implements OnInit {
       },
     ],
   };
+  siteKey = (environment as any)?.siteKey ? (environment as any)?.siteKey  :""
   id: any;
   userDetails: any;
+  recaptchaResolved: boolean = false;
   public headerConfig: any = {
     backButton: {
       label: '',
@@ -60,6 +62,7 @@ export class LoginPage implements OnInit {
     notification: false,
     signupButton: true
   };
+  captchaToken:any;
   labels = ["LOGIN_TO_MENTOR_ED"];
   mentorId: any;
   supportEmail: any = environment.supportEmail;
@@ -97,8 +100,8 @@ export class LoginPage implements OnInit {
 
   async onSubmit() {
     this.form1.onSubmit();
-    if (this.form1.myForm.valid) {
-      this.userDetails = await this.authService.loginAccount(this.form1.myForm.value);
+    if (this.form1.myForm.valid && this.captchaToken) {
+      this.userDetails = await this.authService.loginAccount(this.form1.myForm.value,this.captchaToken);
       if (this.userDetails !== null) {
         this.utilService.ionMenuShow(true)
         let user = await this.profileService.getProfileDetailsFromAPI();
@@ -133,4 +136,10 @@ export class LoginPage implements OnInit {
   goToSignup() {
     this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.REGISTER}`]);
   }
+
+
+onCaptchaResolved(token: string) {
+  this.captchaToken = token
+  this.recaptchaResolved = token?  true: false;
+}
 }

@@ -50,11 +50,19 @@ export class AuthService {
     }
   }
 
-  async loginAccount(formData) {
+  async loginAccount(formData,captchaToken) {
     await this.loaderService.startLoader();
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const acceptLanguage = await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE);
     const config = {
       url: urlConstants.API_URLS.ACCOUNT_LOGIN,
       payload: formData,
+      headers: {
+        'captcha-token': captchaToken,
+        'Content-Type': 'application/json',
+        'timeZone': timezone,
+        'accept-language': acceptLanguage
+      }
     };
     try {
       const data: any = await this.httpService.post(config);
