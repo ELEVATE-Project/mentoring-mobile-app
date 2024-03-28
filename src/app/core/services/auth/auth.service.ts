@@ -101,16 +101,7 @@ export class AuthService {
       if (!skipApiCall) {
         await this.httpService.post(config);
       }
-      this.localStorage.delete(localKeys.USER_DETAILS);
-      this.localStorage.delete(localKeys.USER_ROLES);
-      this.localStorage.delete(localKeys.TOKEN);
-      this.localStorage.delete(localKeys.IS_ROLE_REQUESTED);
-      await this.db.clear()
-      this.userService.token = null;
-      this.userService.userEvent.next(null);
-      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
-        replaceUrl: true
-      });
+      await this.clearLocalData()
     }
     catch (error) {
     }
@@ -126,6 +117,35 @@ export class AuthService {
     }
     catch (error) {
     }
+  }
+
+  async changePassword(formData){
+    const config = {
+      url: urlConstants.API_URLS.CHANGE_PASSWORD,
+      payload: formData,
+    };
+    try {
+      let data = await this.httpService.post(config);
+      if(data && data.message){
+        await this.clearLocalData();
+        this.toast.showToast(data.message, "success");
+      }
+    }
+    catch (error) {
+    }
+  }
+
+  async clearLocalData(){
+    this.localStorage.delete(localKeys.USER_DETAILS);
+    this.localStorage.delete(localKeys.USER_ROLES);
+    this.localStorage.delete(localKeys.TOKEN);
+    this.localStorage.delete(localKeys.IS_ROLE_REQUESTED);
+    await this.db.clear()
+    this.userService.token = null;
+    this.userService.userEvent.next(null);
+    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
+      replaceUrl: true
+    });
   }
 
 }

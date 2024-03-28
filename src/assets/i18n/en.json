@@ -256,5 +256,7 @@
     "INPUT_CHIP_ERROR_TOAST_MESSAGE": "This field must not contain special characters other than underscores.",
     "THIS_WEEK": "This week",
     "THIS_MONTH": "This month",
-    "THIS_QUARTER": "This quarter"
+    "THIS_QUARTER": "This quarter",
+    "CHANGE_PASSWORD": "Change password",
+    "ENTER_SAME_PASSWORD": "Please enter the same password"
 }
