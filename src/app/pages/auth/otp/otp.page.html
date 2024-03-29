@@ -26,10 +26,15 @@
             </ion-item>
           
     </section>
+    <section>
+      <div *ngIf="siteKey" class="d-flex flex-justify-center">
+        <re-captcha (resolved)="onCaptchaResolved($event)" [siteKey]="siteKey" ></re-captcha>
+      </div>
+    </section>
     
     <section>
       <div class="d-flex flex-justify-center flex-align-items-center">
-        <ion-button [ngClass]="{'my-10': true, 'disabled': !checked  || !isEnabled, 'onboard-button':true}" [disabled]="!checked  || !isEnabled"
+        <ion-button [ngClass]="{'my-10': true, 'disabled': !checked  || !isEnabled , 'onboard-button':true}" [disabled]="!checked  || !isEnabled || !recaptchaResolved"
           (click)="onSubmit()" shape="round">
           {{'VERIFY_AND_LOGIN'|translate}}
         </ion-button>

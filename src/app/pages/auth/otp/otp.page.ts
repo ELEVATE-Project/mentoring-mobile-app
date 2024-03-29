@@ -7,6 +7,7 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import { environment } from 'src/environments/environment';
 import { Location } from '@angular/common';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-otp',
@@ -15,6 +16,7 @@ import { Location } from '@angular/common';
 })
 export class OtpPage implements OnInit {
   @ViewChild('ngOtpInput', { static: false }) ngOtpInputRef: any;
+  @ViewChild(RecaptchaComponent) captchaComponent: RecaptchaComponent;
   config = {
     allowNumbersOnly: true,
     length: 6,
@@ -24,6 +26,7 @@ export class OtpPage implements OnInit {
       'border-radius': '8px'
     }
   };
+  siteKey = (environment as any)?.recaptchaSiteKey ? (environment as any)?.recaptchaSiteKey  :""
   resetPasswordData = { email: null, password: null, otp: null };
   public headerConfig: any = {
     // menu: true,
@@ -43,6 +46,9 @@ export class OtpPage implements OnInit {
   checked: boolean = false;
   privacyPolicyUrl =environment.privacyPolicyUrl;
   termsOfServiceUrl = environment.termsOfServiceUrl;
+  captchaToken:any="";
+  recaptchaResolved: boolean = this.siteKey ? false : true;
+  
 
   constructor(private router: Router, private profileService: ProfileService,private location: Location, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService, private menuCtrl: MenuController, private nav: NavController) {
     if(!this.router.getCurrentNavigation()?.extras.state){
@@ -95,15 +101,19 @@ export class OtpPage implements OnInit {
     if (this.actionType == "signup") {
       this.signupData.otp = this.otp;
       this.signupData.has_accepted_terms_and_conditions = this.checked;
-      let result = await this.authService.createAccount(this.signupData);
-      if (result) {
+      let result = await this.authService.createAccount(this.signupData, this.captchaToken);
+      if(result === null){
+        this.captchaComponent.reset();
+      }else if(result !== null){
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
         this.menuCtrl.enable(true);
       }
     } else {
       this.resetPasswordData.otp = this.otp;
-      let response = await this.profileService.updatePassword(this.resetPasswordData);
-      if (response) {
+      let response = await this.profileService.updatePassword(this.resetPasswordData,this.captchaToken);
+      if(response === null){
+        this.captchaComponent.reset();
+      }else if(response !== null){ 
         this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })
         this.menuCtrl.enable(true);
       }
@@ -125,6 +135,10 @@ export class OtpPage implements OnInit {
   }
   checkboxClick(e){
    this.checked = e.detail.checked
+  }
+  onCaptchaResolved(token: string) {
+    this.captchaToken = token
+    this.recaptchaResolved = token?  true: false;
   }
 
 }

@@ -99,7 +99,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     this.control.label = this.originalLabel
     this.selectedData = []
     this.icon = this.addIconDark
-    this.onChange(null)
+    this.onChange([])
     event.stopPropagation()
   }
 

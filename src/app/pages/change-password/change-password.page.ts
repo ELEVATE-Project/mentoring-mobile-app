@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { AuthService, ToastService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-change-password',
@@ -29,14 +30,10 @@ public headerConfig: any = {
         type: 'password',
         errorMessage:{
           required: "Enter old password",
-          minlength:"Please enter minimum 8 characters.",
-          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
         },
         position: 'floating',
         validators: {
           required: true,
-          minLength: 8,
-          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
       {
@@ -47,14 +44,14 @@ public headerConfig: any = {
         type: 'password',
         errorMessage:{
           required: "Enter new password",
-          minlength:"Please enter minimum 8 characters.",
-          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+          minlength:(environment as any)?.password?.minLength ? "Please enter minimum " + (environment as any)?.password?.minLength+" characters.":"Please enter minimum 8 characters.",
+          pattern: (environment as any)?.password?.errorMessage ? (environment as any)?.password?.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         position: 'floating',
         validators: {
           required: true,
-          minLength: 8,
-          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength:(environment as any)?.password?.minLength? (environment as any)?.password?.minLength: 8,
+          pattern: (environment as any)?.password?.regexPattern ? (environment as any)?.password?.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
       {
@@ -65,14 +62,14 @@ public headerConfig: any = {
         type: 'password',
         errorMessage:{
           required: "Re-enter new password",
-          minlength:"Please enter minimum 8 characters.",
-          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+          minlength:(environment as any)?.password?.minLength ? "Please enter minimum " + (environment as any)?.password?.minLength+" characters.":"Please enter minimum 8 characters.",
+          pattern: (environment as any)?.password?.errorMessage ? (environment as any)?.password?.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         position: 'floating',
         validators: {
           required: true,
-          minLength: 8,
-          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength:(environment as any)?.password?.minLength? (environment as any)?.password?.minLength: 8,
+          pattern: (environment as any)?.password?.regexPattern ? (environment as any)?.password?.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
     ],

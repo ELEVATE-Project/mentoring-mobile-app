@@ -31,11 +31,12 @@ export class AuthService {
     private db: DbService
   ) { }
 
-  async createAccount(formData) {
+  async createAccount(formData,captchaToken:any) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.CREATE_ACCOUNT,
       payload: formData,
+      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
     };
     try {
       let data: any = await this.httpService.post(config);
@@ -47,14 +48,16 @@ export class AuthService {
     }
     catch (error) {
       this.loaderService.stopLoader();
+      return null
     }
   }
 
-  async loginAccount(formData) {
+  async loginAccount(formData,captchaToken:any) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.ACCOUNT_LOGIN,
       payload: formData,
+      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
     };
     try {
       const data: any = await this.httpService.post(config);
@@ -139,5 +142,4 @@ export class AuthService {
       replaceUrl: true
     });
   }
-
 }
