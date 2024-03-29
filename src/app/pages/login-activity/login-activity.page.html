@@ -10,6 +10,7 @@
         size-md="8"
         size-lg="8"
         align-self-stretch
+        class="ion-padding"
       >
         <div *ngFor="let data of datas">
           <ion-card class="field">
@@ -17,15 +18,36 @@
               <ion-grid>
                 <ion-row>
                   <ion-col size="9">
-                    <ion-row>Windows</ion-row>
-                    <ion-row>last login</ion-row>
+                    <ion-row>{{data.device_info.osName}} ( {{ data.device_info.browserName }})</ion-row>
+                    <ion-row>{{convertEpochToRealTime(data.login_time)}}</ion-row>
                     <ion-row class="d-flex flex-align-items-center">
-                        <ion-icon name="checkmark-circle" [ngClass]="{'active-icon': isSessionActive, 'inactive-icon': !isSessionActive}"></ion-icon>
-                        <ion-label>login</ion-label>
+                        <ion-icon name="checkmark-circle"
+                            [ngClass]="{
+                              'active-icon': sessionId === data.id && data.status === 'ACTIVE',
+                              'inactive-icon': sessionId !== data.id,
+                              'active-but-logout-icon': data.status === 'ACTIVE' && sessionId !== data.id
+                              }">
+                        </ion-icon>
+                        <!-- <ion-label *ngIf="sessionId === data.id && data.status === 'ACTIVE'"> Your current device</ion-label>
+                        <ion-label *ngIf="data.status === 'ACTIVE' && !(sessionId === data.id)"> Logged out at </ion-label> -->
+                        <ion-label *ngIf="data.status === 'ACTIVE'">
+                          <ng-container *ngIf="sessionId === data.id">Your current device</ng-container>
+                          <ng-container *ngIf="!(sessionId === data.id)">Logged in</ng-container>
+                        </ion-label>
+                        <ion-label *ngIf="data.status === 'INACTIVE'">
+                          <ng-container *ngIf="sessionId === data.id">Your current device</ng-container>
+                          <ng-container *ngIf="!(sessionId === data.id)">Logged out at</ng-container>
+                        </ion-label>
                     </ion-row>
                   </ion-col>
-                  <ion-col size="3">
-                    <ion-button>logout</ion-button>
+                  <ion-col size="3" class="d-flex flex-justify-center flex-align-items-center">
+                    <!-- <ion-button size="small" *ngIf="data.status === 'ACTIVE' && data.login_time && (sessionId === data.id)" (click)="logout()">{{"LOGOUT" | translate}}</ion-button>
+                    <ion-button size="small" *ngIf="data.status === 'ACTIVE' && data.login_time && !(sessionId === data.id)" (click)="logoutInactive()">{{"LOGOUT" | translate}}</ion-button> -->
+                    <ng-template [ngIf]="data.status === 'ACTIVE' && data.login_time">
+                      <ion-button size="small" (click)="sessionId === data.id ? logout() : logoutInactive()">
+                        {{ "LOGOUT" | translate }}
+                      </ion-button>
+                    </ng-template>
                   </ion-col>
                 </ion-row>
               </ion-grid>

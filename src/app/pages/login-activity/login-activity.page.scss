@@ -1,10 +1,14 @@
-.field{
-    height: 18vh;
+.field {
+  height: 18vh;
 }
 .active-icon {
-    color: green; // Change color to green for active session
-  }
-  
-  .inactive-icon {
-    color: grey; // Change color to grey for inactive session
-  }
+  color: green; // Change color to green for active session
+}
+
+.inactive-icon {
+  color: grey; // Change color to grey for inactive session
+}
+
+.active-but-logout-icon {
+  color: var(--ion-color-primary);
+}
