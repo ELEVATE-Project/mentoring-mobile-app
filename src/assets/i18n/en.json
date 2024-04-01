@@ -259,5 +259,10 @@
     "THIS_QUARTER": "This quarter",
     "CHANGE_PASSWORD": "Change password",
     "LOGIN_ACTIVITY": "Login activity",
-    "ENTER_SAME_PASSWORD": "Please enter the same password"
+    "ENTER_SAME_PASSWORD": "Please enter the same password",
+    "LAST_LOGIN_AT": "Last login at",
+    "YOUR_CURRENT_DEVICE": "Your current device ",
+    "LOGGED_IN": "Logged in",
+    "LOGGED_OUT_AT": "Logged out at",
+    "EXPIRED": "Expired"
 }

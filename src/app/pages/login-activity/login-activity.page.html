@@ -21,7 +21,7 @@
                   <ion-col size="9">
                     
                     <ion-row><b>{{data.device_info.osName}} ( {{ data.device_info.browserName }})</b></ion-row>
-                    <ion-row> Last login at {{convertEpochToRealTime(data.login_time)}}</ion-row>
+                    <ion-row> {{"LAST_LOGIN_AT" | translate}} {{convertEpochToRealTime(data.login_time)}}</ion-row>
                     <ion-row class="d-flex flex-align-items-center">
                         <ion-icon name="checkmark-circle"
                             [ngClass]="{
@@ -31,15 +31,15 @@
                               }">
                         </ion-icon>
                         <ion-label *ngIf="data.status === 'ACTIVE'">
-                          <ng-container *ngIf="sessionId === data.id">Your current device</ng-container>
-                          <ng-container *ngIf="!(sessionId === data.id)">Logged in</ng-container>
+                          <ng-container *ngIf="sessionId === data.id">{{"YOUR_CURRENT_DEVICE" | translate}}</ng-container>
+                          <ng-container *ngIf="!(sessionId === data.id)">{{"LOGGED_IN" | translate}}</ng-container>
                         </ion-label>
                         <ion-label *ngIf="data.status === 'INACTIVE'">
-                          <ng-container *ngIf="sessionId === data.id">Your current device</ng-container>
-                          <ng-container *ngIf="!(sessionId === data.id)">Logged out at {{convertEpochToRealTime(data.logout_time)}}</ng-container>
+                          <ng-container *ngIf="sessionId === data.id">{{"YOUR_CURRENT_DEVICE" | translate}}</ng-container>
+                          <ng-container *ngIf="!(sessionId === data.id)">{{"LOGGED_OUT_AT" | translate}} {{convertEpochToRealTime(data.logout_time)}}</ng-container>
                         </ion-label>
                         <ion-label *ngIf="data.status === 'EXPIRED'">
-                          <ng-container> Expired</ng-container>
+                          <ng-container> {{ "EXPIRED" | translate }} </ng-container>
                         </ion-label>
                     </ion-row>
                   </ion-col>

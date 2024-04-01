@@ -89,7 +89,7 @@ export class AuthService {
     return this.user;
   }
 
-  async logoutAccount(skipApiCall?: boolean, sessionId?: any) {
+  async logoutAccount(skipApiCall?: boolean, userSessionId?: any) {
     const config: any = {
       url: urlConstants.API_URLS.LOGOUT_ACCOUNT,
       payload: {
@@ -97,14 +97,14 @@ export class AuthService {
         'refresh_token': _.get(this.userService.token, 'refresh_token')
       }
     };
-    if(sessionId){
-      config.payload.userSessionIds = [sessionId]
+    if(userSessionId){
+      config.payload.userSessionIds = [userSessionId]
     }
     try {
       if (!skipApiCall) {
         await this.httpService.post(config);
       }
-      if(!sessionId){
+      if(!userSessionId){
         await this.clearLocalData()
       }
     }
