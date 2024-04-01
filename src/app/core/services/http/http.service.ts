@@ -56,7 +56,6 @@ export class HttpService {
       'Content-Type': 'application/json',
       'timeZone': timezone,
       'accept-language':acceptLanguage,
-      'device-info': metaData
     }
     return headers;
   }
@@ -73,7 +72,6 @@ export class HttpService {
       headers: headers,
       data: body,
     };
-    console.log(options)
     return CapacitorHttp.post(options)
       .then((data: any) => {
         let result: any = data.data;

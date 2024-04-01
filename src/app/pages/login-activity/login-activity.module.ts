@@ -8,6 +8,7 @@ import { LoginActivityPageRoutingModule } from './login-activity-routing.module'
 
 import { LoginActivityPage } from './login-activity.page';
 import { SharedModule } from 'src/app/shared/shared.module';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     FormsModule,
     IonicModule,
     LoginActivityPageRoutingModule,
-    SharedModule
+    SharedModule,
+    MatPaginatorModule
   ],
   declarations: [LoginActivityPage]
 })

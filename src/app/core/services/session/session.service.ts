@@ -239,4 +239,17 @@ export class SessionService {
     }
     
   }
+
+  async sessionActivity(pageSize, page){
+    const config = {
+      url: urlConstants.API_URLS.LOGIN_ACTIVITY + "?status="+ "&page=" + page + '&limit=' + pageSize,
+      payload: {},
+    };
+    try {
+      let data = await this.httpService.get(config);
+      return data.result;
+    }
+    catch (error) {
+    }
+  }
 }
