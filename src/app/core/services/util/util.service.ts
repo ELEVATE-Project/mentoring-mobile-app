@@ -8,7 +8,6 @@ import { ModelComponent } from 'src/app/shared/components/model/model.component'
 import * as Bowser from "bowser"
 import { Subject } from 'rxjs';
 import * as Papa from 'papaparse';
-import { Device } from '@capacitor/device';
 
 @Injectable({
   providedIn: 'root',
