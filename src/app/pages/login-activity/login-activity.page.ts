@@ -81,7 +81,7 @@ export class LoginActivityPage implements OnInit {
   }
 
   convertEpochToRealTime(epochTime: number): string {
-    return moment.unix(epochTime).format('YYYY-MM-DD HH:mm:ss');
+    return moment.unix(epochTime).format('h:mm A [on] DD MMMM YYYY');
   }
   onPageChange(event){
     this.page = event.pageIndex + 1,

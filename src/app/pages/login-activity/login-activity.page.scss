@@ -1,6 +1,3 @@
-.field {
-  height: 18vh;
-}
 .active-icon {
   color: green; // Change color to green for active session
 }
@@ -11,4 +8,16 @@
 
 .active-but-logout-icon {
   color: var(--ion-color-primary);
+}
+.active-button{
+  height: fit-content;
+}
+.activity-label{
+  padding-left: 5px;
+  width: 100%;
+}
+.container{
+  display: flex !important;
+  align-items: center !important;
+  justify-content: right !important;
 }
