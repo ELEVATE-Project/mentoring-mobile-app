@@ -12,6 +12,7 @@ import { UserService } from '../user/user.service';
 import { ProfileService } from '../profile/profile.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DbService } from '../db/db.service';
+import { UtilService } from '../util/util.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,7 @@ import { DbService } from '../db/db.service';
 export class AuthService {
   baseUrl: any;
   user: any;
+  deviceInfo: string;
   constructor(
     private localStorage: LocalStorageService,
     private httpService: HttpService,
@@ -28,15 +30,17 @@ export class AuthService {
     private userService: UserService,
     private profileService: ProfileService,
     private translate: TranslateService,
-    private db: DbService
+    private db: DbService,
+    private util: UtilService
   ) { }
 
   async createAccount(formData,captchaToken:any) {
+    this.deviceInfo = await this.util?.deviceDetails();
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.CREATE_ACCOUNT,
       payload: formData,
-      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
+      headers: captchaToken ?  {'captcha-token': captchaToken, 'device-info': this.deviceInfo}:{}
     };
     try {
       let data: any = await this.httpService.post(config);
@@ -53,11 +57,12 @@ export class AuthService {
   }
 
   async loginAccount(formData,captchaToken:any) {
+    this.deviceInfo = await this.util?.deviceDetails();
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.ACCOUNT_LOGIN,
       payload: formData,
-      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
+      headers: captchaToken ?  {'captcha-token': captchaToken, 'device-info': this.deviceInfo}:{}
     };
     try {
       const data: any = await this.httpService.post(config);
@@ -84,19 +89,24 @@ export class AuthService {
     return this.user;
   }
 
-  async logoutAccount(skipApiCall?: boolean) {
-    const config = {
+  async logoutAccount(skipApiCall?: boolean, userSessionId?: any) {
+    const config: any = {
       url: urlConstants.API_URLS.LOGOUT_ACCOUNT,
       payload: {
         'X-auth-token': _.get(this.userService.token, 'access_token'),
-        'refresh_token': _.get(this.userService.token, 'refresh_token'),
-      },
+        'refresh_token': _.get(this.userService.token, 'refresh_token')
+      }
     };
+    if(userSessionId){
+      config.payload.userSessionIds = [userSessionId]
+    }
     try {
       if (!skipApiCall) {
         await this.httpService.post(config);
       }
-      await this.clearLocalData()
+      if(!userSessionId){
+        await this.clearLocalData()
+      }
     }
     catch (error) {
     }

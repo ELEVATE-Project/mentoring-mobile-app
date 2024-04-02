@@ -59,6 +59,7 @@ export const urlConstants = {
         DOWNLOAD_CREATED_SESSION_LIST_BY_SESSION_MANAGER:"/mentoring/v1/manage-sessions/downloadSessions?",
         ENROLLED_MENTEES_LIST:"/mentoring/v1/sessions/enrolledMentees/",
         GET_PLATFORM_CONFIG: "/mentoring/v1/platform/config",
-        CHANGE_PASSWORD: "/user/v1/account/changePassword"
+        CHANGE_PASSWORD: "/user/v1/account/changePassword",
+        LOGIN_ACTIVITY: "/user/v1/account/sessions" 
     }
 };

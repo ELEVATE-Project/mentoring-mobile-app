@@ -21,6 +21,7 @@ import { FormService } from 'src/app/core/services/form/form.service';
 })
 export class ProfileService {
   isMentor: boolean;
+  deviceInfo: string;
   constructor(
     private httpService: HttpService,
     private loaderService: LoaderService,
@@ -31,8 +32,10 @@ export class ProfileService {
     private utilService:UtilService,
     private userService: UserService,
     private injector: Injector,
-    private form: FormService
-  ) { }
+    private form: FormService,
+    private util: UtilService
+  ) {
+   }
   async profileUpdate(formData, showToast=true) {
     await this.loaderService.startLoader();
     const config = {
@@ -91,11 +94,12 @@ export class ProfileService {
     }
   }
   async updatePassword(formData,captchaToken) {
+    this.deviceInfo = await this.util?.deviceDetails()
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.RESET_PASSWORD,
       payload: formData,
-      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
+      headers: captchaToken ?  {'captcha-token': captchaToken, 'device-info': this.deviceInfo}:{}
     };
     try {
       let data: any = await this.httpService.post(config);

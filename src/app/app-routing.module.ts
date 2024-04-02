@@ -97,6 +97,11 @@ const routes: Routes = [
     canActivate: [PrivateGuard]
   },
   {
+    path: 'login-activity',
+    loadChildren: () => import('./pages/login-activity/login-activity.module').then( m => m.LoginActivityPageModule),
+    canActivate: [PrivateGuard]
+  },
+  {
     path:'**', redirectTo:'',pathMatch:'full'
   }
 ];
