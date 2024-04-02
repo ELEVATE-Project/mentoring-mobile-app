@@ -35,12 +35,12 @@
                           <ion-label class="activity-label" *ngIf="!(sessionId === data.id)">{{"LOGGED_IN" | translate}}</ion-label>
                         </div>
                         <div class="container" *ngIf="data.status === 'INACTIVE'">
-                          <ion-icon name="checkmark-circle"></ion-icon>
+                          <ion-icon name="remove-circle"></ion-icon>
                           <ion-label class="activity-label" *ngIf="sessionId === data.id">{{"YOUR_CURRENT_DEVICE" | translate}}</ion-label>
                           <ion-label class="activity-label" *ngIf="!(sessionId === data.id)">{{"LOGGED_OUT_AT" | translate}} {{convertEpochToRealTime(data.logout_time)}}</ion-label>
                         </div>
                         <div class="container" *ngIf="data.status === 'EXPIRED'">
-                          <ion-icon name="checkmark-circle"></ion-icon>
+                          <ion-icon name="remove-circle"></ion-icon>
                           <ion-label class="activity-label"> {{ "EXPIRED" | translate }}</ion-label>
                         </div>
                     </ion-row>
