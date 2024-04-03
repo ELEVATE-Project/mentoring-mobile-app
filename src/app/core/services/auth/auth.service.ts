@@ -62,7 +62,7 @@ export class AuthService {
     const config = {
       url: urlConstants.API_URLS.ACCOUNT_LOGIN,
       payload: formData,
-      headers: captchaToken ?  {'captcha-token': captchaToken, 'device-info': this.deviceInfo}:{}
+      headers: captchaToken ?  {'captcha-token': captchaToken, 'device-info': this.deviceInfo}:{ 'device-info': this.deviceInfo}
     };
     try {
       const data: any = await this.httpService.post(config);
