@@ -34,14 +34,14 @@ export class AuthService {
     private util: UtilService
   ) { }
 
-  async createAccount(formData,captchaToken:any) {
+  async createAccount(formData) {
     this.deviceInfo = await this.util?.deviceDetails();
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.CREATE_ACCOUNT,
       payload: formData,
-      headers: captchaToken ?  {'captcha-token': captchaToken, 'device-info': this.deviceInfo}:{}
-    };
+      headers:  {'device-info': this.deviceInfo}
+    }
     try {
       let data: any = await this.httpService.post(config);
       await this.setUserInLocal(data);

@@ -264,5 +264,6 @@
     "YOUR_CURRENT_DEVICE": "Your current device ",
     "LOGGED_IN": "Logged in",
     "LOGGED_OUT_AT": "Logged out at",
-    "EXPIRED": "Expired"
+    "EXPIRED": "Expired",
+    "GENERATE_OTP":"Generate otp"
 }

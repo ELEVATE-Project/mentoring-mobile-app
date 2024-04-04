@@ -111,10 +111,7 @@ export class ResetPasswordPage implements OnInit {
     let formJson = this.form1.myForm.value;
     if (this.form1.myForm.valid) {
       if (_.isEqual(formJson.password, formJson.newPassword)) {
-        var response = await this.profileService.generateOtp({ email: this.form1.myForm.value.email, password:formJson.password });
-        if (response) {
           this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { state: { type: "reset-password", email: formJson.email, password: formJson.password } });
-        }
       } else {
         this.toastService.showToast('Please enter the same password', 'danger');
       }
