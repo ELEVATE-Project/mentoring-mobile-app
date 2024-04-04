@@ -101,15 +101,15 @@ export class OtpPage implements OnInit {
     if (this.actionType == "signup") {
       this.signupData.otp = this.otp;
       this.signupData.has_accepted_terms_and_conditions = this.checked;
-      let result = await this.authService.createAccount(this.signupData, this.captchaToken);
-      if(result !== null){
+      let result = await this.authService.createAccount(this.signupData);
+      if(result){
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
         this.menuCtrl.enable(true);
       }
     } else {
       this.resetPasswordData.otp = this.otp;
-      let response = await this.profileService.updatePassword(this.resetPasswordData,this.captchaToken);
-      if(response !== null){ 
+      let response = await this.profileService.updatePassword(this.resetPasswordData);
+      if(response){ 
         this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })
         this.menuCtrl.enable(true);
       }

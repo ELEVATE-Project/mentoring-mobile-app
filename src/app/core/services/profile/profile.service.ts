@@ -94,7 +94,7 @@ export class ProfileService {
       this.loaderService.stopLoader();
     }
   }
-  async updatePassword(formData,captchaToken) {
+  async updatePassword(formData) {
     this.deviceInfo = await this.util?.deviceDetails()
     await this.loaderService.startLoader();
     const config = {

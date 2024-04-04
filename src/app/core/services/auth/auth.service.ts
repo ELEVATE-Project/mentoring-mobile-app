@@ -34,7 +34,7 @@ export class AuthService {
     private util: UtilService
   ) { }
 
-  async createAccount(formData,captchaToken:any) {
+  async createAccount(formData) {
     this.deviceInfo = await this.util?.deviceDetails();
     await this.loaderService.startLoader();
     const config = {
