@@ -77,11 +77,12 @@ export class ProfileService {
     });
   }
 
-  async generateOtp(formData) {
+  async generateOtp(formData,captchaToken) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.GENERATE_OTP,
-      payload: formData
+      payload: formData,
+      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
     };
     try {
       let data: any = await this.httpService.post(config);
@@ -99,7 +100,7 @@ export class ProfileService {
     const config = {
       url: urlConstants.API_URLS.RESET_PASSWORD,
       payload: formData,
-      headers: captchaToken ?  {'captcha-token': captchaToken, 'device-info': this.deviceInfo}:{}
+      headers: { 'device-info': this.deviceInfo}
     };
     try {
       let data: any = await this.httpService.post(config);
@@ -116,11 +117,12 @@ export class ProfileService {
       return null;
     }
   }
-  async registrationOtp(formData) {
+  async registrationOtp(formData,captchaToken) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.REGISTRATION_OTP,
-      payload: formData
+      payload: formData,
+      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
     };
     try {
       let data: any = await this.httpService.post(config);

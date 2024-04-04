@@ -48,6 +48,7 @@ export class OtpPage implements OnInit {
   termsOfServiceUrl = environment.termsOfServiceUrl;
   captchaToken:any="";
   recaptchaResolved: boolean = this.siteKey ? false : true;
+  showOtp:any = false;
   
 
   constructor(private router: Router, private profileService: ProfileService,private location: Location, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService, private menuCtrl: MenuController, private nav: NavController) {
@@ -67,7 +68,6 @@ export class OtpPage implements OnInit {
   ngOnInit() {
     this.labels = this.actionType == 'signup' ? ['VERIFY_ACCOUNT'] : ['ENTER_OTP'];
     this.translateText();
-    this.startCountdown();
   }
 
   async translateText() {
@@ -102,18 +102,14 @@ export class OtpPage implements OnInit {
       this.signupData.otp = this.otp;
       this.signupData.has_accepted_terms_and_conditions = this.checked;
       let result = await this.authService.createAccount(this.signupData, this.captchaToken);
-      if(result === null){
-        this.captchaComponent.reset();
-      }else if(result !== null){
+      if(result !== null){
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
         this.menuCtrl.enable(true);
       }
     } else {
       this.resetPasswordData.otp = this.otp;
       let response = await this.profileService.updatePassword(this.resetPasswordData,this.captchaToken);
-      if(response === null){
-        this.captchaComponent.reset();
-      }else if(response !== null){ 
+      if(response !== null){ 
         this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })
         this.menuCtrl.enable(true);
       }
@@ -122,10 +118,18 @@ export class OtpPage implements OnInit {
 
   async resendOtp() {
     this.enableResendOtp = false;
-    var response = this.actionType == "signup" ? await this.profileService.registrationOtp(this.signupData) : await this.profileService.generateOtp({ email: this.resetPasswordData.email, password:  this.resetPasswordData.password});
+    this.showOtp = false;
+  }
+
+  async onSubmitGenerateOtp(){
+    var response = this.actionType == "signup" ? await this.profileService.registrationOtp(this.signupData, this.captchaToken) : await this.profileService.generateOtp({ email: this.resetPasswordData.email, password:  this.resetPasswordData.password},this.captchaToken);
     if (response) {
       this.toast.showToast(response.message, "success");
+      this.showOtp = true
       this.startCountdown();
+    }else{
+      this.captchaComponent.reset();
+      this.location.back()
     }
   }
 

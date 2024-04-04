@@ -40,8 +40,8 @@ export class AuthService {
     const config = {
       url: urlConstants.API_URLS.CREATE_ACCOUNT,
       payload: formData,
-      headers: captchaToken ?  {'captcha-token': captchaToken, 'device-info': this.deviceInfo}:{}
-    };
+      headers:  {'device-info': this.deviceInfo}
+    }
     try {
       let data: any = await this.httpService.post(config);
       await this.setUserInLocal(data);
