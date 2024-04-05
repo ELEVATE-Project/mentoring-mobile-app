@@ -215,7 +215,7 @@ export class HttpService {
       default:
         this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
     }
-    return Error(result);
+    throw Error(result);
   }
 
   async openModal(sessionData) {
@@ -231,6 +231,7 @@ export class HttpService {
   }
 
   async triggerLogoutConfirmationAlert(result) {
+    this.closeAllModalsControls();
     let msg = result.data.message;
     if (result && !this.isAlertOpen) {
       let texts: any;
@@ -283,5 +284,8 @@ export class HttpService {
           return data;
         }
       });
+  }
+  async closeAllModalsControls(){
+    (await this.modalController.getTop()).dismiss();
   }
 }
