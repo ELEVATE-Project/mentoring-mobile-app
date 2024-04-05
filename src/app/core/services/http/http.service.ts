@@ -215,7 +215,7 @@ export class HttpService {
       default:
         this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
     }
-    throw Error(result);
+    return Error(result);
   }
 
   async openModal(sessionData) {

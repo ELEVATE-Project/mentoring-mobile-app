@@ -40,6 +40,7 @@ export class SearchPopoverComponent implements OnInit {
   selectedFilters:any = {};
   selectedList: any=[];
   noDataMessage: string;
+  response: any;
 
   constructor(private platform: Platform, private modalController: ModalController, private toast: ToastService, private localStorage: LocalStorageService, private util: UtilService, private httpService: HttpService) { 
     this.platform.backButton.subscribeWithPriority(10, () => {
@@ -115,18 +116,21 @@ export class SearchPopoverComponent implements OnInit {
       payload: {}
     };
     try {
-      const data: any = await this.httpService.get(config);
-      this.count = data.result.count
+      this.response = await this.httpService.get(config);
+      this.count = this.response.result.count
       this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
       let selectedIds =  _.map(this.selectedList, 'id');
-      data.result.data.forEach((ele) => {
+      this.response.result.data.forEach((ele) => {
         ele.action = _.includes(selectedIds, ele.id) ? (ele.enrolled_type === 'ENROLLED' ? [] : this.actionButtons.REMOVE) : this.actionButtons.ADD;
         ele.type = ele?.enrolled_type
         ele.organization = ele?.organization?.name;
       });
-      return data.result.data
+      return this.response.result.data
     }
     catch (error) {
+      if(this.response.status === 401){
+        this.closePopover()
+      }
       return null;
     }
   }
