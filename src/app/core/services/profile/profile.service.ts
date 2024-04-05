@@ -53,7 +53,8 @@ export class ProfileService {
       this.loaderService.stopLoader();
       this._location.back();
       (showToast)?this.toast.showToast(data.message, "success"):null;
-    }
+      return true;
+      }
     catch (error) {
       this.loaderService.stopLoader();
     }
