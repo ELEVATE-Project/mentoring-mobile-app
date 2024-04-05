@@ -231,7 +231,9 @@ export class HttpService {
   }
 
   async triggerLogoutConfirmationAlert(result) {
-    this.closeAllModalsControls();
+    if(this.modalController.getTop()) {
+      (await this.modalController.dismiss())
+    }
     let msg = result.data.message;
     if (result && !this.isAlertOpen) {
       let texts: any;
@@ -284,8 +286,5 @@ export class HttpService {
           return data;
         }
       });
-  }
-  async closeAllModalsControls(){
-    (await this.modalController.getTop()).dismiss();
   }
 }
