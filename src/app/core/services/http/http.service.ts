@@ -232,7 +232,7 @@ export class HttpService {
 
   async triggerLogoutConfirmationAlert(result) {
     if(this.modalController.getTop()) {
-      (await this.modalController.dismiss())
+      await this.modalController.dismiss()
     }
     let msg = result.data.message;
     if (result && !this.isAlertOpen) {
