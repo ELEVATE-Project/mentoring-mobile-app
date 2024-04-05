@@ -44,16 +44,16 @@ export class ProfileService {
     };
     try {
       let data: any = await this.httpService.patch(config);
-        let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-        let profileData = await this.getProfileDetailsFromAPI();
-        userDetails.user = null;
-        let profileDatas = await {...userDetails, ...profileData};
-        await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileDatas);
-        this.userService.userEvent.next(profileDatas);
-        this.loaderService.stopLoader();
-        this._location.back();
-        (showToast)?this.toast.showToast(data.message, "success"):null;
-        return true;
+      let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+      let profileData = await this.getProfileDetailsFromAPI();
+      userDetails.user = null;
+      let profileDatas = await {...userDetails, ...profileData};
+      await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileDatas);
+      this.userService.userEvent.next(profileDatas);
+      this.loaderService.stopLoader();
+      this._location.back();
+      (showToast)?this.toast.showToast(data.message, "success"):null;
+      return true;
       }
     catch (error) {
       this.loaderService.stopLoader();
