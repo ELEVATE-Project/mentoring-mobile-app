@@ -66,7 +66,7 @@ export class OtpPage implements OnInit {
   }
 
   ngOnInit() {
-    this.labels = this.actionType == 'signup' ? ['VERIFY_ACCOUNT'] : ['ENTER_OTP'];
+    this.labels = this.actionType == 'signup' ? ['VERIFY_ACCOUNT'] : ['VALIDATE_OTP'];
     this.translateText();
   }
 
