@@ -265,6 +265,6 @@
     "LOGGED_IN": "Logged in",
     "LOGGED_OUT_AT": "Logged out at",
     "EXPIRED": "Expired",
-    "GENERATE_OTP":"Generate otp",
-    "VALIDATE_OTP": "Validate otp"
+    "GENERATE_OTP":"Generate OTP",
+    "VALIDATE_OTP": "Validate OTP"
 }
