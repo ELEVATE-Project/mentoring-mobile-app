@@ -10,6 +10,7 @@ import { UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-popup/mentee-list-popup.component';
 import *  as moment from 'moment';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 
 @Component({
   selector: 'app-manage-session',
@@ -24,7 +25,7 @@ export class ManageSessionComponent implements OnInit {
     // label: 'MANAGE_SESSION'
   };
   receivedEventData: any;
-  constructor(private adminWorkapceService: AdminWorkapceService, private router: Router, private modalCtrl: ModalController,private utilService:UtilService, private sessionService:SessionService) { }
+  constructor(private adminWorkapceService: AdminWorkapceService, private router: Router, private modalCtrl: ModalController,private utilService:UtilService, private sessionService:SessionService, private profileService:ProfileService) { }
   headingText = "SESSION_LIST"
   download = "DOWNLOAD";
   page = 1;
@@ -90,7 +91,8 @@ export class ManageSessionComponent implements OnInit {
     'UPCOMING': [{ icon: 'eye', cssColor: 'white-color' , action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}, { icon: 'trash', cssColor: 'white-color',action:'DELETE' }],
     'LIVE': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}],
     'COMPLETED': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}]
-  }
+  };
+  user:any;
 
   async ngOnInit() {
     this.fetchSessionList()
@@ -184,6 +186,7 @@ export class ManageSessionComponent implements OnInit {
      this.adminWorkapceService.downloadcreatedSessionsBySessionManager(obj);
   }
   async fetchSessionList() {
+    this.profileService.profileDetails().then(data => { this.user = data })
     var obj = { page: this.page, limit: this.limit, status: this.type, order: this.sortingData?.order, sort_by: this.sortingData?.sort_by, searchText: this.searchText, filteredData:this.filteredDatas };
     var response = await this.adminWorkapceService.createdSessionBySessionManager(obj);
     this.totalCount = response.count;
@@ -206,7 +209,11 @@ export class ManageSessionComponent implements OnInit {
   }
 
   createSession(){
-    this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]);
+    if (this.user?.about != null) {
+      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]); 
+    } else {
+      this.profileService.upDateProfilePopup()
+    }
   }
 
   
