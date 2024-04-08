@@ -231,7 +231,7 @@ export class HttpService {
   }
 
   async triggerLogoutConfirmationAlert(result) {
-    if(this.modalController.getTop()) {
+    if(await this.modalController.getTop()) {
       await this.modalController.dismiss()
     }
     let msg = result.data.message;
