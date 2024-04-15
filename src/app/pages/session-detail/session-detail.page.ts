@@ -137,7 +137,7 @@ export class SessionDetailPage implements OnInit {
   async fetchSessionDetails() { 
     let entityList = await this.form.getEntities({}, 'SESSION')
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
-    if(response && entityList.length){
+    if(response && entityList.result.length){
       entityList.result.forEach(entity => {
         Object.entries(response?.result).forEach(([key, value]) => {
           if(Array.isArray(value) &&   entity.value == key && !this.detailData.form.some(obj => obj.key === entity.value) ){
