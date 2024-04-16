@@ -137,23 +137,25 @@ export class SessionDetailPage implements OnInit {
   async fetchSessionDetails() { 
     let entityList = await this.form.getEntities({}, 'SESSION')
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
-    entityList.result.forEach(entity => {
-      Object.entries(response.result).forEach(([key, value]) => {
-        if(Array.isArray(value) &&   entity.value == key && !this.detailData.form.some(obj => obj.key === entity.value) ){
-          this.detailData.form.push(
-            {
-                title: entity.label,
-                key: entity.value,
-              },
-          )
-        }
+    if(response && entityList.result.length){
+      entityList.result.forEach(entity => {
+        Object.entries(response?.result).forEach(([key, value]) => {
+          if(Array.isArray(value) &&   entity.value == key && !this.detailData.form.some(obj => obj.key === entity.value) ){
+            this.detailData.form.push(
+              {
+                  title: entity.label,
+                  key: entity.value,
+                },
+            )
+          }
+        });
       });
-    });
+    }
     this.sessionDatas = response?.result;
     this.isLoaded = true ;
     this.userCantAccess = response?.responseCode == 'OK' ? false:true
-    this.isCreator = response.result.created_by == this.userDetails.id ? true:false;
-    this.isConductor = this.userDetails.id == response.result.mentor_id ? true : false;
+    this.isCreator = response?.result.created_by == this.userDetails.id ? true:false;
+    this.isConductor = this.userDetails.id == response?.result?.mentor_id ? true : false;
     this.sessionManagerText =  this.isConductor ? "ASSIGNED_BY":"INVITED_BY";
     this.isNotInvited = response?.result?.enrolment_type === 'INVITED'? false : true;
     if (!this.userCantAccess) {
