@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { TranslateService } from '@ngx-translate/core';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -60,13 +61,13 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         errorMessage:{
           required: "Enter password",
-          minlength:"Please enter minimum 8 characters.",
-          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+          minlength:(environment as any)?.password?.minLength ? "Please enter minimum " + (environment as any)?.password?.minLength +" characters." : "Please enter minimum 8 characters.",
+          pattern: (environment as any)?.password?.errorMessage ? (environment as any)?.password?.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         validators: {
           required: true,
-          minLength: 8,
-          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength:(environment as any)?.password?.minLength ? (environment as any)?.password?.minLength: 8,
+          pattern: (environment as any)?.password?.regexPattern ? (environment as any)?.password?.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
       {
@@ -78,13 +79,13 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         errorMessage:{
           required: "Re-enter password",
-          minlength:"Please enter minimum 8 characters.",
-          pattern:"Only letters, numbers,!@#%$&()-`.+,/\" are allowed"
+          minlength:(environment as any)?.password?.minLength ? "Please enter minimum " + (environment as any)?.password.minLength+" characters.":"Please enter minimum 8 characters.",
+          pattern: (environment as any)?.password?.errorMessage ? (environment as any)?.password.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         validators: {
           required: true,
-          minLength: 8,
-          pattern: "^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength: (environment as any)?.password?.minLength ? (environment as any)?.password.minLength:8,
+          pattern: (environment as any)?.password?.regexPattern ? (environment as any)?.password.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         }
       }
     ]
@@ -141,11 +142,7 @@ export class RegisterPage implements OnInit {
   async createUser() {
     let formJson = this.form1.myForm.value;
     if (_.isEqual(formJson.password, formJson.cPassword)) {
-      let result = await this.profileService.registrationOtp(formJson);
-      if (result) {
-        this.toastService.showToast(result.message, "success")
         this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { state: { type: "signup", formData: formJson } });
-      }
     } else {
       this.toastService.showToast('Password does not match.', 'danger');
     }

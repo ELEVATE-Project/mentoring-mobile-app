@@ -14,6 +14,16 @@ const routes: Routes = [
     loadChildren: () => import('./modules/private/private.module').then( m => m.PrivatePageModule)
   },
   {
+    path: CommonRoutes.CHANGE_PASSWORD,
+    loadChildren: () => import('./pages/change-password/change-password.module').then( m => m.ChangePasswordPageModule),
+    canActivate: [PrivateGuard]
+  },
+  {
+    path: 'login-activity',
+    loadChildren: () => import('./pages/login-activity/login-activity.module').then( m => m.LoginActivityPageModule),
+    canActivate: [PrivateGuard]
+  },
+  {
     path:'**', redirectTo:'',pathMatch:'full'
   }
 ];

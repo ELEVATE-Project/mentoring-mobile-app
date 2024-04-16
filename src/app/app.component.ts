@@ -1,5 +1,4 @@
 import { Component, HostListener } from '@angular/core';
-import {  MenuController } from '@ionic/angular';
 import * as _ from 'lodash-es';
 import { UtilService } from 'src/app/core/services';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
@@ -12,7 +11,6 @@ import { SwUpdate } from '@angular/service-worker';
 })
 export class AppComponent {
   constructor(
-    public menuCtrl:MenuController,
     private utilService:UtilService,
     private screenOrientation: ScreenOrientation,
     private swUpdate: SwUpdate,

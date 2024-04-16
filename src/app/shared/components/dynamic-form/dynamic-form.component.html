@@ -8,7 +8,7 @@
           myForm.get(control.name).touched && myForm.get(control.name).invalid
       }"
     >
-    <div *ngIf="control.label !== '' && !['rating'].includes(control.type) && !['chip'].includes(control.type) && !['search'].includes(control.type)" style="display: flex; align-items: center;">
+    <div *ngIf="control.label !== '' && !['rating'].includes(control.type) && !['chip'].includes(control.type) && !['search'].includes(control.type)" class="d-flex flex-align-items-center">
       <ion-label position="stacked">
         {{ control.label }}&nbsp;<span *ngIf="control?.validators['required']==true" class="star-icon-red">*</span>
       </ion-label>

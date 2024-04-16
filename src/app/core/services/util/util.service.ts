@@ -193,4 +193,16 @@ export class UtilService {
       }
     });
   }
+
+  async deviceDetails(){
+    const browser = Bowser.getParser(window.navigator.userAgent);
+    const metaData = {
+      browserName: browser.getBrowserName(),
+      browserVersion: browser.getBrowserVersion(),
+      osName: browser.getOSName(),
+      platformType: browser.getPlatformType(),
+      type: ''
+    }
+    return JSON.stringify(metaData)
+  }
 }
