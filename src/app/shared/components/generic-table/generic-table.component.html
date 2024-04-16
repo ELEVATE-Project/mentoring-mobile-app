@@ -31,21 +31,21 @@
       </ng-container>
       <ng-container>
         <div *ngIf="column.type == 'text'">
-          <td mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">
-            <div class="cell-text" [ngClass]="{'session-name': column.name == 'title' || column.name == 'name'}">
+          <td class="cell-container" mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">
+            <div class="cell-text" [ngClass]="{'session-name cell-text': column.name == 'title' || column.name == 'name'}">
               {{element[column.name] | translate }}</div>
           </td>
         </div>
         <div *ngIf="column.type == 'array'">
           <td mat-cell (click)="onCellClick(column.name,element)" *matCellDef="let element">
-            <div *ngFor="let ele of element[column.name]">
+            <div class="cell-text" *ngFor="let ele of element[column.name]">
               {{ele.label}}
             </div>
           </td>
         </div>
         <div *ngIf="column.type == 'button'">
           <td mat-cell *matCellDef="let element">
-            <div class="d-flex flex-justify-space-between">
+            <div class="d-flex flex-justify-space-between cell-text">
               <ion-grid>
                 <ion-row class="d-flex flex-justify-center">
                   <div *ngFor="let buttonName of element[column.name]">

@@ -1,36 +1,39 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
-import * as _ from 'lodash-es';
-import { CommonRoutes } from 'src/global.routes';
-import { Router } from '@angular/router';
-import { ProfileService } from 'src/app/core/services/profile/profile.service';
-import { ToastService } from 'src/app/core/services';
 import { TranslateService } from '@ngx-translate/core';
+import * as _ from 'lodash';
+import { AuthService, ToastService } from 'src/app/core/services';
+import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-reset-password',
-  templateUrl: './reset-password.page.html',
-  styleUrls: ['./reset-password.page.scss'],
+  selector: 'app-change-password',
+  templateUrl: './change-password.page.html',
+  styleUrls: ['./change-password.page.scss'],
 })
-export class ResetPasswordPage implements OnInit {
-  @ViewChild('form1') form1: DynamicFormComponent;
+export class ChangePasswordPage implements OnInit {
+
+@ViewChild('form1') form1: DynamicFormComponent;
+
+public headerConfig: any = {
+  backButton: true,
+  label: "CHANGE_PASSWORD",
+  color: 'primary'
+};
+
   formData: JsonFormData = {
     controls: [
       {
-        name: 'email',
-        label: 'Email',
+        name: 'oldPassword',
+        label: 'Old password',
         value: '',
         class: 'ion-margin',
-        type: 'email',
+        type: 'password',
         errorMessage:{
-          required: "Please enter registered email ID",
-          email:"Enter a valid email ID"
+          required: "Enter old password",
         },
         position: 'floating',
         validators: {
           required: true,
-          email: true
         },
       },
       {
@@ -71,50 +74,23 @@ export class ResetPasswordPage implements OnInit {
       },
     ],
   };
-  showPassword = false;
-  public headerConfig: any = {
-    // menu: true,
-    backButton: {
-      label: '',
-    },
-    notification: false,
-  };
-  labels = ["RESET_PASSWORD"]
 
-  constructor(private router: Router, private profileService: ProfileService, private toastService: ToastService, private translateService: TranslateService) { }
+  constructor(
+    private toastService: ToastService,
+    private authService:AuthService,) { }
 
   ngOnInit() {
-    this.translateText();
-  }
-  async translateText() {
-    this.translateService.setDefaultLang('en');
-    this.translateService.get(this.labels).subscribe(translatedLabel => {
-      let labelKeys = Object.keys(translatedLabel);
-      labelKeys.forEach((key) => {
-        let index = this.labels.findIndex(
-          (label) => label === key
-        )
-        this.labels[index] = translatedLabel[key];
-      })
-    })
-  }
-  togglePassword() {
-    let type = this.showPassword ? 'password' : 'text';
-    _.forEach(this.formData.controls, (data) => {
-      if (data.type === type) {
-        data.type = !this.showPassword ? 'password' : 'text';;
-      }
-    });
   }
 
-  async onSubmit() {
+  async onSubmit(){
     let formJson = this.form1.myForm.value;
     if (this.form1.myForm.valid) {
-      if (_.isEqual(formJson.password, formJson.newPassword)) {
-          this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.OTP}`], { state: { type: "reset-password", email: formJson.email, password: formJson.password } });
-      } else {
-        this.toastService.showToast('Please enter the same password', 'danger');
+      if (_.isEqual(formJson.password, formJson.newPassword)){
+        this.authService.changePassword({oldPassword: formJson.oldPassword, newPassword: formJson.newPassword});
+      }else {
+        this.toastService.showToast('ENTER_SAME_PASSWORD', 'danger');
       }
     }
   }
+
 }

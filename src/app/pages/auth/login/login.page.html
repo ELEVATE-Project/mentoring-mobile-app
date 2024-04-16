@@ -9,11 +9,15 @@
         <section>
           <app-dynamic-form [jsonFormData]="formData" (onEnter)="onSubmit()" #form1> </app-dynamic-form>
         </section>
-
-        <section [ngClass]="{'btn-disabled': form1.myForm.invalid , 'btn-valid':form1.myForm.valid}">
+        <section>
+          <div *ngIf="siteKey" class="d-flex flex-justify-center">
+            <re-captcha (resolved)="onCaptchaResolved($event)" [siteKey]="siteKey" ></re-captcha>
+          </div>
+        </section>
+        <section [ngClass]="{'btn-disabled': (form1.myForm.invalid || !recaptchaResolved), 'btn-valid':(form1.myForm.valid && recaptchaResolved)}">
           <div class="d-flex flex-justify-center">
             <ion-button class="mx-0 onboard-button" expand="block" shape="round" (click)="onSubmit()" size="large"
-              [disabled]="!form1.myForm.valid">{{"LOGIN"|translate}}</ion-button>
+              [disabled]="!form1.myForm.valid || !recaptchaResolved">{{"LOGIN"|translate}}</ion-button>
           </div>
           <section class="ion-text-center">
             <div class="my-30 hover-pointer">
@@ -28,7 +32,7 @@
               <ion-row class="mail-to-container d-flex">
               <ion-col>
                 <ion-text color="medium"> {{'HAVING_TROUBLE_IN_LOGGING_IN' | translate}} 
-                {{'WRITE_TO_US_AT' | translate}} <div class="email">{{ supportInfo?.to}}</div></ion-text>  
+                {{'WRITE_TO_US_AT' | translate}} <div class="email">{{ supportEmail}}</div></ion-text>  
               </ion-col> 
               </ion-row>
               <ion-ripple-effect></ion-ripple-effect>

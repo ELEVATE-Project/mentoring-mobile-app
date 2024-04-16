@@ -32,6 +32,8 @@ export class AppComponent {
   { title: 'FAQ', action: "faq", icon: 'alert-circle', url: CommonRoutes.FAQ},
   { title: 'HELP_VIDEOS', action: "help videos", icon: 'videocam',url: CommonRoutes.HELP_VIDEOS },
   { title: 'LANGUAGE', action: "selectLanguage", icon: 'language', url: CommonRoutes.LANGUAGE },
+  { title: 'CHANGE_PASSWORD', action: 'change-password', icon: 'key', url: CommonRoutes.CHANGE_PASSWORD},
+  { title: 'LOGIN_ACTIVITY', action: 'login-activity', icon: 'time', url: CommonRoutes.LOGIN_ACTIVITY}
 ];
 
  adminPage = {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD}
@@ -151,7 +153,6 @@ export class AppComponent {
       },1000);
       setTimeout(() => {
         document.querySelector('ion-menu')?.shadowRoot?.querySelector('.menu-inner')?.setAttribute('style', 'border-radius:8px 8px 0px 0px');
-        this.permissionService.getPlatformConfig();
       }, 2000);
 
       this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data=>{

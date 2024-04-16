@@ -10,6 +10,7 @@ import { OtpPage } from './otp.page';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CoreModule } from 'src/app/core/core.module';
 import { NgOtpInputModule } from 'ng-otp-input';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { NgOtpInputModule } from 'ng-otp-input';
     OtpPageRoutingModule,
     SharedModule,
     CoreModule,
-    NgOtpInputModule
+    NgOtpInputModule,
+    RecaptchaModule
   ],
   declarations: [OtpPage]
 })

@@ -30,7 +30,7 @@
       <ion-col size="2"></ion-col>
     </ion-row>
     <ion-col class="header">
-      <ion-row class="d-flex flex-align-items-center" style="padding-left: 10px;">
+      <ion-row class="d-flex flex-align-items-center row-padding">
         <ion-icon name="calendar-number-outline"></ion-icon>
         <div>
           <ion-label *ngIf="startDate && data?.status?.value=='PUBLISHED'" class="platform-date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
@@ -56,7 +56,7 @@
         </div>
       </ion-row>
     </ion-col>
-    <ion-col class="d-flex flex-justify-flex-end flex-align-items-center" style="float: right;" size="4">
+    <ion-col class="d-flex flex-justify-flex-end flex-align-items-center col-float" size="4">
       <ion-button *ngIf="data?.status?.value!='COMPLETED'" class="button"  [disabled]="!buttonConfig?.isEnabled && buttonConfig?.label !='ENROLL'" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
     </ion-col>
   </ion-grid>

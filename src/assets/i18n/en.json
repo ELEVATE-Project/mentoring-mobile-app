@@ -256,5 +256,15 @@
     "INPUT_CHIP_ERROR_TOAST_MESSAGE": "This field must not contain special characters other than underscores.",
     "THIS_WEEK": "This week",
     "THIS_MONTH": "This month",
-    "THIS_QUARTER": "This quarter"
+    "THIS_QUARTER": "This quarter",
+    "CHANGE_PASSWORD": "Change password",
+    "LOGIN_ACTIVITY": "Login activity",
+    "ENTER_SAME_PASSWORD": "Please enter the same password",
+    "LAST_LOGIN_AT": "Last login at",
+    "YOUR_CURRENT_DEVICE": "Your current device ",
+    "LOGGED_IN": "Logged in",
+    "LOGGED_OUT_AT": "Logged out at",
+    "EXPIRED": "Expired",
+    "GENERATE_OTP":"Generate OTP",
+    "VALIDATE_OTP": "Validate OTP"
 }

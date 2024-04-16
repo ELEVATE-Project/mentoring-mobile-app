@@ -7,6 +7,7 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import { environment } from 'src/environments/environment';
 import { Location } from '@angular/common';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-otp',
@@ -15,6 +16,7 @@ import { Location } from '@angular/common';
 })
 export class OtpPage implements OnInit {
   @ViewChild('ngOtpInput', { static: false }) ngOtpInputRef: any;
+  @ViewChild(RecaptchaComponent) captchaComponent: RecaptchaComponent;
   config = {
     allowNumbersOnly: true,
     length: 6,
@@ -24,6 +26,7 @@ export class OtpPage implements OnInit {
       'border-radius': '8px'
     }
   };
+  siteKey = (environment as any)?.recaptchaSiteKey ? (environment as any)?.recaptchaSiteKey  :""
   resetPasswordData = { email: null, password: null, otp: null };
   public headerConfig: any = {
     // menu: true,
@@ -43,6 +46,10 @@ export class OtpPage implements OnInit {
   checked: boolean = false;
   privacyPolicyUrl =environment.privacyPolicyUrl;
   termsOfServiceUrl = environment.termsOfServiceUrl;
+  captchaToken:any="";
+  recaptchaResolved: boolean = this.siteKey ? false : true;
+  showOtp:any = false;
+  
 
   constructor(private router: Router, private profileService: ProfileService,private location: Location, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService, private menuCtrl: MenuController, private nav: NavController) {
     if(!this.router.getCurrentNavigation()?.extras.state){
@@ -59,9 +66,8 @@ export class OtpPage implements OnInit {
   }
 
   ngOnInit() {
-    this.labels = this.actionType == 'signup' ? ['VERIFY_ACCOUNT'] : ['ENTER_OTP'];
+    this.labels = this.actionType == 'signup' ? ['VERIFY_ACCOUNT'] : ['VALIDATE_OTP'];
     this.translateText();
-    this.startCountdown();
   }
 
   async translateText() {
@@ -96,14 +102,14 @@ export class OtpPage implements OnInit {
       this.signupData.otp = this.otp;
       this.signupData.has_accepted_terms_and_conditions = this.checked;
       let result = await this.authService.createAccount(this.signupData);
-      if (result) {
+      if(result){
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
         this.menuCtrl.enable(true);
       }
     } else {
       this.resetPasswordData.otp = this.otp;
       let response = await this.profileService.updatePassword(this.resetPasswordData);
-      if (response) {
+      if(response){ 
         this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })
         this.menuCtrl.enable(true);
       }
@@ -112,10 +118,19 @@ export class OtpPage implements OnInit {
 
   async resendOtp() {
     this.enableResendOtp = false;
-    var response = this.actionType == "signup" ? await this.profileService.registrationOtp(this.signupData) : await this.profileService.generateOtp({ email: this.resetPasswordData.email, password:  this.resetPasswordData.password});
+    this.showOtp = false;
+    this.recaptchaResolved = false
+  }
+
+  async onSubmitGenerateOtp(){
+    var response = this.actionType == "signup" ? await this.profileService.registrationOtp(this.signupData, this.captchaToken) : await this.profileService.generateOtp({ email: this.resetPasswordData.email, password:  this.resetPasswordData.password},this.captchaToken);
     if (response) {
       this.toast.showToast(response.message, "success");
+      this.showOtp = true
       this.startCountdown();
+    }else{
+      this.captchaComponent.reset();
+      this.location.back()
     }
   }
 
@@ -125,6 +140,10 @@ export class OtpPage implements OnInit {
   }
   checkboxClick(e){
    this.checked = e.detail.checked
+  }
+  onCaptchaResolved(token: string) {
+    this.captchaToken = token
+    this.recaptchaResolved = token?  true: false;
   }
 
 }

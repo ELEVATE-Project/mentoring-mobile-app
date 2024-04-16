@@ -45,7 +45,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit() { 
     this.originalLabel = this.control.label;
-    this.isMobile = window.innerWidth <= 800;
+    this.isMobile = window.innerWidth <= 950;
   }
 
   writeValue(value: any[]) {
@@ -99,7 +99,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     this.control.label = this.originalLabel
     this.selectedData = []
     this.icon = this.addIconDark
-    this.onChange(null)
+    this.onChange([])
     event.stopPropagation()
   }
 

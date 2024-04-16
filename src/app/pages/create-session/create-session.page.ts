@@ -59,6 +59,7 @@ export class CreateSessionPage implements OnInit {
   entityNames:any
   entityList:any;
   params: any;
+  editSessionDisable: boolean;
 
   constructor(
     private http: HttpClient,
@@ -89,6 +90,7 @@ export class CreateSessionPage implements OnInit {
     this.entityList = await this.form.getEntities(this.entityNames, 'SESSION')
     this.formData = await this.form.populateEntity(this.formData,this.entityList)
     this.changeDetRef.detectChanges();
+    this.permissionService.getPlatformConfig();
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.id = params?.get('id');
       this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
@@ -100,7 +102,7 @@ export class CreateSessionPage implements OnInit {
         this.showForm = true;
       }
     });
-    this.isSubmited = false; //to be removed
+    this.isSubmited = true; //to be removed
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
   }
@@ -113,6 +115,7 @@ export class CreateSessionPage implements OnInit {
         response.start_date = moment.unix(response.start_date);
         response.end_date = moment.unix(response.end_date);
         this.preFillData(response);
+        this.editSessionDisable = (this.sessionDetails?.status?.value=='LIVE')
   }
 
   async getPlatformFormDetails() {
