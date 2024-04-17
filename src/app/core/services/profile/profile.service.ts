@@ -15,6 +15,7 @@ import { Location } from '@angular/common';
 import { UserService } from '../user/user.service';
 import { AuthService } from '../auth/auth.service';
 import { FormService } from 'src/app/core/services/form/form.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',

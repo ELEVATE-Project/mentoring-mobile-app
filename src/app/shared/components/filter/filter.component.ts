@@ -15,11 +15,6 @@ export class FilterComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.filter);
-
-    console.log(this.defaultValue);
-
-
   }
 
   compareWith(o1, o2) {
