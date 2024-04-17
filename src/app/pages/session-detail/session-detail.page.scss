@@ -55,11 +55,7 @@ ion-item {
     height: 200px;
 }
 .person-container{
-    font-size: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-right: 10px;
+    font-size: 26px;
 }
 
 .manager-text-container{
@@ -70,5 +66,17 @@ ion-item {
     font-size: 16px;
     color: rgb(0, 0, 0);
     margin-left: 6px;
-    margin-bottom: 4px;
+    width: max-content;
+}
+.invite-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.label{
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 5px;
 }

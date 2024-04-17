@@ -22,8 +22,11 @@
         <ion-label *ngIf="endDate && detailData?.data?.status?.value=='COMPLETED'" class="date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
       </ion-item>
       <div class="d-flex ion-no-padding" *ngIf="sessionManagerText && detailData.data.manager_name">
-        <ion-icon class="person-container" name="person"></ion-icon>
-        <p class="manager-text-container">{{ sessionManagerText | translate}} <span>{{detailData.data.manager_name}}</span></p> 
+        <div class="invite-container">
+          <ion-icon class="person-container" name="person"></ion-icon>
+          <ion-label class="manager-text-container">{{ sessionManagerText | translate}}</ion-label> 
+          <ion-label class="label">{{detailData.data.manager_name}}</ion-label>
+        </div>
       </div>
     </div>
     <app-generic-details [sessionData]='detailData' (onViewList)="onViewList($event)"></app-generic-details>
