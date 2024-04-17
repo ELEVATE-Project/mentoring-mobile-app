@@ -266,5 +266,6 @@
     "LOGGED_OUT_AT": "Logged out at",
     "EXPIRED": "Expired",
     "GENERATE_OTP":"Generate OTP",
-    "VALIDATE_OTP": "Validate OTP"
+    "VALIDATE_OTP": "Validate OTP",
+    "CREATE_SESSIONS":"Create sessions"
 }
