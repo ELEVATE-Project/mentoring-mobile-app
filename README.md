@@ -272,3 +272,56 @@ For deploying your application, you need an Environment file, Server.js, and a p
       console.log(`Server is running on port ${port}`);
    });
 ```
+
+
+PROJECT SETUP WITH DOCKER
+---------------------
+Please follow the steps below to run the application using Docker:
+* Clone the repository from GitHub using the following command: 
+    ```bash
+    git clone https://github.com/ELEVATE-Prjoect/mentoring-mobile-app.git
+    ```
+* Checkout to the latest branch, which is currently release-2.5.0.
+* Navigate back from the mentoring-mobile-app folder and create an environment.ts file. Copy and paste the environment variables provided below into this file:
+    ```bash
+    // This file can be replaced during build by using the `fileReplacements` array.
+    // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
+    // The list of file replacements can be found in `angular.json`.
+    
+    export const environment = {
+      production: true,
+      name: 'debug environment',
+      staging: false,
+      dev: false,
+      baseUrl: 'http://localhost:3569', //backend node application url
+      sqliteDBName: 'mentoring.db',
+      deepLinkUrl: 'https://mentored.shikshalokam.org',
+      privacyPolicyUrl:'https://shikshalokam.org/mentoring/privacy-policy',
+      termsOfServiceUrl:'https://shikshalokam.org/mentoring/term-of-use'
+    };
+    
+    
+    /*
+     * For easier debugging in development mode, you can import the following file
+     * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
+     *
+     * This import should be commented out in production mode because it will have a negative impact
+     * on performance if an error is thrown.
+     */
+    // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+    ```
+ * Navigate to the mentoring-mobile-app directory, Open the docker-compose.yml file and within the docker-compose.yml file, locate the volumes section.
+ * In the docker-compose.yml file, replace <exact-path> with the exact file path of the environment.ts file in your system under the volumes section
+     ```bash
+     volumes:
+      - <exact-path>/environment.ts:/app/src/environments/environment.ts
+     ```
+ * Run Docker using the following command:
+    ```bash
+    cd mentoring-mobile-app
+    docker-compose -f docker-compose.yml up
+    ```
+ * To stop Docker, use the following command:
+    ```bash
+    docker-compose -f docker-compose.yml down
+    ```
