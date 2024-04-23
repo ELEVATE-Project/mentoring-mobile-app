@@ -259,6 +259,13 @@
     "MY_MENTORING_SESSIONS":"मेरा मेंटरिंग सत्र",
     "THIS_WEEK": "इस सप्ताह",
     "THIS_MONTH": "इस महीने",
-    "THIS_QUARTER": "इस तिमाही"
-   
+    "THIS_QUARTER": "इस तिमाही",
+    "CHANGE_PASSWORD": "पासवर्ड बदलें",
+    "LOGIN_ACTIVITY": "लॉगिन गतिविधि",
+    "ENTER_SAME_PASSWORD": "कृपया वही पासवर्ड दर्ज करें/ कृपया समान पासवर्ड दर्ज करें",
+    "LAST_LOGIN_AT": "पिछला लॉगिन",
+    "YOUR_CURRENT_DEVICE": "आपका वर्तमान उपकरण",
+    "LOGGED_IN": "लोग्ड इन/ लॉग इन",
+    "LOGGED_OUT_AT": "लॉग आउट/ लोग्ड आउट",
+    "EXPIRED": "आपका सत्र समाप्त हो गया है"
 }
