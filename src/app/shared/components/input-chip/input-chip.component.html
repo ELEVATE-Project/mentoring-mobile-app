@@ -24,7 +24,7 @@
     </ion-chip>
     <ion-chip *ngIf="showAddOption" (click)="addNewOption()">
       <ion-icon name="add"></ion-icon>
-      <ion-label> {{"ADD" | translate}}</ion-label>
+      <ion-label> {{ !addChipLabel ? ("ADD"| translate) : addChipLabel | translate}}</ion-label>
     </ion-chip>
   </div>
 </div>
