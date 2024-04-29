@@ -191,7 +191,7 @@ export class ProfileService {
     }
     for (let i = 0; i < formData.controls.length; i++) {
       if(formData.controls[i].type == 'chip'){
-        formData.controls[i].meta.showAddOption = showAddOption;
+        formData.controls[i].meta.showAddOption.showAddButton = showAddOption;
       }
       formData.controls[i].value = existingData[formData.controls[i].name] ? existingData[formData.controls[i].name] : '';
       formData.controls[i].options = _.unionBy(
