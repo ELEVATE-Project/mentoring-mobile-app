@@ -64,6 +64,11 @@ export class FormService {
       const entity = _.find(entityList, (entityData) => formData.name === entityData.value);
       if (entity) {
         formData.options = entity.entities.map((entityItem)=>{ return { label : entityItem.label, value : entityItem.value }});
+        formData.meta = {
+          ...formData.meta,
+          allow_custom_entities: entity.allow_custom_entities,
+          allow_filtering: entity.allow_filtering
+        };
       }
     });
     return formData

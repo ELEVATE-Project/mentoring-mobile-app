@@ -22,7 +22,7 @@
       <ion-icon name="close-circle" color="white" *ngIf="selectedChips.has(chip)"></ion-icon>
       <ion-label class="chip-label">{{ chip.label }}</ion-label>
     </ion-chip>
-    <ion-chip *ngIf="showAddOption?.showAddButton" (click)="addNewOption()">
+    <ion-chip *ngIf="allowCustomEntities" (click)="addNewOption()">
       <ion-icon name="add"></ion-icon>
       <ion-label> {{ !showAddOption?.addChipLabel ? ("ADD"| translate) : showAddOption?.addChipLabel | translate}}</ion-label>
     </ion-chip>

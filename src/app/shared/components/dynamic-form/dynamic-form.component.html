@@ -133,6 +133,7 @@
         [showSelectAll]="control.meta.showSelectAll"
         [showAddOption]="control.meta.showAddOption"
         [validators]="control.validators"
+        [allowCustomEntities]="control.meta.allow_custom_entities"
       ></app-input-chip>
       <app-search-and-select
         *ngIf="control.type === 'search'"
