@@ -41,7 +41,7 @@ import { FilterTreeComponent } from './components/filter-tree/filter-tree.compon
 import { FilterPopupComponent } from './components/filter-popup/filter-popup.component';
 import { MenteeListPopupComponent } from './components/mentee-list-popup/mentee-list-popup.component';
 import { UserListModalComponent } from './components/user-list-modal/user-list-modal.component';
-import { SnackCaseToNormalCasePipe } from '../core/pipes/snake-case-to-normal-case.pipe';
+import { snakeCaseToUpperCasePipe } from '../core/pipes/snake-case-to-normal-case.pipe';
 
 @NgModule({
   declarations: [
@@ -74,7 +74,7 @@ import { SnackCaseToNormalCasePipe } from '../core/pipes/snake-case-to-normal-ca
     FilterPopupComponent,
     MenteeListPopupComponent,
     UserListModalComponent,
-    SnackCaseToNormalCasePipe
+    snakeCaseToUpperCasePipe
   ],
   imports: [
     CommonModule,
@@ -121,7 +121,7 @@ import { SnackCaseToNormalCasePipe } from '../core/pipes/snake-case-to-normal-ca
     FilterPopupComponent,
     MenteeListPopupComponent,
     UserListModalComponent,
-    SnackCaseToNormalCasePipe
+    snakeCaseToUpperCasePipe
   ],
 })
 export class SharedModule {}

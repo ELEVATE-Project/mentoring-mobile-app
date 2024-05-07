@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'snackCaseToNormalCase'
+  name: 'snakeCaseToUpperCase'
 })
-export class SnackCaseToNormalCasePipe implements PipeTransform {
+export class snakeCaseToUpperCasePipe implements PipeTransform {
   transform(value: string): string {
     if (!value) return value;
 

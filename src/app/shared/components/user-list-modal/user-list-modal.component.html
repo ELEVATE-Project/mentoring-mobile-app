@@ -6,7 +6,7 @@
 </ion-header>
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let datas of data; let i = index">{{ i + 1 }}. {{datas | snackCaseToNormalCase}}</ion-item>
+    <ion-item *ngFor="let datas of data; let i = index">{{ i + 1 }}. {{datas | snakeCaseToUpperCase}}</ion-item>
   </ion-list>
 </ion-content>
 <ion-footer class=" d-flex flex-justify-center footer ion-padding-start footer-button" (click)="closeModal()">
