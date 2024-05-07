@@ -13,8 +13,11 @@
           </div >
           <div class="usr-div">
             <ion-label class="username"><strong>{{user?.name}}</strong></ion-label>
-            <ion-label *ngIf="isMentor">{{"MENTOR" | translate }}</ion-label>
-            <ion-label *ngIf="!isMentor">{{"MENTEE" | translate }}</ion-label>
+            <div>
+              <ion-label *ngIf="userRoles">{{ snakeToNormalText(userRoles[0]) }}
+              </ion-label>
+              <ion-label class="view-roles" (click)="viewRoles()">{{"VIEW_ROLES" | translate}}</ion-label>
+            </div>
             <a (click)="goToProfilePage()" class="cursor">{{"PROFILE" | translate}}</a>
           </div>
         </div>
