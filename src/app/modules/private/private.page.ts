@@ -209,4 +209,13 @@ ngOnDestroy(): void {
     this.routerSubscription.unsubscribe();
   }
 }
+
+  async viewRoles(){
+  this.profile.viewRolesModal()
+}
+
+snakeToNormalText(roles){
+  let result = this.utilService.snakeToNormal(roles);
+  return result;
+}
 }

@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalStorageService, ToastService, UtilService } from 'src/app/core/services';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
@@ -22,6 +21,7 @@ export class GenericProfileHeaderComponent implements OnInit {
 
   public isMobile:any;
   user: any;
+  roles: any;
 
   constructor(private router:Router,private localStorage:LocalStorageService, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService,) {
     this.isMobile = utilService.isMobile()
@@ -29,6 +29,7 @@ export class GenericProfileHeaderComponent implements OnInit {
 
   async ngOnInit() {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    this.roles = await this.localStorage.getLocalData(localKeys.USER_ROLES)
   }
 
   async action(event) {
@@ -80,5 +81,14 @@ export class GenericProfileHeaderComponent implements OnInit {
       this.toast.showToast('COPIED',"success");
     });
   };
+
+  async viewRoles(){
+    this.profileService.viewRolesModal();
+  }
+
+  snakeToNormalText(roles){
+    let result = this.utilService.snakeToNormal(roles);
+    return result;
+  }
 
 }
