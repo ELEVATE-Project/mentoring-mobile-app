@@ -214,8 +214,4 @@ ngOnDestroy(): void {
   this.profile.viewRolesModal()
 }
 
-snakeToNormalText(roles){
-  let result = this.utilService.snakeToNormal(roles);
-  return result;
-}
 }

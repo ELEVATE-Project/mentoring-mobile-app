@@ -10,16 +10,11 @@ import { UtilService } from 'src/app/core/services';
 export class UserListModalComponent implements OnInit {
   @Input() data: any;
 
-  constructor(private modal: ModalController, private utilService: UtilService) { }
+  constructor(private modal: ModalController) { }
 
   ngOnInit() {}
 
   closeModal(){
     this.modal.dismiss()
-  }
-
-  snakeToNormalText(roles){
-    let result =this.utilService.snakeToNormal(roles);
-    return result
   }
 }
