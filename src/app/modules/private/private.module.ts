@@ -11,6 +11,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { RouteReuseStrategy } from '@angular/router';
 import { PrivatePageRoutingModule } from './private-routing.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
 @NgModule({
@@ -27,6 +28,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
         deps: [HttpClient],
       },
     }),
+    SharedModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ]

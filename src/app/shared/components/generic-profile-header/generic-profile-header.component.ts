@@ -86,9 +86,4 @@ export class GenericProfileHeaderComponent implements OnInit {
     this.profileService.viewRolesModal();
   }
 
-  snakeToNormalText(roles){
-    let result = this.utilService.snakeToNormal(roles);
-    return result;
-  }
-
 }

@@ -12,8 +12,8 @@
       <div>
         <ion-label *ngIf="headerData?.name" class="name">{{headerData?.name}} </ion-label>
       </div>
-      <div>
-        <ion-label *ngIf="roles">{{ snakeToNormalText(roles[0]) }}</ion-label>
+      <div class="roles-div">
+        <ion-label *ngIf="roles">{{ roles[0] | snackCaseToNormalCase}}</ion-label>
         <ion-label class="view-roles" (click)="viewRoles()">{{"VIEW_ROLES" | translate}}</ion-label>
       </div>
       <div class="d-inline-flex flex-align-items-center my-4" *ngIf="headerData?.location">

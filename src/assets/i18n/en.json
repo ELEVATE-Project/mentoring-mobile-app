@@ -267,5 +267,7 @@
     "EXPIRED": "Expired",
     "GENERATE_OTP":"Generate OTP",
     "VALIDATE_OTP": "Validate OTP",
-    "VIEW_ROLES": "View roles"
+    "CREATE_SESSIONS": "Create sessions",
+    "VIEW_ROLES": "View roles",
+    "MY_ROLES": "My roles"
 }
