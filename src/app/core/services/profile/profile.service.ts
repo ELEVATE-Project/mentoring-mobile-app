@@ -205,12 +205,11 @@ export class ProfileService {
     }
   }
 
-  async viewRolesModal(){
-    const roles = await this.localStorage.getLocalData(localKeys.USER_ROLES)
+  async viewRolesModal(userRoles){
     let modal = await this.modal.create({
       component: UserListModalComponent,
       cssClass: 'user-role-modal',
-      componentProps: { data: roles }
+      componentProps: { data: userRoles }
     });
     modal.present();
   }

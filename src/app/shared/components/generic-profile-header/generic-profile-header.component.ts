@@ -29,7 +29,7 @@ export class GenericProfileHeaderComponent implements OnInit {
 
   async ngOnInit() {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    this.roles = await this.localStorage.getLocalData(localKeys.USER_ROLES)
+    this.roles = this.headerData.user_roles;
   }
 
   async action(event) {
@@ -83,7 +83,8 @@ export class GenericProfileHeaderComponent implements OnInit {
   };
 
   async viewRoles(){
-    this.profileService.viewRolesModal();
+    const titlesArray = this.roles.map(item => item.title);
+    this.profileService.viewRolesModal(titlesArray);
   }
 
 }

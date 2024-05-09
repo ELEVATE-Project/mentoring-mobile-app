@@ -211,7 +211,7 @@ ngOnDestroy(): void {
 }
 
   async viewRoles(){
-  this.profile.viewRolesModal()
+  this.profile.viewRolesModal(this.userRoles)
 }
 
 }
