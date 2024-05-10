@@ -58,7 +58,7 @@ Setting up the Project
 ----------------------
 
 1. Clone the [repository](https://github.com/ELEVATE-Project/mentoring-mobile-app.git).
-2. Change to the latest GitHub branch (**release-2.5.0**).
+2. Change to the latest GitHub branch (**release-2.6.1**).
 3. Add environment files into the src/environments folder.
 4. Go to the project folder and run `npm i`.
 
