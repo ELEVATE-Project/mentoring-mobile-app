@@ -1,198 +1,221 @@
-CONTENTS OF THIS FILE
+# Customizing the PWA
+
+The Mentor PWA is developed using the Ionic framework. This document provides instructions on setting up the development environment.
+
+Contents
 ---------------------
 
- * Dependencies
- * Command-line setup
- * Project setup
- * Build MentorED
- * Debug MentorED
- * Hashicorp Vault Setup
- * Jenkins Pipeline
- * Ansible Deployment Script
- * Env Files, Server.js And Pm2 Config Files
+ * [Dependencies](#dependencies)
+ * [Setting up the CLI](#setting-up-the-cli)
+ * [Setting up the Project](#setting-up-the-project)
+ * [Building the Application](#building-the-application)
+ * [Debugging the Application](#debugging-the-application)
+ * [Setting up the HashiCorp® Vault](#setting-up-the-hashicorp-vault)
+ * [Creating a Jenkins® Job](#creating-a-jenkins-job)
+ * [Deploying the Application Using an Ansible® Script](#deploying-the-application-using-an-ansible-script)
+ * [Structure of Environment file, Server.js, and pm2.config.json](#structure-of-environment-file-serverjs-and-pm2configjson)
 
-
-DEPENDENCIES
+Dependencies
 ------------
 
-* Ionic:
+| Requirement         | Description    |
+|--------------|-----------|
+| Ionic CLI|Version 7.1.1 (/usr/local/lib/node_modules/@ionic/cli)|
+| Ionic Framework | <ul><li>@ionic/angular 6.7.5</li> <li>@angular-devkit/build-angular : 13.2.6 </li><li> @angular-devkit/schematics : 13.2.6 </li><li>@angular/cli : 13.2.6 </li><li> @ionic/angular-toolkit : 6.1.0 </li></ul>|
+| Capacitor | <ul><li>Capacitor CLI : 5.5.1 </li><li>@capacitor/android : 5.5.1 </li><li>@capacitor/core : 5.5.1 </li><li>@capacitor/ios : 5.5.1 </li></ul>|
+| Cordova | <ul><li>Cordova CLI : 11.0.0</li><li>Cordova Platforms : none</li><li>Cordova Plugins : no whitelisted plugins (0 plugins total)</li></ul>|
+| Utility | <ul><li>cordova-res : 0.15.4</li><li>native-run : 1.7.4 </li></ul>
+| System | <ul><li>Android SDK Tools : 26.1.1</li><li><a href="https://nodejs.org/">Node.js®</a>: v18.18.2</li><li>npm: 10.2.0</li><li>OS : Linux 5.13</li></ul>|
 
-   Ionic CLI                     : 7.1.1 (/usr/local/lib/node_modules/@ionic/cli)
-   Ionic Framework               : @ionic/angular 6.7.5
-   @angular-devkit/build-angular : 13.2.6
-   @angular-devkit/schematics    : 13.2.6
-   @angular/cli                  : 13.2.6
-   @ionic/angular-toolkit        : 6.1.0
+Setting up the CLI
+------------------
 
-* Capacitor:
+1. Install the Ionic framework.
 
-   Capacitor CLI      : 5.5.1
-   @capacitor/android : 5.5.1
-   @capacitor/core    : 5.5.1
-   @capacitor/ios     : 5.5.1
+    ```
+    npm install -g ionic
+    ```
 
-* Cordova:
+2. Install the Ionic client.
 
-   Cordova CLI       : 11.0.0
-   Cordova Platforms : none
-   Cordova Plugins   : no whitelisted plugins (0 plugins total)
+    ```
+    npm install -g @ionic/cli
+    ```
 
-* Utility:
+3. Install the Capacitor Core.
 
-   cordova-res : 0.15.4
-   native-run  : 1.7.4
+    ```
+    npm install @capacitor/core
+    ```
 
-* System:
+4. Install the Capacitor runtime Client.
 
-   Android SDK Tools : 26.1.1
-   NodeJS            : v18.18.2 (you can download from https://nodejs.org/)
-   npm               : 10.2.0
-   OS                : Linux 5.13
+    ```
+    npm install @capacitor/cli --save-dev 
+    ```
 
+Setting up the Project
+----------------------
 
-CLI SETUP
----------
-
-- npm install -g ionic
-- npm install -g @ionic/cli
-- npm install @capacitor/core
-- npm install @capacitor/cli --save-dev
-
-
-PROJECT SETUP
--------------
-
-- git clone the repo (https://github.com/ELEVATE-Prjoect/mentoring-mobile-app.git)
-- Checkout to latest branch.(currently release-2.5.0)
-- Add environment files inside src/environments
-- Go to project folder and run npm i
+1. Clone the [repository](https://github.com/ELEVATE-Project/mentoring-mobile-app.git).
+2. Change to the latest GitHub branch (**release-2.6.1**).
+3. Add environment files into the src/environments folder.
+4. Go to the project folder and run `npm i`.
 
 
-BUILD MENTORED
---------------
+Building the Application
+------------------------
 
-- Run npx cap sync
-- Run ionic build
-- Run ionic cap sync
-- Run ionic serve to serve the project in local
+1. To add the Capacitor plugin, run the following command:
 
+    ```
+    npx cap sync  
 
-DEBUG MENTORED
---------------
+    ```
 
-- Open the running app in browser
-- Start inspecting using chrome dev tools or any alternatives
+2. To run a development build, run the following command:
 
-HASHICORP VAULT SETUP
----------------------
+    ```
+    ionic build
 
+    ```
 
-JENKINS PIPELINE
-----------------
+3. To perform an Ionic build and update any Capacitor plugins or dependencies, run the capacitor sync command.  
 
-For automating your app deployment, you can use Jenkins. You can create a Jenkins job and run that job each time you want a deployment.
-For that you can create a Jenkins job and add a pipeline script for the job inside the job’s ‘Configure’ section. For example, see below.
+    ```
+    ionic cap sync
 
-   pipeline { agent any
-      options {
-         disableConcurrentBuilds()
-            }
-      stages {
-         stage("git"){
-               steps{
-                  
-                  git branch: '<branch-name>', url: '<github-repo-url>'
-               }
-               
-         }
-         stage("ansible run"){
-               steps{
-                  
-                     ansiblePlaybook becomeUser: 'jenkins', 
-                     credentialsId:’your-cred-id’, 
-                     extras: "-e vaultAddress=<your-hashicorp-vault-address> -e gitBranch=<git-branch>", 
-                     installation: 'ansible', 
-                     inventory: '<path-to-your-inventory>', 
-                     playbook: '<path-to-your-ansible-script>'
-               }
-               
-         }
-   }
-   }
+    ```
 
-This pipeline will help to fetch the latest code from the given branch in repo and run the ansible script which we are about to create for building and deploying our application.
+4. Run the project on your local system using the following command:
 
-ANSIBLE DEPLOYMENT SCRIPT
+    ```
+    ionic serve
+
+    ```
+
+Debugging the Application
 -------------------------
 
-Add an ansible script inside the ‘deployment’ folder in the root folder of your project. And add that path in your jenkins pipeline. When you run the job in jenkins, this script will get executed step by step till the end. Please update all the necessary details in the below example.
+1. Open the running app in the browser.
+2. Start inspecting using Chrome dev tools or any alternatives.
 
-Eg :
+Setting up the HashiCorp Vault
+------------------------------
 
-   - hosts: “<your-host>”
-   vars:
-   project_path: <path-to-the-project-in-server>
-   root_path: <path-to-the-parent-folder-of-project>
-   //Add variables here if needed. (Remove this line in your code)
-   tasks:
-   - name: Get the token for Hashicorp vault
-      slurp:
-      src: "<path-to-hashicorp-vault-token>"
-      register: slurpfile
-   - name: Run vault credentials and get the environment related secrets stored in hashicorp vault
-      shell: "curl --location --request GET '{{ vaultAddress }}<environment-files-folder-name>' --header 'X-Vault-Token: {{ slurpfile['content'] | b64decode }}' | jq '.data' > '{{root_path}}/data2.json'"
-      register: vaultCurl
-   - name: Change directory
-      shell: cd {{project_path}}
-   - name: Fetch the latest code
-      git:
-      repo: git-url
-      dest: "{{project_path}}"
-      version: "{{gitBranch}}"
-      force: yes
-   - name: Update npm
-      shell: cd {{project_path}} && npm i --force
-   - name: Set permission
-      shell: chmod 744 {{ project_path }}/src/scripts/json2env.sh
-   - name: Generate .env and store it in environment folder
-      shell: cat {{root_path}}/data2.json | jq '.data' > {{ project_path }}/src/environments/environment.ts && sed -i '1s/^/export const environment = \n/' {{ project_path }}/src/environments/environment.ts
-      register: envConfig
-   - debug: msg=" cred {{ envConfig }} "
-   - name: Change directory
-      shell: chdir {{project_path}}
-   - name: Fetch pm2 config file from Hashicorp vault
-      shell: "curl --location --request GET '{{ vaultAddress }}<pm2-config-file-folder>' --header 'X-Vault-Token: {{ slurpfile['content'] | b64decode }}' | jq '.data.data' > '{{ project_path }}/pm2.config.json'"
-      register: pm2
-   - name: Change directory
-      shell: cd {{project_path}}
-   - name: Remove www folder
-      shell: rm -rf www
-   - name: Build pwa app to deploy
-      shell: cd {{project_path}} && ionic build --prod
-   - name: Start pm2 with pm2 config file and finish deployment
-      shell: cd {{project_path}} && pm2 start pm2.config.json
+After setting up the HashiCorp Vault, you must add the Vault address to the Jenkins Pipeline script and Ansible deployment script.
 
+Creating a Jenkins Job
+----------------------
+To automate your app deployment using Jenkins, do as follows:
 
-Please remove all the unwanted lines.
+1. Create a Jenkins job each time you want a deployment. 
 
-You also have to add a script inside /src/scripts/json2env.sh
+2. Add the pipeline script for the job inside the job’s **Configure** section. This pipeline will fetch the latest code from the given branch in the repository and run the [Ansible script](#deploying-the-application-using-an-ansible-script).
 
+    ```
+       pipeline { agent any
+          options {
+             disableConcurrentBuilds()
+                }
+          stages {
+             stage("git"){
+                   steps{
+                      
+                      git branch: '<branch-name>', url: '<github-repo-url>'
+                   }
+                   
+             }
+             stage("ansible run"){
+                   steps{
+                      
+                         ansiblePlaybook becomeUser: 'jenkins', 
+                         credentialsId:’your-cred-id’, 
+                         extras: "-e vaultAddress=<your-hashicorp-vault-address> -e gitBranch=<git-branch>", 
+                         installation: 'ansible', 
+                         inventory: '<path-to-your-inventory>', 
+                         playbook: '<path-to-your-ansible-script>'
+                   }
+                   
+             }
+       }
+       }
+    ```
 
-   #!/bin/sh
+Deploying the Application Using an Ansible Script
+-------------------------------------------------
 
-   tr -d '\n' |
-   grep -o '"[A-Za-z\_][A-Za-z_0-9]\+"\s*:\s*\("[^"]\+"\|[0-9\.]\+\|true\|false\|null\)' |
-   sed 's/"\(._\)"\s_:\s\*"\?\([^"]\+\)"\?/\1= "\2"/'
+To build and deploy the application using an Ansible script, do as follows:
 
-This script will convert the fetched data from hashicorp to env files.
+1. Add an Ansible script to the **deployment** folder in the root folder of your project.
 
+   >**Note**: Update the script with details (such as paths) that are specific to your project.  
+    
+    ```
+    - hosts: <your-host>
+       vars:
+       project_path: <path-to-the-project-in-server>
+       root_path: <path-to-the-parent-folder-of-project>
+       //Add variables here if needed. (Remove this line in your code)
+      tasks:
+        - name: Slurp host file
+          slurp:
+            src: "<path-to-hashicorp-vault-token>"
+          register: slurpfile
+        - name: Run the HashiCorp Vault credentials
+          shell: "curl --location --request GET '{{ vaultAddress }}mentored-portal' --header 'X-Vault-Token: {{ slurpfile['content'] | b64decode }}' | jq '.data' > '{{root_path}}/data2.json'"
+          register: vaultCurl
+        - name: Change directory
+          shell: cd {{project_path}}
+        - name: Fetch the latest code
+          git:
+            repo: https://github.com/ELEVATE-Project/mentoring-mobile-app
+            dest: "{{project_path}}"
+            version: "{{gitBranch}}"
+            force: yes
+        - name: Update npm
+          shell: cd {{project_path}} && npm i --force
+        - name: Set permission
+          shell: chmod 744 {{ project_path }}/src/scripts/json2env.sh
+        - name: Generate .env
+          shell: cat {{root_path}}/data2.json | jq '.data' > {{ project_path }}/src/environments/environment.ts && sed -i '1s/^/export const environment = \n/' {{ project_path }}/src/environments/environment.ts
+          register: envConfig
+        - debug: msg=" cred {{ envConfig }} "
+        - name: Change directory
+          shell: chdir {{project_path}}
+        - name: Fetch pm2 config file
+          shell: "curl --location --request GET '{{ vaultAddress }}portalPm2Config' --header 'X-Vault-Token: {{ slurpfile['content'] | b64decode }}' | jq '.data.data' > '{{ project_path }}/pm2.config.json'"
+          register: pm2
+        - name: Change directory
+          shell: cd {{project_path}}
+        - name: Remove www folder
+          shell: rm -rf www
+        - name: Build pwa app
+          shell: cd {{project_path}} && ionic build --prod
+        - name: Start pm2
+          shell: cd {{project_path}} && pm2 start pm2.config.json
+    ```
 
+3. Add the script's path to the [Jenkins Pipeline script](#creating-a-jenkins-job). When you run the Jenkins job, the script is executed.
 
-ENV FILES, SERVER.JS AND PM2 CONFIG FILES
------------------------------------------
+4. To convert the JSON file that was fetched from the HashiCorp Vault to an env format, add the following script to ```/src/scripts/json2env.sh.```:
 
-For deploying your application, you need an Environment file, Server.js, and a pm2.config.json file. Adding structure of those below for reference.
+    ```
+    #!/bin/sh
 
+    tr -d '\n' |
+    grep -o '"[A-Za-z\_][A-Za-z_0-9]\+"\s*:\s*\("[^"]\+"\|[0-9\.]\+\|true\|false\|null\)' |
+    sed 's/"\(._\)"\s_:\s\*"\?\([^"]\+\)"\?/\1= "\2"/'
+    ```
+
+Structure of Environment file, Server.js, and pm2.config.json
+-------------------------------------------------------------
+
+For deploying your application, you need an Environment file, Server.js, and a pm2.config.json file.
+
+### Structure of environment.ts File
+
+ ```jsx
    export const environment = {
       production: true / false,
       name: "<name>",
@@ -204,9 +227,11 @@ For deploying your application, you need an Environment file, Server.js, and a p
       privacyPolicyUrl: "<privacy-policy-url>",
       termsOfServiceUrl: "<term-of-service-url>",
    };
+```
 
-* pm2.config.json file structure :
+### Structure of pm2.config.json File
 
+```json
    {
    "apps": [
       {
@@ -224,10 +249,11 @@ For deploying your application, you need an Environment file, Server.js, and a p
       }
    ]
    }
+```
 
+### Structure of Server.js File
 
-* Server.js file structure:
-
+```jsx
    const express = require('express');
    const path = require('path');
    const app = express();
@@ -245,3 +271,4 @@ For deploying your application, you need an Environment file, Server.js, and a p
    app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
    });
+```

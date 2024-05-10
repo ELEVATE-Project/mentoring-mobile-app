@@ -51,7 +51,8 @@ ion-label {
 .error-msg {
   font-size: 10px;
   color: var(--ion-color-danger);
-  height: 20px;
+  max-height: 40px;
+  min-height: 20px;
   display: flex;
   align-items: center;
 }
@@ -75,4 +76,27 @@ mat-form-field {
 
 mat-datepicker-toggle {
   font-size: 20px;
+}
+
+.info {
+  font-size: 24px !important;
+  margin-top: 18px;
+  z-index: 1000;
+  left : 95px;
+  position: absolute;
+}
+
+.popover-header {
+  font-weight: bold;
+}
+
+.ion-padding{
+  text-wrap: wrap;
+  overflow-wrap: break-word;
+}
+
+ion-popover {
+  &::part(content) {
+    width: 300px;
+  }
 }

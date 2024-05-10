@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AttachmentService, LoaderService, ToastService } from 'src/app/core/services';
+import { AttachmentService, LoaderService, ToastService, UtilService } from 'src/app/core/services';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import {
@@ -15,9 +15,12 @@ import { AlertController, Platform } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
-import { CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
+import { CREATE_SESSION_FORM, MANAGERS_CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { map } from 'rxjs/operators';
+import { Validators } from '@angular/forms';
+import { manageSessionAction, permissions } from 'src/app/core/constants/permissionsConstant';
+import { PermissionService } from 'src/app/core/services/permission/permission.service';
 
 @Component({
   selector: 'app-create-session',
@@ -55,6 +58,8 @@ export class CreateSessionPage implements OnInit {
   sessionDetails: any;
   entityNames:any
   entityList:any;
+  params: any;
+  editSessionDisable: boolean;
 
   constructor(
     private http: HttpClient,
@@ -70,17 +75,22 @@ export class CreateSessionPage implements OnInit {
     private alert: AlertController,
     private form: FormService,
     private changeDetRef: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private route:ActivatedRoute,
+    private utilService:UtilService,
+    private permissionService:PermissionService
   ) {
   }
   async ngOnInit() {
+    let formConfig =(await this.permissionService.hasPermission({ module: permissions.MANAGE_SESSION, action: manageSessionAction.SESSION_ACTIONS })) ? MANAGERS_CREATE_SESSION_FORM : CREATE_SESSION_FORM
     const platformForm = await this.getPlatformFormDetails();
-    const result = await this.form.getForm(CREATE_SESSION_FORM);
+    const result = await this.form.getForm(formConfig);
     this.formData = _.get(result, 'data.fields');
     this.entityNames = await this.form.getEntityNames(this.formData)
     this.entityList = await this.form.getEntities(this.entityNames, 'SESSION')
     this.formData = await this.form.populateEntity(this.formData,this.entityList)
     this.changeDetRef.detectChanges();
+    this.permissionService.getPlatformConfig();
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.id = params?.get('id');
       this.headerConfig.label = this.id ? "EDIT_SESSION":"CREATE_NEW_SESSION";
@@ -92,7 +102,7 @@ export class CreateSessionPage implements OnInit {
         this.showForm = true;
       }
     });
-    this.isSubmited = false; //to be removed
+    this.isSubmited = true; //to be removed
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
   }
@@ -105,6 +115,7 @@ export class CreateSessionPage implements OnInit {
         response.start_date = moment.unix(response.start_date);
         response.end_date = moment.unix(response.end_date);
         this.preFillData(response);
+        this.editSessionDisable = (this.sessionDetails?.status?.value=='LIVE')
   }
 
   async getPlatformFormDetails() {
@@ -161,7 +172,7 @@ export class CreateSessionPage implements OnInit {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
         this.getImageUploadUrl(this.localImage);
       } else {
-        const form = Object.assign({}, this.form1.myForm.value);
+        const form = Object.assign({}, {...this.form1.myForm.getRawValue(), ...this.form1.myForm.value});
         form.start_date = form.start_date.unix().toString();
         form.end_date = form.end_date.unix().toString();
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -229,7 +240,7 @@ export class CreateSessionPage implements OnInit {
         let obj = this?.meetingPlatforms[j]?.form?.controls.find( (link:any) => link?.name == 'link')
         let meetingId = this?.meetingPlatforms[j]?.form?.controls.find( (meetingId:any) => meetingId?.name == 'meetingId')
         let password = this?.meetingPlatforms[j]?.form?.controls.find( (password:any) => password?.name == 'password')
-        if(existingData.meeting_info.link){
+        if(obj && existingData?.meeting_info?.link){
           obj.value = existingData?.meeting_info?.link;
         }
         if(existingData?.meeting_info?.meta?.meetingId){
@@ -238,10 +249,34 @@ export class CreateSessionPage implements OnInit {
         }
       }
     }
-    
     for (let i = 0; i < this.formData.controls.length; i++) {
       this.formData.controls[i].value =
         existingData[this.formData.controls[i].name];
+      if (this.formData.controls[i].type=='search'){
+        this.formData.controls[i].id = this.id;
+        if(this.formData.controls[i].meta.multiSelect){
+          this.formData.controls[i].meta.searchData = existingData[this.formData.controls[i].name]
+          this.formData.controls[i].value = this.formData.controls[i].meta.searchData.map(obj => obj.id);
+        } else {
+          this.formData.controls[i].meta.searchData.push({
+            label: `${existingData.mentor_name}, ${existingData.organization.name}`,
+            id: existingData[this.formData.controls[i].name]
+          });
+        }
+        if(!this.formData.controls[i].meta.disableIfSelected) {
+          this.formData.controls[i].disabled = false;
+        }
+        if(this.formData.controls[i].meta.disableIfSelected&&this.formData.controls[i].value){
+          this.formData.controls[i].disabled = true;
+        }
+      }
+      let dependedChildIndex = this.formData.controls.findIndex(formControl => formControl.name === this.formData.controls[i].dependedChild)
+      if(this.formData.controls[i].dependedChild && this.formData.controls[i].name === 'type'){
+        if(existingData[this.formData.controls[i].name].value){
+          this.formData.controls[i].disabled = true;
+          this.formData.controls[dependedChildIndex].validators['required']= existingData[this.formData.controls[i].name].value=='PUBLIC' ? false : true
+        }
+      }
       this.formData.controls[i].options = _.unionBy(
         this.formData.controls[i].options,
         this.formData.controls[i].value, 'value'
@@ -302,7 +337,30 @@ export class CreateSessionPage implements OnInit {
       })
     }
   }
+
   compareWithFn(o1, o2) {
     return o1 === o2;
   };
+
+  formValueChanged(event){
+    let dependedControlIndex = this.formData.controls.findIndex(formControl => formControl.name === event.dependedChild)
+    let dependedControl = this.form1.myForm.get(event.dependedChild)
+    if(event.value === "PUBLIC") {
+      this.setControlValidity(dependedControlIndex, dependedControl, false);
+    } else {
+      this.setControlValidity(dependedControlIndex, dependedControl, true);
+    }
+    this.formData.controls.forEach(control => {
+      if (event.meta.disabledChildren.includes(control.name)) {
+        control.disabled = false;
+      }
+    })
+  }
+  
+  setControlValidity(index, control, required) {
+    this.formData.controls[index].validators['required'] = required;
+    this.formData.controls[index].disabled = false;
+    control.setValidators(required ? [Validators.required] : null);
+    control.updateValueAndValidity();
+  }
 }

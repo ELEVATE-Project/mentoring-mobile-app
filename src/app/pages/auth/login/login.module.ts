@@ -9,6 +9,7 @@ import { LoginPageRoutingModule } from './login-routing.module';
 import { LoginPage } from './login.page';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CoreModule } from 'src/app/core/core.module';
+import { RecaptchaModule, RECAPTCHA_SETTINGS, RecaptchaSettings, RecaptchaLoaderService, RECAPTCHA_LANGUAGE } from 'ng-recaptcha';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { CoreModule } from 'src/app/core/core.module';
     IonicModule,
     LoginPageRoutingModule,
     SharedModule,
-    CoreModule
+    CoreModule,
+    RecaptchaModule,
   ],
   declarations: [LoginPage]
 })

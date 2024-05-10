@@ -21,7 +21,7 @@ import { FormService } from 'src/app/core/services/form/form.service';
 })
 export class ProfileService {
   isMentor: boolean;
-  isOrgAdmin: any;
+  deviceInfo: string;
   constructor(
     private httpService: HttpService,
     private loaderService: LoaderService,
@@ -32,8 +32,10 @@ export class ProfileService {
     private utilService:UtilService,
     private userService: UserService,
     private injector: Injector,
-    private form: FormService
-  ) { }
+    private form: FormService,
+    private util: UtilService
+  ) {
+   }
   async profileUpdate(formData, showToast=true) {
     await this.loaderService.startLoader();
     const config = {
@@ -51,7 +53,8 @@ export class ProfileService {
       this.loaderService.stopLoader();
       this._location.back();
       (showToast)?this.toast.showToast(data.message, "success"):null;
-    }
+      return true;
+      }
     catch (error) {
       this.loaderService.stopLoader();
     }
@@ -75,11 +78,12 @@ export class ProfileService {
     });
   }
 
-  async generateOtp(formData) {
+  async generateOtp(formData,captchaToken) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.GENERATE_OTP,
-      payload: formData
+      payload: formData,
+      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
     };
     try {
       let data: any = await this.httpService.post(config);
@@ -92,28 +96,34 @@ export class ProfileService {
     }
   }
   async updatePassword(formData) {
+    this.deviceInfo = await this.util?.deviceDetails()
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.RESET_PASSWORD,
-      payload: formData
+      payload: formData,
+      headers: { 'device-info': this.deviceInfo}
     };
     try {
       let data: any = await this.httpService.post(config);
       let authService = this.injector.get(AuthService);
       let userData = authService.setUserInLocal(data);
+      let user = await this.getProfileDetailsFromAPI();
+      this.userService.userEvent.next(user);
       this.loaderService.stopLoader();
       this.toast.showToast(data.message, "success");
       return userData;
     }
     catch (error) {
       this.loaderService.stopLoader();
+      return null;
     }
   }
-  async registrationOtp(formData) {
+  async registrationOtp(formData,captchaToken) {
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.REGISTRATION_OTP,
-      payload: formData
+      payload: formData,
+      headers: captchaToken ?  {'captcha-token': captchaToken}:{}
     };
     try {
       let data: any = await this.httpService.post(config);
@@ -162,7 +172,6 @@ export class ProfileService {
       return item['title'];
     });
     this.isMentor = roles.includes('mentor')?true:false;
-    this.isOrgAdmin = roles.includes('org_admin')?true:false;
     return roles
   }
 

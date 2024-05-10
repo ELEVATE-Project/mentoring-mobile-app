@@ -2,11 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthService, LocalStorageService, UtilService } from 'src/app/core/services';
+import { AuthService, LocalStorageService, UserService, UtilService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 import { environment } from 'src/environments/environment';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +17,7 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 })
 export class LoginPage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;
+  @ViewChild(RecaptchaComponent) captchaComponent: RecaptchaComponent;
   formData: JsonFormData = {
     controls: [
       {
@@ -42,17 +45,17 @@ export class LoginPage implements OnInit {
         position: 'floating',
         errorMessage:{
           required: "Enter password",
-          minlength: "Password should contain minimum of 8 characters"
         },
         validators: {
           required: true,
-          minLength: 8,
         },
       },
     ],
   };
+  siteKey = (environment as any)?.recaptchaSiteKey ? (environment as any)?.recaptchaSiteKey  :""
   id: any;
   userDetails: any;
+  recaptchaResolved: boolean = this.siteKey ? false : true;
   public headerConfig: any = {
     backButton: {
       label: '',
@@ -61,23 +64,24 @@ export class LoginPage implements OnInit {
     notification: false,
     signupButton: true
   };
+  captchaToken:any="";
   labels = ["LOGIN_TO_MENTOR_ED"];
   mentorId: any;
-  supportInfo: any;
+  supportEmail: any = environment.supportEmail;
   privacyPolicyUrl =environment.privacyPolicyUrl;
   termsOfServiceUrl = environment.termsOfServiceUrl;
   constructor(private authService: AuthService, private router: Router,private utilService: UtilService,
               private menuCtrl: MenuController, private activatedRoute: ActivatedRoute,private profileService: ProfileService,
-              private translateService: TranslateService, private localStorage: LocalStorageService) {
+              private translateService: TranslateService, private localStorage: LocalStorageService, private userService: UserService) {
     this.menuCtrl.enable(false);
   }
 
   ngOnInit() {
     this.translateText();
-    this.getMailInfo();
   }
 
   async translateText() {
+    this.translateService.setDefaultLang('en');
     this.translateService.get(this.labels).subscribe(translatedLabel => {
       let labelKeys = Object.keys(translatedLabel);
       labelKeys.forEach((key) => {
@@ -99,10 +103,13 @@ export class LoginPage implements OnInit {
   async onSubmit() {
     this.form1.onSubmit();
     if (this.form1.myForm.valid) {
-      this.userDetails = await this.authService.loginAccount(this.form1.myForm.value);
-      if (this.userDetails !== null) {
+      this.userDetails = await this.authService.loginAccount(this.form1.myForm.value,this.captchaToken);
+      if(this.userDetails === null && this.captchaToken){
+        this.captchaComponent.reset();
+      }else if (this.userDetails !== null) {
         this.utilService.ionMenuShow(true)
-        await this.profileService.getProfileDetailsFromAPI();
+        let user = await this.profileService.getProfileDetailsFromAPI();
+        this.userService.userEvent.next(user);
         if (this.id) {
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
           this.menuCtrl.enable(true);
@@ -133,9 +140,10 @@ export class LoginPage implements OnInit {
   goToSignup() {
     this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.REGISTER}`]);
   }
-  getMailInfo(){
-    this.authService.getMailInfo().then((result:any) =>{
-      this.supportInfo = result
-    })
+
+
+onCaptchaResolved(token: string) {
+  this.captchaToken = token
+  this.recaptchaResolved = token?  true: false;
 }
 }

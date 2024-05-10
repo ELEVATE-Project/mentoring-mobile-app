@@ -1,0 +1,22 @@
+.header {
+    font-weight: bold;
+    font-size: 17px;
+    letter-spacing: 1px;
+}
+.wrapper-class {
+    display: flex;
+    justify-content: space-between;
+}
+.underline {
+    border-bottom: 1px solid black;
+    cursor: pointer;
+}
+.sub-header {
+    font-weight: bold;
+    font-size: 16px;
+    padding-bottom: 16px;
+    // letter-spacing: 1px;
+}
+ion-checkbox {
+    --border-color: var(--ion-color-primary)
+}

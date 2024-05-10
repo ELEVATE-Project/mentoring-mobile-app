@@ -29,4 +29,9 @@ export class CommonRoutes {
     public static ADMIN= 'admin';
     public static MANAGE_USER= 'manage-user';
     public static BULK_UPLOAD= 'bulk-upload';
+    public static MANAGE_SESSION= 'manage-session';
+    public static MANAGERS_SESSION = 'managers-create-session';
+    public static MANAGERS_SESSION_DETAILS = 'managers-session-details'
+    public static CHANGE_PASSWORD = 'change-password'
+    public static LOGIN_ACTIVITY = 'login-activity'
 }

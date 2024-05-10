@@ -1,6 +1,6 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 <ion-segment (ionChange)="segmentChanged($event)" [value]="type" *ngIf="showForm">
-  <ion-segment-button value="default" layout="icon-start">
+  <ion-segment-button value="default" [disabled]="editSessionDisable" layout="icon-start">
     <div class="icon-2">1</div>
     <ion-label>{{ firstStepperTitle | translate}}</ion-label>
   </ion-segment-button>
@@ -16,7 +16,7 @@
         <ion-content class="ion-padding">
           <app-profile-image *ngIf="showForm" [profileImageData]='profileImageData' [uploadImage]="true" (imageUploadEvent)="imageUploadEvent($event)" (imageRemoveEvent)="imageRemoveEvent($event)"></app-profile-image>
           <div *ngIf="formData && showForm">
-            <app-dynamic-form [jsonFormData]="formData" #form1 (formValid)="isValid($event)"> </app-dynamic-form>
+            <app-dynamic-form [jsonFormData]="formData" #form1 (formValid)="isValid($event)" (formValueChanged)="formValueChanged($event)"> </app-dynamic-form>
           </div>
         </ion-content>
       </ion-list>

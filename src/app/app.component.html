@@ -24,7 +24,7 @@
       <ion-content *ngIf="user" fullscreen>
         <div class="menu-css">
           <ion-list lines="none" class="sub-menu-list">
-            <ion-menu-toggle auto-hide="false" [class]="adminPage?.class" *ngIf="isOrgAdmin">
+            <ion-menu-toggle auto-hide="false" [class]="adminPage?.class" *ngIf="adminAccess">
               <ion-item [routerLink]="adminPage?.url" lines="none" detail="false" (click)="menuItemAction(adminPage)">
                 <ion-icon class="side-menu-icon" slot="start" [ios]="adminPage.icon + '-outline'" [md]="adminPage.icon + '-outline'"></ion-icon>
                 <ion-label class="sub-menu-list-label"><strong>{{ adminPage.title | translate}}</strong></ion-label>
@@ -42,7 +42,7 @@
       <ion-footer class="side-menu-footer" *ngIf="user">
         <ion-row (click)="logout()" class="cursor">
           <ion-col size="12">
-            <div class="d-flex" style="justify-content: center;">
+            <div class="d-flex flex-justify-center">
               <ion-icon name="power" size="large" class="ion-margin-end"> </ion-icon> <strong class="space-bottom">
                 {{"LOGOUT" | translate}}</strong>
             </div>

@@ -54,7 +54,8 @@ export class HttpService {
     if (!this.checkNetworkAvailability()) {
       throw Error(null);
     }
-    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+    let defaultHeaders = await this.setHeaders();
+    const headers = requestParam.headers ?  { ...requestParam.headers, ...defaultHeaders } : defaultHeaders;
     let body = requestParam.payload ? requestParam.payload : {};
     const options = {
       url: this.baseUrl + requestParam.url,
@@ -230,6 +231,9 @@ export class HttpService {
   }
 
   async triggerLogoutConfirmationAlert(result) {
+    if(await this.modalController.getTop()) {
+      await this.modalController.dismiss()
+    }
     let msg = result.data.message;
     if (result && !this.isAlertOpen) {
       let texts: any;
@@ -263,5 +267,24 @@ export class HttpService {
     } else {
       return true;
     }
+  }
+
+ async getFile(requestParam: RequestParams){
+    
+    const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
+    const options = {
+      url: this.baseUrl + requestParam.url,
+      headers: headers,
+      params: {},
+    };
+    return CapacitorHttp.get(options)
+      .then((data: any) => {
+        if (data.status == 200) {
+          return data;
+        } else {
+          this.handleError(data)
+          return data;
+        }
+      });
   }
 }

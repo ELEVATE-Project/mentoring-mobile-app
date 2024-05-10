@@ -3,11 +3,13 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { PublicGuard } from './core/guards/canActivate/public.guard';
 import { PrivateGuard } from './core/guards/private.guard';
+import { CREATE_SESSION_FORM } from './core/constants/formConstant';
 
 const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
+    canActivate: [PrivateGuard]
   },
   {
     path: CommonRoutes.AUTH,
@@ -32,7 +34,7 @@ const routes: Routes = [
   {
     path: CommonRoutes.CREATE_SESSION,
     loadChildren: () => import('./pages/create-session/create-session.module').then( m => m.CreateSessionPageModule),
-    canActivate: [PrivateGuard]
+    canActivate: [PrivateGuard],
   },
   {
     path: CommonRoutes.CREATED_BY_ME,
@@ -87,6 +89,16 @@ const routes: Routes = [
   {
     path: CommonRoutes.ADMIN,
     loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule),
+    canActivate: [PrivateGuard]
+  },
+  {
+    path: CommonRoutes.CHANGE_PASSWORD,
+    loadChildren: () => import('./pages/change-password/change-password.module').then( m => m.ChangePasswordPageModule),
+    canActivate: [PrivateGuard]
+  },
+  {
+    path: 'login-activity',
+    loadChildren: () => import('./pages/login-activity/login-activity.module').then( m => m.LoginActivityPageModule),
     canActivate: [PrivateGuard]
   },
   {

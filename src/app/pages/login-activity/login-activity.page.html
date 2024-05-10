@@ -1,0 +1,63 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<mat-paginator [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)">
+</mat-paginator>
+<ion-content>
+  <ion-grid>
+    <ion-row class="d-flex flex-justify-center" *ngIf="response">
+      <ion-col
+        padding
+        size-xs="12"
+        size-sm="12"
+        size-md="8"
+        size-lg="8"
+        align-self-stretch
+        class="ion-padding"
+      >
+        <div *ngFor="let data of response.data">
+          <ion-card class="field">
+            <ion-card-content>
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="9">
+                    
+                    <ion-row><b>{{data.device_info.osName}} ( {{ data.device_info.browserName }})</b></ion-row>
+                    <ion-row> {{"LAST_LOGIN_AT" | translate}} {{convertEpochToRealTime(data.login_time)}}</ion-row>
+                    <ion-row class="d-flex flex-align-items-center activity-row">
+                        <div class="container" *ngIf="data.status === 'ACTIVE'">
+                          <ion-icon name="checkmark-circle"
+                            [ngClass]="{
+                              'active-icon': sessionId === data.id && data.status === 'ACTIVE',
+                              'inactive-icon': sessionId !== data.id,
+                              'active-but-logout-icon': data.status === 'ACTIVE' && sessionId !== data.id
+                              }">
+                            </ion-icon>
+                          <ion-label class="activity-label" *ngIf="sessionId === data.id">{{"YOUR_CURRENT_DEVICE" | translate}}</ion-label>
+                          <ion-label class="activity-label" *ngIf="!(sessionId === data.id)">{{"LOGGED_IN" | translate}}</ion-label>
+                        </div>
+                        <div class="container" *ngIf="data.status === 'INACTIVE'">
+                          <ion-icon name="remove-circle"></ion-icon>
+                          <ion-label class="activity-label" *ngIf="sessionId === data.id">{{"YOUR_CURRENT_DEVICE" | translate}}</ion-label>
+                          <ion-label class="activity-label" *ngIf="!(sessionId === data.id)">{{"LOGGED_OUT_AT" | translate}} {{convertEpochToRealTime(data.logout_time)}}</ion-label>
+                        </div>
+                        <div class="container" *ngIf="data.status === 'EXPIRED'">
+                          <ion-icon name="remove-circle"></ion-icon>
+                          <ion-label class="activity-label"> {{ "EXPIRED" | translate }}</ion-label>
+                        </div>
+                    </ion-row>
+                  </ion-col>
+                  <ion-col [hidden]="!(data.status === 'ACTIVE')" size="3" class="d-flex flex-justify-center flex-align-items-center active-button">
+                    <ng-template [ngIf]="data.status === 'ACTIVE' && data.login_time">
+                      <ion-button size="small" (click)="sessionId === data.id ? logout() : logoutInactive(data.id)">
+                        {{ "LOGOUT" | translate }}
+                      </ion-button>
+                    </ng-template>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
