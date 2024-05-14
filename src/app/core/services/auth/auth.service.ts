@@ -151,5 +151,6 @@ export class AuthService {
     this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
       replaceUrl: true
     });
+    this.translate.use("en")
   }
 }
