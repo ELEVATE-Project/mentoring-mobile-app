@@ -23,6 +23,8 @@ export const urlConstants = {
         CREATED_SESSIONS: "/mentoring/v1/mentors/createdSessions?page=",
         MENTORS_DIRECTORY_LIST: "/mentoring/v1/mentors/list?page=",
         MENTORS_PROFILE_DETAILS: "/mentoring/v1/mentors/details/",
+        SESSION_DOWNLOAD_CSV: "/mentoring/v1/sessions/getSampleCSV",
+        SESSION_BULK_UPLOAD: "/mentoring/v1/sessions/bulkSessionCreate",
         
         // FORMS
         FORM_READ:'/mentoring/v1/form/read',
