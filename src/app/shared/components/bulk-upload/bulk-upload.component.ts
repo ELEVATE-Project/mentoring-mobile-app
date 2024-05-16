@@ -23,7 +23,7 @@ export class BulkUploadComponent implements OnInit {
 
 async downloadCSV(){
   if(this.data){
-      let response = await this.organisation.downloadManageUserCsv(this.data?.downloadCsvApiUrl);
+      let response = await this.organisation.downloadCsv(this.data?.downloadCsvApiUrl);
       if(response){this.sessionService.openBrowser(response,"_blank")}
     }
   }

@@ -116,7 +116,7 @@ export class OrganisationService {
     return this.http.put(path.signedUrl, file, options);
   }
   
-  async downloadManageUserCsv(downloadCsvUrl){
+  async downloadCsv(downloadCsvUrl){
     let config = {
       url: downloadCsvUrl,
       payload: {}
