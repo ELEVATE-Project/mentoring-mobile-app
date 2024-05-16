@@ -40,6 +40,7 @@ import { HasPermissionDirective } from './directive/permission.directive';
 import { FilterTreeComponent } from './components/filter-tree/filter-tree.component';
 import { FilterPopupComponent } from './components/filter-popup/filter-popup.component';
 import { MenteeListPopupComponent } from './components/mentee-list-popup/mentee-list-popup.component';
+import { BulkUploadComponent } from './components/bulk-upload/bulk-upload.component';
 import { UserListModalComponent } from './components/user-list-modal/user-list-modal.component';
 import { snakeCaseToUpperCasePipe } from '../core/pipes/snake-case-to-normal-case.pipe';
 
@@ -73,6 +74,7 @@ import { snakeCaseToUpperCasePipe } from '../core/pipes/snake-case-to-normal-cas
     FilterTreeComponent,
     FilterPopupComponent,
     MenteeListPopupComponent,
+    BulkUploadComponent,
     UserListModalComponent,
     snakeCaseToUpperCasePipe
   ],
@@ -120,6 +122,7 @@ import { snakeCaseToUpperCasePipe } from '../core/pipes/snake-case-to-normal-cas
     FilterTreeComponent,
     FilterPopupComponent,
     MenteeListPopupComponent,
+    BulkUploadComponent,
     UserListModalComponent,
     snakeCaseToUpperCasePipe
   ],

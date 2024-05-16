@@ -28,6 +28,12 @@ export class ManageListComponent implements OnInit {
   };
   requestList: any;
   formData: any;
+
+  public manageUserUrls: any = {
+    downloadCsvApiUrl: urlConstants.API_URLS.ADMIN_DOWNLOAD_SAMPLE_CSV,
+    uploadCsvApiUrl: urlConstants.API_URLS.ADMIN_BULK_UPLOAD
+  }
+
   constructor(private organisation: OrganisationService, private util: UtilService, private toast: ToastService, private form: FormService, private sessionService: SessionService, private profileService:ProfileService, private http: HttpService) { }
 
   async ngOnInit() {
@@ -82,32 +88,5 @@ export class ManageListComponent implements OnInit {
       }
       this.util.openModal(componenProps).then((data)=>{
       })
-    }
-    async downloadCSV(){
-      let config = {
-        url: urlConstants.API_URLS.ADMIN_DOWNLOAD_SAMPLE_CSV,
-        payload: {}
-      }
-      this.http.get(config).then(async (response)=>{
-        await this.sessionService.openBrowser(response.result,"_blank")
-      })
-    }
-  
-    async uploadCSV(event){
-      let file= event.target.files[0];
-      if(file.type != 'text/csv'){
-        this.toast.showToast('PLEASE_UPLOAD_CSV_FILE', 'danger')
-        event.target.value='';
-      }else{
-        let signedUrl = await this.organisation.getSignedUrl(event.target.files[0].name)
-        this.organisation.upload(event.target.files[0], signedUrl).subscribe(async () => {
-          let data = await this.organisation.bulkUpload(signedUrl.filePath);
-          if(data){
-            this.toast.showToast(data.message, 'success');
-            event.target.value='';
-          }
-          (error) => event.target.value='';
-        })
-      }
     }
 }
