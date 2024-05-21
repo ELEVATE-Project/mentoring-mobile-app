@@ -3,10 +3,10 @@
     <div class="d-flex flex-justify-center">
         <ion-header>
             <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
-                <ion-segment-button value="manage-user">
+                <ion-segment-button value="manage-user" class="normal-case">
                     <ion-label>{{"MANAGE_REQUEST"|translate}}</ion-label>
                 </ion-segment-button>
-                <ion-segment-button value="bulk-upload">
+                <ion-segment-button value="bulk-upload" class="normal-case">
                     <ion-label>{{"BULK_UPLOAD"|translate}}</ion-label>
                 </ion-segment-button>
             </ion-segment>
