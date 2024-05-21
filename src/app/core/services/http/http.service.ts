@@ -143,8 +143,8 @@ export class HttpService {
   }
 
   //network check
-  async checkNetworkAvailability() {
-    await this.network.getCurrentStatus()
+  checkNetworkAvailability() {
+    this.network.getCurrentStatus()
     if (!this.network.isNetworkAvailable) {
       this.toastService.showToast('MSG_PLEASE_NETWORK', 'danger')
       return false;
