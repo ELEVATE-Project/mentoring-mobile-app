@@ -206,6 +206,9 @@ export class ProfileService {
   }
 
   async viewRolesModal(userRoles){
+    if (!userRoles.includes("mentee")) {
+      userRoles.push("mentee");
+    }
     let modal = await this.modal.create({
       component: UserListModalComponent,
       cssClass: 'user-role-modal',
