@@ -1,33 +1,27 @@
-
 import { Injectable } from '@angular/core';
-import { Network, NetworkStatus } from '@capacitor/network';
+import { Network } from '@capacitor/network';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NetworkService {
+  connectSubscription;
+  disconnectSubscription;
   isNetworkAvailable: boolean = false;
+  constructor() {}
 
-  constructor() {
-    // Initialize network status and set up the listener
-    this.initializeNetworkListener();
+  public netWorkCheck() {
+    this.getCurrentStatus();
+    Network.addListener('networkStatusChange', status => {
+      this.isNetworkAvailable = status.connected;
+    });
   }
 
-  public async netWorkCheck() {
-    await this.getCurrentStatus();
+  getCurrentStatus() {
+    Network.getStatus().then((status)=>{
+      this.isNetworkAvailable = status.connected
+    })
   }
 
-  public async getCurrentStatus() {
-    const status = await Network.getStatus();
-    this.updateNetworkStatus(status);
-  }
-
-  private initializeNetworkListener() {
-    Network.addListener('networkStatusChange', this.updateNetworkStatus.bind(this));
-  }
-
-  private updateNetworkStatus(status: NetworkStatus) {
-    this.isNetworkAvailable = status.connected;
-  }
 }
-
