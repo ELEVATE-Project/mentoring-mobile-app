@@ -18,10 +18,9 @@ export class NetworkService {
     });
   }
 
-  getCurrentStatus() {
-    Network.getStatus().then((status)=>{
-      this.isNetworkAvailable = status.connected
-    })
+  async getCurrentStatus() {
+    let status = await Network.getStatus();
+    this.isNetworkAvailable = status.connected
   }
 
 }
