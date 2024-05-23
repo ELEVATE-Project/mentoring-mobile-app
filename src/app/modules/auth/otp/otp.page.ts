@@ -121,7 +121,7 @@ export class OtpPage implements OnInit {
     this.enableResendOtp = false;
     this.showOtp = false;
     this.recaptchaResolved = false;
-    this.siteKey ? this.enableGeneratetOtp = false :  this.enableGeneratetOtp = true;
+    this.enableGeneratetOtp = this.siteKey ? false : true;
   }
 
   async onSubmitGenerateOtp(){
