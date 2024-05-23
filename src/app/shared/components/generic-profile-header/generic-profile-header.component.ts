@@ -20,7 +20,6 @@ export class GenericProfileHeaderComponent implements OnInit {
   labels = ["CHECK_OUT_MENTOR","PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS"];
 
   public isMobile:any;
-  user: any;
   roles: any;
 
   constructor(private router:Router,private localStorage:LocalStorageService, private profileService: ProfileService, private utilService:UtilService,private toast: ToastService, private translateService: TranslateService,) {
@@ -28,7 +27,6 @@ export class GenericProfileHeaderComponent implements OnInit {
    }
 
   async ngOnInit() {
-    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.roles = this.headerData.user_roles;
   }
 
@@ -39,7 +37,7 @@ export class GenericProfileHeaderComponent implements OnInit {
         break;
       
       case 'role':
-        if(this.user?.about != null){
+        if(this.headerData?.about != null){
           this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);   
         } else{
           this.profileService.upDateProfilePopup()
