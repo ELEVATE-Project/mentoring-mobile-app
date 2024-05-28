@@ -44,7 +44,7 @@
       </section>
       <section>
         <div class="d-flex flex-justify-center flex-align-items-center">
-          <ion-button [ngClass]="{'my-10': true, 'disabled': !checked  || !isEnabled , 'onboard-button':true}" [disabled]="!checked  || !isEnabled || !recaptchaResolved && !enableGeneratetOtp"
+          <ion-button [ngClass]="{'my-10': true, 'disabled': !checked  || !isEnabled , 'onboard-button':true}" [disabled]="!checked  || !isEnabled || !recaptchaResolved"
             (click)="onSubmit()" shape="round">
             {{'VERIFY_AND_LOGIN'|translate}}
           </ion-button>
