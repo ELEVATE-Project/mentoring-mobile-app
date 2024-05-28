@@ -209,6 +209,7 @@ export class ProfileService {
     if (!userRoles.includes("mentee")) {
       userRoles.push("mentee");
     }
+    userRoles = userRoles.sort();
     let modal = await this.modal.create({
       component: UserListModalComponent,
       cssClass: 'user-role-modal',
