@@ -128,7 +128,9 @@ export class OtpPage implements OnInit {
     var response = this.actionType == "signup" ? await this.profileService.registrationOtp(this.signupData, this.captchaToken) : await this.profileService.generateOtp({ email: this.resetPasswordData.email, password:  this.resetPasswordData.password},this.captchaToken);
     if (response) {
       this.toast.showToast(response.message, "success");
-      this.showOtp = true
+      this.showOtp = true;
+      this.recaptchaResolved = true;
+      this.isEnabled = false;
       this.startCountdown();
     }else{
       this.captchaComponent.reset();

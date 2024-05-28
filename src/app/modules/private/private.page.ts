@@ -211,7 +211,8 @@ ngOnDestroy(): void {
 }
 
   async viewRoles(){
-  this.profile.viewRolesModal(this.userRoles)
+  const userRoles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
+  this.profile.viewRolesModal(userRoles)
 }
 
 }
