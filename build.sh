@@ -3,7 +3,7 @@
 set -eo pipefail
 
 build_tag=$1
-name='kb-portal'
+name='mentoring-portal'
 node=$2
 org=$3
 
