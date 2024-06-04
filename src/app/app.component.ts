@@ -10,7 +10,6 @@ import { ProfileService } from './core/services/profile/profile.service';
 import { Location } from '@angular/common';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
-import { environment } from 'src/environments/environment';
 import { Capacitor } from '@capacitor/core';
 import { SwUpdate } from '@angular/service-worker';
 import { PermissionService } from './core/services/permission/permission.service';
@@ -164,7 +163,7 @@ export class AppComponent {
       })
       App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
         this.zone.run(() => {
-          const domain = environment.deepLinkUrl
+          const domain = window['env']['deepLinkUrl'];
           const slug = event.url.split(domain).pop();
           if (slug) {
             this.router.navigateByUrl(slug);
