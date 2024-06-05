@@ -9,6 +9,7 @@ import { HomeSearchPageRoutingModule } from './home-search-routing.module';
 import { HomeSearchPage } from './home-search.page';
 import { CoreModule } from 'src/app/core/core.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CoreModule,
     SharedModule,
     IonicModule,
-    HomeSearchPageRoutingModule
+    HomeSearchPageRoutingModule,
+    MatPaginatorModule
   ],
   declarations: [HomeSearchPage]
 })

@@ -46,6 +46,10 @@ export class HomePage implements OnInit {
   createdSessions: any;
   isMentor: boolean;
   userEventSubscription: any;
+  isOpen = false;
+  selectedChipIndex: any;
+
+  chips= ['Session title', 'Session discription', 'Session discription for', 'chip 4', 'Session title', 'Session discription', 'Session discription for',]
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -137,8 +141,11 @@ export class HomePage implements OnInit {
     this.router.navigate([`/${CommonRoutes.SESSIONS}`], { queryParams: { type: data } });
   }
 
-  search() {
-    this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
+  search(q: string) {
+    this.isOpen = false;
+    if(q){
+      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`], {queryParams:{ chip: this.selectedChipIndex, searchString: q}});
+    }
   }
   getUser() {
     this.profileService.profileDetails().then(data => {
@@ -207,5 +214,10 @@ export class HomePage implements OnInit {
     if (this.userEventSubscription) {
       this.userEventSubscription.unsubscribe();
     }
+  }
+
+  selectChip(chip : string) {
+    console.log( chip)
+    this.selectedChipIndex = chip;
   }
 }

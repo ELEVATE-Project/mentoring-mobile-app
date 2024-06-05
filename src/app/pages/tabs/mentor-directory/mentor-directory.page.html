@@ -1,10 +1,69 @@
 <app-page-header [config]="headerConfig">
-</app-page-header>
-<ion-toolbar class="padding-top-10">
   <div class="d-flex flex-justify-center">
     <ion-searchbar class="top-padding search-style"  debounce="1000" placeholder="{{'MENTOR_SEARCH_PLACEHOLDER' | translate}}"
-    [(ngModel)]="searchText" (ionChange)="onSearch()"></ion-searchbar>
+    [(ngModel)]="searchText" (ionChange)="onSearch()"
+    cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="isOpen = !isOpen"></ion-searchbar>
   </div>
+</app-page-header>
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen"
+  (overlayOutsideClick)="isOpen = false"
+  [cdkConnectedOverlayOffsetY]="10" 
+  [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.offsetWidth" 
+>
+  <ion-grid>
+    <div class="overlay-container">
+      <ion-row>
+        <ion-chip 
+          class="overlay-chip" 
+          *ngFor="let chip of overlayChips; let i = index" 
+          (click)="selectChip(chip)"
+          [ngClass]="{'selected-chip': selectedChipIndex === chip}">
+          <ion-icon name="close-circle" color="white"></ion-icon>
+          <ion-label class="chip-label">{{ chip }}</ion-label>
+        </ion-chip>
+      </ion-row>
+    </div>
+  </ion-grid>
+</ng-template>
+<ion-toolbar class="padding-top-10">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="auto" *ngIf="selectedChipIndex">
+        <div style="width: auto">
+          <ion-chip class="chip">
+            <ion-icon name="close-circle" color="white"></ion-icon>
+            <ion-label class="chip-label">{{selectedChipIndex}}</ion-label>
+          </ion-chip>
+        </div>
+      </ion-col>
+      <ion-col size="auto">
+        <div *ngIf="chips.length && selectedChipIndex" class="verticalLine"><hr></div>
+      </ion-col>
+      <ion-col class="chip-container">
+        <ion-row>
+          <div>
+            <ion-chip class="chip" *ngFor="let chip of chips">
+              <ion-icon name="close-circle" (click)="removeChip(chip)" color="white"></ion-icon>
+              <ion-label class="chip-label">{{ chip }}</ion-label>
+            </ion-chip>
+          </div>
+        </ion-row>
+      </ion-col>
+      <ion-col size="auto" style="display: flex;align-items: center;">
+        <div style="width: 5em">
+          <div class="filter">
+            <p style="margin: unset;">{{"FILTER" | translate}}</p>
+            <div class="circle-container" (click)="onClickFilter()">
+              <ion-icon class="ion-funnel-icon" name="funnel"></ion-icon>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-toolbar>
 <ion-content >
   <div *ngIf="isLoaded">
