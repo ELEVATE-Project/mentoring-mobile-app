@@ -19,6 +19,8 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "baseHref": "/mentorship/",
+            "deployUrl": "/mentorship/",
             "assets": [
               {
                 "glob": "**/*",
