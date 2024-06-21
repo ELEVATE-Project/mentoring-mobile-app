@@ -23,8 +23,8 @@ ion-chip{
   }
 
 .view-mentee-list{
-    color: #832915;
-    border: 1px solid #832915;
+    color: var(--ion-color-primary);
+    border: 1px solid var(--ion-color-primary);
     border-radius: 10px;
 }
 .mentee-count{
