@@ -7,6 +7,7 @@ import {
   LoaderService,
   ToastService
 } from 'src/app/core/services';
+import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -35,8 +36,8 @@ export class MentorDirectoryPage implements OnInit {
   filterData =
     [
       {
-        "title": "Categories",
-        "name": "categories",
+        "title": "Area of expertise",
+        "name": "area_of_expertise",
         "options": [
           {
             "label": "Communication",
@@ -54,8 +55,8 @@ export class MentorDirectoryPage implements OnInit {
         "type": "checkbox"
       },
       {
-        "title": "Recommended For",
-        "name": "recommended_for",
+        "title": "Designation",
+        "name": "designation",
         "options": [
           {
             "label": "Block education officer",
@@ -81,31 +82,16 @@ export class MentorDirectoryPage implements OnInit {
         "type": "checkbox"
       },
       {
-        "title": "Medium",
+        "title": "Languages",
         "name": "medium",
         "options": [
           {
             "label": "English",
-            "value": "en_in"
+            "value": "en"
           },
           {
             "label": "Hindi",
             "value": "hi"
-          }
-        ],
-        "type": "checkbox"
-      },
-      {
-        "title": "Type",
-        "name": "type",
-        "options": [
-          {
-            "label": "Public",
-            "value": "PUBLIC"
-          },
-          {
-            "label": "Private",
-            "value": "PRIVATE"
           }
         ],
         "type": "checkbox"
@@ -116,8 +102,13 @@ export class MentorDirectoryPage implements OnInit {
   setPaginatorToFirstpage: boolean;
   criteriaData = []
   isOpen = false;
-  selectedChipIndex: any;
-  overlayChips= ['Session title', 'Session discription', 'Session discription for', 'chip 4', 'Session title', 'Session discription', 'Session discription for',]
+  selectedChipLabel: any;
+  overlayChips = [];
+  selectedChipName: any;
+  urlFilterData: string;
+  directory: boolean = true;
+  selectedChips: boolean = false;
+  data: any;
 
   constructor(
     private router: Router,
@@ -125,6 +116,7 @@ export class MentorDirectoryPage implements OnInit {
     private httpService: HttpService,
     private route: ActivatedRoute,
     private modalCtrl: ModalController,
+    private permissionService: PermissionService
   ) {
   }
 
@@ -133,6 +125,9 @@ export class MentorDirectoryPage implements OnInit {
       this.searchText = queryParams.get('search');
       this.searchText = this.searchText === null ? '' : this.searchText;
     });
+    this.permissionService.getPlatformConfig().then((config)=>{
+      this.overlayChips = config?.result?.search_config?.search?.mentor?.fields;
+    })
   }
 
   ionViewWillEnter() {
@@ -149,12 +144,14 @@ export class MentorDirectoryPage implements OnInit {
 
   async getMentors(showLoader = true) {
     showLoader ? await this.loaderService.startLoader() : '';
+    this.directory = (this.selectedChipName || this.selectedChips) ? false : true;
     const config = {
-      url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + '&directory=true',
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + '&directory=' + this.directory + '&search_on=' + (this.selectedChipName? this.selectedChipName : '') + '&' + (this.urlFilterData ? this.urlFilterData: ''),
       payload: {}
     };
     try {
       let data: any = await this.httpService.get(config);
+      this.data = data.result.data;
       this.isLoaded = true
       showLoader ? await this.loaderService.stopLoader() : '';
       if (this.mentors.length && this.mentors[this.mentors.length - 1].key == data.result.data[0]?.key) {
@@ -205,22 +202,24 @@ export class MentorDirectoryPage implements OnInit {
     modal.onDidDismiss().then(async (dataReturned) => {
       this.filteredDatas = []
       if (dataReturned !== null) {
-        if (dataReturned.data.data.selectedFilters) {
-          for (let key in dataReturned.data.data.selectedFilters) {
+        if (dataReturned?.data?.data?.selectedFilters) {
+          for (let key in dataReturned?.data?.data?.selectedFilters) {
             this.filteredDatas[key] = dataReturned.data.data.selectedFilters[key].slice(0, dataReturned.data.data.selectedFilters[key].length).map(obj => obj.value).join(',').toString()
           }
+          this.selectedChips = true;
         }
         this.extractLabels(dataReturned.data.data.selectedFilters);
+        this.getFilteredData();
       }
       this.page = 1;
-      this.setPaginatorToFirstpage = true
-      // this.fetchSessionList()
+      this.setPaginatorToFirstpage = true;
+      this.mentors = [];
+      this.getMentors()
     });
-    modal.present()
+    modal.present();
   }
 
   extractLabels(data) {
-    console.log(data)
     this.chips = [];
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
@@ -233,10 +232,30 @@ export class MentorDirectoryPage implements OnInit {
   
   removeChip(index: number) {
     this.chips.splice(index, 1);
+    this.selectedChips = false;
+    this.getFilteredData()
+    this.getMentors();
   }
 
-  selectChip(chip : string) {
-    console.log( chip)
-    this.selectedChipIndex = chip;
+  selectChip(chip) {
+    this.selectedChipLabel = chip.label;
+    this.selectedChipName = chip.name;
+    this.directory = false;
+    this.getMentors();
+    this.isOpen = false;
+  }
+  closeCriteriaChip(){
+    this.selectedChipLabel = "";
+    this.selectedChipName = "";
+    this.getMentors();
+  }
+
+  getFilteredData() {
+    const queryString = Object.keys(this.filteredDatas)
+      .map(key => `${key}=${this.filteredDatas[key]}`)
+      .join('&');
+
+    this.urlFilterData = queryString;
+    this.getMentors()
   }
 }

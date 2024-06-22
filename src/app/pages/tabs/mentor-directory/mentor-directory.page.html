@@ -20,9 +20,9 @@
           class="overlay-chip" 
           *ngFor="let chip of overlayChips; let i = index" 
           (click)="selectChip(chip)"
-          [ngClass]="{'selected-chip': selectedChipIndex === chip}">
+          [ngClass]="{'selected-chip': selectedChipLabel === chip.label}">
           <ion-icon name="close-circle" color="white"></ion-icon>
-          <ion-label class="chip-label">{{ chip }}</ion-label>
+          <ion-label class="chip-label">{{ chip.label }}</ion-label>
         </ion-chip>
       </ion-row>
     </div>
@@ -31,16 +31,16 @@
 <ion-toolbar class="padding-top-10">
   <ion-grid>
     <ion-row>
-      <ion-col size="auto" *ngIf="selectedChipIndex">
+      <ion-col size="auto" *ngIf="selectedChipLabel">
         <div style="width: auto">
           <ion-chip class="chip">
-            <ion-icon name="close-circle" color="white"></ion-icon>
-            <ion-label class="chip-label">{{selectedChipIndex}}</ion-label>
+            <ion-icon name="close-circle" color="white" (click)="closeCriteriaChip()"></ion-icon>
+            <ion-label class="chip-label">{{selectedChipLabel}}</ion-label>
           </ion-chip>
         </div>
       </ion-col>
       <ion-col size="auto">
-        <div *ngIf="chips.length && selectedChipIndex" class="verticalLine"><hr></div>
+        <div *ngIf="chips.length && selectedChipLabel" class="verticalLine"><hr></div>
       </ion-col>
       <ion-col class="chip-container">
         <ion-row>
@@ -66,21 +66,31 @@
   </ion-grid>
 </ion-toolbar>
 <ion-content >
-  <div *ngIf="isLoaded">
-  <div *ngFor="let mentor of mentors">
-    <div class="index-label">
-      {{mentor.key}}
+  <div *ngIf="isLoaded && !selectedChipName && !selectedChips">
+    <div *ngFor="let mentor of mentors">
+      <div class="index-label">
+        {{mentor.key}}
+      </div>
+      <ion-grid >
+        <ion-row class="d-flex ">
+          <ion-col *ngFor="let value of mentor.values" padding size-xs="12" size-sm="12" size-md="6" size-lg="4" align-self-stretch>
+            <app-mentor-card class="mentor-card" [data]="value" (onClickEvent)="eventAction($event)">
+            </app-mentor-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </div>
+  </div>
+  <div *ngIf="selectedChipName || selectedChips">
     <ion-grid >
       <ion-row class="d-flex ">
-        <ion-col *ngFor="let value of mentor.values" padding size-xs="12" size-sm="12" size-md="6" size-lg="4" align-self-stretch>
-      <app-mentor-card class="mentor-card" [data]="value" (onClickEvent)="eventAction($event)">
-      </app-mentor-card>
-  </ion-col>
-</ion-row>
-</ion-grid>
+        <ion-col *ngFor="let value of data" padding size-xs="12" size-sm="12" size-md="6" size-lg="4" align-self-stretch>
+          <app-mentor-card class="mentor-card" [data]="value" (onClickEvent)="eventAction($event)">
+          </app-mentor-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
-</div>
   <div *ngIf="!mentors?.length && isLoaded">
     <app-no-data-found [messageHeader]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
   </div>
