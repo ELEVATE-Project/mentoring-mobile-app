@@ -42,9 +42,9 @@ export class HomeSearchPage implements OnInit {
   noDataMessage: any;
   createdSessions: any;
   user: any;
-  criteriaChip: string;
+  criteriaChip: any;
   chips =[]
-  criteriaChipName: string;
+  criteriaChipName: any;
   params: any;
   overlayChips: any;
   isOpen = false;
@@ -62,13 +62,14 @@ export class HomeSearchPage implements OnInit {
   ) { 
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.params = params;
-      this.criteriaChip = this.params.get('chipTitle');
-      this.searchText = this.params.get('searchString')
+      let criteriaChip = JSON.parse(params.get('criteriaChip'));
+      this.criteriaChip = criteriaChip?.label;
+      this.searchText = this.params.get('searchString');
     })
   }
 
   async ngOnInit() {
-    this.criteriaChipName = this.params.get('chipName');
+    this.criteriaChipName = this.criteriaChip?.name;
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchSessionList()
     this.permissionService.getPlatformConfig().then((config)=>{
@@ -182,8 +183,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   closeCriteriaChip(){
-    this.criteriaChip = "";
-    this.criteriaChipName = "";
+    this.criteriaChip = this.criteriaChip = "";
     this.searchText = this.params.get('searchString')
     this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchText : this.searchText} });
     this.fetchSessionList()
