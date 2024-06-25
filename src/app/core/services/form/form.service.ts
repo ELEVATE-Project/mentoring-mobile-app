@@ -7,8 +7,7 @@ import * as _ from 'lodash-es';
   providedIn: 'root',
 })
 export class FormService {
-  constructor(private http: HttpService, private db: DbService,
-   private httpService: HttpService
+  constructor(private http: HttpService, private db: DbService
   ) { }
 
   getForm = async (formBody) => {
@@ -93,7 +92,7 @@ export class FormService {
       payload: {},
     };
     try {
-      const data: any = await this.httpService.get(config);
+      const data: any = await this.http.get(config);
       return data.result
     }
     catch (error) {

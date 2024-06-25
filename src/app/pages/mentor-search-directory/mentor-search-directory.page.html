@@ -40,12 +40,12 @@
         </div>
       </ion-col>
       <ion-col size="auto">
-        <div *ngIf="flatChips.length && selectedChipLabel" class="verticalLine"><hr></div>
+        <div *ngIf="chips.length && selectedChipLabel" class="verticalLine"><hr></div>
       </ion-col>
       <ion-col class="chip-container">
         <ion-row>
           <div>
-            <ion-chip class="chip" *ngFor="let chip of flatChips; ; let i = index">
+            <ion-chip class="chip" *ngFor="let chip of chips; ; let i = index">
               <ion-icon name="close-circle" (click)="removeChip(chip.value, i)" color="white"></ion-icon>
               <ion-label class="chip-label">{{ chip.label }}</ion-label>
             </ion-chip>

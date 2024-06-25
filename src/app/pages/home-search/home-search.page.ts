@@ -48,7 +48,7 @@ export class HomeSearchPage implements OnInit {
   params: any;
   overlayChips: any;
   isOpen = false;
-  urlFilterData: string;
+  urlQueryData: string;
   pageSize: any;
 
   constructor(private modalCtrl: ModalController, private adminWorkapceService: AdminWorkapceService,private httpService: HttpService, private router: Router, private toast: ToastService,
@@ -103,7 +103,7 @@ export class HomeSearchPage implements OnInit {
           }
         }
         this.extractLabels(dataReturned.data.data.selectedFilters);
-        this.getFilteredData();
+        this.getUrlQueryData();
       }
       this.page = 1;
       this.setPaginatorToFirstpage = true;
@@ -113,7 +113,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   async fetchSessionList() {
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlQueryData}
     var response = await this.sessionService.getSessionsList(obj);
     this.results = response?.result?.data;
     this.totalCount = response.result.count;
@@ -177,7 +177,7 @@ export class HomeSearchPage implements OnInit {
   removeChip(chip: string, index: number) {
     this.chips.splice(index, 1);
     this.removeFilteredData(chip);
-    this.getFilteredData();
+    this.getUrlQueryData();
     this.fetchSessionList()
   }
 
@@ -215,12 +215,12 @@ export class HomeSearchPage implements OnInit {
     this.isOpen = false;
   }
 
-  getFilteredData() {
+  getUrlQueryData() {
     const queryString = Object.keys(this.filteredDatas)
       .map(key => `${key}=${this.filteredDatas[key]}`)
       .join('&');
 
-    this.urlFilterData = queryString;
+    this.urlQueryData = queryString;
   }
 
   removeFilteredData(chip){

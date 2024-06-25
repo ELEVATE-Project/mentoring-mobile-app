@@ -7,6 +7,7 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, LoaderService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -34,7 +35,7 @@ export class MentorSearchDirectoryPage implements OnInit {
   filterData: any;
   filteredDatas: any[];
   selectedChips: boolean;
-  urlFilterData: string;
+  urlQueryData: string;
   setPaginatorToFirstpage: boolean;
   page: any = 1;
   data: any;
@@ -42,12 +43,11 @@ export class MentorSearchDirectoryPage implements OnInit {
   // mentors = [];
   totalCount: any;
   limit: any;
-  flatChips = [];
+  chips = [];
 
   constructor(
     private router: Router,
-    private loaderService: LoaderService,
-    private httpService: HttpService,
+    private profileService: ProfileService,
     private modalCtrl: ModalController,
     private permissionService: PermissionService,
     private formService: FormService
@@ -80,9 +80,9 @@ export class MentorSearchDirectoryPage implements OnInit {
   }
 
   removeChip(chip: string,index: number) {
-    this.flatChips.splice(index, 1);
+    this.chips.splice(index, 1);
     this.removeFilteredData(chip)
-    this.getFilteredData();
+    this.getUrlQueryData();
     this.getMentors()
   }
 
@@ -103,7 +103,7 @@ export class MentorSearchDirectoryPage implements OnInit {
           this.selectedChips = true;
         }
         this.extractLabels(dataReturned?.data?.data?.selectedFilters);
-        this.getFilteredData();
+        this.getUrlQueryData();
       }
       this.page = 1;
       this.setPaginatorToFirstpage = true;
@@ -132,41 +132,20 @@ export class MentorSearchDirectoryPage implements OnInit {
   }
 
   extractLabels(data) {
-    this.flatChips = [];
+    this.chips = [];
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
-        this.flatChips.push(...data[key]);
+        this.chips.push(...data[key]);
       }
     }
   }
 
-  getFilteredData() {
+  getUrlQueryData() {
     const queryString = Object.keys(this.filteredDatas)
       .map(key => `${key}=${this.filteredDatas[key]}`)
       .join('&');
 
-    this.urlFilterData = queryString;
-    console.log(this.filteredDatas, this.urlFilterData)
-  }
-
-  async getMentors(showLoader = true){
-    showLoader ? await this.loaderService.startLoader() : '';
-    const config = {
-      url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST  + this.page + '&limit=' + this.pageSize + '&search=' + btoa(this.searchText) + '&directory=false'+ '&search_on=' + (this.selectedChipName? this.selectedChipName : '') + '&' + (this.urlFilterData ? this.urlFilterData: ''),
-      payload: {}
-    };
-    try {
-      let data: any = await this.httpService.get(config);
-      this.data = data.result.data;
-      this.totalCount = data.result.count;
-      this.isLoaded = true
-      showLoader ? await this.loaderService.stopLoader() : '';
-      // this.mentors = this.mentors.concat(data.result.data);
-    }
-    catch (error) {
-      this.isLoaded = true
-      showLoader ? await this.loaderService.stopLoader() : '';
-    }
+    this.urlQueryData = queryString;
   }
 
   eventAction(event){
@@ -204,6 +183,13 @@ export class MentorSearchDirectoryPage implements OnInit {
           }
       }
     }
+  }
+
+  async getMentors(){
+    var obj = {page: this.page, pageSize: this.pageSize, searchText: this.searchText, selectedChip: this.selectedChipName, urlQueryData: this.urlQueryData};
+    let data = await this.profileService.getMentors(true,obj);
+    this.data = data.result.data;
+    this.totalCount = data.result.count;
   }
 
 }
