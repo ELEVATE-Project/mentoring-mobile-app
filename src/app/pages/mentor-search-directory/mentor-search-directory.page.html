@@ -90,7 +90,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <div *ngIf="!data?.length && isLoaded">
+  <div *ngIf="totalCount == 0">
     <app-no-data-found [messageHeader]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
   </div>
 </ion-content>
