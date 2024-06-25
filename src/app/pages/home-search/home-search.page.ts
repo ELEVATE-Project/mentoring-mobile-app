@@ -62,14 +62,12 @@ export class HomeSearchPage implements OnInit {
   ) { 
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.params = params;
-      let criteriaChip = JSON.parse(params.get('criteriaChip'));
-      this.criteriaChip = criteriaChip?.label;
+      this.criteriaChip = JSON.parse(params.get('criteriaChip'));
       this.searchText = this.params.get('searchString');
     })
   }
 
   async ngOnInit() {
-    this.criteriaChipName = this.criteriaChip?.name;
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchSessionList()
     this.permissionService.getPlatformConfig().then((config)=>{
@@ -114,7 +112,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   async fetchSessionList() {
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlQueryData}
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChip?.name, filterData : this.urlQueryData}
     var response = await this.sessionService.getSessionsList(obj);
     this.results = response?.result?.data;
     this.totalCount = response.result.count;
@@ -183,9 +181,8 @@ export class HomeSearchPage implements OnInit {
   }
 
   closeCriteriaChip(){
-    this.criteriaChip = this.criteriaChip = "";
-    this.searchText = this.params.get('searchString')
-    this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchText : this.searchText} });
+    this.criteriaChip = null;
+    this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchString : this.searchText} });
     this.fetchSessionList()
   }
 
@@ -209,8 +206,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   selectChip(chip) {
-    this.criteriaChip = chip.label;
-    this.criteriaChipName = chip.name;
+    this.criteriaChip = chip;
     this.fetchSessionList()
     this.isOpen = false;
   }
