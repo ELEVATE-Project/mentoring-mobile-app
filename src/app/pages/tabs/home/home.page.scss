@@ -116,3 +116,33 @@ img {
     min-width: 100%;
     --border-radius:8px;
 }
+
+
+
+.overlay-container {
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 16px;
+    max-width: 100%;
+    z-index: 1000;
+}
+.chip {
+    font-size: 14px;
+    align-items: center;
+    display: inline-block;
+    text-decoration: none;
+    ion-icon {
+        color: white;
+      }
+      &.selected-chip {
+        background-color: var(--ion-color-primary);
+        color: white;
+      }
+}  
+.chip-container {
+    display: flex;
+    white-space: nowrap;
+    width: calc(100% - 100px);
+    scrollbar-width: none;
+}

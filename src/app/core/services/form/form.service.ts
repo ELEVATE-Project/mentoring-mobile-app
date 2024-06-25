@@ -84,4 +84,18 @@ export class FormService {
     })
     return existingData
   }
+
+  async filterList(obj){
+    const config = {
+      url: urlConstants.API_URLS.FILTER_LIST + '&type=' + obj,
+      payload: {},
+    };
+    try {
+      const data: any = await this.http.get(config);
+      return data.result
+    }
+    catch (error) {
+      return null;
+    }
+  }
 }

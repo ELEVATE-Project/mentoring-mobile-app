@@ -101,6 +101,11 @@ const routes: Routes = [
         canActivate: [PrivateGuard]
       },
       {
+        path: CommonRoutes.MENTOR_SEARCH_DIRECTORY,
+        loadChildren: () => import('../../pages/mentor-search-directory/mentor-search-directory.module').then(m => m.MentorSearchDirectoryPageModule),
+        canActivate: [PrivateGuard]
+      },
+      {
         path: '',
         redirectTo: '',
         pathMatch: 'full',
