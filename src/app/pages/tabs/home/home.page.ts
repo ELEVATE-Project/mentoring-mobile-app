@@ -149,7 +149,7 @@ export class HomePage implements OnInit {
   search(q: string) {
     this.isOpen = false;
     if(q){
-      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`], {queryParams: { criteriaChip: JSON.stringify(this.criteriaChip), searchString: q}});
+      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`], {queryParams: { chipName: this.criteriaChip?.name, chipTitle: this.criteriaChip?.label, searchString: q}});
     }
     this.criteriaChip = null;
   }

@@ -42,9 +42,9 @@ export class HomeSearchPage implements OnInit {
   noDataMessage: any;
   createdSessions: any;
   user: any;
-  criteriaChip: any;
+  criteriaChip: string;
   chips =[]
-  criteriaChipValue: string;
+  criteriaChipName: string;
   params: any;
   overlayChips: any;
   isOpen = false;
@@ -62,13 +62,13 @@ export class HomeSearchPage implements OnInit {
   ) { 
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.params = params;
-      this.criteriaChip = JSON.parse(params.get('criteriaChip'));
+      this.criteriaChip = this.params.get('chipTitle');
       this.searchText = this.params.get('searchString')
     })
   }
 
   async ngOnInit() {
-    this.criteriaChipValue = this.criteriaChip.name;
+    this.criteriaChipName = this.params.get('chipName');
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchSessionList()
     this.permissionService.getPlatformConfig().then((config)=>{
@@ -113,7 +113,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   async fetchSessionList() {
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipValue, filterData : this.urlQueryData}
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlQueryData}
     var response = await this.sessionService.getSessionsList(obj);
     this.results = response?.result?.data;
     this.totalCount = response.result.count;
@@ -182,9 +182,10 @@ export class HomeSearchPage implements OnInit {
   }
 
   closeCriteriaChip(){
-    this.criteriaChip.name = this.criteriaChip.label = "";
+    this.criteriaChip = "";
+    this.criteriaChipName = "";
     this.searchText = this.params.get('searchString')
-    this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchText : this.searchText, selectedChip : ''} });
+    this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchText : this.searchText} });
     this.fetchSessionList()
   }
 
@@ -208,8 +209,8 @@ export class HomeSearchPage implements OnInit {
   }
 
   selectChip(chip) {
-    this.criteriaChip = chip;
-    this.criteriaChipValue = chip.name;
+    this.criteriaChip = chip.label;
+    this.criteriaChipName = chip.name;
     this.fetchSessionList()
     this.isOpen = false;
   }
