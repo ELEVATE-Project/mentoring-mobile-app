@@ -7,8 +7,7 @@ import * as _ from 'lodash-es';
   providedIn: 'root',
 })
 export class FormService {
-  constructor(private http: HttpService, private db: DbService
-  ) { }
+  constructor(private http: HttpService, private db: DbService) { }
 
   getForm = async (formBody) => {
     //Check if form is available in local DB

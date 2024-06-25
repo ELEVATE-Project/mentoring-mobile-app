@@ -149,7 +149,7 @@ export class HomePage implements OnInit {
   search(q: string) {
     this.isOpen = false;
     if(q){
-      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`], {queryParams: { chipName: this.criteriaChip?.name, chipTitle: this.criteriaChip?.label, searchString: q}});
+      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`], {queryParams: { criteriaChip: JSON.stringify(this.criteriaChip), searchString: q}});
     }
     this.criteriaChip = null;
   }
@@ -164,16 +164,10 @@ export class HomePage implements OnInit {
   }
 
   async getSessions() {
-    const config = {
-      url: urlConstants.API_URLS.HOME_SESSION + this.page + '&limit=' + this.limit,
-    };
-    try {
-      let data: any = await this.httpService.get(config);
-      this.sessions = data.result;
-      this.sessionsCount = data.result.count;
-    }
-    catch (error) {
-    }
+    var obj = {page: this.page, limit: this.limit}
+    let data = await this.sessionService.getSessions(obj);
+    this.sessions = data.result;
+    this.sessionsCount = data.result.count;
   }
   async openModal() {
     const modal = await this.modalController.create({

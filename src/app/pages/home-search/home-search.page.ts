@@ -42,9 +42,9 @@ export class HomeSearchPage implements OnInit {
   noDataMessage: any;
   createdSessions: any;
   user: any;
-  criteriaChip: string;
+  criteriaChip: any;
   chips =[]
-  criteriaChipName: string;
+  criteriaChipValue: string;
   params: any;
   overlayChips: any;
   isOpen = false;
@@ -62,13 +62,13 @@ export class HomeSearchPage implements OnInit {
   ) { 
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.params = params;
-      this.criteriaChip = this.params.get('chipTitle');
+      this.criteriaChip = JSON.parse(params.get('criteriaChip'));
       this.searchText = this.params.get('searchString')
     })
   }
 
   async ngOnInit() {
-    this.criteriaChipName = this.params.get('chipName');
+    this.criteriaChipValue = this.params.get('chipName');
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchSessionList()
     this.permissionService.getPlatformConfig().then((config)=>{
@@ -113,7 +113,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   async fetchSessionList() {
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlQueryData}
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipValue, filterData : this.urlQueryData}
     var response = await this.sessionService.getSessionsList(obj);
     this.results = response?.result?.data;
     this.totalCount = response.result.count;
@@ -182,8 +182,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   closeCriteriaChip(){
-    this.criteriaChip = "";
-    this.criteriaChipName = "";
+    this.criteriaChip.name = this.criteriaChip.label = "";
     this.searchText = this.params.get('searchString')
     this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchText : this.searchText, selectedChip : ''} });
     this.fetchSessionList()
@@ -210,7 +209,7 @@ export class HomeSearchPage implements OnInit {
 
   selectChip(chip) {
     this.criteriaChip = chip.label;
-    this.criteriaChipName = chip.name;
+    this.criteriaChipValue = chip.name;
     this.fetchSessionList()
     this.isOpen = false;
   }

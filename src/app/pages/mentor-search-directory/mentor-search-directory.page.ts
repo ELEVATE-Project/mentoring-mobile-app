@@ -40,7 +40,6 @@ export class MentorSearchDirectoryPage implements OnInit {
   page: any = 1;
   data: any;
   isLoaded: boolean;
-  // mentors = [];
   totalCount: any;
   limit: any;
   chips = [];
