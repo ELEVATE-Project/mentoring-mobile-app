@@ -43,6 +43,7 @@ import { MenteeListPopupComponent } from './components/mentee-list-popup/mentee-
 import { BulkUploadComponent } from './components/bulk-upload/bulk-upload.component';
 import { UserListModalComponent } from './components/user-list-modal/user-list-modal.component';
 import { snakeCaseToUpperCasePipe } from '../core/pipes/snake-case-to-normal-case.pipe';
+import { AllowTemplateViewDirective } from './directive/allowTemplate.directive';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { snakeCaseToUpperCasePipe } from '../core/pipes/snake-case-to-normal-cas
     MenteeListPopupComponent,
     BulkUploadComponent,
     UserListModalComponent,
-    snakeCaseToUpperCasePipe
+    snakeCaseToUpperCasePipe,
+    AllowTemplateViewDirective
   ],
   imports: [
     CommonModule,
@@ -124,7 +126,8 @@ import { snakeCaseToUpperCasePipe } from '../core/pipes/snake-case-to-normal-cas
     MenteeListPopupComponent,
     BulkUploadComponent,
     UserListModalComponent,
-    snakeCaseToUpperCasePipe
+    snakeCaseToUpperCasePipe,
+    AllowTemplateViewDirective
   ],
 })
 export class SharedModule {}
