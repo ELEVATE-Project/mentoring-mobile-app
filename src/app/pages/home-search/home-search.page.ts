@@ -68,7 +68,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   async ngOnInit() {
-    this.criteriaChipValue = this.params.get('chipName');
+    this.criteriaChipValue = this.criteriaChip.name;
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchSessionList()
     this.permissionService.getPlatformConfig().then((config)=>{
@@ -208,7 +208,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   selectChip(chip) {
-    this.criteriaChip = chip.label;
+    this.criteriaChip = chip;
     this.criteriaChipValue = chip.name;
     this.fetchSessionList()
     this.isOpen = false;
