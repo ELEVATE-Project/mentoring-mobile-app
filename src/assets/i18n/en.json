@@ -270,5 +270,8 @@
     "CREATE_SESSIONS": "Create sessions",
     "VIEW_ROLES": "View roles",
     "ROLES": "Roles",
-    "NO_SESSIONS_AVAILABLE":"No sessions available"
+    "NO_SESSIONS_AVAILABLE":"No sessions available",
+    "SESSSION_SEARCH_RESULT": "Session search result for",
+    "SEARCH_RESULT": "Search results found",
+    "MENTOR_SEARCH_RESULT": "Mentors search result for"
 }

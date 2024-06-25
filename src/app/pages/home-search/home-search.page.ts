@@ -1,8 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import * as moment from 'moment';
-import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, LoaderService, LocalStorageService, ToastService } from 'src/app/core/services';
 import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admin-workapce.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
@@ -13,6 +11,8 @@ import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { Location } from '@angular/common';
+import { PermissionService } from 'src/app/core/services/permission/permission.service';
+import { FormService } from 'src/app/core/services/form/form.service';
 
 @Component({
   selector: 'app-home-search',
@@ -22,8 +22,7 @@ import { Location } from '@angular/common';
 export class HomeSearchPage implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  pageSize = paginatorConstants.defaultPageSize;
-  pageSizeOptions = paginatorConstants.pageSizeOptions;
+  @Output() toggleOverlayEvent = new EventEmitter<void>();
 
   public headerConfig: any = {
     menu: true,
@@ -32,134 +31,66 @@ export class HomeSearchPage implements OnInit {
     // label:'MENU'
   };
   noResults : boolean =  false;
-  searchText:string="";
+  searchText:string;
   results=[];
   type:any;
   searching=true;
-  filterData =
-    [
-      {
-        "title": "Categories",
-        "name": "categories",
-        "options": [
-          {
-            "label": "Communication",
-            "value": "communication"
-          },
-          {
-            "label": "Educational leadership",
-            "value": "educational_leadership"
-          },
-          {
-            "label": "Professional development",
-            "value": "professional_development"
-          }
-        ],
-        "type": "checkbox"
-      },
-      {
-        "title": "Recommended For",
-        "name": "recommended_for",
-        "options": [
-          {
-            "label": "Block education officer",
-            "value": "beo"
-          },
-          {
-            "label": "Cluster officials",
-            "value": "co"
-          },
-          {
-            "label": "District education officer",
-            "value": "deo"
-          },
-          {
-            "label": "Head master",
-            "value": "hm"
-          },
-          {
-            "label": "Teacher",
-            "value": "te"
-          }
-        ],
-        "type": "checkbox"
-      },
-      {
-        "title": "Medium",
-        "name": "medium",
-        "options": [
-          {
-            "label": "English",
-            "value": "en_in"
-          },
-          {
-            "label": "Hindi",
-            "value": "hi"
-          }
-        ],
-        "type": "checkbox"
-      },
-      {
-        "title": "Type",
-        "name": "type",
-        "options": [
-          {
-            "label": "Public",
-            "value": "PUBLIC"
-          },
-          {
-            "label": "Private",
-            "value": "PRIVATE"
-          }
-        ],
-        "type": "checkbox"
-      }
-    ]
+  filterData: any;
   filteredDatas = []
   page = 1;
   setPaginatorToFirstpage:any = false;
   limit = 5;
   sortingData: any;
   totalCount: any;
-  actionButtons = {
-    'UPCOMING': [{ icon: 'eye', cssColor: 'white-color' , action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}, { icon: 'trash', cssColor: 'white-color',action:'DELETE' }],
-    'LIVE': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}],
-    'COMPLETED': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}]
-  };
-  tableData: any;
-  dummyTableData: any = false;
   noDataMessage: any;
   createdSessions: any;
   user: any;
   sessions: any;
-  sessionsCount = 0;
   criteriaChip: string;
+  // searchValue: string = '';
+  chips =[]
+  criteriaChipName: string;
+  params: any;
+  overlayChips: any;
+  isOpen = false;
+  urlFilterData: string;
+  pageSize: any;
 
   constructor(private modalCtrl: ModalController, private adminWorkapceService: AdminWorkapceService,private httpService: HttpService, private router: Router, private toast: ToastService,
     private sessionService: SessionService,
     private localStorage: LocalStorageService,
     private profileService: ProfileService,
     private location: Location,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private permissionService: PermissionService,
+    private formService: FormService
   ) { 
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
-      this.criteriaChip = params.get('chip');
+      this.params = params;
+      this.criteriaChip = this.params.get('chipTitle');
+      this.searchText = this.params.get('searchString')
     })
   }
 
   async ngOnInit() {
-    this.type='all-sessions';
-    var obj = { page: this.page, limit: this.limit, searchText: "" };
+    this.criteriaChipName = this.params.get('chipName');
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    var response = await this.sessionService.getSessionsList(obj);
-    this.results = response?.result?.data;
-    this.fetchSessionList();
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
+    this.fetchSessionList(obj)
+    this.permissionService.getPlatformConfig().then((config)=>{
+      this.overlayChips = config?.result?.search_config?.search?.session?.fields;
+    })
   }
 
- chips =[]
+  async ionViewWillEnter() {
+    let data = await this.formService.filterList('session');
+    this.filterData = this.transformData(data);
+  }
 
-  handleInput(event) {
-    console.log('event :',event);
+  search(event) {
+    this.searchText = event;
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
+    this.fetchSessionList(obj)
   }
 
   async onClickFilter() {
@@ -178,43 +109,32 @@ export class HomeSearchPage implements OnInit {
           }
         }
         this.extractLabels(dataReturned.data.data.selectedFilters);
+        this.getFilteredData();
       }
       this.page = 1;
-      this.setPaginatorToFirstpage = true
-      this.fetchSessionList()
+      this.setPaginatorToFirstpage = true;
+      var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
+      this.fetchSessionList(obj)
     });
     modal.present()
   }
 
-  async fetchSessionList() {
-    // var obj = { page: this.page, limit: this.limit, status: this.type, order: this.sortingData?.order, sort_by: this.sortingData?.sort_by, searchText: this.searchText, filteredData:this.filteredDatas };
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText}
+  async fetchSessionList(obj) {
     var response = await this.sessionService.getSessionsList(obj);
+    this.results = response?.result?.data;
     this.totalCount = response.result.count;
-    let data = response.result.data
-    if (data && data.length) {
-      data.forEach((ele) => {
-        let currentTimeInSeconds=Math.floor(Date.now()/1000);
-        let setButton = (ele?.status?.value == 'PUBLISHED' && ele.end_date > currentTimeInSeconds) ? 'UPCOMING' :(ele?.status?.value == 'LIVE' && ele.end_date > currentTimeInSeconds) ? 'LIVE' : 'COMPLETED';
-        let date = ele.start_date;
-        ele.start_date = moment.unix(date).format('DD-MMM-YYYY')
-        ele.start_time = moment.unix(date).format('h:mm A')
-        ele.action = this.actionButtons[setButton]
-        ele.status = ele?.status?.label;
-        ele.type = ele?.type?.label;
-        ele.duration_in_minutes =Math.round(ele?.duration_in_minutes) 
-      });
-    }
-    this.tableData = data;
-    this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
+    this.noDataMessage = obj.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
   }
 
   onPageChange(event){
-    this.page = event.pageIndex + 1,
-    this.pageSize = this.paginator.pageSize;
+    this.page = event.page,
+    this.pageSize = event.pageSize;
+    var obj={page: this.page, limit: this.pageSize, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
+    this.fetchSessionList(obj)
   }
 
   async eventAction(event) {
+    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
     if (this.user.about) {
       switch (event.type) {
         case 'cardSelect':
@@ -249,17 +169,8 @@ export class HomeSearchPage implements OnInit {
   }
 
   async getSessions() {
-    const config = {
-      url: urlConstants.API_URLS.HOME_SESSION + this.page + '&limit=' + this.limit,
-    };
-    try {
-      let data: any = await this.httpService.get(config);
-      this.sessions = data.result;
-      console.log(this.sessions.all_sessions)
-      this.sessionsCount = data.result.count;
-    }
-    catch (error) {
-    }
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName}
+    this.sessions = await this.sessionService.getSessions(obj)
   }
 
   locationBack(){
@@ -270,15 +181,83 @@ export class HomeSearchPage implements OnInit {
     this.chips = [];
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
-        data[key].forEach((item: any) => {
-          this.chips.push(item.label);
-        });
+        this.chips.push(...data[key]);
       }
     }
   }
 
-  removeChip(index: number) {
+  removeChip(chip: string, index: number) {
     this.chips.splice(index, 1);
+    this.removeFilteredData(chip);
+    this.getFilteredData();
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
+    this.fetchSessionList(obj)
   }
+
+  closeCriteriaChip(){
+    this.criteriaChip = "";
+    this.criteriaChipName = "";
+    this.searchText = this.params.get('searchString')
+    this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchText : this.searchText, selectedChip : ''} });
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
+    this.fetchSessionList(obj)
+  }
+
+  transformData(responseData) {
+    const entityTypes = responseData.entity_types;
   
+    const filterData = Object.keys(entityTypes).map(type => {
+      const entityType = entityTypes[type][0];
+      return {
+        title: entityType.label,
+        name: entityType.value,
+        options: entityType.entities.map(entity => ({
+          label: entity.label,
+          value: entity.value
+        })),
+        type: "checkbox"
+      };
+    });
+  
+    return filterData;
+  }
+
+  selectChip(chip) {
+    this.criteriaChip = chip.label;
+    this.criteriaChipName = chip.name;
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
+    this.fetchSessionList(obj)
+    this.isOpen = false;
+  }
+
+  getFilteredData() {
+    const queryString = Object.keys(this.filteredDatas)
+      .map(key => `${key}=${this.filteredDatas[key]}`)
+      .join('&');
+
+    this.urlFilterData = queryString;
+  }
+
+  removeFilteredData(chip){
+    for (let key in this.filteredDatas) {
+      if (this.filteredDatas.hasOwnProperty(key)) {
+
+          let values = this.filteredDatas[key].split(',');
+
+          let chipIndex = values.indexOf(chip);
+
+          if (chipIndex > -1) {
+              values.splice(chipIndex, 1);
+
+              let newValue = values.join(',');
+
+              if (newValue === '') {
+                delete this.filteredDatas[key];
+            } else {
+                this.filteredDatas[key] = newValue;
+            }
+          }
+      }
+    }
+  }
 }

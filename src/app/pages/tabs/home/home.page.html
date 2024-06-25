@@ -31,9 +31,9 @@
           class="chip" 
           *ngFor="let chip of chips; let i = index" 
           (click)="selectChip(chip)"
-          [ngClass]="{'selected-chip': selectedChipIndex === chip}">
+          [ngClass]="{'selected-chip': criteriaChip === chip}">
           <ion-icon name="close-circle" color="white"></ion-icon>
-          <ion-label class="chip-label">{{ chip }}</ion-label>
+          <ion-label class="chip-label">{{ chip.label }}</ion-label>
         </ion-chip>
       </ion-row>
     </div>

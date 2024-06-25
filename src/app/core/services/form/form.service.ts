@@ -7,7 +7,9 @@ import * as _ from 'lodash-es';
   providedIn: 'root',
 })
 export class FormService {
-  constructor(private http: HttpService, private db: DbService) { }
+  constructor(private http: HttpService, private db: DbService,
+   private httpService: HttpService
+  ) { }
 
   getForm = async (formBody) => {
     //Check if form is available in local DB
@@ -83,5 +85,19 @@ export class FormService {
       }
     })
     return existingData
+  }
+
+  async filterList(obj){
+    const config = {
+      url: urlConstants.API_URLS.FILTER_LIST + '&type=' + obj,
+      payload: {},
+    };
+    try {
+      const data: any = await this.httpService.get(config);
+      return data.result
+    }
+    catch (error) {
+      return null;
+    }
   }
 }

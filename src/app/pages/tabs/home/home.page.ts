@@ -13,6 +13,7 @@ import { SessionService } from 'src/app/core/services/session/session.service';
 import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-conditions.page';
 import { App, AppState } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
+import { PermissionService } from 'src/app/core/services/permission/permission.service';
 
 
 @Component({
@@ -47,9 +48,9 @@ export class HomePage implements OnInit {
   isMentor: boolean;
   userEventSubscription: any;
   isOpen = false;
-  selectedChipIndex: any;
 
-  chips= ['Session title', 'Session discription', 'Session discription for', 'chip 4', 'Session title', 'Session discription', 'Session discription for',]
+  chips= [];
+  criteriaChip: any;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -61,7 +62,8 @@ export class HomePage implements OnInit {
     private modalController: ModalController,
     private userService: UserService,
     private localStorage: LocalStorageService,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private permissionService: PermissionService) { }
 
   ngOnInit() {
     this.isMentor = this.profileService.isMentor
@@ -89,6 +91,9 @@ export class HomePage implements OnInit {
       }
     })
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    this.permissionService.getPlatformConfig().then((config)=>{
+      this.chips = config.result.search_config.search.session.fields;
+    })
   }
   gotToTop() {
     this.content.scrollToTop(1000);
@@ -144,8 +149,9 @@ export class HomePage implements OnInit {
   search(q: string) {
     this.isOpen = false;
     if(q){
-      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`], {queryParams:{ chip: this.selectedChipIndex, searchString: q}});
+      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`], {queryParams: { chipName: this.criteriaChip?.name, chipTitle: this.criteriaChip?.label, searchString: q}});
     }
+    this.criteriaChip = null;
   }
   getUser() {
     this.profileService.profileDetails().then(data => {
@@ -216,8 +222,7 @@ export class HomePage implements OnInit {
     }
   }
 
-  selectChip(chip : string) {
-    console.log( chip)
-    this.selectedChipIndex = chip;
+  selectChip(chip: any) {
+    this.criteriaChip = chip;
   }
 }
