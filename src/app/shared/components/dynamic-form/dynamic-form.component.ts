@@ -209,8 +209,6 @@ export class DynamicFormComponent implements OnInit {
     return JSON.stringify(a) == JSON.stringify(b);
   }
   onSubmit() {
-    console.log('Form valid: ', this.myForm.valid);
-    console.log('Form values: ', this.myForm.value);
     this.isFormValid();
   }
   reset() {

@@ -44,7 +44,7 @@ export class HomeSearchPage implements OnInit {
   user: any;
   criteriaChip: any;
   chips =[]
-  criteriaChipValue: string;
+  criteriaChipName: any;
   params: any;
   overlayChips: any;
   isOpen = false;
@@ -63,12 +63,11 @@ export class HomeSearchPage implements OnInit {
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.params = params;
       this.criteriaChip = JSON.parse(params.get('criteriaChip'));
-      this.searchText = this.params.get('searchString')
+      this.searchText = this.params.get('searchString');
     })
   }
 
   async ngOnInit() {
-    this.criteriaChipValue = this.params.get('chipName');
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchSessionList()
     this.permissionService.getPlatformConfig().then((config)=>{
@@ -113,7 +112,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   async fetchSessionList() {
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipValue, filterData : this.urlQueryData}
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChip?.name, filterData : this.urlQueryData}
     var response = await this.sessionService.getSessionsList(obj);
     this.results = response?.result?.data;
     this.totalCount = response.result.count;
@@ -182,9 +181,8 @@ export class HomeSearchPage implements OnInit {
   }
 
   closeCriteriaChip(){
-    this.criteriaChip.name = this.criteriaChip.label = "";
-    this.searchText = this.params.get('searchString')
-    this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchText : this.searchText, selectedChip : ''} });
+    this.criteriaChip = null;
+    this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchString : this.searchText} });
     this.fetchSessionList()
   }
 
@@ -208,8 +206,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   selectChip(chip) {
-    this.criteriaChip = chip.label;
-    this.criteriaChipValue = chip.name;
+    this.criteriaChip = chip;
     this.fetchSessionList()
     this.isOpen = false;
   }
