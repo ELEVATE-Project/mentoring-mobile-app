@@ -30,24 +30,19 @@ export class HomeSearchPage implements OnInit {
     headerColor: 'primary',
     // label:'MENU'
   };
-  noResults : boolean =  false;
   searchText:string;
   results=[];
   type:any;
-  searching=true;
   filterData: any;
   filteredDatas = []
   page = 1;
   setPaginatorToFirstpage:any = false;
   limit = 5;
-  sortingData: any;
   totalCount: any;
   noDataMessage: any;
   createdSessions: any;
   user: any;
-  sessions: any;
   criteriaChip: string;
-  // searchValue: string = '';
   chips =[]
   criteriaChipName: string;
   params: any;
@@ -75,8 +70,7 @@ export class HomeSearchPage implements OnInit {
   async ngOnInit() {
     this.criteriaChipName = this.params.get('chipName');
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
-    this.fetchSessionList(obj)
+    this.fetchSessionList()
     this.permissionService.getPlatformConfig().then((config)=>{
       this.overlayChips = config?.result?.search_config?.search?.session?.fields;
     })
@@ -89,8 +83,8 @@ export class HomeSearchPage implements OnInit {
 
   search(event) {
     this.searchText = event;
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
-    this.fetchSessionList(obj)
+    this.isOpen = false;
+    this.fetchSessionList()
   }
 
   async onClickFilter() {
@@ -113,13 +107,13 @@ export class HomeSearchPage implements OnInit {
       }
       this.page = 1;
       this.setPaginatorToFirstpage = true;
-      var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
-      this.fetchSessionList(obj)
+      this.fetchSessionList()
     });
     modal.present()
   }
 
-  async fetchSessionList(obj) {
+  async fetchSessionList() {
+    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
     var response = await this.sessionService.getSessionsList(obj);
     this.results = response?.result?.data;
     this.totalCount = response.result.count;
@@ -129,8 +123,7 @@ export class HomeSearchPage implements OnInit {
   onPageChange(event){
     this.page = event.page,
     this.pageSize = event.pageSize;
-    var obj={page: this.page, limit: this.pageSize, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
-    this.fetchSessionList(obj)
+    this.fetchSessionList()
   }
 
   async eventAction(event) {
@@ -143,14 +136,14 @@ export class HomeSearchPage implements OnInit {
 
         case 'joinAction':
           await this.sessionService.joinSession(event.data)
-          this.getSessions();
+          this.fetchSessionList()
           break;
 
         case 'enrollAction':
           let enrollResult = await this.sessionService.enrollSession(event.data.id);
           if (enrollResult.result) {
             this.toast.showToast(enrollResult.message, "success")
-            this.getSessions();
+            this.fetchSessionList()
           }
           break;
 
@@ -166,11 +159,6 @@ export class HomeSearchPage implements OnInit {
     } else {
       this.profileService.upDateProfilePopup()
     }
-  }
-
-  async getSessions() {
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName}
-    this.sessions = await this.sessionService.getSessions(obj)
   }
 
   locationBack(){
@@ -190,8 +178,7 @@ export class HomeSearchPage implements OnInit {
     this.chips.splice(index, 1);
     this.removeFilteredData(chip);
     this.getFilteredData();
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
-    this.fetchSessionList(obj)
+    this.fetchSessionList()
   }
 
   closeCriteriaChip(){
@@ -199,8 +186,7 @@ export class HomeSearchPage implements OnInit {
     this.criteriaChipName = "";
     this.searchText = this.params.get('searchString')
     this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchText : this.searchText, selectedChip : ''} });
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
-    this.fetchSessionList(obj)
+    this.fetchSessionList()
   }
 
   transformData(responseData) {
@@ -225,8 +211,7 @@ export class HomeSearchPage implements OnInit {
   selectChip(chip) {
     this.criteriaChip = chip.label;
     this.criteriaChipName = chip.name;
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChipName, filterData : this.urlFilterData}
-    this.fetchSessionList(obj)
+    this.fetchSessionList()
     this.isOpen = false;
   }
 
