@@ -5,7 +5,6 @@ import { Storage } from '@ionic/storage-angular';
   providedIn: 'root',
 })
 export class DbService {
-  private _storage: Storage;
 
   constructor(private storage: Storage) {
   }
@@ -13,7 +12,6 @@ export class DbService {
   //Initialize DB
   async init() {
     const storage = await this.storage.create();
-    this._storage = storage;
   }
 
   //Add item in DB
