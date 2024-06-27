@@ -18,16 +18,16 @@ export class DbService {
 
   //Add item in DB
   async setItem(key,value) {
-    return await this._storage.set(key, value);
+    return await this.storage.set(key, value);
   }
 
   //Read item from DB 
   async getItem(key) {
-    return await this._storage.get(key);
+    return await this.storage.get(key);
   }
 
   //Clear the DB 
   async clear() {
-    return await this._storage.clear();
+    return await this.storage.clear();
   }
 }
