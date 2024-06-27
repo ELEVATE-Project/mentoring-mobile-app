@@ -38,6 +38,7 @@ export class ManageSessionComponent implements OnInit {
   sortingData: any;
   setPaginatorToFirstpage:any = false;
   columnData = [
+    { name: 'id', displayName: 'Session Id', type: 'text'},
     { name: 'title', displayName: 'Session name', type: 'text', sortingData: [{ sort_by: 'title', order: 'ASC', label: 'A -> Z' }, { sort_by: 'title', order: 'DESC', label: 'Z -> A' }] },
     { name: 'type', displayName: 'Type', type: 'text' },
     { name: 'mentor_name', displayName: 'Mentor', type: 'text' },
