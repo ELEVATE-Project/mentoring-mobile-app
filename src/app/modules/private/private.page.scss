@@ -110,3 +110,8 @@
 .user-role-labels{
     padding-top: 3%;
 }
+.disable-div{
+    pointer-events: none; /* Disable all pointer events (clicks, hovers, etc.) */
+    opacity: 0.5; /* Make the header appear grayed out */
+    background-color: lightgray;
+}

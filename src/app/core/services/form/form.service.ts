@@ -69,6 +69,10 @@ export class FormService {
           allow_custom_entities: entity.allow_custom_entities,
           allow_filtering: entity.allow_filtering
         };
+        formData.validators = {
+          ...formData.validators,
+          required: entity.required
+        }
       }
     });
     return formData

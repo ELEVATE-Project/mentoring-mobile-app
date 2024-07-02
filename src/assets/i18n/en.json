@@ -273,5 +273,7 @@
     "NO_SESSIONS_AVAILABLE":"No sessions available",
     "SESSSION_SEARCH_RESULT": "Session search result for",
     "SEARCH_RESULT": "Search results found",
-    "MENTOR_SEARCH_RESULT": "Mentors search result for"
+    "MENTOR_SEARCH_RESULT": "Mentors search result for",
+    "SETUP_PROFILE": "Setup profile",
+    "SETUP_PROFILE_MESSAGE": "Finish setting up your profile to get started"
 }
