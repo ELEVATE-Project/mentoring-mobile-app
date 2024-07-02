@@ -69,6 +69,10 @@ export class FormService {
           allow_custom_entities: entity.allow_custom_entities,
           allow_filtering: entity.allow_filtering
         };
+        formData.validators = {
+          ...formData.validators,
+          required: entity.required
+        }
       }
     });
     return formData
@@ -87,7 +91,7 @@ export class FormService {
 
   async filterList(obj){
     const config = {
-      url: urlConstants.API_URLS.FILTER_LIST + '&type=' + obj,
+      url: urlConstants.API_URLS.FILTER_LIST + '&filter_type=' + obj,
       payload: {},
     };
     try {

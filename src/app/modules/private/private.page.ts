@@ -183,6 +183,9 @@ getUser() {
   this.profile.profileDetails(false).then(profileDetails => {
     this.adminAccess = profileDetails.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,profileDetails?.permissions) : false;
     this.user = profileDetails;
+    if (profileDetails.profile_mandatory_fields && profileDetails.profile_mandatory_fields.length > 0 && !profileDetails.about) {
+      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`], { replaceUrl: true });
+    }
     this.isMentor = this.profile.isMentor;
   })
 }
