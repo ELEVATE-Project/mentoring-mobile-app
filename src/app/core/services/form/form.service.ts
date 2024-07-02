@@ -91,7 +91,7 @@ export class FormService {
 
   async filterList(obj){
     const config = {
-      url: urlConstants.API_URLS.FILTER_LIST + '&filter_type=' + obj,
+      url: urlConstants.API_URLS.FILTER_LIST + '&type=' + obj,
       payload: {},
     };
     try {
