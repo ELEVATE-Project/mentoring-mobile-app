@@ -115,7 +115,7 @@ export class HomeSearchPage implements OnInit {
     var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChip?.name, filterData : this.urlQueryData}
     var response = await this.sessionService.getSessionsList(obj);
     this.results = response?.result?.data;
-    this.totalCount = response.result.count;
+    this.totalCount = response?.result?.count;
     this.noDataMessage = obj.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
   }
 

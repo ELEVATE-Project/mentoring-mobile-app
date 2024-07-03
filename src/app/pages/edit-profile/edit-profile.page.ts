@@ -78,7 +78,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
       this.profileService.prefillData(this.userDetails, this.entityNames, this.formData);
       this.showForm = true;
     }
-    if(this.userDetails?.profile_mandatory_fields?.length || !this.userDetails.about){
+    if(this.userDetails?.profile_mandatory_fields?.length || !this.userDetails?.about){
     this.headerConfig.backButton = false;
     let msg = {
         header: 'SETUP_PROFILE',

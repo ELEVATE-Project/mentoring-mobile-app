@@ -55,7 +55,6 @@ export class MentorDirectoryPage implements OnInit {
 
   async ionViewWillEnter() {
     this.page = 1;
-    this.mentors = [];
     this.getMentors();
     this.gotToTop();
   }

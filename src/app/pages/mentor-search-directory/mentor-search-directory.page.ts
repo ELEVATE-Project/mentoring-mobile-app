@@ -112,7 +112,7 @@ export class MentorSearchDirectoryPage implements OnInit {
   }
 
   transformData(responseData) {
-    const entityTypes = responseData.entity_types;
+    const entityTypes = responseData?.entity_types;
   
     const filterData = Object.keys(entityTypes).map(type => {
       const entityType = entityTypes[type][0];
