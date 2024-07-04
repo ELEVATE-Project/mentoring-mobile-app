@@ -11,7 +11,7 @@ import {
 import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
 import { Location } from '@angular/common';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,6 +21,8 @@ import { map } from 'rxjs/operators';
 import { Validators } from '@angular/forms';
 import { manageSessionAction, permissions } from 'src/app/core/constants/permissionsConstant';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
+import { SearchPopoverComponent } from 'src/app/shared/components/search-popover/search-popover.component';
+import { SearchCompetencyComponent } from 'src/app/shared/components/search-competency/search-competency.component';
 
 @Component({
   selector: 'app-create-session',
@@ -60,6 +62,11 @@ export class CreateSessionPage implements OnInit {
   entityList:any;
   params: any;
   editSessionDisable: boolean;
+  isMobile = window.innerWidth <= 950;
+
+  //to be removed
+  addIconDark = {name: 'add-outline', color: 'dark'}
+  closeIconLight = {name: 'close-circle-sharp', color: 'light'}
 
   constructor(
     private http: HttpClient,
@@ -77,15 +84,371 @@ export class CreateSessionPage implements OnInit {
     private changeDetRef: ChangeDetectorRef,
     private router: Router,
     private route:ActivatedRoute,
-    private utilService:UtilService,
+    private modalCtrl:ModalController,
     private permissionService:PermissionService
   ) {
   }
   async ngOnInit() {
     let formConfig =(await this.permissionService.hasPermission({ module: permissions.MANAGE_SESSION, action: manageSessionAction.SESSION_ACTIONS })) ? MANAGERS_CREATE_SESSION_FORM : CREATE_SESSION_FORM
     const platformForm = await this.getPlatformFormDetails();
-    const result = await this.form.getForm(formConfig);
-    this.formData = _.get(result, 'data.fields');
+    // const result = await this.form.getForm(formConfig);
+    // this.formData = _.get(result, 'data.fields');
+    this.formData = {
+      "controls": [
+          {
+              "name": "title",
+              "label": "Session title",
+              "value": "",
+              "class": "ion-no-margin",
+              "type": "text",
+              "placeHolder": "Ex. Name of your session",
+              "position": "floating",
+              "errorMessage": {
+                  "required": "Enter session title",
+                  "pattern": "This field can only contain alphanumeric characters"
+              },
+              "validators": {
+                  "required": true,
+                  "maxLength": 255,
+                  "pattern": "^[a-zA-Z0-9-.,s ]+$"
+              }
+          },
+          {
+              "name": "description",
+              "label": "Description",
+              "value": "",
+              "class": "ion-no-margin",
+              "type": "textarea",
+              "placeHolder": "Tell the community something about your session",
+              "position": "floating",
+              "errorMessage": {
+                  "required": "Enter description",
+                  "pattern": "This field can only contain alphanumeric characters"
+              },
+              "validators": {
+                  "required": true,
+                  "maxLength": 255,
+                  "pattern": "^[a-zA-Z0-9-.,s ]+$"
+              }
+          },
+          {
+              "name": "type",
+              "label": "Session type",
+              "class": "ion-no-margin",
+              "type": "select",
+              "dependedChild": "mentees",
+              "value": "",
+              "position": "floating",
+              "info": [
+                  {
+                      "header": "Public session",
+                      "message": "Discoverable. Mentees can enroll and attend"
+                  },
+                  {
+                      "header": "Private session",
+                      "message": "Non-discoverable. Invited mentee can attend"
+                  }
+              ],
+              "errorMessage": {
+                  "required": "Please select your session type"
+              },
+              "validators": {
+                  "required": true
+              },
+              "meta": {
+                  "errorLabel": "Location",
+                  "disabledChildren": [
+                      "mentees",
+                      "mentor_id"
+                  ]
+              },
+              "multiple": false,
+              "options": [
+                  {
+                      "label": "Private",
+                      "value": "PRIVATE"
+                  },
+                  {
+                      "label": "Public",
+                      "value": "PUBLIC"
+                  }
+              ]
+          },
+          {
+              "name": "mentor_id",
+              "label": "Add mentor",
+              "value": "",
+              "class": "ion-no-margin",
+              "type": "search",
+              "position": "floating",
+              "disabled": true,
+              "meta": {
+                  "multiSelect": false,
+                  "disableIfSelected": true,
+                  "searchLabel": "Search for mentor",
+                  "searchData": [],
+                  "url": "MENTORS_LIST",
+                  "labelArrayForSingleSelect": [
+                      "mentor_name",
+                      "organization.name"
+                  ],
+                  "filters": {
+                      "entity_types": [
+                          {
+                              "key": "designation",
+                              "label": "Designation",
+                              "type": "checkbox"
+                          }
+                      ],
+                      "organizations": [
+                          {
+                              "isEnabled": true,
+                              "key": "organizations",
+                              "type": "checkbox"
+                          }
+                      ]
+                  },
+                  "filterType": "mentor",
+                  "addPopupType": "addUser"
+              },
+              "info": [
+                  {
+                      "message": "Click to select Mentor for this session"
+                  }
+              ],
+              "errorMessage": {
+                  "required": "Please add a mentor for the session"
+              },
+              "validators": {
+                  "required": true
+              }
+          },
+          {
+              "name": "mentees",
+              "label": "Add mentee",
+              "value": [],
+              "class": "ion-no-margin",
+              "disabled": true,
+              "type": "search",
+              "meta": {
+                  "multiSelect": true,
+                  "url": "MENTEES_LIST",
+                  "searchLabel": "Search for mentee",
+                  "searchData": [],
+                  "maxCount": "MAX_MENTEE_ENROLLMENT_COUNT",
+                  "labelForListButton": "View Mentee List",
+                  "labelForAddButton": "Add New Mentee",
+                  "filters": {
+                      "entity_types": [
+                          {
+                              "key": "designation",
+                              "label": "Designation",
+                              "type": "checkbox"
+                          }
+                      ],
+                      "organizations": [
+                          {
+                              "isEnabled": true,
+                              "key": "organizations",
+                              "type": "checkbox"
+                          }
+                      ]
+                  },
+                  "filterType": "mentee",
+                  "addPopupType": "addUser"
+              },
+              "position": "floating",
+              "info": [
+                  {
+                      "message": "Click to select Mentee(s) for this session"
+                  }
+              ],
+              "errorMessage": {
+                  "required": "Please add mentee for the session"
+              },
+              "validators": {
+                  "required": true
+              }
+          },
+          {
+              "name": "start_date",
+              "label": "Start date",
+              "class": "ion-no-margin",
+              "value": "",
+              "displayFormat": "DD/MMM/YYYY HH:mm",
+              "dependedChild": "end_date",
+              "type": "date",
+              "placeHolder": "YYYY-MM-DD hh:mm",
+              "errorMessage": {
+                  "required": "Enter start date"
+              },
+              "position": "floating",
+              "validators": {
+                  "required": true
+              }
+          },
+          {
+              "name": "end_date",
+              "label": "End date",
+              "class": "ion-no-margin",
+              "position": "floating",
+              "value": "",
+              "displayFormat": "DD/MMM/YYYY HH:mm",
+              "dependedParent": "start_date",
+              "type": "date",
+              "placeHolder": "YYYY-MM-DD hh:mm",
+              "errorMessage": {
+                  "required": "Enter end date"
+              },
+              "validators": {
+                  "required": true
+              }
+          },
+          {
+              "name": "recommended_for",
+              "label": "Recommended for",
+              "class": "ion-no-margin",
+              "value": "",
+              "type": "search",
+              "position": "",
+              "disabled": false,
+              "errorMessage": {
+                  "required": "Enter recommended for"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [
+                  {
+                      "label": "Block education officer",
+                      "value": "beo"
+                  },
+                  {
+                      "label": "Cluster officials",
+                      "value": "co"
+                  },
+                  {
+                      "label": "District education officer",
+                      "value": "deo"
+                  },
+                  {
+                      "label": "Head master",
+                      "value": "hm"
+                  },
+                  {
+                      "label": "Teacher",
+                      "value": "te"
+                  }
+              ],
+              "meta": {
+                  "entityType": "recommended_for",
+                  "addNewPopupHeader": "Recommended for",
+                  "addNewPopupSubHeader": "Who is this session for?",
+                  "showSelectAll": true,
+                  "multiSelect": true,
+                  "showAddOption": {
+                      "showAddButton": true,
+                      "addChipLabel": ""
+                  },
+                  "allow_custom_entities": true,
+                  "allow_filtering": true,
+                  "addPopupType": "addCompetency"
+              },
+              "multiple": true
+          },
+          {
+              "name": "categories",
+              "label": "Categories",
+              "class": "ion-no-margin",
+              "value": "",
+              "type": "search",
+              "position": "",
+              "disabled": false,
+              "errorMessage": {
+                  "required": "Enter categories"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [
+                  {
+                      "label": "Communication",
+                      "value": "communication"
+                  },
+                  {
+                      "label": "Educational leadership",
+                      "value": "educational_leadership"
+                  },
+                  {
+                      "label": "Professional development",
+                      "value": "professional_development"
+                  },
+                  {
+                      "label": "School process",
+                      "value": "school_process"
+                  },
+                  {
+                      "label": "SQAA",
+                      "value": "sqaa"
+                  }
+              ],
+              "meta": {
+                  "entityType": "categories",
+                  "addNewPopupHeader": "Add a new category",
+                  "showSelectAll": true,
+                  "multiSelect": true,
+                  "showAddOption": {
+                      "showAddButton": true,
+                      "addChipLabel": ""
+                  },
+                  "allow_custom_entities": true,
+                  "allow_filtering": true,
+                  "addPopupType": "addCompetency"
+              },
+              "multiple": true
+          },
+          {
+              "name": "medium",
+              "label": "Select medium",
+              "alertLabel": "medium",
+              "class": "ion-no-margin",
+              "value": "",
+              "type": "search",
+              "position": "",
+              "disabled": false,
+              "errorMessage": {
+                  "required": "Enter select medium"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [
+                  {
+                      "label": "English",
+                      "value": "en_in"
+                  },
+                  {
+                      "label": "Hindi",
+                      "value": "hi"
+                  }
+              ],
+              "meta": {
+                  "entityType": "medium",
+                  "addNewPopupHeader": "Add new language",
+                  "showSelectAll": true,
+                  "multiSelect": true,
+                  "showAddOption": {
+                      "showAddButton": true,
+                      "addChipLabel": ""
+                  },
+                  "allow_custom_entities": true,
+                  "allow_filtering": true,
+                  "addPopupType": "addCompetency"
+              },
+              "multiple": true
+          }
+      ]
+  }
     this.entityNames = await this.form.getEntityNames(this.formData)
     this.entityList = await this.form.getEntities(this.entityNames, 'SESSION')
     this.formData = await this.form.populateEntity(this.formData,this.entityList)
@@ -177,10 +540,11 @@ export class CreateSessionPage implements OnInit {
         form.end_date = form.end_date.unix().toString();
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         form.time_zone = timezone;
-        _.forEach(this.entityNames, (entityKey) => {
-          let control = this.formData.controls.find(obj => obj.name === entityKey);
-          form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey]
-        });
+        // _.forEach(this.entityNames, (entityKey) => {
+        //   let control = this.formData.controls.find(obj => obj.name === entityKey);
+        //   console.log("herrrrr", _.map(form[entityKey], 'value'), form[entityKey])
+        //   form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey]
+        // });
         if(!this.profileImageData.image){
           form.image=[]
         }
@@ -233,6 +597,7 @@ export class CreateSessionPage implements OnInit {
   async preFillData(data) {
     let existingData = await this.form.formatEntityOptions(data,this.entityNames)
 
+
     for(let j=0;j<this?.meetingPlatforms?.length;j++){
       if( existingData.meeting_info.platform == this?.meetingPlatforms[j].name){
          this.selectedLink = this?.meetingPlatforms[j];
@@ -256,12 +621,12 @@ export class CreateSessionPage implements OnInit {
         this.formData.controls[i].id = this.id;
         if(this.formData.controls[i].meta.multiSelect){
           this.formData.controls[i].meta.searchData = existingData[this.formData.controls[i].name]
-          this.formData.controls[i].value = this.formData.controls[i].meta.searchData.map(obj => obj.id);
+          this.formData.controls[i].value = this.formData.controls[i].meta.searchData.map(obj => obj.id || obj.value);
         } else {
-          this.formData.controls[i].meta.searchData.push({
+          this.formData.controls[i].meta.searchData = [{
             label: `${existingData.mentor_name}, ${existingData.organization.name}`,
             id: existingData[this.formData.controls[i].name]
-          });
+          }];
         }
         if(!this.formData.controls[i].meta.disableIfSelected) {
           this.formData.controls[i].disabled = false;
@@ -277,10 +642,11 @@ export class CreateSessionPage implements OnInit {
           this.formData.controls[dependedChildIndex].validators['required']= existingData[this.formData.controls[i].name].value=='PUBLIC' ? false : true
         }
       }
-      this.formData.controls[i].options = _.unionBy(
-        this.formData.controls[i].options,
-        this.formData.controls[i].value, 'value'
-      );
+      // this.formData.controls[i].options = _.unionBy(
+      //   this.formData.controls[i].options,
+      //   this.formData.controls[i].value, 'value'
+      // );
+      console.log(this.formData.controls[i].options)
     }
     this.showForm = true;
   }
@@ -362,5 +728,142 @@ export class CreateSessionPage implements OnInit {
     this.formData.controls[index].disabled = false;
     control.setValidators(required ? [Validators.required] : null);
     control.updateValueAndValidity();
+  }
+
+  eventHandler(event) {
+    switch(event.type) {
+      case 'addUser':
+        this.showAddUserPopup(event)
+        break;
+      
+      case 'addCompetency':
+        this.showCompetencyPopup(event)
+        break;
+      
+      case 'addUser view':
+        this.viewSelectedUsers(event)
+        break;
+
+      case 'addCompetency view':
+        this.viewSelectedCompetencies(event)
+        break;
+    }
+  }
+
+  async showCompetencyPopup(event) {
+    const popover = await this.modalCtrl.create({
+      component: SearchCompetencyComponent,
+      cssClass: 'small-width-popover-config',
+      backdropDismiss: false,
+      componentProps: {
+        data: {
+          selectedData: event.formControl.selectedData,
+          control: event.formControl.control,
+          showFilter: false,
+          showSearch: true,
+          viewListMode: false,
+          isMobile: this.isMobile
+        }
+      }
+    });
+
+    popover.onDidDismiss().then((data) => {
+      if (data.data) {
+        event.formControl.selectedData = data.data;
+        const values = event.formControl.control.meta.multiSelect ? data.data.map(obj => obj.value) : data.data[0].value;
+        console.log(values, event.formControl.control.meta.multiSelect)
+        event.formControl.onChange(values);
+        event.formControl.icon = event.formControl.selectedData.length ? this.closeIconLight : this.addIconDark
+      }
+    });
+    await popover.present();
+  }
+
+  async showAddUserPopup(event) {
+    const popover = await this.modalCtrl.create({
+      component: SearchPopoverComponent,
+      cssClass: 'large-width-popover-config',
+      backdropDismiss: false,
+      componentProps: {
+        data: {
+          selectedData: event.formControl.selectedData,
+          control: event.formControl.control,
+          showFilter: true,
+          showSearch: true,
+          viewListMode: false,
+          isMobile: this.isMobile
+        }
+      }
+    });
+
+    popover.onDidDismiss().then((data) => {
+      if (data.data) {
+        event.formControl.selectedData = data.data;
+        const values = event.formControl.control.meta.multiSelect ? data.data.map(obj => obj.id) : data.data[0].id;
+        event.formControl.onChange(values);
+        event.formControl.icon = event.formControl.selectedData.length ? this.closeIconLight : this.addIconDark
+      }
+    });
+    await popover.present();
+  }
+
+  async viewSelectedUsers(event) {
+    const popover = await this.modalCtrl.create({
+      component: SearchPopoverComponent,
+      cssClass: 'large-width-popover-config',
+      backdropDismiss: false,
+      componentProps: {
+        data: {
+          selectedData: event.formControl.selectedData,
+          control: event.formControl.control,
+          showFilter: false,
+          showSearch: false,
+          viewListMode: true,
+          isMobile: this.isMobile
+        }
+      }
+    });
+
+    popover.onDidDismiss().then((data) => {
+      if (data.data) {
+        event.formControl.selectedData = data.data
+        const values = event.formControl.selectedData.length
+        ? (event.formControl.control.meta.multiSelect ? event.formControl.selectedData.map(obj => obj.id) : event.formControl.selectedData[0].id)
+        : (event.formControl.control.meta.multiSelect ? [] : '');
+        event.formControl.onChange(values);
+        event.formControl.icon = event.formControl.selectedData.length ? this.closeIconLight : this.addIconDark
+      }
+    });
+    await popover.present();
+  }
+
+  async viewSelectedCompetencies(event) {
+    const popover = await this.modalCtrl.create({
+      component: SearchCompetencyComponent,
+      cssClass: 'small-width-popover-config',
+      backdropDismiss: false,
+      componentProps: {
+        data: {
+          selectedData: event.formControl.selectedData,
+          control: event.formControl.control,
+          showFilter: false,
+          showSearch: false,
+          viewListMode: true,
+          isMobile: this.isMobile
+        }
+      }
+    });
+
+    popover.onDidDismiss().then((data) => {
+      if (data.data) {
+        event.formControl.selectedData = data.data
+        const values = event.formControl.selectedData.length
+        ? (event.formControl.control.meta.multiSelect ? event.formControl.selectedData.map(obj => obj.value) : event.formControl.selectedData[0].value)
+        : (event.formControl.control.meta.multiSelect ? [] : '');
+        event.formControl.onChange(values);
+        event.formControl.icon = event.formControl.selectedData.length ? this.closeIconLight : this.addIconDark
+      }
+    });
+    await popover.present();
   }
 }

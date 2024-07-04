@@ -1,5 +1,5 @@
 <form [formGroup]="myForm" *ngIf="showForm">
-  <div class="fields" *ngFor="let control of jsonFormData?.controls">
+  <div class="fields" *ngFor="let control of jsonFormData?.controls; let i=index">
     <ion-item
       class="ion-no-padding"
       [class]="control.class"
@@ -139,6 +139,8 @@
         *ngIf="control.type === 'search'"
         [formControlName]="control.name"
         [control]="control"
+        (showSelectionPopover)="searchEventEmitter($event)"
+        [uniqueId]="i"
       ></app-search-and-select>
       <ion-icon
         size="small"

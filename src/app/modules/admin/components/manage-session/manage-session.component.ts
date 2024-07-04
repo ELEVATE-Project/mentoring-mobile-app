@@ -113,7 +113,7 @@ export class ManageSessionComponent implements OnInit {
       case "mentee_count":
         let modal = await this.modalCtrl.create({
           component: MenteeListPopupComponent, 
-          cssClass: 'search-popover-config',
+          cssClass: 'large-width-popover-config',
           componentProps: { id:this.receivedEventData.element.id }
         });
     
