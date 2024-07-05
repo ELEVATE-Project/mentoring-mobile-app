@@ -40,3 +40,5 @@
       shell: cd {{project_path}} && ionic build --prod
     - name: Start pm2
       shell: cd {{project_path}} && pm2 start pm2.config.json
+    - name: Forms related actions
+      shell: npm run manage-forms
