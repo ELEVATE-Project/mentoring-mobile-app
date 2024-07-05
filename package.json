@@ -9,7 +9,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "manage-forms": "node formManager.js"
   },
   "private": true,
   "dependencies": {
@@ -56,6 +57,7 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "@schematics/angular": "^16.2.3",
     "@types/lodash": "^4.14.182",
+    "axios": "^1.7.2",
     "bowser": "2.7.0",
     "chart.js": "^4.4.0",
     "cordova-plugin-screen-orientation": "^3.0.3",
