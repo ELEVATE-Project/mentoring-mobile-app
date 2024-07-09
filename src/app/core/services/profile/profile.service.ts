@@ -55,7 +55,6 @@ export class ProfileService {
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileDatas);
       this.userService.userEvent.next(profileDatas);
       this.loaderService.stopLoader();
-      this._location.back();
       (showToast)?this.toast.showToast(data.message, "success"):null;
       return true;
       }

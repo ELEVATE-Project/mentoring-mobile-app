@@ -14,6 +14,7 @@ import {
   LoaderService,
   LocalStorageService,
   ToastService,
+  UtilService,
 } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
@@ -21,6 +22,8 @@ import { AlertController, Platform } from '@ionic/angular';
 import { isDeactivatable } from 'src/app/core/guards/canDeactive/deactive.guard';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-edit-profile',
@@ -34,10 +37,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     type: 'profile',
   };
   public headerConfig: any = {
-    // menu: true,
-    backButton: {
-      label: 'PROFILE_DETAILS',
-    },
+    backButton: true,
+    label: 'PROFILE_DETAILS',
     notification: false,
   };
   path;
@@ -57,22 +58,36 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     private loaderService: LoaderService,
     private alert: AlertController,
     private translate: TranslateService,
-    private toast: ToastService
+    private toast: ToastService,
+    private utilService: UtilService,
+    private router: Router
   ) {
   }
   async ngOnInit() {
+    this.userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     const response = await this.form.getForm(EDIT_PROFILE_FORM);
     this.profileImageData.isUploaded = true;
     this.formData = _.get(response, 'data.fields');
-    this.entityNames = await this.form.getEntityNames(this.formData)
-    this.entityList = await this.form.getEntities(this.entityNames, 'PROFILE')
+    const entityNames = await this.form.getEntityNames(this.formData);
+    this.entityNames = await this.updateEntityArray(this.userDetails?.profile_mandatory_fields, entityNames);
+    this.entityList = await this.form.getEntities(this.entityNames, 'PROFILE');
     this.formData = await this.form.populateEntity(this.formData, this.entityList)
     this.changeDetRef.detectChanges();
-    this.userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     if (this.userDetails) {
       this.profileImageData.image = this.userDetails.image;
       this.profileService.prefillData(this.userDetails, this.entityNames, this.formData);
       this.showForm = true;
+    }
+    if(this.userDetails?.profile_mandatory_fields?.length || !this.userDetails?.about){
+    this.headerConfig.backButton = false;
+    let msg = {
+        header: 'SETUP_PROFILE',
+        message: 'SETUP_PROFILE_MESSAGE',
+        cancel: "CONTINUE"
+        }
+        this.utilService.profileUpdatePopup(msg)
+    }else{
+        this.headerConfig.backButton = true;
     }
   }
 
@@ -125,7 +140,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
           form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey]
         });
         this.form1.myForm.markAsPristine();
-        this.profileService.profileUpdate(form);
+        const updated = this.profileService.profileUpdate(form);
+        if(updated){ this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })}
       }
     } else {
       this.toast.showToast('Please fill all the mandatory fields', 'danger');
@@ -167,5 +183,14 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     }
     let data: any = await this.api.get(config);
     return this.upload(file, data.result).subscribe()
+  }
+
+  updateEntityArray(arr1: string[], arr2: string[]) {
+    arr1.forEach(value => {
+      if (!arr2.includes(value)) {
+        arr2.push(value);
+      }
+    });
+    return arr2
   }
 }
