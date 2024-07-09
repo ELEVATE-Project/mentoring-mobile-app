@@ -64,10 +64,6 @@ export class CreateSessionPage implements OnInit {
   editSessionDisable: boolean;
   isMobile = window.innerWidth <= 950;
 
-  //to be removed
-  addIconDark = {name: 'add-outline', color: 'dark'}
-  closeIconLight = {name: 'close-circle-sharp', color: 'light'}
-
   constructor(
     private http: HttpClient,
     private sessionService: SessionService,
@@ -413,9 +409,9 @@ export class CreateSessionPage implements OnInit {
       if (data.data) {
         event.formControl.selectedData = data.data;
         const values = event.formControl.control.meta.multiSelect ? data.data.map(obj => obj.value) : data.data[0].value;
-        console.log(values, event.formControl.control.meta.multiSelect)
+        console.log(values, event.formControl)
         event.formControl.onChange(values);
-        event.formControl.icon = event.formControl.selectedData.length ? this.closeIconLight : this.addIconDark
+        event.formControl.icon = event.formControl.selectedData.length ? event.formControl.closeIconLight : event.formControl.addIconDark
       }
     });
     await popover.present();
@@ -443,7 +439,7 @@ export class CreateSessionPage implements OnInit {
         event.formControl.selectedData = data.data;
         const values = event.formControl.control.meta.multiSelect ? data.data.map(obj => obj.id) : data.data[0].id;
         event.formControl.onChange(values);
-        event.formControl.icon = event.formControl.selectedData.length ? this.closeIconLight : this.addIconDark
+        event.formControl.icon = event.formControl.selectedData.length ? event.formControl.closeIconLight : event.formControl.addIconDark
       }
     });
     await popover.present();
@@ -473,7 +469,7 @@ export class CreateSessionPage implements OnInit {
         ? (event.formControl.control.meta.multiSelect ? event.formControl.selectedData.map(obj => obj.id) : event.formControl.selectedData[0].id)
         : (event.formControl.control.meta.multiSelect ? [] : '');
         event.formControl.onChange(values);
-        event.formControl.icon = event.formControl.selectedData.length ? this.closeIconLight : this.addIconDark
+        event.formControl.icon = event.formControl.selectedData.length ? event.formControl.closeIconLight : event.formControl.addIconDark
       }
     });
     await popover.present();
@@ -503,7 +499,7 @@ export class CreateSessionPage implements OnInit {
         ? (event.formControl.control.meta.multiSelect ? event.formControl.selectedData.map(obj => obj.value) : event.formControl.selectedData[0].value)
         : (event.formControl.control.meta.multiSelect ? [] : '');
         event.formControl.onChange(values);
-        event.formControl.icon = event.formControl.selectedData.length ? this.closeIconLight : this.addIconDark
+        event.formControl.icon = event.formControl.selectedData.length ? event.formControl.closeIconLight : event.formControl.addIconDark
       }
     });
     await popover.present();
