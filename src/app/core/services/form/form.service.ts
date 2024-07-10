@@ -66,6 +66,7 @@ export class FormService {
         formData.options = entity.entities.map((entityItem)=>{ return { label : entityItem.label, value : entityItem.value }});
         formData.meta = {
           ...formData.meta,
+          entityId: entity.id,
           allow_custom_entities: entity.allow_custom_entities,
           allow_filtering: entity.allow_filtering
         };

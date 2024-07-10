@@ -13,13 +13,25 @@
   </ion-popover>
 </div>
 <div class="ion-margin-top">
-  <ion-chip *ngIf="control?.meta.multiSelect && selectedData.length" (click)="showPopover(control.meta)" [disabled]="control?.disabled">
+  <ion-chip (click)="showPopover()" [disabled]="control?.disabled">
     <ion-icon class="icon" name="add-outline" color="dark"></ion-icon>
-    <ion-label>{{control?.meta.labelForAddButton}}</ion-label>
+    <ion-label>{{control?.meta.labelForAddButton || control?.label}}</ion-label>
   </ion-chip>
-  <ion-chip (click)="control?.meta.multiSelect && selectedData.length ? viewSelectedList() : showPopover(control.meta)" [ngClass]="{'color-red': selectedData.length}" [disabled]="control?.disabled">
-    <ion-icon class="icon" [name]="icon.name" [color]="icon.color" (click)="handleIconClick($event)"></ion-icon>
-    <ion-label *ngIf="selectedData.length" class="capitalize">{{control?.meta.multiSelect ? control?.meta?.labelForListButton : selectedData[0]?.label}}&nbsp; {{ control?.meta.multiSelect ? selectedData.length : '' }}</ion-label>
-    <ion-label *ngIf="!selectedData.length">{{control?.label}}</ion-label>
+
+  <ion-chip *ngIf="allowCustomEntities" (click)="addNewOption()">
+    <ion-icon name="add"></ion-icon>
+    <ion-label> {{ "OTHER" | translate}}</ion-label>
+  </ion-chip>
+
+  <ng-container *ngFor="let data of selectedData; let i = index">
+    <ion-chip *ngIf="i < 3" class="color-red" [disabled]="control?.disabled">
+      <ion-icon class="icon" [name]="icon.name" [color]="icon.color" (click)="handleCloseIconClick($event, data)"></ion-icon>
+      <ion-label class="capitalize">{{data.name || data.label}}</ion-label>
+    </ion-chip>
+  </ng-container>
+
+  <ion-chip *ngIf="selectedData.length > 3" (click)="viewSelectedList()" class="color-red" [disabled]="control?.disabled">
+    <ion-icon class="icon" name="add-outline" color="light"></ion-icon>
+    <ion-label>{{selectedData.length-3}} more</ion-label>
   </ion-chip>
 </div>

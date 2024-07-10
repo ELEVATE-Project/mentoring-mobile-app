@@ -274,6 +274,8 @@
     "SESSSION_SEARCH_RESULT": "Session search result for",
     "SEARCH_RESULT": "Search results found",
     "MENTOR_SEARCH_RESULT": "Mentors search result for",
+    "OTHER": "Other",
+    "SELECT": "Select",
     "SETUP_PROFILE": "Setup profile",
     "SETUP_PROFILE_MESSAGE": "Finish setting up your profile to get started",
     "NO_SESSION_MESSAGE_DESCRIPTION": "Looks like we couldn’t  find what you were looking for, try searching for something else."

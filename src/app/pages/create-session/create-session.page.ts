@@ -11,7 +11,7 @@ import {
 import { CommonRoutes } from 'src/global.routes';
 import * as _ from 'lodash-es';
 import { Location } from '@angular/common';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,6 +21,8 @@ import { map } from 'rxjs/operators';
 import { Validators } from '@angular/forms';
 import { manageSessionAction, permissions } from 'src/app/core/constants/permissionsConstant';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
+import { SearchPopoverComponent } from 'src/app/shared/components/search-popover/search-popover.component';
+import { SearchCompetencyComponent } from 'src/app/shared/components/search-competency/search-competency.component';
 
 @Component({
   selector: 'app-create-session',
@@ -60,6 +62,7 @@ export class CreateSessionPage implements OnInit {
   entityList:any;
   params: any;
   editSessionDisable: boolean;
+  isMobile = window.innerWidth <= 950;
 
   constructor(
     private http: HttpClient,
@@ -77,7 +80,7 @@ export class CreateSessionPage implements OnInit {
     private changeDetRef: ChangeDetectorRef,
     private router: Router,
     private route:ActivatedRoute,
-    private utilService:UtilService,
+    private modalCtrl:ModalController,
     private permissionService:PermissionService
   ) {
   }
@@ -179,7 +182,7 @@ export class CreateSessionPage implements OnInit {
         form.time_zone = timezone;
         _.forEach(this.entityNames, (entityKey) => {
           let control = this.formData.controls.find(obj => obj.name === entityKey);
-          form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey]
+          form[entityKey] = control.multiple && control.type == 'chip' ? _.map(form[entityKey], 'value') : form[entityKey]
         });
         if(!this.profileImageData.image){
           form.image=[]
@@ -233,6 +236,7 @@ export class CreateSessionPage implements OnInit {
   async preFillData(data) {
     let existingData = await this.form.formatEntityOptions(data,this.entityNames)
 
+
     for(let j=0;j<this?.meetingPlatforms?.length;j++){
       if( existingData.meeting_info.platform == this?.meetingPlatforms[j].name){
          this.selectedLink = this?.meetingPlatforms[j];
@@ -256,12 +260,12 @@ export class CreateSessionPage implements OnInit {
         this.formData.controls[i].id = this.id;
         if(this.formData.controls[i].meta.multiSelect){
           this.formData.controls[i].meta.searchData = existingData[this.formData.controls[i].name]
-          this.formData.controls[i].value = this.formData.controls[i].meta.searchData.map(obj => obj.id);
+          this.formData.controls[i].value = this.formData.controls[i].meta.searchData.map(obj => obj.id || obj.value);
         } else {
-          this.formData.controls[i].meta.searchData.push({
+          this.formData.controls[i].meta.searchData = [{
             label: `${existingData.mentor_name}, ${existingData.organization.name}`,
             id: existingData[this.formData.controls[i].name]
-          });
+          }];
         }
         if(!this.formData.controls[i].meta.disableIfSelected) {
           this.formData.controls[i].disabled = false;
@@ -362,5 +366,142 @@ export class CreateSessionPage implements OnInit {
     this.formData.controls[index].disabled = false;
     control.setValidators(required ? [Validators.required] : null);
     control.updateValueAndValidity();
+  }
+
+  eventHandler(event) {
+    switch(event.type) {
+      case 'addUser':
+        this.showAddUserPopup(event)
+        break;
+      
+      case 'addCompetency':
+        this.showCompetencyPopup(event)
+        break;
+      
+      case 'addUser view':
+        this.viewSelectedUsers(event)
+        break;
+
+      case 'addCompetency view':
+        this.viewSelectedCompetencies(event)
+        break;
+    }
+  }
+
+  async showCompetencyPopup(event) {
+    const popover = await this.modalCtrl.create({
+      component: SearchCompetencyComponent,
+      cssClass: 'small-width-popover-config',
+      backdropDismiss: false,
+      componentProps: {
+        data: {
+          selectedData: event.formControl.selectedData,
+          control: event.formControl.control,
+          showFilter: false,
+          showSearch: true,
+          viewListMode: false,
+          isMobile: this.isMobile
+        }
+      }
+    });
+
+    popover.onDidDismiss().then((data) => {
+      if (data.data) {
+        event.formControl.selectedData = data.data;
+        const values = event.formControl.control.meta.multiSelect ? data.data.map(obj => obj.value) : data.data[0].value;
+        console.log(values, event.formControl)
+        event.formControl.onChange(values);
+        event.formControl.icon = event.formControl.selectedData.length ? event.formControl.closeIconLight : event.formControl.addIconDark
+      }
+    });
+    await popover.present();
+  }
+
+  async showAddUserPopup(event) {
+    const popover = await this.modalCtrl.create({
+      component: SearchPopoverComponent,
+      cssClass: 'large-width-popover-config',
+      backdropDismiss: false,
+      componentProps: {
+        data: {
+          selectedData: event.formControl.selectedData,
+          control: event.formControl.control,
+          showFilter: true,
+          showSearch: true,
+          viewListMode: false,
+          isMobile: this.isMobile
+        }
+      }
+    });
+
+    popover.onDidDismiss().then((data) => {
+      if (data.data) {
+        event.formControl.selectedData = data.data;
+        const values = event.formControl.control.meta.multiSelect ? data.data.map(obj => obj.id) : data.data[0].id;
+        event.formControl.onChange(values);
+        event.formControl.icon = event.formControl.selectedData.length ? event.formControl.closeIconLight : event.formControl.addIconDark
+      }
+    });
+    await popover.present();
+  }
+
+  async viewSelectedUsers(event) {
+    const popover = await this.modalCtrl.create({
+      component: SearchPopoverComponent,
+      cssClass: 'large-width-popover-config',
+      backdropDismiss: false,
+      componentProps: {
+        data: {
+          selectedData: event.formControl.selectedData,
+          control: event.formControl.control,
+          showFilter: false,
+          showSearch: false,
+          viewListMode: true,
+          isMobile: this.isMobile
+        }
+      }
+    });
+
+    popover.onDidDismiss().then((data) => {
+      if (data.data) {
+        event.formControl.selectedData = data.data
+        const values = event.formControl.selectedData.length
+        ? (event.formControl.control.meta.multiSelect ? event.formControl.selectedData.map(obj => obj.id) : event.formControl.selectedData[0].id)
+        : (event.formControl.control.meta.multiSelect ? [] : '');
+        event.formControl.onChange(values);
+        event.formControl.icon = event.formControl.selectedData.length ? event.formControl.closeIconLight : event.formControl.addIconDark
+      }
+    });
+    await popover.present();
+  }
+
+  async viewSelectedCompetencies(event) {
+    const popover = await this.modalCtrl.create({
+      component: SearchCompetencyComponent,
+      cssClass: 'small-width-popover-config',
+      backdropDismiss: false,
+      componentProps: {
+        data: {
+          selectedData: event.formControl.selectedData,
+          control: event.formControl.control,
+          showFilter: false,
+          showSearch: false,
+          viewListMode: true,
+          isMobile: this.isMobile
+        }
+      }
+    });
+
+    popover.onDidDismiss().then((data) => {
+      if (data.data) {
+        event.formControl.selectedData = data.data
+        const values = event.formControl.selectedData.length
+        ? (event.formControl.control.meta.multiSelect ? event.formControl.selectedData.map(obj => obj.value) : event.formControl.selectedData[0].value)
+        : (event.formControl.control.meta.multiSelect ? [] : '');
+        event.formControl.onChange(values);
+        event.formControl.icon = event.formControl.selectedData.length ? event.formControl.closeIconLight : event.formControl.addIconDark
+      }
+    });
+    await popover.present();
   }
 }
