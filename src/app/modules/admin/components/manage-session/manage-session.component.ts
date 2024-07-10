@@ -207,7 +207,7 @@ export class ManageSessionComponent implements OnInit {
       });
     }
     this.tableData = data;
-    this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
+    this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "SEARCH_RESULT_NOT_FOUND"
   }
 
   createSession(){
