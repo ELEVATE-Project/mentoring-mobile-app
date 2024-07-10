@@ -12,7 +12,7 @@ export const environment = {
   recaptchaSiteKey:"",
   restictedPages: ["restricted_pages_id_1", "restricted_pages_id_2"],
   isAuthBypassed: true,
-  unauthorizedRedirectUrl: "/auth/login",
+  unauthorizedRedirectUrl: "unauthorized_redirect_url",
   password:{
     minLength:10,
     rejectPattern:"regex for password validation",
