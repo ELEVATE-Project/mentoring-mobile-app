@@ -10,6 +10,9 @@ window["env"] = {
     termsOfServiceUrl:'t&c',
     supportEmail: "",
     recaptchaSiteKey:"",
+    restictedPages: ["restricted_pages_id_1", "restricted_pages_id_2"],
+    isAuthBypassed: true,
+    unauthorizedRedirectUrl: "unauthorized_redirect_url",
     password:{
       minLength:10,
       rejectPattern:"",
