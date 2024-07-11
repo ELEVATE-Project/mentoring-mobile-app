@@ -185,10 +185,10 @@ export class MentorSearchDirectoryPage implements OnInit {
   }
 
   async getMentors(){
-    var obj = {page: this.page, pageSize: this.pageSize, searchText: this.searchText, selectedChip: this.selectedChipName, urlQueryData: this.urlQueryData};
+    var obj = {page: this.page, pageSize: this.pageSize, searchText: this.searchText.trim(), selectedChip: this.selectedChipName, urlQueryData: this.urlQueryData};
     let data = await this.profileService.getMentors(true,obj);
-    this.data = data.result.data;
-    this.totalCount = data.result.count;
+    this.data = data?.result?.data;
+    this.totalCount = data?.result?.count;
   }
 
 }

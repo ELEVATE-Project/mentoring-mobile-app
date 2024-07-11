@@ -96,12 +96,12 @@ export class HomeSearchPage implements OnInit {
     modal.onDidDismiss().then(async (dataReturned) => {
       this.filteredDatas = []
       if (dataReturned !== null) {
-        if (dataReturned.data.data.selectedFilters) {
-          for (let key in dataReturned.data.data.selectedFilters) {
-            this.filteredDatas[key] = dataReturned.data.data.selectedFilters[key].slice(0, dataReturned.data.data.selectedFilters[key].length).map(obj => obj.value).join(',').toString()
+        if (dataReturned?.data?.data?.selectedFilters) {
+          for (let key in dataReturned?.data?.data?.selectedFilters) {
+            this.filteredDatas[key] = dataReturned?.data?.data?.selectedFilters[key].slice(0, dataReturned?.data?.data?.selectedFilters[key].length).map(obj => obj.value).join(',').toString()
           }
         }
-        this.extractLabels(dataReturned.data.data.selectedFilters);
+        this.extractLabels(dataReturned?.data?.data?.selectedFilters);
         this.getUrlQueryData();
       }
       this.page = 1;
