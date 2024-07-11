@@ -233,4 +233,19 @@ export class ProfileService {
     }
   }
 
+  async updateLanguage(formData, showToast=true){
+    const config = {
+      url: urlConstants.API_URLS.UPDATE_LANGUAGE,
+      payload: formData,
+    };
+    try {
+      let data: any = await this.httpService.patch(config);
+      (showToast)?this.toast.showToast(data.message, "success"):null;
+      return data;
+      }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
+
 }

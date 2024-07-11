@@ -94,14 +94,14 @@ export class MentorSearchDirectoryPage implements OnInit {
 
     modal.onDidDismiss().then(async (dataReturned) => {
       this.filteredDatas = []
-      if (dataReturned !== null) {
-        if (dataReturned?.data?.data?.selectedFilters) {
-          for (let key in dataReturned?.data?.data?.selectedFilters) {
-            this.filteredDatas[key] = dataReturned?.data?.data?.selectedFilters[key].slice(0, dataReturned?.data?.data?.selectedFilters[key].length).map(obj => obj.value).join(',').toString()
+      if (dataReturned.data && dataReturned.data.data) {
+        if (dataReturned.data.data.selectedFilters) {
+          for (let key in dataReturned.data.data.selectedFilters) {
+            this.filteredDatas[key] = dataReturned.data.data.selectedFilters[key].slice(0, dataReturned.data.data.selectedFilters[key].length).map(obj => obj.value).join(',').toString()
           }
           this.selectedChips = true;
         }
-        this.extractLabels(dataReturned?.data?.data?.selectedFilters);
+        this.extractLabels(dataReturned.data.data.selectedFilters);
         this.getUrlQueryData();
       }
       this.page = 1;
@@ -185,7 +185,7 @@ export class MentorSearchDirectoryPage implements OnInit {
   }
 
   async getMentors(){
-    var obj = {page: this.page, pageSize: this.pageSize, searchText: this.searchText, selectedChip: this.selectedChipName, urlQueryData: this.urlQueryData};
+    var obj = {page: this.page, pageSize: this.pageSize, searchText: this.searchText.trim(), selectedChip: this.selectedChipName, urlQueryData: this.urlQueryData};
     let data = await this.profileService.getMentors(true,obj);
     this.data = data.result.data;
     this.totalCount = data.result.count;
