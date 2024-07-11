@@ -11,8 +11,10 @@
     <ion-col size="8" class="details-wrapper">
       <div>
         <ion-label *ngIf="headerData?.name" class="name">{{headerData?.name}} </ion-label>
-        <ion-label *ngIf="showRole&&isMentor" class="role ellipsis">({{"MENTOR"|translate}})</ion-label>
-        <ion-label *ngIf="showRole&&!isMentor" class="role ellipsis">({{"MENTEE"|translate}})</ion-label>
+      </div>
+      <div class="roles-div">
+        <ion-label *ngIf="roles">{{ roles[0].title | snakeCaseToUpperCase}}</ion-label>
+        <ion-label class="view-roles" (click)="viewRoles()">{{"VIEW_ROLES" | translate}}</ion-label>
       </div>
       <div class="d-inline-flex flex-align-items-center my-4" *ngIf="headerData?.location">
         <ion-icon name="location"></ion-icon>

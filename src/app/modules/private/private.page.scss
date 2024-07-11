@@ -1,0 +1,117 @@
+.sub-menu-toolbar{
+    height: 100px;
+    padding: 10px;
+    background-color: var(--white);
+    color:--dark-gray;
+    display: flex;
+}
+.menu-css{
+    height: 100%;
+    margin-left: 20px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.sub-menu-list{
+    border-radius: 0px 35px 0 0;
+    margin-top: 20px;
+    ion-item{
+        padding: 5px 3px 3px 3px;
+        --background:rgba(0,0,0,0) !important;
+        font-size: 16px;
+        color: var(--dark-gray);
+        ion-icon{
+            color: var(--ion-color-primary);
+        }
+    }
+}
+.sub-menu-list-label{
+    color: rgb(0, 0, 0);
+    font-size: larger;
+    font-weight: bolder;
+    line-height: normal;
+}
+
+.side-menu-footer{
+    ion-row{
+        background-color: var(--ion-color-primary);
+        height:55px;
+        overflow: hidden;
+        align-items: center;
+        padding: 1px 18px;
+
+        ion-col{
+            padding: 0;
+            color: var(--white);
+            text-align: center;
+        }
+    }
+}
+
+.edit-btn {
+  background-color: var(--ion-color-primary);
+  color: var(--white);;
+  border-radius: 10px;
+  text-transform: capitalize;
+  width:90px
+}
+.space-bottom{
+    margin-top: 5px;
+    font-size: 17px;
+}
+.profile-image{
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    border: solid 2px var(--ion-color-primary);
+    margin: 0px 20px 0px 10px;
+}
+.no-image-icon{
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    margin: 0px 20px 0px 10px;
+}
+.usr-div{
+    display: grid;
+    height: fit-content;
+    align-self: end;
+}
+.usr-div a {
+    background-color: transparent;
+    color: var(--ion-color-primary, #3880ff);
+    font-weight: bolder;
+    font-size: small;
+    letter-spacing: 1pt;
+
+}
+.username {
+    color: black;
+    width: 144px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: larger;
+    font-weight: bolder;
+}
+.side-menu-icon{
+    font-size: xx-large;
+}
+.cursor {
+    cursor: pointer;
+}
+.view-roles{
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 4%;
+    font-size: small;
+}
+.user-role-labels{
+    padding-top: 3%;
+}
+.disable-div{
+    pointer-events: none; /* Disable all pointer events (clicks, hovers, etc.) */
+    opacity: 0.5; /* Make the header appear grayed out */
+    background-color: lightgray;
+}

@@ -7,6 +7,8 @@ import { ModelComponent } from 'src/app/shared/components/model/model.component'
 import * as Bowser from "bowser"
 import { Subject } from 'rxjs';
 import * as Papa from 'papaparse';
+import { localKeys } from '../../constants/localStorage.keys';
+import { LocalStorageService } from '../localstorage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +23,8 @@ export class UtilService {
   constructor(
     private modalCtrl: ModalController,
     private alert: AlertController,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private localstorage:LocalStorageService
   ) {
     const browser = Bowser.getParser(window.navigator.userAgent);
   }
@@ -201,4 +204,30 @@ export class UtilService {
     }
     return JSON.stringify(metaData)
   }
+
+  snakeToNormal(text: string): string {
+    return text.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
+
+  async profileUpdatePopup(msg){
+    let texts;
+    this.translate.get([msg.header, msg.message, msg.cancel]).subscribe(text => {
+      texts = text;
+    })
+      const alert = await this.alert.create({
+        cssClass: 'my-custom-class',
+        header: texts[msg.header],
+        message: texts[msg.message],
+        buttons: [
+          {
+            text: texts[msg.cancel],
+            role: 'cancel',
+            cssClass: 'alert-button-red'
+          },
+        ],
+        backdropDismiss: false
+      });
+      await alert.present();
+  }
+  
 }

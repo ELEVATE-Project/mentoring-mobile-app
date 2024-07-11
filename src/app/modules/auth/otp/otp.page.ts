@@ -48,6 +48,7 @@ export class OtpPage implements OnInit {
   captchaToken:any="";
   recaptchaResolved: boolean = this.siteKey ? false : true;
   showOtp:any = false;
+  enableGeneratetOtp: boolean = false;
   
 
   constructor(private router: Router, private profileService: ProfileService,private location: Location, private activatedRoute: ActivatedRoute, private localStorage: LocalStorageService, private translateService: TranslateService, private authService: AuthService, private toast: ToastService, private menuCtrl: MenuController, private nav: NavController) {
@@ -118,14 +119,17 @@ export class OtpPage implements OnInit {
   async resendOtp() {
     this.enableResendOtp = false;
     this.showOtp = false;
-    this.recaptchaResolved = false
+    this.recaptchaResolved = false;
+    this.enableGeneratetOtp = this.siteKey ? false : true;
   }
 
   async onSubmitGenerateOtp(){
     var response = this.actionType == "signup" ? await this.profileService.registrationOtp(this.signupData, this.captchaToken) : await this.profileService.generateOtp({ email: this.resetPasswordData.email, password:  this.resetPasswordData.password},this.captchaToken);
     if (response) {
       this.toast.showToast(response.message, "success");
-      this.showOtp = true
+      this.showOtp = true;
+      this.recaptchaResolved = true;
+      this.isEnabled = false;
       this.startCountdown();
     }else{
       this.captchaComponent.reset();

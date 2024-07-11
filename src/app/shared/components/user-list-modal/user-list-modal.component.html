@@ -1,0 +1,14 @@
+<ion-header>
+  <div class="d-flex flex-justify-center ion-padding-start wrapper-class">
+    <ion-label class="header">{{"ROLES"|translate}}</ion-label>
+    <ion-icon class="close-icon" (click)="closeModal()" name="close"></ion-icon>
+  </div>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let datas of data; let i = index">{{ i + 1 }}. {{datas | snakeCaseToUpperCase}}</ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer class=" d-flex flex-justify-center footer ion-padding-start footer-button" (click)="closeModal()">
+  <ion-label class="header">{{"CLOSE"|translate}}</ion-label>
+</ion-footer>

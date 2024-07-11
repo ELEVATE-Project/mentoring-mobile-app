@@ -1,0 +1,13 @@
+<ion-grid>
+  <ion-row class="d-flex flex-justify-center">
+      <div class="ion-margin ion-padding">
+          <ion-button class="btn-width-200"
+              (click)="downloadCSV()">{{"DOWNLOAD_SAMPLE_CSV"|translate}}</ion-button>
+      </div>
+      <div class="ion-margin ion-padding">
+          <ion-button class="btn-width-200"
+              (click)="upload.click()">{{"UPLOAD_CSV"|translate}}</ion-button>
+          <input type="file" accept=".csv" (change)="uploadCSV($event)" hidden #upload />
+      </div>
+  </ion-row>
+</ion-grid>

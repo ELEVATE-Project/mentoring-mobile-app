@@ -35,3 +35,6 @@
   .btn-width-200 {
     width: 200px;
   }
+  .normal-case {
+    text-transform: none;
+  }
