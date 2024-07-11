@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Share } from '@capacitor/share';
 import { AlertController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { environment } from 'src/environments/environment';
 import { ISocialSharing } from '../../interface/soical-sharing-interface';
 import { ModelComponent } from 'src/app/shared/components/model/model.component';
 import * as Bowser from "bowser"
@@ -31,7 +30,7 @@ export class UtilService {
   }
 
   getDeepLink(url){
-    return environment.deepLinkUrl+url;
+    return window['env']['deepLinkUrl']+url;
   }
 
   async shareLink(param:ISocialSharing) {
