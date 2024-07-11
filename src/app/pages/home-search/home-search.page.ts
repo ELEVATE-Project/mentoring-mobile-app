@@ -101,7 +101,7 @@ export class HomeSearchPage implements OnInit {
             this.filteredDatas[key] = dataReturned?.data?.data?.selectedFilters[key].slice(0, dataReturned?.data?.data?.selectedFilters[key].length).map(obj => obj.value).join(',').toString()
           }
         }
-        this.extractLabels(dataReturned?.data?.data?.selectedFilters);
+        this.extractLabels(dataReturned.data.data.selectedFilters);
         this.getUrlQueryData();
       }
       this.page = 1;
@@ -114,8 +114,8 @@ export class HomeSearchPage implements OnInit {
   async fetchSessionList() {
     var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChip?.name, filterData : this.urlQueryData}
     var response = await this.sessionService.getSessionsList(obj);
-    this.results = response?.result?.data;
-    this.totalCount = response?.result?.count;
+    this.results = response.result.data;
+    this.totalCount = response.result.count;
     this.noDataMessage = obj.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
   }
 
