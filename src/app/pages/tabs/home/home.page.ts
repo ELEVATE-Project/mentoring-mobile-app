@@ -166,8 +166,8 @@ export class HomePage implements OnInit {
   async getSessions() {
     var obj = {page: this.page, limit: this.limit}
     let data = await this.sessionService.getSessions(obj);
-    this.sessions = data?.result;
-    this.sessionsCount = data?.result?.count;
+    this.sessions = data.result;
+    this.sessionsCount = data.result.count;
   }
   async openModal() {
     const modal = await this.modalController.create({

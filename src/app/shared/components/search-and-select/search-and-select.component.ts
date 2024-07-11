@@ -85,9 +85,9 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     });
 
     popover.onDidDismiss().then((data) => {
-      if (data.data) {
+      if (data && data.data) {
         this.selectedData = data.data;
-        const values = this.control.meta.multiSelect ? data.data.map(obj => obj.id) : data?.data[0]?.id;
+        const values = this.control.meta.multiSelect ? data.data.map(obj => obj.id) : data.data[0].id;
         this.onChange(values);
         this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
       }
