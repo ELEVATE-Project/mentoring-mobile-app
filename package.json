@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "manage-forms": "node formManager.js"
+    "manage-forms": "node formsManager.js"
   },
   "private": true,
   "dependencies": {

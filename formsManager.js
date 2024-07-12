@@ -3,14 +3,14 @@ const axios = require("axios");
 const authToken = process.env.AUTH_TOKEN;
 const apiUrl = process.env.API_URL;
 
-const forms = require("forms.json");
+const forms = require("./forms.json");
 
 const createForm = async (form) => {
   try {
     const response = await axios.post(
       `${apiUrl}/mentoring/v1/form/create`,
-      { form },
-      { headers: { Authorization: `Bearer ${authToken}` } }
+      form,
+      { headers: { 'X-auth-token': `bearer ${authToken}` } }
     );
     if(response){
         console.log("Form created successfully:", response.data);
@@ -24,8 +24,8 @@ const updateForm = async (form) => {
   try {
     const response = await axios.put(
       `${apiUrl}/mentoring/v1/form/update`,
-      { form },
-      { headers: { Authorization: `Bearer ${authToken}` } }
+      form,
+      { headers: { 'X-auth-token': `bearer ${authToken}` } }
     );
     if(response){
         console.log("Form updated successfully:", response.data);

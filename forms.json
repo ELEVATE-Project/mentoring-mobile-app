@@ -2,7 +2,7 @@
     {
         "type": "editProfile",
         "sub_type": "editProfileForm",
-        "action":"create",
+        "action":"update",
         "data": {
             "fields": {
                 "controls": [
@@ -188,7 +188,7 @@
     {
         "type": "session",
         "sub_type": "sessionForm",
-        "action":"create",
+        "action":"skip",
         "data": {
             "fields": {
                 "controls": [
@@ -339,7 +339,7 @@
     {
         "type": "managersSession",
         "sub_type": "managersSessionForm",
-        "action":"create",
+        "action":"skip",
         "data": {
             "fields": {
                 "controls": [
@@ -679,7 +679,7 @@
     {
         "type": "helpApp",
         "sub_type": "helpAppForm",
-        "action":"update",
+        "action":"skip",
         "data": {
             "fields": {
                 "forms": [
@@ -712,7 +712,7 @@
                     {
                         "name": "Request to delete my account",
                         "menteeMessage": "Please note the following points<ul><li>Account deletion takes 2 days to process. You will receive an email notification when complete.</li><li>Your previous session data will be retained.</li><li>You will be un-enrolled from enrolled sessions.</li></ul>",
-                        "menterMessage": "Please note the following points<ul><li>Account deletion takes 2 days to process. You will receive an email notification when complete.</li><li>Your previous session data will be retained.</li><li>Sessions created by you will be deleted.</li><li>You will be un-enrolled from enrolled sessions.</li></ul>",
+                        "menterMessage": "Please note the following points<ul><li>Account deletion takes 2 days to process. You will receive an email notification when complete.</li><li>Your previous session data will be retained.</li><li>Sessions updated by you will be deleted.</li><li>You will be un-enrolled from enrolled sessions.</li></ul>",
                         "value": "Request to delete my account",
                         "buttonText": "DELETE_ACCOUNT",
                         "form": {
