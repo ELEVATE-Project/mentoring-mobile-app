@@ -24,7 +24,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   @Input() control;
   @Output() showSelectionPopover = new EventEmitter()
   @Output() viewSelectedListPopover = new EventEmitter()
-  @Input() uniqueId: string;
+  @Input() uniqueId: any;
   disabled;
   touched = false;
   selectedChips;
