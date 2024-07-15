@@ -1,4 +1,4 @@
-FROM node:14 AS build
+FROM node:16 AS build
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ COPY . .
 
 RUN ionic build --prod
 
-FROM node:14 AS final
+FROM node:16 AS final
 
 WORKDIR /usr/src/app
 
