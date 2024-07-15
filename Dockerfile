@@ -8,7 +8,7 @@ RUN npm install -g @ionic/cli@6.0.0
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --force
 
 COPY . .
 
