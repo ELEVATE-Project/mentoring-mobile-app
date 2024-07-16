@@ -1,10 +1,12 @@
-FROM node:18 AS build
+FROM node:16 AS build
 
 WORKDIR /app
 
 RUN npm install -g @angular/cli@13.2.3
 
 RUN npm install -g @ionic/cli@6.0.0
+
+RUN rm -rf node_modules
 
 COPY package*.json ./
 
@@ -14,7 +16,7 @@ COPY . .
 
 RUN ionic build --prod
 
-FROM node:18 AS final
+FROM node:16 AS final
 
 WORKDIR /usr/src/app
 
