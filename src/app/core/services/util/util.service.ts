@@ -230,5 +230,39 @@ export class UtilService {
       });
       await alert.present();
   }
+
+
+  async transformToFilterData(responseData, obj) {
+    const result = [];
+    for (const key in responseData) {
+      if (key !== 'entity_types') {
+        const title = key.charAt(0).toUpperCase() + key.slice(1);
+        const name = 'organization_ids';
+        const options = responseData[key].map(item => ({
+          id: item.value,
+          label: item.name,
+          value: item.id
+        }));
+        const type = "checkbox";
+        result.push({ title, name, options, type });
+      }
+    }
+    const entityTypes = responseData?.entity_types;
+  
+    const filterData = Object.keys(entityTypes).map(type => {
+      const entityType = entityTypes[type][0];
+      return {
+        title: entityType.label,
+        name: entityType.value,
+        options: entityType.entities.map(entity => ({
+          label: entity.label,
+          value: entity.value
+        })),
+        type: "checkbox"
+      };
+    });
+    const data = [...filterData, ...result]
+    return data;
+  }
   
 }

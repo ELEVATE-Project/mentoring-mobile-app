@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
-import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService, LoaderService } from 'src/app/core/services';
+import { UtilService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
@@ -49,16 +48,18 @@ export class MentorSearchDirectoryPage implements OnInit {
     private profileService: ProfileService,
     private modalCtrl: ModalController,
     private permissionService: PermissionService,
-    private formService: FormService
+    private formService: FormService,
+    private utilService: UtilService
   ) { }
 
   async ngOnInit() {
     this.getMentors();
     this.permissionService.getPlatformConfig().then((config)=>{
       this.overlayChips = config?.result?.search_config?.search?.mentor?.fields;
-    })
-    let data = await this.formService.filterList('profile')
-    this.filterData = this.transformData(data)
+    });
+    const obj = {filterType: 'mentor', org: true};
+    let data = await this.formService.filterList(obj);
+    this.filterData = await this.utilService.transformToFilterData(data, obj);
   }
 
   onSearch(){
@@ -109,25 +110,6 @@ export class MentorSearchDirectoryPage implements OnInit {
       this.getMentors()
     });
     modal.present();
-  }
-
-  transformData(responseData) {
-    const entityTypes = responseData?.entity_types;
-  
-    const filterData = Object.keys(entityTypes).map(type => {
-      const entityType = entityTypes[type][0];
-      return {
-        title: entityType.label,
-        name: entityType.value,
-        options: entityType.entities.map(entity => ({
-          label: entity.label,
-          value: entity.value
-        })),
-        type: "checkbox"
-      };
-    });
-  
-    return filterData;
   }
 
   extractLabels(data) {

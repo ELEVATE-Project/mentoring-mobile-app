@@ -276,5 +276,8 @@
     "MENTOR_SEARCH_RESULT": "Mentors search result for",
     "SETUP_PROFILE": "Setup profile",
     "SETUP_PROFILE_MESSAGE": "Finish setting up your profile to get started",
-    "NO_SESSION_MESSAGE_DESCRIPTION": "Looks like we couldn’t  find what you were looking for, try searching for something else."
+    "NO_SESSION_MESSAGE_DESCRIPTION": "Looks like we couldn’t  find what you were looking for, try searching for something else.",
+    "PROFILE_FORM_UNSAVED_DATA": "You have unsaved data, would you like to save it before exiting?",
+    "PROFILE_EXIT_HEADER_LABEL": "Save Data?",
+    "DONOT_SAVE": "Don't Save"
 }
