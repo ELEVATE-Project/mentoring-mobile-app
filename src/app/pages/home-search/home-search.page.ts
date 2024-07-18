@@ -1,13 +1,11 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { HttpService, LoaderService, LocalStorageService, ToastService } from 'src/app/core/services';
-import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admin-workapce.service';
+import { LocalStorageService, ToastService, UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
 import { CommonRoutes } from 'src/global.routes';
 import { MatPaginator } from '@angular/material/paginator';
-import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { Location } from '@angular/common';
@@ -51,14 +49,15 @@ export class HomeSearchPage implements OnInit {
   urlQueryData: string;
   pageSize: any;
 
-  constructor(private modalCtrl: ModalController, private adminWorkapceService: AdminWorkapceService,private httpService: HttpService, private router: Router, private toast: ToastService,
+  constructor(private modalCtrl: ModalController, private router: Router, private toast: ToastService,
     private sessionService: SessionService,
     private localStorage: LocalStorageService,
     private profileService: ProfileService,
     private location: Location,
     private activatedRoute: ActivatedRoute,
     private permissionService: PermissionService,
-    private formService: FormService
+    private formService: FormService,
+    private utilService: UtilService
   ) { 
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.params = params;
@@ -76,8 +75,9 @@ export class HomeSearchPage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    let data = await this.formService.filterList('session');
-    this.filterData = this.transformData(data);
+    const obj = {filterType: 'session', org: false};
+    let data = await this.formService.filterList(obj);
+    this.filterData = await this.utilService.transformToFilterData(data, obj);
   }
 
   search(event) {
@@ -184,25 +184,6 @@ export class HomeSearchPage implements OnInit {
     this.criteriaChip = null;
     this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchString : this.searchText} });
     this.fetchSessionList()
-  }
-
-  transformData(responseData) {
-    const entityTypes = responseData.entity_types;
-  
-    const filterData = Object.keys(entityTypes).map(type => {
-      const entityType = entityTypes[type][0];
-      return {
-        title: entityType.label,
-        name: entityType.value,
-        options: entityType.entities.map(entity => ({
-          label: entity.label,
-          value: entity.value
-        })),
-        type: "checkbox"
-      };
-    });
-  
-    return filterData;
   }
 
   selectChip(chip) {

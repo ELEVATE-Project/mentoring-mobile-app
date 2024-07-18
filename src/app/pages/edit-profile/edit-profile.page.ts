@@ -24,6 +24,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
+import { PlatformLocation } from '@angular/common';
 
 @Component({
   selector: 'app-edit-profile',
@@ -60,8 +61,18 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     private translate: TranslateService,
     private toast: ToastService,
     private utilService: UtilService,
-    private router: Router
+    private router: Router,
+    private platformLocation: PlatformLocation
   ) {
+  }
+
+  ionViewWillEnter() {
+    if(this.userDetails?.profile_mandatory_fields?.length || !this.userDetails?.about){
+      history.pushState(null, '', location.href);
+      this.platformLocation.onPopState(()=>{
+      history.pushState(null, '', location.href)
+    })
+    }
   }
   async ngOnInit() {
     this.userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
@@ -95,22 +106,22 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     if (this.form1 && !this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
       let texts: any;
       this.translate
-        .get(['FORM_UNSAVED_DATA', 'CANCEL', 'OK', 'EXIT_HEADER_LABEL'])
+        .get(['PROFILE_FORM_UNSAVED_DATA', 'DONOT_SAVE', 'SAVE', 'PROFILE_EXIT_HEADER_LABEL'])
         .subscribe((text) => {
           texts = text;
         });
       const alert = await this.alert.create({
-        header: texts['EXIT_HEADER_LABEL'],
-        message: texts['FORM_UNSAVED_DATA'],
+        header: texts['PROFILE_EXIT_HEADER_LABEL'],
+        message: texts['PROFILE_FORM_UNSAVED_DATA'],
         buttons: [
           {
-            text: texts['CANCEL'],
+            text: texts['DONOT_SAVE'],
             cssClass: 'alert-button-bg-white',
             role: 'exit',
             handler: () => { },
           },
           {
-            text: texts['OK'],
+            text: texts['SAVE'],
             role: 'cancel',
             cssClass: 'alert-button-red',
             handler: () => { },
