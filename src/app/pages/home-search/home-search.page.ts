@@ -11,6 +11,7 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { Location } from '@angular/common';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { FormService } from 'src/app/core/services/form/form.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home-search',
@@ -43,30 +44,30 @@ export class HomeSearchPage implements OnInit {
   criteriaChip: any;
   chips =[]
   criteriaChipName: any;
-  params: any;
   overlayChips: any;
   isOpen = false;
   urlQueryData: string;
   pageSize: any;
+  searchTextSubscription: Subscription;
+  criteriaChipSubscription: Subscription;
 
   constructor(private modalCtrl: ModalController, private router: Router, private toast: ToastService,
     private sessionService: SessionService,
     private localStorage: LocalStorageService,
     private profileService: ProfileService,
     private location: Location,
-    private activatedRoute: ActivatedRoute,
     private permissionService: PermissionService,
     private formService: FormService,
-    private utilService: UtilService
-  ) { 
-    this.activatedRoute.queryParamMap.subscribe(async (params) => {
-      this.params = params;
-      this.criteriaChip = JSON.parse(params.get('criteriaChip'));
-      this.searchText = this.params.get('searchString');
-    })
-  }
+    private utilService: UtilService,
+  ) {  }
 
   async ngOnInit() {
+    this.searchTextSubscription = this.utilService.currentSearchText.subscribe(searchText => {
+      this.searchText = searchText;
+    });
+    this.criteriaChipSubscription = this.utilService.currentCriteriaChip.subscribe(selectedCriteria => {
+      this.criteriaChip = JSON.parse(selectedCriteria);
+    });
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchSessionList()
     this.permissionService.getPlatformConfig().then((config)=>{
@@ -81,9 +82,13 @@ export class HomeSearchPage implements OnInit {
   }
 
   search(event) {
-    this.searchText = event;
-    this.isOpen = false;
-    this.fetchSessionList()
+    if (event.length >= 3) {
+      this.searchText = event;
+      this.isOpen = false;
+      this.fetchSessionList()
+    } else {
+      this.toast.showToast("ENTER_MIN_CHARACTER","danger");
+    }
   }
 
   async onClickFilter() {
@@ -221,5 +226,10 @@ export class HomeSearchPage implements OnInit {
           }
       }
     }
+  }
+  
+  ngOnDestroy() {
+    this.searchTextSubscription.unsubscribe();
+    this.criteriaChipSubscription.unsubscribe();
   }
 }

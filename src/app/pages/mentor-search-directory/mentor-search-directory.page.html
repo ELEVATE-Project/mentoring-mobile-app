@@ -1,7 +1,8 @@
 <app-page-header [config]="headerConfig">
   <div class="d-flex flex-justify-center">
     <ion-searchbar class="top-padding search-style"  debounce="1000" placeholder="{{'MENTOR_SEARCH_PLACEHOLDER' | translate}}"
-    [(ngModel)]="searchText" (ionChange)="onSearch()"
+    #event
+    (keyup.enter)="onSearch(event.value)"
     cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="isOpen = !isOpen"></ion-searchbar>
   </div>
 </app-page-header>
