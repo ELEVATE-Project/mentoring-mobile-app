@@ -1,9 +1,12 @@
 const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
 
 const authToken = process.env.AUTH_TOKEN;
 const apiUrl = process.env.API_URL;
 
-const forms = require("./forms.json");
+const formsFilePath = path.resolve(__dirname, "./forms.json");
+let forms = require(formsFilePath);
 
 const createForm = async (form) => {
   try {
@@ -14,6 +17,7 @@ const createForm = async (form) => {
     );
     if(response){
         console.log("Form created successfully:", response.data);
+        form.action = "skip";
     }
   } catch (error) {
     console.error("Error creating form:", error);
@@ -29,10 +33,21 @@ const updateForm = async (form) => {
     );
     if(response){
         console.log("Form updated successfully:", response.data);
+        form.action = "skip";
     }
   } catch (error) {
     console.error("Error updating form:", error);
   }
+};
+
+const saveFormsToFile = () => {
+  fs.writeFile(formsFilePath, JSON.stringify(forms, null, 2), (err) => {
+    if (err) {
+      console.error("Error saving forms to file:", err);
+    } else {
+      console.log("Forms saved to file successfully.");
+    }
+  });
 };
 
 const createOrUpdateForms = async () => {
@@ -55,6 +70,7 @@ const createOrUpdateForms = async () => {
       console.error("Error processing form with type", form.type, ":", error);
     }
   }
+  saveFormsToFile();
 };
 
 createOrUpdateForms();
