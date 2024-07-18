@@ -2,13 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
-import { ModalController, NavController, Platform, IonContent } from '@ionic/angular';
+import { ModalController, NavController, IonContent } from '@ionic/angular';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { HttpService, LoaderService, LocalStorageService, ToastService, UserService, UtilService } from 'src/app/core/services';
-import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-conditions.page';
 import { App, AppState } from '@capacitor/app';
@@ -63,7 +62,8 @@ export class HomePage implements OnInit {
     private userService: UserService,
     private localStorage: LocalStorageService,
     private toast: ToastService,
-    private permissionService: PermissionService) { }
+    private permissionService: PermissionService,
+    private utilService: UtilService) { }
 
   ngOnInit() {
     this.isMentor = this.profileService.isMentor
@@ -146,10 +146,14 @@ export class HomePage implements OnInit {
     this.router.navigate([`/${CommonRoutes.SESSIONS}`], { queryParams: { type: data } });
   }
 
-  search(q: string) {
+  search(event: string) {
     this.isOpen = false;
-    if(q){
-      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`], {queryParams: { criteriaChip: JSON.stringify(this.criteriaChip), searchString: q}});
+    if(event && event.length >= 3){
+      this.utilService.subscribeSearchText(event);
+      this.utilService.subscribeCriteriaChip(JSON.stringify(this.criteriaChip))
+      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
+    }else {
+      this.toast.showToast("ENTER_MIN_CHARACTER","danger");
     }
     this.criteriaChip = null;
   }

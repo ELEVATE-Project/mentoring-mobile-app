@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
-import { UtilService } from 'src/app/core/services';
+import { ToastService, UtilService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
@@ -49,7 +49,8 @@ export class MentorSearchDirectoryPage implements OnInit {
     private modalCtrl: ModalController,
     private permissionService: PermissionService,
     private formService: FormService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private toast: ToastService
   ) { }
 
   async ngOnInit() {
@@ -62,8 +63,13 @@ export class MentorSearchDirectoryPage implements OnInit {
     this.filterData = await this.utilService.transformToFilterData(data, obj);
   }
 
-  onSearch(){
-    this.getMentors()
+  onSearch(event){
+    if (event.length >= 3) {
+      this.searchText = event;
+      this.getMentors();
+    } else {
+      this.toast.showToast("ENTER_MIN_CHARACTER","danger");
+    }
   }
   
   selectChip(chip) {
