@@ -66,7 +66,7 @@ export class HomeSearchPage implements OnInit {
       this.searchText = searchText;
     });
     this.criteriaChipSubscription = this.utilService.currentCriteriaChip.subscribe(selectedCriteria => {
-      this.criteriaChip = JSON.parse(selectedCriteria);
+      this.criteriaChip = selectedCriteria ? JSON.parse(selectedCriteria) : "";
     });
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchSessionList()
@@ -226,6 +226,12 @@ export class HomeSearchPage implements OnInit {
           }
       }
     }
+  }
+
+  ionViewWillLeave(){
+    this.searchText = "";
+    this.criteriaChip = "";
+    this.chips = [];
   }
   
   ngOnDestroy() {
