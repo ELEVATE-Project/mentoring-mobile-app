@@ -42,6 +42,7 @@ export class MentorSearchDirectoryPage implements OnInit {
   totalCount: any;
   limit: any;
   chips = [];
+  showSelectedCriteria: any;
 
   constructor(
     private router: Router,
@@ -66,6 +67,7 @@ export class MentorSearchDirectoryPage implements OnInit {
   onSearch(event){
     if (event.length >= 3) {
       this.searchText = event;
+      this.showSelectedCriteria = this.selectedChipLabel;
       this.getMentors();
     } else {
       this.toast.showToast("ENTER_MIN_CHARACTER","danger");
@@ -73,23 +75,25 @@ export class MentorSearchDirectoryPage implements OnInit {
   }
   
   selectChip(chip) {
-    this.selectedChipLabel = chip.label;
-    this.selectedChipName = chip.name;
-    this.isOpen = false;
-    this.getMentors()
+    if (this.selectedChipLabel === chip.label) {
+      this.selectedChipLabel = null;
+      this.selectedChipName = null;
+    } else {
+      this.selectedChipLabel = chip.label;
+      this.selectedChipName = chip.name;
+    }
   }
 
   closeCriteriaChip(){
     this.selectedChipLabel = "";
     this.selectedChipName = "";
-    this.getMentors()
+    this.showSelectedCriteria = "";
   }
 
   removeChip(chip: string,index: number) {
     this.chips.splice(index, 1);
     this.removeFilteredData(chip)
     this.getUrlQueryData();
-    this.getMentors()
   }
 
   async onClickFilter() {
@@ -175,8 +179,11 @@ export class MentorSearchDirectoryPage implements OnInit {
   async getMentors(){
     var obj = {page: this.page, pageSize: this.pageSize, searchText: this.searchText.trim(), selectedChip: this.selectedChipName, urlQueryData: this.urlQueryData};
     let data = await this.profileService.getMentors(true,obj);
-    this.data = data.result.data;
-    this.totalCount = data.result.count;
+    if(data && data.result){
+      this.isOpen = false;
+      this.data = data.result.data;
+      this.totalCount = data.result.count;
+    }
   }
 
 }
