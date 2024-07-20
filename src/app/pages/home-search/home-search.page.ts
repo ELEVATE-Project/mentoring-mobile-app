@@ -50,6 +50,7 @@ export class HomeSearchPage implements OnInit {
   pageSize: any;
   searchTextSubscription: Subscription;
   criteriaChipSubscription: Subscription;
+  showSelectedCriteria: any;
 
   constructor(private modalCtrl: ModalController, private router: Router, private toast: ToastService,
     private sessionService: SessionService,
@@ -76,6 +77,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   async ionViewWillEnter() {
+    this.showSelectedCriteria = this.criteriaChip? this.criteriaChip : "";
     const obj = {filterType: 'session', org: false};
     let data = await this.formService.filterList(obj);
     this.filterData = await this.utilService.transformToFilterData(data, obj);
@@ -84,6 +86,7 @@ export class HomeSearchPage implements OnInit {
   search(event) {
     if (event.length >= 3) {
       this.searchText = event;
+      this.showSelectedCriteria = this.criteriaChip;
       this.isOpen = false;
       this.fetchSessionList()
     } else {
@@ -187,14 +190,16 @@ export class HomeSearchPage implements OnInit {
 
   closeCriteriaChip(){
     this.criteriaChip = null;
+    this.showSelectedCriteria = null;
     this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchString : this.searchText} });
-    this.fetchSessionList()
   }
 
   selectChip(chip) {
-    this.criteriaChip = chip;
-    this.fetchSessionList()
-    this.isOpen = false;
+    if (this.criteriaChip === chip) {
+      this.criteriaChip = null;
+    } else {
+      this.criteriaChip = chip;
+    }
   }
 
   getUrlQueryData() {
