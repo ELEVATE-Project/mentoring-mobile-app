@@ -1,6 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import * as _ from 'lodash-es';
-import { UserService, UtilService } from 'src/app/core/services';
+import { UtilService } from 'src/app/core/services';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { Capacitor } from '@capacitor/core';
 import { SwUpdate } from '@angular/service-worker';
@@ -15,7 +15,6 @@ export class AppComponent {
     private utilService:UtilService,
     private screenOrientation: ScreenOrientation,
     private swUpdate: SwUpdate,
-    private userService: UserService
   ) {
     if(Capacitor.isNativePlatform()){
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
