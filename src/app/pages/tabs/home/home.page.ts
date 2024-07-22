@@ -221,6 +221,10 @@ export class HomePage implements OnInit {
   }
 
   selectChip(chip: any) {
-    this.criteriaChip = chip;
+    if (this.criteriaChip === chip) {
+      this.criteriaChip = null;
+    } else {
+      this.criteriaChip = chip;
+    }
   }
 }
