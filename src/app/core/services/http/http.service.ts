@@ -23,6 +23,8 @@ export class HttpService {
   baseUrl;
   isFeedbackTriggered = false;
   isAlertOpen: any = false;
+  extraHeaders
+
   constructor(
     private userService: UserService,
     private network: NetworkService,
@@ -46,6 +48,12 @@ export class HttpService {
       'Content-Type': 'application/json',
       'timeZone': timezone,
       'accept-language':acceptLanguage
+    }
+    this.extraHeaders = localStorage.getItem('headers')
+    if(this.extraHeaders) {
+      Object.keys(this.extraHeaders).forEach(key => {
+        headers[key] = this.extraHeaders[key];
+      });
     }
     return headers;
   }
