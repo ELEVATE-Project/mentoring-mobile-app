@@ -29,7 +29,7 @@
     </div>
   </ion-grid>
 </ng-template>
-<ion-toolbar class="padding-top-10">
+<ion-toolbar>
   <ion-grid>
     <ion-row>
       <ion-col size="auto" *ngIf="showSelectedCriteria">
@@ -79,7 +79,7 @@
         <ion-label>{{totalCount}} {{"SEARCH_RESULT" | translate}}</ion-label>
       </div>
     </div>
-    <div>
+    <div class="paginator">
       <mat-paginator  [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"></mat-paginator>
     </div>
   </div>

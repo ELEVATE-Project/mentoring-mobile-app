@@ -10,7 +10,7 @@
       <ion-label>{{totalCount}} {{"SEARCH_RESULT" | translate}}</ion-label>
     </div>
   </div>
-  <div>
+  <div class="paginator">
     <mat-paginator  [length]="totalCount" [pageSize]="limit" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"></mat-paginator>
   </div>
 </div>
