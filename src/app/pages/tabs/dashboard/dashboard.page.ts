@@ -42,13 +42,13 @@ export class DashboardPage implements OnInit {
     private apiService: HttpService) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
     this.isMentor = this.profile.isMentor;
     this.segment = this.isMentor ? "mentor" : "mentee";
     this.dataAvailable = true;
     this.getReports();
-  }
-
-  ionViewWillEnter() {
     this.gotToTop();
   }
 

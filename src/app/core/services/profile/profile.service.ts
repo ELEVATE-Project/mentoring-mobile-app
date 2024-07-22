@@ -18,6 +18,7 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UserListModalComponent } from 'src/app/shared/components/user-list-modal/user-list-modal.component';
 import { ModalController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -188,7 +189,7 @@ export class ProfileService {
 
   async prefillData(requestDetails: any,entityNames:any,formData:any,showAddOption:any=true) {
     let existingData = requestDetails;
-    if(requestDetails?.about){
+    if(requestDetails?.about || environment.isAuthBypassed){
        existingData = await this.form.formatEntityOptions(requestDetails,entityNames)
     }
     for (let i = 0; i < formData.controls.length; i++) {

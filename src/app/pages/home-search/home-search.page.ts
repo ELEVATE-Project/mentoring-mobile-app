@@ -13,6 +13,7 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { Location } from '@angular/common';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { FormService } from 'src/app/core/services/form/form.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home-search',
@@ -127,7 +128,7 @@ export class HomeSearchPage implements OnInit {
 
   async eventAction(event) {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    if (this.user.about) {
+    if (this.user.about || environment.isAuthBypassed) {
       switch (event.type) {
         case 'cardSelect':
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
