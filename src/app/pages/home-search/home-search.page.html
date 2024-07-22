@@ -24,7 +24,7 @@
           *ngFor="let chip of overlayChips; let i = index" 
           (click)="selectChip(chip)"
           [ngClass]="{'selected-chip': criteriaChip?.label === chip.label}">
-          <ion-icon name="close-circle" color="white"></ion-icon>
+          <ion-icon name="close-circle"  style="pointer-events: none;" color="white"></ion-icon>
           <ion-label class="chip-label">{{ chip.label }}</ion-label>
         </ion-chip>
       </ion-row>
@@ -33,16 +33,16 @@
 </ng-template>
   <ion-grid>
     <ion-row>
-      <ion-col *ngIf="criteriaChip" size="auto">
+      <ion-col *ngIf="showSelectedCriteria" size="auto">
         <div style="width: auto">
           <ion-chip class="chip">
             <ion-icon name="close-circle" color="white" (click)="closeCriteriaChip()"></ion-icon>
-            <ion-label class="chip-label">{{criteriaChip?.label}}</ion-label>
+            <ion-label class="chip-label">{{showSelectedCriteria?.label}}</ion-label>
           </ion-chip>
         </div>
       </ion-col>
       <ion-col size="auto">
-        <div *ngIf="chips.length && criteriaChip" class="verticalLine"><hr></div>
+        <div *ngIf="chips.length && showSelectedCriteria" class="verticalLine"><hr></div>
       </ion-col>
       <ion-col class="chip-container">
         <ion-row>
