@@ -213,7 +213,7 @@ export class HttpService {
 
         break
       default:
-        // this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
+        this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
     }
     throw Error(result);
   }
