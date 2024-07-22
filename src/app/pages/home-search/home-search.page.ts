@@ -236,6 +236,7 @@ export class HomeSearchPage implements OnInit {
   ionViewWillLeave(){
     this.searchText = "";
     this.criteriaChip = "";
+    this.showSelectedCriteria = "";
     this.chips = [];
   }
   
