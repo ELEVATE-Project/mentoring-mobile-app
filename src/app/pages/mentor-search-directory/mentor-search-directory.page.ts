@@ -192,6 +192,7 @@ export class MentorSearchDirectoryPage implements OnInit {
     this.selectedChipName = null;
     this.chips = [];
     this.urlQueryData = null;
+    this.getMentors();
   }
 
 }

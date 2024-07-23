@@ -15,7 +15,7 @@ export class GenericDetailsComponent implements OnInit {
     return Array.isArray(arr)
  }
 
-  ngOnInit() {}
+  ngOnInit() {console.log(this.sessionData)}
 
   onClickViewList(){
     this.onViewList.emit()
