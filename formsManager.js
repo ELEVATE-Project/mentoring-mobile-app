@@ -1,9 +1,13 @@
 const axios = require("axios");
+const { error } = require("console");
 const fs = require("fs");
 const path = require("path");
 
 const authToken = process.env.AUTH_TOKEN;
 const apiUrl = process.env.API_URL;
+
+const args = process.argv.slice(2);
+const actionsApplicable = ["skip", "update","create"]
 
 const formsFilePath = path.resolve(__dirname, "./forms.json");
 let forms = require(formsFilePath);
@@ -52,6 +56,11 @@ const saveFormsToFile = () => {
 
 const createOrUpdateForms = async () => {
   for (const form of forms) {
+    if(!!args[0] && actionsApplicable.includes(args[0])){
+      form.action = args[0];
+    }else if(!!args[0] && !actionsApplicable.includes(args[0])){
+      throw error("Invalid argument applied => ",args[0])
+    }
     try {
       switch (form.action) {
         case "skip":

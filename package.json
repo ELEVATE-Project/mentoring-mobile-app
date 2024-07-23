@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "manage-forms": "node formsManager.js"
+    "manage-forms": "node formsManager"
   },
   "private": true,
   "dependencies": {
@@ -73,6 +73,7 @@
     "rxjs": "~6.6.0",
     "rxjs-compat": "^6.6.7",
     "tslib": "^2.2.0",
+    "yargs": "^17.7.2",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
