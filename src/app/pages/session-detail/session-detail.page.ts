@@ -357,7 +357,7 @@ export class SessionDetailPage implements OnInit {
      
     let modal = await this.modalCtrl.create({
       component: MenteeListPopupComponent, 
-      cssClass: 'search-popover-config',
+      cssClass: 'large-width-popover-config',
       componentProps: { id:this.id }
     });
 

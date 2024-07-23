@@ -1,21 +1,11 @@
-rm -rf node_modules
-rm -rf www
-
-rm package-lock.json && npm install
-
-
 #!/bin/bash
+# Build script
+set -eo pipefail
 
-rm android/app/build/outputs/apk/debug
+build_tag=$1
+name='mentoring-portal'
+node=$2
+org=$3
 
-ionic capacitor build android --release  --prod --stacktrace
-
-cd android
-
-./gradlew clean
-
-./gradlew bundle
-
-cd ..
-
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore mentoring-key.keystore android/app/build/outputs/bundle/release/app-release.aab mentoring-key
+docker build -f Dockerfile --label commitHash=$(git rev-parse --short HEAD) -t ${org}/${name}:${build_tag} .
+echo {\"image_name\" : \"${name}\", \"image_tag\" : \"${build_tag}\", \"node_name\" : \"$node\"} > metadata.json

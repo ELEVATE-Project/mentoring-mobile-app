@@ -55,7 +55,6 @@ export class ProfileService {
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileDatas);
       this.userService.userEvent.next(profileDatas);
       this.loaderService.stopLoader();
-      this._location.back();
       (showToast)?this.toast.showToast(data.message, "success"):null;
       return true;
       }
@@ -216,6 +215,22 @@ export class ProfileService {
       componentProps: { data: userRoles }
     });
     modal.present();
+  }
+
+  async getMentors(showLoader = true, obj){
+    showLoader ? await this.loaderService.startLoader() : '';
+    const config = {
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST  + obj?.page + '&limit=' + obj.pageSize + '&search=' + btoa(obj.searchText) + '&directory=false'+ '&search_on=' + (obj?.selectedChip? obj?.selectedChip : '') + '&' + (obj?.urlQueryData ? obj?.urlQueryData: ''),
+      payload: {}
+    };
+    try {
+      let data: any = await this.httpService.get(config);
+      showLoader ? await this.loaderService.stopLoader() : '';
+      return data;
+    }
+    catch (error) {
+      showLoader ? await this.loaderService.stopLoader() : '';
+    }
   }
 
 }

@@ -1,0 +1,35 @@
+<ion-toolbar position="top" color="primary">
+  <div class="container">
+    <h2 class="ion-padding-start ion-padding-top">{{data.control.label}}</h2>
+    <div class="close-col">
+      <ion-icon class="close-button" name="close-outline" (click)="closePopover()"></ion-icon>
+    </div>
+  </div>
+</ion-toolbar>
+
+<ion-content>
+  <div *ngIf="!data?.viewListMode" class="search-col d-flex flex-justify-center ion-padding-top ion-margin-top ion-margin-start">
+    <ion-searchbar *ngIf="data.showSearch" class="search-style" debounce="1000" [(ngModel)]="searchText"
+      (ionChange)="onSearch()" placeholder="{{'SELECT'|translate}} {{data.control.label}}"></ion-searchbar>
+    <h2 class="ion-padding-start label-button" (click)="clearAll()">{{ "CLEAR_ALL" | translate }}</h2>
+  </div>
+  <div *ngIf="entities && !data?.viewListMode" class="competency-list-wrapper">
+    <ion-item *ngFor="let option of entities.data" lines="none">
+      <ion-label>{{ option?.label }}</ion-label>
+      <ion-checkbox slot="start" [checked]="isOptionSelected(option)" (ionChange)="onCheckboxChange($event, option)"></ion-checkbox>
+    </ion-item>
+  </div>
+
+  <div *ngIf="data?.viewListMode" class="competency-list-wrapper">
+    <ion-item *ngFor="let data of data.selectedData" lines="none">
+      <ion-label>{{ data?.label }}</ion-label>
+      <ion-checkbox checked="true" (ionChange)="onCheckboxChange($event, data)" slot="start"></ion-checkbox>
+    </ion-item>
+  </div>
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+<ion-footer>
+  <ion-button expand="full" (click)="onSave()">{{"SAVE"|translate}}</ion-button>
+</ion-footer>

@@ -13,6 +13,7 @@ import { SessionService } from 'src/app/core/services/session/session.service';
 import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-conditions.page';
 import { App, AppState } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
+import { PermissionService } from 'src/app/core/services/permission/permission.service';
 
 
 @Component({
@@ -46,6 +47,10 @@ export class HomePage implements OnInit {
   createdSessions: any;
   isMentor: boolean;
   userEventSubscription: any;
+  isOpen = false;
+
+  chips= [];
+  criteriaChip: any;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -57,7 +62,8 @@ export class HomePage implements OnInit {
     private modalController: ModalController,
     private userService: UserService,
     private localStorage: LocalStorageService,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private permissionService: PermissionService) { }
 
   ngOnInit() {
     this.isMentor = this.profileService.isMentor
@@ -85,6 +91,9 @@ export class HomePage implements OnInit {
       }
     })
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    this.permissionService.getPlatformConfig().then((config)=>{
+      this.chips = config.result.search_config.search.session.fields;
+    })
   }
   gotToTop() {
     this.content.scrollToTop(1000);
@@ -137,8 +146,12 @@ export class HomePage implements OnInit {
     this.router.navigate([`/${CommonRoutes.SESSIONS}`], { queryParams: { type: data } });
   }
 
-  search() {
-    this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
+  search(q: string) {
+    this.isOpen = false;
+    if(q){
+      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`], {queryParams: { criteriaChip: JSON.stringify(this.criteriaChip), searchString: q}});
+    }
+    this.criteriaChip = null;
   }
   getUser() {
     this.profileService.profileDetails().then(data => {
@@ -151,16 +164,10 @@ export class HomePage implements OnInit {
   }
 
   async getSessions() {
-    const config = {
-      url: urlConstants.API_URLS.HOME_SESSION + this.page + '&limit=' + this.limit,
-    };
-    try {
-      let data: any = await this.httpService.get(config);
-      this.sessions = data.result;
-      this.sessionsCount = data.result.count;
-    }
-    catch (error) {
-    }
+    var obj = {page: this.page, limit: this.limit}
+    let data = await this.sessionService.getSessions(obj);
+    this.sessions = data.result;
+    this.sessionsCount = data.result.count;
   }
   async openModal() {
     const modal = await this.modalController.create({
@@ -207,5 +214,9 @@ export class HomePage implements OnInit {
     if (this.userEventSubscription) {
       this.userEventSubscription.unsubscribe();
     }
+  }
+
+  selectChip(chip: any) {
+    this.criteriaChip = chip;
   }
 }

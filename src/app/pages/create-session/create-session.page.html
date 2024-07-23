@@ -16,7 +16,7 @@
         <ion-content class="ion-padding">
           <app-profile-image *ngIf="showForm" [profileImageData]='profileImageData' [uploadImage]="true" (imageUploadEvent)="imageUploadEvent($event)" (imageRemoveEvent)="imageRemoveEvent($event)"></app-profile-image>
           <div *ngIf="formData && showForm">
-            <app-dynamic-form [jsonFormData]="formData" #form1 (formValid)="isValid($event)" (formValueChanged)="formValueChanged($event)"> </app-dynamic-form>
+            <app-dynamic-form [jsonFormData]="formData" #form1 (formValid)="isValid($event)" (formValueChanged)="formValueChanged($event)" (customEventEmitter)="eventHandler($event)"> </app-dynamic-form>
           </div>
         </ion-content>
       </ion-list>

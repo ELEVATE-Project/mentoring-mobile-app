@@ -4,6 +4,8 @@ import { PrivatePage } from './private.page';
 import { CommonRoutes } from 'src/global.routes';
 import { PrivateGuard } from 'src/app/core/guards/private.guard';
 import { CREATE_SESSION_FORM } from 'src/app/core/constants/formConstant';
+import { PAGE_IDS } from 'src/app/core/constants/page.ids';
+import { AllowPageAccess } from 'src/app/core/guards/allowPageAccess/allowPageAccess.guard';
 
 const routes: Routes = [
   {
@@ -43,7 +45,10 @@ const routes: Routes = [
       {
         path: CommonRoutes.EDIT_PROFILE,
         loadChildren: () => import('../../pages/edit-profile/edit-profile.module').then(m => m.EditProfilePageModule),
-        canActivate: [PrivateGuard]
+        canActivate: [PrivateGuard, AllowPageAccess],
+        data: {
+          pageId: PAGE_IDS.editProfile
+        }
       },
       {
         path: CommonRoutes.HOME_SEARCH,
@@ -63,22 +68,34 @@ const routes: Routes = [
       {
         path: CommonRoutes.HELP,
         loadChildren: () => import('../../pages/help/help.module').then(m => m.HelpPageModule),
-        canActivate: [PrivateGuard]
+        canActivate: [PrivateGuard, AllowPageAccess],
+        data: {
+          pageId: PAGE_IDS.help
+        }
       },
       {
         path: CommonRoutes.FAQ,
         loadChildren: () => import('../../pages/faq/faq.module').then(m => m.FaqPageModule),
-        canActivate: [PrivateGuard]
+        canActivate: [PrivateGuard, AllowPageAccess],
+        data: {
+          pageId: PAGE_IDS.faq
+        }
       },
       {
         path: CommonRoutes.LANGUAGE,
         loadChildren: () => import('../../pages/language/language.module').then(m => m.LanguagePageModule),
-        canActivate: [PrivateGuard]
+        canActivate: [PrivateGuard, AllowPageAccess],
+        data: {
+          pageId: PAGE_IDS.language
+        }
       },
       {
         path: CommonRoutes.HELP_VIDEOS,
         loadChildren: () => import('../../pages/help-video/help-video.module').then(m => m.HelpVideoPageModule),
-        canActivate: [PrivateGuard]
+        canActivate: [PrivateGuard, AllowPageAccess],
+        data: {
+          pageId: PAGE_IDS.helpVideos
+        }
       },
       {
         path: CommonRoutes.MENTOR_QUESTIONNAIRE,
@@ -88,16 +105,30 @@ const routes: Routes = [
       {
         path: CommonRoutes.ADMIN,
         loadChildren: () => import('../../modules/admin/admin.module').then(m => m.AdminModule),
-        canActivate: [PrivateGuard]
+        canActivate: [PrivateGuard, AllowPageAccess],
+        data: {
+          pageId: PAGE_IDS.adminWorkspace
+        }
       },
       {
         path: CommonRoutes.CHANGE_PASSWORD,
         loadChildren: () => import('../../pages/change-password/change-password.module').then(m => m.ChangePasswordPageModule),
-        canActivate: [PrivateGuard]
+        canActivate: [PrivateGuard, AllowPageAccess],
+        data: {
+          pageId: PAGE_IDS.changePassword
+        }
       },
       {
         path: CommonRoutes.LOGIN_ACTIVITY,
         loadChildren: () => import('../../pages/login-activity/login-activity.module').then(m => m.LoginActivityPageModule),
+        canActivate: [PrivateGuard, AllowPageAccess],
+        data: {
+          pageId: PAGE_IDS.loginActivity
+        }
+      },
+      {
+        path: CommonRoutes.MENTOR_SEARCH_DIRECTORY,
+        loadChildren: () => import('../../pages/mentor-search-directory/mentor-search-directory.module').then(m => m.MentorSearchDirectoryPageModule),
         canActivate: [PrivateGuard]
       },
       {
