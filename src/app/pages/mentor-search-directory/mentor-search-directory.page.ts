@@ -191,6 +191,7 @@ export class MentorSearchDirectoryPage implements OnInit {
   ionViewDidLeave(){
     this.searchText = "";
     this.showSelectedCriteria = "";
+    this.selectedChipLabel = null;
     this.selectedChipName = null;
     this.chips = [];
     this.urlQueryData = null;
