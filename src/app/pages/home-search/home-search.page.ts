@@ -233,11 +233,13 @@ export class HomeSearchPage implements OnInit {
     }
   }
 
-  ionViewWillLeave(){
+  ionViewDidLeave(){
     this.searchText = "";
     this.criteriaChip = "";
     this.showSelectedCriteria = "";
     this.chips = [];
+    this.utilService.subscribeSearchText('');
+    this.utilService.subscribeCriteriaChip('')
   }
   
   ngOnDestroy() {

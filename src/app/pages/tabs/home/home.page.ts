@@ -50,6 +50,7 @@ export class HomePage implements OnInit {
 
   chips= [];
   criteriaChip: any;
+  searchText: string;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -149,13 +150,15 @@ export class HomePage implements OnInit {
   search(event: string) {
     this.isOpen = false;
     if(event && event.length >= 3){
-      this.utilService.subscribeSearchText(event);
+      this.searchText = event ? event : "";
+      this.utilService.subscribeSearchText(this.searchText);
       this.utilService.subscribeCriteriaChip(JSON.stringify(this.criteriaChip))
       this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
     }else {
       this.toast.showToast("ENTER_MIN_CHARACTER","danger");
     }
     this.criteriaChip = null;
+    this.searchText = null;
   }
   getUser() {
     this.profileService.profileDetails().then(data => {
@@ -227,4 +230,10 @@ export class HomePage implements OnInit {
       this.criteriaChip = chip;
     }
   }
+
+  ionViewDidLeave(){
+    this.criteriaChip = '';
+    this.searchText = '';
+  }
+
 }
