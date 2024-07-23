@@ -54,7 +54,9 @@ export class MentorSearchDirectoryPage implements OnInit {
     private toast: ToastService
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() { }
+
+  async ionViewWillEnter() {
     this.getMentors();
     this.permissionService.getPlatformConfig().then((config)=>{
       this.overlayChips = config?.result?.search_config?.search?.mentor?.fields;
@@ -62,10 +64,6 @@ export class MentorSearchDirectoryPage implements OnInit {
     const obj = {filterType: 'mentor', org: true};
     let data = await this.formService.filterList(obj);
     this.filterData = await this.utilService.transformToFilterData(data, obj);
-  }
-
-  ionViewWillEnter() {
-    this.getMentors();
   }
 
   onSearch(event){
