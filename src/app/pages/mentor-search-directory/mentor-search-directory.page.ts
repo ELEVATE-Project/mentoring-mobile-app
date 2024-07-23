@@ -54,7 +54,9 @@ export class MentorSearchDirectoryPage implements OnInit {
     private toast: ToastService
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() { }
+
+  async ionViewWillEnter() {
     this.getMentors();
     this.permissionService.getPlatformConfig().then((config)=>{
       this.overlayChips = config?.result?.search_config?.search?.mentor?.fields;
@@ -191,8 +193,7 @@ export class MentorSearchDirectoryPage implements OnInit {
     this.showSelectedCriteria = "";
     this.selectedChipName = null;
     this.chips = [];
-    this.utilService.subscribeSearchText('');
-    this.utilService.subscribeCriteriaChip('')
+    this.urlQueryData = null;
   }
 
 }

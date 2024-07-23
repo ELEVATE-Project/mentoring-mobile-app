@@ -52,12 +52,8 @@ export class HomePage implements OnInit {
   criteriaChip: any;
   searchText: string;
   constructor(
-    private http: HttpClient,
     private router: Router,
-    private navController: NavController,
     private profileService: ProfileService,
-    private loaderService: LoaderService,
-    private httpService: HttpService,
     private sessionService: SessionService,
     private modalController: ModalController,
     private userService: UserService,
@@ -157,8 +153,6 @@ export class HomePage implements OnInit {
     }else {
       this.toast.showToast("ENTER_MIN_CHARACTER","danger");
     }
-    this.criteriaChip = null;
-    this.searchText = null;
   }
   getUser() {
     this.profileService.profileDetails().then(data => {
