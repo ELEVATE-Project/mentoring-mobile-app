@@ -64,6 +64,10 @@ export class MentorSearchDirectoryPage implements OnInit {
     this.filterData = await this.utilService.transformToFilterData(data, obj);
   }
 
+  ionViewWillEnter() {
+    this.getMentors();
+  }
+
   onSearch(event){
     if (event.length >= 3) {
       this.searchText = event;
@@ -192,7 +196,6 @@ export class MentorSearchDirectoryPage implements OnInit {
     this.selectedChipName = null;
     this.chips = [];
     this.urlQueryData = null;
-    this.getMentors();
   }
 
 }
