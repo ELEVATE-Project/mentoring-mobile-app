@@ -191,8 +191,7 @@ export class MentorSearchDirectoryPage implements OnInit {
     this.showSelectedCriteria = "";
     this.selectedChipName = null;
     this.chips = [];
-    this.utilService.subscribeSearchText('');
-    this.utilService.subscribeCriteriaChip('')
+    this.urlQueryData = null;
   }
 
 }
