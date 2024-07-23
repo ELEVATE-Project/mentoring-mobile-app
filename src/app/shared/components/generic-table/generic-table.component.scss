@@ -55,7 +55,7 @@ margin: 0 10px;
 }
 .primary-color{
   color: #ffffff;
-  --background: #832915;
+  --background: var(--ion-color-primary);
   height: 30px;
   min-width: 40px;
   padding: 0%;

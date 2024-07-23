@@ -5,7 +5,9 @@ import {
   OnInit,
   Output,
   ViewChild,
-  EventEmitter
+  EventEmitter,
+  ViewChildren,
+  QueryList
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash-es';
@@ -15,6 +17,7 @@ import { ThemePalette } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { NGX_MAT_DATE_FORMATS, NgxMatDateFormats, NgxMatDatetimePicker } from '@angular-material-components/datetime-picker';
 import { debounceTime } from 'rxjs/operators';
+import { SearchAndSelectComponent } from '../search-and-select/search-and-select.component';
 
 interface JsonFormValidators {
   min?: number;
@@ -108,6 +111,8 @@ export class DynamicFormComponent implements OnInit {
   @Output() onEnter = new EventEmitter()
   @Output() formValueChanged = new EventEmitter()
   @ViewChild('picker') picker: MatDatepicker<Date>;
+  @ViewChildren(SearchAndSelectComponent) searchAndSelectComponents: QueryList<SearchAndSelectComponent>;
+  @Output() customEventEmitter = new EventEmitter()
   
   public showSpinners = true;
   public showSeconds = false;
@@ -209,8 +214,6 @@ export class DynamicFormComponent implements OnInit {
     return JSON.stringify(a) == JSON.stringify(b);
   }
   onSubmit() {
-    console.log('Form valid: ', this.myForm.valid);
-    console.log('Form values: ', this.myForm.value);
     this.isFormValid();
   }
   reset() {
@@ -263,5 +266,13 @@ export class DynamicFormComponent implements OnInit {
     if(this.myForm.valid){
       this.onEnter.emit(event)
     }
+  }
+
+  searchEventEmitter(event){
+    const componentInstance = this.searchAndSelectComponents.find(comp => comp.uniqueId === event.id);
+    if (componentInstance) {
+      event.formControl = componentInstance
+      this.customEventEmitter.emit(event)
+    }    
   }
 }

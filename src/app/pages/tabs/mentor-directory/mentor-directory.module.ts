@@ -10,6 +10,7 @@ import { MentorDirectoryPage } from './mentor-directory.page';
 import { TranslateModule } from '@ngx-translate/core';
 import { CoreModule } from 'src/app/core/core.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import {OverlayModule} from '@angular/cdk/overlay'
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     IonicModule,
     SharedModule,
     TranslateModule,
-    MentorDirectoryPageRoutingModule
+    MentorDirectoryPageRoutingModule,
+    OverlayModule
   ],
   declarations: [MentorDirectoryPage]
 })

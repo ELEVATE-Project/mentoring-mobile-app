@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import * as _ from 'lodash-es';
 import { UtilService } from 'src/app/core/services';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { SwUpdate } from '@angular/service-worker';
 @Component({

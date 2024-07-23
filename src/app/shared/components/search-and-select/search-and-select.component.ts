@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash-es';
 import { SearchPopoverComponent } from '../search-popover/search-popover.component';
@@ -22,6 +22,9 @@ import { SearchPopoverComponent } from '../search-popover/search-popover.compone
 })
 export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   @Input() control;
+  @Output() showSelectionPopover = new EventEmitter()
+  @Output() viewSelectedListPopover = new EventEmitter()
+  @Input() uniqueId: any;
   disabled;
   touched = false;
   selectedChips;
@@ -33,9 +36,10 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   icon = this.addIconDark;
   value: any[];
   isMobile: any;
+  allowCustomEntities: any;
 
   constructor(
-    private modalCtrl: ModalController,
+    private alertController: AlertController,
     private translateService: TranslateService
   ) { }
 
@@ -46,10 +50,12 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   ngOnInit() { 
     this.originalLabel = this.control.label;
     this.isMobile = window.innerWidth <= 950;
+    this.allowCustomEntities = this.control.meta.allow_custom_entities
   }
 
   writeValue(value: any[]) {
     this.selectedData = this.control.meta.searchData ? this.control.meta.searchData : []
+    this.selectedChips = this.selectedData.map( data => data.id )
     this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
   }
   registerOnChange(onChange: any) {
@@ -66,77 +72,63 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-  async showPopover(event) {
+  handleCloseIconClick(event: Event, removedItem): void {
+    if (this.selectedData) {
+      this.selectedData = this.selectedData.filter(obj => obj.value !== removedItem.value || obj.id !== removedItem.id );
+      this.onChange(this.selectedData)
+      event.stopPropagation()
+    }
+  }
+
+  async showPopover() {
     this.markAsTouched();
-    const popover = await this.modalCtrl.create({
-      component: SearchPopoverComponent,
-      cssClass: 'search-popover-config',
-      backdropDismiss: false,
-      componentProps: {
-        data: {
-          selectedData: this.selectedData,
-          control: this.control,
-          showFilter: true,
-          showSearch: true,
-          viewListMode: false,
-          isMobile: this.isMobile
-        }
-      }
-    });
-
-    popover.onDidDismiss().then((data) => {
-      if (data.data) {
-        this.selectedData = data.data;
-        const values = this.control.meta.multiSelect ? data.data.map(obj => obj.id) : data.data[0].id;
-        this.onChange(values);
-        this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
-      }
-    });
-    await popover.present();
+    this.showSelectionPopover.emit({type: this.control.meta.addPopupType, id: this.uniqueId})
   }
 
-  clearControl(event){
-    this.control.label = this.originalLabel
-    this.selectedData = []
-    this.icon = this.addIconDark
-    this.onChange([])
-    event.stopPropagation()
-  }
+  
 
   async viewSelectedList() {
     this.markAsTouched();
-    const popover = await this.modalCtrl.create({
-      component: SearchPopoverComponent,
-      cssClass: 'search-popover-config',
-      backdropDismiss: false,
-      componentProps: {
-        data: {
-          selectedData: this.selectedData,
-          control: this.control,
-          showFilter: false,
-          showSearch: false,
-          viewListMode: true,
-          isMobile: this.isMobile
-        }
-      }
-    });
+    this.showSelectionPopover.emit({type:this.control.meta.addPopupType+' view', id: this.uniqueId})
+  }
 
-    popover.onDidDismiss().then((data) => {
-      if (data.data) {
-        this.selectedData = data.data
-        const values = this.selectedData.length
-        ? (this.control.meta.multiSelect ? this.selectedData.map(obj => obj.id) : this.selectedData[0].id)
-        : (this.control.meta.multiSelect ? [] : '');
-        this.onChange(values);
-        this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
+  async addNewOption() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Add ' + `${this.control.label}`,
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          placeholder: 'Enter ' + `${this.control.label}`,
+          attributes: {
+            maxlength: 50,
+          }
+        },
+      ],
+      buttons: [
+        {
+          text: this.translateService.instant('CANCEL'),
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => { },
+        },
+        {
+          text: this.translateService.instant('OK'),
+          handler: (alertData) => {
+            let obj = {
+              label: alertData.name,
+              value: alertData.name
+            };
+            this.selectedData.push(obj);
+            this.selectedChips.push(obj.value)
+            this.onChange(this.selectedData.map(data => data.value));
+            this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
+          }
       }
+      
+      ],
     });
-    await popover.present();
+    await alert.present();
   }
-  // Your component code
-handleIconClick(event: Event): void {
-  if (this.selectedData) {
-    this.clearControl(event);
-  }
-}
 }
