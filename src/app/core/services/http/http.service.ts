@@ -1,6 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
 import { RequestParams } from '../../interface/request-param';
-import { environment } from 'src/environments/environment';
 import * as _ from 'lodash-es';
 import { UserService } from '../user/user.service';
 import { NetworkService } from '../network.service';
@@ -35,8 +34,8 @@ export class HttpService {
     private modalController: ModalController,
     private translate: TranslateService,
     private alert: AlertController,
-  ) {
-    this.baseUrl = environment.baseUrl;
+  ) {  
+    this.baseUrl = window['env']['baseUrl'];
     console.log(environment.baseUrl, this.baseUrl, "http service")
   }
 

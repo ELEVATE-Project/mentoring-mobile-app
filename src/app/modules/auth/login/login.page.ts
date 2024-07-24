@@ -5,7 +5,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService, LocalStorageService, UserService, UtilService } from 'src/app/core/services';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
-import { environment } from 'src/environments/environment';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { RecaptchaComponent } from 'ng-recaptcha';
@@ -52,7 +51,7 @@ export class LoginPage implements OnInit {
       },
     ],
   };
-  siteKey = (environment as any)?.recaptchaSiteKey ? (environment as any)?.recaptchaSiteKey  :""
+  siteKey = window['env']?.recaptchaSiteKey ? window['env']?.recaptchaSiteKey.recaptchaSiteKey  :""
   id: any;
   userDetails: any;
   recaptchaResolved: boolean = this.siteKey ? false : true;
@@ -67,9 +66,9 @@ export class LoginPage implements OnInit {
   captchaToken:any="";
   labels = ["LOGIN_TO_MENTOR_ED"];
   mentorId: any;
-  supportEmail: any = environment.supportEmail;
-  privacyPolicyUrl =environment.privacyPolicyUrl;
-  termsOfServiceUrl = environment.termsOfServiceUrl;
+  supportEmail: any = window['env'].supportEmail;
+  privacyPolicyUrl = window['env'].privacyPolicyUrl;
+  termsOfServiceUrl = window['env'].termsOfServiceUrl;
   constructor(private authService: AuthService, private router: Router,private utilService: UtilService,
               private menuCtrl: MenuController, private activatedRoute: ActivatedRoute,private profileService: ProfileService,
               private translateService: TranslateService, private localStorage: LocalStorageService, private userService: UserService) {
