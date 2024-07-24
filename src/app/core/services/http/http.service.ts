@@ -34,8 +34,9 @@ export class HttpService {
     private modalController: ModalController,
     private translate: TranslateService,
     private alert: AlertController,
-  ) {
+  ) {  
     this.baseUrl = window['env']['baseUrl'];
+    console.log(environment.baseUrl, this.baseUrl, "http service")
   }
 
   async setHeaders() {
@@ -49,6 +50,7 @@ export class HttpService {
       'accept-language':acceptLanguage
     }
     this.extraHeaders = localStorage.getItem('headers')
+    console.log(this.extraHeaders)
     if(this.extraHeaders) {
       Object.keys(this.extraHeaders).forEach(key => {
         headers[key] = this.extraHeaders[key];
