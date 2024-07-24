@@ -183,7 +183,7 @@ logout(){
 }
 
 getUser() {
-  this.profile.profileDetails(false).then(profileDetails => {
+  this.profile.getProfileDetailsFromAPI().then(profileDetails => {
     this.adminAccess = profileDetails.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,profileDetails?.permissions) : false;
     this.user = profileDetails;
     if (!environment.isAuthBypassed && profileDetails.profile_mandatory_fields && profileDetails.profile_mandatory_fields.length > 0 || !profileDetails.about && !environment.isAuthBypassed) {
