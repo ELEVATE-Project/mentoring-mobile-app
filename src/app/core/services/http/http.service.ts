@@ -50,7 +50,7 @@ export class HttpService {
       'timeZone': timezone,
       'accept-language':acceptLanguage
     }
-    this.extraHeaders = localStorage.getItem('headers')
+    this.extraHeaders = JSON.parse(localStorage.getItem('headers'))
     console.log(this.extraHeaders)
     if(this.extraHeaders) {
       Object.keys(this.extraHeaders).forEach(key => {
