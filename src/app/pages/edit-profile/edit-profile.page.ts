@@ -139,7 +139,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     }
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.form1.onSubmit();
     if (this.form1.myForm.valid) {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
@@ -151,7 +151,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
           form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey]
         });
         this.form1.myForm.markAsPristine();
-        const updated = this.profileService.profileUpdate(form);
+        const updated = await this.profileService.profileUpdate(form);
         if(updated){ this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })}
       }
     } else {
