@@ -46,7 +46,7 @@ export class HomeSearchPage implements OnInit {
   overlayChips: any;
   isOpen = false;
   urlQueryData: string;
-  pageSize: any;
+  pageSize: any =5;
   searchTextSubscription: Subscription;
   criteriaChipSubscription: Subscription;
   showSelectedCriteria: any;
