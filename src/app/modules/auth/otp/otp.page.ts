@@ -5,7 +5,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService, LocalStorageService, ToastService } from 'src/app/core/services';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
-import { environment } from 'src/environments/environment';
 import { Location } from '@angular/common';
 import { RecaptchaComponent } from 'ng-recaptcha';
 
@@ -26,7 +25,7 @@ export class OtpPage implements OnInit {
       'border-radius': '8px'
     }
   };
-  siteKey = (environment as any)?.recaptchaSiteKey ? (environment as any)?.recaptchaSiteKey  :""
+  siteKey = window['env']?.recaptchaSiteKey ? window['env']?.recaptchaSiteKey.recaptchaSiteKey  :""
   resetPasswordData = { email: null, password: null, otp: null };
   public headerConfig: any = {
     // menu: true,
@@ -44,8 +43,8 @@ export class OtpPage implements OnInit {
   labels;
   signupData: any;
   checked: boolean = false;
-  privacyPolicyUrl =environment.privacyPolicyUrl;
-  termsOfServiceUrl = environment.termsOfServiceUrl;
+  privacyPolicyUrl = window['env'].privacyPolicyUrl;
+  termsOfServiceUrl = window['env'].termsOfServiceUrl;
   captchaToken:any="";
   recaptchaResolved: boolean = this.siteKey ? false : true;
   showOtp:any = false;
