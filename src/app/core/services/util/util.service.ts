@@ -6,9 +6,8 @@ import { environment } from 'src/environments/environment';
 import { ISocialSharing } from '../../interface/soical-sharing-interface';
 import { ModelComponent } from 'src/app/shared/components/model/model.component';
 import * as Bowser from "bowser"
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import * as Papa from 'papaparse';
-import { localKeys } from '../../constants/localStorage.keys';
 import { LocalStorageService } from '../localstorage.service';
 
 @Injectable({
@@ -17,6 +16,10 @@ import { LocalStorageService } from '../localstorage.service';
 export class UtilService {
   modal: any;
   public canIonMenuShow = new Subject<boolean>();
+  private searchTextSource = new BehaviorSubject<string>('');
+  private criteriaChipSource = new BehaviorSubject<string>('');
+  currentSearchText = this.searchTextSource.asObservable();
+  currentCriteriaChip = this.criteriaChipSource.asObservable();
 
   ionMenuShow(data:boolean) {
     this.canIonMenuShow.next(data);
@@ -229,6 +232,47 @@ export class UtilService {
         backdropDismiss: false
       });
       await alert.present();
+  }
+
+
+  async transformToFilterData(responseData, obj) {
+    const result = [];
+    for (const key in responseData) {
+      if (key !== 'entity_types') {
+        const title = key.charAt(0).toUpperCase() + key.slice(1);
+        const name = 'organization_ids';
+        const options = responseData[key].map(item => ({
+          id: item.value,
+          label: item.name,
+          value: item.id
+        }));
+        const type = "checkbox";
+        result.push({ title, name, options, type });
+      }
+    }
+    const entityTypes = responseData?.entity_types;
+  
+    const filterData = Object.keys(entityTypes).map(type => {
+      const entityType = entityTypes[type][0];
+      return {
+        title: entityType.label,
+        name: entityType.value,
+        options: entityType.entities.map(entity => ({
+          label: entity.label,
+          value: entity.value
+        })),
+        type: "checkbox"
+      };
+    });
+    const data = [...filterData, ...result]
+    return data;
+  }
+
+  subscribeSearchText(searchText: string) {
+    this.searchTextSource.next(searchText);
+  }
+  subscribeCriteriaChip(criteriaChip: string) {
+    this.criteriaChipSource.next(criteriaChip);
   }
   
 }

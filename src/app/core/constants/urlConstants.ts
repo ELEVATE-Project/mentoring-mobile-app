@@ -63,6 +63,7 @@ export const urlConstants = {
         GET_PLATFORM_CONFIG: "/mentoring/v1/platform/config",
         CHANGE_PASSWORD: "/user/v1/account/changePassword",
         LOGIN_ACTIVITY: "/user/v1/account/sessions",
-        ENTITY_LIST: "/mentoring/v1/entity/list?"
+        ENTITY_LIST: "/mentoring/v1/entity/list?",
+        UPDATE_LANGUAGE: "/user/v1/user/setLanguagePreference"
     }
 };

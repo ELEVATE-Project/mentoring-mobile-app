@@ -1,7 +1,8 @@
 <app-page-header [config]="headerConfig">
   <div class="d-flex flex-justify-center">
     <ion-searchbar class="top-padding search-style"  debounce="1000" placeholder="{{'MENTOR_SEARCH_PLACEHOLDER' | translate}}"
-    [(ngModel)]="searchText" (ionChange)="onSearch()"
+    #event [value]="searchText"
+    (keyup.enter)="onSearch(event.value)"
     cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="isOpen = !isOpen"></ion-searchbar>
   </div>
 </app-page-header>
@@ -21,26 +22,26 @@
           *ngFor="let chip of overlayChips; let i = index" 
           (click)="selectChip(chip)"
           [ngClass]="{'selected-chip': selectedChipLabel === chip.label}">
-          <ion-icon name="close-circle" color="white"></ion-icon>
+          <ion-icon name="close-circle" style="pointer-events: none;" color="white"></ion-icon>
           <ion-label class="chip-label">{{ chip.label }}</ion-label>
         </ion-chip>
       </ion-row>
     </div>
   </ion-grid>
 </ng-template>
-<ion-toolbar class="padding-top-10">
+<ion-toolbar>
   <ion-grid>
     <ion-row>
-      <ion-col size="auto" *ngIf="selectedChipLabel">
+      <ion-col size="auto" *ngIf="showSelectedCriteria">
         <div style="width: auto">
           <ion-chip class="chip">
             <ion-icon name="close-circle" color="white" (click)="closeCriteriaChip()"></ion-icon>
-            <ion-label class="chip-label">{{selectedChipLabel}}</ion-label>
+            <ion-label class="chip-label">{{showSelectedCriteria}}</ion-label>
           </ion-chip>
         </div>
       </ion-col>
       <ion-col size="auto">
-        <div *ngIf="chips.length && selectedChipLabel" class="verticalLine"><hr></div>
+        <div *ngIf="chips.length && showSelectedCriteria" class="verticalLine"><hr></div>
       </ion-col>
       <ion-col class="chip-container">
         <ion-row>
@@ -78,7 +79,7 @@
         <ion-label>{{totalCount}} {{"SEARCH_RESULT" | translate}}</ion-label>
       </div>
     </div>
-    <div>
+    <div class="paginator">
       <mat-paginator  [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"></mat-paginator>
     </div>
   </div>

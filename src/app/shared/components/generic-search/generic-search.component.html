@@ -10,7 +10,7 @@
       <ion-label>{{totalCount}} {{"SEARCH_RESULT" | translate}}</ion-label>
     </div>
   </div>
-  <div>
+  <div class="paginator">
     <mat-paginator  [length]="totalCount" [pageSize]="limit" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"></mat-paginator>
   </div>
 </div>
@@ -26,7 +26,7 @@
       </ion-col>
       <ion-col *ngIf="!results.length" padding size-xs="12" size-sm="12" size-md="6" size-lg="12"
       align-self-stretch>
-        <app-no-data-found [messageHeader]="'NO_SESSIONS_AVAILABLE'" [messageDescription]="'NO_SESSION_MESSAGE_DESCRIPTION'"> </app-no-data-found>
+        <app-no-data-found [messageHeader]="'SEARCH_RESULT_NOT_FOUND'" [messageDescription]="'NO_SESSION_MESSAGE_DESCRIPTION'"> </app-no-data-found>
       </ion-col>
     </ion-row>
   </ion-grid>
