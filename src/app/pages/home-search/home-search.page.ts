@@ -36,7 +36,6 @@ export class HomeSearchPage implements OnInit {
   filteredDatas = []
   page = 1;
   setPaginatorToFirstpage:any = false;
-  limit = 5;
   totalCount: any;
   noDataMessage: any;
   createdSessions: any;
@@ -120,7 +119,7 @@ export class HomeSearchPage implements OnInit {
   }
 
   async fetchSessionList() {
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChip?.name, filterData : this.urlQueryData}
+    var obj={page: this.page, limit: this.pageSize, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChip?.name, filterData : this.urlQueryData}
     var response = await this.sessionService.getSessionsList(obj);
     this.results = response.result.data;
     this.totalCount = response.result.count;
@@ -156,7 +155,7 @@ export class HomeSearchPage implements OnInit {
 
         case 'startAction':
           this.sessionService.startSession(event.data.id).then(async () => {
-            var obj = { page: this.page, limit: this.limit, searchText: "" };
+            var obj = { page: this.page, limit: this.pageSize, searchText: "" };
             if(this.profileService.isMentor){
               this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
             }

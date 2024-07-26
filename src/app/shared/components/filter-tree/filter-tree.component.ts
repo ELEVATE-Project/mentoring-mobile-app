@@ -7,7 +7,8 @@ import * as _ from 'lodash';
   styleUrls: ['./filter-tree.component.scss'],
 })
 export class FilterTreeComponent implements OnInit {
-  @Input() enableFilterHeader:any
+  @Input() enableFilterHeader:any;
+  @Input() enableFilterLabel: any;
   @Input() filterData: any;
   @Output() filtersChanged = new EventEmitter<any>();
 
