@@ -66,7 +66,7 @@ export class HomePage implements OnInit {
     this.isMentor = this.profileService.isMentor
     App.addListener('appStateChange', (state: AppState) => {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
-        if (state.isActive == true && data?.user) {
+        if (state.isActive == true && data && !data.profile_mandatory_fields.length) {
           this.getSessions();
           if(this.profileService.isMentor){
             this.getCreatedSessionDetails();
@@ -98,7 +98,7 @@ export class HomePage implements OnInit {
 
   async ionViewWillEnter() {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    if(this.user?.about){
+    if(this.user && !this.user.profile_mandatory_fields.length){
       this.getSessions();
     }
     this.gotToTop();
