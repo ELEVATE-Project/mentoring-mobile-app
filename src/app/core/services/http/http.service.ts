@@ -41,7 +41,7 @@ export class HttpService {
 
   async setHeaders() {
     let token;
-    if(!window[env][isAuthBypassed]) {
+    if(!window['env']['isAuthBypassed']) {
       token = await this.getToken();
     }
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
