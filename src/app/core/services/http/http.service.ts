@@ -51,7 +51,7 @@ export class HttpService {
       'accept-language':acceptLanguage
     }
     this.extraHeaders = JSON.parse(localStorage.getItem('headers'))
-    console.log(this.extraHeaders)
+    console.log("extra headers", this.extraHeaders)
     if(this.extraHeaders) {
       Object.keys(this.extraHeaders).forEach(key => {
         headers[key] = this.extraHeaders[key];
