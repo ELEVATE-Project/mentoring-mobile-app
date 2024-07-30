@@ -43,7 +43,9 @@ import { MenteeListPopupComponent } from './components/mentee-list-popup/mentee-
 import { BulkUploadComponent } from './components/bulk-upload/bulk-upload.component';
 import { UserListModalComponent } from './components/user-list-modal/user-list-modal.component';
 import { snakeCaseToUpperCasePipe } from '../core/pipes/snake-case-to-normal-case.pipe';
+import { AllowTemplateViewDirective } from './directive/allowTemplate.directive';
 import { GenericSearchComponent } from './components/generic-search/generic-search.component';
+import { SearchCompetencyComponent } from './components/search-competency/search-competency.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,9 @@ import { GenericSearchComponent } from './components/generic-search/generic-sear
     BulkUploadComponent,
     UserListModalComponent,
     snakeCaseToUpperCasePipe,
-    GenericSearchComponent
+    AllowTemplateViewDirective,
+    GenericSearchComponent,
+    SearchCompetencyComponent
   ],
   imports: [
     CommonModule,
@@ -127,7 +131,9 @@ import { GenericSearchComponent } from './components/generic-search/generic-sear
     BulkUploadComponent,
     UserListModalComponent,
     snakeCaseToUpperCasePipe,
-    GenericSearchComponent
+    AllowTemplateViewDirective,
+    GenericSearchComponent,
+    SearchCompetencyComponent
   ],
 })
 export class SharedModule {}
