@@ -19,7 +19,7 @@
       </ion-grid>
     </div>
   </div>
-  <div *ngIf="!mentors?.length && isLoaded">
+  <div *ngIf="!mentorsCount && isLoaded">
     <app-no-data-found [messageHeader]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
   </div>
   <ion-infinite-scroll #infinitescroll [disabled]="mentors.length==0" (ionInfinite)="loadMore($event)">
