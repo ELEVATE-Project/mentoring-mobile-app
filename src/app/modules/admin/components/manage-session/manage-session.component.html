@@ -1,5 +1,5 @@
 <app-page-header [config]="headerConfig">
-  <div class="d-flex flex-justify-center my-8">
+  <div class="d-flex flex-justify-center my-8" *ngIf="segmentType === 'manage-session'">
     <ion-searchbar class="top-padding search-bar"  debounce="1000" placeholder="{{'SSESSIONS_MENTOR_SEARCH_PLACEHOLDER' | translate}}"
     [(ngModel)]="searchText" (ionChange)="onSearch()"></ion-searchbar>
   </div>

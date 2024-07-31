@@ -6,7 +6,7 @@
 .wrapper-class {
     display: flex;
     justify-content: end;
-    padding: 5px 5px;
+    padding: 10px 20px 0px 0px;
 }
 .underline {
     cursor: pointer;
@@ -18,4 +18,11 @@
 }
 ion-checkbox {
     --border-color: var(--ion-color-primary)
+}
+.header{
+    padding-right: 65%;
+}
+.filter-underline{
+    cursor: pointer;
+    text-decoration: underline;
 }

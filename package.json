@@ -9,7 +9,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "manage-forms": "node formsManager"
   },
   "private": true,
   "dependencies": {
@@ -55,7 +56,8 @@
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
     "@schematics/angular": "^16.2.3",
-    "@types/lodash": "^4.14.182",
+    "axios": "^1.7.2",
+    "@types/lodash": "^4.17.5",
     "bowser": "2.7.0",
     "chart.js": "^4.4.0",
     "cordova-plugin-screen-orientation": "^3.0.3",
@@ -71,6 +73,7 @@
     "rxjs": "~6.6.0",
     "rxjs-compat": "^6.6.7",
     "tslib": "^2.2.0",
+    "yargs": "^17.7.2",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

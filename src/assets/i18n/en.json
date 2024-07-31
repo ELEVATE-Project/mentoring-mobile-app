@@ -235,7 +235,7 @@
     "PLEASE_UPLOAD_IMAGE_FILE":"Please, upload image file.",
     "SESSION_LIST":"Session list",
     "DOWNLOAD":"Download",
-    "SEARCH_RESULT_NOT_FOUND":"Search result not found",
+    "SEARCH_RESULT_NOT_FOUND":"Search results not found",
     "THIS_SPACE_LOOKS_EMPTY":"This space looks empty",
     "SSESSIONS_MENTOR_SEARCH_PLACEHOLDER":"Search for sessions,mentors",
     "PORTAL_ONLY_TOAST_MESSAGE": "Portal is recommended for administrative tasks",
@@ -278,5 +278,9 @@
     "SELECT": "Select",
     "SETUP_PROFILE": "Setup profile",
     "SETUP_PROFILE_MESSAGE": "Finish setting up your profile to get started",
-    "NO_SESSION_MESSAGE_DESCRIPTION": "Looks like we couldn’t  find what you were looking for, try searching for something else."
+    "NO_SESSION_MESSAGE_DESCRIPTION": "Looks like we couldn’t  find what you were looking for, try searching for something else.",
+    "PROFILE_FORM_UNSAVED_DATA": "You have unsaved data, would you like to save it before exiting?",
+    "PROFILE_EXIT_HEADER_LABEL": "Save Data?",
+    "DONOT_SAVE": "Don't Save",
+    "ENTER_MIN_CHARACTER": "Please enter at least three characters to search."
 }

@@ -1,4 +1,4 @@
-<app-page-header [config]="headerConfig" *ngIf="this.userCantAccess && isloaded"></app-page-header>
+<app-page-header [config]="headerConfig" *ngIf="isloaded"></app-page-header>
 <app-generic-profile-header *ngIf="!this.userCantAccess && isloaded" [headerData]='detailData.data' [buttonConfig]="buttonConfig" [showRole]="false">
 </app-generic-profile-header>
 <div *ngIf="!this.userCantAccess && isloaded">

@@ -24,4 +24,6 @@ RUN npm install -g serve
 
 EXPOSE 7601
 
+
 CMD ["serve", "-s", "www", "-p", "7601"]
+
