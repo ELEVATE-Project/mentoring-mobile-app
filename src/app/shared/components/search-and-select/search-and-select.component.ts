@@ -72,37 +72,6 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-
-  async showPopover(event) {
-    this.markAsTouched();
-    const popover = await this.modalCtrl.create({
-      component: SearchPopoverComponent,
-      cssClass: 'search-popover-config',
-      backdropDismiss: false,
-      componentProps: {
-        data: {
-          selectedData: this.selectedData,
-          control: this.control,
-          showFilter: true,
-          showSearch: true,
-          viewListMode: false,
-          isMobile: this.isMobile
-        }
-      }
-    });
-
-    popover.onDidDismiss().then((data) => {
-      if (data && data.data) {
-        this.selectedData = data.data;
-        const values = this.control.meta.multiSelect ? data.data.map(obj => obj.id) : data.data[0].id;
-        this.onChange(values);
-        this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
-      }
-    });
-    await popover.present();
-  }
-
-
   handleCloseIconClick(event: Event, removedItem): void {
     if (this.selectedData) {
       this.selectedData = this.selectedData.filter(obj => obj.value !== removedItem.value || obj.id !== removedItem.id );
