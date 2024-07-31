@@ -22,9 +22,9 @@ import { AlertController, Platform } from '@ionic/angular';
 import { isDeactivatable } from 'src/app/core/guards/canDeactive/deactive.guard';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
-import { PlatformLocation } from '@angular/common';
+import { PlatformLocation, Location } from '@angular/common';
 
 @Component({
   selector: 'app-edit-profile',
@@ -49,6 +49,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   entityNames: any;
   entityList: any;
   formData: any;
+  redirectUrl: any;
   constructor(
     private form: FormService,
     private api: HttpService,
@@ -62,7 +63,9 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     private toast: ToastService,
     private utilService: UtilService,
     private router: Router,
-    private platformLocation: PlatformLocation
+    private platformLocation: PlatformLocation,
+    private activatedRoute: ActivatedRoute,
+    private location: Location
   ) {
   }
 
@@ -73,6 +76,9 @@ export class EditProfilePage implements OnInit, isDeactivatable {
       history.pushState(null, '', location.href)
     })
     }
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.redirectUrl = params.redirectUrl;
+    });
   }
   async ngOnInit() {
     this.userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
@@ -152,7 +158,11 @@ export class EditProfilePage implements OnInit, isDeactivatable {
         });
         this.form1.myForm.markAsPristine();
         const updated = await this.profileService.profileUpdate(form);
-        if(updated){ this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })}
+        if(updated && this.redirectUrl){ 
+          this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })
+        }else{
+          this.location.back()
+        }
       }
     } else {
       this.toast.showToast('Please fill all the mandatory fields', 'danger');
