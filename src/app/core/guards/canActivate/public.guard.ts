@@ -17,7 +17,7 @@ export class PublicGuard implements CanActivate {
     return this.userService.getUserValue().then((result) => {
       if (result) {
         return false;
-      } else if(environment.isAuthBypassed) {
+      } else if(window['env']['isAuthBypassed']) {
         this.router.navigate([''])
         return false;
       }

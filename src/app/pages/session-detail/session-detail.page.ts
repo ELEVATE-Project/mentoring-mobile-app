@@ -302,7 +302,7 @@ export class SessionDetailPage implements OnInit {
 
   async onEnroll() {
     if (this.userDetails) {
-      if (this.userDetails?.about || environment.isAuthBypassed) {
+      if (this.userDetails?.about || window['env']['isAuthBypassed']) {
         let result = await this.sessionService.enrollSession(this.id);
         if (result?.result) {
           this.toast.showToast(result?.message, "success");
