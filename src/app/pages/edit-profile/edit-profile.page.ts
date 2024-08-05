@@ -159,7 +159,7 @@ export class EditProfilePage implements OnInit, isDeactivatable {
         this.form1.myForm.markAsPristine();
         const updated = await this.profileService.profileUpdate(form);
         if(updated && this.redirectUrl){ 
-          this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true })
+          this.router.navigate(this.redirectUrl, { replaceUrl: true })
         }else{
           this.location.back()
         }
