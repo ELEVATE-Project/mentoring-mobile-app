@@ -8,6 +8,7 @@ import * as Bowser from "bowser"
 import { BehaviorSubject, Subject } from 'rxjs';
 import * as Papa from 'papaparse';
 import { LocalStorageService } from '../localstorage.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +34,7 @@ export class UtilService {
   }
 
   getDeepLink(url){
-    return window['env']['deepLinkUrl']+url;
+    return environment.deepLinkUrl+url;
   }
 
   async shareLink(param:ISocialSharing) {

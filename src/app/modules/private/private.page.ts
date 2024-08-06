@@ -187,7 +187,7 @@ getUser() {
     this.adminAccess = profileDetails.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,profileDetails?.permissions) : false;
     this.user = profileDetails;
     if (!environment['isAuthBypassed'] && profileDetails.profile_mandatory_fields && profileDetails.profile_mandatory_fields.length > 0 || !profileDetails.about && !environment['isAuthBypassed']) {
-      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`], { replaceUrl: true });
+      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`], { replaceUrl: true, queryParams: {redirectUrl: '/tabs/home'}});
     }
     this.isMentor = this.profile.isMentor;
   })
