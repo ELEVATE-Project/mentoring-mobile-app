@@ -135,7 +135,7 @@ export class HomeSearchPage implements OnInit {
 
   async eventAction(event) {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    if (this.user.about || window['env']['isAuthBypassed']) {
+    if (this.user.about || environment['isAuthBypassed']) {
       switch (event.type) {
         case 'cardSelect':
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
