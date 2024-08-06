@@ -163,6 +163,7 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
+      this.getUserRole(data)
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
       await this.localStorage.setLocalData(localKeys.USER_ROLES, this.getUserRole(data))
       return data;
@@ -175,7 +176,7 @@ export class ProfileService {
     var roles = userDetails.user_roles.map(function(item) {
       return item['title'];
     });
-    this.isMentor = roles.includes('mentor')?true:false;
+    this.isMentor = roles.includes('MENTOR')?true:false;
     return roles
   }
 
