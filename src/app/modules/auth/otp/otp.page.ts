@@ -7,6 +7,7 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import { Location } from '@angular/common';
 import { RecaptchaComponent } from 'ng-recaptcha';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-otp',
@@ -25,7 +26,7 @@ export class OtpPage implements OnInit {
       'border-radius': '8px'
     }
   };
-  siteKey = window['env']?.recaptchaSiteKey ? window['env']?.recaptchaSiteKey.recaptchaSiteKey  :""
+  siteKey = environment?.recaptchaSiteKey ? environment?.recaptchaSiteKey  :""
   resetPasswordData = { email: null, password: null, otp: null };
   public headerConfig: any = {
     // menu: true,
@@ -43,8 +44,8 @@ export class OtpPage implements OnInit {
   labels;
   signupData: any;
   checked: boolean = false;
-  privacyPolicyUrl = window['env'].privacyPolicyUrl;
-  termsOfServiceUrl = window['env'].termsOfServiceUrl;
+  privacyPolicyUrl = environment.privacyPolicyUrl;
+  termsOfServiceUrl = environment.termsOfServiceUrl;
   captchaToken:any="";
   recaptchaResolved: boolean = this.siteKey ? false : true;
   showOtp:any = false;
