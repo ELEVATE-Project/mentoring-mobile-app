@@ -64,7 +64,6 @@ export const urlConstants = {
         CHANGE_PASSWORD: "/user/v1/account/changePassword",
         UPDATE_LANGUAGE: "/user/v1/user/setLanguagePreference",
         LOGIN_ACTIVITY: "/user/v1/account/sessions",
-        ENTITY_LIST: "/mentoring/v1/entity/list?",
-        UPDATE_LANGUAGE: "/user/v1/user/setLanguagePreference"
+        ENTITY_LIST: "/mentoring/v1/entity/list?"
     }
 };
