@@ -63,7 +63,8 @@ export class HomePage implements OnInit {
     private permissionService: PermissionService,
     private utilService: UtilService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.getUser();
     this.isMentor = this.profileService.isMentor
     App.addListener('appStateChange', (state: AppState) => {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
@@ -75,7 +76,6 @@ export class HomePage implements OnInit {
         }
       })
     });
-    this.getUser();
     let isRoleRequested = this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
     let isBecomeMentorTileClosed = this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
     this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor || isBecomeMentorTileClosed ? false : true;
@@ -158,14 +158,13 @@ export class HomePage implements OnInit {
       this.toast.showToast("ENTER_MIN_CHARACTER","danger");
     }
   }
-  getUser() {
-    this.profileService.profileDetails().then(data => {
-      this.isMentor = this.profileService.isMentor
-      this.user = data
-      if (!this.user?.terms_and_conditions) {
-        // this.openModal();
-      }
-    })
+  async getUser() {
+    let data = await this.profileService.getProfileDetailsFromAPI()
+    this.isMentor = this.profileService.isMentor
+    this.user = data
+    if (!this.user?.terms_and_conditions) {
+      // this.openModal();
+    }
   }
 
   async getSessions() {
