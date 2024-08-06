@@ -19,7 +19,7 @@
       [ngClass]="selectedChips.has(chip) ? 'selected-chip' : ''"
     >
       <ion-icon name="add" *ngIf="!selectedChips.has(chip)"></ion-icon>
-      <ion-icon name="close-circle" color="white" *ngIf="selectedChips.has(chip)"></ion-icon>
+      <ion-icon name="close-circle" color="white" *ngIf="selectedChips.has(chip) && !disabled"></ion-icon>
       <ion-label class="chip-label">{{ chip.label }}</ion-label>
     </ion-chip>
     <ion-chip *ngIf="allowCustomEntities" (click)="addNewOption()">
