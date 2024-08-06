@@ -21,7 +21,6 @@ export class AppComponent {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
     }
     window['env']['baseUrl'] = localStorage.getItem('baseUrl') ? localStorage.getItem('baseUrl') : window['env']['baseUrl'];
-    console.log(window['env']['baseUrl'], "app comp")
   }
 
   ngOnInit(){

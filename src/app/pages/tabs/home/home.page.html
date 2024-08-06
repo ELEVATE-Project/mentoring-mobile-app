@@ -9,8 +9,8 @@
       <div class="d-flex flex-justify-center my-8">
         <ion-searchbar class="search-bar" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"
          cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="isOpen = !isOpen"
-         #q
-        (keyup.enter)="search(q.value)">
+         [(ngModel)]="searchText"
+        (keyup.enter)="search(searchText)">
         </ion-searchbar>
       </div>
     <!--</ion-col>

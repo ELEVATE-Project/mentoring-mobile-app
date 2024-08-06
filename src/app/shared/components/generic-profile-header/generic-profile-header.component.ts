@@ -38,7 +38,7 @@ export class GenericProfileHeaderComponent implements OnInit {
         break;
       
       case 'role':
-        if(this.headerData?.about != null || environment.isAuthBypassed){
+        if(this.headerData?.about != null || window['env']['isAuthBypassed']){
           this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);   
         } else{
           this.profileService.upDateProfilePopup()

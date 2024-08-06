@@ -42,6 +42,12 @@ export class SessionDetailPage implements OnInit {
   sessionManagerText="";
  activeUrl:any;
  isNotInvited: any;
+ defaultUiForm = [
+  {
+    title: "MEETING_PLATFORM",
+    key: "meeting_info",
+  }
+ ];
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
@@ -58,6 +64,7 @@ export class SessionDetailPage implements OnInit {
   }
 
   async ionViewWillEnter() {
+    this.detailData.form = JSON.parse(JSON.stringify(this.defaultUiForm));
     await this.user.getUserValue();
     this.userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     this.fetchSessionDetails();
@@ -70,10 +77,7 @@ export class SessionDetailPage implements OnInit {
   };
   detailData = {
     form: [
-      {
-        title: "MEETING_PLATFORM",
-        key: "meeting_info",
-      },
+      
     ],
     data: {
       id:'',
@@ -298,7 +302,7 @@ export class SessionDetailPage implements OnInit {
 
   async onEnroll() {
     if (this.userDetails) {
-      if (this.userDetails?.about || environment.isAuthBypassed) {
+      if (this.userDetails?.about || window['env']['isAuthBypassed']) {
         let result = await this.sessionService.enrollSession(this.id);
         if (result?.result) {
           this.toast.showToast(result?.message, "success");

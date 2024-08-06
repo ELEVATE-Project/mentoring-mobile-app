@@ -1,19 +1,18 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { HttpService, LoaderService, LocalStorageService, ToastService } from 'src/app/core/services';
-import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admin-workapce.service';
+import { LocalStorageService, ToastService, UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
 import { CommonRoutes } from 'src/global.routes';
 import { MatPaginator } from '@angular/material/paginator';
-import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { Location } from '@angular/common';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { environment } from 'src/environments/environment';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home-search',
@@ -38,7 +37,6 @@ export class HomeSearchPage implements OnInit {
   filteredDatas = []
   page = 1;
   setPaginatorToFirstpage:any = false;
-  limit = 5;
   totalCount: any;
   noDataMessage: any;
   createdSessions: any;
@@ -46,29 +44,31 @@ export class HomeSearchPage implements OnInit {
   criteriaChip: any;
   chips =[]
   criteriaChipName: any;
-  params: any;
   overlayChips: any;
   isOpen = false;
   urlQueryData: string;
-  pageSize: any;
+  pageSize: any =5;
+  searchTextSubscription: Subscription;
+  criteriaChipSubscription: Subscription;
+  showSelectedCriteria: any;
 
-  constructor(private modalCtrl: ModalController, private adminWorkapceService: AdminWorkapceService,private httpService: HttpService, private router: Router, private toast: ToastService,
+  constructor(private modalCtrl: ModalController, private router: Router, private toast: ToastService,
     private sessionService: SessionService,
     private localStorage: LocalStorageService,
     private profileService: ProfileService,
     private location: Location,
-    private activatedRoute: ActivatedRoute,
     private permissionService: PermissionService,
-    private formService: FormService
-  ) { 
-    this.activatedRoute.queryParamMap.subscribe(async (params) => {
-      this.params = params;
-      this.criteriaChip = JSON.parse(params.get('criteriaChip'));
-      this.searchText = this.params.get('searchString');
-    })
-  }
+    private formService: FormService,
+    private utilService: UtilService,
+  ) {  }
 
   async ngOnInit() {
+    this.searchTextSubscription = this.utilService.currentSearchText.subscribe(searchText => {
+      this.searchText = searchText;
+    });
+    this.criteriaChipSubscription = this.utilService.currentCriteriaChip.subscribe(selectedCriteria => {
+      this.criteriaChip = selectedCriteria ? JSON.parse(selectedCriteria) : "";
+    });
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchSessionList()
     this.permissionService.getPlatformConfig().then((config)=>{
@@ -77,14 +77,21 @@ export class HomeSearchPage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    let data = await this.formService.filterList('session');
-    this.filterData = this.transformData(data);
+    this.showSelectedCriteria = this.criteriaChip? this.criteriaChip : "";
+    const obj = {filterType: 'session', org: false};
+    let data = await this.formService.filterList(obj);
+    this.filterData = await this.utilService.transformToFilterData(data, obj);
   }
 
   search(event) {
-    this.searchText = event;
-    this.isOpen = false;
-    this.fetchSessionList()
+    if (event.length >= 3) {
+      this.searchText = event;
+      this.showSelectedCriteria = this.criteriaChip;
+      this.isOpen = false;
+      this.fetchSessionList()
+    } else {
+      this.toast.showToast("ENTER_MIN_CHARACTER","danger");
+    }
   }
 
   async onClickFilter() {
@@ -96,7 +103,7 @@ export class HomeSearchPage implements OnInit {
 
     modal.onDidDismiss().then(async (dataReturned) => {
       this.filteredDatas = []
-      if (dataReturned !== null) {
+      if (dataReturned.data && dataReturned.data.data) {
         if (dataReturned.data.data.selectedFilters) {
           for (let key in dataReturned.data.data.selectedFilters) {
             this.filteredDatas[key] = dataReturned.data.data.selectedFilters[key].slice(0, dataReturned.data.data.selectedFilters[key].length).map(obj => obj.value).join(',').toString()
@@ -113,10 +120,10 @@ export class HomeSearchPage implements OnInit {
   }
 
   async fetchSessionList() {
-    var obj={page: this.page, limit: this.limit, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChip?.name, filterData : this.urlQueryData}
+    var obj={page: this.page, limit: this.pageSize, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChip?.name, filterData : this.urlQueryData}
     var response = await this.sessionService.getSessionsList(obj);
-    this.results = response?.result?.data;
-    this.totalCount = response?.result?.count;
+    this.results = response.result.data;
+    this.totalCount = response.result.count;
     this.noDataMessage = obj.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
   }
 
@@ -128,7 +135,7 @@ export class HomeSearchPage implements OnInit {
 
   async eventAction(event) {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    if (this.user.about || environment.isAuthBypassed) {
+    if (this.user.about || window['env']['isAuthBypassed']) {
       switch (event.type) {
         case 'cardSelect':
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
@@ -149,7 +156,7 @@ export class HomeSearchPage implements OnInit {
 
         case 'startAction':
           this.sessionService.startSession(event.data.id).then(async () => {
-            var obj = { page: this.page, limit: this.limit, searchText: "" };
+            var obj = { page: this.page, limit: this.pageSize, searchText: "" };
             if(this.profileService.isMentor){
               this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
             }
@@ -183,33 +190,16 @@ export class HomeSearchPage implements OnInit {
 
   closeCriteriaChip(){
     this.criteriaChip = null;
+    this.showSelectedCriteria = null;
     this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchString : this.searchText} });
-    this.fetchSessionList()
-  }
-
-  transformData(responseData) {
-    const entityTypes = responseData.entity_types;
-  
-    const filterData = Object.keys(entityTypes).map(type => {
-      const entityType = entityTypes[type][0];
-      return {
-        title: entityType.label,
-        name: entityType.value,
-        options: entityType.entities.map(entity => ({
-          label: entity.label,
-          value: entity.value
-        })),
-        type: "checkbox"
-      };
-    });
-  
-    return filterData;
   }
 
   selectChip(chip) {
-    this.criteriaChip = chip;
-    this.fetchSessionList()
-    this.isOpen = false;
+    if (this.criteriaChip === chip) {
+      this.criteriaChip = null;
+    } else {
+      this.criteriaChip = chip;
+    }
   }
 
   getUrlQueryData() {
@@ -241,5 +231,20 @@ export class HomeSearchPage implements OnInit {
           }
       }
     }
+  }
+
+  ionViewDidLeave(){
+    this.showSelectedCriteria = "";
+    this.searchText = "";
+    this.criteriaChip = "";
+    this.chips = [];
+    this.utilService.subscribeSearchText('');
+    this.utilService.subscribeCriteriaChip('');
+    this.urlQueryData = null;
+  }
+  
+  ngOnDestroy() {
+    this.searchTextSubscription.unsubscribe();
+    this.criteriaChipSubscription.unsubscribe();
   }
 }

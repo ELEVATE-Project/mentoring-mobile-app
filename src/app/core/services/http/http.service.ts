@@ -36,7 +36,6 @@ export class HttpService {
     private alert: AlertController,
   ) {  
     this.baseUrl = window['env']['baseUrl'];
-    console.log(this.baseUrl, "http service")
   }
 
   async setHeaders() {
@@ -52,8 +51,7 @@ export class HttpService {
       'timeZone': timezone,
       'accept-language':acceptLanguage
     }
-    this.extraHeaders = JSON.parse(localStorage.getItem('headers'));
-    console.log("extra headers: ", JSON.stringify(this.extraHeaders))
+    this.extraHeaders = JSON.parse(localStorage.getItem('headers'))
     if(this.extraHeaders) {
       Object.keys(this.extraHeaders).forEach(key => {
         headers[key] = this.extraHeaders[key];
