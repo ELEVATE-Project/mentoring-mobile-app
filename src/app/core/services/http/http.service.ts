@@ -13,6 +13,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
 import { CapacitorHttp } from '@capacitor/core';
 import { TranslateService } from '@ngx-translate/core';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -35,7 +36,7 @@ export class HttpService {
     private translate: TranslateService,
     private alert: AlertController,
   ) {  
-    this.baseUrl = window['env']['baseUrl'];
+    this.baseUrl = environment['baseUrl'];
   }
 
   async setHeaders() {
