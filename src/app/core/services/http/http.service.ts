@@ -22,6 +22,8 @@ export class HttpService {
   baseUrl;
   isFeedbackTriggered = false;
   isAlertOpen: any = false;
+  extraHeaders
+
   constructor(
     private userService: UserService,
     private network: NetworkService,
@@ -32,7 +34,7 @@ export class HttpService {
     private modalController: ModalController,
     private translate: TranslateService,
     private alert: AlertController,
-  ) {
+  ) {  
     this.baseUrl = window['env']['baseUrl'];
   }
 
@@ -45,6 +47,12 @@ export class HttpService {
       'Content-Type': 'application/json',
       'timeZone': timezone,
       'accept-language':acceptLanguage
+    }
+    this.extraHeaders = JSON.parse(localStorage.getItem('headers'))
+    if(this.extraHeaders) {
+      Object.keys(this.extraHeaders).forEach(key => {
+        headers[key] = this.extraHeaders[key];
+      });
     }
     return headers;
   }

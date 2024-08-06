@@ -18,6 +18,7 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UserListModalComponent } from 'src/app/shared/components/user-list-modal/user-list-modal.component';
 import { ModalController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -162,6 +163,7 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
+      this.getUserRole(data)
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
       await this.localStorage.setLocalData(localKeys.USER_ROLES, this.getUserRole(data))
       return data;
@@ -174,7 +176,7 @@ export class ProfileService {
     var roles = userDetails.user_roles.map(function(item) {
       return item['title'];
     });
-    this.isMentor = roles.includes('mentor')?true:false;
+    this.isMentor = roles.includes('MENTOR')?true:false;
     return roles
   }
 
@@ -188,7 +190,7 @@ export class ProfileService {
 
   async prefillData(requestDetails: any,entityNames:any,formData:any,showAddOption:any=true) {
     let existingData = requestDetails;
-    if(requestDetails?.about){
+    if(requestDetails?.about || environment.isAuthBypassed){
        existingData = await this.form.formatEntityOptions(requestDetails,entityNames)
     }
     for (let i = 0; i < formData.controls.length; i++) {

@@ -5,6 +5,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { SwUpdate } from '@angular/service-worker';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -19,6 +20,8 @@ export class AppComponent {
     if(Capacitor.isNativePlatform()){
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
     }
+    environment.baseUrl = localStorage.getItem('baseUrl') ? localStorage.getItem('baseUrl') : environment.baseUrl;
+    console.log(environment.baseUrl, "app comp")
   }
 
   ngOnInit(){

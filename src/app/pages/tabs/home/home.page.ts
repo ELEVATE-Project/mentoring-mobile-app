@@ -13,6 +13,7 @@ import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-con
 import { App, AppState } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -62,7 +63,8 @@ export class HomePage implements OnInit {
     private permissionService: PermissionService,
     private utilService: UtilService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.getUser();
     this.isMentor = this.profileService.isMentor
     App.addListener('appStateChange', (state: AppState) => {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
@@ -74,7 +76,6 @@ export class HomePage implements OnInit {
         }
       })
     });
-    this.getUser();
     let isRoleRequested = this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
     let isBecomeMentorTileClosed = this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
     this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor || isBecomeMentorTileClosed ? false : true;
@@ -110,7 +111,7 @@ export class HomePage implements OnInit {
     this.createdSessions = this.isMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
   }
   async eventAction(event) {
-    if (this.user.about) {
+    if (this.user.about || window['env']['isAuthBypassed']) {
       switch (event.type) {
         case 'cardSelect':
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
@@ -157,14 +158,13 @@ export class HomePage implements OnInit {
       this.toast.showToast("ENTER_MIN_CHARACTER","danger");
     }
   }
-  getUser() {
-    this.profileService.profileDetails().then(data => {
-      this.isMentor = this.profileService.isMentor
-      this.user = data
-      if (!this.user?.terms_and_conditions) {
-        // this.openModal();
-      }
-    })
+  async getUser() {
+    let data = await this.profileService.getProfileDetailsFromAPI()
+    this.isMentor = this.profileService.isMentor
+    this.user = data
+    if (!this.user?.terms_and_conditions) {
+      // this.openModal();
+    }
   }
 
   async getSessions() {
@@ -185,7 +185,7 @@ export class HomePage implements OnInit {
     this.selectedSegment = event.name;
   }
   async createSession() {
-    if (this.user?.about != null) {
+    if (this.user?.about != null || window['env']['isAuthBypassed']) {
       this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]); 
     } else {
       this.profileService.upDateProfilePopup()
@@ -193,7 +193,7 @@ export class HomePage implements OnInit {
   }
 
   async becomeMentor() {
-    if(this.user?.about != null){
+    if(this.user?.about != null || window['env']['isAuthBypassed']){
       this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);   
     } else{
       this.profileService.upDateProfilePopup()
