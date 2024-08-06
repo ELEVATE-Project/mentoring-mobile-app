@@ -27,7 +27,7 @@ ion-segment-button{
     width: 50%;
 }
 .no-details-message{
-    color: red;
+    color: var(--ion-color-primary);
     font-size:larger;
     text-align: center;
     margin: 20px;

@@ -196,7 +196,6 @@ export class SessionService {
   async openBrowser(link, windowName: any = "_self") {
     await Browser.open({ url: link, windowName: windowName });
     Browser.addListener('browserFinished', () => {
-      console.log("exit");
     });
   }
 

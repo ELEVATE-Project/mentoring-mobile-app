@@ -1,0 +1,45 @@
+.search-style{
+    --icon-color:var(--ion-color-primary);
+    font-size:16px;
+    height: 36px;
+    max-width: 80%;
+    --box-shadow: 0 0 0 1px var(--ion-color-primary);
+}
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .search-col {
+    flex: 11;
+    margin-left: 5px;
+  }
+  
+  .close-col {
+    flex: 1;
+    text-align: end;
+  }
+
+  .close-button {
+    font-size: 36px;
+    margin: 15px;
+    cursor: pointer;
+}
+
+ion-item {
+  margin-bottom: 0px;
+}
+.competency-list-wrapper {
+  margin: 20px 20px 10px 20px;
+  padding-left: 50px;
+}
+
+ion-checkbox {
+  --border-color: var(--ion-color-primary);
+  margin-right: 25px;
+}
+.label-button {
+  cursor: pointer;
+}

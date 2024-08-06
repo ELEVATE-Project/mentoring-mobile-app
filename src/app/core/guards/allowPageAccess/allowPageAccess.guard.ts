@@ -2,32 +2,25 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { UserService } from '../../services/user/user.service';
+import { CommonRoutes } from 'src/global.routes';
+import { UtilService } from '../../services';
 import { environment } from 'src/environments/environment';
+import { UserService } from '../../services';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PublicGuard implements CanActivate {
-  constructor(private userService:UserService,private router: Router){}
+export class AllowPageAccess implements CanActivate {
+  constructor(private router: Router){}
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    
-    return this.userService.getUserValue().then((result) => {
-      if (result) {
-        return false;
-      } else if(environment['isAuthBypassed']) {
-        this.router.navigate([''])
-        return false;
+      
+      if(environment.restictedPages.includes(route.data.pageId)) {
+        this.router.navigate(["/"]);
+        return false
       }
-      else {
-        return true;
-      }
-    }).catch(error => {
-        return true;
-    });
-  
+      return true
   }
   
 }

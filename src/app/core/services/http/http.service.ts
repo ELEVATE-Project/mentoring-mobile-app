@@ -1,6 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
 import { RequestParams } from '../../interface/request-param';
-import { environment } from 'src/environments/environment';
 import * as _ from 'lodash-es';
 import { UserService } from '../user/user.service';
 import { NetworkService } from '../network.service';
@@ -14,6 +13,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
 import { CapacitorHttp } from '@capacitor/core';
 import { TranslateService } from '@ngx-translate/core';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -23,6 +23,8 @@ export class HttpService {
   baseUrl;
   isFeedbackTriggered = false;
   isAlertOpen: any = false;
+  extraHeaders
+
   constructor(
     private userService: UserService,
     private network: NetworkService,
@@ -33,8 +35,8 @@ export class HttpService {
     private modalController: ModalController,
     private translate: TranslateService,
     private alert: AlertController,
-  ) {
-    this.baseUrl = environment.baseUrl;
+  ) {  
+    this.baseUrl = environment['baseUrl'];
   }
 
   async setHeaders() {
@@ -46,6 +48,12 @@ export class HttpService {
       'Content-Type': 'application/json',
       'timeZone': timezone,
       'accept-language':acceptLanguage
+    }
+    this.extraHeaders = JSON.parse(localStorage.getItem('headers'))
+    if(this.extraHeaders) {
+      Object.keys(this.extraHeaders).forEach(key => {
+        headers[key] = this.extraHeaders[key];
+      });
     }
     return headers;
   }
