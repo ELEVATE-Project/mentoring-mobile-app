@@ -2,7 +2,7 @@
   <div class="d-flex flex-justify-center">
     <div class="profile-container "
       *ngIf="!profileImageData?.image || profileImageData?.image==''; else Img; let image">
-      <img class="thumbnail-image" src="../../../../assets/prof-img/user.png" />
+      <img class="thumbnail-image" src="assets/prof-img/user.png" />
       <div class="camera-icon-container" *ngIf="isMobile">
         <ion-icon name="camera" class="camera-icon" (click)="uploadPhoto('CAMERA'); clearFileInput();"></ion-icon>
       </div>
