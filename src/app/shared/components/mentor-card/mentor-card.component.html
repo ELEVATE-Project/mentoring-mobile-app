@@ -12,8 +12,8 @@
     <div>
       <h5 class="text-align">{{data?.name || data?.title}}</h5>
       <div class="area-of-expertise-container">
-        <div class="margin-btm-10 align-area-of-expertise" *ngIf="data?.area_of_expertise?.length">
-          <span class="ion-margin-top" *ngFor="let label of data?.area_of_expertise;  let isLast=last">
+        <div class="margin-btm-10 align-area-of-expertise" *ngIf="data?.competency?.length">
+          <span class="ion-margin-top" *ngFor="let label of data?.competency;  let isLast=last">
             <ion-label>{{label?.label}}{{isLast ? '' : ', '}} </ion-label>
           </span>
         </div>
