@@ -15,11 +15,6 @@ ion-item {
   ion-textarea {
     caret-color: black !important;
   }
-
-  ion-label {
-    font-weight: bold;
-    color: var(--grey-medium);
-  }
 }
 :host {
   .item-interactive.ion-invalid {
@@ -28,6 +23,13 @@ ion-item {
   .item-interactive.ion-valid {
     --highlight-background: rgba(255, 255, 255, 0) !important;
   }
+}
+
+ion-label {
+  font-weight: bold;
+  color: var(--grey-medium);
+  font-size: 18px !important;
+  margin-bottom: 10px;
 }
 
 .form-invalid {
@@ -39,10 +41,18 @@ ion-item {
   top: 42%;
 }
 
+.label-invalid{
+  color: var(--red);
+  font-weight: bold;
+  font-size: 18px !important;
+  margin-bottom: 10px;
+}
+
 .error-msg {
   font-size: 10px;
   color: var(--ion-color-danger);
-  height: 20px;
+  max-height: 40px;
+  min-height: 20px;
   display: flex;
   align-items: center;
 }
@@ -50,4 +60,43 @@ ion-item {
   align-self:flex-end;
   margin-right: 8px;
   margin-bottom: 10px;
+}
+.fields{
+  margin-bottom: 5px;
+}
+ion-textarea{
+  width: 100%;
+  border: none;
+  margin-top: 10px;
+  outline: none;
+}
+mat-form-field {
+  width: 100%;
+}
+
+mat-datepicker-toggle {
+  font-size: 20px;
+}
+
+.info {
+  font-size: 24px !important;
+  margin-top: 18px;
+  z-index: 1000;
+  left : 95px;
+  position: absolute;
+}
+
+.popover-header {
+  font-weight: bold;
+}
+
+.ion-padding{
+  text-wrap: wrap;
+  overflow-wrap: break-word;
+}
+
+ion-popover {
+  &::part(content) {
+    width: 300px;
+  }
 }

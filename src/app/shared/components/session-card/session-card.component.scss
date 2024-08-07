@@ -1,58 +1,100 @@
-.session-card{
-    padding: 10px;
-    .card-avatar{
-    text-align: center;
-    margin: auto 0px 3px;
-    .thumbnail-image{
-        width: 50px;
-        height: 50px;
+.session-card {
+    padding: 8px 6px;
+    border-radius: 10px;
+    height: 200px;
+    .thumbnail-image {
+        width: 57px;
+        height: 57px;
         border-radius: 50%;
     }
-    }
-    .status-badge{
-        background: var(--ion-color-primary);
-        min-width: 60px;
+    .badge-container {
+        min-width: 80px;
+        height: 24px;
         color: var(--white);
-        padding: 2px;
+        padding: 1px;
         position: absolute;
         right: 0px;
         top: 0px;
-        ion-icon{
-            font-size: 10px;
-            padding: 0px 5px;
-        }
+        border-bottom-left-radius: 10px;
+        font-size: 10px;
     }
-    h5{
+    .status-badge {
+        background: var(--green);
+    }
+    h5 {
         margin-bottom: 5px;
         margin-top: 0px;
         font-size: 16px;
-        color:var(--black);
     }
-    p{
-        margin: 6px 0px 0px 0px;
+    .session-image{
+        margin-right: 20px;
     }
-  .session-actions{
-    display: flex;
-    justify-content: flex-end;
-  }
+    .assigned-tag{
+        background: rgb(53, 120, 184);
+    }
+    .assigned-tag-icon{
+        padding-right: 2px;
+    }
+    .live-tag{
+        background: var(--green);
+        min-width: 80px;
+        height: 24px;
+        color: var(--white);
+        padding: 1px;
+        position: absolute;
+        right: 70px;
+        top: 0px;
+        border-bottom-left-radius: 10px;
+        font-size: 10px;
+    }
 }
-.session-enroll{
-    margin-top: -15px;
-    color: var(--ion-color-primary);
-    }
+.text-align {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: rgb(41, 41, 41);
+}
+.margin-btm-10 {
+    margin-bottom: 10px;
+}
 
-.text-align{
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-    width: 80%;
-}  
-.ellipsis{
-    overflow: hidden;
-    text-overflow:ellipsis;
-    font-size: small;
-    white-space: nowrap;
+.button{
+    --border-radius: 10px;
+    flex:1;
+    max-width: 150px;
 }
-.margin-btm-10{
-    margin-bottom: 10px;  
+ion-icon{
+    font-size: 20px;
+    color: black;
+}
+.header{
+    margin-top: 10px;
+}
+.platform-date-label{
+    padding-left: 8px;
+    font-size: 12px;
+    color: rgb(41, 41, 41);
+    margin: unset !important;
+}
+.add-meeting-link{
+    width: 75%;
+    text-decoration: underline;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+    z-index: 1000;
+
+}
+.join-platform-container{
+    width: 350px;
+}
+.meeting-platform{
+    padding-top: 2%;
+    padding-left: 10px;
+    width: max-content;
+}
+.row-padding {
+    padding-left: 10px;
+}
+.col-float {
+    float: right;
 }

@@ -8,6 +8,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from 'src/app/core/core.module';
+import {OverlayModule} from '@angular/cdk/overlay'
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { CoreModule } from 'src/app/core/core.module';
     SharedModule,
     CoreModule,
     HttpClientModule,
+    OverlayModule
   ],
   declarations: [HomePage],
 })

@@ -1,0 +1,12 @@
+<ion-header>
+  <div class="d-flex flex-justify-center ion-padding-start wrapper-class">
+    <ion-label class="header">{{"FILTER"|translate}}</ion-label>
+    <ion-icon class="close-icon" (click)="closePopup()" name="close"></ion-icon>
+  </div>
+</ion-header>
+<ion-content  class="d-flex flex-justify-center">
+  <app-filter-tree *ngIf="filterData" [filterData]="filterData" [enableFilterLabel]="false" [enableFilterHeader]="true" (filtersChanged)="filtersChanged($event)"></app-filter-tree>
+</ion-content>
+<ion-footer class=" d-flex flex-justify-center footer ion-padding-start wrapper-class" (click)="onClickApply()">
+    <ion-label class="header">{{"APPLY"|translate}}</ion-label>
+</ion-footer>

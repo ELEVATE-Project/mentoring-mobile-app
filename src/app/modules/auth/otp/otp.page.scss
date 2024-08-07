@@ -1,0 +1,70 @@
+.resend-otp{
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
+.hint-message{
+  font-size: 12px;
+  margin-top: 15px;
+  margin-left: 5px;
+  text-align: center;
+}
+ion-button{
+  width: 80%;
+  height: 45px;
+  font-weight: bold;
+}
+.underline{
+  text-decoration: underline;
+  color: rgb(143, 143, 143);
+  padding: 5px;
+  pointer-events: none;
+  text-align: center;
+}
+.disabled{
+  --background: rgb(49, 49, 51);
+}
+.label{
+  margin-top: 0px !important;
+  padding-top: 0px !important;
+  text-decoration: underline;
+  text-align: center;
+  font-size: 13px;
+}
+.counter{
+  text-align: center;
+}
+.otp-field{
+  display: flex !important;
+  justify-content: center;
+}
+
+.align-content-center{
+  margin-top: 15%;
+}
+
+.t-and-c {
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.t-and-c-text{
+  padding-left: 10px;
+  margin: unset;
+}
+
+.enable {
+  color: rgb(108, 147, 206);;
+  cursor: pointer;
+  pointer-events: all;
+}
+.check-box{
+  margin-inline-end: unset;
+}

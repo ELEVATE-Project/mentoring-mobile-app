@@ -1,35 +1,63 @@
-<ion-card (click)="onCardClick(data)" class="session-card">
-  <span class="status-badge " *ngIf="data?.status == 'live'">
-    <ion-icon name="ellipse-sharp"></ion-icon> {{data?.status | titlecase}}
+<ion-card (click)="onCardClick(data)" class="session-card card-shadow-bottom">
+  <span class="badge-container status-badge d-flex flex-justify-center" *ngIf="data?.status?.value == 'LIVE'" [ngClass]="{'live-tag': data?.status?.value == 'LIVE' && data?.is_assigned || data?.enrolled_type === 'INVITED'}">
+    {{data?.status?.value| titlecase}}
   </span>
-  <ion-row>
-    <ion-col size="3" class="card-avatar">
-      <img *ngIf="!data?.image || data?.image==''; else Img; let image" class="thumbnail-image"
-        src="../../../../assets/prof-img/user.png" />
-      <ng-template #Img>
-        <img class="thumbnail-image" src="{{data?.image}}" />
-      </ng-template>
-    </ion-col>
-    <ion-col size="9">
-      <h5 class="text-align">{{data?.name || data?.title}}</h5>
-      <div class="margin-btm-10" *ngIf="data?.areasOfExpertise?.length">
-        <span class="ion-margin-top" *ngFor="let label of data?.areasOfExpertise;  let isLast=last">
-          <ion-label>{{label?.label}}{{isLast ? '' : ', '}} </ion-label>
-        </span>
+  <span class="badge-container assigned-tag d-flex flex-justify-center" *ngIf="data?.is_assigned">
+    <ion-icon class="assigned-tag-icon" name="person-circle-sharp"></ion-icon>
+    {{"ASSIGNED"|translate}}
+  </span>
+  <span class="badge-container assigned-tag d-flex flex-justify-center" *ngIf="data?.enrolled_type === 'INVITED'">
+    <ion-icon class="assigned-tag-icon" name="person-circle-sharp"></ion-icon>
+    {{"INVITED"|translate}}
+  </span>
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <div class="session-image">
+        <img *ngIf="!data?.image.length || data?.image==''; else Img; let image" class="thumbnail-image"
+          src="../../../../assets/default-session-img/session-img.png" />
+        <ng-template #Img>
+          <img class="thumbnail-image" src="{{data?.image[0]}}" />
+        </ng-template>
       </div>
-      <p class="text-align" *ngIf="data?.description">{{data?.description}}</p>
+      <ion-col padding size-xs="6" size-sm="8" size-md="6" size-lg="8">
+      <div class="header">
+        <h5 class="text-align">{{data?.name || data?.title}}</h5>
+        <div class="margin-btm-10">
+          <p class="text-align" *ngIf="data?.description">{{data?.mentor_name}}</p>
+        </div>
+      </div>
     </ion-col>
-  </ion-row>
-  <div class="session-actions">
-    <div class="session-enroll" *ngIf="action=='ENROLL'" (click)="$event.stopPropagation(); onEnroll(data)">
-      <ion-label>
-        {{action | translate}} <ion-icon name="caret-forward-outline"></ion-icon>
-      </ion-label>
-    </div>
-    <div class="session-enroll" *ngIf="action=='VIEW_PROFILE'" (click)="$event.stopPropagation(); onCardClick(data)">
-      <ion-label>
-        {{action | translate}} <ion-icon name="caret-forward-outline"></ion-icon>
-      </ion-label>
-    </div>
-  </div>
+      <ion-col size="2"></ion-col>
+    </ion-row>
+    <ion-col class="header">
+      <ion-row class="d-flex flex-align-items-center row-padding">
+        <ion-icon name="calendar-number-outline"></ion-icon>
+        <div>
+          <ion-label *ngIf="startDate && data?.status?.value=='PUBLISHED'" class="platform-date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+          <ion-label *ngIf="startDate && data?.status?.value=='LIVE'" class="platform-date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+          <ion-label *ngIf="endDate && data?.status?.value=='COMPLETED'" class="platform-date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
+        </div> 
+      </ion-row>
+      <ion-row class="d-flex flex-justify-center meeting-platform" *ngIf="!(meetingPlatform?.platform == 'OFF' && isCreator) ">
+        <ion-icon name="videocam"></ion-icon>
+        <div class="join-platform-container">
+          <p class="platform-date-label">
+            {{ "MEETING_PLATFORM" | translate }} :
+            <b>{{ meetingPlatform?.platform }}</b> 
+          </p>
+        </div>
+      </ion-row>
+      <ion-row class="d-flex flex-align-items-center meeting-platform" *ngIf="meetingPlatform?.platform == 'OFF' && isCreator && (data.status != 'COMPLETED')">
+        <ion-icon name="videocam"></ion-icon>
+        <div>
+          <p class="platform-date-label">
+            <b class="add-meeting-link" (click)="clickOnAddMeetingLink(data); $event.stopPropagation()">Add meeting link</b>
+          </p>
+        </div>
+      </ion-row>
+    </ion-col>
+    <ion-col class="d-flex flex-justify-flex-end flex-align-items-center col-float" size="4">
+      <ion-button *ngIf="data?.status?.value!='COMPLETED'" class="button"  [disabled]="!buttonConfig?.isEnabled && buttonConfig?.label !='ENROLL'" (click)="$event.stopPropagation();onButtonClick(data,buttonConfig?.type)" color="primary"> {{buttonConfig?.label | translate}}</ion-button>
+    </ion-col>
+  </ion-grid>
 </ion-card>

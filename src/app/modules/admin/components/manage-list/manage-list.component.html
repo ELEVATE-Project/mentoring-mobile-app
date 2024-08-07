@@ -1,0 +1,59 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<ion-content>
+    <div class="d-flex flex-justify-center">
+        <ion-header>
+            <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
+                <ion-segment-button value="manage-user" class="normal-case">
+                    <ion-label>{{"MANAGE_REQUEST"|translate}}</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="bulk-upload" class="normal-case">
+                    <ion-label>{{"BULK_UPLOAD"|translate}}</ion-label>
+                </ion-segment-button>
+            </ion-segment>
+        </ion-header>
+    </div>
+    <div class="ion-padding">
+        <div [ngSwitch]="type">
+            <ion-card *ngSwitchCase="'manage-user'">
+                <table *ngIf="requestList" class="table color-black">
+                    <thead>
+                        <tr>
+                            <th>{{"SL_NO"|translate}}</th>
+                            <th>{{"NAME"|translate}}</th>
+                            <th>{{"STATUS"|translate}}</th>
+                            <th>{{"ACTIONS"|translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let request of requestList.data; let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{request?.requester?.name}}</td>
+                            <td>{{request?.status}}</td>
+                            <td class="ion-padding width-250">
+                                <div class="d-flex flex-justify-space-between">
+                                    <ion-grid>
+                                        <ion-row class="d-flex flex-justify-center">
+                                    <ion-button color="success" (click)="acceptRequest(request?.id, 'APPROVED')">
+                                        <ion-icon name="checkmark-sharp"></ion-icon>
+                                    </ion-button>
+                                    <ion-button color="danger" (click)="rejectRequest(request?.id, 'REJECTED')">
+                                        <ion-icon name="close-sharp"></ion-icon>
+                                    </ion-button>
+                                    <ion-button color="dark" (click)="viewRequest(request)">
+                                        <ion-icon name="eye-sharp"></ion-icon>
+                                    </ion-button>
+                                </ion-row>
+                            </ion-grid>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ion-card>
+
+            <div *ngSwitchCase="'bulk-upload'" class="d-flex flex-justify-center flex-align-items-center">
+                <app-bulk-upload [data]="manageUserUrls"></app-bulk-upload>
+            </div>
+        </div>
+    </div>
+</ion-content>

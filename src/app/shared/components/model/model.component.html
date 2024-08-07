@@ -1,0 +1,14 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div class="ion-margin ion-padding">
+        <app-dynamic-form [jsonFormData]="formData" [readonly]="readonly" (formValid)="formValid()" #form1> </app-dynamic-form>
+    </div>
+</ion-content>

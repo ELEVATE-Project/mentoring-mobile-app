@@ -1,0 +1,44 @@
+.download{
+    display: grid;
+    align-items: center;
+    justify-content: flex-end;
+    font-weight:700;
+    color: #6da6f2;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .mob-download{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    padding: 18px;
+    margin: 0;
+  }
+
+  .close-icon{
+    display: flex;
+    cursor: pointer;
+    justify-content: end;
+    align-items: end;
+    font-size: 24px;
+    padding: 8px;
+    margin: 0;
+  }
+
+  .card-wrapper {
+    padding: 10px;
+    margin: 10px;
+    background-color: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 14px;
+  }
+  
+  .card-data {
+    margin: 0px;
+    padding: 8px;
+  }
+  .card-header {
+    font-weight: bold;
+    padding: 8px;
+  }

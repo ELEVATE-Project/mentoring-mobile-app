@@ -1,9 +1,12 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import { LoaderService, LocalStorageService, ToastService } from 'src/app/core/services';
+import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
+import { IonModal } from '@ionic/angular';
+import { App, AppState } from '@capacitor/app';
 
 @Component({
   selector: 'app-session-card',
@@ -12,11 +15,54 @@ import { CommonRoutes } from 'src/global.routes';
 })
 export class SessionCardComponent implements OnInit {
   @Input() data: any;
-  @Input() action;
-  @Input() status:any;
+  @Input() isEnrolled;
   @Output() onClickEvent = new EventEmitter();
-  constructor(private router: Router,private sessionService: SessionService, private toast:ToastService, private localStorage: LocalStorageService) { }
-  ngOnInit() { }
+  @ViewChild(IonModal) modal: IonModal;
+  startDate: string;
+  isCreator: boolean;
+  isConductor:boolean;
+  buttonConfig;
+  userData: any;
+  endDate: string;
+  isModalOpen = false;
+  meetingPlatform: any;
+  
+  constructor(private router: Router, private sessionService: SessionService, private toast: ToastService, private localStorage: LocalStorageService) { }
+  
+  async ngOnInit() {
+    App.addListener('appStateChange', (state: AppState) => {
+      if (state.isActive == true) {
+        this.setButtonConfig(this.isCreator,this.isConductor);
+      }
+    });
+    this.meetingPlatform = (this.data?.meeting_info);
+    this.isCreator = await this.checkIfCreator();
+    this.isConductor = await this.checkIfConductor();
+    this.setButtonConfig(this.isCreator,this.isConductor);
+    this.startDate = (this.data.start_date>0)?moment.unix(this.data.start_date).toLocaleString():this.startDate;
+    this.endDate = (this.data.end_date>0)?moment.unix(this.data.end_date).toLocaleString():this.endDate;
+  }
+ 
+  setButtonConfig(isCreator: boolean, isConductor:boolean) {
+    let currentTimeInSeconds=Math.floor(Date.now()/1000);
+    if(isConductor){
+      this.buttonConfig={label:"START",type:"startAction"};
+    } else {
+      this.buttonConfig=(!isCreator && !isConductor &&this.data.is_enrolled || this.isEnrolled)?{label:"JOIN",type:"joinAction"}:{label:"ENROLL",type:"enrollAction"};
+    }
+    this.buttonConfig.isEnabled = ((this.data.start_date - currentTimeInSeconds) < 600 && !(this.data?.meeting_info?.platform == 'OFF')) ? true : false
+  }
+
+  async checkIfCreator() {
+    this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    return (this.data.created_by == this.userData.id) ?true : false;
+  }
+
+  async checkIfConductor() {
+    this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    return (this.data.mentor_id == this.userData.id) ?true : false;
+  }
+ 
   onCardClick(data) {
     let value = {
       data: data,
@@ -24,15 +70,16 @@ export class SessionCardComponent implements OnInit {
     }
     this.onClickEvent.emit(value)
   }
-  async onEnroll(data){
-    let userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    if (userDetails?.about) {
-      let result = await this.sessionService.enrollSession(data._id);
-      if(result?.result){
-        this.toast.showToast(result?.message,"success");
-      }
-    } else {
-      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
-    }
+
+  onButtonClick(data,type){
+    let value = {
+      data: data,
+      type:type
+    };
+    this.onClickEvent.emit(value)
+  }
+  clickOnAddMeetingLink(cardData:any){
+    let id = cardData.id;
+    this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: id , type: 'segment'} });
   }
 }

@@ -1,0 +1,15 @@
+<ion-header *ngIf="enableFilterHeader && filterData">
+  <div class="ion-padding-start wrapper-class">
+    <ion-label *ngIf="enableFilterLabel" class="header">{{"FILTER"|translate}}</ion-label>
+    <ion-label [ngClass]="{'filter-underline': enableFilterLabel, 'underline': !enableFilterLabel}" (click)="clearAll()">{{"CLEAR_ALL"|translate}}</ion-label>
+  </div>
+</ion-header>
+<ng-container *ngIf="filterData">
+  <div class="ion-padding-start ion-padding-top" *ngFor="let filter of filterData">
+    <ion-label class="sub-header">{{filter?.title}}</ion-label>
+    <div class="ion-padding-top d-flex flex-align-items-center" *ngFor="let data of filter.options">
+      <ion-checkbox slot="start" [(ngModel)]="data.selected" (ionChange)="onFilterChange()"></ion-checkbox>
+      <ion-label class="ion-padding-start">{{data?.name || data?.label}}</ion-label>
+    </div>
+  </div>
+</ng-container> 

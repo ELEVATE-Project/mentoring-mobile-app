@@ -15,9 +15,10 @@ import * as _ from 'lodash-es';
   ],
 })
 export class StarRatingComponent implements OnInit, ControlValueAccessor {
-  rate=0;
+  @Input() rate=0;
   @Input() numberOfStars: any;
   @Input() label: any;
+  @Input() isDisabled=false;
   range: any;
   rating: Set<unknown>;
   touched: boolean = false;
@@ -36,7 +37,6 @@ export class StarRatingComponent implements OnInit, ControlValueAccessor {
   onTouched = () => { };
 
   writeValue(quantity: number) {
-    this.rate = quantity;
   }
 
   registerOnChange(onChange: any): void {

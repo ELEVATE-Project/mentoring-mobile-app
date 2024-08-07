@@ -1,0 +1,54 @@
+.session-card{
+    padding: 8px 6px;
+    border-radius: 10px;
+    height: 150px;
+    .card-avatar{
+    margin-right: 20px;
+    .thumbnail-image{
+        width: 57px;
+        height: 57px;
+        border-radius: 50%;
+    }
+    }
+}
+h5{
+    margin-bottom: 5px;
+    margin-top: 0px;
+    font-size: 16px;
+}
+p{
+    margin: 6px 0px 0px 0px;
+}
+.session-actions{
+display: flex;
+justify-content: flex-end;
+}
+.text-align{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    color: rgb(41, 41, 41);
+}  
+.margin-btm-10{
+    margin-bottom: 10px;  
+}
+.card-button{
+    color: var(--ion-color-primary);
+    float: right;
+}
+.icon-position{
+    vertical-align: middle;
+}
+.align-area-of-expertise{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    color: rgb(41, 41, 41);
+    white-space: pre-line;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+.area-of-expertise-container{
+    height: 75px;
+}

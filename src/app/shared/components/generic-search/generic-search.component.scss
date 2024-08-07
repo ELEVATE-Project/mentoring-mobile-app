@@ -1,0 +1,30 @@
+.search-navigation{
+    display: flex;
+    justify-content: space-between;
+}
+.search-result-count{
+    display: flex;
+    padding-left: 18%;
+}
+.search-result-label{
+    display: flex;
+    align-items: center;
+}
+
+@media only screen and (max-width: 767px) {
+    .search-navigation {
+      display: flex;
+      flex-direction: column;
+    }
+    .search-result-count{
+        display: flex;
+        padding-left: 11%;
+    }
+    .paginator {
+      order: 2;
+      display: -webkit-box;
+    }
+    .search-result {
+      order: 1;
+    }
+  }

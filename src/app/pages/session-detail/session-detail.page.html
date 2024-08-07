@@ -1,33 +1,58 @@
-<app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
-<ion-content [fullscreen]="true">
-  <div class="main-wrapper">
-    <app-profile-image [profileImageData]='sessionHeaderData'></app-profile-image>
-    <div *ngIf="isCreator; else elseBlock" class="d-flex flex-justify-center">
-      <ion-button class="session-btn" shape="round" (click)="onDelete()">{{ "DELETE" | translate }}</ion-button>
-      <ion-button class="session-btn" *ngIf="detailData?.data?.status=='published' || detailData?.data?.status=='live'" shape="round"
-        (click)="editSession()">{{ "EDIT" | translate }}
-      </ion-button>
+<app-page-header [config]="headerConfig" (actionEvent)="action($event)" *ngIf="isLoaded"></app-page-header>
+<ion-content [fullscreen]="true" *ngIf="!this.userCantAccess">
+  <div *ngIf="detailData && isLoaded && !this.userCantAccess" class="main-wrapper"> 
+    <ion-grid>
+      <ion-row class="d-flex ">
+        <ion-col padding size-xs="12" size-sm="12" size-md="4" size-lg="4">
+    <div class="d-flex flex-justify-center image-container">
+      <img *ngIf="!detailData?.data?.image?.length || !detailData?.data?.image[0]; else elseBlock" src="../../../assets/default-session-img/session-img.png"/>
+      <ng-template #elseBlock>
+        <img src="{{detailData?.data?.image}}"/>
+      </ng-template>
     </div>
-    <ng-template #elseBlock>
-      <div class="d-flex flex-justify-center">
-        <ion-button [disabled]="!detailData?.data?.isEnrolled || detailData?.data?.status==='completed'" class="session-btn" shape="round" (click)="onJoin()">{{ "JOIN" | translate }}</ion-button>
+  </ion-col>
+    <ion-col padding >
+    <div class="field-wrapper">
+      <h6 class="title-font">{{detailData?.data?.title}}</h6>
+      <p class="description">{{detailData?.data?.description}}</p>
+      <ion-item class="ion-no-padding" lines="none">
+        <ion-icon class="calendar-icon" name="calendar-number-outline"></ion-icon>
+        <ion-label *ngIf="startDate && detailData?.data?.status?.value=='PUBLISHED'" class="date-label">{{"STARTS_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+        <ion-label *ngIf="startDate && detailData?.data?.status?.value=='LIVE'" class="date-label">{{"STARTED_ON"|translate}} {{startDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{startDate|date:'shortTime'}}</ion-label>
+        <ion-label *ngIf="endDate && detailData?.data?.status?.value=='COMPLETED'" class="date-label">{{"COMPLETED_ON"|translate}} {{endDate|date:'dd/MM/yyyy'}} {{"AT"|translate}} {{endDate|date:'shortTime'}}</ion-label>
+      </ion-item>
+      <div class="d-flex ion-no-padding" *ngIf="sessionManagerText && detailData.data.manager_name">
+        <ion-icon class="person-container" name="person"></ion-icon>
+        <p class="manager-text-container">{{ sessionManagerText | translate}} <span>{{detailData.data.manager_name}}</span></p> 
       </div>
-    </ng-template>
-    <app-generic-details [sessionData]='detailData'></app-generic-details>
+    </div>
+    <app-generic-details [sessionData]='detailData' (onViewList)="onViewList($event)"></app-generic-details>
+  </ion-col>
+</ion-row>
+</ion-grid>
   </div>
 </ion-content>
-<ion-footer class="ion-no-border">
-  <div *ngIf="isCreator; else elseBlockFooter">
-    <ion-button *ngIf="detailData?.data?.status=='published' || detailData?.data?.status=='live'" class="load-more-button" expand="full"
-      (click)="onStart(detailData?.data)">{{"START_SESSIONS" | translate}}</ion-button>
-  </div>
+<ion-footer class="ion-no-border" *ngIf="isLoaded && !this.userCantAccess">
+  <ion-item *ngIf="isConductor; else elseBlockFooter">
+      <ion-button *ngIf="detailData?.data?.status?.value=='PUBLISHED' || detailData?.data?.status?.value=='LIVE'" [disabled]="!isEnabled || platformOff" class="load-more-button" expand="full"
+      (click)="onStart(detailData?.data?.id)">{{"START_SESSIONS" | translate}}</ion-button>
+    
+  </ion-item>
   <ng-template #elseBlockFooter>
-    <div *ngIf="!detailData?.data?.isEnrolled && detailData?.data?.status!='completed'">
+    <div *ngIf="!detailData?.data?.is_enrolled && detailData?.data?.status?.value!='COMPLETED'">
       <ion-button class="load-more-button" expand="full" (click)="onEnroll()">{{"ENROLL" | translate}}</ion-button>
     </div>
-    
-    <div *ngIf="detailData?.data?.isEnrolled && detailData?.data?.status==='published'">
-      <ion-button class="load-more-button" expand="full" (click)="onCancel()">{{"CANCEL" | translate}}</ion-button>
+    <div *ngIf="detailData?.data?.is_enrolled && detailData?.data?.status?.value==='PUBLISHED' && !isEnabled && isNotInvited">
+      <ion-button class="load-more-button" expand="full"  (click)="onCancel()">{{"UN_ENROLL" | translate}}</ion-button>
+    </div>
+    <div *ngIf="detailData?.data?.is_enrolled && detailData?.data?.status?.value!='COMPLETED' && isEnabled" class="join-button">
+      <ion-button class="load-more-button" expand="full" (click)="onJoin()" [disabled]="platformOff">{{"JOIN" | translate}}</ion-button>
     </div>
   </ng-template>
+</ion-footer>
+<div *ngIf="this.userCantAccess && isLoaded">
+      <app-no-data-found [messageHeader]="'USER_CANT_ACCESS_THIS_SESSION'" [messageDescription]="'USER_CANT_ACCESS_SESSION_GO_TO_HOME_PAGE'" [image]="'../../../../assets/no-data/unotherised-access.png'"> </app-no-data-found>
+</div>
+<ion-footer class="ion-no-border footer-button" *ngIf="this.userCantAccess && isLoaded">
+    <ion-button expand="full" (click)="goToHome()">{{"HOME" | translate}}</ion-button>
 </ion-footer>

@@ -1,0 +1,50 @@
+<ion-toolbar position="top">
+  <div class="container">
+    <div class="search-col d-flex flex-justify-center">
+      <ion-searchbar *ngIf="data.showSearch" class="search-style" debounce="1000" [(ngModel)]="searchText"
+        (ionChange)="onSearch()" placeholder="{{data.control.meta.searchLabel}}"></ion-searchbar>
+    </div>
+    <div class="close-col">
+      <ion-icon class="close-button" name="close-outline" (click)="closePopover()"></ion-icon>
+    </div>
+  </div>
+</ion-toolbar>
+<ion-grid class="ion-no-margin" *ngIf="!data.isMobile;">
+  <ion-row>
+    <ion-col class="col-width-25" *ngIf="data.showFilter && tableData">
+      <div class="scrollable-filter">
+        <app-filter-tree [enableFilterHeader]="true" [enableFilterLabel]="true" *ngIf="filterData" [filterData]="filterData"
+        (filtersChanged)="filtersChanged($event)"></app-filter-tree>
+      </div>
+    </ion-col>
+    <ion-col class="ion-text-end" *ngIf="tableData">
+      <div class="scrollable-table ">
+      <app-generic-table [headingText]="this.data.control.meta.url" [columnData]="columnData" [tableData]="tableData"
+        [totalCount]="count" (onClickEvent)='onButtonCLick($event)' (paginatorChanged)="onPaginatorChange($event)" (onSorting)="onSorting($event)" 
+        [noDataMessage]="noDataMessage" [setPaginatorToFirstpage]="setPaginatorToFirstpage" [showPaginator]="true"></app-generic-table>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<ion-content *ngIf="data.isMobile;">
+    <div *ngIf="tableData">
+      <div class="card-wrapper" *ngFor="let data of tableData">
+        <ion-header class="card-header">{{data.name}}</ion-header>
+        <ion-label class="card-data">{{data.email}}</ion-label>
+        <ion-col class="d-flex flex-justify-center">
+          <ion-button *ngFor="let button of data.action" [class]="button.cssColor" class="card-button"
+            (click)="onButtonCLick({'action': button.name, 'element': data})">
+            {{ button.name | translate }}
+          </ion-button>
+        </ion-col>
+      </div>
+      <div *ngIf="!tableData?.length">
+        <app-no-data-found [messageDescription]="noDataMessage">
+        </app-no-data-found>
+      </div>
+    </div>
+</ion-content>
+<ion-footer *ngIf="data.isMobile;">
+  <ion-button expand="full" *ngIf="tableData && count > tableData.length"
+    (click)="onPaginatorChange({'page': page, 'pageSize': limit})">Load more</ion-button>
+  </ion-footer>

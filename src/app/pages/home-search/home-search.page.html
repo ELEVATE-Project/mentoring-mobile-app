@@ -1,40 +1,72 @@
-<app-page-header [config]="headerConfig"></app-page-header>
-<ion-content class="ion-padding">
-  <ion-toolbar>
-    <ion-searchbar class="top-padding" [(ngModel)]="searchText" placeholder="" (ionInput)="checkInput()" debounce="100"></ion-searchbar>
-  </ion-toolbar>
-  <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
-    <ion-segment-button value="all-sessions">
-      <ion-label>{{ "ALL_SESSIONS" | translate }}</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="mentor-profile">
-      <ion-label>{{ "MENTOR_PROFILE" | translate }}</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-  <div *ngIf="results">
-    <div [ngSwitch]="type">
-      <ion-list *ngSwitchCase="'all-sessions'">
-        <div *ngFor="let result of results">
-          <app-session-card [data]="result" (onClickEvent)="onSessionAction($event)" [action]="'ENROLL'">
-          </app-session-card>
+<app-page-header [config]="headerConfig">
+  <div class="d-flex flex-justify-center my-8">
+    <ion-searchbar class="search-bar" [debounce]="1000" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"  
+    #event [value]="searchText"
+    (keyup.enter)="search(event.value)"
+    cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="isOpen = !isOpen">
+    </ion-searchbar>
+  </div>
+</app-page-header>
+<ion-toolbar>
+  <ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen"
+  (overlayOutsideClick)="isOpen = false"
+  [cdkConnectedOverlayOffsetY]="10" 
+  [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.offsetWidth" 
+>
+  <ion-grid>
+    <div class="overlay-container">
+      <ion-row>
+        <ion-chip 
+          class="overlay-chip" 
+          *ngFor="let chip of overlayChips; let i = index" 
+          (click)="selectChip(chip)"
+          [ngClass]="{'selected-chip': criteriaChip?.label === chip.label}">
+          <ion-icon name="close-circle"  style="pointer-events: none;" color="white"></ion-icon>
+          <ion-label class="chip-label">{{ chip.label }}</ion-label>
+        </ion-chip>
+      </ion-row>
+    </div>
+  </ion-grid>
+</ng-template>
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngIf="showSelectedCriteria" size="auto">
+        <div style="width: auto">
+          <ion-chip class="chip">
+            <ion-icon name="close-circle" color="white" (click)="closeCriteriaChip()"></ion-icon>
+            <ion-label class="chip-label">{{showSelectedCriteria?.label}}</ion-label>
+          </ion-chip>
         </div>
-      </ion-list>
-      <ion-list *ngSwitchCase="'mentor-profile'">
-        <div *ngFor="let result of results">
-          <div *ngFor="let value of result.values">
-            <app-session-card [data]="value" [action]="'VIEW_PROFILE'" (onClickEvent)="onMentorAction($event)">
-            </app-session-card>
+      </ion-col>
+      <ion-col size="auto">
+        <div *ngIf="chips.length && showSelectedCriteria" class="verticalLine"><hr></div>
+      </ion-col>
+      <ion-col class="chip-container">
+        <ion-row>
+          <div>
+            <ion-chip class="chip" *ngFor="let chip of chips ; let i = index">
+              <ion-icon name="close-circle" (click)="removeChip(chip.value, i)" color="white"></ion-icon>
+              <ion-label class="chip-label">{{ chip.label }}</ion-label>
+            </ion-chip>
+          </div>
+        </ion-row>
+      </ion-col>
+      <ion-col size="auto" style="display: flex;align-items: center;">
+        <div style="width: 5em">
+          <div class="filter">
+            <p style="margin: unset;">{{"FILTER" | translate}}</p>
+            <div class="circle-container" (click)="onClickFilter()">
+              <ion-icon class="ion-funnel-icon" name="funnel"></ion-icon>
+            </div>
           </div>
         </div>
-      </ion-list>
-    </div>
-  </div>
-  <div *ngIf="noResults && !searching">
-    <app-no-data-found [message]="'SORRY_NO_RESULTS'"> </app-no-data-found>
-  </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-toolbar>
+<ion-content>
+  <app-generic-search [results]="results" [totalCount]="totalCount" [searchValue]="searchText" (onClickEvent)="eventAction($event)" (onPageChangeEvent)="onPageChange($event)"></app-generic-search>
 </ion-content>
-<ion-footer class="ion-no-border">
-  <ion-button [disabled]="searchText?.length<3" expand="full" (click)="search()">
-    <ion-icon name="search" class="ion-margin-right"></ion-icon> {{"SEARCH" | translate}}
-  </ion-button>
-</ion-footer>

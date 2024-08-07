@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { HTTP } from '@ionic-native/http/ngx';
-import { SQLite } from '@ionic-native/sqlite/ngx';
-import { Network } from '@ionic-native/network/ngx';
 
 @NgModule({
   declarations: [],
   imports: [CommonModule, TranslateModule],
-  providers: [HTTP,SQLite,Network],
+  providers: [
+    HTTP
+  ],
 })
 export class CoreModule {}

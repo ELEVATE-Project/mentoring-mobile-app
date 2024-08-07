@@ -1,48 +1,31 @@
 import { Injectable } from '@angular/core';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
-import { environment } from 'src/environments/environment';
+import { Storage } from '@ionic/storage-angular';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DbService {
-  readonly db_name: string = environment.sqliteDBName;
-  private db: SQLiteObject;
 
-  constructor(private sqlite: SQLite) {
+  constructor(private storage: Storage) {
   }
 
+  //Initialize DB
   async init() {
-    try {
-      this.db = await this.sqlite.create({
-        name: this.db_name,
-        location: 'default',
-      });
-      this.db
-        .executeSql(
-          'CREATE TABLE IF NOT EXISTS forms(primary_key PRIMARY KEY,form,ttl)',
-          []
-        ) // CREATE ALL REQUIRED TABLES HERE
-        .then(() => console.log('Executed SQL'))
-        .catch((e) => console.log(e));
-      console.log(this.db);
-    } catch (error) {
-      console.log(JSON.stringify(error));
-    }
+    const storage = await this.storage.create();
   }
 
-  async query(query, value = []) {
-    const res = await this.db.executeSql(query, value);
-    const data = [];
-    // CREATE ARRAY OF ALL ROWS
-    for (let index = 0; index < res.rows.length; index++) {
-      const element = res.rows.item([index]);
-      data.push(element);
-    }
-    return data;
+  //Add item in DB
+  async setItem(key,value) {
+    return await this.storage.set(key, value);
   }
 
-  store(insertQuery, value) {
-    return this.db.executeSql(insertQuery, value);
+  //Read item from DB 
+  async getItem(key) {
+    return await this.storage.get(key);
+  }
+
+  //Clear the DB 
+  async clear() {
+    return await this.storage.clear();
   }
 }

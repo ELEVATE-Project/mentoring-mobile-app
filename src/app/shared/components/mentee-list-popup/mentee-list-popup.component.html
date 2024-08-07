@@ -1,0 +1,27 @@
+<ion-content>
+<div *ngIf="enrolledMenteeList">
+  <div class="close-icon" (click)="closePopup()">
+    <ion-icon name="close"></ion-icon>
+  </div>
+  <div *ngIf="isMobile;">
+    <div *ngIf="enrolledMenteeList.length;">
+      <div class="mob-download">
+        <div class="download"  (click)="onClickDownload()">{{ download | translate}}</div>
+      </div>
+      <div class="card-wrapper" *ngFor="let data of enrolledMenteeList">
+        <ion-header class="card-header d-flex flex-justify-center">{{data.name}}, {{data.organization}}</ion-header>
+        <ion-label class="card-data d-flex flex-justify-center">{{data.email}}</ion-label>
+      </div>
+    </div>
+    <div *ngIf="!enrolledMenteeList?.length">
+      <app-no-data-found [messageHeader]="noDataMessage">
+      </app-no-data-found>
+    </div>
+  </div>
+  <div *ngIf="!isMobile;">
+    <app-generic-table [headingText]="headingText" [columnData]="columnData" [tableData]="enrolledMenteeList" [showPaginator]="false">
+      <div class="download"  (click)="onClickDownload()">{{ download | translate}}</div>
+    </app-generic-table>
+  </div>
+</div>
+</ion-content>

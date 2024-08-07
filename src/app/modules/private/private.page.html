@@ -1,0 +1,56 @@
+<ion-split-pane contentId="main-content">
+  <ion-menu contentId="main-content" menuId="side-menu" type="overlay" swipeGesture="false" class="width-20">
+    <ion-header  [translucent]="true" class="ion-no-border" [ngClass]="{'disable-div': user?.profile_mandatory_fields.length && !isAuthBypassed || !user?.about && !isAuthBypassed }">
+      <div *ngIf="user" >
+        <div class="sub-menu-toolbar">
+          <div slot="start" class="img-mainDiv">
+              <div class="image-div" *ngIf="user?.image; else elseBlock">
+                <img class="profile-image" src="{{user?.image}}">
+              </div>
+              <ng-template #elseBlock>
+                <ion-icon slot="icon-only" name="person-circle" class="no-image-icon"></ion-icon>
+              </ng-template>
+          </div >
+          <div class="usr-div">
+            <ion-label class="username"><strong>{{user?.name}}</strong></ion-label>
+            <div class="user-role-labels">
+              <ion-label *ngIf="userRoles">{{ userRoles[0] | snakeCaseToUpperCase}}
+              </ion-label>
+              <ion-label class="view-roles" (click)="viewRoles()">{{"VIEW_ROLES" | translate}}</ion-label>
+            </div>
+            <a (click)="goToProfilePage()" class="cursor" *allowTemplateView="PAGE_IDS.profile">{{"PROFILE" | translate}}</a>
+          </div>
+        </div>
+      </div>
+    </ion-header>
+    <ion-content *ngIf="user" fullscreen [ngClass]="{'disable-div': user?.profile_mandatory_fields.length && !isAuthBypassed || !user?.about && !isAuthBypassed}">
+      <div class="menu-css">
+        <ion-list lines="none" class="sub-menu-list">
+          <ion-menu-toggle auto-hide="false" [class]="adminPage?.class" *ngIf="adminAccess">
+            <ion-item [routerLink]="adminPage?.url" lines="none" detail="false" (click)="menuItemAction(adminPage)" *allowTemplateView="adminPage?.pageId">
+              <ion-icon class="side-menu-icon" slot="start" [ios]="adminPage.icon + '-outline'" [md]="adminPage.icon + '-outline'"></ion-icon>
+              <ion-label class="sub-menu-list-label"><strong>{{ adminPage.title | translate}}</strong></ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index" [class]="p?.class">
+            <ion-item [routerLink]="p?.url" lines="none" detail="false" (click)="menuItemAction(p)" *allowTemplateView="p?.pageId">
+              <ion-icon class="side-menu-icon" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
+              <ion-label class="sub-menu-list-label"><strong>{{ p.title | translate}}</strong></ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list> 
+      </div>
+    </ion-content>
+    <ion-footer class="side-menu-footer" *ngIf="user">
+      <ion-row (click)="logout()" class="cursor" *allowTemplateView="'PROFILE_PAGE'">
+        <ion-col size="12">
+          <div class="d-flex flex-justify-center">
+            <ion-icon name="power" size="large" class="ion-margin-end"> </ion-icon> <strong class="space-bottom">
+              {{"LOGOUT" | translate}}</strong>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-footer>
+  </ion-menu>
+  <ion-router-outlet id="main-content"></ion-router-outlet>
+</ion-split-pane>

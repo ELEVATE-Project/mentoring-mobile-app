@@ -2,7 +2,7 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-toolbar>
     <ion-searchbar class="top-padding" debounce="500" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"
-    [(ngModel)]="searchText" (ionChange)="onSearch()"></ion-searchbar>
+      [(ngModel)]="searchText" (ionChange)="onSearch()"></ion-searchbar>
     <ion-segment (ionChange)="segmentChanged($event)" [value]="type">
       <ion-segment-button value="all-sessions">
         <ion-label>{{ "ALL_SESSIONS" | translate }}</ion-label>
@@ -13,16 +13,23 @@
     </ion-segment>
     <div class="sessions-wrap">
       <div *ngIf="sessions">
-        <div *ngFor="let session of sessions">
-          <div [ngSwitch]="type">
-            <ion-list *ngSwitchCase="'all-sessions'">
-              <app-session-card [data]="session" (onClickEvent)="onAction($event)" [action]="'ENROLL'"></app-session-card>
-            </ion-list>
-            <ion-list *ngSwitchCase="'my-sessions'">
-              <app-session-card-template [data]="session" [buttonConfig]="buttonConfig" (onClickEvent)="onJoin($event)"></app-session-card-template>
-            </ion-list>
-          </div>
-        </div>
+        <ion-grid>
+          <ion-row class="d-flex flex-justify-center">
+           
+            <div *ngFor="let session of sessions">
+            <div [ngSwitch]="type">
+              <ion-list *ngSwitchCase="'all-sessions'">
+                <app-session-card [data]="session" (onClickEvent)="onAction($event)"></app-session-card>
+              </ion-list>
+              <ion-list *ngSwitchCase="'my-sessions'">
+                <app-session-card-template [data]="session" [buttonConfig]="buttonConfig"
+                  (onClickEvent)="onJoin($event)"></app-session-card-template>
+              </ion-list>
+            </div>
+            </div>
+            
+          </ion-row>
+        </ion-grid>
       </div>
     </div>
   </ion-toolbar>
@@ -33,15 +40,15 @@
     <app-skeleton [type]="SKELETON.SESSION_CARD_SKELETON" [repetition]="4"></app-skeleton>
   </div>
   <div *ngIf="!sessions?.length && searchText==='' && !loading">
-    <app-no-data-found [message]="emptyMessage"> </app-no-data-found>
+    <app-no-data-found [messageHeader]="emptyMessage"> </app-no-data-found>
   </div>
   <div *ngIf="!sessions?.length && searchText!==''">
-    <app-no-data-found [message]="emptyMessageOnSearch"> </app-no-data-found>
+    <app-no-data-found [messageHeader]="emptyMessageOnSearch"> </app-no-data-found>
   </div>
 </ion-content>
 <ion-footer class="ion-no-border">
   <div *ngIf="showLoadMoreButton">
-      <ion-button *ngIf="sessionsCount > sessions?.length" class="load-more-button" (click)="loadMore()" expand="full">
-        {{"LOAD MORE" | translate}}</ion-button>
+    <ion-button *ngIf="sessionsCount > sessions?.length" class="load-more-button" (click)="loadMore()" expand="full">
+      {{"LOAD MORE" | translate}}</ion-button>
   </div>
 </ion-footer>

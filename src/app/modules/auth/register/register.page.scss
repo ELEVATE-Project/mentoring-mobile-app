@@ -1,0 +1,30 @@
+.btn-section{
+    margin-top: 5%;
+}
+// .check-box{
+//    margin-right: 30px;
+// }
+.label{
+    font-size: large;
+}
+.text{
+    --placeholder-color: black;
+    --placeholder-opacity: 1;
+    color: rgb(77, 72, 72);
+}
+.text-config{
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 2px !important;
+    margin-top: unset;
+}
+.underline{
+    text-decoration: underline;
+    text-decoration-color: var(--ion-color-primary);
+    color:  var(--ion-color-primary);
+    margin-top: 2px;
+    cursor: pointer;
+}
+.register-content{
+    width: fit-content;
+  }

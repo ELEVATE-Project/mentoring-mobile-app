@@ -1,10 +1,59 @@
-<app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
-<ion-content class="ion-padding">
-  <div>
-    <app-profile-image [profileImageData]='detailData.data'></app-profile-image>
-    <app-generic-details [sessionData]='detailData'></app-generic-details>
+<app-page-header [config]="headerConfig" *ngIf="isloaded"></app-page-header>
+<app-generic-profile-header *ngIf="!this.userCantAccess && isloaded" [headerData]='detailData.data' [buttonConfig]="buttonConfig" [showRole]="false">
+</app-generic-profile-header>
+<div *ngIf="!this.userCantAccess && isloaded">
+  <ion-card class="card-wrapper">
+    <ion-card-content>
+      <ion-row>
+        <ion-col class="d-flex flex-justify-center card-header-config">{{"SESSIONS_CONDUCTED"|translate}}</ion-col>
+        <ion-col class="d-flex flex-justify-center card-header-config">{{"RATING"|translate}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="d-flex flex-justify-center card-value-config">{{detailData?.data?.sessions_hosted}}</ion-col>
+        <ion-col class="d-flex flex-justify-center card-value-config"><app-star-rating [numberOfStars]="5"
+            [rate]="detailData?.data?.rating?.average" [isDisabled]="true"></app-star-rating></ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+  <ion-segment [value]="segmentValue" (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="about">
+      <ion-label class="segment-lbl">{{"ABOUT"|translate}}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="upcoming">
+      <ion-label class="segment-lbl">{{"UPCOMING_SESSIONS"|translate}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</div>
+<ion-content *ngIf="!this.userCantAccess && isloaded">
+  <div [ngSwitch]="segmentValue">
+    <ion-grid>
+      <ion-row class="d-flex ion-padding">
+        <ion-col size-xs="12" size-sm="12" size-md="8" size-lg="8" align-self-stretch>
+          <app-generic-details *ngSwitchCase="'about'" [sessionData]='detailData'></app-generic-details>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    
+    <ion-list *ngSwitchCase="'upcoming'">
+      <div *ngIf="!upcomingSessions?.length">
+        <p class="no-details-message">{{ "NO_UPCOMING_SESSIONS" | translate }}</p>
+      </div>
+      <ion-grid>
+        <ion-row class="d-flex ">
+          <ion-col *ngFor="let data of upcomingSessions" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
+            align-self-stretch>
+            <div>
+              <app-session-card [data]="data" (onClickEvent)="onAction($event)"></app-session-card>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
   </div>
 </ion-content>
-<ion-footer class="ion-no-border">
+<div *ngIf="this.userCantAccess && isloaded" class="d-flex flex-justify-center">
+    <app-no-data-found [messageHeader]="'USER_CANT_ACCESS_THIS_PROFILE'" [messageDescription]="'USER_CANT_ACCESS_PROFILE_GO_TO_HOME_PAGE'" [image]="'../../../../assets/no-data/unotherised-access.png'"> </app-no-data-found>
+</div>
+<ion-footer *ngIf="isloaded" class="ion-no-border footer-button">
   <ion-button (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>
 </ion-footer>

@@ -1,19 +1,30 @@
 export const urlConstants = {
     API_URLS:{
-        CREATE_ACCOUNT:"/user/v1/account/create",
-        ACCOUNT_LOGIN:"/user/v1/account/login",
+        CREATE_ACCOUNT:"/interface/v1/account/create",
+        ACCOUNT_LOGIN:"/interface/v1/account/login",
         LOGOUT_ACCOUNT:"/user/v1/account/logout",
         REFRESH_TOKEN:"/user/v1/account/generateToken",
         TERMS_CONDITIONS:"/user/v1/account/acceptTermsAndCondition",
-        PROFILE_UPDATE:"/user/v1/profile/update",
-        PROFILE_DETAILS: "/user/v1/profile/details",
-        MENTORS_DIRECTORY:"/user/v1/mentors/list?page=",
+        PROFILE_UPDATE:"/interface/v1/account/update",
+        PROFILE_DETAILS: "/user/v1/user/read/",
+        MENTOR_PROFILE_DETAILS: "/mentoring/v1/mentors/profile/",
+        MENTEE_PROFILE_DETAILS:"/mentoring/v1/mentees/profile/",
+        MENTORS_DIRECTORY:"/mentoring/v1/users/list?type=mentor&page=",
         FILE_UPLOAD:"/user/v1/cloud-services/file/upload",
         SESSIONS:"/mentoring/v1/mentees/sessions?enrolled=", //sessions?enrolled=true/false&page=1&limit=5&search=:search
         HOME_SESSION:"/mentoring/v1/mentees/homeFeed?page=", ///v1/mentees/homefeed?page=1&limit=4
-        GET_IMAGE_UPLOAD_URL:'/user/v1/cloud-services/file/getSignedUrl?fileName=',
+        GET_FILE_UPLOAD_URL:'/user/v1/cloud-services/file/getSignedUrl?fileName=',
         GET_SESSION_IMAGE_UPLOAD_URL:"/mentoring/v1/cloud-services/getSignedUrl?fileName=",
         SUBMIT_FEEDBACK:"/mentoring/v1/feedback/submit/",
+        UPCOMING_SESSIONS:"/mentoring/v1/mentors/upcomingSessions/",
+        SHARE_MENTOR_PROFILE:"/mentoring/v1/mentors/share/",
+        REPORT_ISSUE:"/mentoring/v1/issues/create",
+        PROFILE_READ: "/mentoring/v1/profile/read",
+        CREATED_SESSIONS: "/mentoring/v1/mentors/createdSessions?page=",
+        MENTORS_DIRECTORY_LIST: "/mentoring/v1/mentors/list?page=",
+        MENTORS_PROFILE_DETAILS: "/mentoring/v1/mentors/details/",
+        SESSION_DOWNLOAD_CSV: "/mentoring/v1/sessions/getSampleCSV",
+        SESSION_BULK_UPLOAD: "/mentoring/v1/sessions/bulkSessionCreate",
         
         // FORMS
         FORM_READ:'/mentoring/v1/form/read',
@@ -33,5 +44,26 @@ export const urlConstants = {
         MENTOR_FEEDBACK_QUESTION_SET:"/mentoring/v1/questionsSet/read/61b867df5201107b3c2fb435",
         MENTEE_FEEDBACK_QUESTIONS_SET:"/mentoring/v1/questionsSet/read/61b8656fed665f7b5470a9f1",
         GET_FEEDBACK_QUESTION:"/mentoring/v1/questions/read/", 
+        GET_ENTITY_LIST: {
+            PROFILE: "/interface/v1/entity-type/read",
+            SESSION: "/mentoring/v1/entity-type/read"
+        },
+        REQUEST_TO_BECOME_MENTOR: "/user/v1/organization/requestOrgRole",
+        LIST_ORG_ROLES: "/user/v1/user-role/list",
+        ADMIN_MENTOR_REQUEST_LIST: "/user/v1/org-admin/getRequests",
+        ADMIN_UPDATE_REQUEST: "/user/v1/org-admin/updateRequestStatus",
+        ADMIN_BULK_UPLOAD: "/user/v1/org-admin/bulkUserCreate",
+        ADMIN_DOWNLOAD_SAMPLE_CSV: "/user/v1/cloud-services/file/getSampleCSV",
+        CREATED_SESSION_BY_SESSION_MANAGER:"/mentoring/v1/manage-sessions/createdSessions?page=",
+        MENTEES_LIST: "/mentoring/v1/mentees/list?page=",
+        MENTORS_LIST: "/mentoring/v1/mentors/list?page=",
+        FILTER_LIST: "/mentoring/v1/profile/filterList?",
+        DOWNLOAD_CREATED_SESSION_LIST_BY_SESSION_MANAGER:"/mentoring/v1/manage-sessions/downloadSessions?",
+        ENROLLED_MENTEES_LIST:"/mentoring/v1/sessions/enrolledMentees/",
+        GET_PLATFORM_CONFIG: "/mentoring/v1/platform/config",
+        CHANGE_PASSWORD: "/user/v1/account/changePassword",
+        UPDATE_LANGUAGE: "/user/v1/user/setLanguagePreference",
+        LOGIN_ACTIVITY: "/user/v1/account/sessions",
+        ENTITY_LIST: "/mentoring/v1/entity/list?"
     }
 };

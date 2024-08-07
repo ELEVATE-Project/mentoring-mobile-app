@@ -8,8 +8,8 @@ import {
 } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { UUID } from 'angular2-uuid';
 import * as _ from 'lodash-es';
+import { ToastService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-input-chip',
@@ -29,21 +29,26 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   @Input() showSelectAll;
   @Input() showAddOption;
   @Input() validators;
+  @Input() allowCustomEntities;
   disabled;
   touched = false;
   selectedChips;
   _selectAll;
+  lowerCaseLabel;
 
   constructor(
     private alertController: AlertController,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private toast: ToastService,
   ) { }
 
   onChange = (quantity) => { };
 
   onTouched = () => { };
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.lowerCaseLabel = this.label.toLowerCase();
+  }
 
   writeValue(value: any[]) {
     this.selectedChips = new Set();
@@ -108,12 +113,15 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   async addNewOption() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Add ' + `${this.label}`,
+      header: 'Add ' + `${this.lowerCaseLabel}`,
       inputs: [
         {
           name: 'chip',
           type: 'text',
-          placeholder: 'Enter Expertise',
+          placeholder: 'Enter ' + `${this.lowerCaseLabel}`,
+          attributes: {
+            maxlength: 50,
+          }
         },
       ],
       buttons: [
@@ -126,16 +134,22 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
         {
           text: this.translateService.instant('OK'),
           handler: (alertData) => {
-            if (alertData?.chip !== "") {
-              let obj = {
-                label: alertData.chip,
-                value: UUID.UUID(),
-              };
-              this.chips.push(obj);
-              this.onChipClick(obj);
-            }
-          },
-        },
+              const regexPattern = /[^A-Za-z0-9\s_]/;
+              const filteredChip = alertData?.chip.trim();
+              if (filteredChip !== "" && !regexPattern.test(filteredChip)) {
+                  let obj = {
+                      label: filteredChip,
+                      value: filteredChip
+                  };
+                  this.chips.push(obj);
+                  this.onChipClick(obj);
+              } else {
+                  this.toast.showToast("INPUT_CHIP_ERROR_TOAST_MESSAGE", "danger");
+                  return false;
+              }
+          }
+      }
+      
       ],
     });
     await alert.present();

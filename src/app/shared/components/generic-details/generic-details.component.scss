@@ -1,24 +1,35 @@
 .field-wrapper{
-    margin-top: 30px;
-}
-.field{
-    margin-top: 10px;
+    margin : 20px 25px 10px 15px
 }
 ion-chip{
-    --background: #E3EBFF;
-    font-weight: bold;
+    --background: var(--white);
+    color: var(--dark-gray);
     margin-top: 6px;
 }
 
 .value{
-      font-size: 15px;
-      color: rgb(87, 95, 116);
-      font-weight: 600;
-  }
+      font-size: 14px;
+      color: var(--dark-gray);
+      margin-top: 5px;
+}
   ion-toolbar{
       --padding-bottom: 0px;
   }
   .session-detail-heading{
-      font-size: 14px;
-      color: rgb(87, 95, 116);
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--dark-grey);
+      margin-bottom: 5px;
   }
+
+.view-mentee-list{
+    color: var(--ion-color-primary);
+    border: 1px solid var(--ion-color-primary);
+    border-radius: 10px;
+}
+.mentee-count{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10px;
+}

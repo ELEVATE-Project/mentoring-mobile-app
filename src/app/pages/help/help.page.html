@@ -1,0 +1,29 @@
+<app-page-header [config]="headerConfig"></app-page-header>
+<ion-content class="ion-padding header">
+  <ion-grid>
+    <ion-row class="d-flex flex-justify-center">
+      <ion-col padding size-xs="12" size-sm="12" size-md="10" size-lg="10" align-self-stretch>
+  <div class="field">
+    <ion-card>
+      <ion-card-content>
+        <ion-item>
+          <ion-select #link class="select" [(ngModel)]="selectedOption" interface="popover" (ionChange)="clickOptions($event)" [value]="selectedOption">
+            <ion-select-option [value]="option" *ngFor="let option of helpForms">
+              {{ option?.name }}
+            </ion-select-option>
+          </ion-select> 
+      </ion-item>
+        <div *ngFor="let option of helpForms">
+          <div *ngIf="selectedOption == option && message" [innerHTML]="message"></div>
+          <app-dynamic-form *ngIf="selectedOption == option" [jsonFormData]="option.form" #form1 class="input"></app-dynamic-form>
+       </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-col>
+</ion-row>
+</ion-grid>
+</ion-content>
+<ion-footer class="ion-no-border footer-button">
+  <ion-button *ngIf="selectedOption" expand="full" [disabled]="form1 && !form1.myForm.valid" (click)="onSubmit(selectedOption)">{{selectedOption?.buttonText | translate}}</ion-button>
+</ion-footer>

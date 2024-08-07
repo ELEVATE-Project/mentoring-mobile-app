@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    margin-top: 40%;
+    margin-top: 20%;
 }
 .dashboard-title {
     margin: 0;
@@ -48,6 +48,7 @@
 
 .segment-label{
     font-weight: bold;
+    text-transform: none;
 }
 .filter{
   margin-left: 18%;
@@ -55,3 +56,7 @@
   border: 1px solid rgb(182, 177, 177);
   border-radius: 7px;
 }
+
+.my-chart {
+    padding-top: 25px;
+  }

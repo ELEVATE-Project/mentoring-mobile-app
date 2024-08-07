@@ -8,12 +8,16 @@
     justify-content: flex-end;
 }
 .head-label{
+    font-weight: bold;
+    color: var(--black);
+    font-size: 14px !important;
     overflow: visible !important;
-    margin-left: 5px;
-    font-size: 14px;
-    font-weight: normal;
-    text-transform: none;
-}
+ }
+
+.head-label::first-letter{
+    text-transform: capitalize;
+ }
+ 
 .icon{
     font-size: smaller;
 }

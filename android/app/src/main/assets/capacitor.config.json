@@ -1,0 +1,22 @@
+{
+	"appId": "org.elevate.mentoring",
+	"appName": "MentorED",
+	"webDir": "www",
+	"universalLinking": true,
+	"bundledWebRuntime": false,
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 3000,
+			"launchAutoHide": true,
+			"backgroundColor": "#ffffffff",
+			"androidSplashResourceName": "splash",
+			"androidScaleType": "CENTER",
+			"splashFullScreen": false,
+			"layoutName": "launch_screen",
+			"useDialog": false
+		},
+		"CapacitorHttp": {
+			"enabled": true
+		}
+	}
+}

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Network } from '@ionic-native/network/ngx';
-import { Subject } from 'rxjs';
+import { Network } from '@capacitor/network';
 import { ToastService } from './toast.service';
 
 @Injectable({
@@ -10,22 +9,18 @@ export class NetworkService {
   connectSubscription;
   disconnectSubscription;
   isNetworkAvailable: boolean = false;
-  constructor(private network: Network, private toastService: ToastService) {}
+  constructor() {}
 
   public netWorkCheck() {
     this.getCurrentStatus();
-    this.disconnectSubscription = this.network.onDisconnect()
-      .subscribe(() => {
-        this.isNetworkAvailable = false;
-      });
-    this.connectSubscription = this.network.onConnect().subscribe(() => {
-      this.isNetworkAvailable = true;
+    Network.addListener('networkStatusChange', status => {
+      this.isNetworkAvailable = status.connected;
     });
   }
 
-
-  public getCurrentStatus() {
-    this.isNetworkAvailable = (this.network.type === 'none') ? false : true;
+  async getCurrentStatus() {
+    let status = await Network.getStatus();
+    this.isNetworkAvailable = status.connected
   }
 
 }

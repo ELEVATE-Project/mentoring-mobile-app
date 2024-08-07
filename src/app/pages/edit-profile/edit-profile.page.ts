@@ -1,24 +1,30 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import {
   DynamicFormComponent,
   JsonFormData,
 } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
-import {
-  FormService,
-} from 'src/app/core/services/form/form.service';
+import { FormService } from 'src/app/core/services/form/form.service';
 import * as _ from 'lodash-es';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { EDIT_PROFILE_FORM } from 'src/app/core/constants/formConstant';
-import { AttachmentService, LoaderService, LocalStorageService, ToastService } from 'src/app/core/services';
+import {
+  AttachmentService,
+  LoaderService,
+  LocalStorageService,
+  ToastService,
+  UtilService,
+} from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { AlertController, Platform } from '@ionic/angular';
-import { File } from "@ionic-native/file/ngx";
-import { isDeactivatable } from 'src/app/core/guards/canDeactive/deactive.guard'
+import { isDeactivatable } from 'src/app/core/guards/canDeactive/deactive.guard';
 import { TranslateService } from '@ngx-translate/core';
-
+import { map } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonRoutes } from 'src/global.routes';
+import { PlatformLocation, Location } from '@angular/common';
 
 @Component({
   selector: 'app-edit-profile',
@@ -28,137 +34,184 @@ import { TranslateService } from '@ngx-translate/core';
 export class EditProfilePage implements OnInit, isDeactivatable {
   private win: any = window;
   @ViewChild('form1') form1: DynamicFormComponent;
-  profileImageData:any={
-    type :'profile'
-  }
+  profileImageData: any = {
+    type: 'profile',
+  };
   public headerConfig: any = {
-    // menu: true,
-    backButton: {
-      label: 'Profile Details',
-    },
+    backButton: true,
+    label: 'PROFILE_DETAILS',
     notification: false,
   };
   path;
   localImage;
-  public formData: JsonFormData;
-  showForm: any= false;
+  showForm: any = false;
+  userDetails: any;
+  entityNames: any;
+  entityList: any;
+  formData: any;
+  redirectUrl: any;
   constructor(
     private form: FormService,
     private api: HttpService,
     private profileService: ProfileService,
     private localStorage: LocalStorageService,
     private attachment: AttachmentService,
-    private platform: Platform,
-    private file: File,
+    private changeDetRef: ChangeDetectorRef,
     private loaderService: LoaderService,
     private alert: AlertController,
-    private translate :TranslateService,
-    private toast : ToastService,
+    private translate: TranslateService,
+    private toast: ToastService,
+    private utilService: UtilService,
+    private router: Router,
+    private platformLocation: PlatformLocation,
+    private activatedRoute: ActivatedRoute,
+    private location: Location
   ) {
-    this.path = this.platform.is("ios") ? this.file.documentsDirectory : this.file.externalDataDirectory;
+  }
+
+  ionViewWillEnter() {
+    if(this.userDetails?.profile_mandatory_fields?.length || !this.userDetails?.about){
+      history.pushState(null, '', location.href);
+      this.platformLocation.onPopState(()=>{
+      history.pushState(null, '', location.href)
+    })
+    }
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.redirectUrl = params.redirectUrl;
+    });
   }
   async ngOnInit() {
+    this.userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     const response = await this.form.getForm(EDIT_PROFILE_FORM);
-    var result = await this.profileService.getProfileDetailsAPI();
-    this.profileImageData.image = result.image;
     this.profileImageData.isUploaded = true;
-    this.formData = _.get(response, 'result.data.fields');
-    const userDetails =  await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    this.preFillData(userDetails);
+    this.formData = _.get(response, 'data.fields');
+    const entityNames = await this.form.getEntityNames(this.formData);
+    this.entityNames = await this.updateEntityArray(this.userDetails?.profile_mandatory_fields, entityNames);
+    this.entityList = await this.form.getEntities(this.entityNames, 'PROFILE');
+    this.formData = await this.form.populateEntity(this.formData, this.entityList)
+    this.changeDetRef.detectChanges();
+    if (this.userDetails) {
+      this.profileImageData.image = this.userDetails.image;
+      this.profileService.prefillData(this.userDetails, this.entityNames, this.formData);
+      this.showForm = true;
+    }
+    if(this.userDetails?.profile_mandatory_fields?.length || !this.userDetails?.about){
+    this.headerConfig.backButton = false;
+    let msg = {
+        header: 'SETUP_PROFILE',
+        message: 'SETUP_PROFILE_MESSAGE',
+        cancel: "CONTINUE"
+        }
+        this.utilService.profileUpdatePopup(msg)
+    }else{
+        this.headerConfig.backButton = true;
+    }
   }
 
   async canPageLeave() {
-    if (!this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
+    if (this.form1 && !this.form1.myForm.pristine || !this.profileImageData.isUploaded) {
       let texts: any;
-      this.translate.get(['FORM_UNSAVED_DATA', 'CANCEL', 'OK']).subscribe(text => {
-        texts = text;
-      })
+      this.translate
+        .get(['PROFILE_FORM_UNSAVED_DATA', 'DONOT_SAVE', 'SAVE', 'PROFILE_EXIT_HEADER_LABEL'])
+        .subscribe((text) => {
+          texts = text;
+        });
       const alert = await this.alert.create({
-        message: texts['FORM_UNSAVED_DATA'],
+        header: texts['PROFILE_EXIT_HEADER_LABEL'],
+        message: texts['PROFILE_FORM_UNSAVED_DATA'],
         buttons: [
           {
-            text: texts['CANCEL'],
-            handler: () => { }
+            text: texts['DONOT_SAVE'],
+            cssClass: 'alert-button-bg-white',
+            role: 'exit',
+            handler: () => { },
           },
           {
-            text: texts['OK'],
+            text: texts['SAVE'],
             role: 'cancel',
-            handler: () => { }
-          }
-        ]
+            cssClass: 'alert-button-red',
+            handler: () => { },
+          },
+        ],
       });
       await alert.present();
       let data = await alert.onDidDismiss();
-      if (data.role == 'cancel') {
-        return false;
-      } else {
+      if (data.role == 'exit') {
         return true;
       }
+      return false;
     } else {
       return true;
     }
-    return true
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.form1.onSubmit();
     if (this.form1.myForm.valid) {
       if (this.profileImageData.image && !this.profileImageData.isUploaded) {
         this.getImageUploadUrl(this.localImage);
       } else {
+        const form = Object.assign({}, this.form1.myForm.value);
+        _.forEach(this.entityNames, (entityKey) => {
+          let control = this.formData.controls.find(obj => obj.name === entityKey);
+          form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey]
+        });
         this.form1.myForm.markAsPristine();
-        this.profileService.profileUpdate(this.form1.myForm.value);
+        const updated = await this.profileService.profileUpdate(form);
+        if(updated && this.redirectUrl){ 
+          this.router.navigate([this.redirectUrl], { replaceUrl: true })
+        }else{
+          this.location.back()
+        }
       }
     } else {
-      this.toast.showToast("Please fill all the mandatory fields","danger");
+      this.toast.showToast('Please fill all the mandatory fields', 'danger');
     }
   }
 
   resetForm() {
     this.form1.reset();
   }
-  removeCurrentPhoto(event){
-    this.form1.myForm.value.image ='';
-    this.profileImageData.image='';
+  removeCurrentPhoto(event) {
+    this.form1.myForm.value.image = '';
+    this.profileImageData.image = '';
     this.form1.myForm.markAsDirty();
     this.profileImageData.isUploaded = true;
   }
-  imageUploadEvent(event) {
-    this.localImage = event;
-    this.profileImageData.image = this.win.Ionic.WebView.convertFileSrc(this.path + event.name);
-    this.profileImageData.isUploaded = false;
+  async imageUploadEvent(event) {
+    this.localImage = event.target.files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = (file: any) => {
+      this.profileImageData.image = file.target.result
+      this.profileImageData.isUploaded = false;
+      this.profileImageData.haveValidationError = true;
+    }
   }
-  upload(data) {
-    this.loaderService.startLoader();
-    this.attachment.cloudImageUpload(data).then(resp => {
-      this.profileImageData.image = data.uploadUrl.destFilePath;
-      this.form1.myForm.value.image = data.uploadUrl.destFilePath
-      this.profileImageData.isUploaded = true;
-      this.loaderService.stopLoader();
-      this.onSubmit();
-    }, error => {
-      this.loaderService.stopLoader();
-    })
+  upload(data, uploadUrl) {
+    return this.attachment.cloudImageUpload(data, uploadUrl).pipe(
+      map((resp => {
+        this.profileImageData.image = uploadUrl.destFilePath;
+        this.form1.myForm.value.image = uploadUrl.destFilePath;
+        this.profileImageData.isUploaded = true;
+        this.onSubmit();
+      })))
   }
   async getImageUploadUrl(file) {
     this.loaderService.startLoader();
     let config = {
-      url: urlConstants.API_URLS.GET_IMAGE_UPLOAD_URL + file.name
+      url: urlConstants.API_URLS.GET_FILE_UPLOAD_URL + file.name.replace(/[^A-Z0-9]+/ig, "_").toLowerCase()
     }
     let data: any = await this.api.get(config);
-    this.loaderService.stopLoader();
-    file.uploadUrl = data.result;
-    this.upload(file);
+    return this.upload(file, data.result).subscribe()
   }
-  preFillData(existingData) {
-    for (let i = 0; i < this.formData.controls.length; i++) {
-      this.formData.controls[i].value =
-        existingData[this.formData.controls[i].name];
-      this.formData.controls[i].options = _.unionBy(
-        this.formData.controls[i].options,
-        this.formData.controls[i].value,'value'
-      );
-    }
-    this.showForm=true;
+
+  updateEntityArray(arr1: string[], arr2: string[]) {
+    arr1.forEach(value => {
+      if (!arr2.includes(value)) {
+        arr2.push(value);
+      }
+    });
+    return arr2
   }
 }

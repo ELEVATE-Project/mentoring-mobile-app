@@ -1,0 +1,30 @@
+<div *ngIf="headerData" class="header-bottom-border">
+  <ion-row class="content-wrapper">
+    <ion-col size="4">
+      <div class="d-flex flex-justify-center">
+        <img *ngIf="!headerData?.image || headerData?.image==''; else Img; let image" src="../../../../assets/prof-img/user.png" />
+        <ng-template #Img>
+          <img src="{{headerData?.image}}" />
+        </ng-template>
+      </div>
+    </ion-col>
+    <ion-col size="8" class="details-wrapper">
+      <div>
+        <ion-label *ngIf="headerData?.name" class="name">{{headerData?.name}} </ion-label>
+      </div>
+      <div class="roles-div">
+        <ion-label *ngIf="roles">{{ roles[0].title | snakeCaseToUpperCase}}</ion-label>
+        <ion-label class="view-roles" (click)="viewRoles()">{{"VIEW_ROLES" | translate}}</ion-label>
+      </div>
+      <div class="d-inline-flex flex-align-items-center my-4" *ngIf="headerData?.location">
+        <ion-icon name="location"></ion-icon>
+        <ion-label class="location">{{headerData?.location?.label}}</ion-label>
+      </div>
+      <div *ngIf="buttonConfig">
+        <div *ngFor="let button of buttonConfig.buttons">
+          <ion-button color="Light" expand="block" fill="outline" shape="round" (click)="action(button?.action)">{{ button?.label | translate }}</ion-button>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+</div>

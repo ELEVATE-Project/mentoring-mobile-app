@@ -1,0 +1,21 @@
+.header {
+    font-size: 20px;
+    margin-top: 10px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+  }
+  .field-spacing {
+    margin-top: 30px;
+  }
+  .input{
+      margin-top: 10px;
+  }
+  ion-select::part(text) {
+    color: var(--black);
+  }
+  .select {
+    padding: unset;
+    width: 100%;
+  }

@@ -1,11 +1,74 @@
 .main-wrapper{
-    margin : 20px 25px 0px 25px
+    margin : 10px 15px 0px 15px;
+    padding-bottom: 40px;
 }
 .load-more-button{
     height: 50px;
+    width: 100%;
+    font-size: 15px !important;
 }
 .session-btn{
     margin: 10px,;
     width: 120px;
     height: 30px;
+}
+.title-font{
+    font-size: 19px;
+    margin-top: 0px;
+}
+.field-wrapper{
+    margin: 5px 10px 0px 15px;
+    ::first-letter {
+        text-transform: uppercase;
+    }
+}
+.description{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    ::first-letter {
+        text-transform: uppercase;
+    }
+    color: var( --dark-gray);
+}
+.calendar-icon{
+    font-size: 26px;
+}
+.date-label{
+    font-size: 16px;
+    color: rgb(0, 0, 0);
+    margin-left: 8px;
+    margin-bottom: 4px;
+}
+img{
+    width: 93%;
+    border-radius: 10px;
+}
+ion-item {
+    --padding-end: 0px;
+    --inner-padding-end: 0px;
+    --padding-start: 0px;
+  }
+.join-button{
+    background: var(--white);
+}
+.image-container{
+    height: 200px;
+}
+.person-container{
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 10px;
+}
+
+.manager-text-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    color: rgb(0, 0, 0);
+    margin-left: 6px;
+    margin-bottom: 4px;
 }

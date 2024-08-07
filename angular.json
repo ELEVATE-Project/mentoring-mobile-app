@@ -29,7 +29,8 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
-              }
+              },
+              "src/manifest.webmanifest"
             ],
             "styles": ["src/theme/variables.scss", "src/global.scss"],
             "scripts": [],
@@ -39,14 +40,16 @@
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "with": "src/environments/environment.ts"
                 }
               ],
               "optimization": true,
@@ -57,27 +60,12 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "serviceWorker": true,
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
-                }
-              ]
-            },
-            "staging":{
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.staging.ts"
-                }
-              ]
-            },
-            "dev":{
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
                 }
               ]
             },
@@ -94,12 +82,6 @@
           "configurations": {
             "production": {
               "browserTarget": "app:build:production"
-            },
-            "staging": {
-              "browserTarget": "app:build:staging"
-            },
-            "dev": {
-              "browserTarget": "app:build:dev"
             },
             "ci": {
               "progress": false
@@ -131,7 +113,8 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "/assets"
-              }
+              },
+              "src/manifest.webmanifest"
             ]
           },
           "configurations": {
@@ -164,49 +147,12 @@
               "devServerTarget": "app:serve:ci"
             }
           }
-        },
-        "ionic-cordova-build": {
-          "builder": "@ionic/angular-toolkit:cordova-build",
-          "options": {
-            "browserTarget": "app:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "app:build:production"
-            },
-            "staging": {
-              "browserTarget": "app:build:staging"
-            },
-            "dev": {
-              "browserTarget": "app:build:dev"
-            }
-          }
-        },
-        "ionic-cordova-serve": {
-          "builder": "@ionic/angular-toolkit:cordova-serve",
-          "options": {
-            "cordovaBuildTarget": "app:ionic-cordova-build",
-            "devServerTarget": "app:serve"
-          },
-          "configurations": {
-            "production": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:production",
-              "devServerTarget": "app:serve:production"
-            },
-            "staging": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:staging",
-              "devServerTarget": "app:serve:staging"
-            },
-            "dev": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:dev",
-              "devServerTarget": "app:serve:dev"
-            }
-          }
         }
       }
     }
   },
   "cli": {
+    "analytics": false,
     "defaultCollection": "@ionic/angular-toolkit"
   },
   "schematics": {

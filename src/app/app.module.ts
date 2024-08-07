@@ -5,6 +5,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CommonModule } from '@angular/common';
 import {
   TranslateLoader,
   TranslateModule,
@@ -14,16 +15,16 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CoreModule } from './core/core.module';
 import { Drivers, Storage } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
-import { Deeplinks } from '@ionic-native/deeplinks/ngx';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { File } from '@ionic-native/file/ngx';
-import { Camera } from '@awesome-cordova-plugins/camera/ngx';
-import { FilePath } from '@ionic-native/file-path/ngx';
-import { Chooser } from '@ionic-native/chooser/ngx';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { SQLite } from '@ionic-native/sqlite/ngx';
 import { TitleCasePipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { ServiceWorkerModule, SwUpdate } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -32,10 +33,13 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
+    CommonModule,
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    MatTableModule,
+    MatPaginatorModule,
     IonicStorageModule.forRoot({
       name: 'mentoringApp',
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage],
@@ -49,19 +53,21 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
       },
     }),
     ReactiveFormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: typeof(environment.production)=='string' ? JSON.parse(environment.production) : environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
+    BrowserAnimationsModule,
+    RecaptchaModule,
   ],
 
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Deeplinks,
-    SocialSharing,
-    File,
-    Camera,
-    FilePath,
-    Chooser,
-    FileTransfer, 
-    FileTransferObject,
-    InAppBrowser,
+    SQLite,
     TitleCasePipe,
+    ScreenOrientation,
+    SwUpdate
   ],
   bootstrap: [AppComponent],
 })
