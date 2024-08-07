@@ -52,7 +52,7 @@
   </div>
 </ion-content>
 <div *ngIf="this.userCantAccess && isloaded" class="d-flex flex-justify-center">
-    <app-no-data-found [messageHeader]="'USER_CANT_ACCESS_THIS_PROFILE'" [messageDescription]="'USER_CANT_ACCESS_PROFILE_GO_TO_HOME_PAGE'" [image]="'../../../../assets/no-data/unotherised-access.png'"> </app-no-data-found>
+    <app-no-data-found [messageHeader]="'USER_CANT_ACCESS_THIS_PROFILE'" [messageDescription]="'USER_CANT_ACCESS_PROFILE_GO_TO_HOME_PAGE'" [image]="'assets/no-data/unotherised-access.png'"> </app-no-data-found>
 </div>
 <ion-footer *ngIf="isloaded" class="ion-no-border footer-button">
   <ion-button (click)="goToHome()" expand="full">{{"HOME" | translate}}</ion-button>

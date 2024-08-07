@@ -3,7 +3,7 @@
     <ion-row>
     <div class="card-avatar">
       <img *ngIf="!data?.image || data?.image==''; else Img; let image" class="thumbnail-image"
-        src="../../../../assets/prof-img/user.png" />
+        src="assets/prof-img/user.png" />
       <ng-template #Img>
         <img class="thumbnail-image" src="{{data?.image}}" />
       </ng-template>

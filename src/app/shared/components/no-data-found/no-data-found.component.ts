@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class NoDataFoundComponent implements OnInit {
 @Input() messageHeader;
 @Input() messageDescription;
-@Input() image = '../../../../assets/no-data/sad-face-2691.svg'
+@Input() image = 'assets/no-data/sad-face-2691.svg'
   constructor() { }
 
   ngOnInit() {}
