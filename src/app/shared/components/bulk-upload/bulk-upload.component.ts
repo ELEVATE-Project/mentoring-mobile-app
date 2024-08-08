@@ -30,7 +30,8 @@ async downloadCSV(){
 
 async uploadCSV(event){
     let file= event.target.files[0];
-    const acceptableTypes = ['text/csv', 'appilication/vnd.ms-excel']
+    const acceptableTypes = ['text/csv', 'appilication/vnd.ms-excel'];
+    console.log('file  type :', file.type, file);
     if(!(acceptableTypes.includes(file.type))){
       this.toast.showToast('PLEASE_UPLOAD_CSV_FILE', 'danger')
       event.target.value='';
