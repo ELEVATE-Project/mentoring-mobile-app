@@ -40,11 +40,14 @@ export class HttpService {
   }
 
   async setHeaders() {
-    let token = await this.getToken();
+    let token;
+    if(!window['env']['isAuthBypassed']) {
+      token = await this.getToken();
+    }
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const acceptLanguage = await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE);
     const headers = {
-      'X-auth-token': token ? token : "",
+      'x-authenticated-user-token': token ? token : "",
       'Content-Type': 'application/json',
       'timeZone': timezone,
       'accept-language':acceptLanguage
@@ -55,6 +58,7 @@ export class HttpService {
         headers[key] = this.extraHeaders[key];
       });
     }
+    console.log(JSON.stringify(headers))
     return headers;
   }
 
