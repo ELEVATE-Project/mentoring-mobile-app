@@ -13,7 +13,6 @@ import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-con
 import { App, AppState } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
-import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -111,7 +110,7 @@ export class HomePage implements OnInit {
     this.createdSessions = this.isMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
   }
   async eventAction(event) {
-    if (this.user.about || environment['isAuthBypassed']) {
+    if (this.user.about || window['env']['isAuthBypassed']) {
       switch (event.type) {
         case 'cardSelect':
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
@@ -185,7 +184,7 @@ export class HomePage implements OnInit {
     this.selectedSegment = event.name;
   }
   async createSession() {
-    if (this.user?.about != null || environment['isAuthBypassed']) {
+    if (this.user?.about != null || window['env']['isAuthBypassed']) {
       this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]); 
     } else {
       this.profileService.upDateProfilePopup()
@@ -193,7 +192,7 @@ export class HomePage implements OnInit {
   }
 
   async becomeMentor() {
-    if(this.user?.about != null || environment['isAuthBypassed']){
+    if(this.user?.about != null || window['env']['isAuthBypassed']){
       this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);   
     } else{
       this.profileService.upDateProfilePopup()

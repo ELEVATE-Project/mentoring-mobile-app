@@ -456,67 +456,37 @@
             }
           },
           {
-            "name": "recommended_for",
-            "label": "Recommended for",
+            "name": "competencies",
+            "label": "Competencies",
             "class": "ion-no-margin",
             "value": "",
             "type": "search",
             "position": "",
             "disabled": false,
             "errorMessage": {
-              "required": "Enter recommended for"
+                "required": "Enter competencies"
             },
             "validators": {
-              "required": true
+                "required": true
             },
-            "options": [],
+            "options": [
+            ],
             "meta": {
-              "entityType": "recommended_for",
-              "addNewPopupHeader": "Recommended for",
-              "addNewPopupSubHeader": "Who is this session for?",
-              "showSelectAll": true,
-              "multiSelect": true,
-              "showAddOption": {
-                "showAddButton": true,
-                "addChipLabel": ""
-              },
-              "allow_custom_entities": true,
-              "allow_filtering": true,
-              "addPopupType": "addCompetency"
+                "entityType": "competencies",
+                "addNewPopupHeader": "Competencies",
+                "addNewPopupSubHeader": "Who is this session for?",
+                "showSelectAll": true,
+                "multiSelect": true,
+                "showAddOption": {
+                    "showAddButton": true,
+                    "addChipLabel": ""
+                },
+                "allow_custom_entities": true,
+                "allow_filtering": true,
+                "addPopupType": "addCompetency"
             },
             "multiple": true
-          },
-          {
-            "name": "categories",
-            "label": "Categories",
-            "class": "ion-no-margin",
-            "value": "",
-            "type": "search",
-            "position": "",
-            "disabled": false,
-            "errorMessage": {
-              "required": "Enter categories"
-            },
-            "validators": {
-              "required": true
-            },
-            "options": [],
-            "meta": {
-              "entityType": "categories",
-              "addNewPopupHeader": "Add new category",
-              "addNewPopupSubHeader": "Categories for the session",
-              "showSelectAll": true,
-              "multiSelect": true,
-              "showAddOption": {
-                "showAddButton": true,
-                "addChipLabel": ""
-              },
-              "allow_custom_entities": true,
-              "allow_filtering": true,
-              "addPopupType": "addCompetency"
-            },
-            "multiple": true
-          },
+        },
           {
             "name": "medium",
             "label": "Select medium",

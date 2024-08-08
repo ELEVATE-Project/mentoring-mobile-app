@@ -3,7 +3,6 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } fro
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,7 @@ export class PublicGuard implements CanActivate {
     return this.userService.getUserValue().then((result) => {
       if (result) {
         return false;
-      } else if(environment['isAuthBypassed']) {
+      } else if(window['env']['isAuthBypassed']) {
         this.router.navigate([''])
         return false;
       }
