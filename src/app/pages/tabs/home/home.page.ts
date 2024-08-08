@@ -98,7 +98,7 @@ export class HomePage implements OnInit {
 
   async ionViewWillEnter() {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    if((this.user && !this.user.profile_mandatory_fields.length)||window['env']['isAuthBypassed']){
+    if(this.user && !this.user.profile_mandatory_fields.length){
       this.getSessions();
     }
     this.gotToTop();
