@@ -7,7 +7,6 @@ import { AuthService, DbService, LocalStorageService, NetworkService, UserServic
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
-import { environment } from 'src/environments/environment';
 import { Location } from '@angular/common';
 import * as _ from 'lodash-es';
 import { PermissionService } from '../../core/services/permission/permission.service';
@@ -45,7 +44,7 @@ export class PrivatePage implements OnInit {
    menuSubscription: any;
    routerSubscription: any;
    adminAccess: boolean;
-   isAuthBypassed = environment['isAuthBypassed'];
+   isAuthBypassed = window['env']['isAuthBypassed'];
   constructor(
     private translate: TranslateService,
     private platform: Platform,
@@ -132,7 +131,7 @@ export class PrivatePage implements OnInit {
      })
      App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
        this.zone.run(() => {
-         const domain = environment.deepLinkUrl
+         const domain = window['env']['deepLinkUrl']
          const slug = event.url.split(domain).pop();
          if (slug) {
            this.router.navigateByUrl(slug);
