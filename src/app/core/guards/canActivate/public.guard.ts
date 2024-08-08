@@ -3,7 +3,6 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } fro
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'

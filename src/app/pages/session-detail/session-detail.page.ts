@@ -14,7 +14,6 @@ import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-
 import { EventListenerFocusTrapInertStrategy } from '@angular/cdk/a11y';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { FormService } from 'src/app/core/services/form/form.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-session-detail',

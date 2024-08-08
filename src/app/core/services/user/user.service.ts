@@ -16,9 +16,7 @@ export class UserService {
   userEventEmitted$ = this.userEvent.asObservable();
   constructor(
     private localStorage: LocalStorageService,
-    ) { 
-      this.baseUrl = window['env']['baseUrl'];
-    }
+    ) {}
 
   async getUserValue() {
     return this.localStorage

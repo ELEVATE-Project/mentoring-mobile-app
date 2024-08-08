@@ -13,7 +13,6 @@ import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-con
 import { App, AppState } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
-import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -76,8 +75,8 @@ export class HomePage implements OnInit {
         }
       })
     });
-    let isRoleRequested = this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
-    let isBecomeMentorTileClosed = this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
+    let isRoleRequested = await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
+    let isBecomeMentorTileClosed = await this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
     this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor || isBecomeMentorTileClosed ? false : true;
     if(this.profileService.isMentor){
       this.getCreatedSessionDetails();
@@ -88,7 +87,7 @@ export class HomePage implements OnInit {
         this.user = data;
       }
     })
-    this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.permissionService.getPlatformConfig().then((config)=>{
       this.chips = config.result.search_config.search.session.fields;
     })

@@ -7,7 +7,6 @@ import { AuthService, DbService, LocalStorageService, NetworkService, UserServic
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
-import { environment } from 'src/environments/environment';
 import { Location } from '@angular/common';
 import * as _ from 'lodash-es';
 import { PermissionService } from '../../core/services/permission/permission.service';
@@ -132,7 +131,7 @@ export class PrivatePage implements OnInit {
      })
      App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
        this.zone.run(() => {
-         const domain = environment.deepLinkUrl
+         const domain = window['env']['deepLinkUrl']
          const slug = event.url.split(domain).pop();
          if (slug) {
            this.router.navigateByUrl(slug);
@@ -187,7 +186,7 @@ getUser() {
     this.adminAccess = profileDetails.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,profileDetails?.permissions) : false;
     this.user = profileDetails;
     if (!window['env']['isAuthBypassed'] && profileDetails.profile_mandatory_fields && profileDetails.profile_mandatory_fields.length > 0 || !profileDetails.about && !window['env']['isAuthBypassed']) {
-      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`], { replaceUrl: true });
+      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`], { replaceUrl: true, queryParams: {redirectUrl: '/tabs/home'}});
     }
     this.isMentor = this.profile.isMentor;
   })

@@ -14,7 +14,7 @@
     <ion-row>
       <div class="session-image">
         <img *ngIf="!data?.image.length || data?.image==''; else Img; let image" class="thumbnail-image"
-          src="../../../../assets/default-session-img/session-img.png" />
+          src="assets/default-session-img/session-img.png" />
         <ng-template #Img>
           <img class="thumbnail-image" src="{{data?.image[0]}}" />
         </ng-template>
