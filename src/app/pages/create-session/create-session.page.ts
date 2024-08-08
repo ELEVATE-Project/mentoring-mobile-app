@@ -176,8 +176,8 @@ export class CreateSessionPage implements OnInit {
         this.getImageUploadUrl(this.localImage);
       } else {
         const form = Object.assign({}, {...this.form1.myForm.getRawValue(), ...this.form1.myForm.value});
-        form.start_date = form.start_date.unix().toString();
-        form.end_date = form.end_date.unix().toString();
+        form.start_date = (Math.floor(form.start_date.unix() / 60) * 60).toString();
+        form.end_date = (Math.floor(form.end_date.unix() / 60) * 60).toString();
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         form.time_zone = timezone;
         _.forEach(this.entityNames, (entityKey) => {

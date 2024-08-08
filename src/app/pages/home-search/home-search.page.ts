@@ -11,7 +11,6 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { Location } from '@angular/common';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { FormService } from 'src/app/core/services/form/form.service';
-import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 
 @Component({

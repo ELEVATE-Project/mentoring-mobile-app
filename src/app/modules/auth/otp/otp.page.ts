@@ -25,7 +25,7 @@ export class OtpPage implements OnInit {
       'border-radius': '8px'
     }
   };
-  siteKey = window['env']?.recaptchaSiteKey ? window['env']?.recaptchaSiteKey.recaptchaSiteKey  :""
+  siteKey = window['env']['recaptchaSiteKey'] ? window['env']['recaptchaSiteKey']  :""
   resetPasswordData = { email: null, password: null, otp: null };
   public headerConfig: any = {
     // menu: true,
@@ -43,8 +43,8 @@ export class OtpPage implements OnInit {
   labels;
   signupData: any;
   checked: boolean = false;
-  privacyPolicyUrl = window['env'].privacyPolicyUrl;
-  termsOfServiceUrl = window['env'].termsOfServiceUrl;
+  privacyPolicyUrl = window['env']['privacyPolicyUrl'];
+  termsOfServiceUrl = window['env']['termsOfServiceUrl'];
   captchaToken:any="";
   recaptchaResolved: boolean = this.siteKey ? false : true;
   showOtp:any = false;

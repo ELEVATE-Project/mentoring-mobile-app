@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { UserService } from '../services/user/user.service';
 import { UtilService } from '../services';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
