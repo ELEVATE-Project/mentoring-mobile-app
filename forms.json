@@ -482,7 +482,8 @@
               },
               "allow_custom_entities": true,
               "allow_filtering": true,
-              "addPopupType": "addCompetency"
+              "addPopupType": "addCompetency",
+              "labelForAddButton": "Select Recommended for"
             },
             "multiple": true
           },
@@ -513,13 +514,14 @@
               },
               "allow_custom_entities": true,
               "allow_filtering": true,
-              "addPopupType": "addCompetency"
+              "addPopupType": "addCompetency",
+              "labelForAddButton": "Select Categories"
             },
             "multiple": true
           },
           {
             "name": "medium",
-            "label": "Select medium",
+            "label": "Medium",
             "alertLabel": "medium",
             "class": "ion-no-margin",
             "value": "",
@@ -545,7 +547,8 @@
               },
               "allow_custom_entities": true,
               "allow_filtering": true,
-              "addPopupType": "addCompetency"
+              "addPopupType": "addCompetency",
+              "labelForAddButton": "Select Medium"
             },
             "multiple": true
           }
@@ -812,7 +815,8 @@
               "showAddOption": {
                 "showAddButton": true,
                 "addChipLabel": ""
-              }
+              },
+              "labelForAddButton": "Select Recommended for"
             },
             "multiple": true
           },
@@ -859,13 +863,14 @@
               "showAddOption": {
                 "showAddButton": true,
                 "addChipLabel": ""
-              }
+              },
+              "labelForAddButton": "Select Categories"
             },
             "multiple": true
           },
           {
             "name": "medium",
-            "label": "Select medium",
+            "label": "Medium",
             "alertLabel": "medium",
             "class": "ion-no-margin",
             "value": "",
@@ -895,7 +900,8 @@
               "showAddOption": {
                 "showAddButton": true,
                 "addChipLabel": ""
-              }
+              },
+              "labelForAddButton": "Select Medium"
             },
             "multiple": true
           }
