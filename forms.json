@@ -380,7 +380,7 @@
   {
     "type": "session",
     "sub_type": "sessionForm",
-    "action": "update",
+    "action": "skip",
     "data": {
       "templateName": "defaultTemplate",
       "fields": {
@@ -776,7 +776,7 @@
             "label": "Recommended for",
             "class": "ion-no-margin",
             "value": "",
-            "type": "chip",
+            "type": "search",
             "position": "",
             "disabled": false,
             "errorMessage": {
@@ -825,7 +825,7 @@
             "label": "Categories",
             "class": "ion-no-margin",
             "value": "",
-            "type": "chip",
+            "type": "search",
             "position": "",
             "disabled": false,
             "errorMessage": {
@@ -874,7 +874,7 @@
             "alertLabel": "medium",
             "class": "ion-no-margin",
             "value": "",
-            "type": "chip",
+            "type": "search",
             "position": "",
             "disabled": false,
             "errorMessage": {
