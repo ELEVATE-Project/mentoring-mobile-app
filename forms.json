@@ -814,10 +814,14 @@
               "addNewPopupHeader": "Recommended for",
               "addNewPopupSubHeader": "Who is this session for?",
               "showSelectAll": true,
+              "multiSelect": true,
               "showAddOption": {
                 "showAddButton": true,
                 "addChipLabel": ""
               },
+              "allow_custom_entities": true,
+              "allow_filtering": true,
+              "addPopupType": "addCompetency",
               "labelForAddButton": "Select Recommended for"
             },
             "multiple": true
@@ -860,12 +864,17 @@
             ],
             "meta": {
               "entityType": "categories",
-              "addNewPopupHeader": "Add a new category",
+              "addNewPopupHeader": "Add new category",
+              "addNewPopupSubHeader": "Categories for the session",
               "showSelectAll": true,
+              "multiSelect": true,
               "showAddOption": {
                 "showAddButton": true,
                 "addChipLabel": ""
               },
+              "allow_custom_entities": true,
+              "allow_filtering": true,
+              "addPopupType": "addCompetency",
               "labelForAddButton": "Select Categories"
             },
             "multiple": true
@@ -897,12 +906,17 @@
             ],
             "meta": {
               "entityType": "medium",
-              "addNewPopupHeader": "Add new language",
+              "addNewPopupHeader": "Add new medium",
+              "addNewPopupSubHeader": "Medium for the session",
               "showSelectAll": true,
+              "multiSelect": true,
               "showAddOption": {
                 "showAddButton": true,
                 "addChipLabel": ""
               },
+              "allow_custom_entities": true,
+              "allow_filtering": true,
+              "addPopupType": "addCompetency",
               "labelForAddButton": "Select Medium"
             },
             "multiple": true
