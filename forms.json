@@ -677,7 +677,8 @@
                   }
                 ]
               },
-              "filterType": "mentor"
+              "filterType": "mentor",
+              "addPopupType": "addUser"
             },
             "info": [
               {
@@ -722,7 +723,8 @@
                   }
                 ]
               },
-              "filterType": "mentee"
+              "filterType": "mentee",
+              "addPopupType": "addUser"
             },
             "position": "floating",
             "info": [
