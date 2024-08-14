@@ -57,7 +57,6 @@ export class HttpService {
         headers[key] = this.extraHeaders[key];
       });
     }
-    console.log(JSON.stringify(headers))
     return headers;
   }
 
