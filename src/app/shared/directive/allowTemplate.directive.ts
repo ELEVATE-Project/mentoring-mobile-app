@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 })
 export class AllowTemplateViewDirective {
   @Input() set allowTemplateView( pageId: any ) {
-    if(!environment.restictedPages.includes(pageId)){
+    if(!window['env']['restictedPages'].includes(pageId)){
       this.viewContainer.createEmbeddedView(this.templateRef);
     }else{
       this.viewContainer.clear();

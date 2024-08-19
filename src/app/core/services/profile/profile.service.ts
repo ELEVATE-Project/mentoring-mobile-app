@@ -176,7 +176,7 @@ export class ProfileService {
     var roles = userDetails.user_roles.map(function(item) {
       return item['title'];
     });
-    this.isMentor = roles.includes('mentor')?true:false;
+    this.isMentor = roles.map(s => s.toLowerCase()).includes('mentor')?true:false;
     return roles
   }
 
