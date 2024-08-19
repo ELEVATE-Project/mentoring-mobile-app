@@ -1,6 +1,6 @@
 <ion-toolbar position="top" color="primary">
   <div class="container">
-    <h2 class="ion-padding-start ion-padding-top">{{data.control.label}}</h2>
+    <h2 class="ion-padding-start ion-padding-top">{{'SELECT'|translate}} {{data.control.label}}</h2>
     <div class="close-col">
       <ion-icon class="close-button" name="close-outline" (click)="closePopover()"></ion-icon>
     </div>
@@ -10,7 +10,7 @@
 <ion-content>
   <div *ngIf="!data?.viewListMode" class="search-col d-flex flex-justify-center ion-padding-top ion-margin-top ion-margin-start">
     <ion-searchbar *ngIf="data.showSearch" class="search-style" debounce="1000" [(ngModel)]="searchText"
-      (ionChange)="onSearch()" placeholder="{{'SELECT'|translate}} {{data.control.label}}"></ion-searchbar>
+      (ionChange)="onSearch()" placeholder="{{'SEARCH'|translate}} {{data.control.label}}"></ion-searchbar>
     <h2 class="ion-padding-start label-button" (click)="clearAll()">{{ "CLEAR_ALL" | translate }}</h2>
   </div>
   <div *ngIf="entities && !data?.viewListMode" class="competency-list-wrapper">
