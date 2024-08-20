@@ -40,10 +40,9 @@ export class LanguagePage implements OnInit {
 
   onSubmit(){
     let showProfileUpdateToast = false;
-    this.profile.profileUpdate({preferred_language:this.selectedLanguage}, showProfileUpdateToast).then((result)=>{
+    this.profile.updateLanguage({preferred_language:this.selectedLanguage}, showProfileUpdateToast).then((result)=>{
       if(result){
         this.setLanguage(this.selectedLanguage);
-        this.toast.showToast("LANGUAGE_CHANGED_SUCCESSFULLY","success");
       }
     })
   }
@@ -51,6 +50,7 @@ export class LanguagePage implements OnInit {
   setLanguage(lang){
     this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,lang).then(() =>{
       this.translate.use(lang);
+      this.toast.showToast("LANGUAGE_CHANGED_SUCCESSFULLY","success");
     }).catch(error => {
       this.toast.showToast("ERROR_LANGUAGE_CHANGE","danger");
     })

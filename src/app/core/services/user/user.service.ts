@@ -4,7 +4,6 @@ import { LocalStorageService } from '../localstorage.service';
 import * as _ from 'lodash-es';
 import jwt_decode from "jwt-decode";
 import * as moment from 'moment';
-import { environment } from 'src/environments/environment';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -17,9 +16,7 @@ export class UserService {
   userEventEmitted$ = this.userEvent.asObservable();
   constructor(
     private localStorage: LocalStorageService,
-    ) { 
-      this.baseUrl = environment.baseUrl;
-    }
+    ) {}
 
   async getUserValue() {
     return this.localStorage

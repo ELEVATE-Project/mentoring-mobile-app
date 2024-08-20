@@ -34,4 +34,5 @@ export class CommonRoutes {
     public static MANAGERS_SESSION_DETAILS = 'managers-session-details'
     public static CHANGE_PASSWORD = 'change-password'
     public static LOGIN_ACTIVITY = 'login-activity'
+    public static MENTOR_SEARCH_DIRECTORY = 'mentor-search-directory'
 }

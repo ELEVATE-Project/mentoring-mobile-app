@@ -13,7 +13,7 @@
   <ion-row>
     <ion-col class="col-width-25" *ngIf="data.showFilter && tableData">
       <div class="scrollable-filter">
-        <app-filter-tree [enableFilterHeader]="true" *ngIf="filterData" [filterData]="filterData"
+        <app-filter-tree [enableFilterHeader]="true" [enableFilterLabel]="true" *ngIf="filterData" [filterData]="filterData"
         (filtersChanged)="filtersChanged($event)"></app-filter-tree>
       </div>
     </ion-col>

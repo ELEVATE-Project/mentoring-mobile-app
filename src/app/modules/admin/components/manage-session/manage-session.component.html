@@ -1,37 +1,65 @@
 <app-page-header [config]="headerConfig">
-  <div class="d-flex flex-justify-center my-8">
+  <div class="d-flex flex-justify-center my-8" *ngIf="segmentType === 'manage-session'">
     <ion-searchbar class="top-padding search-bar"  debounce="1000" placeholder="{{'SSESSIONS_MENTOR_SEARCH_PLACEHOLDER' | translate}}"
     [(ngModel)]="searchText" (ionChange)="onSearch()"></ion-searchbar>
   </div>
 </app-page-header>
 <ion-content>
-<div>
-    <ion-card class="session-sqr-card">
-        <ion-card-content class="card-content">
-          <div class="segment-button d-flex flex-justify-center flex-align-items-flex-end">
-            {{"START_CREATE_SESSION"|translate}}
-          </div>
-          <ion-grid>
-            <ion-row class="d-flex flex-justify-center">
-              <ion-col padding size-xs="12" size-sm="12" size-md="8" size-lg="6" align-self-stretch>
-          <ion-button shape="round" strong="true" class="card-button" (click)="createSession()">
-            {{'CREATE_SESSION' | translate}} <ion-icon class="create-icon" name="add-circle-outline"></ion-icon>
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-        </ion-card-content>
-      </ion-card>
-</div>
-<div class="filter">
-  <p>{{"FILTER"|translate}}</p>
-  <div class="circle-container" (click)="onClickFilter()">
-    <ion-icon class="ion-funnel-icon" name="funnel"></ion-icon>
+  <div class="d-flex flex-justify-center">
+    <ion-header>
+      <ion-segment (ionChange)="segmentChanged($event)" [value]="segmentType">
+        <ion-segment-button value="manage-session" class="normal-case">
+          <ion-label>{{ "CREATE_SESSIONS" | translate }}</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="bulk-upload" class="normal-case">
+          <ion-label>{{ "BULK_UPLOAD" | translate }}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-header>
   </div>
-</div>
-<div *ngIf="tableData">
-    <app-generic-table [headingText]="headingText" [columnData]="columnData" [noDataMessage]="noDataMessage"  [tableData]="tableData" [totalCount]="totalCount" (onClickEvent)='onCLickEvent($event)' (paginatorChanged)="onPaginatorChange($event)" (onSorting)="onSorting($event)" [setPaginatorToFirstpage]="setPaginatorToFirstpage" [showPaginator]="true">
-      <div class="download"  (click)="onClickDownload()">{{ download | translate}}</div>
-    </app-generic-table>
-</div>
+  <div [ngSwitch]="segmentType">
+    <div>
+      <div *ngSwitchCase="'manage-session'">
+        <ion-card class="session-sqr-card">
+          <ion-card-content class="card-content">
+            <div class="segment-button d-flex flex-justify-center flex-align-items-flex-end">
+              {{"START_CREATE_SESSION"|translate}}
+            </div>
+            <ion-grid>
+              <ion-row class="d-flex flex-justify-center">
+                <ion-col padding size-xs="12" size-sm="12" size-md="8" size-lg="6" align-self-stretch>
+                  <ion-button shape="round" strong="true" class="card-button" (click)="createSession()">
+                    {{"CREATE_SESSION" | translate }} <ion-icon class="create-icon"name="add-circle-outline"></ion-icon>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+        <div class="filter">
+          <p>{{"FILTER"|translate}}</p>
+          <div class="circle-container" (click)="onClickFilter()">
+            <ion-icon class="ion-funnel-icon" name="funnel"></ion-icon>
+          </div>
+        </div>
+        <div *ngIf="tableData">
+          <app-generic-table [headingText]="headingText"
+            [columnData]="columnData"
+            [noDataMessage]="noDataMessage"
+            [tableData]="tableData"
+            [totalCount]="totalCount"
+            (onClickEvent)="onCLickEvent($event)"
+            (paginatorChanged)="onPaginatorChange($event)"
+            (onSorting)="onSorting($event)"
+            [setPaginatorToFirstpage]="setPaginatorToFirstpage"
+            [showPaginator]="true">
+            <div class="download" (click)="onClickDownload()">{{ download | translate}}</div>
+          </app-generic-table>
+        </div>
+      </div>
+      <div *ngSwitchCase="'bulk-upload'" class="d-flex flex-justify-center flex-align-items-center">
+        <app-bulk-upload [data]="manageSessionUrls"></app-bulk-upload>
+      </div>
+    </div>
+  </div>
 </ion-content>

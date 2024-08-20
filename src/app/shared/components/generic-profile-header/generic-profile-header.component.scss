@@ -31,11 +31,17 @@ ion-button{
     max-width: 250px;
     
 }
-.role{
-    color: rgb(221, 224, 224);
-    font-size:20px;
-    letter-spacing: .5px;
-}
 .content-wrapper{
     padding: 16px 16px 16px 0px;
+}
+.view-roles{
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 2%;
+    font-size: small;
+}
+.roles-div{
+    padding-left: 2px;
+    padding-top: 1%
 }

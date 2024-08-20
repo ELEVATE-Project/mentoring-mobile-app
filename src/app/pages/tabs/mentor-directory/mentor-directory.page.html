@@ -1,28 +1,25 @@
 <app-page-header [config]="headerConfig">
-</app-page-header>
-<ion-toolbar class="padding-top-10">
   <div class="d-flex flex-justify-center">
-    <ion-searchbar class="top-padding search-style"  debounce="1000" placeholder="{{'MENTOR_SEARCH_PLACEHOLDER' | translate}}"
-    [(ngModel)]="searchText" (ionChange)="onSearch()"></ion-searchbar>
+    <ion-searchbar class="top-padding search-style"  debounce="1000" placeholder="{{'MENTOR_SEARCH_PLACEHOLDER' | translate}}"(click)="onSearch()"></ion-searchbar>
   </div>
-</ion-toolbar>
+</app-page-header>
 <ion-content >
   <div *ngIf="isLoaded">
-  <div *ngFor="let mentor of mentors">
-    <div class="index-label">
-      {{mentor.key}}
+    <div *ngFor="let mentor of mentors">
+      <div class="index-label">
+        {{mentor.key}}
+      </div>
+      <ion-grid >
+        <ion-row class="d-flex ">
+          <ion-col *ngFor="let value of mentor.values" padding size-xs="12" size-sm="12" size-md="6" size-lg="4" align-self-stretch>
+            <app-mentor-card class="mentor-card" [data]="value" (onClickEvent)="eventAction($event)">
+            </app-mentor-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </div>
-    <ion-grid >
-      <ion-row class="d-flex ">
-        <ion-col *ngFor="let value of mentor.values" padding size-xs="12" size-sm="12" size-md="6" size-lg="4" align-self-stretch>
-      <app-mentor-card class="mentor-card" [data]="value" (onClickEvent)="eventAction($event)">
-      </app-mentor-card>
-  </ion-col>
-</ion-row>
-</ion-grid>
   </div>
-</div>
-  <div *ngIf="!mentors?.length && isLoaded">
+  <div *ngIf="!mentorsCount && isLoaded">
     <app-no-data-found [messageHeader]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
   </div>
   <ion-infinite-scroll #infinitescroll [disabled]="mentors.length==0" (ionInfinite)="loadMore($event)">

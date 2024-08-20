@@ -5,6 +5,7 @@ import {
   RouterStateSnapshot
 } from "@angular/router";
 import { Observable } from "rxjs";
+import { CommonRoutes } from 'src/global.routes';
 
 export interface isDeactivatable {
   canPageLeave: () => Observable<boolean> | Promise<boolean> | boolean;
@@ -20,6 +21,7 @@ export class CanLeavePageGuard implements CanDeactivate<isDeactivatable> {
     currentState: RouterStateSnapshot,
     nextState: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
+    if(nextState.url === `/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`){return true}
     return component.canPageLeave ? component.canPageLeave() : true;
   }
 }

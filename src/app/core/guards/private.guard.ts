@@ -19,8 +19,9 @@ export class PrivateGuard implements CanActivate {
       if (result) {
         this.utilService?.alertClose();
         return true;
-      }
-      else {
+      } else if(window['env']['isAuthBypassed']) {
+        return true;
+      } else {
         this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LANDING_PAGE}`]);
         return false;
       }

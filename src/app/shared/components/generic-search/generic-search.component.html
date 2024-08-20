@@ -1,0 +1,33 @@
+<div class="search-navigation">
+  <div class="search-result">
+    <div class="search-result-label">
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+      </ion-buttons>
+      <ion-label *ngIf="searchValue && totalCount">{{"SESSSION_SEARCH_RESULT" | translate}} "{{searchValue}}"</ion-label>
+    </div>
+    <div *ngIf="totalCount && searchValue" class="search-result-count">
+      <ion-label>{{totalCount}} {{"SEARCH_RESULT" | translate}}</ion-label>
+    </div>
+  </div>
+  <div class="paginator">
+    <mat-paginator  [length]="totalCount" [pageSize]="limit" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"></mat-paginator>
+  </div>
+</div>
+<div>
+  <ion-grid>
+    <ion-row class="d-flex ">
+      <ion-col *ngFor="let result of results" padding size-xs="12" size-sm="12" size-md="6" size-lg="6"
+        align-self-stretch>
+        <div >
+          <app-session-card [data]="result" (onClickEvent)="eventAction($event)">
+          </app-session-card>
+        </div>
+      </ion-col>
+      <ion-col *ngIf="!results.length" padding size-xs="12" size-sm="12" size-md="6" size-lg="12"
+      align-self-stretch>
+        <app-no-data-found [messageHeader]="'SEARCH_RESULT_NOT_FOUND'" [messageDescription]="'NO_SESSION_MESSAGE_DESCRIPTION'"> </app-no-data-found>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>

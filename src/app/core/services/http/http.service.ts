@@ -1,6 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
 import { RequestParams } from '../../interface/request-param';
-import { environment } from 'src/environments/environment';
 import * as _ from 'lodash-es';
 import { UserService } from '../user/user.service';
 import { NetworkService } from '../network.service';
@@ -23,6 +22,8 @@ export class HttpService {
   baseUrl;
   isFeedbackTriggered = false;
   isAlertOpen: any = false;
+  extraHeaders
+
   constructor(
     private userService: UserService,
     private network: NetworkService,
@@ -33,19 +34,28 @@ export class HttpService {
     private modalController: ModalController,
     private translate: TranslateService,
     private alert: AlertController,
-  ) {
-    this.baseUrl = environment.baseUrl;
+  ) {  
+    this.baseUrl = window['env']['baseUrl'];
   }
 
   async setHeaders() {
-    let token = await this.getToken();
+    let token;
+    if(!window['env']['isAuthBypassed']) {
+      token = await this.getToken();
+    }
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const acceptLanguage = await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE);
     const headers = {
-      'X-auth-token': token ? token : "",
+      'x-authenticated-user-token': token ? token : "",
       'Content-Type': 'application/json',
       'timeZone': timezone,
       'accept-language':acceptLanguage
+    }
+    this.extraHeaders = JSON.parse(localStorage.getItem('headers'))
+    if(this.extraHeaders) {
+      Object.keys(this.extraHeaders).forEach(key => {
+        headers[key] = this.extraHeaders[key];
+      });
     }
     return headers;
   }
@@ -143,8 +153,8 @@ export class HttpService {
   }
 
   //network check
-  checkNetworkAvailability() {
-    this.network.getCurrentStatus()
+  async checkNetworkAvailability() {
+    await this.network.getCurrentStatus()
     if (!this.network.isNetworkAvailable) {
       this.toastService.showToast('MSG_PLEASE_NETWORK', 'danger')
       return false;

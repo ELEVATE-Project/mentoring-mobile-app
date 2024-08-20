@@ -15,6 +15,10 @@ import { Location } from '@angular/common';
 import { UserService } from '../user/user.service';
 import { AuthService } from '../auth/auth.service';
 import { FormService } from 'src/app/core/services/form/form.service';
+import { TranslateService } from '@ngx-translate/core';
+import { UserListModalComponent } from 'src/app/shared/components/user-list-modal/user-list-modal.component';
+import { ModalController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +37,8 @@ export class ProfileService {
     private userService: UserService,
     private injector: Injector,
     private form: FormService,
-    private util: UtilService
+    private util: UtilService,
+    private modal: ModalController
   ) {
    }
   async profileUpdate(formData, showToast=true) {
@@ -51,7 +56,6 @@ export class ProfileService {
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, profileDatas);
       this.userService.userEvent.next(profileDatas);
       this.loaderService.stopLoader();
-      this._location.back();
       (showToast)?this.toast.showToast(data.message, "success"):null;
       return true;
       }
@@ -159,6 +163,7 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
+      this.getUserRole(data)
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
       await this.localStorage.setLocalData(localKeys.USER_ROLES, this.getUserRole(data))
       return data;
@@ -171,7 +176,7 @@ export class ProfileService {
     var roles = userDetails.user_roles.map(function(item) {
       return item['title'];
     });
-    this.isMentor = roles.includes('mentor')?true:false;
+    this.isMentor = roles.map(s => s.toLowerCase()).includes('mentor')?true:false;
     return roles
   }
 
@@ -185,12 +190,12 @@ export class ProfileService {
 
   async prefillData(requestDetails: any,entityNames:any,formData:any,showAddOption:any=true) {
     let existingData = requestDetails;
-    if(requestDetails?.about){
+    if(requestDetails?.about || environment.isAuthBypassed){
        existingData = await this.form.formatEntityOptions(requestDetails,entityNames)
     }
     for (let i = 0; i < formData.controls.length; i++) {
       if(formData.controls[i].type == 'chip'){
-        formData.controls[i].meta.showAddOption = showAddOption;
+        formData.controls[i].meta.showAddOption.showAddButton = showAddOption;
       }
       formData.controls[i].value = existingData[formData.controls[i].name] ? existingData[formData.controls[i].name] : '';
       formData.controls[i].options = _.unionBy(
@@ -201,5 +206,48 @@ export class ProfileService {
     }
   }
 
+  async viewRolesModal(userRoles){
+    if (!userRoles.includes("mentee")) {
+      userRoles.push("mentee");
+    }
+    userRoles = userRoles.sort();
+    let modal = await this.modal.create({
+      component: UserListModalComponent,
+      cssClass: 'user-role-modal',
+      componentProps: { data: userRoles }
+    });
+    modal.present();
+  }
+
+  async getMentors(showLoader = true, obj){
+    showLoader ? await this.loaderService.startLoader() : '';
+    const config = {
+      url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST  + obj?.page + '&limit=' + obj.pageSize + '&search=' + btoa(obj.searchText) + '&directory=false'+ '&search_on=' + (obj?.selectedChip? obj?.selectedChip : '') + '&' + (obj?.urlQueryData ? obj?.urlQueryData: ''),
+      payload: {}
+    };
+    try {
+      let data: any = await this.httpService.get(config);
+      showLoader ? await this.loaderService.stopLoader() : '';
+      return data;
+    }
+    catch (error) {
+      showLoader ? await this.loaderService.stopLoader() : '';
+    }
+  }
+
+  async updateLanguage(formData, showToast=true){
+    const config = {
+      url: urlConstants.API_URLS.UPDATE_LANGUAGE,
+      payload: formData,
+    };
+    try {
+      let data: any = await this.httpService.patch(config);
+      (showToast)?this.toast.showToast(data.message, "success"):null;
+      return data;
+      }
+    catch (error) {
+      this.loaderService.stopLoader();
+    }
+  }
 
 }

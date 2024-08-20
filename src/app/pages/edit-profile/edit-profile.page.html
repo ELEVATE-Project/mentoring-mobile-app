@@ -11,6 +11,6 @@
 
 <ion-footer class="ion-no-border footer-button" submitButton>
   <ion-toolbar>
-    <ion-button expand="full" (click)="onSubmit()">{{'SUBMIT' | translate}}</ion-button>
+    <ion-button [disabled]="form1 && !form1.myForm.valid" expand="full" (click)="onSubmit()">{{'SUBMIT' | translate}}</ion-button>
   </ion-toolbar>
 </ion-footer>

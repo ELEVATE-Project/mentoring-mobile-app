@@ -20,8 +20,8 @@
 }
 .underline{
     text-decoration: underline;
-    text-decoration-color: rgb(187, 3, 3);
-    color:  rgb(187, 3, 3);
+    text-decoration-color: var(--ion-color-primary);
+    color:  var(--ion-color-primary);
     margin-top: 2px;
     cursor: pointer;
 }

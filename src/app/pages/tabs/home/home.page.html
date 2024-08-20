@@ -7,13 +7,39 @@
     <ion-col size="6" class="ion-no-padding"> -->
       <!-- <p class="welcome-note hide-on-small-screen">{{'WELCOME_NOTE'| translate}}!</p> -->
       <div class="d-flex flex-justify-center my-8">
-        <ion-searchbar class="search-bar" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}" (click)="search()">
+        <ion-searchbar class="search-bar" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"
+         cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="isOpen = !isOpen"
+         [(ngModel)]="searchText"
+        (keyup.enter)="search(searchText)">
         </ion-searchbar>
       </div>
     <!--</ion-col>
   </ion-row> -->
 </app-page-header>
-<ion-card *ngIf="showBecomeMentorCard" class="ion-padding card-config">
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen"
+  (overlayOutsideClick)="isOpen = false"
+  [cdkConnectedOverlayOffsetY]="10" 
+  [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.offsetWidth" 
+>
+  <ion-grid>
+    <div class="overlay-container">
+      <ion-row>
+        <ion-chip 
+          class="chip" 
+          *ngFor="let chip of chips; let i = index" 
+          (click)="selectChip(chip)"
+          [ngClass]="{'selected-chip': criteriaChip === chip}">
+          <ion-icon name="close-circle" color="white"></ion-icon>
+          <ion-label class="chip-label">{{ chip.label }}</ion-label>
+        </ion-chip>
+      </ion-row>
+    </div>
+  </ion-grid>
+</ng-template>
+<!-- <ion-card *ngIf="showBecomeMentorCard" class="ion-padding card-config">
   <ion-card-header class="ion-no-padding d-flex flex-align-items-center flex-justify-space-between">
     <ion-label class="header-label">{{"CONNECT_SHARE_&_INSPIRE"|translate}}</ion-label>
     <div class="round-icon-button d-flex flex-align-items-center flex-justify-center" (click)="closeCard()">
@@ -23,12 +49,12 @@
 
   <ion-card-content class="ion-no-padding">
     <div class="d-flex flex-justify-center">
-      <img src="../../../../assets/images/request-to-be-a-mentor.svg" alt="Image" />
+      <img src="assets/images/request-to-be-a-mentor.svg" alt="Image" />
     </div>
     <ion-label class="header-label content-label">{{"EMPOWER_THE_SCHOOL_LEADERS"|translate}}</ion-label>
   </ion-card-content>
   <ion-button class="mentor-card-button my-8" (click)="becomeMentor()">{{"BECOME_A_MENTOR"|translate}}</ion-button>
-</ion-card>
+</ion-card> -->
 <div class="page-intro segment-wrapper" [ngClass]="{'align-center': !isNativeApp}">
   <div class="d-flex segment-wrapper">
     <div class="segment-div" *ngFor="let segment of segmentButtons;">

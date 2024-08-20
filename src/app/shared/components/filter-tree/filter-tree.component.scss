@@ -5,18 +5,24 @@
 }
 .wrapper-class {
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
+    padding: 10px 20px 0px 0px;
 }
 .underline {
-    border-bottom: 1px solid black;
     cursor: pointer;
+    font-weight: bold;
 }
 .sub-header {
     font-weight: bold;
     font-size: 16px;
-    padding-bottom: 16px;
-    // letter-spacing: 1px;
 }
 ion-checkbox {
     --border-color: var(--ion-color-primary)
+}
+.header{
+    padding-right: 65%;
+}
+.filter-underline{
+    cursor: pointer;
+    text-decoration: underline;
 }

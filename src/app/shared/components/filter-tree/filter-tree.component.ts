@@ -7,21 +7,23 @@ import * as _ from 'lodash';
   styleUrls: ['./filter-tree.component.scss'],
 })
 export class FilterTreeComponent implements OnInit {
-  @Input() enableFilterHeader:any
+  @Input() enableFilterHeader:any;
+  @Input() enableFilterLabel: any;
   @Input() filterData: any;
   @Output() filtersChanged = new EventEmitter<any>();
 
-  ogArrObj: any;
 
   constructor() { }
 
-  ngOnInit() {
-    this.ogArrObj = _.cloneDeep(this.filterData);
-  }
+  ngOnInit() { }
 
 
   clearAll() {
-    this.filterData = _.cloneDeep(this.ogArrObj)
+    if (this.filterData) {
+      this.filterData.forEach(filter => 
+        filter.options = filter.options.map(option => ({ ...option, selected: false }))
+      );
+    }
     this.filtersChanged.emit([])
   }
 

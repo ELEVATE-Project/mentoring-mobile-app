@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LineElement } from 'chart.js/dist';
-import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admin-workapce.service';
 import { CommonRoutes } from 'src/global.routes';
 import { ModalController } from '@ionic/angular';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
-import { UtilService } from 'src/app/core/services';
-import { SessionService } from 'src/app/core/services/session/session.service';
 import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-popup/mentee-list-popup.component';
 import *  as moment from 'moment';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
 
 @Component({
   selector: 'app-manage-session',
@@ -24,7 +21,13 @@ export class ManageSessionComponent implements OnInit {
     // label: 'MANAGE_SESSION'
   };
   receivedEventData: any;
-  constructor(private adminWorkapceService: AdminWorkapceService, private router: Router, private modalCtrl: ModalController,private utilService:UtilService, private sessionService:SessionService) { }
+
+  public manageSessionUrls: any = {
+    downloadCsvApiUrl: urlConstants.API_URLS.SESSION_DOWNLOAD_CSV,
+    uploadCsvApiUrl: urlConstants.API_URLS.SESSION_BULK_UPLOAD
+  }
+
+  constructor(private adminWorkapceService: AdminWorkapceService, private router: Router, private modalCtrl: ModalController) { }
   headingText = "SESSION_LIST"
   download = "DOWNLOAD";
   page = 1;
@@ -35,6 +38,7 @@ export class ManageSessionComponent implements OnInit {
   sortingData: any;
   setPaginatorToFirstpage:any = false;
   columnData = [
+    { name: 'id', displayName: 'Session Id', type: 'text'},
     { name: 'title', displayName: 'Session name', type: 'text', sortingData: [{ sort_by: 'title', order: 'ASC', label: 'A -> Z' }, { sort_by: 'title', order: 'DESC', label: 'Z -> A' }] },
     { name: 'type', displayName: 'Type', type: 'text' },
     { name: 'mentor_name', displayName: 'Mentor', type: 'text' },
@@ -85,6 +89,7 @@ export class ManageSessionComponent implements OnInit {
   tableData: any;
   dummyTableData: any = false;
   noDataMessage: any;
+  segmentType = 'manage-session';
   filteredDatas = []
   actionButtons = {
     'UPCOMING': [{ icon: 'eye', cssColor: 'white-color' , action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}, { icon: 'trash', cssColor: 'white-color',action:'DELETE' }],
@@ -109,7 +114,7 @@ export class ManageSessionComponent implements OnInit {
       case "mentee_count":
         let modal = await this.modalCtrl.create({
           component: MenteeListPopupComponent, 
-          cssClass: 'search-popover-config',
+          cssClass: 'large-width-popover-config',
           componentProps: { id:this.receivedEventData.element.id }
         });
     
@@ -166,7 +171,7 @@ export class ManageSessionComponent implements OnInit {
 
     modal.onDidDismiss().then(async (dataReturned) => {
       this.filteredDatas = []
-      if (dataReturned !== null) {
+      if (dataReturned.data && dataReturned.data.data) {
         if (dataReturned.data.data.selectedFilters) {
           for (let key in dataReturned.data.data.selectedFilters) {
             this.filteredDatas[key] = dataReturned.data.data.selectedFilters[key].slice(0, dataReturned.data.data.selectedFilters[key].length).map(obj => obj.value).join(',').toString()
@@ -202,11 +207,13 @@ export class ManageSessionComponent implements OnInit {
       });
     }
     this.tableData = data;
-    this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
+    this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "SEARCH_RESULT_NOT_FOUND"
   }
 
   createSession(){
       this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]); 
   } 
-
+  segmentChanged(event){
+    this.segmentType = event.target.value;
+  }
 }

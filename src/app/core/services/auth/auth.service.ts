@@ -13,6 +13,7 @@ import { ProfileService } from '../profile/profile.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DbService } from '../db/db.service';
 import { UtilService } from '../util/util.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -148,8 +149,9 @@ export class AuthService {
     await this.db.clear()
     this.userService.token = null;
     this.userService.userEvent.next(null);
-    this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], {
+    this.router.navigate([environment.unauthorizedRedirectUrl], {
       replaceUrl: true
     });
+    this.translate.use("en")
   }
 }

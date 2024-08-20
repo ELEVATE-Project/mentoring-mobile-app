@@ -23,6 +23,8 @@ export const urlConstants = {
         CREATED_SESSIONS: "/mentoring/v1/mentors/createdSessions?page=",
         MENTORS_DIRECTORY_LIST: "/mentoring/v1/mentors/list?page=",
         MENTORS_PROFILE_DETAILS: "/mentoring/v1/mentors/details/",
+        SESSION_DOWNLOAD_CSV: "/mentoring/v1/sessions/getSampleCSV",
+        SESSION_BULK_UPLOAD: "/mentoring/v1/sessions/bulkSessionCreate",
         
         // FORMS
         FORM_READ:'/mentoring/v1/form/read',
@@ -60,6 +62,8 @@ export const urlConstants = {
         ENROLLED_MENTEES_LIST:"/mentoring/v1/sessions/enrolledMentees/",
         GET_PLATFORM_CONFIG: "/mentoring/v1/platform/config",
         CHANGE_PASSWORD: "/user/v1/account/changePassword",
-        LOGIN_ACTIVITY: "/user/v1/account/sessions" 
+        UPDATE_LANGUAGE: "/user/v1/user/setLanguagePreference",
+        LOGIN_ACTIVITY: "/user/v1/account/sessions",
+        ENTITY_LIST: "/mentoring/v1/entity/list?"
     }
 };

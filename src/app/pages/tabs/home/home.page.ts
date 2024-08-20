@@ -2,17 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
-import { ModalController, NavController, Platform, IonContent } from '@ionic/angular';
+import { ModalController, NavController, IonContent } from '@ionic/angular';
 import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { HttpService, LoaderService, LocalStorageService, ToastService, UserService, UtilService } from 'src/app/core/services';
-import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-conditions.page';
 import { App, AppState } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
+import { PermissionService } from 'src/app/core/services/permission/permission.service';
 
 
 @Component({
@@ -46,24 +46,28 @@ export class HomePage implements OnInit {
   createdSessions: any;
   isMentor: boolean;
   userEventSubscription: any;
+  isOpen = false;
+
+  chips= [];
+  criteriaChip: any;
+  searchText: string;
   constructor(
-    private http: HttpClient,
     private router: Router,
-    private navController: NavController,
     private profileService: ProfileService,
-    private loaderService: LoaderService,
-    private httpService: HttpService,
     private sessionService: SessionService,
     private modalController: ModalController,
     private userService: UserService,
     private localStorage: LocalStorageService,
-    private toast: ToastService) { }
+    private toast: ToastService,
+    private permissionService: PermissionService,
+    private utilService: UtilService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.getUser();
     this.isMentor = this.profileService.isMentor
     App.addListener('appStateChange', (state: AppState) => {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
-        if (state.isActive == true && data) {
+        if (state.isActive == true && data && !data.profile_mandatory_fields.length) {
           this.getSessions();
           if(this.profileService.isMentor){
             this.getCreatedSessionDetails();
@@ -71,9 +75,8 @@ export class HomePage implements OnInit {
         }
       })
     });
-    this.getUser();
-    let isRoleRequested = this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
-    let isBecomeMentorTileClosed = this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
+    let isRoleRequested = await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
+    let isBecomeMentorTileClosed = await this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
     this.showBecomeMentorCard = isRoleRequested || this.profileService.isMentor || isBecomeMentorTileClosed ? false : true;
     if(this.profileService.isMentor){
       this.getCreatedSessionDetails();
@@ -84,14 +87,20 @@ export class HomePage implements OnInit {
         this.user = data;
       }
     })
-    this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    this.permissionService.getPlatformConfig().then((config)=>{
+      this.chips = config.result.search_config.search.session.fields;
+    })
   }
   gotToTop() {
     this.content.scrollToTop(1000);
   }
 
   async ionViewWillEnter() {
-    this.getSessions();
+    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    if(this.user && !this.user.profile_mandatory_fields.length){
+      this.getSessions();
+    }
     this.gotToTop();
     let isRoleRequested = await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
     let isBecomeMentorTileClosed =await this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
@@ -101,7 +110,7 @@ export class HomePage implements OnInit {
     this.createdSessions = this.isMentor ? await this.sessionService.getAllSessionsAPI(obj) : []
   }
   async eventAction(event) {
-    if (this.user.about) {
+    if (this.user.about || window['env']['isAuthBypassed']) {
       switch (event.type) {
         case 'cardSelect':
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
@@ -137,30 +146,31 @@ export class HomePage implements OnInit {
     this.router.navigate([`/${CommonRoutes.SESSIONS}`], { queryParams: { type: data } });
   }
 
-  search() {
-    this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
+  search(event: string) {
+    this.isOpen = false;
+    if(event && event.length >= 3){
+      this.searchText = event ? event : "";
+      this.utilService.subscribeSearchText(this.searchText);
+      this.utilService.subscribeCriteriaChip(JSON.stringify(this.criteriaChip))
+      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
+    }else {
+      this.toast.showToast("ENTER_MIN_CHARACTER","danger");
+    }
   }
-  getUser() {
-    this.profileService.profileDetails().then(data => {
-      this.isMentor = this.profileService.isMentor
-      this.user = data
-      if (!this.user?.terms_and_conditions) {
-        // this.openModal();
-      }
-    })
+  async getUser() {
+    let data = await this.profileService.getProfileDetailsFromAPI()
+    this.isMentor = this.profileService.isMentor
+    this.user = data
+    if (!this.user?.terms_and_conditions) {
+      // this.openModal();
+    }
   }
 
   async getSessions() {
-    const config = {
-      url: urlConstants.API_URLS.HOME_SESSION + this.page + '&limit=' + this.limit,
-    };
-    try {
-      let data: any = await this.httpService.get(config);
-      this.sessions = data.result;
-      this.sessionsCount = data.result.count;
-    }
-    catch (error) {
-    }
+    var obj = {page: this.page, limit: this.limit}
+    let data = await this.sessionService.getSessions(obj);
+    this.sessions = data.result;
+    this.sessionsCount = data.result.count;
   }
   async openModal() {
     const modal = await this.modalController.create({
@@ -174,7 +184,7 @@ export class HomePage implements OnInit {
     this.selectedSegment = event.name;
   }
   async createSession() {
-    if (this.user?.about != null) {
+    if (this.user?.about != null || window['env']['isAuthBypassed']) {
       this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]); 
     } else {
       this.profileService.upDateProfilePopup()
@@ -182,7 +192,7 @@ export class HomePage implements OnInit {
   }
 
   async becomeMentor() {
-    if(this.user?.about != null){
+    if(this.user?.about != null || window['env']['isAuthBypassed']){
       this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);   
     } else{
       this.profileService.upDateProfilePopup()
@@ -208,4 +218,18 @@ export class HomePage implements OnInit {
       this.userEventSubscription.unsubscribe();
     }
   }
+
+  selectChip(chip: any) {
+    if (this.criteriaChip === chip) {
+      this.criteriaChip = null;
+    } else {
+      this.criteriaChip = chip;
+    }
+  }
+
+  ionViewDidLeave(){
+    this.criteriaChip = '';
+    this.searchText = '';
+  }
+
 }

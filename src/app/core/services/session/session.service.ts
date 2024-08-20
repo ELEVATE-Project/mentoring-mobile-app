@@ -62,7 +62,7 @@ export class SessionService {
 
   async getSessionsList(obj) {
     const config = {
-      url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj?.type + '&page=' + obj?.page + '&limit=' + obj?.limit + '&search=' + btoa(obj?.searchText),
+      url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj?.page + '&limit=' + obj?.limit + '&search=' + btoa(obj?.searchText) + '&search_on=' + (obj?.selectedChip ? obj?.selectedChip : '') + '&' + obj?.filterData,
     };
     try {
       let data: any = await this.httpService.get(config);
@@ -196,7 +196,6 @@ export class SessionService {
   async openBrowser(link, windowName: any = "_self") {
     await Browser.open({ url: link, windowName: windowName });
     Browser.addListener('browserFinished', () => {
-      console.log("exit");
     });
   }
 
@@ -248,6 +247,18 @@ export class SessionService {
     try {
       let data = await this.httpService.get(config);
       return data.result;
+    }
+    catch (error) {
+    }
+  }
+
+  async getSessions(obj) {
+    const config = {
+      url: urlConstants.API_URLS.HOME_SESSION + obj.page + '&limit=' + obj.limit,
+    };
+    try {
+      let data: any = await this.httpService.get(config);
+      return data
     }
     catch (error) {
     }

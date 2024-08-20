@@ -5,7 +5,7 @@
   </div>
 </ion-header>
 <ion-content  class="d-flex flex-justify-center">
-  <app-filter-tree *ngIf="filterData" [filterData]="filterData" [enableFilterHeader]="false" (filtersChanged)="filtersChanged($event)"></app-filter-tree>
+  <app-filter-tree *ngIf="filterData" [filterData]="filterData" [enableFilterLabel]="false" [enableFilterHeader]="true" (filtersChanged)="filtersChanged($event)"></app-filter-tree>
 </ion-content>
 <ion-footer class=" d-flex flex-justify-center footer ion-padding-start wrapper-class" (click)="onClickApply()">
     <ion-label class="header">{{"APPLY"|translate}}</ion-label>

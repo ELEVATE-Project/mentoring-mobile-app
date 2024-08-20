@@ -156,7 +156,7 @@ export class SearchPopoverComponent implements OnInit {
     switch(data.action){
       case 'ADD':
         this.countSelectedList = (this.user.id == data.element.id) ?this.countSelectedList : this.countSelectedList+1
-        if(!this.data.control.meta .multiSelect){
+        if(!this.data.control.meta.multiSelect){
           this.modalController.dismiss([{label: data.element.name+', '+data.element.organization, id: data.element.id, data: data.element}])
         } else {
           if(this.maxCount && this.maxCount>=this.countSelectedList){

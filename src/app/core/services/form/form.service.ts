@@ -64,6 +64,16 @@ export class FormService {
       const entity = _.find(entityList, (entityData) => formData.name === entityData.value);
       if (entity) {
         formData.options = entity.entities.map((entityItem)=>{ return { label : entityItem.label, value : entityItem.value }});
+        formData.meta = {
+          ...formData.meta,
+          entityId: entity.id,
+          allow_custom_entities: entity.allow_custom_entities,
+          allow_filtering: entity.allow_filtering
+        };
+        formData.validators = {
+          ...formData.validators,
+          required: entity.required
+        }
       }
     });
     return formData
@@ -78,5 +88,19 @@ export class FormService {
       }
     })
     return existingData
+  }
+
+  async filterList(obj){
+    const config = {
+      url: urlConstants.API_URLS.FILTER_LIST + '&organization=' + obj?.org + '&filter_type=' + obj?.filterType,
+      payload: {},
+    };
+    try {
+      const data: any = await this.http.get(config);
+      return data.result
+    }
+    catch (error) {
+      return null;
+    }
   }
 }

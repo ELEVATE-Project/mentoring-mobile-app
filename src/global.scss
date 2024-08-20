@@ -30,7 +30,7 @@
 :root {
   --ion-default-font: "NotoSans-Regular";
   --ion-font-family: "NotoSans-Regular";
-  --ion-color-primary: #832215;
+  --ion-color-primary: #024BA3;
   --red: rgb(255, 0, 0);
   --white:#fff;
   --black:#000;
@@ -358,9 +358,15 @@ ion-searchbar {
       }
 }
 
-.search-popover-config {
+.large-width-popover-config {
   --min-width: 95%;
   --min-height: 95%;
+  --border-radius: 6px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+}
+
+.small-width-popover-config {
+  --min-width: 65%;
   --border-radius: 6px;
   --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
 }
@@ -372,8 +378,19 @@ ion-searchbar {
   --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
 }
 @media (max-width: 1000px) {
-  .search-popover-config {
+  .large-width-popover-config {
     --min-width: 100%;
     --min-height: 100%;
   }
+  .small-width-popover-config {
+    --min-width: 100%;
+    --min-height: 100%;
+  }
+}
+
+.user-role-modal{
+  --max-height:350px;
+  --max-width: 300px;
+  --border-radius: 6px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
 }

@@ -1,7 +1,7 @@
 <ion-header *ngIf="enableFilterHeader && filterData">
-  <div class="ion-padding-start wrapper-class ion-padding-bottom">
-    <ion-label class="header">{{"FILTER"|translate}}</ion-label>
-    <ion-label class="underline" (click)="clearAll()">{{"CLEAR_ALL"|translate}}</ion-label>
+  <div class="ion-padding-start wrapper-class">
+    <ion-label *ngIf="enableFilterLabel" class="header">{{"FILTER"|translate}}</ion-label>
+    <ion-label [ngClass]="{'filter-underline': enableFilterLabel, 'underline': !enableFilterLabel}" (click)="clearAll()">{{"CLEAR_ALL"|translate}}</ion-label>
   </div>
 </ion-header>
 <ng-container *ngIf="filterData">
