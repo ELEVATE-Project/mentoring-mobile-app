@@ -380,7 +380,7 @@
   {
     "type": "session",
     "sub_type": "sessionForm",
-    "action": "skip",
+    "action": "update",
     "data": {
       "templateName": "defaultTemplate",
       "fields": {
@@ -484,13 +484,12 @@
                 "allow_custom_entities": true,
                 "allow_filtering": true,
                 "addPopupType": "addCompetency"
-
             },
             "multiple": true
         },
           {
             "name": "medium",
-            "label": "Medium",
+            "label": "Select medium",
             "alertLabel": "medium",
             "class": "ion-no-margin",
             "value": "",
@@ -516,8 +515,7 @@
               },
               "allow_custom_entities": true,
               "allow_filtering": true,
-              "addPopupType": "addCompetency",
-              "labelForAddButton": "Select Medium"
+              "addPopupType": "addCompetency"
             },
             "multiple": true
           }
@@ -646,8 +644,7 @@
                   }
                 ]
               },
-              "filterType": "mentor",
-              "addPopupType": "addUser"
+              "filterType": "mentor"
             },
             "info": [
               {
@@ -692,8 +689,7 @@
                   }
                 ]
               },
-              "filterType": "mentee",
-              "addPopupType": "addUser"
+              "filterType": "mentee"
             },
             "position": "floating",
             "info": [
@@ -747,7 +743,7 @@
             "label": "Recommended for",
             "class": "ion-no-margin",
             "value": "",
-            "type": "search",
+            "type": "chip",
             "position": "",
             "disabled": false,
             "errorMessage": {
@@ -783,15 +779,10 @@
               "addNewPopupHeader": "Recommended for",
               "addNewPopupSubHeader": "Who is this session for?",
               "showSelectAll": true,
-              "multiSelect": true,
               "showAddOption": {
                 "showAddButton": true,
                 "addChipLabel": ""
-              },
-              "allow_custom_entities": true,
-              "allow_filtering": true,
-              "addPopupType": "addCompetency",
-              "labelForAddButton": "Select Recommended for"
+              }
             },
             "multiple": true
           },
@@ -800,7 +791,7 @@
             "label": "Categories",
             "class": "ion-no-margin",
             "value": "",
-            "type": "search",
+            "type": "chip",
             "position": "",
             "disabled": false,
             "errorMessage": {
@@ -833,28 +824,22 @@
             ],
             "meta": {
               "entityType": "categories",
-              "addNewPopupHeader": "Add new category",
-              "addNewPopupSubHeader": "Categories for the session",
+              "addNewPopupHeader": "Add a new category",
               "showSelectAll": true,
-              "multiSelect": true,
               "showAddOption": {
                 "showAddButton": true,
                 "addChipLabel": ""
-              },
-              "allow_custom_entities": true,
-              "allow_filtering": true,
-              "addPopupType": "addCompetency",
-              "labelForAddButton": "Select Categories"
+              }
             },
             "multiple": true
           },
           {
             "name": "medium",
-            "label": "Medium",
+            "label": "Select medium",
             "alertLabel": "medium",
             "class": "ion-no-margin",
             "value": "",
-            "type": "search",
+            "type": "chip",
             "position": "",
             "disabled": false,
             "errorMessage": {
@@ -875,18 +860,12 @@
             ],
             "meta": {
               "entityType": "medium",
-              "addNewPopupHeader": "Add new medium",
-              "addNewPopupSubHeader": "Medium for the session",
+              "addNewPopupHeader": "Add new language",
               "showSelectAll": true,
-              "multiSelect": true,
               "showAddOption": {
                 "showAddButton": true,
                 "addChipLabel": ""
-              },
-              "allow_custom_entities": true,
-              "allow_filtering": true,
-              "addPopupType": "addCompetency",
-              "labelForAddButton": "Select Medium"
+              }
             },
             "multiple": true
           }

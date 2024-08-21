@@ -149,7 +149,7 @@ export class AuthService {
     await this.db.clear()
     this.userService.token = null;
     this.userService.userEvent.next(null);
-    this.router.navigate([environment.unauthorizedRedirectUrl], {
+    this.router.navigate([window['env']['unauthorizedRedirectUrl']], {
       replaceUrl: true
     });
     this.translate.use("en")
