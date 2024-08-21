@@ -83,7 +83,7 @@ export class FormService {
     await entityList.map((entityName)=>{
       if(Array.isArray(existingData[entityName])){
         existingData[entityName] = existingData[entityName].map((data)=>{
-          return { label : data.label, value : data.value == 'other' ? data.label : data.value }
+          return { label : data.label, value : data.value == 'other' ? data.label : data.value, type: data.value }
         })
       }
     })
