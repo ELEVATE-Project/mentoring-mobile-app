@@ -409,7 +409,6 @@ export class CreateSessionPage implements OnInit {
       if (data.data) {
         event.formControl.selectedData = data.data;
         const values = event.formControl.control.meta.multiSelect ? data.data.map(obj => obj.value) : data.data[0].value;
-        console.log(values, event.formControl)
         event.formControl.onChange(values);
         event.formControl.icon = event.formControl.selectedData.length ? event.formControl.closeIconLight : event.formControl.addIconDark
       }
