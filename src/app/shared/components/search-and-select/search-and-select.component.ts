@@ -118,7 +118,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
           handler: (alertData) => {
             let obj = {
               label: alertData.name,
-              value: alertData.name
+              value: alertData.name,
+              type: "other"
             };
             this.selectedData.push(obj);
             this.selectedChips.push(obj.value)
