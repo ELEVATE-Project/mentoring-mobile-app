@@ -52,7 +52,7 @@ export class SearchCompetencyComponent implements OnInit {
   }
 
   clearAll(){
-    this.selectedOptions = [];
+    this.selectedOptions = this.selectedOptions.filter(option => option.type === 'other');
   }
 
   closePopover() {

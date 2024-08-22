@@ -706,7 +706,7 @@
               "searchData": [],
               "maxCount": "MAX_MENTEE_ENROLLMENT_COUNT",
               "labelForListButton": "View Mentee List",
-              "labelForAddButton": "Add New Mentee",
+              "labelForAddButton": "Add Mentee",
               "filters": {
                 "entity_types": [
                   {

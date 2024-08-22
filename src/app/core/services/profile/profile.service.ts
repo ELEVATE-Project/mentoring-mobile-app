@@ -232,6 +232,7 @@ export class ProfileService {
     }
     catch (error) {
       showLoader ? await this.loaderService.stopLoader() : '';
+      return error
     }
   }
 
