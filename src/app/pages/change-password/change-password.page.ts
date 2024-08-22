@@ -51,7 +51,7 @@ public headerConfig: any = {
         validators: {
           required: true,
           minLength:environment?.password?.minLength? environment?.password?.minLength: 8,
-          pattern: environment?.password?.rejectPattern ? environment?.password?.rejectPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          pattern: environment?.password?.regexPattern ? environment?.password?.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
       {
@@ -69,7 +69,7 @@ public headerConfig: any = {
         validators: {
           required: true,
           minLength:environment?.password?.minLength? environment?.password?.minLength: 8,
-          pattern: environment?.password?.rejectPattern ? environment?.password?.rejectPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          pattern: environment?.password?.regexPattern ? environment?.password?.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
     ],
