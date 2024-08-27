@@ -220,7 +220,12 @@ export class HttpService {
         break
       case 401:
           this.triggerLogoutConfirmationAlert(result)
-
+        break
+      case 419:
+          this.triggerLogoutConfirmationAlert(result)
+        break
+      case 302:
+          this.triggerLogoutConfirmationAlert(result)
         break
       default:
         this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
