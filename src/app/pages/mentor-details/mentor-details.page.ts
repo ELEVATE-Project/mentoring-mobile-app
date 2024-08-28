@@ -87,7 +87,7 @@ export class MentorDetailsPage implements OnInit {
     routerParams.params.subscribe(params => {
       this.mentorId = this.buttonConfig.meta.id = params.id;
       this.userService.getUserValue().then(async (result) => {
-        if (result) {
+        if (result || window['env']['isAuthBypassed']) {
           this.getMentor();
         } else {
           this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams: { mentorId: this.mentorId } })
