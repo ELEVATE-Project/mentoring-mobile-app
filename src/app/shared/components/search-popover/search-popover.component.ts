@@ -127,7 +127,7 @@ export class SearchPopoverComponent implements OnInit {
       return data.result.data
     }
     catch (error) {
-      return null;
+      return error;
     }
   }
 

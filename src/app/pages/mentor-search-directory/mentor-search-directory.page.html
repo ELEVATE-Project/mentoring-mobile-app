@@ -73,9 +73,9 @@
         <ion-buttons slot="start">
           <ion-back-button defaultHref="/tabs/home"></ion-back-button>
         </ion-buttons>
-        <ion-label *ngIf="searchText && totalCount">{{"MENTOR_SEARCH_RESULT" | translate}} "{{searchText}}"</ion-label>
+        <ion-label *ngIf="searchText && totalCount > 0">{{"MENTOR_SEARCH_RESULT" | translate}} "{{searchText}}"</ion-label>
       </div>
-      <div *ngIf="totalCount && searchText" class="search-result-count">
+      <div *ngIf="totalCount > 0 && searchText" class="search-result-count">
         <ion-label>{{totalCount}} {{"SEARCH_RESULT" | translate}}</ion-label>
       </div>
     </div>
@@ -91,7 +91,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <div *ngIf="totalCount == 0">
+  <div *ngIf="totalCount == 0 || !data">
     <app-no-data-found [messageHeader]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
   </div>
 </ion-content>
