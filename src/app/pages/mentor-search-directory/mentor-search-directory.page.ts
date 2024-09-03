@@ -185,6 +185,9 @@ export class MentorSearchDirectoryPage implements OnInit {
       this.isOpen = false;
       this.data = data.result.data;
       this.totalCount = data.result.count;
+    }else{
+      this.data = [];
+      this.totalCount = [];
     }
   }
 
