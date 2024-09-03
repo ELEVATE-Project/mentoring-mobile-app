@@ -28,9 +28,9 @@
 
 
 :root {
-  --ion-default-font: "NotoSans-Regular";
-  --ion-font-family: "NotoSans-Regular";
-  --ion-color-primary: #024BA3;
+  --ion-default-font: "Montserrat";
+  --ion-font-family: "Montserrat";
+  --ion-color-primary: #1B4CA1;
   --red: rgb(255, 0, 0);
   --white:#fff;
   --black:#000;
@@ -80,7 +80,7 @@ input:-webkit-autofill:focus {
 }
 
 h6, h5 , h4, h3, h2, h1 {
-  font-family: "NotoSans-Bold";
+  font-family: "Montserrat" !important;
 }
 
 .header-md::after{
