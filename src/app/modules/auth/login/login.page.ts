@@ -8,7 +8,6 @@ import { CommonRoutes } from 'src/global.routes';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { RecaptchaComponent } from 'ng-recaptcha';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -52,7 +51,7 @@ export class LoginPage implements OnInit {
       },
     ],
   };
-  siteKey = environment?.recaptchaSiteKey ? environment?.recaptchaSiteKey  :""
+  siteKey = window['env']['recaptchaSiteKey'] ? window['env']['recaptchaSiteKey']  :""
   id: any;
   userDetails: any;
   recaptchaResolved: boolean = this.siteKey ? false : true;
@@ -67,9 +66,9 @@ export class LoginPage implements OnInit {
   captchaToken:any="";
   labels = ["LOGIN_TO_MENTOR_ED"];
   mentorId: any;
-  supportEmail: any = environment.supportEmail;
-  privacyPolicyUrl = environment.privacyPolicyUrl;
-  termsOfServiceUrl = environment.termsOfServiceUrl;
+  supportEmail: any = window['env']['supportEmail'];
+  privacyPolicyUrl = window['env']['privacyPolicyUrl'];
+  termsOfServiceUrl = window['env']['termsOfServiceUrl'];
   constructor(private authService: AuthService, private router: Router,private utilService: UtilService,
               private menuCtrl: MenuController, private activatedRoute: ActivatedRoute,private profileService: ProfileService,
               private translateService: TranslateService, private localStorage: LocalStorageService, private userService: UserService) {

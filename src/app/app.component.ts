@@ -20,7 +20,7 @@ export class AppComponent {
     if(Capacitor.isNativePlatform()){
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
     }
-    environment.baseUrl = localStorage.getItem('baseUrl') ? localStorage.getItem('baseUrl') : environment.baseUrl;
+    window['env']['baseUrl'] = localStorage.getItem('baseUrl') ? localStorage.getItem('baseUrl') : window['env']['baseUrl'];
   }
 
   ngOnInit(){

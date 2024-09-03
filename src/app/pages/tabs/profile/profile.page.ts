@@ -84,10 +84,10 @@ public buttonConfig = {
     if(this.user){
       await this.profileService.getUserRole(this.user)
     }
-    if(!this.profileService.isMentor&&!await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)&&!this.isMentorButtonPushed) {
-      this.buttonConfig.buttons.push(this.becomeAMentorButton)
-      this.isMentorButtonPushed = true;
-    }
+    // if(!this.profileService.isMentor&&!await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)&&!this.isMentorButtonPushed) {
+    //   this.buttonConfig.buttons.push(this.becomeAMentorButton)
+    //   this.isMentorButtonPushed = true;
+    // }
     this.formData.data = this.user;
     this.formData.data.emailId = this.user.email.address;
     this.formData.data.organizationName = this.user?.organization?.name;

@@ -13,7 +13,6 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
 import { CapacitorHttp } from '@capacitor/core';
 import { TranslateService } from '@ngx-translate/core';
-import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -36,15 +35,18 @@ export class HttpService {
     private translate: TranslateService,
     private alert: AlertController,
   ) {  
-    this.baseUrl = environment['baseUrl'];
+    this.baseUrl = window['env']['baseUrl'];
   }
 
   async setHeaders() {
-    let token = await this.getToken();
+    let token;
+    if(!window['env']['isAuthBypassed']) {
+      token = await this.getToken();
+    }
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const acceptLanguage = await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE);
     const headers = {
-      'X-auth-token': token ? token : "",
+      'x-authenticated-user-token': token ? token : "",
       'Content-Type': 'application/json',
       'timeZone': timezone,
       'accept-language':acceptLanguage
