@@ -9,7 +9,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { TranslateService } from '@ngx-translate/core';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -61,13 +60,13 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         errorMessage:{
           required: "Enter password",
-          minlength:environment?.password?.minLength ? "Please enter minimum " + environment?.password?.minLength +" characters." : "Please enter minimum 8 characters.",
-          pattern: environment?.password?.errorMessage ? environment?.password?.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
+          minlength:window['env']?.password?.minLength ? "Please enter minimum " + window['env']?.password?.minLength +" characters." : "Please enter minimum 8 characters.",
+          pattern: window['env']?.password?.errorMessage ? window['env']?.password?.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         validators: {
           required: true,
-          minLength:environment?.password?.minLength ? environment?.password?.minLength: 8,
-          pattern: environment?.password?.regexPattern ? environment?.password?.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength:window['env']?.password?.minLength ? window['env']?.password?.minLength: 8,
+          pattern: window['env']?.password?.regexPattern ? window['env']?.password?.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         },
       },
       {
@@ -79,13 +78,13 @@ export class RegisterPage implements OnInit {
         position: 'floating',
         errorMessage:{
           required: "Re-enter password",
-          minlength:environment?.password?.minLength ? "Please enter minimum " + environment?.password.minLength+" characters.":"Please enter minimum 8 characters.",
-          pattern: environment?.password?.errorMessage ? environment?.password.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
+          minlength:window['env']?.password?.minLength ? "Please enter minimum " + window['env']?.password.minLength+" characters.":"Please enter minimum 8 characters.",
+          pattern: window['env']?.password?.errorMessage ? window['env']?.password.errorMessage :"Only letters, numbers,!@#%$&()-`.+,/\" are allowed",
         },
         validators: {
           required: true,
-          minLength: environment?.password?.minLength ? environment?.password.minLength:8,
-          pattern: environment?.password?.regexPattern ? environment?.password.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
+          minLength: window['env']?.password?.minLength ? window['env']?.password.minLength:8,
+          pattern: window['env']?.password?.regexPattern ? window['env']?.password.regexPattern :"^[a-zA-Z0-9!@#%$&()\\-`.+,/\"]*$",
         }
       }
     ]
