@@ -2,7 +2,7 @@
   <ion-row class="content-wrapper">
     <ion-col size="4">
       <div class="d-flex flex-justify-center">
-        <img *ngIf="!headerData?.image || headerData?.image==''; else Img; let image" src="/assets/prof-img/user.png" />
+        <img *ngIf="!headerData?.image || headerData?.image==''; else Img; let image" src="assets/prof-img/user.png" />
         <ng-template #Img>
           <img src="{{headerData?.image}}" />
         </ng-template>
