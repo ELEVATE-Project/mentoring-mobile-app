@@ -68,7 +68,7 @@ h3{
     color: var(--black);
 }
 .card-button{
-    --background:rgb(53, 120, 184);
+    --background:var(--ion-color-primary);
     width: 85% !important;
     font-weight: bold;
     height: 43px;
