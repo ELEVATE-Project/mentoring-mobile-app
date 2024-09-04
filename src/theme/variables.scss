@@ -299,5 +299,5 @@ $app-theme: mat.define-light-theme((
   src: url('../assets/fonts/montserrat/Montserrat-BoldItalic.ttf');
 }
 html, body { height: 100%; }
-body { margin: 0; font-family: Latto,"Montserrat", sans-serif; }
+body { margin: 0; font-family: Latto,"Montserrat", sans-serif !important; }
 

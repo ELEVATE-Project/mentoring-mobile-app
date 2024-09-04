@@ -210,6 +210,10 @@ export class HttpService {
   }
 
   public handleError(result) {
+    console.log(result)
+    if(result.responseCode == 'UNAUTHORIZED') {
+      this.triggerLogoutConfirmationAlert(result)
+    }
     let msg = result.data.message;
     switch (result.status) {
       case 400:
@@ -255,7 +259,7 @@ export class HttpService {
         });
         this.isAlertOpen = true;
       const alert = await this.alert.create({
-        message: msg,
+        message: msg || 'Session expired. Please login again',
         buttons: [
           {
             text: texts['OK'],
