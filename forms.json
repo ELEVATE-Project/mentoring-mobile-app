@@ -459,7 +459,7 @@
             "name": "competencies",
             "label": "Competencies",
             "class": "ion-no-margin",
-            "value": "",
+            "value": [],
             "type": "search",
             "position": "",
             "disabled": false,
@@ -492,7 +492,7 @@
             "label": "Select medium",
             "alertLabel": "medium",
             "class": "ion-no-margin",
-            "value": "",
+            "value": [],
             "type": "search",
             "position": "",
             "disabled": false,
@@ -672,7 +672,7 @@
               "searchData": [],
               "maxCount": "MAX_MENTEE_ENROLLMENT_COUNT",
               "labelForListButton": "View Mentee List",
-              "labelForAddButton": "Add New Mentee",
+              "labelForAddButton": "Add Mentee",
               "filters": {
                 "entity_types": [
                   {
@@ -742,8 +742,8 @@
             "name": "recommended_for",
             "label": "Recommended for",
             "class": "ion-no-margin",
-            "value": "",
-            "type": "chip",
+            "value": [],
+            "type": "search",
             "position": "",
             "disabled": false,
             "errorMessage": {
@@ -790,8 +790,8 @@
             "name": "categories",
             "label": "Categories",
             "class": "ion-no-margin",
-            "value": "",
-            "type": "chip",
+            "value": [],
+            "type": "search",
             "position": "",
             "disabled": false,
             "errorMessage": {
@@ -838,8 +838,8 @@
             "label": "Select medium",
             "alertLabel": "medium",
             "class": "ion-no-margin",
-            "value": "",
-            "type": "chip",
+            "value": [],
+            "type": "search",
             "position": "",
             "disabled": false,
             "errorMessage": {

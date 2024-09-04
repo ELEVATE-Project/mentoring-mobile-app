@@ -75,7 +75,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   handleCloseIconClick(event: Event, removedItem): void {
     if (this.selectedData) {
       this.selectedData = this.selectedData.filter(obj => obj.value !== removedItem.value || obj.id !== removedItem.id );
-      this.onChange(this.selectedData)
+      this.onChange(this.selectedData.map(data => data.value))
       event.stopPropagation()
     }
   }
@@ -118,7 +118,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
           handler: (alertData) => {
             let obj = {
               label: alertData.name,
-              value: alertData.name
+              value: alertData.name,
+              type: "other"
             };
             this.selectedData.push(obj);
             this.selectedChips.push(obj.value)

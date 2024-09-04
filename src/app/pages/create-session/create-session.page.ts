@@ -260,7 +260,7 @@ export class CreateSessionPage implements OnInit {
         this.formData.controls[i].id = this.id;
         if(this.formData.controls[i].meta.multiSelect){
           this.formData.controls[i].meta.searchData = existingData[this.formData.controls[i].name]
-          this.formData.controls[i].value = this.formData.controls[i].meta.searchData.map(obj => obj.id || obj.value);
+          this.formData.controls[i].value = this.formData.controls[i].meta.searchData ? this.formData.controls[i].meta.searchData.map(obj => obj.id || obj.value) : [];
         } else {
           this.formData.controls[i].meta.searchData = [{
             label: `${existingData.mentor_name}, ${existingData.organization.name}`,
@@ -409,7 +409,6 @@ export class CreateSessionPage implements OnInit {
       if (data.data) {
         event.formControl.selectedData = data.data;
         const values = event.formControl.control.meta.multiSelect ? data.data.map(obj => obj.value) : data.data[0].value;
-        console.log(values, event.formControl)
         event.formControl.onChange(values);
         event.formControl.icon = event.formControl.selectedData.length ? event.formControl.closeIconLight : event.formControl.addIconDark
       }
