@@ -268,8 +268,14 @@ export class HttpService {
       await alert.present();
       let data = await alert.onDidDismiss();
       if (data.role == 'cancel') {
-        let auth = this.injector.get(AuthService);
-        auth.logoutAccount(true);
+        if(environment.isAuthBypassed) {
+          let auth = this.injector.get(AuthService);
+          auth.clearLocalData();
+          location.href = environment.unauthorizedRedirectUrl
+        } else {
+          let auth = this.injector.get(AuthService);
+          auth.logoutAccount(true);
+        }
       }
       return false;
     } else {
