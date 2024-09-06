@@ -100,7 +100,6 @@ export class HomePage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
     this.gotToTop();
     let isRoleRequested = await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
     let isBecomeMentorTileClosed =await this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)
