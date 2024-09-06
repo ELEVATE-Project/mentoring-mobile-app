@@ -13,6 +13,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
 import { CapacitorHttp } from '@capacitor/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -28,7 +29,7 @@ export class HttpService {
     private userService: UserService,
     private network: NetworkService,
     private toastService: ToastService,
-    private loaderService: LoaderService,
+    private router: Router,
     private localStorage: LocalStorageService,
     private injector: Injector,
     private modalController: ModalController,
@@ -211,7 +212,7 @@ export class HttpService {
 
   public handleError(result) {
     console.log(result)
-    if(result.responseCode == 'UNAUTHORIZED') {
+    if(result.data.responseCode == 'UNAUTHORIZED') {
       this.triggerLogoutConfirmationAlert(result)
     }
     let msg = result.data.message;
@@ -275,8 +276,13 @@ export class HttpService {
       await alert.present();
       let data = await alert.onDidDismiss();
       if (data.role == 'cancel') {
-        let auth = this.injector.get(AuthService);
-        auth.logoutAccount(true);
+        console.log(data)
+        if(window['env']['isAuthBypassed']) {
+          this.router.navigate([window['env']['unauthorizedRedirectUrl']]);
+        } else {
+          let auth = this.injector.get(AuthService);
+          auth.logoutAccount(true);
+        }
       }
       return false;
     } else {
