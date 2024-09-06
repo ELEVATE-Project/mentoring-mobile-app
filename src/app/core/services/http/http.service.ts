@@ -29,7 +29,6 @@ export class HttpService {
     private userService: UserService,
     private network: NetworkService,
     private toastService: ToastService,
-    private router: Router,
     private localStorage: LocalStorageService,
     private injector: Injector,
     private modalController: ModalController,
@@ -276,11 +275,10 @@ export class HttpService {
       await alert.present();
       let data = await alert.onDidDismiss();
       if (data.role == 'cancel') {
-        console.log(data)
         if(window['env']['isAuthBypassed']) {
           let auth = this.injector.get(AuthService);
           auth.clearLocalData();
-          this.router.navigate([window['env']['unauthorizedRedirectUrl']]);
+          location.href = window['env']['unauthorizedRedirectUrl']
         } else {
           let auth = this.injector.get(AuthService);
           auth.logoutAccount(true);
