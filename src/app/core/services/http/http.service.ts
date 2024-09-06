@@ -278,6 +278,8 @@ export class HttpService {
       if (data.role == 'cancel') {
         console.log(data)
         if(window['env']['isAuthBypassed']) {
+          let auth = this.injector.get(AuthService);
+          auth.clearLocalData();
           this.router.navigate([window['env']['unauthorizedRedirectUrl']]);
         } else {
           let auth = this.injector.get(AuthService);
