@@ -132,6 +132,7 @@ export class DynamicFormComponent implements OnInit {
   dependedChildDate="";
   dependedParent: any;
   dependedParentDate: any;
+  isMobile = window.innerWidth <= 950;
 
   constructor(private fb: FormBuilder, private toast: ToastService) {}
   ngOnInit() {
