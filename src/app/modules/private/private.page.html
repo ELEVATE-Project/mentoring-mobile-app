@@ -23,7 +23,7 @@
         </div>
       </div>
     </ion-header>
-    <div [translucent]="true" class="ion-no-border" [ngClass]="{'disable-div': user?.profile_mandatory_fields.length && !isAuthBypassed || !user?.about && !isAuthBypassed }">
+    <div class="ion-no-border" [ngClass]="{'disable-div': user?.profile_mandatory_fields.length && !isAuthBypassed || !user?.about && !isAuthBypassed }">
       <div *ngIf="user" >
         <div class="sub-menu-toolbar">
           <div slot="start" class="img-mainDiv">
