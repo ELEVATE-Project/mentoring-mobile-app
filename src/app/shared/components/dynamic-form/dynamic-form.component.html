@@ -94,8 +94,8 @@
           [max]="maxDate"
           autocomplete="new-password"
           [disabled]="control?.disabled"
-          (dateChange)="dateSelected($event, control)"
-          (click)="dateInputClick(control,picker)">
+          readonly
+          (dateChange)="dateSelected($event, control)">
         <mat-datepicker-toggle matSuffix [for]="$any(picker)">
         </mat-datepicker-toggle>
         <ngx-mat-datetime-picker #picker 
