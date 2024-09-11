@@ -13,6 +13,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { FeedbackPage } from 'src/app/pages/feedback/feedback.page';
 import { CapacitorHttp } from '@capacitor/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -28,7 +29,6 @@ export class HttpService {
     private userService: UserService,
     private network: NetworkService,
     private toastService: ToastService,
-    private loaderService: LoaderService,
     private localStorage: LocalStorageService,
     private injector: Injector,
     private modalController: ModalController,
@@ -210,6 +210,10 @@ export class HttpService {
   }
 
   public handleError(result) {
+    console.log(result)
+    if(result.data.responseCode == 'UNAUTHORIZED') {
+      this.triggerLogoutConfirmationAlert(result)
+    }
     let msg = result.data.message;
     switch (result.status) {
       case 400:
@@ -219,8 +223,9 @@ export class HttpService {
         this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
         break
       case 401:
+      case 419:
+      case 302:
           this.triggerLogoutConfirmationAlert(result)
-
         break
       default:
         this.toastService.showToast(msg ? msg : 'SOMETHING_WENT_WRONG', 'danger')
@@ -254,7 +259,7 @@ export class HttpService {
         });
         this.isAlertOpen = true;
       const alert = await this.alert.create({
-        message: msg,
+        message: msg || 'Session expired. Please login again',
         buttons: [
           {
             text: texts['OK'],
@@ -270,8 +275,14 @@ export class HttpService {
       await alert.present();
       let data = await alert.onDidDismiss();
       if (data.role == 'cancel') {
-        let auth = this.injector.get(AuthService);
-        auth.logoutAccount(true);
+        if(window['env']['isAuthBypassed']) {
+          let auth = this.injector.get(AuthService);
+          auth.clearLocalData();
+          location.href = window['env']['unauthorizedRedirectUrl']
+        } else {
+          let auth = this.injector.get(AuthService);
+          auth.logoutAccount(true);
+        }
       }
       return false;
     } else {

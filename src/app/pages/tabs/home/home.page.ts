@@ -64,6 +64,9 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
     await this.getUser();
+    if(this.user && !this.user.profile_mandatory_fields.length){
+      this.getSessions();
+    }
     this.isMentor = this.profileService.isMentor
     App.addListener('appStateChange', (state: AppState) => {
       this.localStorage.getLocalData(localKeys.USER_DETAILS).then(data => {
@@ -97,10 +100,6 @@ export class HomePage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    if(this.user && !this.user.profile_mandatory_fields.length){
-      this.getSessions();
-    }
     this.gotToTop();
     let isRoleRequested = await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED)
     let isBecomeMentorTileClosed =await this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED)

@@ -272,31 +272,32 @@ $app-theme: mat.define-light-theme((
 
 // Mentoring app fonts
 @font-face {
-  font-family: 'NotoSans-Bold';
+  font-family: 'Montserrat-Bold';
   font-style: normal;
   font-weight: bold;
-  src: url('../assets/fonts/noto_Sans/NotoSans-Bold.ttf');
+  src: url('../assets/fonts/montserrat/Montserrat-Bold.ttf');
 }
 
 @font-face {
-  font-family: 'NotoSans-Regular';
-  src: url('../assets/fonts/noto_Sans/NotoSans-Regular.ttf');
-  font-weight: normal;
+  font-family: 'Montserrat-Regular';
   font-style: normal;
+  font-weight: normal;
+  src: url('../assets/fonts/montserrat/Montserrat-Regular.ttf');
 }
 
 @font-face {
-  font-family: 'NotoSans-Italic';
+  font-family: 'Montserrat-Italic';
   font-style: italic;
   font-weight: normal;
-  src: url('../assets/fonts/noto_Sans/NotoSans-Italic.ttf');
+  src: url('../assets/fonts/montserrat/Montserrat-Italic.ttf');
 }
 
 @font-face {
-  font-family: 'NotoSans-BoldItalic';
+  font-family: 'Montserrat-BoldItalic';
   font-style: italic;
   font-weight: bold;
-  src: url('../assets/fonts/noto_Sans/NotoSans-BoldItalic.ttf');
+  src: url('../assets/fonts/montserrat/Montserrat-BoldItalic.ttf');
 }
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Latto,"Montserrat", sans-serif !important; }
+

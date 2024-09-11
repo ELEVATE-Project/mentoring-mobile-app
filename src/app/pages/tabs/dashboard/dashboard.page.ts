@@ -2,8 +2,10 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Chart } from 'chart.js/auto';
+import { DASHBOARD } from 'src/app/core/constants/formConstant';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService } from 'src/app/core/services';
+import { FormService } from 'src/app/core/services/form/form.service';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 
 @Component({
@@ -35,13 +37,19 @@ export class DashboardPage implements OnInit {
   ];
   loading: boolean = false;
   chartData: any;
+  completeDashboardForms: any;
+  chartCreationJson: any;
 
   constructor(
     private translate: TranslateService,
     private profile: ProfileService,
-    private apiService: HttpService) { }
+    private apiService: HttpService,
+    private form: FormService) { }
 
-  ngOnInit() { }
+  async ngOnInit() {
+    let data = await this.form.getForm(DASHBOARD);
+    this.completeDashboardForms = data.data.fields;
+   }
 
   ionViewWillEnter() {
     this.isMentor = this.profile.isMentor;
@@ -93,6 +101,7 @@ export class DashboardPage implements OnInit {
   }
 
   createChart() {
+    this.chartCreationJson = this.segment === 'mentor' ? JSON.parse(JSON.stringify(this.completeDashboardForms.mentor)) : JSON.parse(JSON.stringify(this.completeDashboardForms.mentee))
     const maxDataValue = Math.max(
       ...(
           this.segment === 'mentor' ?
@@ -100,48 +109,21 @@ export class DashboardPage implements OnInit {
           [this.chartData.total_session_enrolled, this.chartData.total_session_attended]
       )
   );
-    this.chart = new Chart('MyChart', {
-      type: this.segment === 'mentor' ? 'bar': 'pie',
-      data: {
-        labels: this.segment === 'mentor' ? ['Total sessions created', 'Total sessions assigned', 'Total sessions conducted'] : ['Total sessions enrolled', 'Total sessions attended'],
-        datasets: [{
-          label: '',
-          data: this.segment === 'mentor' ? [this.chartData.total_session_created, this.chartData.total_session_assigned,  this.chartData.total_session_hosted,] : [this.chartData.total_session_enrolled, this.chartData.total_session_attended],
-          backgroundColor: this.segment === 'mentor' ?['#4e81bd', '#fdc107', '#5ab251']: ['#ffdf00', '#7b7b7b'],
-          borderWidth: 1,
-          barThickness: 50,
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          }
-        },
-        scales: this.segment === 'mentor' ?{
-          y: {
-            ticks: {
-              stepSize: this.calculateStepSize(maxDataValue),
-            },
-            grid: {
-              display: false,
-            },
-          },
-          x:{
-            grid: {
-              display: false,
-            },
-          }
-        }:{}
-      }
-    });
+  this.chartCreationJson.forEach(chart => {
+    if (chart.options && chart.options.scales && chart.options.scales.y && chart.options.scales.y.ticks) {
+      chart.options.scales.y.ticks.stepSize = this.calculateStepSize(maxDataValue);
+    }
+    if (chart.data && chart.data.datasets) {
+      chart.data.datasets.forEach(dataset => {
+        dataset.data = dataset.data.map(item => this.chartData[item] || 0);
+      });
+    }
+  });
+    this.chart = new Chart('MyChart', this.chartCreationJson[0]);
     this.dataAvailable = !!(this.chartData?.total_session_created ||this.chartData?.total_session_enrolled ||this.chartData?.total_session_assigned ||this.chartData?.total_session_hosted);
   }
 
   calculateStepSize(maxDataValue) {
-
     return Math.ceil(maxDataValue / 5);
   }
 }
