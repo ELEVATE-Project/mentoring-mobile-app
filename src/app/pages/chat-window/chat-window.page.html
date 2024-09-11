@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar color="{{headerConfig?.headerColor}}">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <div style="display: flex; align-items: center;">
+        <img src="../../../assets/prof-img/user.png" alt="Profile Picture" 
+             style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+        <div style="display: flex; flex-direction: column;">
+          <span style="font-weight: bold;">John Doe</span>
+          <span style="font-size: 12px;">Admin</span>
+        </div>
+      </div>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div style="padding: 16px;">
+    <div style="display: flex; align-items: end;">
+      <div style="background-color: #f1f1f1; border-radius: 15px; padding: 10px; width: 80%;">
+        Hi, I would like to connect with you.
+        <span style="display: block; text-align: right; color: gray; font-size: 12px;">
+          10:10am
+        </span>
+      </div>
+      <img src="../../../assets/prof-img/user.png" alt="Profile Picture" 
+           style="width: 35px; height: 35px; border-radius: 50%; margin-left: 10px;">
+    </div>
+  </div>
+
+  <div style="position: fixed; bottom: 100px;background-color: #f1f1f1; text-align: center; padding: 10px; margin:0 15px ">
+    <ion-icon name="information-circle" style=" vertical-align: end;" style="font-size: 24px;"></ion-icon>
+    <span style="font-size: 18px; vertical-align: super; font-weight: 800;">
+      Please wait for John Doe to respond.
+    </span>
+    <p style="font-size: 14px; margin: 5px 0 0; color: grey;">You can continue your conversation once they accept your request.</p>
+  </div>
+</ion-content>
+<ion-footer>
+
+  <ion-toolbar>
+    <div style="display: flex; align-items: center; width: 100%;">
+      <ion-input type="text" placeholder="Type a message..." [(ngModel)]="message"
+                 style="    border-radius: 10px;
+                 border: 1px solid #ccc;
+                 padding: 8px;
+                 padding: 0px 10px !important;
+                 margin: 0px 10px !important;"></ion-input>
+    <ion-fab-button size="small" (click)="sendRequest()">
+      <ion-icon name="send" style="padding: 10px;"></ion-icon>
+    </ion-fab-button>
+    </div>
+  </ion-toolbar>
+  
+</ion-footer>

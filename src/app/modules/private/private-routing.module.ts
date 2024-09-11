@@ -132,6 +132,11 @@ const routes: Routes = [
         canActivate: [PrivateGuard]
       },
       {
+        path: 'chat',
+        loadChildren: () => import('../../pages/chat-window/chat-window.module').then(m => m.ChatWindowPageModule),
+        canActivate: [PrivateGuard]
+      },
+      {
         path: '',
         redirectTo: '',
         pathMatch: 'full',
