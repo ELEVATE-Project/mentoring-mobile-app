@@ -1,52 +1,6 @@
 <ion-split-pane contentId="main-content">
   <ion-menu contentId="main-content" menuId="side-menu" type="overlay" swipeGesture="false" class="width-20">
-    <ion-header  [translucent]="true" class="ion-no-border" [ngClass]="{'disable-div': user?.profile_mandatory_fields.length && !isAuthBypassed || !user?.about && !isAuthBypassed }">
-      <div *ngIf="user" >
-        <div class="sub-menu-toolbar">
-          <div slot="start" class="img-mainDiv">
-              <div class="image-div" *ngIf="user?.image; else elseBlock">
-                <img class="profile-image" src="{{user?.image}}">
-              </div>
-              <ng-template #elseBlock>
-                <ion-icon slot="icon-only" name="person-circle" class="no-image-icon"></ion-icon>
-              </ng-template>
-          </div >
-          <div class="usr-div">
-            <ion-label class="username"><strong>{{user?.name}}</strong></ion-label>
-            <div class="user-role-labels">
-              <ion-label *ngIf="userRoles">{{ userRoles[0] | snakeCaseToUpperCase}}
-              </ion-label>
-              <ion-label class="view-roles" (click)="viewRoles()">{{"VIEW_ROLES" | translate}}</ion-label>
-            </div>
-            <a (click)="goToProfilePage()" class="cursor" *allowTemplateView="PAGE_IDS.profile">{{"PROFILE" | translate}}</a>
-          </div>
-        </div>
-      </div>
-    </ion-header>
     <div class="ion-no-border" [ngClass]="{'disable-div': user?.profile_mandatory_fields.length && !isAuthBypassed || !user?.about && !isAuthBypassed }">
-      <div *ngIf="user" >
-        <div class="sub-menu-toolbar">
-          <div slot="start" class="img-mainDiv">
-              <div class="image-div" *ngIf="user?.image; else elseBlock">
-                <img class="profile-image" src="{{user?.image}}">
-              </div>
-              <ng-template #elseBlock>
-                <ion-icon slot="icon-only" name="person-circle" class="no-image-icon"></ion-icon>
-              </ng-template>
-          </div >
-          <div class="usr-div">
-            <ion-label class="username"><strong>{{user?.name}}</strong></ion-label>
-            <div class="user-role-labels">
-              <ion-label *ngIf="userRoles">{{ userRoles[0] | snakeCaseToUpperCase}}
-              </ion-label>
-              <ion-label class="view-roles" (click)="viewRoles()">{{"VIEW_ROLES" | translate}}</ion-label>
-            </div>
-            <a (click)="goToProfilePage()" class="cursor" *allowTemplateView="PAGE_IDS.profile">{{"PROFILE" | translate}}</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="ion-no-border">
       <div *ngIf="user" >
         <div class="sub-menu-toolbar">
           <div slot="start" class="img-mainDiv">

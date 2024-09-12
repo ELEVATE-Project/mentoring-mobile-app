@@ -83,7 +83,6 @@ export class HomeSearchPage implements OnInit {
   }
 
   search(event) {
-    alert(event);
     if (event.length >= 3) {
       this.searchText = event;
       this.showSelectedCriteria = this.criteriaChip;
