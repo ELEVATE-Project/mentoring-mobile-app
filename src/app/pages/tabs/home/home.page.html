@@ -10,6 +10,8 @@
         <ion-searchbar class="search-bar" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"
          cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="isOpen = !isOpen"
          [(ngModel)]="searchText"
+         type="search"
+         inputmode="search"
         (keyup.enter)="search(searchText)">
         </ion-searchbar>
       </div>
