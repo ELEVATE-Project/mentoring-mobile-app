@@ -6,10 +6,11 @@ import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admi
 import { CommonRoutes } from 'src/global.routes';
 import { ModalController } from '@ionic/angular';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
-import { UtilService } from 'src/app/core/services';
+import { HttpService, ToastService, UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-popup/mentee-list-popup.component';
 import *  as moment from 'moment';
+import { OrganisationService } from 'src/app/core/services/organisation/organisation.service';
 
 @Component({
   selector: 'app-manage-session',
@@ -24,7 +25,11 @@ export class ManageSessionComponent implements OnInit {
     // label: 'MANAGE_SESSION'
   };
   receivedEventData: any;
-  constructor(private adminWorkapceService: AdminWorkapceService, private router: Router, private modalCtrl: ModalController,private utilService:UtilService, private sessionService:SessionService) { }
+  constructor(private adminWorkapceService: AdminWorkapceService, private router: Router, private modalCtrl: ModalController,private utilService:UtilService, private sessionService:SessionService, 
+    private http: HttpService,
+    private toast: ToastService,
+    private organisation: OrganisationService,
+  ) { }
   headingText = "SESSION_LIST"
   download = "DOWNLOAD";
   page = 1;
@@ -91,6 +96,7 @@ export class ManageSessionComponent implements OnInit {
     'LIVE': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}],
     'COMPLETED': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}]
   };
+  segmentType = 'manage-session';
 
   async ngOnInit() {
     this.fetchSessionList()
@@ -208,5 +214,37 @@ export class ManageSessionComponent implements OnInit {
   createSession(){
       this.router.navigate([`${CommonRoutes.CREATE_SESSION}`]); 
   } 
+
+  segmentChanged(event){
+    this.segmentType = event.target.value;
+  }
+
+  async downloadCSV(){
+    let config = {
+      url: urlConstants.API_URLS.ADMIN_DOWNLOAD_SAMPLE_CSV,
+      payload: {}
+    }
+    this.http.get(config).then(async (response)=>{
+      await this.sessionService.openBrowser(response.result,"_blank")
+    })
+  }
+
+  async uploadCSV(event){
+    let file= event.target.files[0];
+    if(file.type != 'text/csv'){
+      this.toast.showToast('PLEASE_UPLOAD_CSV_FILE', 'danger')
+      event.target.value='';
+    }else{
+      let signedUrl = await this.organisation.getSignedUrl(event.target.files[0].name)
+      this.organisation.upload(event.target.files[0], signedUrl).subscribe(async () => {
+        let data = await this.organisation.bulkUpload(signedUrl.filePath);
+        if(data){
+          this.toast.showToast(data.message, 'success');
+          event.target.value='';
+        }
+        (error) => event.target.value='';
+      })
+    }
+  }
 
 }
