@@ -9,7 +9,7 @@ import {
   ViewChildren,
   QueryList
 } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash-es';
 import * as moment from 'moment';
 import { ToastService } from 'src/app/core/services';
@@ -124,7 +124,7 @@ export class DynamicFormComponent implements OnInit {
   public color: ThemePalette = 'warn';
 
 
-  public myForm: FormGroup = this.fb.group({});
+  public myForm: UntypedFormGroup = this.fb.group({});
   showForm = false;
   currentDate = moment().format();
   maxDate = moment(this.currentDate).add(10, "years").format();
@@ -133,7 +133,7 @@ export class DynamicFormComponent implements OnInit {
   dependedParent: any;
   dependedParentDate: any;
 
-  constructor(private fb: FormBuilder, private toast: ToastService) {}
+  constructor(private fb: UntypedFormBuilder, private toast: ToastService) {}
   ngOnInit() {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){

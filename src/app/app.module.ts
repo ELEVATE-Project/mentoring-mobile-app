@@ -30,45 +30,43 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    IonicModule.forRoot(),
-    AppRoutingModule,
-    HttpClientModule,
-    MatTableModule,
-    MatPaginatorModule,
-    IonicStorageModule.forRoot({
-      name: 'mentoringApp',
-      driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage],
-    }),
-    CoreModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: translateHttpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
-    ReactiveFormsModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: typeof(environment.production)=='string' ? JSON.parse(environment.production) : environment.production,
-      // Register the ServiceWorker as soon as the app is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    }),
-    BrowserAnimationsModule,
-    RecaptchaModule,
-  ],
-
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    SQLite,
-    TitleCasePipe,
-    ScreenOrientation,
-    SwUpdate
-  ],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [
+        CommonModule,
+        BrowserModule,
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        HttpClientModule,
+        MatTableModule,
+        MatPaginatorModule,
+        IonicStorageModule.forRoot({
+            name: 'mentoringApp',
+            driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage],
+        }),
+        CoreModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: translateHttpLoaderFactory,
+                deps: [HttpClient],
+            },
+        }),
+        ReactiveFormsModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: typeof (environment.production) == 'string' ? JSON.parse(environment.production) : environment.production,
+            // Register the ServiceWorker as soon as the app is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000'
+        }),
+        BrowserAnimationsModule,
+        RecaptchaModule,
+    ],
+    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        SQLite,
+        TitleCasePipe,
+        ScreenOrientation,
+        SwUpdate
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}
