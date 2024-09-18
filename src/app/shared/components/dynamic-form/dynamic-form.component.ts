@@ -248,7 +248,9 @@ export class DynamicFormComponent implements OnInit {
   dateInputClick(control, datetimePicker: NgxMatDatetimePicker<any>) {
     if (this.myForm.get(control.name).value)
       datetimePicker._selected = this.myForm.get(control.name).value;
-    datetimePicker.open();
+    setTimeout(()=>{
+      datetimePicker.open();
+    },500)
   }
 
   selectionChanged(control, event){
