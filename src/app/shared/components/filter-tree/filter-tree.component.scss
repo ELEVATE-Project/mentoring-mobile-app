@@ -17,7 +17,10 @@
     font-size: 16px;
 }
 ion-checkbox {
-    --border-color: var(--ion-color-primary)
+    --border-color: var(--ion-color-primary);
+    --size: 18px;
+    min-width: 18px;
+    min-height: 18px;
 }
 .header{
     padding-right: 65%;
