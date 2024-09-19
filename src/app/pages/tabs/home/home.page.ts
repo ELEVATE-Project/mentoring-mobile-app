@@ -145,15 +145,18 @@ export class HomePage implements OnInit {
     this.router.navigate([`/${CommonRoutes.SESSIONS}`], { queryParams: { type: data } });
   }
 
-  search(event: string) {
-    this.isOpen = false;
-    if(event && event.length >= 3){
-      this.searchText = event ? event : "";
-      this.utilService.subscribeSearchText(this.searchText);
-      this.utilService.subscribeCriteriaChip(JSON.stringify(this.criteriaChip))
-      this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
-    }else {
-      this.toast.showToast("ENTER_MIN_CHARACTER","danger");
+  search(searchText: string, event) {
+    alert(event.key)
+    if (event.key === 'Enter') {
+      this.isOpen = false;
+      if(searchText && searchText.length >= 3){
+        this.searchText = searchText ? searchText : "";
+        this.utilService.subscribeSearchText(this.searchText);
+        this.utilService.subscribeCriteriaChip(JSON.stringify(this.criteriaChip))
+        this.router.navigate([`/${CommonRoutes.HOME_SEARCH}`]);
+      }else {
+        this.toast.showToast("ENTER_MIN_CHARACTER","danger");
+      }
     }
   }
   async getUser() {
