@@ -90,6 +90,7 @@
         <input matInput [ngxMatDatetimePicker]="picker" 
           [formControlName]="control.name"
           [value]="control.value"
+          type="text" readonly
           [min]="(control.name === dependedChild)?dependedChildDate:currentDate"
           [max]="maxDate"
           autocomplete="new-password"
