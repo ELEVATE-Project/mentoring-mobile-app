@@ -82,14 +82,16 @@ export class HomeSearchPage implements OnInit {
     this.filterData = await this.utilService.transformToFilterData(data, obj);
   }
 
-  search(event) {
-    if (event.length >= 3) {
-      this.searchText = event;
-      this.showSelectedCriteria = this.criteriaChip;
-      this.isOpen = false;
-      this.fetchSessionList()
-    } else {
-      this.toast.showToast("ENTER_MIN_CHARACTER","danger");
+  search(searchText, event) {
+    if (event.key === 'Enter') {
+      if (searchText.length >= 3) {
+        this.searchText = searchText;
+        this.showSelectedCriteria = this.criteriaChip;
+        this.isOpen = false;
+        this.fetchSessionList();
+      } else {
+        this.toast.showToast("ENTER_MIN_CHARACTER", "danger");
+      }
     }
   }
 
