@@ -67,7 +67,6 @@ export class MentorSearchDirectoryPage implements OnInit {
   }
 
   onSearch(searchText, event){
-    alert(event.key)
     if (event.key === 'Enter') {
       if (searchText.length >= 3) {
         this.searchText = searchText;
