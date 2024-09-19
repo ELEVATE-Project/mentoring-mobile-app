@@ -66,13 +66,16 @@ export class MentorSearchDirectoryPage implements OnInit {
     this.filterData = await this.utilService.transformToFilterData(data, obj);
   }
 
-  onSearch(event){
-    if (event.length >= 3) {
-      this.searchText = event;
-      this.showSelectedCriteria = this.selectedChipLabel;
-      this.getMentors();
-    } else {
-      this.toast.showToast("ENTER_MIN_CHARACTER","danger");
+  onSearch(searchText, event){
+    alert(event.key)
+    if (event.key === 'Enter') {
+      if (searchText.length >= 3) {
+        this.searchText = searchText;
+        this.showSelectedCriteria = this.selectedChipLabel;
+        this.getMentors();
+      } else {
+        this.toast.showToast("ENTER_MIN_CHARACTER","danger");
+      } 
     }
   }
   
