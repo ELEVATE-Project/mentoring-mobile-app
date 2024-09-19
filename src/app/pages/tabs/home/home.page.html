@@ -12,7 +12,7 @@
          [(ngModel)]="searchText"
          type="search"
          inputmode="search"
-        (ionChange)="search(searchText)">
+        (keydown)="search(searchText, $event)">
         </ion-searchbar>
       </div>
     <!--</ion-col>
