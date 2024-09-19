@@ -146,7 +146,6 @@ export class HomePage implements OnInit {
   }
 
   search(searchText: string, event) {
-    alert(event.key)
     if (event.key === 'Enter') {
       this.isOpen = false;
       if(searchText && searchText.length >= 3){
