@@ -2,7 +2,7 @@
   <div class="d-flex flex-justify-center">
     <ion-searchbar class="top-padding search-style"  debounce="1000" placeholder="{{'MENTOR_SEARCH_PLACEHOLDER' | translate}}"
     #event [value]="searchText"
-    (ionChange)="onSearch(event.value)"
+    (keydown)="onSearch(event.value, $event)"
     type="search"
     inputmode="search"
     cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="isOpen = !isOpen"></ion-searchbar>
