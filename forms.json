@@ -2,7 +2,7 @@
   {
     "type": "editProfile",
     "sub_type": "editProfileForm",
-    "action": "skip",
+    "action": "create",
     "data": {
       "templateName": "defaultTemplate",
       "fields": {
@@ -380,7 +380,7 @@
   {
     "type": "session",
     "sub_type": "sessionForm",
-    "action": "skip",
+    "action": "create",
     "data": {
       "templateName": "defaultTemplate",
       "fields": {
@@ -533,7 +533,7 @@
   {
     "type": "managersSession",
     "sub_type": "managersSessionForm",
-    "action": "skip",
+    "action": "create",
     "data": {
       "template_name": "defaultTemplate",
       "fields": {
@@ -883,7 +883,7 @@
   {
     "type": "helpApp",
     "sub_type": "helpAppForm",
-    "action": "skip",
+    "action": "create",
     "data": {
       "fields": {
         "forms": [
@@ -948,7 +948,7 @@
   {
     "type": "mentorQuestionnaire",
     "sub_type": "mentorQuestionnaireForm",
-    "action": "skip",
+    "action": "create",
     "data": {
       "templateName": "defaultTemplate",
       "fields": {
@@ -1051,7 +1051,7 @@
   {
     "type": "dashboard",
     "sub_type": "dashboardForm",
-    "action": "skip",
+    "action": "create",
     "data": {
       "template_name": "defaultTemplate",
       "fields": {
