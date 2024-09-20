@@ -385,147 +385,147 @@
       "templateName": "defaultTemplate",
       "fields": {
         "controls": [
-              {
-                  "name": "title",
-                  "label": "Session title",
-                  "value": "",
-                  "class": "ion-no-margin",
-                  "type": "text",
-                  "placeHolder": "Ex. Name of your session",
-                  "position": "floating",
-                  "errorMessage": {
-                      "required": "Enter session title",
-                      "pattern": "This field can only contain alphanumeric characters"
-                  },
-                  "validators": {
-                      "required": true,
-                      "maxLength": 255,
-                      "pattern": "^[a-zA-Z0-9-.,s ]+$"
-                  }
-              },
-              {
-                  "name": "description",
-                  "label": "Description",
-                  "value": "",
-                  "class": "ion-no-margin",
-                  "type": "textarea",
-                  "placeHolder": "Tell the community something about your session",
-                  "position": "floating",
-                  "errorMessage": {
-                      "required": "Enter description",
-                      "pattern": "This field can only contain alphanumeric characters"
-                  },
-                  "validators": {
-                      "required": true,
-                      "maxLength": 255,
-                      "pattern": "^[a-zA-Z0-9-.,s ]+$"
-                  }
-              },
-              {
-                  "name": "start_date",
-                  "label": "Start date",
-                  "class": "ion-no-margin",
-                  "value": "",
-                  "displayFormat": "DD/MMM/YYYY HH:mm",
-                  "dependedChild": "end_date",
-                  "type": "date",
-                  "placeHolder": "YYYY-MM-DD hh:mm",
-                  "errorMessage": {
-                      "required": "Enter start date"
-                  },
-                  "position": "floating",
-                  "validators": {
-                      "required": true
-                  }
-              },
-              {
-                  "name": "end_date",
-                  "label": "End date",
-                  "class": "ion-no-margin",
-                  "position": "floating",
-                  "value": "",
-                  "displayFormat": "DD/MMM/YYYY HH:mm",
-                  "dependedParent": "start_date",
-                  "type": "date",
-                  "placeHolder": "YYYY-MM-DD hh:mm",
-                  "errorMessage": {
-                      "required": "Enter end date"
-                  },
-                  "validators": {
-                      "required": true
-                  }
-              },
-              {
-                  "name": "competency",
-                  "label": "Competencies",
-                  "class": "ion-no-margin",
-                  "value": [],
-                  "type": "search",
-                  "position": "",
-                  "disabled": false,
-                  "errorMessage": {
-                      "required": "Enter competencies"
-                  },
-                  "validators": {
-                      "required": true
-                  },
-                  "options": [],
-                  "meta": {
-                      "entityType": "competency",
-                      "addNewPopupHeader": "Competencies",
-                      "addNewPopupSubHeader": "Who is this session for?",
-                      "showSelectAll": true,
-                      "multiSelect": true,
-                      "showAddOption": {
-                          "showAddButton": true,
-                          "addChipLabel": ""
-                      },
-                      "allow_custom_entities": true,
-                      "allow_filtering": true,
-                      "addPopupType": "addCompetency"
-                  },
-                  "multiple": true
-              },
-              {
-                  "name": "medium",
-                  "label": "Medium",
-                  "alertLabel": "medium",
-                  "class": "ion-no-margin",
-                  "value": [],
-                  "type": "search",
-                  "position": "",
-                  "disabled": false,
-                  "errorMessage": {
-                      "required": "Enter select medium"
-                  },
-                  "validators": {
-                      "required": true
-                  },
-                  "options": [
-                      {
-                          "label": "English",
-                          "value": "en_in"
-                      },
-                      {
-                          "label": "Hindi",
-                          "value": "hi"
-                      }
-                  ],
-                  "meta": {
-                      "entityType": "medium",
-                      "addNewPopupHeader": "Add new language",
-                      "showSelectAll": true,
-                      "multiSelect": true,
-                      "showAddOption": {
-                          "showAddButton": true,
-                          "addChipLabel": ""
-                      },
-                      "allow_custom_entities": true,
-                      "allow_filtering": true,
-                      "addPopupType": "addCompetency"
-                  },
-                  "multiple": true
-              }
+            {
+                "name": "title",
+                "label": "Session title test",
+                "value": "",
+                "class": "ion-no-margin",
+                "type": "text",
+                "placeHolder": "Ex. Name of your session",
+                "position": "floating",
+                "errorMessage": {
+                    "required": "Enter session title",
+                    "pattern": "This field can only contain alphanumeric characters"
+                },
+                "validators": {
+                    "required": true,
+                    "maxLength": 255,
+                    "pattern": "^[a-zA-Z0-9-.,s ]+$"
+                }
+            },
+            {
+                "name": "description",
+                "label": "Description",
+                "value": "",
+                "class": "ion-no-margin",
+                "type": "textarea",
+                "placeHolder": "Tell the community something about your session",
+                "position": "floating",
+                "errorMessage": {
+                    "required": "Enter description",
+                    "pattern": "This field can only contain alphanumeric characters"
+                },
+                "validators": {
+                    "required": true,
+                    "maxLength": 255,
+                    "pattern": "^[a-zA-Z0-9-.,s ]+$"
+                }
+            },
+            {
+                "name": "start_date",
+                "label": "Start date",
+                "class": "ion-no-margin",
+                "value": "",
+                "displayFormat": "DD/MMM/YYYY HH:mm",
+                "dependedChild": "end_date",
+                "type": "date",
+                "placeHolder": "YYYY-MM-DD hh:mm",
+                "errorMessage": {
+                    "required": "Enter start date"
+                },
+                "position": "floating",
+                "validators": {
+                    "required": true
+                }
+            },
+            {
+                "name": "end_date",
+                "label": "End date",
+                "class": "ion-no-margin",
+                "position": "floating",
+                "value": "",
+                "displayFormat": "DD/MMM/YYYY HH:mm",
+                "dependedParent": "start_date",
+                "type": "date",
+                "placeHolder": "YYYY-MM-DD hh:mm",
+                "errorMessage": {
+                    "required": "Enter end date"
+                },
+                "validators": {
+                    "required": true
+                }
+            },
+            {
+                "name": "competencies",
+                "label": "Competencies",
+                "class": "ion-no-margin",
+                "value": [],
+                "type": "search",
+                "position": "",
+                "disabled": false,
+                "errorMessage": {
+                    "required": "Enter competencies"
+                },
+                "validators": {
+                    "required": true
+                },
+                "options": [],
+                "meta": {
+                    "entityType": "competencies",
+                    "addNewPopupHeader": "Competencies",
+                    "addNewPopupSubHeader": "Who is this session for?",
+                    "showSelectAll": true,
+                    "multiSelect": true,
+                    "showAddOption": {
+                        "showAddButton": true,
+                        "addChipLabel": ""
+                    },
+                    "allow_custom_entities": true,
+                    "allow_filtering": true,
+                    "addPopupType": "addCompetency"
+                },
+                "multiple": true
+            },
+            {
+                "name": "medium",
+                "label": "Medium",
+                "alertLabel": "medium",
+                "class": "ion-no-margin",
+                "value": [],
+                "type": "search",
+                "position": "",
+                "disabled": false,
+                "errorMessage": {
+                    "required": "Enter select medium"
+                },
+                "validators": {
+                    "required": true
+                },
+                "options": [
+                    {
+                        "label": "English",
+                        "value": "en_in"
+                    },
+                    {
+                        "label": "Hindi",
+                        "value": "hi"
+                    }
+                ],
+                "meta": {
+                    "entityType": "medium",
+                    "addNewPopupHeader": "Add new language",
+                    "showSelectAll": true,
+                    "multiSelect": true,
+                    "showAddOption": {
+                        "showAddButton": true,
+                        "addChipLabel": ""
+                    },
+                    "allow_custom_entities": true,
+                    "allow_filtering": true,
+                    "addPopupType": "addCompetency"
+                },
+                "multiple": true
+            }
         ]
       }
     }
