@@ -6,7 +6,7 @@ import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dy
 import { CommonRoutes } from 'src/global.routes';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { HELP } from 'src/app/core/constants/formConstant';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController} from '@ionic/angular';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';

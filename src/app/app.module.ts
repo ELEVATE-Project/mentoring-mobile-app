@@ -15,10 +15,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CoreModule } from './core/core.module';
 import { Drivers, Storage } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
-import { SQLite } from '@ionic-native/sqlite/ngx';
 import { TitleCasePipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { ServiceWorkerModule, SwUpdate } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -62,9 +60,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
         RecaptchaModule,
     ],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        SQLite,
         TitleCasePipe,
-        ScreenOrientation,
         SwUpdate
     ],
     bootstrap: [AppComponent]

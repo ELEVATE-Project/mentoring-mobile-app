@@ -11,11 +11,9 @@ import {
 } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash-es';
-import * as moment from 'moment';
 import { ToastService } from 'src/app/core/services';
 import { ThemePalette } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
-// import { NGX_MAT_DATE_FORMATS, NgxMatDateFormats, NgxMatDatetimePicker } from '@angular-material-components/datetime-picker';
 import { debounceTime } from 'rxjs/operators';
 import { SearchAndSelectComponent } from '../search-and-select/search-and-select.component';
 
@@ -81,17 +79,17 @@ export interface JsonFormData {
   controls: JsonFormControls[];
 }
 
-// const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
-//   parse: {
-//     dateInput: 'LL LT'
-//   },
-//   display: {
-//     dateInput: 'LL LT',
-//     monthYearLabel: 'MMM YYYY',
-//     dateA11yLabel: 'LL',
-//     monthYearA11yLabel: 'MMM YYYY'
-//   }
-// };
+const CUSTOM_DATE_FORMATS = {
+  parse: {
+    dateInput: 'LL LT'
+  },
+  display: {
+    dateInput: 'LL LT',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMM YYYY'
+  }
+};
 
 @Component({
   selector: 'app-dynamic-form',
@@ -126,8 +124,8 @@ export class DynamicFormComponent implements OnInit {
 
   public myForm: UntypedFormGroup = this.fb.group({});
   showForm = false;
-  currentDate = moment().format();
-  maxDate = moment(this.currentDate).add(10, "years").format();
+  currentDate = new Date();
+  // maxDate = new Date(this.currentDate).setFullYear(new Date(this.currentDate).getFullYear() + 10).();
   dependedChild: any;
   dependedChildDate="";
   dependedParent: any;
@@ -244,11 +242,11 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
-  // dateInputClick(control, datetimePicker: NgxMatDatetimePicker<any>) {
-  //   if (this.myForm.get(control.name).value)
-  //     datetimePicker._selected = this.myForm.get(control.name).value;
-  //   datetimePicker.open();
-  // }
+  dateInputClick(control, datetimePicker) {
+    if (this.myForm.get(control.name).value)
+      datetimePicker._selected = this.myForm.get(control.name).value;
+    datetimePicker.open();
+  }
 
   selectionChanged(control, event){
     const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
