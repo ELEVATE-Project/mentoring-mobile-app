@@ -125,6 +125,7 @@ export class DynamicFormComponent implements OnInit {
   public myForm: UntypedFormGroup = this.fb.group({});
   showForm = false;
   currentDate = new Date();
+  maxDate;
   // maxDate = new Date(this.currentDate).setFullYear(new Date(this.currentDate).getFullYear() + 10).();
   dependedChild: any;
   dependedChildDate="";
