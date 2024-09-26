@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import * as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
@@ -18,12 +17,12 @@ export class SessionCardComponent implements OnInit {
   @Input() isEnrolled;
   @Output() onClickEvent = new EventEmitter();
   @ViewChild(IonModal) modal: IonModal;
-  startDate: string;
+  startDate;
   isCreator: boolean;
   isConductor:boolean;
   buttonConfig;
   userData: any;
-  endDate: string;
+  endDate;
   isModalOpen = false;
   meetingPlatform: any;
   
@@ -39,8 +38,8 @@ export class SessionCardComponent implements OnInit {
     this.isCreator = await this.checkIfCreator();
     this.isConductor = await this.checkIfConductor();
     this.setButtonConfig(this.isCreator,this.isConductor);
-    this.startDate = (this.data.start_date>0)?moment.unix(this.data.start_date).toLocaleString():this.startDate;
-    this.endDate = (this.data.end_date>0)?moment.unix(this.data.end_date).toLocaleString():this.endDate;
+    this.startDate = (this.data.start_date>0)?new Date(this.data.start_date * 1000):this.startDate;
+    this.endDate = (this.data.end_date>0)?new Date(this.data.start_date * 1000):this.endDate;
   }
  
   setButtonConfig(isCreator: boolean, isConductor:boolean) {

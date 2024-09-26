@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, Platform } from '@ionic/angular';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, LocalStorageService, ToastService, UtilService } from 'src/app/core/services';

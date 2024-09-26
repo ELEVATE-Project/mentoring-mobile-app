@@ -5,7 +5,6 @@ import { CommonRoutes } from 'src/global.routes';
 import { ModalController } from '@ionic/angular';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
 import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-popup/mentee-list-popup.component';
-import *  as moment from 'moment';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 
 @Component({
@@ -198,8 +197,8 @@ export class ManageSessionComponent implements OnInit {
         let currentTimeInSeconds=Math.floor(Date.now()/1000);
         let setButton = (ele?.status?.value == 'PUBLISHED' && ele.end_date > currentTimeInSeconds) ? 'UPCOMING' :(ele?.status?.value == 'LIVE' && ele.end_date > currentTimeInSeconds) ? 'LIVE' : 'COMPLETED';
         let date = ele.start_date;
-        ele.start_date = moment.unix(date).format('DD-MMM-YYYY')
-        ele.start_time = moment.unix(date).format('h:mm A')
+        ele.start_date = new Date(date * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/,/, '');
+        ele.start_time = new Date(date * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
         ele.action = this.actionButtons[setButton]
         ele.status = ele?.status?.label;
         ele.type = ele?.type?.label;

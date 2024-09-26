@@ -177,7 +177,6 @@ export class HomePage implements OnInit {
     const modal = await this.modalController.create({
       component: TermsAndConditionsPage,
       backdropDismiss: false,
-      swipeToClose: false
     });
     return await modal.present();
   }
