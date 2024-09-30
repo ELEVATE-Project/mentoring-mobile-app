@@ -1,6 +1,6 @@
 <ion-split-pane contentId="main-content">
   <ion-menu contentId="main-content" menuId="side-menu" type="overlay" swipeGesture="false" class="width-20">
-    <ion-header  [translucent]="true" class="ion-no-border" [ngClass]="{'disable-div': user?.profile_mandatory_fields.length && !isAuthBypassed || !user?.about && !isAuthBypassed }">
+    <ion-header class="ion-no-border" [ngClass]="{'disable-div': user?.profile_mandatory_fields.length && !isAuthBypassed || !user?.about && !isAuthBypassed }">
       <div *ngIf="user" >
         <div class="sub-menu-toolbar">
           <div slot="start" class="img-mainDiv">

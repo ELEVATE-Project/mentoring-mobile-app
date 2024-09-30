@@ -90,13 +90,14 @@
         <input matInput [ngxMatDatetimePicker]="picker" 
           [formControlName]="control.name"
           [value]="control.value"
+          type="text" readonly
           [min]="(control.name === dependedChild)?dependedChildDate:currentDate"
           [max]="maxDate"
           autocomplete="new-password"
           [disabled]="control?.disabled"
           (dateChange)="dateSelected($event, control)"
-          (click)="dateInputClick(control,picker)">
-        <mat-datepicker-toggle matSuffix [for]="$any(picker)">
+          (click)="!isMobile && dateInputClick(control,picker)">
+        <mat-datepicker-toggle matSuffix (click)="dateInputClick(control,picker)">
         </mat-datepicker-toggle>
         <ngx-mat-datetime-picker #picker 
           [showSpinners]="showSpinners" 

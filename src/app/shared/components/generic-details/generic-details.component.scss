@@ -5,6 +5,7 @@ ion-chip{
     --background: var(--white);
     color: var(--dark-gray);
     margin-top: 6px;
+    height: auto;
 }
 
 .value{
@@ -32,4 +33,7 @@ ion-chip{
     justify-content: center;
     align-items: center;
     padding-right: 10px;
+}
+.info {
+    font-size: 20px;
 }

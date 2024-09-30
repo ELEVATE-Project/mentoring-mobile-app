@@ -5,6 +5,10 @@ const path = require("path");
 
 const authToken = process.env.AUTH_TOKEN;
 const apiUrl = process.env.API_URL;
+const authorization = process.env.AUTHORIZATION;
+const adminAuthToken = process.env.ADMIN_AUTH_TOKEN;
+const organizationId = process.env.ORGANIZATION_ID;
+
 
 const args = process.argv.slice(2);
 const actionsApplicable = ["skip", "update","create"]
@@ -17,7 +21,7 @@ const createForm = async (form) => {
     const response = await axios.post(
       `${apiUrl}/mentoring/v1/form/create`,
       form,
-      { headers: { 'X-auth-token': `bearer ${authToken}` } }
+      { headers: { 'x-authenticated-user-token': `${authToken}`, 'Authorization': `bearer ${authorization}`, 'admin-auth-token': `${adminAuthToken}`, 'organization-id': `${organizationId}` } }
     );
     if(response){
         console.log("Form created successfully:", response.data);
@@ -33,7 +37,7 @@ const updateForm = async (form) => {
     const response = await axios.put(
       `${apiUrl}/mentoring/v1/form/update`,
       form,
-      { headers: { 'X-auth-token': `bearer ${authToken}` } }
+      { headers: { 'x-authenticated-user-token': `${authToken}`, 'Authorization': `bearer ${authorization}`, 'admin-auth-token': `${adminAuthToken}`, 'organization-id': `${organizationId}` } }
     );
     if(response){
         console.log("Form updated successfully:", response.data);
