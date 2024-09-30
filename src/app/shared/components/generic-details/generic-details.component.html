@@ -1,6 +1,15 @@
 <div class="field-wrapper" *ngFor="let item of sessionData.form">
   <div *ngIf="!sessionData?.menteeForm?.includes(item.title) || (sessionData?.menteeForm?.includes(item.title)&&!isMentor)">
-    <p class="session-detail-heading">{{item.title | translate }}</p>
+    <p class="session-detail-heading">{{item.title | translate }}  
+      <ion-icon *ngIf="item?.info" id="{{item.key}}" class="info" name="information-circle"></ion-icon>
+      <ion-popover trigger="{{item.key}}" triggerAction="hover">
+        <ng-template>
+          <ion-content class="ion-padding">
+            <div class="ion-padding-bottom"><span class="popover-header">{{item?.info}}</span></div>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+    </p>
     <div *ngIf="isArray(sessionData.data[item.key]); else elseBlock">
       <ion-chip outline="true" class="ion-margin-top" *ngFor="let chip of sessionData.data[item.key]">
         <ion-label>{{chip.label}}</ion-label>
