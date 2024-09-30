@@ -43,7 +43,8 @@ export class MentorDetailsPage implements OnInit {
       },
       {
         title: "Competencies",
-        key: "competency" 
+        key: "competency",
+        info: 'Competencies associated with this mentor'
       }
     ],
     data: {
