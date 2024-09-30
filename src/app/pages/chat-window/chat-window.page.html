@@ -5,11 +5,11 @@
     </ion-buttons>
     <ion-buttons slot="start">
       <div style="display: flex; align-items: center;">
-        <img src="../../../assets/prof-img/user.png" alt="Profile Picture" 
-             style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+        <img src="{{info?.receiver_user_details?.image}}" alt="Profile Picture" 
+             style="width: 40px; height: 40px; border-radius: 50%;     object-fit: cover; margin-right: 10px;">
         <div style="display: flex; flex-direction: column;">
-          <span style="font-weight: bold;">John Doe</span>
-          <span style="font-size: 12px;">Admin</span>
+          <span style="font-weight: bold;">{{info?.receiver_user_details?.name}}</span>
+          <span style="font-size: 12px;">{{info?.receiver_user_details?.user_roles}}</span>
         </div>
       </div>
     </ion-buttons>
@@ -17,9 +17,9 @@
 </ion-header>
 <ion-content>
   <div style="padding: 16px;">
-    <div style="display: flex; align-items: end;">
+    <div style="display: flex; align-items: end;" *ngIf="info?.status == 'REQUESTED'">
       <div style="background-color: #f1f1f1; border-radius: 15px; padding: 10px; width: 80%;">
-        Hi, I would like to connect with you.
+       {{info?.meta?.connection?.initial_message}}
         <span style="display: block; text-align: right; color: gray; font-size: 12px;">
           10:10am
         </span>
@@ -29,18 +29,23 @@
     </div>
   </div>
 
-  <div style="position: fixed; bottom: 100px;background-color: #f1f1f1; text-align: center; padding: 10px; margin:0 15px ">
-    <ion-icon name="information-circle" style=" vertical-align: end;" style="font-size: 24px;"></ion-icon>
-    <span style="font-size: 18px; vertical-align: super; font-weight: 800;">
-      Please wait for John Doe to respond.
-    </span>
-    <p style="font-size: 14px; margin: 5px 0 0; color: grey;">You can continue your conversation once they accept your request.</p>
+  <div class="flex flex-justify-center">
+    <div style="position: fixed; bottom: 100px; background-color: #f1f1f1; padding: 10px; margin: 0 15px; border-radius: 8px;">
+      <ion-icon name="information-circle" style="font-size: 24px; vertical-align: end;"></ion-icon>
+      <span style="font-size: 18px; vertical-align: super; font-weight: 800;">
+       {{ messages[info?.status]?.title}}
+      </span>
+      <p style="font-size: 14px; margin: 5px 0px 0 30px; color: grey; ">
+        {{ messages[info?.status]?.subText}}
+      </p>
+    </div>
   </div>
 </ion-content>
 <ion-footer>
 
   <ion-toolbar>
-    <div style="display: flex; align-items: center; width: 100%;">
+    <div  class="flex-box " styt
+    =" width: 100%;">
       <ion-input type="text" placeholder="Type a message..." [(ngModel)]="message"
                  style="    border-radius: 10px;
                  border: 1px solid #ccc;
