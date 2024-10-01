@@ -29,8 +29,9 @@
     </div>
   </div>
 
+  <div style="position: fixed; bottom: 100px; width: 100%;">
   <div class="flex flex-justify-center">
-    <div style="position: fixed; bottom: 100px; background-color: #f1f1f1; padding: 10px; margin: 0 15px; border-radius: 8px;">
+    <div style=" background-color: #f1f1f1; padding: 10px; margin: 0 15px; border-radius: 8px;">
       <ion-icon name="information-circle" style="font-size: 24px; vertical-align: end;"></ion-icon>
       <span style="font-size: 18px; vertical-align: super; font-weight: 800;">
        {{ messages[info?.status]?.title}}
@@ -38,10 +39,22 @@
       <p style="font-size: 14px; margin: 5px 0px 0 30px; color: grey; ">
         {{ messages[info?.status]?.subText}}
       </p>
+    
     </div>
+   
+  </div>
+  <div style="    display: flex;
+  justify-content: space-evenly;">
+    <ion-button size="small" color="light">
+      <ion-icon name="checkmark-outline" color="success"></ion-icon> Accept
+      </ion-button>
+      <ion-button size="small" color="light">
+        <ion-icon name="close-outline" color="danger"></ion-icon>  Reject
+        </ion-button>
+  </div>
   </div>
 </ion-content>
-<ion-footer>
+<!-- <ion-footer>
 
   <ion-toolbar>
     <div  class="flex-box " styt
@@ -58,4 +71,4 @@
     </div>
   </ion-toolbar>
   
-</ion-footer>
+</ion-footer> -->
