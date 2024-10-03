@@ -100,3 +100,19 @@ ion-popover {
     width: 300px;
   }
 }
+
+.date-input-container {
+  margin: 10px 0px;
+  width: 100%;
+}
+
+.date-input {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+.calendar-icon {
+  position: absolute;
+  right: 10px;
+  font-size: 24px;
+}

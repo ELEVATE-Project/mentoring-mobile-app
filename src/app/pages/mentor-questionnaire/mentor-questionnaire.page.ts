@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 import { MENTOR_QUESTIONNAIRE } from 'src/app/core/constants/formConstant';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService, ToastService } from 'src/app/core/services';

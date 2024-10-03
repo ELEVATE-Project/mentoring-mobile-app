@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService, ToastService, UserService, UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { CommonRoutes } from 'src/global.routes';
-import *  as moment from 'moment';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { Location } from '@angular/common';
 import { ModalController, ToastController } from '@ionic/angular';
@@ -166,7 +165,7 @@ export class SessionDetailPage implements OnInit {
     if (!this.userCantAccess) {
       response = response.result;
       this.setPageHeader(response);
-      let readableStartDate = moment.unix(response.start_date).toLocaleString();
+      let readableStartDate = new Date(response.start_date * 1000).toLocaleString();
       let currentTimeInSeconds=Math.floor(Date.now()/1000);
       if(response.is_enrolled){
         this.isEnabled = ((response.start_date - currentTimeInSeconds) < 600 || response?.status?.value=='LIVE') ? true : false
@@ -177,8 +176,8 @@ export class SessionDetailPage implements OnInit {
       this.detailData.data.start_date = readableStartDate;
       this.detailData.data.meeting_info = response.meeting_info?.platform;
       this.detailData.data.mentee_count = response.seats_limit - response.seats_remaining
-      this.startDate = (response.start_date>0)?moment.unix(response.start_date).toLocaleString():this.startDate;
-      this.endDate = (response.end_date>0)?moment.unix(response.end_date).toLocaleString():this.endDate;
+      this.startDate = (response.start_date>0)?new Date(response.start_date * 1000):this.startDate;
+      this.endDate = (response.end_date>0)?new Date(response.end_date * 1000):this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
       this.detailData.data.mentor_designation = response?.mentor_designation.map(designation => designation?.label).join(', ');
       if((!this.isConductor && !this.detailData.form.some(obj => obj.title === 'MENTOR'))){
