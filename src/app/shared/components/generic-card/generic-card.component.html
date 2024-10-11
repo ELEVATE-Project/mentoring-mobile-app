@@ -1,0 +1,33 @@
+<ion-card class="generic-card">
+  <ion-grid>
+    <ion-row>
+      <ion-col class="right-column" size="4">
+        <div>
+          <ion-img src="assets/prof-img/user.png">
+          </ion-img> 
+          <ng-template #Img>
+            <img class="thumbnail-image" src="{{data?.image}}" />
+          </ng-template>
+        </div>
+      </ion-col>
+      <ion-col class="right-column" size="8">
+        <ion-item lines="none">
+          <ion-label>
+            <h4>{{data?.name || data?.title}}</h4>
+            <div class="role-div" *ngIf="data?.area_of_expertise?.length">
+              <p>{{data?.area_of_expertise[0]?.label}}</p>
+              <p>(12 years)</p>
+            </div>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-button fill="solid" style="width: 35%;" *ngIf="isSessionChatVisible && isSessionButtonVisible">Chat</ion-button>
+          <ion-button fill="solid" style="max-width: 200px" color="primary" *ngIf="isSessionButtonVisible">Request Session</ion-button>
+          <span  *ngIf="isSessionChatVisible && !isSessionButtonVisible" style="padding-left: 60%;">
+            <ion-button fill="solid" class="ion-text-wrap">Chat</ion-button>
+          </span>
+        </ion-item>
+      </ion-col>
+        </ion-row>
+  </ion-grid>
+</ion-card>

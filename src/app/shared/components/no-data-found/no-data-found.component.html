@@ -4,6 +4,10 @@
   </div>
   <div class="title"> {{messageHeader | translate}}</div>
   <div class="d-flex flex-justify-center">
-    <div class="description"> {{messageDescription | translate}}</div>
+    <div class="description">
+      <h4> {{messageDescription | translate}} </h4>
+      <p>{{noResult?.subHeader | translate}}</p>
+      <ion-button *ngIf="mentorButton"  (click)="onSubmit()">Explore mentors</ion-button>
+    </div>
   </div>
 </div>

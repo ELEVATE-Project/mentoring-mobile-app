@@ -282,5 +282,8 @@
     "PROFILE_FORM_UNSAVED_DATA": "You have unsaved data, would you like to save it before exiting?",
     "PROFILE_EXIT_HEADER_LABEL": "Save Data?",
     "DONOT_SAVE": "Don't Save",
-    "ENTER_MIN_CHARACTER": "Please enter at least three characters to search."
+    "ENTER_MIN_CHARACTER": "Please enter at least three characters to search.",
+    "MY_CONNECTIONS": "My connections",
+    "SEARCH_RESULTS_NOT_FOUND": "Search results not found",
+    "NO_RESULT_SUB_HEADER": "Looks like we couldn’t find what you were looking for, try searching for something else."
 }
