@@ -10,8 +10,8 @@
   
   .mob-download{
     display: flex;
-    justify-content: end;
-    align-items: end;
+    justify-content: flex-end;
+    align-items: flex-end;
     padding: 18px;
     margin: 0;
   }
@@ -19,8 +19,8 @@
   .close-icon{
     display: flex;
     cursor: pointer;
-    justify-content: end;
-    align-items: end;
+    justify-content: flex-end;
+    align-items: flex-end;
     font-size: 24px;
     padding: 8px;
     margin: 0;

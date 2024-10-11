@@ -9,15 +9,14 @@ import {
   ViewChildren,
   QueryList
 } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash-es';
-import * as moment from 'moment';
 import { ToastService } from 'src/app/core/services';
 import { ThemePalette } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { NGX_MAT_DATE_FORMATS, NgxMatDateFormats, NgxMatDatetimePicker } from '@angular-material-components/datetime-picker';
 import { debounceTime } from 'rxjs/operators';
 import { SearchAndSelectComponent } from '../search-and-select/search-and-select.component';
+import { OWL_DATE_TIME_FORMATS } from '@danielmoncada/angular-datetime-picker';
 
 interface JsonFormValidators {
   min?: number;
@@ -81,16 +80,13 @@ export interface JsonFormData {
   controls: JsonFormControls[];
 }
 
-const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
-  parse: {
-    dateInput: 'LL LT'
-  },
-  display: {
-    dateInput: 'LL LT',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMM YYYY'
-  }
+const CUSTOM_DATE_FORMATS = {
+  fullPickerInput: {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true},
+  datePickerInput: {year: 'numeric', month: 'long', day: 'numeric'},
+  timePickerInput: {hour: 'numeric', minute: 'numeric', hour12: true},
+  monthYearLabel: {year: 'numeric', month: 'long'},
+  dateA11yLabel: {year: 'numeric', month: 'long', day: 'numeric'},
+  monthYearA11yLabel: {year: 'numeric', month: 'long'},
 };
 
 @Component({
@@ -99,8 +95,7 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
   styleUrls: ['./dynamic-form.component.scss'],
   providers: [
     {
-      provide: NGX_MAT_DATE_FORMATS,
-      useValue: CUSTOM_DATE_FORMATS
+      provide: OWL_DATE_TIME_FORMATS, useValue: CUSTOM_DATE_FORMATS
     }
 ]
 })
@@ -124,16 +119,16 @@ export class DynamicFormComponent implements OnInit {
   public color: ThemePalette = 'warn';
 
 
-  public myForm: FormGroup = this.fb.group({});
+  public myForm: UntypedFormGroup = this.fb.group({});
   showForm = false;
-  currentDate = moment().format();
-  maxDate = moment(this.currentDate).add(10, "years").format();
+  currentDate = new Date();
+  maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 10));
   dependedChild: any;
   dependedChildDate="";
   dependedParent: any;
   dependedParentDate: any;
 
-  constructor(private fb: FormBuilder, private toast: ToastService) {}
+  constructor(private fb: UntypedFormBuilder, private toast: ToastService) {}
   ngOnInit() {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){
@@ -231,20 +226,20 @@ export class DynamicFormComponent implements OnInit {
   }
 
   dateSelected(event, control){
-    const indexToEdit = this.jsonFormData.controls.findIndex(formControl => formControl.name === control.name);
-    if (indexToEdit !== -1) {
-      this.jsonFormData.controls[indexToEdit].value = event.value
+    if(event.value < this.currentDate) {
+      this.myForm.controls[control.name].setValue(this.currentDate);
     }
     if(control.dependedChild){
       this.dependedChild = control.dependedChild;
       this.dependedChildDate = event.value;
-    } else {
-      this.dependedParent = control.dependedParent
-      this.dependedParentDate = event.value;
-    }
+      if(event.value > new Date(this.myForm.controls[this.dependedChild].value)) {
+        this.myForm.controls[this.dependedChild].setValue(this.dependedChildDate);
+      }
+    }    
   }
 
-  dateInputClick(control, datetimePicker: NgxMatDatetimePicker<any>) {
+  dateInputClick(control, datetimePicker) {
+    this.currentDate = new Date();
     if (this.myForm.get(control.name).value)
       datetimePicker._selected = this.myForm.get(control.name).value;
     datetimePicker.open();

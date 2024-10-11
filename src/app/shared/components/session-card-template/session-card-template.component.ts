@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import * as moment from 'moment';
 import { ToastService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -18,7 +17,7 @@ export class SessionCardTemplateComponent implements OnInit {
   constructor(private router: Router, private toast:ToastService) { }
 
   ngOnInit() { 
-    let startDate = moment.unix(this.data.startDate);
+    let startDate = new Date(this.data.startDate).getTime();
     this.data.startDate = startDate.toLocaleString();
   }
 

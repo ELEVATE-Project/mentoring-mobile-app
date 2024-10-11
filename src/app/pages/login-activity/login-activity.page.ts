@@ -6,7 +6,6 @@ import {
   UtilService,
 } from 'src/app/core/services';
 import { MenuController } from '@ionic/angular';
-import * as moment from 'moment';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import jwt_decode from 'jwt-decode'; 
@@ -81,7 +80,7 @@ export class LoginActivityPage implements OnInit {
   }
 
   convertEpochToRealTime(epochTime: number): string {
-    return moment.unix(epochTime).format('h:mm A [on] DD MMMM YYYY');
+    return `${new Date(epochTime * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })} on ${new Date(epochTime * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}`;
   }
   onPageChange(event){
     this.page = event.pageIndex + 1,
