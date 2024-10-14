@@ -1,21 +1,18 @@
 export const environment = {
-  production: false,
-  name: 'debug environment',
-  staging: false,
-  dev: false,
-  baseUrl: 'your api url',
-  sqliteDBName: 'DB',
-  deepLinkUrl: 'deeplink_url',
-  privacyPolicyUrl:'privacy_policy_url',
-  termsOfServiceUrl:'terms_of_use_url',
-  supportEmail: "",
-  recaptchaSiteKey:"",
-  restictedPages: ["restricted_pages_id_1", "restricted_pages_id_2"],
-  isAuthBypassed: true,
-  unauthorizedRedirectUrl: "unauthorized_redirect_url",
-  password:{
-    minLength:10,
-    rejectPattern:"regex for password validation",
-    errorMessage:"error message for password"
-  },
-};
+	production: false ,
+	name: window['env' as any]['name' as any] ,
+	baseUrl: window['env' as any]['baseUrl'] ,
+	sqliteDBName: window['env' as any]['sqliteDBName' as any] ,
+	deepLinkUrl: window['env' as any]['deepLinkUrl'],
+	privacyPolicyUrl: window['env' as any]['privacyPolicyUrl' as any] ,
+	termsOfServiceUrl: window['env' as any]['termsOfServiceUrl' as any] ,
+	recaptchaSiteKey: window['env' as any]['recaptchaSiteKey'] ,
+	recaptchaSiteKeyOld: window['env' as any]['recaptchaSiteKeyOld' as any] ,
+	restictedPages: window['env' as any]['restictedPages'],
+	unauthorizedRedirectUrl: window['env' as any]['unauthorizedRedirectUrl' as any] ,
+	supportEmail: window['env' as any]['supportEmail' as any] ,
+	isAuthBypassed: window['env' as any]['isAuthBypassed'] ,
+	password: window['env' as any]['password'] 
+}
+
+
