@@ -24,10 +24,11 @@ WORKDIR /usr/src/app
 
 COPY --from=build /app/www ./www
 
+COPY src/assets/env/env.js ./www/assets/env/env.js
+
 RUN npm install -g serve
 
 EXPOSE 7601
-
 
 CMD ["serve", "-s", "www", "-p", "7601"]
 
