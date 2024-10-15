@@ -1,0 +1,33 @@
+<app-page-header [config]="headerConfig">
+    <app-searchbar *ngIf="routeData && overlayChips" [data]="routeData" [overlayChip]="overlayChips" [receivedData]="criteriaChipEvent" (outputData)="searchResults($event)"></app-searchbar>
+</app-page-header>
+<app-chips-and-filter *ngIf="routeData || searchAndCriterias" [selectedFilters]="chips" [searchAndCriteriaData]="searchAndCriterias" (removeFilterChip)="removeChip($event)" (filterClick)="onClickFilter()"></app-chips-and-filter>
+
+<ion-content>
+  <ion-row>
+    <div class="search-navigation">
+      <div class="search-result">
+        <div class="search-result-label">
+          <ion-buttons slot="start">
+            <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+          </ion-buttons>
+          <ion-label *ngIf="searchText && totalCount > 0">{{"MENTOR_SEARCH_RESULT" | translate}} "{{searchText}}"</ion-label>
+        </div>
+        <div *ngIf="totalCount > 0 && searchText" class="search-result-count">
+          <ion-label>{{totalCount}} {{"SEARCH_RESULT" | translate}}</ion-label>
+        </div>
+      </div>
+      <div class="paginator">
+        <mat-paginator  [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"></mat-paginator>
+      </div>
+    </div>
+  </ion-row>
+  <ion-row class="d-flex ">
+      <ion-col  *ngFor="let value of mentorList" padding size-xs="12" size-sm="12" size-md="6" size-lg="4" align-self-stretch>
+        <app-generic-card [data]="value"></app-generic-card>
+      </ion-col>
+  </ion-row>
+  <div *ngIf="!totalCount && isLoaded">
+    <app-no-data-found [messageHeader]="noResult.header" [noResult]="noResult" [mentorButton]="enableMentorButton"> </app-no-data-found>
+  </div>
+</ion-content>

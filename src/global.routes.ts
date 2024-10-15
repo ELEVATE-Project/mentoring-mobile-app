@@ -35,4 +35,6 @@ export class CommonRoutes {
     public static CHANGE_PASSWORD = 'change-password'
     public static LOGIN_ACTIVITY = 'login-activity'
     public static MENTOR_SEARCH_DIRECTORY = 'mentor-search-directory'
+    public static GENERIC_LIST = 'generic-list'
+    public static MY_CONNECTIONS = 'my-connections'
 }

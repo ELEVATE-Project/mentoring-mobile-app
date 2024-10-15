@@ -3,9 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { PrivatePage } from './private.page';
 import { CommonRoutes } from 'src/global.routes';
 import { PrivateGuard } from 'src/app/core/guards/private.guard';
-import { CREATE_SESSION_FORM } from 'src/app/core/constants/formConstant';
 import { PAGE_IDS } from 'src/app/core/constants/page.ids';
 import { AllowPageAccess } from 'src/app/core/guards/allowPageAccess/allowPageAccess.guard';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
 
 const routes: Routes = [
   {
@@ -129,7 +129,22 @@ const routes: Routes = [
       {
         path: CommonRoutes.MENTOR_SEARCH_DIRECTORY,
         loadChildren: () => import('../../pages/mentor-search-directory/mentor-search-directory.module').then(m => m.MentorSearchDirectoryPageModule),
-        canActivate: [PrivateGuard]
+        canActivate: [PrivateGuard],
+        data: {
+          pageId: PAGE_IDS.mentorSearchDirectory,
+          placeholder: 'Search for mentors'
+        }
+      },
+      {
+        path: CommonRoutes.MY_CONNECTIONS,
+        loadChildren: () => import('../../pages/generic-list/generic-list.module').then(m => m.GenericListPageModule),
+        canActivate: [PrivateGuard, AllowPageAccess],
+        data: {
+          pageId: PAGE_IDS.myConnections,
+          placeholder: 'Search for connections',
+          filterType: 'mentor',
+          url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST
+        }
       },
       {
         path: '',
