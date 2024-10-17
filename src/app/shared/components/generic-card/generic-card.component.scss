@@ -1,33 +1,36 @@
-ion-card {
-    box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    ion-item {
-      --inner-padding-start: 0;
-      --inner-padding-end: 0;
-    }
-    ion-row {
-      --inner-padding-start: 0;
-      --inner-padding-start: 0;
-    }
-    ion-label{
-      margin: auto;
-    }
-    h4 {
-      font-weight: bold;
-      margin: auto;
-    }
-    p {
-      color: gray;
-      max-width: 120px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    ion-button{
-      --background: #fbfbfb;
-      color: var(--ion-color-primary);
-    }
-  }
-  .role-div{
-    display: flex;
-  }
+.generic-card{
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+ion-button{
+  --background: var(--white);
+  color: var(--ion-color-primary);
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+p {
+  color: gray;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.columns{
+  --ion-grid-column-padding: 0;
+}
+.profile-img {
+  width: 80% !important;
+  height: auto;
+  object-fit: cover;
+}
+
+.button-container {
+  justify-content: space-between;
+  width: auto;
+}
+
+.chat-span {
+  padding-left: 60%;
+  padding-right: 0;
+}

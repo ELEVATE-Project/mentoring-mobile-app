@@ -47,6 +47,7 @@ export class GenericListPage implements OnInit {
   isLoaded: boolean;
   criteriaChipEvent: any;
   enableMentorButton: boolean = false;
+  valueFromChipAndFilter: any;
 
   constructor(private route: ActivatedRoute,
     private httpService: HttpService,
@@ -82,8 +83,6 @@ export class GenericListPage implements OnInit {
     this.searchText = this.searchAndCriterias?.headerData?.searchText;
     this.mentorList = response.result.data;
     this.totalCount = response?.result?.count;
-    // this.mentorList = '';
-    // this.totalCount = 0;
     if(!this.mentorList && !this.totalCount){this.enableMentorButton = true}
   }
 

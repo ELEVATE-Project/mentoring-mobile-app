@@ -10,6 +10,7 @@ export class ChipsAndFilterComponent implements OnInit {
   @Output() filterClick = new EventEmitter();
   @Output() removeFilterChip = new EventEmitter();
   @Input() selectedFilters:  any;
+  @Output() sendChildValue: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() { }
 
@@ -18,7 +19,7 @@ export class ChipsAndFilterComponent implements OnInit {
 
   closeCriteriaChip(){
     this.searchAndCriteriaData = null;
-    console.log('close criteria chip',this.searchAndCriteriaData);
+    this.sendChildValue.emit(this.searchAndCriteriaData);
   }
 
   removeChip(chipValue,index){

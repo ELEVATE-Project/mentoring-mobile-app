@@ -11,6 +11,7 @@ export class SearchbarComponent implements OnInit {
   @Input() data: any;
   @Input() overlayChip: any;
   @Output() outputData = new EventEmitter();
+  @Input() valueFromParent: string;
   isOpen = false;
   criteriaChipSubscription: any;
   criteriaChip: any;
@@ -28,6 +29,9 @@ export class SearchbarComponent implements OnInit {
       this.criteriaChip = selectedCriteria ? JSON.parse(selectedCriteria) : "";
     });
     this.showSelectedCriteria = this.criteriaChip? this.criteriaChip : "";
+  }
+  ngOnChanges(){
+    this.criteriaChip = this.valueFromParent;
   }
   selectChip(chip) {
     if (this.criteriaChip === chip) {
