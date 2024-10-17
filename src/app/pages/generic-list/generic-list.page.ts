@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
 import { HttpService, UtilService } from 'src/app/core/services';
@@ -8,6 +8,7 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
 import { SearchbarComponent } from 'src/app/shared/components/searchbar/searchbar.component';
+import { CommonRoutes } from 'src/global.routes';
 
 @Component({
   selector: 'app-generic-list',
@@ -55,6 +56,7 @@ export class GenericListPage implements OnInit {
     private utilService: UtilService,
     private formService: FormService,
     private permissionService:PermissionService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -190,6 +192,14 @@ export class GenericListPage implements OnInit {
             this.overlayChips = config?.result?.search_config?.search?.session?.fields;
           });
         }
+    }
+  }
+
+  eventAction(event){
+    switch (event.type) {
+      case 'cardSelect':
+        this.router.navigate([CommonRoutes.MENTOR_DETAILS, event?.data?.id]);
+        break;
     }
   }
   
