@@ -46,6 +46,7 @@ import { snakeCaseToUpperCasePipe } from '../core/pipes/snake-case-to-normal-cas
 import { AllowTemplateViewDirective } from './directive/allowTemplate.directive';
 import { GenericSearchComponent } from './components/generic-search/generic-search.component';
 import { SearchCompetencyComponent } from './components/search-competency/search-competency.component';
+import { GenericCardComponent } from './components/generic-card/generic-card.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { SearchCompetencyComponent } from './components/search-competency/search
     snakeCaseToUpperCasePipe,
     AllowTemplateViewDirective,
     GenericSearchComponent,
-    SearchCompetencyComponent
+    SearchCompetencyComponent,
+    GenericCardComponent
   ],
   imports: [
     CommonModule,
@@ -133,7 +135,8 @@ import { SearchCompetencyComponent } from './components/search-competency/search
     snakeCaseToUpperCasePipe,
     AllowTemplateViewDirective,
     GenericSearchComponent,
-    SearchCompetencyComponent
+    SearchCompetencyComponent,
+    GenericCardComponent
   ],
 })
 export class SharedModule {}

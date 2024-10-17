@@ -1,0 +1,39 @@
+.generic-card{
+    box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  ion-button{
+    --background: var(--white);
+    color: var(--ion-color-primary);
+    box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  p {
+    color: var(--dark-gray);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .columns{
+    --ion-grid-column-padding: 0;
+  }
+  .profile-img {
+    width: 85px;
+    height: 85px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  .button-container {
+    justify-content: space-between;
+    width: auto;
+  }
+  
+  .chat-span {
+    padding-left: 60%;
+    padding-right: 0;
+  }
+  

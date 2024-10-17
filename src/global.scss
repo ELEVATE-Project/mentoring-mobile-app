@@ -394,3 +394,16 @@ ion-searchbar {
   --border-radius: 6px;
   --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
 }
+
+.auto-margin{
+  margin: auto;
+}
+.margin-none{
+  margin: 0px !important;
+}
+.ion-item-padding-none{
+  --inner-padding-start: 0;
+  --inner-padding-end: 0;
+  --padding-end: 0;
+  --padding-start: 0;
+}
