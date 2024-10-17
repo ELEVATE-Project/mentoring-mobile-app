@@ -1,11 +1,12 @@
 import { Component, HostListener } from '@angular/core';
 import * as _ from 'lodash-es';
 import { UtilService } from 'src/app/core/services';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { SwUpdate } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -14,11 +15,10 @@ import { environment } from 'src/environments/environment';
 export class AppComponent {
   constructor(
     private utilService:UtilService,
-    private screenOrientation: ScreenOrientation,
     private swUpdate: SwUpdate,
   ) {
     if(Capacitor.isNativePlatform()){
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT); 
+      ScreenOrientation.lock({ orientation: 'portrait' })
     }
     environment.baseUrl = localStorage.getItem('baseUrl') ? localStorage.getItem('baseUrl') : environment.baseUrl;
   }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import * as moment from 'moment';
 // import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { Browser } from '@capacitor/browser';
 import { ToastService } from 'src/app/core/services';
@@ -23,8 +22,8 @@ export class JoinDialogBoxComponent implements OnInit {
      private toast: ToastService) { }
 
   ngOnInit() {
-    this.startDate = (this.sessionData.start_date>0)?moment.unix(this.sessionData.start_date).toLocaleString():this.startDate;
-    this.endDate = (this.sessionData.end_date>0)?moment.unix(this.sessionData.end_date).toLocaleString():this.endDate;
+    this.startDate = (this.sessionData.start_date>0)?new Date(this.sessionData.start_date * 1000):this.startDate;
+    this.endDate = (this.sessionData.end_date>0)?new Date(this.sessionData.start_date * 1000):this.endDate;
     this.meetingPlatform = (this.sessionData.meeting_info);
   }
   async openBrowser(link) {

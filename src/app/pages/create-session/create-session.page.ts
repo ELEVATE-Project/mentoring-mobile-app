@@ -13,7 +13,6 @@ import * as _ from 'lodash-es';
 import { Location } from '@angular/common';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
 import { CREATE_SESSION_FORM, MANAGERS_CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
@@ -115,8 +114,8 @@ export class CreateSessionPage implements OnInit {
         this.sessionDetails= response;
         this.profileImageData.image = response.image;
         this.profileImageData.isUploaded = true;
-        response.start_date = moment.unix(response.start_date);
-        response.end_date = moment.unix(response.end_date);
+        response.start_date = new Date(response.start_date * 1000).toISOString();
+        response.end_date = new Date(response.end_date * 1000).toISOString();
         this.preFillData(response);
         this.editSessionDisable = (this.sessionDetails?.status?.value=='LIVE')
   }
@@ -176,8 +175,9 @@ export class CreateSessionPage implements OnInit {
         this.getImageUploadUrl(this.localImage);
       } else {
         const form = Object.assign({}, {...this.form1.myForm.getRawValue(), ...this.form1.myForm.value});
-        form.start_date = (Math.floor(form.start_date.unix() / 60) * 60).toString();
-        form.end_date = (Math.floor(form.end_date.unix() / 60) * 60).toString();
+        console.log(form)
+        form.start_date = (Math.floor((new Date(form.start_date).getTime() / 1000) / 60) * 60).toString();
+        form.end_date = (Math.floor((new Date(form.end_date).getTime() / 1000) / 60) * 60).toString();
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         form.time_zone = timezone;
         _.forEach(this.entityNames, (entityKey) => {
@@ -287,6 +287,7 @@ export class CreateSessionPage implements OnInit {
       );
     }
     this.showForm = true;
+    console.log(this.formData)
   }
 
   async imageUploadEvent(event) {

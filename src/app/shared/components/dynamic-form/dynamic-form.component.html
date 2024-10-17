@@ -86,28 +86,24 @@
         ></ion-icon>
         <ion-icon slot="end" [name]="control.options.icon"></ion-icon>
       </ion-range>
-      <mat-form-field *ngIf="control.type === 'date'" appearance="fill">
-        <input matInput [ngxMatDatetimePicker]="picker" 
+      <div class="date-input-container" *ngIf="control.type === 'date'">
+        <input matInput class="date-input" [owlDateTimeTrigger]="dt" [owlDateTime]="dt" #dateInput
           [formControlName]="control.name"
           [value]="control.value"
           [min]="(control.name === dependedChild)?dependedChildDate:currentDate"
           [max]="maxDate"
           autocomplete="new-password"
           [disabled]="control?.disabled"
-          (dateChange)="dateSelected($event, control)"
-          (click)="dateInputClick(control,picker)">
-        <mat-datepicker-toggle matSuffix [for]="$any(picker)">
-        </mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #picker 
-          [showSpinners]="showSpinners" 
-          [showSeconds]="showSeconds"
+          (dateTimeChange)="dateSelected($event, control)"
+          (click)="dateInputClick(control,dt)"
+        >
+        <owl-date-time #dt
           [stepHour]="stepHour" [stepMinute]="stepMinute" 
           [stepSecond]="stepSecond"
-          [touchUi]="touchUi"
-          [enableMeridian]="enableMeridian"
-          [color]="color">
-        </ngx-mat-datetime-picker>
-      </mat-form-field> 
+          [hour12Timer]="enableMeridian"
+        ></owl-date-time>
+        <ion-icon class="calendar-icon" (click)="dateInput.click()" name="calendar-outline"></ion-icon>
+      </div> 
       <ion-select
         *ngIf="control.type === 'select'"
         [multiple]="control.multiple"
