@@ -1,0 +1,26 @@
+<ion-card class="shadow-with-radious generic-card" (click)="onCardClick(data)">
+  <ion-grid>
+    <ion-row>
+      <ion-col class="columns" size="4" no-padding>
+        <div class="d-flex flex-justify-center">
+          <img class="profile-img" [src]="data?.image ? data.image : 'assets/prof-img/user.png'">
+        </div>
+      </ion-col>
+      <ion-col class="columns" size="8" no-padding>
+        <ion-item lines="none" class="ion-item-padding-none">
+          <ion-label class="auto-margin">
+            <h4 class="margin-none" >{{data?.name || data?.title}}</h4>
+            <div class="d-flex" *ngIf="data?.area_of_expertise?.length">
+              <p>{{data?.area_of_expertise[0]?.label}}</p>
+              <p>(12 years)</p>
+            </div>
+          </ion-label>
+        </ion-item>
+        <div class="d-flex flex-justify-flex-end" [ngClass]="{'two-buttons': buttonConfig?.chatButton && buttonConfig?.requestSessionButton}">
+          <ion-button color="light" class="button-text" *ngIf="buttonConfig?.chatButton" (click)="onChatButtonClick(); $event.stopPropagation()">Chat</ion-button>
+          <ion-button color="primary" *ngIf="buttonConfig?.requestSessionButton" (click)="onReqSessionButtonClick(); $event.stopPropagation()">Request Session</ion-button>
+        </div>  
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-card>

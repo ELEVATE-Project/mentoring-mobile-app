@@ -43,6 +43,7 @@ export class MentorSearchDirectoryPage implements OnInit {
   limit: any;
   chips = [];
   showSelectedCriteria: any;
+  buttonConfig = { chatButton: true, requestSessionButton: true };
 
   constructor(
     private router: Router,

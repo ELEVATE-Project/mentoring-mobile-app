@@ -45,6 +45,7 @@ import { AllowTemplateViewDirective } from './directive/allowTemplate.directive'
 import { GenericSearchComponent } from './components/generic-search/generic-search.component';
 import { SearchCompetencyComponent } from './components/search-competency/search-competency.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+import { GenericCardComponent } from './components/generic-card/generic-card.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angul
     snakeCaseToUpperCasePipe,
     AllowTemplateViewDirective,
     GenericSearchComponent,
-    SearchCompetencyComponent
+    SearchCompetencyComponent,
+    GenericCardComponent
   ],
   imports: [
     CommonModule,
@@ -131,7 +133,8 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angul
     snakeCaseToUpperCasePipe,
     AllowTemplateViewDirective,
     GenericSearchComponent,
-    SearchCompetencyComponent
+    SearchCompetencyComponent,
+    GenericCardComponent
   ],
 })
 export class SharedModule {}

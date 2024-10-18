@@ -43,6 +43,7 @@ export class MentorDirectoryPage implements OnInit {
   directory: boolean = true;
   selectedChips: boolean = false;
   data: any;
+  buttonConfig = { chatButton: true, requestSessionButton: true };
 
   constructor(
     private router: Router,
