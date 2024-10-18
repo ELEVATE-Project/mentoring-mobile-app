@@ -14,6 +14,7 @@ import { App, AppState } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { environment } from 'src/environments/environment';
+import { ThemeService } from 'src/app/core/services/theme.service';
 
 
 @Component({
@@ -61,9 +62,18 @@ export class HomePage implements OnInit {
     private localStorage: LocalStorageService,
     private toast: ToastService,
     private permissionService: PermissionService,
-    private utilService: UtilService) { }
+    private utilService: UtilService,
+    private themeService: ThemeService
+    ) { }
 
+
+
+
+    switchTheme() {
+      this.themeService.toggleTheme();
+    }
   async ngOnInit() {
+    this.switchTheme();
     await this.getUser();
     this.isMentor = this.profileService.isMentor
     App.addListener('appStateChange', (state: AppState) => {

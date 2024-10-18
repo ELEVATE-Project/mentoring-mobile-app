@@ -70,6 +70,7 @@ input:-webkit-autofill:focus {
   display: flex;
 }
 
+
 .d-block {
   display: block;
 }
@@ -284,7 +285,6 @@ ion-accordion-group{
   }
 }
 
-//////////////
 
 
 .example-modal {
@@ -399,4 +399,25 @@ ion-searchbar {
   --max-width: 300px;
   --border-radius: 6px;
   --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+}
+
+
+
+
+// Light Theme
+.light-theme {
+  --ion-color-primary: #387478;
+  --ion-color-secondary: #EB8317;
+}
+
+// Dark Theme
+.dark-theme {
+  --ion-color-primary: #FFBF61;
+  --ion-color-secondary: #605678;
+}
+
+// Apply theme variables
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
 }

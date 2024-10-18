@@ -123,6 +123,8 @@
       </div>
     </div>
   </div>
+  <button (click)="switchTheme()">Toggle Theme</button>
+  
   <div *ngIf="sessions&&(selectedSegment=='my-sessions')">
     <div *ngIf="sessions && sessions?.my_sessions?.length">
       <ion-label class="font-bold section-header">{{"ENROLLED_SESSIONS"|translate}}</ion-label>
