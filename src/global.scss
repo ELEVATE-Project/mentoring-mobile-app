@@ -410,3 +410,7 @@ ion-searchbar {
   --padding-end: 0;
   --padding-start: 0;
 }
+.shadow-with-radious{
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
