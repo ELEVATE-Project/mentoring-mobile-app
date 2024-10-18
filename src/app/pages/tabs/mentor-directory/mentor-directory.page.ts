@@ -43,7 +43,7 @@ export class MentorDirectoryPage implements OnInit {
   directory: boolean = true;
   selectedChips: boolean = false;
   data: any;
-  buttonConfig: { chatButton: boolean; requestSessionButton: boolean; };
+  buttonConfig = { chatButton: true, requestSessionButton: true };
 
   constructor(
     private router: Router,
@@ -59,7 +59,6 @@ export class MentorDirectoryPage implements OnInit {
     this.mentors = [];
     this.getMentors();
     this.gotToTop();
-    this.platformConfigButtons()
   }
 
   gotToTop() {
@@ -109,13 +108,6 @@ export class MentorDirectoryPage implements OnInit {
   }
   onSearch(){
     this.router.navigate(['/' + CommonRoutes.MENTOR_SEARCH_DIRECTORY], { queryParams: { search: this.searchText } });
-  }
-
-  platformConfigButtons(){
-    this.buttonConfig = {
-      chatButton: true,
-      requestSessionButton: true
-    }
   }
   
 }

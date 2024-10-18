@@ -43,7 +43,7 @@ export class MentorSearchDirectoryPage implements OnInit {
   limit: any;
   chips = [];
   showSelectedCriteria: any;
-  buttonConfig: { chatButton: boolean; requestSessionButton: boolean; };
+  buttonConfig = { chatButton: true, requestSessionButton: true };
 
   constructor(
     private router: Router,
@@ -65,7 +65,6 @@ export class MentorSearchDirectoryPage implements OnInit {
     const obj = {filterType: 'mentor', org: true};
     let data = await this.formService.filterList(obj);
     this.filterData = await this.utilService.transformToFilterData(data, obj);
-    this.platformConfigButtons();
   }
 
   onSearch(event){
@@ -200,13 +199,6 @@ export class MentorSearchDirectoryPage implements OnInit {
     this.selectedChipName = null;
     this.chips = [];
     this.urlQueryData = null;
-  }
-
-  platformConfigButtons(){
-    this.buttonConfig = {
-      chatButton: true,
-      requestSessionButton: true
-    }
   }
 
 }
