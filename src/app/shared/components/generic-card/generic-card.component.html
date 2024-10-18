@@ -1,4 +1,4 @@
-<ion-card class="generic-card" (click)="onCardClick(data)">
+<ion-card class="button-shadow-with-radious generic-card" (click)="onCardClick(data)">
   <ion-grid>
     <ion-row>
       <ion-col class="columns" size="4" no-padding>
@@ -16,13 +16,10 @@
             </div>
           </ion-label>
         </ion-item>
-          <div class="d-flex button-container">
-            <ion-button fill="solid" class="chat-button" *ngIf="isSessionChatVisible && isSessionButtonVisible" (click)="onChatButtonClick(); $event.stopPropagation()">Chat</ion-button>
-            <ion-button fill="solid" class="request-button" color="primary" *ngIf="isSessionButtonVisible" (click)="onReqSessionButtonClick(); $event.stopPropagation()">Request Session</ion-button>
-            <span *ngIf="isSessionChatVisible && !isSessionButtonVisible" class="chat-span">
-              <ion-button fill="solid">Chat</ion-button>
-            </span>
-          </div>
+        <div class="d-flex flex-justify-flex-end" [ngClass]="{'two-buttons': buttonConfig?.chatButton && buttonConfig?.requestSessionButton}">
+          <ion-button color="light" class="button-text" *ngIf="buttonConfig?.chatButton" (click)="onChatButtonClick(); $event.stopPropagation()">Chat</ion-button>
+          <ion-button color="primary" *ngIf="buttonConfig?.requestSessionButton" (click)="onReqSessionButtonClick(); $event.stopPropagation()">Request Session</ion-button>
+        </div>  
       </ion-col>
     </ion-row>
   </ion-grid>
