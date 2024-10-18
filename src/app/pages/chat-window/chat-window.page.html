@@ -1,74 +1,69 @@
-<ion-header>
+<ion-header class="header">
   <ion-toolbar color="{{headerConfig?.headerColor}}">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="start">
-      <div style="display: flex; align-items: center;">
-        <img src="{{info?.receiver_user_details?.image}}" alt="Profile Picture" 
-             style="width: 40px; height: 40px; border-radius: 50%;     object-fit: cover; margin-right: 10px;">
-        <div style="display: flex; flex-direction: column;">
-          <span style="font-weight: bold;">{{info?.receiver_user_details?.name}}</span>
-          <span style="font-size: 12px;">{{info?.receiver_user_details?.user_roles}}</span>
+      <div class="flex-box">
+        <img [src]="info?.user_details?.image || '../../../../assets/prof-img/user.png'" alt="Profile Picture" class="profile-pic">
+        <div class="d-flex flex-column">
+          <span style="font-weight: bold;">{{info?.user_details?.name}}</span>
+          <span style="font-size: 12px;">{{info?.user_details?.user_roles}}</span>
         </div>
       </div>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content>
-  <div style="padding: 16px;">
-    <div style="display: flex; align-items: end;" *ngIf="info?.status == 'REQUESTED'">
-      <div style="background-color: #f1f1f1; border-radius: 15px; padding: 10px; width: 80%;">
-       {{info?.meta?.connection?.initial_message}}
-        <span style="display: block; text-align: right; color: gray; font-size: 12px;">
-          10:10am
+<ion-content class="chat-window">
+  <div class="chat-card">
+    <div class="d-flex flex-align-items-flex-end" *ngIf="info?.status == 'REQUESTED'">
+      <div class="chat-card-content">
+       {{info?.meta?.message}}
+        <span>
+         {{info.created_at | date : 'hh:mm a'}}
         </span>
       </div>
-      <img src="../../../assets/prof-img/user.png" alt="Profile Picture" 
-           style="width: 35px; height: 35px; border-radius: 50%; margin-left: 10px;">
+      <img [src]="info?.user_details?.image || '../../../../assets/prof-img/user.png'" alt="Profile Picture" 
+           class="chat-pic">
     </div>
   </div>
 
-  <div style="position: fixed; bottom: 100px; width: 100%;">
+  <div  class="message-info" [ngStyle]="{'bottom': info?.is_initiator ? '100px' : '20px'}">
   <div class="flex flex-justify-center">
-    <div style=" background-color: #f1f1f1; padding: 10px; margin: 0 15px; border-radius: 8px;">
-      <ion-icon name="information-circle" style="font-size: 24px; vertical-align: end;"></ion-icon>
-      <span style="font-size: 18px; vertical-align: super; font-weight: 800;">
-       {{ messages[info?.status]?.title}}
+    <div class="info-container">
+      <ion-icon name="information-circle"></ion-icon>
+      <span>
+        {{ messages[info?.status]?.title | translate: { name: info?.user_details?.name } }}
       </span>
-      <p style="font-size: 14px; margin: 5px 0px 0 30px; color: grey; ">
-        {{ messages[info?.status]?.subText}}
+      <p>
+        {{ messages[info?.status]?.subText | translate: { name: info?.user_details?.name } }}
       </p>
-    
     </div>
-   
+    
   </div>
-  <div style="    display: flex;
-  justify-content: space-evenly;">
-    <ion-button size="small" color="light">
+  <div style="display: flex;
+  justify-content: space-evenly; margin-top: 15px;" *ngIf="!info?.is_initiator">
+    <ion-button size="medium" color="light" (click)="acceptRequest()">
       <ion-icon name="checkmark-outline" color="success"></ion-icon> Accept
       </ion-button>
-      <ion-button size="small" color="light">
+      <ion-button size="medium" color="light" (click)="rejectRequest()">
         <ion-icon name="close-outline" color="danger"></ion-icon>  Reject
         </ion-button>
   </div>
   </div>
 </ion-content>
-<!-- <ion-footer>
-
+<ion-footer *ngIf="info?.is_initiator"> 
   <ion-toolbar>
-    <div  class="flex-box " styt
-    =" width: 100%;">
+    <div  class="flex-box ">
       <ion-input type="text" placeholder="Type a message..." [(ngModel)]="message"
                  style="    border-radius: 10px;
                  border: 1px solid #ccc;
                  padding: 8px;
                  padding: 0px 10px !important;
                  margin: 0px 10px !important;"></ion-input>
-    <ion-fab-button size="small" (click)="sendRequest()">
+    <ion-fab-button size="small" (click)="sendRequest()" style="width: 50px; height: 40px;">
       <ion-icon name="send" style="padding: 10px;"></ion-icon>
     </ion-fab-button>
     </div>
   </ion-toolbar>
-  
-</ion-footer> -->
+</ion-footer>

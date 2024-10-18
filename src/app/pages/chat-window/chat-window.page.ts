@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { urlConstants } from 'src/app/core/constants/urlConstants';
+import { HttpService, ToastService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-chat-window',
@@ -10,47 +13,91 @@ export class ChatWindowPage implements OnInit {
     menu: false,
     headerColor: 'primary',
   };
-  messageSent : boolean = false;
+  isRequested:string;
+  id;
+
   message : string = "Hi, I would like to connect with you.";
-  info ={
-    status:'PENDING',
-    receiver_user_details: {
-      name: "Nevil",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZmVtYWxlJTIwcHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-      user_roles: []
-      },
-      meta: {
-        chat: {
-        initiated: true,
-        room_id: "<rocket.chat rid>"
-        },
-        connection: {
-        initial_message: "I would like to chat with you"
-        }
-        }
+  info :any ={};
+  messages ={};
+  constructor(
+    private httpService : HttpService,
+    private routerParams : ActivatedRoute,
+    private toast : ToastService
+  ) { 
+    routerParams.params.subscribe(parameters =>{
+      console.log(parameters,"parameters");
+      this.id = parameters?.id;
+    })
   }
-  messages ={
-    'PENDING':{
-        title: `Your first message to  ${this.info?.receiver_user_details?.name}`,
-        subText:"You are allowed to send only one message till your message request is accepted"
-    },
-    'REQUESTED':{
-      title: `Please wait for ${this.info?.receiver_user_details?.name} to respond.`,
-      subText:`You can continue your conversation with  ${this.info?.receiver_user_details?.name} once they accept your request.`
-  }
-  };
-  constructor() { }
 
   ngOnInit() {
     this.getConnectionInfo();
   }
 
   getConnectionInfo () {
-
+    const payload ={
+      url : urlConstants.API_URLS.GET_CHAT_INFO,
+      payload:{
+        user_id : this.id
+      }
+    }
+    this.httpService.post(payload).then(resp =>{
+      console.log(resp,"resp");
+      this.info = resp?.result;
+      if(resp?.result?.status && resp?.result?.status == 'REQUESTED'){
+        this.isRequested = resp?.result?.status;
+        this.message = '';
+      }else{
+        this.info.status =  'PENDING';
+      }
+      this.messages= {
+        'PENDING':{
+            title: `FIRST_MSG_REQ_INFO_TITLE`,
+            subText:"FIRST_MSG_REQ_INFO_SUBTITLE"
+        },
+        'REQUESTED':{
+          title: `MULTIPLE_MSG_REQ_TITLE`,
+          subText:`MULTIPLE_MSG_REQ_SUBTITLE`
+      }}
+    console.log(this.info.user_details?.name,"resp info");
+    })
   }
   sendRequest(){
-    this.info.status = 'REQUESTED';
-    this.message = "";
+    console.log(this.isRequested,'this.isRequested');
+    if(this.isRequested == 'REQUESTED'){
+      this.toast.showToast('MULTIPLE_MESSAGE_REQ','danger')
+      return;
+    }
+    const payload ={
+      url : urlConstants.API_URLS.SEND_REQUEST,
+      payload:{
+        user_id : this.id, 
+        message : this.message
+      }
+    }
+    this.httpService.post(payload).then(resp =>{
+      console.log(resp,"resp");
+    })
   }
-
+  acceptRequest(){
+    const payload ={
+      url : urlConstants.API_URLS.ACCEPT_MSG_REQ,
+      payload:{
+        user_id : this.id
+      }
+    }
+    this.httpService.post(payload).then(resp =>{
+      console.log(resp,"resp");
+    })
+  }
+  rejectRequest(){
+    const payload ={
+      url : urlConstants.API_URLS.REJECT_MSG_REQ,
+      payload:{
+        user_id : this.id
+      }
+    }
+    this.httpService.post(payload).then(resp =>{
+    })
+  }
 }

@@ -282,5 +282,11 @@
     "PROFILE_FORM_UNSAVED_DATA": "You have unsaved data, would you like to save it before exiting?",
     "PROFILE_EXIT_HEADER_LABEL": "Save Data?",
     "DONOT_SAVE": "Don't Save",
-    "ENTER_MIN_CHARACTER": "Please enter at least three characters to search."
+    "ENTER_MIN_CHARACTER": "Please enter at least three characters to search.",
+    "MULTIPLE_MESSAGE_REQ":"You cannot send any more messages till your message request is accepted.",
+    "FIRST_MSG_REQ_INFO_TITLE":"Your first message to {{name}}",
+    "FIRST_MSG_REQ_INFO_SUBTITLE":"You are allowed to send only one message till your message request is accepted",
+    "MULTIPLE_MSG_REQ_TITLE":"Please wait for {{name}} to respond.",
+    "MULTIPLE_MSG_REQ_SUBTITLE":"You can continue your conversation with  {{name}} once they accept your request."
+
 }

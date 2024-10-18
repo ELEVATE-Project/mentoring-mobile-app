@@ -1,0 +1,56 @@
+.header{
+    .profile-pic{
+        width: 40px; 
+        height: 40px; 
+        border-radius: 50%; 
+        object-fit: cover; 
+        margin-right: 10px;
+    }
+}
+.chat-window{
+    .chat-card{
+        padding: 16px;
+        .chat-card-content{
+            background-color: #f1f1f1;
+            border-radius: 15px;
+            padding: 10px;
+            width: 80%;
+            span{
+                display: block; 
+                text-align: right; 
+                color: gray; 
+                font-size: 12px;
+            }
+        }
+        .chat-pic{
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+    }
+.message-info{
+    position: fixed; 
+    width: 100%;
+    .info-container{
+        background-color: #f1f1f1;
+        padding: 10px;
+        margin: 0 15px;
+        border-radius: 8px;
+        ion-icon{
+            font-size: 24px; vertical-align: end;
+        }
+        span{
+            font-size: 16px;
+            vertical-align: super;
+            font-weight: 800;
+        }
+        p{
+            font-size: 14px; 
+            margin: 5px 0px 0 30px; 
+            color: grey; 
+        }
+    }
+}
+}
+

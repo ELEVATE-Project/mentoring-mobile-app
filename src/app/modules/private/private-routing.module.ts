@@ -132,7 +132,7 @@ const routes: Routes = [
         canActivate: [PrivateGuard]
       },
       {
-        path: 'chat',
+        path: 'chat/:id',
         loadChildren: () => import('../../pages/chat-window/chat-window.module').then(m => m.ChatWindowPageModule),
         canActivate: [PrivateGuard]
       },

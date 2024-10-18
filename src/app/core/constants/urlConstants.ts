@@ -64,6 +64,11 @@ export const urlConstants = {
         CHANGE_PASSWORD: "/user/v1/account/changePassword",
         UPDATE_LANGUAGE: "/user/v1/user/setLanguagePreference",
         LOGIN_ACTIVITY: "/user/v1/account/sessions",
-        ENTITY_LIST: "/mentoring/v1/entity/list?"
+        ENTITY_LIST: "/mentoring/v1/entity/list?",
+        GET_CHAT_INFO:"/mentoring/v1/connections/getInfo",
+        SEND_REQUEST:"/mentoring/v1/connections/initiate",
+        ACCEPT_MSG_REQ:"/mentoring/v1/connections/accept",
+        REJECT_MSG_REQ:"/mentoring/v1/connections/reject",
+        GET_PENDING_CONNECTIONS:"/mentoring/v1/connections/pending"
     }
 };
