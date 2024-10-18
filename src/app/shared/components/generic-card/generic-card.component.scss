@@ -23,15 +23,11 @@
     justify-content: space-between;
     width: auto;
   }
-  
-  .chat-span {
-    padding-left: 60%;
-    padding-right: 0;
-  }
-  
+
   .two-buttons {
     justify-content: flex-start;
   }
+  
   .button-text::part(native){
     --ion-color-contrast: var(--ion-color-primary);
   }
