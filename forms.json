@@ -1092,5 +1092,103 @@
         ]
       }
     }
+  },
+  {
+    "type": "dashboard",
+    "sub_type": "dashboardForm",
+    "data": {
+      "template_name": "defaultTemplate",
+      "fields": {
+        "mentor": [
+          {
+            "type": "bar",
+            "data": {
+              "labels": [
+                "Total sessions created",
+                "Total sessions assigned",
+                "Total sessions conducted"
+              ],
+              "datasets": [
+                {
+                  "label": "",
+                  "data": [
+                    "total_session_created",
+                    "total_session_assigned",
+                    "total_session_hosted"
+                  ],
+                  "backgroundColor": [
+                    "#4e81bd",
+                    "#fdc107",
+                    "#5ab251"
+                  ],
+                  "borderWidth": 1,
+                  "barThickness": 50
+                }
+              ]
+            },
+            "options": {
+              "responsive": true,
+              "maintainAspectRatio": false,
+              "plugins": {
+                "legend": {
+                  "display": false
+                }
+              },
+              "scales": {
+                "y": {
+                  "ticks": {
+                    "stepSize": 0
+                  },
+                  "grid": {
+                    "display": false
+                  }
+                },
+                "x": {
+                  "grid": {
+                    "display": false
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "mentee": [
+          {
+            "type": "pie",
+            "data": {
+              "labels": [
+                "Total sessions enrolled",
+                "Total sessions attended"
+              ],
+              "datasets": [
+                {
+                  "label": "",
+                  "data": [
+                    "total_session_enrolled",
+                    "total_session_attended"
+                  ],
+                  "backgroundColor": [
+                    "#ffdf00",
+                    "#7b7b7b"
+                  ],
+                  "borderWidth": 1,
+                  "barThickness": 50
+                }
+              ]
+            },
+            "options": {
+              "responsive": true,
+              "maintainAspectRatio": false,
+              "plugins": {
+                "legend": {
+                  "display": false
+                }
+              },
+              "scales": {}
+            }
+          }
+        ]
+      }
+    }
   }
 ]
