@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import { LocalStorageService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
@@ -15,11 +13,9 @@ export class GenericCardComponent implements OnInit {
   @Input() buttonConfig: any;
   @Input() meta: any;
 
-  constructor(private localStorage: LocalStorageService, private router: Router) { }
+  constructor(private router: Router) { }
 
-  async ngOnInit() { 
-    // let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-   }
+  ngOnInit() { }
 
   onCardClick(data) {
     this.router.navigate([CommonRoutes.MENTOR_DETAILS, (data?.id || data?.user_id)]);
@@ -30,5 +26,14 @@ export class GenericCardComponent implements OnInit {
       type: action,
     }
     this.onClickEvent.emit(value);
+  }
+  showButton(event, data){
+    if(!event.hasCondition){
+      return true
+    }else if(event[event.onCheck] == data[event.onCheck]){
+      return true
+    }else{
+      return false
+    }
   }
 }

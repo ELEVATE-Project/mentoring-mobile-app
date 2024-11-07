@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService } from 'src/app/core/services';
-import { CHAT_MESSAGES } from 'src/app/core/constants/chatConstants'
+import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -19,16 +19,20 @@ export class RequestsPage implements OnInit {
     notification: false,
   };
   segmentType = 'slot-requests';
-  buttonConfig = CHAT_MESSAGES.GENERIC_CARD_REQUEST_BTN_CONFIG;
+  buttonConfig: any;
   data: any;
 
   constructor(
     private httpService: HttpService,
+    private route: ActivatedRoute,
     private router : Router
   ) { }
 
   ngOnInit() { 
     this.pendingRequest();
+    this.route.data.subscribe(data => {
+      this.buttonConfig = data.button_config;
+    })
    }
 
   segmentChanged(event){

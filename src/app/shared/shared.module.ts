@@ -44,8 +44,11 @@ import { snakeCaseToUpperCasePipe } from '../core/pipes/snake-case-to-normal-cas
 import { AllowTemplateViewDirective } from './directive/allowTemplate.directive';
 import { GenericSearchComponent } from './components/generic-search/generic-search.component';
 import { SearchCompetencyComponent } from './components/search-competency/search-competency.component';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+import { SearchbarComponent } from './components/searchbar/searchbar.component';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { ChipsAndFilterComponent } from './components/chips-and-filter/chips-and-filter.component';
 import { GenericCardComponent } from './components/generic-card/generic-card.component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 
 @NgModule({
   declarations: [
@@ -83,6 +86,8 @@ import { GenericCardComponent } from './components/generic-card/generic-card.com
     AllowTemplateViewDirective,
     GenericSearchComponent,
     SearchCompetencyComponent,
+    SearchbarComponent,
+    ChipsAndFilterComponent,
     GenericCardComponent
   ],
   imports: [
@@ -98,6 +103,7 @@ import { GenericCardComponent } from './components/generic-card/generic-card.com
     MatButtonModule,
     MatTableModule,
     MatPaginatorModule,
+    OverlayModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
   ],
@@ -134,6 +140,8 @@ import { GenericCardComponent } from './components/generic-card/generic-card.com
     AllowTemplateViewDirective,
     GenericSearchComponent,
     SearchCompetencyComponent,
+    SearchbarComponent,
+    ChipsAndFilterComponent,
     GenericCardComponent
   ],
 })

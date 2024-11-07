@@ -40,4 +40,19 @@ export const CHAT_MESSAGES = {
             color: 'primary',
         },
     ],
+    GENERIC_CARD_MY_CONNECTION_BTN_CONFIG: [
+        {
+            label: 'CHAT',
+            action: 'chat',
+            color: 'light',
+        },
+        {
+            label: 'REQUEST_SESSION',
+            action: 'requestSession',
+            color: 'primary',
+            hasCondition: true,
+            is_mentor: true,
+            onCheck: 'is_mentor'
+        },
+    ],
 };

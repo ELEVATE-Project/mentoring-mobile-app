@@ -16,5 +16,7 @@ export const PAGE_IDS = {
   resetPassword: "RESET_PASSWORD_PAGE",
   otp: "OTP_PAGE",
   editProfile: "EDIT_PROFILE",
+  myConnections: "MY_CONNECTIONS",
+  mentorSearchDirectory: "MENTOR_SEARCH_DIRECTORY",
   requests: "REQUESTS"
 };

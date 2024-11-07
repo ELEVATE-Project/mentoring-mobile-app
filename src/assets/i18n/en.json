@@ -283,6 +283,9 @@
     "PROFILE_EXIT_HEADER_LABEL": "Save Data?",
     "DONOT_SAVE": "Don't Save",
     "ENTER_MIN_CHARACTER": "Please enter at least three characters to search.",
+    "MY_CONNECTIONS": "My connections",
+    "SEARCH_RESULTS_NOT_FOUND": "Search results not found",
+    "NO_RESULT_SUB_HEADER": "Looks like we couldn’t find what you were looking for, try searching for something else.",
     "MULTIPLE_MESSAGE_REQ":"You cannot send any more messages till your message request is accepted.",
     "FIRST_MSG_REQ_INFO_TITLE":"Your first message to {{name}}",
     "FIRST_MSG_REQ_INFO_SUBTITLE":"You are allowed to send only one message till your message request is accepted",
@@ -303,5 +306,10 @@
     "RECEIVED": "Received",
     "VIEW_MESSAGE": "View Message",
     "REQUEST_SESSION": "Request session",
-    "CHAT": "Chat"
+    "CHAT": "Chat",
+    "EXPLORE_MENTORS": "Explore mentors",
+    "SEARCH_RESULTS_NOT_FOUND_HEADER": "This space looks empty",
+    "NO_RESULT_SUB_HEADER_MENTEE": "Expand your network! Book slots or message experienced professionals to get connected.",
+    "NO_RESULT_SUB_HEADER_MENTOR": "Connected mentees will appear here when you accept their request. Keep your calender updated to show your availability.",
+    "SET_CALENDAR": "Set Calendar"
 }

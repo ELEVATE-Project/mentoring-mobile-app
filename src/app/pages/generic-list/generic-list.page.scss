@@ -1,0 +1,14 @@
+.search-navigation{
+    display: flex;
+    justify-content: space-between;
+    width: -webkit-fill-available;
+}
+.search-result-label{
+    display: flex;
+    align-items: center;
+}
+.search-result-count{
+    display: flex;
+    padding-left: 18%;
+}
+

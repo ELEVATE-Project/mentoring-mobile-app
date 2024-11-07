@@ -2,7 +2,7 @@
   <div class="generic-card-header d-grid" *ngIf="meta">
     <div class="d-flex flex-align-items-center mx-10">
       <ion-icon [ngClass]="meta.isSent ? 'rotate-icon-sent' : 'rotate-icon-receive'" name="arrow-back-outline"></ion-icon>
-      <p class="max-width-70" style="margin: 2px 5px;"> {{ meta.isSent ? 'SENT' : 'RECEIVED' | translate}} </p>
+      <p class="max-width-70" style="margin: 2px 5px;"> {{ meta.isSent ? ('SENT' | translate) : ('RECEIVED' | translate)}} </p>
     </div>
     <div class="d-flex flex-align-items-center mx-10">
       <ion-icon name="chatbox"></ion-icon>
@@ -27,13 +27,15 @@
           </ion-label>
         </ion-item>
         <div class="d-flex flex-justify-flex-end" [ngClass]="{'flex-justify-start': buttonConfig?.length > 1}">
-          <ion-button
-            *ngFor="let button of buttonConfig"
-            [color]="button?.color"
-            (click)="handleButtonClick(button?.action, (data?.id || data?.user_id)); $event.stopPropagation()"
-          >
-            {{ button?.label | translate}}
-          </ion-button>
+          <ng-container *ngFor="let button of buttonConfig">
+            <ion-button
+              *ngIf="showButton(button, data)"
+              [color]="button?.color"
+              (click)="handleButtonClick(button?.action, (data?.id || data?.user_id)); $event.stopPropagation()"
+            >
+              {{ button?.label | translate }}
+            </ion-button>
+          </ng-container>
         </div>
       </ion-col>
     </ion-row>

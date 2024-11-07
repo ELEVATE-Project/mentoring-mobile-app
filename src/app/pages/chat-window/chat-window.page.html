@@ -57,7 +57,7 @@
 </ion-content>
 <ion-footer *ngIf="info.created_by === info.user_id  && info.status != 'ACCEPTED'"> 
   <ion-toolbar>
-    <div  class="flex-box "> 
+    <div  class="flex-box " style="padding-left: 5%;"> 
       <ion-input type="text" placeholder="Type a message..." [(ngModel)]="message" class="message-input" [maxlength]="messageLimit"></ion-input>
     <ion-fab-button size="small" (click)="sendRequest()" style="width: 50px; height: 40px;">
       <ion-icon name="send" style="padding: 10px;"></ion-icon>

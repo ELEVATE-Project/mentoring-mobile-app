@@ -54,3 +54,19 @@ export const DASHBOARD: IFORM = {
 	"type": "dashboard",
 	"sub_type": "dashboardForm",
 }
+
+export const FILTER_ROLES = {
+	"title": "Roles",
+	"name": "roles",
+	"options": [
+		{
+			"label": "Mentor",
+			"value": "mentor"
+		},
+		{
+			"label": "Mentee",
+			"value": "Mentee"
+		}
+	],
+	"type": "checkbox"
+}

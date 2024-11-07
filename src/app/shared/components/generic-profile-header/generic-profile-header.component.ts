@@ -58,6 +58,8 @@ export class GenericProfileHeaderComponent implements OnInit {
               this.toast.showToast("PROFILE_LINK_COPIED","success");
             }
         break;
+      case 'requestSession':
+        this.router.navigate([`/${CommonRoutes.MY_CONNECTIONS}`]);
     }
   }
 
