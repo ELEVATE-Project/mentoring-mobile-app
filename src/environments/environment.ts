@@ -1,18 +1,21 @@
 export const environment = {
-	production: false ,
-	name: window['env' as any]['name' as any] ,
-	baseUrl: window['env' as any]['baseUrl'] ,
-	sqliteDBName: window['env' as any]['sqliteDBName' as any] ,
-	deepLinkUrl: window['env' as any]['deepLinkUrl'],
-	privacyPolicyUrl: window['env' as any]['privacyPolicyUrl' as any] ,
-	termsOfServiceUrl: window['env' as any]['termsOfServiceUrl' as any] ,
-	recaptchaSiteKey: window['env' as any]['recaptchaSiteKey'] ,
-	recaptchaSiteKeyOld: window['env' as any]['recaptchaSiteKeyOld' as any] ,
-	restictedPages: window['env' as any]['restictedPages'],
-	unauthorizedRedirectUrl: window['env' as any]['unauthorizedRedirectUrl' as any] ,
-	supportEmail: window['env' as any]['supportEmail' as any] ,
-	isAuthBypassed: window['env' as any]['isAuthBypassed'] ,
-	password: window['env' as any]['password'] 
-}
+    production: false,
+    name: 'debug environment',
+    baseUrl: 'https://dev.elevate-apis.shikshalokam.org',
+    sqliteDBName: 'mentoring.db',
+    deepLinkUrl: 'https://mentored.shikshalokam.org',
+    privacyPolicyUrl:'https://shikshalokam.org/mentoring/privacy-policy',
+    termsOfServiceUrl:'https://shikshalokam.org/mentoring/term-of-use',
+    supportEmail: "mentoredtest1@yopmail.com",
+    recaptchaSiteKey:"",
+    restictedPages: [],
+    isAuthBypassed: false,
+    unauthorizedRedirectUrl: "/auth/login",
+    password:{
+      minLength:10,
+      regexPattern: "^(?=(?:.*[A-Z]){2})(?=(?:.*[0-9]){2})(?=(?:.*[!@#%$&()\\-`.+,]){3}).{11,}$",
+      errorMessage:"Password should contain at least one uppercase letter, one number and one special character."
+    },
+  };
 
 
