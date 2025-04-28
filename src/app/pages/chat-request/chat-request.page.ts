@@ -91,7 +91,7 @@ export class ChatRequestPage implements OnInit {
     };
     this.httpService.post(payload).then((resp) => {
       this.info.status = 'ACCEPTED';
-        this.router.navigate([CommonRoutes.CHAT, resp?.result?.meta.room_id],{queryParams:{id:resp?.result?.id}});
+        this.router.navigate([CommonRoutes.CHAT, resp?.result?.meta.room_id],{queryParams:{id:resp?.result?.id}, replaceUrl: true });
     });
   }
 
