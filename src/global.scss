@@ -50,6 +50,8 @@
   --dark-grey: rgb(49, 52, 59);
   --green: rgb(20, 189, 20);
   --blue: #1b6dff;
+  --background-color : #fff;
+  --text-color : #000;
   input:-webkit-autofill {
     height: 0px;
     -webkit-box-shadow: 0 0 0 10px white inset;
@@ -90,10 +92,18 @@ h5,
 h4,
 h3,
 h2,
-h1 {
+h1, 
+p, 
+div,
+ion-label,
+ion-button {
   font-family: "NotoSans-Bold";
+  // color: var(--text-color);
 }
 
+body{
+  background-color: var(--background-color);
+}
 .header-md::after {
   background-image: none;
 }

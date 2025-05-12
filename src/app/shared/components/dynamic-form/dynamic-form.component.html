@@ -8,7 +8,7 @@
           myForm.get(control.name)?.touched && myForm.get(control.name)?.invalid
       }"
     >
-    <div *ngIf="control.label !== '' && !['rating'].includes(control.type) && !['chip'].includes(control.type) && !['search'].includes(control.type)" class="d-flex flex-align-items-center">
+    <div *ngIf="control.label !== '' && !['rating'].includes(control.type) && !['chip'].includes(control.type) && !['search'].includes(control.type)" class="d-flex flex-align-items-center p-rel">
       <ion-label position="stacked">
         {{ control.label }}&nbsp;<span *ngIf="control?.validators['required']==true" class="star-icon-red">*</span>
       </ion-label>
@@ -104,7 +104,7 @@
         ></owl-date-time>
         <ion-icon class="calendar-icon" (click)="dateInput.click()" name="calendar-outline"></ion-icon>
       </div> 
-      <ion-select
+      <ion-select class="p-rel"
         *ngIf="control.type === 'select'"
         [multiple]="control.multiple"
         [formControlName]="control.name"
@@ -120,7 +120,7 @@
           >{{ option.label }}</ion-select-option
         >
       </ion-select>
-      <app-input-chip
+      <app-input-chip class="p-rel"
         *ngIf="control.type === 'chip'"
         [formControlName]="control.name"
         [label]="control.alertLabel?control.alertLabel:control.label"
@@ -131,7 +131,7 @@
         [validators]="control.validators"
         [allowCustomEntities]="control.meta.allow_custom_entities"
       ></app-input-chip>
-      <app-search-and-select
+      <app-search-and-select 
         *ngIf="control.type === 'search'"
         [formControlName]="control.name"
         [control]="control"

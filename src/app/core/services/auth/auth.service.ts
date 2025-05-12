@@ -146,6 +146,8 @@ export class AuthService {
     this.localStorage.delete(localKeys.USER_ROLES);
     this.localStorage.delete(localKeys.TOKEN);
     this.localStorage.delete(localKeys.IS_ROLE_REQUESTED);
+    document.documentElement.style.setProperty('--ion-color-primary', '#832215');
+    document.documentElement.style.setProperty('--ion-color-secondary', '#ffffff');
     await this.db.clear()
     this.userService.token = null;
     this.userService.userEvent.next(null);

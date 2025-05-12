@@ -37,3 +37,12 @@ ion-chip{
     align-items: center;
     padding-right: 10px;
 }
+.resources-link{
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--ion-color-primary);
+    margin: 8px 10px;
+    width: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+}

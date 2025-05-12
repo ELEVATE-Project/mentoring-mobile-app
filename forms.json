@@ -943,7 +943,7 @@
   {
     "type": "managersSession",
     "sub_type": "managersSessionForm",
-    "action": "skip",
+    "action": "update",
     "data": {
       "template_name": "defaultTemplate",
       "fields": {
@@ -1336,6 +1336,65 @@
               "labelForAddButton": "Select Medium"
             },
             "multiple": true
+          },{
+            "name": "pre",
+            "label": "Pre  session resources",
+            "class": "ion-no-margin",
+            "value": [],
+            "type": "search",
+            "position": "",
+            "disabled": false,
+            "validators": {
+              "required": false
+            },
+            "meta": {
+              "showSelectAll": true,
+              "multiSelect": true,
+              "showAddOption": {
+                "showAddButton": true,
+                "addChipLabel": ""
+              },
+              "allow_custom_entities": false,
+              "allow_filtering": false,
+              "addPopupType": "file",
+              "add_link":true,
+              "labelForAddButton": "Add resource"
+            },
+            "info": [
+              {
+                 "message": "Supported formats: PDF, WORD, PPT, IMAGES, VIDEO, AUDIO,LINKS,"
+              }
+            ]
+          },
+          {
+            "name": "post",
+            "label": "Post  session resources",
+            "class": "ion-no-margin",
+            "value": [],
+            "type": "search",
+            "position": "",
+            "disabled": true,
+            "validators": {
+              "required": false
+            },
+            "meta": {
+              "showSelectAll": true,
+              "multiSelect": true,
+              "showAddOption": {
+                "showAddButton": true,
+                "addChipLabel": ""
+              },
+              "allow_custom_entities": false,
+              "allow_filtering": false,
+              "addPopupType": "file",
+              "add_link":true,
+              "labelForAddButton": "Add resource"
+            },
+            "info": [
+              {
+                "message": "Supported formats: PDF, WORD, PPT, IMAGES, VIDEO, AUDIO,LINKS,"
+              }
+            ]
           }
         ]
       }

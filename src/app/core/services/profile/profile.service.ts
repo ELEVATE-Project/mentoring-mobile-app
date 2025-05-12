@@ -313,4 +313,20 @@ export class ProfileService {
      return false
     }
   }
+
+  async getTheme(){
+    const config = {
+      url: urlConstants.API_URLS.THEME_READ,
+    };
+    try {
+      let resp: any = await this.httpService.get(config);
+      const theme = resp?.result;
+      document.documentElement.style.setProperty('--ion-color-primary', theme.primaryColor);
+      document.documentElement.style.setProperty('--ion-color-secondary', theme.secondaryColor);
+      document.documentElement.style.setProperty('--background-color', theme.backgroundColor);
+      // document.documentElement.style.setProperty('--text-color', theme.textColor);
+    }
+    catch (error) {
+    }
+  }
 }

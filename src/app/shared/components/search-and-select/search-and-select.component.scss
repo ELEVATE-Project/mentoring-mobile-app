@@ -14,11 +14,15 @@ ion-chip {
     text-transform: capitalize;
  }
 
+ .p-rel{
+  position: relative;
+  width: fit-content;
+ }
  .info {
     font-size: 24px !important;
     margin-top: 6px;
     z-index: 1000;
-    left : 95px;
+   right: 0px;
     position: absolute;
   }
 

@@ -379,5 +379,9 @@
     "EDIT_LINK": "Edit link",
     "NO_MESSAGE_DESCRIPTION":"Conversations with your connections will appear here.",
     "MESSAGE_TEXT_LIMIT":"Message text limit has been exceeded.",
-    "ACCEPTED_MESSAGE_REQ":"You have accepted this message request, and {{name}} is added to your connections."
+    "ACCEPTED_MESSAGE_REQ":"You have accepted this message request, and {{name}} is added to your connections.",
+    "POST_RESOURCES": "Post resources",
+    "PRE_RESOURCES": "Pre resources",
+    "INVALID_LINK": "Invalid link, Please enter a valid link",
+    "ENTER_LINK": "Enter link"
 }

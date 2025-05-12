@@ -1,5 +1,6 @@
 <div class="field-wrapper" *ngFor="let item of sessionData.form">
-  <div *ngIf="!sessionData?.menteeForm?.includes(item.title) || (sessionData?.menteeForm?.includes(item.title)&&!isMentor)">
+  <div
+    *ngIf="!sessionData?.menteeForm?.includes(item.title) || (sessionData?.menteeForm?.includes(item.title)&&!isMentor)">
     <p class="session-detail-heading">{{item.title | translate }}</p>
     <div *ngIf="isArray(sessionData.data[item.key]); else elseBlock">
       <ion-chip outline="true" class="ion-margin-top" *ngFor="let chip of sessionData.data[item.key]">
@@ -7,10 +8,12 @@
       </ion-chip>
     </div>
     <ng-template #elseBlock>
-      <p *ngIf="item?.key=='duration';else elseBlock2" class="value">{{sessionData.data.duration.hours}} {{"HOURS" | translate}} {{sessionData.data.duration.minutes}} {{"MINUTES" | translate}}</p>
+      <p *ngIf="item?.key=='duration';else elseBlock2" class="value">{{sessionData.data.duration.hours}} {{"HOURS" |
+        translate}} {{sessionData.data.duration.minutes}} {{"MINUTES" | translate}}</p>
     </ng-template>
     <ng-template #elseBlock2>
-      <p *ngIf="item?.key=='startDate' || item?.key=='endDate';else elseBlock3" class="value">{{sessionData.data[item.key] | date:'MMM d, y, h:mm a'}}</p>
+      <p *ngIf="item?.key=='startDate' || item?.key=='endDate';else elseBlock3" class="value">
+        {{sessionData.data[item.key] | date:'MMM d, y, h:mm a'}}</p>
     </ng-template>
     <ng-template #elseBlock3>
       <div class="d-flex" *ngIf="item?.key=='mentee_count';else elseBlock4">
@@ -30,5 +33,32 @@
       <p *ngIf="item?.key=='experience'" class="value">{{sessionData.data[item.key]}} {{"YEARS"|translate}}</p>
       <p *ngIf="item?.key!='experience'" class="value">{{sessionData.data[item.key]}}</p>
     </ng-template>
+  </div>
+</div>
+<div *ngIf="preResources.length > 0">
+  <p class="session-detail-heading" style="margin: 0 10px;">{{ 'PRE_RESOURCES' | translate }}</p>
+  <div *ngFor="let resource of preResources" class="resources-link">
+    <ng-container [ngSwitch]="getFileType(resource)">
+      <img *ngSwitchCase="'image'" [src]="resource.link" alt="{{ resource.name }}" style="max-width: 100%; height: auto;" />
+      <div *ngSwitchCase="'pdf'">
+        <img src="assets/icons/pdf-icon.png" alt="PDF Icon" style="width: 24px; vertical-align: middle;" />
+        <a [href]="resource.link" target="_blank">{{ resource.name }}</a>
+      </div>
+      <a *ngSwitchDefault [href]="resource.link" target="_blank">{{ resource.name }}</a>
+    </ng-container>
+  </div>
+</div>
+
+<div *ngIf="postResources.length > 0 && sessionData?.data?.status?.value == 'COMPLETED'">
+  <p class="session-detail-heading" style="margin: 0 10px;">{{ 'POST_RESOURCES' | translate }}</p>
+  <div *ngFor="let resource of postResources" class="resources-link">
+    <ng-container [ngSwitch]="getFileType(resource)">
+      <img *ngSwitchCase="'image'" [src]="resource.link" alt="{{ resource.name }}" style="max-width: 100%; height: auto;" />
+      <div *ngSwitchCase="'pdf'">
+        <img src="assets/icons/pdf-icon.png" alt="PDF Icon" style="width: 24px; vertical-align: middle;" />
+        <a [href]="resource.link" target="_blank">{{ resource.name }}</a>
+      </div>
+      <a *ngSwitchDefault [href]="resource.link" target="_blank">{{ resource.name }}</a>
+    </ng-container>
   </div>
 </div>

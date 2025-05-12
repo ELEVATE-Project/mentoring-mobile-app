@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash-es';
-import { ToastService } from 'src/app/core/services';
+import { AttachmentService, ToastService } from 'src/app/core/services';
 import { ThemePalette } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { debounceTime } from 'rxjs/operators';
@@ -129,7 +129,10 @@ export class DynamicFormComponent implements OnInit {
   dependedParentDate: any;
   isMobile = window.innerWidth <= 950;
 
-  constructor(private fb: UntypedFormBuilder, private toast: ToastService) {}
+  constructor(private fb: UntypedFormBuilder, private toast: ToastService,
+        private attachment: AttachmentService,
+    
+  ) {}
   ngOnInit() {
     this.jsonFormData.controls.find((element, index) => {
       if(element.type == "select"){
@@ -272,5 +275,29 @@ export class DynamicFormComponent implements OnInit {
       event.formControl = componentInstance
       this.customEventEmitter.emit(event)
     }    
+  }
+
+
+  upload(event: any, control: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.myForm.get(control.name).setValue(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  
+  uploadPhoto(action: string, control: any) {
+    if (action === 'ADD_PHOTO') {
+      (document.querySelector(`#${control.name}-file`) as HTMLInputElement).click();
+    } else if (action === 'REMOVE_PHOTO') {
+      this.myForm.get(control.name).setValue('');
+    }
+  }
+  
+  clearFileInput(control: any) {
+    (document.querySelector(`#${control.name}-file`) as HTMLInputElement).value = '';
   }
 }

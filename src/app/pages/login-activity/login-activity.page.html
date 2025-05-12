@@ -47,7 +47,7 @@
                   </ion-col>
                   <ion-col [hidden]="!(data.status === 'ACTIVE')" size="3" class="d-flex flex-justify-center flex-align-items-center active-button">
                     <ng-template [ngIf]="data.status === 'ACTIVE' && data.login_time">
-                      <ion-button size="small" (click)="sessionId === data.id ? logout() : logoutInactive(data.id)">
+                      <ion-button size="small" color="primary" (click)="sessionId === data.id ? logout() : logoutInactive(data.id)">
                         {{ "LOGOUT" | translate }}
                       </ion-button>
                     </ng-template>

@@ -221,6 +221,7 @@ export class PrivatePage implements OnInit {
     this.platform.ready().then(() => {
       this.network.netWorkCheck();
       this.profile.getChatToken();
+      this.profile.getTheme();
       setTimeout(async () => {
         this.languageSetting();
         this.setHeader();

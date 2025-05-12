@@ -158,9 +158,7 @@ export class HomePage implements OnInit {
     }
   }
   async getUser() {
-    let data = await this.profileService.getProfileDetailsFromAPI()
     this.isMentor = this.profileService.isMentor
-    this.user = data
     if (!this.user?.terms_and_conditions) {
       // this.openModal();
     }
