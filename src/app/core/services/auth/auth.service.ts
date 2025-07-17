@@ -45,6 +45,7 @@ export class AuthService {
     }
     try {
       let data: any = await this.httpService.post(config);
+      
       await this.setUserInLocal(data);
       let user = await this.profileService.getProfileDetailsFromAPI();
       this.userService.userEvent.next(user);
@@ -77,15 +78,15 @@ export class AuthService {
     }
   }
   async setUserInLocal(data) {
-    const result = _.pick(data.result, ['refresh_token', 'access_token']);
-    if (!result.access_token) { throw Error(); };
-    this.userService.token = result;
-    await this.localStorage.setLocalData(localKeys.TOKEN, result);
-    this.user = data.result.user;
+    // const result = _.pick(data.result, ['refresh_token', 'access_token']);
+    // if (!result.access_token || result?.accToken) { throw Error(); };
+    // this.userService.token = result;
+    // await this.localStorage.setLocalData(localKeys.TOKEN, result);
+    this.user = data;
     await this.localStorage.setLocalData(localKeys.USER_ROLES, this.profileService.getUserRole(this.user))
     await this.profileService.getUserRole(this.user);
-    this.profileService.isMentor = (this.user?.user_roles[0]?.title === 'mentor')
-    await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, this.user.preferred_language.value);
+    this.profileService.isMentor = (this.user?.organizations[0].roles[0]?.title === 'mentor')
+    await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, this.user.preferred_language);
     this.translate.use(this.user.preferred_language.value)
     return this.user;
   }
@@ -142,6 +143,7 @@ export class AuthService {
   }
 
   async clearLocalData(){
+    localStorage.clear();
     this.localStorage.delete(localKeys.USER_DETAILS);
     this.localStorage.delete(localKeys.USER_ROLES);
     this.localStorage.delete(localKeys.TOKEN);

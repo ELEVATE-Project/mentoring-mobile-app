@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash-es';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, ToastService } from 'src/app/core/services';
+import { PreAlertModalComponent } from '../pre-alert-modal/pre-alert-modal.component';
 
 @Component({
   selector: 'app-search-and-select',
@@ -45,7 +46,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     private alertController: AlertController,
     private translateService: TranslateService,
     private toast:ToastService,
-    private httpService : HttpService
+    private httpService : HttpService,
+    private modalController: ModalController
   ) { }
 
   onChange = (quantity) => {};
@@ -175,47 +177,23 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
 
   async addLink(data){
     data.value = data.value || [];
-    const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: this.translateService.instant('ADD_LINK'),
-      inputs: [
-      {
-        name: 'name',
-        type: 'text',
-        placeholder: 'Enter link',
-        attributes: {
-        maxlength: 50,
-        }
+    const modal = await this.modalController.create({
+      component: PreAlertModalComponent,
+      cssClass: 'pre-custom-modal',
+      componentProps: {
+        data: data, 
+        type: 'link',
+        heading: 'ADD_LINK'
       },
-      ],
-      buttons: [
-      {
-        text: this.translateService.instant('CANCEL'),
-        role: 'cancel',
-        cssClass: 'secondary',
-        handler: () => { },
-      },
-      {
-        text: this.translateService.instant('OK'),
-        handler: (alertData) => {
-        if (alertData.name && alertData.name.startsWith('http://') || alertData.name.startsWith('https://')) {
-          let obj = {
-          name: alertData.name,
-          type: data.name,
-          isLink: true,
-          isNew:true
-          };
-          data.value.push(obj);
-          return true; 
-        } else {
-          this.toast.showToast(this.translateService.instant('INVALID_LINK'), 'danger');
-          return false; 
-        }
-        }
-      }
-      ],
-      backdropDismiss: false // Prevent dismissing the modal by clicking outside
+      backdropDismiss: false
     });
-    await alert.present();
+  
+    modal.onDidDismiss().then((result) => {
+      if (result.data && result.data.success) {
+        data.value.push(result.data.data);
+      }
+    });
+  
+    return await modal.present();
   }
 }

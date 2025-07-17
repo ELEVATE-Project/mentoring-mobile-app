@@ -44,7 +44,7 @@
   <div *ngIf="segmentType === 'slot-requests' && !slotRequests?.length">
     <app-no-data-found [noResult]="noResult"> </app-no-data-found>
   </div>
-  <div *ngIf="segmentType === 'message-requests' && !data?.length" class="d-flex flex-justify-center">
+  <div *ngIf="segmentType === 'message-requests' && !data?.length" >
     <app-no-data-found [noResult]="noResult"> </app-no-data-found>
   </div>
 </ion-content>

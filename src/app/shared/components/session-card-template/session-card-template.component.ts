@@ -31,6 +31,6 @@ export class SessionCardTemplateComponent implements OnInit {
   }
 
   onCardClick(data){
-    data.sessionId ? this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data.sessionId}`]) : this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data._id}`]);
+    data.sessionId ? this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data.sessionId}`],{replaceUrl:true}) : this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${data._id}`],{replaceUrl:true});
   }
 }

@@ -11,6 +11,7 @@ import { HttpService, LocalStorageService, ToastService, UtilService } from 'src
   styleUrls: ['./search-popover.component.scss'],
 })
 export class SearchPopoverComponent implements OnInit {
+
   @Input() data: any;
   showFilterHeader = true
   columnData = [
@@ -31,6 +32,7 @@ export class SearchPopoverComponent implements OnInit {
   maxCount;
   countSelectedList:any = 0 ;
   user;
+  roles: any;
   sortingData;
   setPaginatorToFirstpage:any = false;
   actionButtons = {
@@ -61,6 +63,7 @@ export class SearchPopoverComponent implements OnInit {
   async ngOnInit() {
     this.maxCount = await this.localStorage.getLocalData(localKeys[this.data.control.meta.maxCount])
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    this.roles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
     this.selectedList = this.data.selectedData ? this.data.selectedData : this.selectedList
     if (this.data.viewListMode) {
       this.selectedList.forEach((ele) => {
@@ -112,12 +115,15 @@ export class SearchPopoverComponent implements OnInit {
     const typeQueryParam = this.selectedFilters && this.selectedFilters.type
     ? '&' + this.data.control.meta.filters.type[0].key +'=' + this.selectedFilters.type.map(des => des.value).join(',')
     : '';
-    
-    let queryString = organizationsQueryParam + designationQueryParam + typeQueryParam;
+    let queryString = organizationsQueryParam + designationQueryParam + 
+    ((this.data.sessionType === 'PRIVATE' && (this.data.formConfig || Boolean(this.data.isCreator)) && !this.roles.includes("session_manager")) 
+    ? '&connected_mentees=true' 
+    : typeQueryParam);
+
     if(this.data.control.id){
       queryString = queryString + '&session_id=' + this.data.control.id
     }
-    const sorting = `&order=${this.sortingData?.order || ''}&sort_by=${this.sortingData?.sort_by || ''}&mentorId=${this.data?.mentorId ? this.data?.mentorId : (this.data.isManagePage ? '' : this.user.id)}`;
+    const sorting = `&order=${this.sortingData?.order || ''}&sort_by=${this.sortingData?.sort_by || ''}&mentorId=${this.data?.mentorId ? this.data?.mentorId :  this.user.id}`;
     queryString = queryString + sorting
     const config = {
       url: urlConstants.API_URLS[this.data.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + queryString,
@@ -144,6 +150,11 @@ export class SearchPopoverComponent implements OnInit {
     this.modalController.dismiss(this.selectedList);
   }
 
+  async onClearSearch(event: any) {
+    this.searchText =''
+    this.tableData = await this.getMenteelist();
+    }
+
   async filtersChanged(event) {
     this.selectedFilters = event
     this.page=1;
@@ -151,10 +162,11 @@ export class SearchPopoverComponent implements OnInit {
     this.tableData = await this.getMenteelist()
   }
 
-  async onSearch(){
-    this.page=1;
-    this.setPaginatorToFirstpage= true
-    this.tableData = await this.getMenteelist()
+  async onSearch(event: any){
+    this.searchText= event.searchText;
+      this.page=1;
+      this.setPaginatorToFirstpage= true
+      this.tableData = await this.getMenteelist()
   }
 
   onButtonCLick(data: any) {

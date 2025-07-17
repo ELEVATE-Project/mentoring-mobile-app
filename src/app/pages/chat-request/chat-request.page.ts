@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { replace } from 'lodash';
 import { CHAT_MESSAGES } from 'src/app/core/constants/chatConstants';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService, ToastService } from 'src/app/core/services';
+import { HttpService, ToastService, UtilService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 @Component({
   selector: 'app-chat-request',
@@ -30,7 +30,8 @@ export class ChatRequestPage implements OnInit {
     private toast: ToastService,
     private alert: AlertController,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    private utilService: UtilService
   ) {
     routerParams.params.subscribe((parameters) => {
       this.id = parameters?.id;
@@ -53,9 +54,9 @@ export class ChatRequestPage implements OnInit {
       if (resp?.result?.status == 'REQUESTED') {
         this.message = '';
       }
-      // else if(resp?.result?.status == 'ACCEPTED') {
-      //   this.router.navigate([CommonRoutes.CHAT, resp?.result?.meta.room_id],{queryParams:{id:resp?.result?.id}, replaceUrl: true });
-      // }
+      else if(resp?.result?.status == 'ACCEPTED') {
+        this.router.navigate([CommonRoutes.CHAT, resp?.result?.meta.room_id],{queryParams:{id:resp?.result?.id}, replaceUrl: true });
+      }
       this.info.status = !resp?.result?.status
         ? 'PENDING'
         : resp?.result?.status;
@@ -95,36 +96,29 @@ export class ChatRequestPage implements OnInit {
       const message = this.translate.instant('ACCEPTED_MESSAGE_REQ', { name });
       this.toast.showToast(message, 'success');
       this.info.status = 'ACCEPTED';
-        this.router.navigate([CommonRoutes.CHAT, resp?.result?.meta.room_id],{queryParams:{id:resp?.result?.id}});
+        this.router.navigate([CommonRoutes.CHAT, resp?.result?.meta.room_id],{replaceUrl: true, queryParams:{id:resp?.result?.id}});
     });
   }
 
-  async rejectConfirmation() {
+   async rejectConfirmation() {  
     let texts: any;
     this.translate
       .get(['MESSAGE_REQ_REJECT', 'REJECT', 'CANCEL'])
       .subscribe((text) => {
         texts = text;
       });
-    const alert = await this.alert.create({
+    let msg = {
       header: texts['REJECT'] + '?',
       message: texts['MESSAGE_REQ_REJECT'],
-      buttons: [
-        {
-          text: texts['REJECT'],
-          role: 'cancel',
-          handler: () => {
-            this.rejectRequest();
-          },
-        },
-        {
-          text: texts['CANCEL'],
-          handler: () => {},
-        },
-      ],
-    });
-
-    await alert.present();
+      cancel: 'CANCEL',
+      submit: 'Reject',
+    };
+    const response:any = await this.utilService.alertPopup(msg);
+    if (response) {
+     this.rejectRequest();
+    } else {
+      console.log('User canceled the rejection');
+    }
   }
   rejectRequest() {
     const payload = {

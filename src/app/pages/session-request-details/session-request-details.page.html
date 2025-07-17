@@ -9,7 +9,7 @@
     <h2 class="profile-name">{{apiResponse?.user_details?.name | titlecase}}</h2>
     <p class="profile-description">
       <ng-container *ngIf="apiResponse?.user_details?.designation?.length">
-        <ng-container *ngFor="let item of apiResponse.user_details.designation.slice(0,2); let last = last">
+        <ng-container *ngFor="let item of apiResponse.user_details.designation let last = last">
           {{ item.label | titlecase }}<span *ngIf="!last">, </span>
         </ng-container>
       </ng-container>
@@ -30,15 +30,15 @@
     </ion-label>    
 
     <p class="request-info text-left">
-      You have requested a slot at <strong style="padding-left: 5px;">
+      {{apiResponse?.user_details?.name | titlecase}} requested a slot at<strong style="padding-left: 5px;">
         {{
-          apiResponse.start_date * 1000 | date: 'dd MMM, yyyy'
+           apiResponse.start_date * 1000 | date: 'dd MMM, yyyy'
         }},
         {{
-          apiResponse.start_date * 1000 | date: 'h:mm a'
+          formatUnixTime(apiResponse.start_date)
         }} -
         {{
-          apiResponse.end_date * 1000 | date: 'h:mm a'
+          formatUnixTime(apiResponse.end_date)
         }}
       </strong>
     </p>
@@ -155,8 +155,8 @@
 
                 <ion-row class="px-4">
                   <ion-col size="3">
-                    <p class="margin-none text-left ">{{ event?.startTime }}</p> <br />
-                    <p class="margin-none text-left ">{{ event?.endTime }}</p>
+                    <p class="margin-none text-left ">{{  formatUnixTime(event?.startTime)  }}</p> <br />
+                    <p class="margin-none text-left ">{{ formatUnixTime(event?.endTime) }}</p>
                   </ion-col>
                   <ion-col size="9" class="d-flex  ion-align-items-center"> <h3 class="margin-none session-title text-left">{{event?.title | titlecase}}</h3> </ion-col>
                 </ion-row>

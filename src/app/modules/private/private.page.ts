@@ -228,12 +228,18 @@ export class PrivatePage implements OnInit {
 
   async initializeApp() {
     await this.platform.ready();
-
     this.network.netWorkCheck();
-
-    await this.profile.getChatToken();
-
-    this.profile.getTheme();
+    let theme: any =  localStorage.getItem('theme');
+    if (theme) {
+      try {
+        theme = JSON.parse(theme);
+        document.documentElement.style.setProperty('--ion-color-primary', theme.primaryColor);
+        document.documentElement.style.setProperty('--ion-color-secondary', theme.secondaryColor);
+      } catch (error) {
+        console.error("Error parsing theme from localStorage:", error);
+      }
+    }
+    // this.profile.getTheme();
 
     await new Promise<void>((resolve) => {
       setTimeout(async () => {
@@ -252,7 +258,7 @@ export class PrivatePage implements OnInit {
               )
             : false;
         }
-
+        await this.profile.getChatToken();
         this.getUser();
         resolve();
       }, 0);
@@ -350,30 +356,6 @@ export class PrivatePage implements OnInit {
       })
       .catch((error) => {});
   }
-
-  getUser() {
-    this.profile.getProfileDetailsFromAPI().then((profileDetails) => {
-      this.adminAccess = profileDetails.permissions
-        ? this.permissionService.hasAdminAcess(
-            this.actionsArrays,
-            profileDetails?.permissions
-          )
-        : false;
-      this.user = profileDetails;
-      if (
-        (!environment['isAuthBypassed'] &&
-          profileDetails.profile_mandatory_fields &&
-          profileDetails.profile_mandatory_fields.length > 0) ||
-        (!profileDetails.about && !environment['isAuthBypassed'])
-      ) {
-        this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`], {
-          replaceUrl: true,
-          queryParams: { redirectUrl: '/tabs/home' },
-        });
-      }
-      this.isMentor = this.profile.isMentor;
-    });
-  }
   goToProfilePage() {
     this.menuCtrl.toggle();
     this.router.navigate([`${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
@@ -396,7 +378,35 @@ export class PrivatePage implements OnInit {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
+}
+
+getUser() {
+  let theme: any = localStorage.getItem('theme');
+  if (theme) {
+    try {
+      theme = JSON.parse(theme);
+      document.documentElement.style.setProperty('--ion-color-primary', theme.primaryColor);
+      document.documentElement.style.setProperty('--ion-color-secondary', theme.secondaryColor);
+    } catch (error) {
+      console.error("Error parsing theme from localStorage:", error);
+    }
   }
+  this.profile.getProfileDetailsFromAPI().then(profileDetails => {
+    if(profileDetails?.organizations && profileDetails?.organizations.length == 1){
+      this.authService.setUserInLocal(profileDetails);
+    }else if(profileDetails?.organizations && profileDetails?.organizations.length >1 ){  
+      // this.showOrganizationModal(profileDetails?.result?.user?.organizations);
+    }
+    this.adminAccess = profileDetails?.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,profileDetails?.permissions) : false;
+    this.user = profileDetails;
+    // !environment['isAuthBypassed'] && 
+    // !environment['isAuthBypassed'] && 
+    if (profileDetails?.profile_mandatory_fields && profileDetails?.profile_mandatory_fields.length > 0 || !profileDetails?.about) {
+      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`], { replaceUrl: true, queryParams: {redirectUrl: '/tabs/home'}});
+    }
+    this.isMentor = this.profile.isMentor;
+  })
+}
 
   async viewRoles() {
     const userRoles = await this.localStorage.getLocalData(

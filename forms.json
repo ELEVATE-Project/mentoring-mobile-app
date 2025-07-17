@@ -2,378 +2,427 @@
   {
     "type": "editProfile",
     "sub_type": "editProfileForm",
-    "action": "skip",
+    "action": "update",
     "data": {
       "templateName": "defaultTemplate",
       "fields": {
         "controls": [
           {
-            "name": "name",
-            "label": "Your name",
-            "value": "Agastya",
-            "class": "ion-no-margin",
-            "type": "text",
-            "position": "floating",
-            "placeHolder": "Please enter your full name",
-            "errorMessage": {
-              "required": "Enter your name",
-              "pattern": "This field can only contain alphabets"
-            },
-            "validators": {
-              "required": true,
-              "pattern": "^[^0-9!@#%$&()\\-`.+,/\"]*$"
-            },
-            "options": [],
-            "meta": {
-              "showValidationError": true,
-              "maxLength": 255
-            }
+              "name": "name",
+              "label": "Your name",
+              "value": "Agastya",
+              "class": "ion-no-margin",
+              "type": "text",
+              "position": "floating",
+              "placeHolder": "Please enter your full name",
+              "errorMessage": {
+                  "required": "Enter your name",
+                  "pattern": "This field can only contain alphabets"
+              },
+              "validators": {
+                  "required": true,
+                  "pattern": "^[^0-9!@#%$&()\\-`.+,/\"]*$"
+              },
+              "options": [],
+              "meta": {
+                  "showValidationError": true,
+                  "maxLength": 255
+              }
           },
           {
-            "name": "location",
-            "label": "Select your location",
-            "value": "ar",
-            "class": "ion-no-margin",
-            "type": "select",
-            "position": "floating",
-            "errorMessage": {
-              "required": "Please select your location"
-            },
-            "validators": {
-              "required": true
-            },
-            "options": [
-              {
-                "label": "Andhra Pradesh",
-                "value": "ap"
+              "name": "designation",
+              "label": "Designation",
+              "class": "ion-no-margin",
+              "value": [
+                  {
+                      "label": "Cluster officials",
+                      "value": "co"
+                  },
+                  {
+                      "label": "District education officer",
+                      "value": "deo"
+                  }
+              ],
+              "type": "chip",
+              "position": "",
+              "disabled": false,
+              "errorMessage": {
+                  "required": "Enter your designation"
               },
-              {
-                "label": "Arunachal Pradesh",
-                "value": "ar"
+              "validators": {
+                  "required": true
               },
-              {
-                "label": "Assam",
-                "value": "as"
+              "options": [
+                  {
+                      "label": "Block education officer",
+                      "value": "beo"
+                  },
+                  {
+                      "label": "Cluster officials",
+                      "value": "co"
+                  },
+                  {
+                      "label": "District education officer",
+                      "value": "deo"
+                  },
+                  {
+                      "label": "Head master",
+                      "value": "hm"
+                  },
+                  {
+                      "label": "Teacher",
+                      "value": "te"
+                  }
+              ],
+              "meta": {
+                  "entityType": "designation",
+                  "addNewPopupHeader": "Add a designation",
+                  "showSelectAll": true,
+                  "showAddOption": {
+                      "showAddButton": true,
+                      "addChipLabel": "Other"
+                  },
+                  "errorLabel": "Designation"
               },
-              {
-                "label": "Bihar",
-                "value": "br"
-              },
-              {
-                "label": "Chhattisgarh",
-                "value": "cg"
-              },
-              {
-                "label": "Goa",
-                "value": "ga"
-              },
-              {
-                "label": "Gujarat",
-                "value": "gj"
-              },
-              {
-                "label": "Haryana",
-                "value": "hr"
-              },
-              {
-                "label": "Himachal Pradesh",
-                "value": "hp"
-              },
-              {
-                "label": "Jharkhand",
-                "value": "jh"
-              },
-              {
-                "label": "Karnataka",
-                "value": "kn"
-              },
-              {
-                "label": "Kerala",
-                "value": "kl"
-              },
-              {
-                "label": "Madhya Pradesh",
-                "value": "mp"
-              },
-              {
-                "label": "Maharashtra",
-                "value": "mh"
-              },
-              {
-                "label": "Manipur",
-                "value": "mn"
-              },
-              {
-                "label": "Meghalaya",
-                "value": "ml"
-              },
-              {
-                "label": "Mizoram",
-                "value": "mz"
-              },
-              {
-                "label": "Nagaland",
-                "value": "nl"
-              },
-              {
-                "label": "Odisha",
-                "value": "od"
-              },
-              {
-                "label": "Punjab",
-                "value": "pb"
-              },
-              {
-                "label": "Rajasthan",
-                "value": "rj"
-              },
-              {
-                "label": "Sikkim",
-                "value": "sk"
-              },
-              {
-                "label": "Tamil Nadu",
-                "value": "tn"
-              },
-              {
-                "label": "Telangana",
-                "value": "ts"
-              },
-              {
-                "label": "Tripura",
-                "value": "tr"
-              },
-              {
-                "label": "Uttar Pradesh",
-                "value": "up"
-              },
-              {
-                "label": "Uttarakhand",
-                "value": "uk"
-              },
-              {
-                "label": "West Bengal",
-                "value": "wb"
-              }
-            ],
-            "meta": {
-              "entityType": "location",
-              "errorLabel": "Location"
-            },
-            "multiple": false
+              "multiple": true
           },
           {
-            "name": "designation",
-            "label": "Your role",
-            "class": "ion-no-margin",
-            "value": [
-              {
-                "label": "Cluster officials",
-                "value": "co"
+              "name": "experience",
+              "label": "Your experience in years",
+              "value": "3",
+              "class": "ion-no-margin",
+              "type": "text",
+              "position": "floating",
+              "placeHolder": "Ex. 5 years",
+              "errorMessage": {
+                  "required": "Enter your experience in years"
               },
-              {
-                "label": "District education officer",
-                "value": "deo"
-              }
-            ],
-            "type": "chip",
-            "position": "",
-            "disabled": false,
-            "errorMessage": {
-              "required": "Enter your role"
-            },
-            "validators": {
-              "required": true
-            },
-            "options": [
-              {
-                "label": "Block education officer",
-                "value": "beo"
+              "isNumberOnly": true,
+              "validators": {
+                  "required": true,
+                  "maxLength": 2
               },
-              {
-                "label": "Cluster officials",
-                "value": "co"
-              },
-              {
-                "label": "District education officer",
-                "value": "deo"
-              },
-              {
-                "label": "Head master",
-                "value": "hm"
-              },
-              {
-                "label": "Teacher",
-                "value": "te"
-              }
-            ],
-            "meta": {
-              "entityType": "designation",
-              "addNewPopupHeader": "Add a new role",
-              "showSelectAll": true,
-              "showAddOption": {
-                "showAddButton": true,
-                "addChipLabel": "Other"
-              },
-              "errorLabel": "Designation"
-            },
-            "multiple": true
+              "options": []
           },
           {
-            "name": "experience",
-            "label": "Your experience in years",
-            "value": "3",
-            "class": "ion-no-margin",
-            "type": "text",
-            "position": "floating",
-            "placeHolder": "Ex. 5 years",
-            "errorMessage": {
-              "required": "Enter your experience in years"
-            },
-            "isNumberOnly": true,
-            "validators": {
-              "required": true,
-              "maxLength": 2
-            },
-            "options": []
+              "name": "about",
+              "label": "Tell us about yourself",
+              "value": "QA",
+              "class": "ion-no-margin",
+              "type": "textarea",
+              "position": "floating",
+              "errorMessage": {
+                  "required": "This field cannot be empty",
+                  "pattern": "This field can only contain alphanumeric characters"
+              },
+              "placeHolder": "Please use only 150 characters",
+              "validators": {
+                  "required": true,
+                  "maxLength": 150,
+                  "pattern": "^[a-zA-Z0-9-.,s ]+$"
+              },
+              "options": []
           },
           {
-            "name": "about",
-            "label": "Tell us about yourself",
-            "value": "QA",
-            "class": "ion-no-margin",
-            "type": "textarea",
-            "position": "floating",
-            "errorMessage": {
-              "required": "This field cannot be empty",
-              "pattern": "This field can only contain alphanumeric characters"
-            },
-            "placeHolder": "Please use only 150 characters",
-            "validators": {
-              "required": true,
-              "maxLength": 150,
-              "pattern": "^[a-zA-Z0-9-.,s ]+$"
-            },
-            "options": []
+              "name": "area_of_expertise",
+              "label": "Your expertise",
+              "class": "ion-no-margin",
+              "value": [
+                  {
+                      "label": "Educational leadership",
+                      "value": "educational_leadership"
+                  }
+              ],
+              "type": "chip",
+              "position": "",
+              "disabled": false,
+              "errorMessage": {
+                  "required": "Enter your expertise"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [
+                  {
+                      "label": "Communication",
+                      "value": "communication"
+                  },
+                  {
+                      "label": "Educational leadership",
+                      "value": "educational_leadership"
+                  },
+                  {
+                      "label": "Professional development",
+                      "value": "professional_development"
+                  },
+                  {
+                      "label": "School process",
+                      "value": "school_process"
+                  },
+                  {
+                      "label": "SQAA",
+                      "value": "sqaa"
+                  }
+              ],
+              "meta": {
+                  "entityType": "area_of_expertise",
+                  "addNewPopupHeader": "Add your expertise",
+                  "showSelectAll": true,
+                  "showAddOption": {
+                      "showAddButton": true,
+                      "addChipLabel": "Other"
+                  },
+                  "errorLabel": "Expertise",
+                  "addChipLabel": "Add"
+              },
+              "multiple": true
           },
           {
-            "name": "area_of_expertise",
-            "label": "Your expertise",
-            "class": "ion-no-margin",
-            "value": [
-              {
-                "label": "Educational leadership",
-                "value": "educational_leadership"
+              "name": "education_qualification",
+              "label": "Education qualification",
+              "value": "BBA",
+              "class": "ion-no-margin",
+              "type": "text",
+              "position": "floating",
+              "errorMessage": {
+                  "required": "Enter education qualification",
+                  "pattern": "This field can only contain alphanumeric characters"
+              },
+              "placeHolder": "Ex. BA, B.ED",
+              "validators": {
+                  "required": true,
+                  "maxLength": 255,
+                  "pattern": "^[a-zA-Z0-9-.,s ]+$"
+              },
+              "options": [],
+              "meta": {
+                  "errorLabel": "Education qualification"
               }
-            ],
-            "type": "chip",
-            "position": "",
-            "disabled": false,
-            "errorMessage": {
-              "required": "Enter your expertise"
-            },
-            "validators": {
-              "required": true
-            },
-            "options": [
-              {
-                "label": "Communication",
-                "value": "communication"
-              },
-              {
-                "label": "Educational leadership",
-                "value": "educational_leadership"
-              },
-              {
-                "label": "Professional development",
-                "value": "professional_development"
-              },
-              {
-                "label": "School process",
-                "value": "school_process"
-              },
-              {
-                "label": "SQAA",
-                "value": "sqaa"
-              }
-            ],
-            "meta": {
-              "entityType": "area_of_expertise",
-              "addNewPopupHeader": "Add your expertise",
-              "showSelectAll": true,
-              "showAddOption": {
-                "showAddButton": true,
-                "addChipLabel": "Other"
-              },
-              "errorLabel": "Expertise",
-              "addChipLabel": "Add"
-            },
-            "multiple": true
           },
           {
-            "name": "education_qualification",
-            "label": "Education qualification",
-            "value": "BBA",
-            "class": "ion-no-margin",
-            "type": "text",
-            "position": "floating",
-            "errorMessage": {
-              "required": "Enter education qualification",
-              "pattern": "This field can only contain alphanumeric characters"
-            },
-            "placeHolder": "Ex. BA, B.ED",
-            "validators": {
-              "required": true,
-              "maxLength": 255,
-              "pattern": "^[a-zA-Z0-9-.,s ]+$"
-            },
-            "options": [],
-            "meta": {
-              "errorLabel": "Education qualification"
-            }
+              "name": "languages",
+              "label": "Languages",
+              "class": "ion-no-margin",
+              "value": [
+                  {
+                      "label": "English",
+                      "value": "en_in"
+                  }
+              ],
+              "type": "chip",
+              "position": "",
+              "disabled": false,
+              "errorMessage": {
+                  "required": "Enter language"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [
+                  {
+                      "label": "English",
+                      "value": "en_in"
+                  },
+                  {
+                      "label": "Hindi",
+                      "value": "hi"
+                  }
+              ],
+              "meta": {
+                  "entityType": "languages",
+                  "addNewPopupHeader": "Add new language",
+                  "showSelectAll": true,
+                  "showAddOption": {
+                      "showAddButton": true,
+                      "addChipLabel": ""
+                  },
+                  "errorLabel": "Medium"
+              },
+              "multiple": true
           },
           {
-            "name": "languages",
-            "label": "Languages",
-            "class": "ion-no-margin",
-            "value": [
-              {
-                "label": "English",
-                "value": "en_in"
-              }
-            ],
-            "type": "chip",
-            "position": "",
-            "disabled": false,
-            "errorMessage": {
-              "required": "Enter language"
-            },
-            "validators": {
-              "required": true
-            },
-            "options": [
-              {
-                "label": "English",
-                "value": "en_in"
+              "name": "state",
+              "label": "State",
+              "class": "ion-no-margin",
+              "value": [],
+              "type": "text",
+              "position": "",
+              "disabled": true,
+              "errorMessage": {
+                  "required": "Enter state"
               },
-              {
-                "label": "Hindi",
-                "value": "hi"
-              }
-            ],
-            "meta": {
-              "entityType": "languages",
-              "addNewPopupHeader": "Add new language",
-              "showSelectAll": true,
-              "showAddOption": {
-                "showAddButton": true,
-                "addChipLabel": ""
+              "validators": {
+                  "required": true
               },
-              "errorLabel": "Medium"
-            },
-            "multiple": true
+              "options": [],
+              "meta": {
+                  "entityType": "state",
+                  "showSelectAll": true,
+                  "showAddOption": {
+                      "showAddButton": false,
+                      "addChipLabel": ""
+                  },
+                  "errorLabel": "State"
+              },
+              "multiple": false
+          },
+          {
+              "name": "district",
+              "label": "District",
+              "class": "ion-no-margin",
+              "value": [],
+              "type": "text",
+              "position": "",
+              "disabled": true,
+              "errorMessage": {
+                  "required": "Enter district"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [],
+              "meta": {
+                  "entityType": "district",
+                  "showSelectAll": true,
+                  "showAddOption": {
+                      "showAddButton": false,
+                      "addChipLabel": ""
+                  },
+                  "errorLabel": "district"
+              },
+              "multiple": false
+          },
+          {
+              "name": "block",
+              "label": "Block",
+              "class": "ion-no-margin",
+              "value": [],
+              "type": "text",
+              "position": "",
+              "disabled": true,
+              "errorMessage": {
+                  "required": "Enter block"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [],
+              "meta": {
+                  "entityType": "block",
+                  "showSelectAll": true,
+                  "showAddOption": {
+                      "showAddButton": false,
+                      "addChipLabel": ""
+                  },
+                  "errorLabel": "block"
+              },
+              "multiple": false
+          },
+          {
+              "name": "cluster",
+              "label": "Cluster",
+              "class": "ion-no-margin",
+              "value": [],
+              "type": "text",
+              "position": "",
+              "disabled": true,
+              "errorMessage": {
+                  "required": "Enter cluster"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [],
+              "meta": {
+                  "entityType": "cluster",
+                  "showSelectAll": true,
+                  "showAddOption": {
+                      "showAddButton": false,
+                      "addChipLabel": ""
+                  },
+                  "errorLabel": "cluster"
+              },
+              "multiple": false
+          },
+          {
+              "name": "school",
+              "label": "School",
+              "class": "ion-no-margin",
+              "value": [],
+              "type": "text",
+              "position": "",
+              "disabled": true,
+              "errorMessage": {
+                  "required": "Enter school"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [],
+              "meta": {
+                  "entityType": "school",
+                  "showSelectAll": true,
+                  "showAddOption": {
+                      "showAddButton": false,
+                      "addChipLabel": ""
+                  },
+                  "errorLabel": "school"
+              },
+              "multiple": false
+          },
+          {
+              "name": "professional_role",
+              "label": "Professional role",
+              "class": "ion-no-margin",
+              "value": [],
+              "type": "text",
+              "position": "",
+              "disabled": true,
+              "errorMessage": {
+                  "required": "Enter professional role"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [],
+              "meta": {
+                  "entityType": "professional_role",
+                  "showSelectAll": true,
+                  "showAddOption": {
+                      "showAddButton": false,
+                      "addChipLabel": ""
+                  },
+                  "errorLabel": "professional role"
+              },
+              "multiple": false
+          },
+          {
+              "name": "professional_subroles",
+              "label": "Professional subrole",
+              "class": "ion-no-margin",
+              "value": [],
+              "type": "chip",
+              "position": "",
+              "disabled": true,
+              "errorMessage": {
+                  "required": "Enter professional subrole"
+              },
+              "validators": {
+                  "required": true
+              },
+              "options": [],
+              "meta": {
+                  "entityType": "professional_subroles",
+                  "showSelectAll": true,
+                  "showAddOption": {
+                      "showAddButton": false,
+                      "addChipLabel": ""
+                  },
+                  "errorLabel": "professional subrole"
+              },
+              "multiple": true
           }
-        ]
+      ]
       }
     }
   },
@@ -492,21 +541,6 @@
                                         "isEnabled": true,
                                         "key": "organizations",
                                         "type": "checkbox"
-                                    }
-                                ],
-                                "type": [
-                                    {
-                                        "isConnectionEnabled": true,
-                                        "key": "connected_mentees",
-                                        "type": "checkbox",
-                                        "title": "Type",
-                                        "name": "type",
-                                        "options": [
-                                            {
-                                                "label": "Connected mentees",
-                                                "value": "true"
-                                            }
-                                        ]
                                     }
                                 ]
                             },
@@ -1227,7 +1261,7 @@
                 ],
                 "type": [
                   {
-                      "isConnectionEnabled": false,
+                      "isConnectionEnabled": true,
                       "isEnabled": true,
                       "key": "connected_mentors",
                       "type": "checkbox",
@@ -1632,107 +1666,170 @@
   },
   {
     "type": "mentorQuestionnaire",
-    "sub_type": "mentorQuestionnaireForm",
-    "action": "skip",
-    "data": {
-      "templateName": "defaultTemplate",
-      "fields": {
-        "controls": [
-          {
-            "name": "designation",
-            "label": "Your role",
-            "class": "ion-no-margin",
-            "value": [
-              {}
-            ],
-            "type": "chip",
-            "position": "",
-            "disabled": false,
-            "errorMessage": {
-              "required": "Enter your role"
-            },
-            "validators": {
-              "required": true
-            },
-            "options": [],
-            "meta": {
-              "entityType": "designation",
-              "addNewPopupHeader": "Add a new role",
-              "showSelectAll": true,
-              "showAddOption": {
-                "showAddButton": true,
-                "addChipLabel": "Other"
-              },
-              "errorLabel": "Designation"
-            }
-          },
-          {
-            "name": "experience",
-            "label": "Your experience in years",
-            "value": "",
-            "class": "ion-no-margin",
-            "type": "text",
-            "position": "floating",
-            "placeHolder": "Ex. 5 years",
-            "errorMessage": {
-              "required": "Enter your experience in years"
-            },
-            "isNumberOnly": true,
-            "validators": {
-              "required": true,
-              "maxLength": 2
-            },
-            "options": []
-          },
-          {
-            "name": "area_of_expertise",
-            "label": "Your expertise",
-            "class": "ion-no-margin",
-            "value": [],
-            "type": "chip",
-            "position": "",
-            "disabled": false,
-            "errorMessage": {
-              "required": "Enter your expertise"
-            },
-            "validators": {
-              "required": true
-            },
-            "options": [],
-            "meta": {
-              "entityType": "area_of_expertise",
-              "addNewPopupHeader": "Add your expertise",
-              "showSelectAll": true,
-              "showAddOption": {
-                "showAddButton": true,
-                "addChipLabel": "Other"
-              },
-              "errorLabel": "Expertise"
-            }
-          },
-          {
-            "name": "about",
-            "label": "Tell us about yourself",
-            "value": "",
-            "class": "ion-no-margin",
-            "type": "textarea",
-            "position": "floating",
-            "errorMessage": {
-              "required": "This field cannot be empty",
-              "pattern": "This field can only contain alphanumeric characters"
-            },
-            "placeHolder": "Please use only 150 character",
-            "validators": {
-              "required": true,
-              "maxLength": 150,
-              "pattern": "^[a-zA-Z0-9-.,s ]+$"
-            },
-            "options": []
-          }
-        ]
-      }
-    }
-  },
+   "sub_type": "mentorQuestionnaireForm",
+     "action": "update",
+       "data": {
+               "templateName": "defaultTemplate",
+               "fields": {
+                   "controls": [
+                       {
+                           "name": "designation",
+                           "label": "Your role",
+                           "class": "ion-no-margin",
+                           "value": [
+                               {}
+                           ],
+                           "type": "chip",
+                           "position": "",
+                           "disabled": false,
+                           "errorMessage": {
+                               "required": "Enter your role"
+                           },
+                           "validators": {
+                               "required": true
+                           },
+                           "options": [],
+                           "meta": {
+                               "entityType": "designation",
+                               "addNewPopupHeader": "Add a new role",
+                               "showSelectAll": true,
+                               "showAddOption": {
+                                   "showAddButton": true,
+                                   "addChipLabel": "Other"
+                               },
+                               "errorLabel": "Designation"
+                           }
+                       },
+                       {
+                           "name": "experience",
+                           "label": "Your experience in years",
+                           "value": "",
+                           "class": "ion-no-margin",
+                           "type": "text",
+                           "position": "floating",
+                           "placeHolder": "Ex. 5 years",
+                           "errorMessage": {
+                               "required": "Enter your experience in years"
+                           },
+                           "isNumberOnly": true,
+                           "validators": {
+                               "required": true,
+                               "maxLength": 2
+                           },
+                           "options": []
+                       },
+                       {
+                           "name": "area_of_expertise",
+                           "label": "Your expertise",
+                           "class": "ion-no-margin",
+                           "value": [],
+                           "type": "chip",
+                           "position": "",
+                           "disabled": false,
+                           "errorMessage": {
+                               "required": "Enter your expertise"
+                           },
+                           "validators": {
+                               "required": true
+                           },
+                           "options": [],
+                           "meta": {
+                               "entityType": "area_of_expertise",
+                               "addNewPopupHeader": "Add your expertise",
+                               "showSelectAll": true,
+                               "showAddOption": {
+                                   "showAddButton": true,
+                                   "addChipLabel": "Other"
+                               },
+                               "errorLabel": "Expertise"
+                           }
+                       },
+                       {
+                           "name": "about",
+                           "label": "Tell us about yourself",
+                           "value": "",
+                           "class": "ion-no-margin",
+                           "type": "textarea",
+                           "position": "floating",
+                           "errorMessage": {
+                               "required": "This field cannot be empty",
+                               "pattern": "This field can only contain alphanumeric characters"
+                           },
+                           "placeHolder": "Please use only 150 character",
+                           "validators": {
+                               "required": true,
+                               "maxLength": 150,
+                               "pattern": "^[a-zA-Z0-9-.,s ]+$"
+                           },
+                           "options": []
+                       },
+                        {
+               "name": "education_qualification",
+               "label": "Education qualification",
+               "value": "BBA",
+               "class": "ion-no-margin",
+               "type": "text",
+               "position": "floating",
+               "errorMessage": {
+                 "required": "Enter education qualification",
+                 "pattern": "This field can only contain alphanumeric characters"
+               },
+               "placeHolder": "Ex. BA, B.ED",
+               "validators": {
+                 "required": true,
+                 "maxLength": 255,
+                 "pattern": "^[a-zA-Z0-9-.,s ]+$"
+               },
+               "options": [],
+               "meta": {
+                 "errorLabel": "Education qualification"
+               }
+             },
+             {
+               "name": "languages",
+               "label": "Languages",
+               "class": "ion-no-margin",
+               "value": [
+                 {
+                   "label": "English",
+                   "value": "en_in"
+                 }
+               ],
+               "type": "chip",
+               "position": "",
+               "disabled": false,
+               "errorMessage": {
+                 "required": "Enter language"
+               },
+               "validators": {
+                 "required": true
+               },
+               "options": [
+                 {
+                   "label": "English",
+                   "value": "en_in"
+                 },
+                 {
+                   "label": "Hindi",
+                   "value": "hi"
+                 }
+               ],
+               "meta": {
+                 "entityType": "languages",
+                 "addNewPopupHeader": "Add new language",
+                 "showSelectAll": true,
+                 "showAddOption": {
+                   "showAddButton": true,
+                   "addChipLabel": ""
+                 },
+                 "errorLabel": "Medium"
+               },
+               "multiple": true
+             }
+                   ]
+               }
+           }
+   },
   {
     "type": "sampleCsvDownload",
     "sub_type": "sampleCsvDownload",
@@ -2510,14 +2607,13 @@
                       "required": "Enter description",
                       "pattern": "This field can only contain alphanumeric characters"
                   },
-                  "validators": {
-                      "required": true,
-                      "maxLength": 300,
-                      "pattern": "^[a-zA-Z0-9-.,s ]+$"
-                  }
+                 "validators": {
+                 "required": true,
+                 "maxLength": 300
+                }
               }
           ]
       }
   }
-  }
+}
 ]

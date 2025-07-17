@@ -124,7 +124,7 @@ export class ManageSessionComponent implements OnInit {
         break;
 
       case "EDIT":
-        (this.receivedEventData?.element?.status=='Live') ? this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.receivedEventData.element.id , type: 'segment'} }) : this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.receivedEventData.element.id } });
+        (this.receivedEventData?.element?.status=='Live') ? this.router.navigate([CommonRoutes.CREATE_SESSION], {queryParams: { id: this.receivedEventData.element.id , type: 'segment'} }) : this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.receivedEventData.element.id } });
         break;
       case 'DELETE':
         await this.adminWorkapceService.deleteSession(this.receivedEventData.element.id)

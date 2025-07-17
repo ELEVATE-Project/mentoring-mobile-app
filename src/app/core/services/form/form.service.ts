@@ -81,9 +81,12 @@ export class FormService {
 
   async formatEntityOptions(existingData, entityList){
     await entityList.map((entityName)=>{
+      if(['state', 'district', 'block', 'cluster', 'school','professional_role','professional_subroles'].includes(entityName)){
+        return { label : existingData[entityName]?.label, value : existingData[entityName]?.value }
+      }else
       if(Array.isArray(existingData[entityName])){
         existingData[entityName] = existingData[entityName].map((data)=>{
-          return { label : data.label, value : data.value == 'other' ? data.label : data.value, type: data.value }
+          return { label : data?.label, value : data?.value == 'other' ? data?.label : data?.value, type: data?.value }
         })
       }
     })

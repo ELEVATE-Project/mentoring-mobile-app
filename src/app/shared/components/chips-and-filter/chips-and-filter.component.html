@@ -9,15 +9,15 @@
           </ion-chip>
         </div>
       </ion-col>
-      <ion-col size="auto" *ngIf="selectedFilters && searchAndCriteriaData?.headerData?.criterias?.label">
+      <ion-col size="auto" *ngIf="selectedFilters?.length >0 && searchAndCriteriaData?.headerData?.criterias?.label">
           <div class="verticalLine"><hr></div>
       </ion-col>
       <ion-col class="chip-container">
         <ion-row>
           <div>
             <ion-chip class="chip" *ngFor="let chip of selectedFilters; ; let i = index">
-              <ion-icon name="close-circle" color="white"  (click)="removeChip(chip.value, i)"></ion-icon>
-              <ion-label class="chip-label">{{ chip.label }}</ion-label>
+              <ion-icon name="close-circle" color="white"  (click)="removeChip(chip?.value, i)"></ion-icon>
+              <ion-label class="chip-label">{{ chip?.label }}</ion-label>
             </ion-chip>
           </div>
         </ion-row>

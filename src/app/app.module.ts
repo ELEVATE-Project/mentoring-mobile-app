@@ -53,11 +53,10 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
     }),
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled:
-        typeof environment.production == 'string'
-          ? JSON.parse(environment.production)
-          : environment.production,
-      registrationStrategy: 'registerWhenStable:30000',
+      enabled: false,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
     }),
     BrowserAnimationsModule,
     RecaptchaModule,

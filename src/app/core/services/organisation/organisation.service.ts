@@ -110,7 +110,8 @@ export class OrganisationService {
   upload(file: any, path: any) {
     var options = {
       headers: {
-        "Content-Type": "multipart/form-data"
+        "Content-Type": "multipart/form-data",
+         "x-ms-blob-type":"BlockBlob"
       },
     };
     return this.http.put(path.signedUrl, file, options);

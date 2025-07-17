@@ -41,6 +41,10 @@ export class ProfilePage implements OnInit {
       {
         title: "EMAIL_ID",
         key: "emailId"
+      },
+      {
+        title: "PROFESSIONAL_ROLE",
+        key: "professional_role"
       }
     ],
     menteeForm:['SESSIONS_ATTENDED'],
@@ -93,7 +97,7 @@ public buttonConfig = {
     this.formData.data.organizationName = this.user?.organization?.name;
     this.isMentor = this.profileService.isMentor;
     if (!this.formData?.data?.about) {
-      (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE]):null;
+      (!this.visited && !this.formData.data.deleted)?this.router.navigate([CommonRoutes.EDIT_PROFILE],{replaceUrl:true}):null;
       this.visited=true;
     }
     this.showProfileDetails = true;
@@ -119,16 +123,43 @@ public buttonConfig = {
     var result = await this.profileService.getProfileDetailsFromAPI();
     response.data.fields.controls.forEach(entity => {
       Object.entries(result).forEach(([key, value]) => {
-        if(entity.type=='chip' &&   entity.name == key && !this.formData.form.some(obj => obj.key === entity.name)){
+        if(entity.type=='chip' &&  entity.name == key && !this.formData.form.some(obj => obj.key === entity.name)){
           this.formData.form.push(
             {
               title: entity.label,
               key: entity.name
             }
-        )}
+        )
+      }
       });
-
     });
+  let extraDataForm = [
+    {
+      title: "STATE",
+      key: "state"
+    },
+    {
+      title: "DISTRICT",
+      key: "district"
+    },
+    {
+      title: "BLOCK",
+      key: "block"
+    },
+    {
+      title: "CLUSTER",
+      key: "cluster"
+    },
+    {
+      title: "SCHOOL",
+      key: "school"
+    }
+  ];
+  extraDataForm.forEach(field => {
+    if (!this.formData.form.some(existingField => existingField.key === field.key)) {
+      this.formData.form.push(field);
+    }
+  });
     if(result){
       this.formData.data = result;
       this.formData.data.emailId = result.email;
@@ -139,7 +170,7 @@ public buttonConfig = {
   async upDateProfilePopup(msg:any = {header: 'UPDATE_PROFILE',message: 'PLEASE_UPDATE_YOUR_PROFILE_IN_ORDER_TO_PROCEED',cancel:'UPDATE',submit:'CANCEL'}){
     this.utilService.alertPopup(msg).then(async (data) => {
       if(!data){
-        this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
+        this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`], {replaceUrl:true});
       }
     }).catch(error => {})
   }

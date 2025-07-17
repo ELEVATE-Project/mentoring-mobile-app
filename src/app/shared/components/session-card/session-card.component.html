@@ -97,7 +97,7 @@
           *ngIf="
             meetingPlatform?.platform == 'OFF' &&
             isCreator &&
-            data.status != 'COMPLETED'
+            data.status.value != 'COMPLETED'
           "
         >
           <ion-icon name="videocam"></ion-icon>
@@ -106,7 +106,7 @@
               <b
                 class="add-meeting-link"
                 (click)="clickOnAddMeetingLink(data); $event.stopPropagation()"
-                >Add meeting link</b
+                >{{"SELECT_MEETING_PLATFORM" | translate}}</b
               >
             </p>
           </div>

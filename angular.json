@@ -18,6 +18,8 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "baseHref": "/mentoring/",
+            "deployUrl": "/mentoring/",
             "assets": [
               {
                 "glob": "**/*",
@@ -45,7 +47,7 @@
             "sourceMap": true,
             "optimization": false,
             "namedChunks": true,
-            "serviceWorker": true,
+            "serviceWorker": false,
             "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {

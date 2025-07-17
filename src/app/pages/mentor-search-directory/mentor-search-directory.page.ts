@@ -17,6 +17,7 @@ import { CommonRoutes } from 'src/global.routes';
   styleUrls: ['./mentor-search-directory.page.scss'],
 })
 export class MentorSearchDirectoryPage implements OnInit {
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   pageSize = paginatorConstants.defaultPageSize;
   pageSizeOptions = paginatorConstants.pageSizeOptions;
@@ -27,13 +28,12 @@ export class MentorSearchDirectoryPage implements OnInit {
     headerColor: 'primary',
     // label:'MENU'
   };
-  searchText: string = '';
+  
   isOpen = false;
   overlayChips = [];
-  selectedChipLabel: any;
-  selectedChipName: any;
   filterData: any;
   filteredDatas: any[];
+  filterIcon: boolean;
   selectedChips: boolean;
   urlQueryData: string;
   setPaginatorToFirstpage: boolean;
@@ -43,8 +43,17 @@ export class MentorSearchDirectoryPage implements OnInit {
   totalCount: any;
   limit: any;
   chips = [];
-  showSelectedCriteria: any;
-  buttonConfig: any;;
+  buttonConfig: any;
+  searchAndCriterias: any = {
+    headerData: {
+      searchText: '',
+      criterias: {
+        name: undefined,
+        label: undefined
+      }
+    }
+  };
+  valueFromChipAndFilter: string;
 
   constructor(
     private router: Router,
@@ -63,47 +72,73 @@ export class MentorSearchDirectoryPage implements OnInit {
     })
    }
 
-  async ionViewWillEnter() {
-    this.getMentors();
-    this.permissionService.getPlatformConfig().then((config)=>{
-      this.overlayChips = config?.result?.search_config?.search?.mentor?.fields;
+async ionViewWillEnter() {
+  const queryParams = this.route.snapshot.queryParams;
+  const search = queryParams['search'];
+  const chip = queryParams['chip'];
+
+  if (search) {
+    this.searchAndCriterias = {
+      ...this.searchAndCriterias,
+      headerData: {
+        ...this.searchAndCriterias.headerData,
+        searchText: search
+      }
+    };
+  }
+
+  this.getMentors();
+
+  const config = await this.permissionService.getPlatformConfig();
+  this.overlayChips = config?.result?.search_config?.search?.mentor?.fields;
+
+  if (chip) {
+    const matchedField = this.overlayChips?.find(d => d.name === chip);
+    if (matchedField && search) {
+      this.searchAndCriterias = {
+        ...this.searchAndCriterias,
+        headerData: {
+          ...this.searchAndCriterias.headerData,
+          criterias: {
+            name: matchedField.name,
+            label: matchedField.label
+          }
+        }
+      };
+    }
+  }
+
+  const obj = {filterType: 'mentor', org: true};
+  let data = await this.formService.filterList(obj);
+  this.filterData = await this.utilService.transformToFilterData(data, obj);
+
+}
+
+
+  async onSearch(event){
+    this.searchAndCriterias = {
+      headerData: event,
+    };
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { 
+        search: event.searchText, 
+        chip: event?.criterias?.name 
+      },
+      queryParamsHandling: 'merge',
     });
-    const obj = {filterType: 'mentor', org: true};
-    let data = await this.formService.filterList(obj);
-    this.filterData = await this.utilService.transformToFilterData(data, obj);
+    await this.getMentors();
   }
 
-  onSearch(event){
-    if (event.length >= 3) {
-      this.searchText = event;
-      this.showSelectedCriteria = this.selectedChipLabel;
-      this.getMentors();
-    } else {
-      this.toast.showToast("ENTER_MIN_CHARACTER","danger");
-    }
-  }
-  
-  selectChip(chip) {
-    if (this.selectedChipLabel === chip.label) {
-      this.selectedChipLabel = null;
-      this.selectedChipName = null;
-    } else {
-      this.selectedChipLabel = chip.label;
-      this.selectedChipName = chip.name;
-    }
-  }
-
-  closeCriteriaChip(){
-    this.selectedChipLabel = "";
-    this.selectedChipName = "";
-    this.showSelectedCriteria = "";
-  }
-
-  removeChip(chip: string,index: number) {
-    this.chips.splice(index, 1);
-    this.removeFilteredData(chip)
-    this.getUrlQueryData();
-    this.getMentors();
+  async onClearSearch($event: string) {
+    this.searchAndCriterias.headerData.searchText = '';
+    this.searchAndCriterias.headerData.criterias = undefined;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { search: '', chip: '' },
+      queryParamsHandling: 'merge',
+    });
+    await this.getMentors();
   }
 
   async onClickFilter() {
@@ -162,6 +197,11 @@ export class MentorSearchDirectoryPage implements OnInit {
         break;
     }
   }
+  
+  eventHandler(event: any) {
+    this.valueFromChipAndFilter = event;
+    this.searchAndCriterias.headerData.criterias = {name: undefined, label: undefined}
+  }
 
   onPageChange(event){
     this.page = event.pageIndex + 1,
@@ -193,25 +233,48 @@ export class MentorSearchDirectoryPage implements OnInit {
   }
 
   async getMentors(){
-    var obj = {page: this.page, pageSize: this.pageSize, searchText: this.searchText.trim(), selectedChip: this.selectedChipName, urlQueryData: this.urlQueryData};
+    var obj = {
+      page: this.page, 
+      pageSize: this.pageSize, 
+      searchText: this.searchAndCriterias.headerData.searchText?.trim(), 
+      selectedChip: this.searchAndCriterias.headerData.criterias?.name, 
+      urlQueryData: this.urlQueryData
+    };
     let data = await this.profileService.getMentors(true,obj);
-    if(data && data.result){
+    if(data && data.result.data.length){
       this.isOpen = false;
       this.data = data.result.data;
       this.totalCount = data.result.count;
-    }else{
+    } else {
+       
       this.data = [];
       this.totalCount = [];
+     
+      if (Object.keys(this.filteredDatas || {}).length === 0 && !this.searchAndCriterias.headerData.criterias?.name) {
+        this.filterIcon = false;
+      }
     }
+    this.filterIcon = !!obj.searchText?.trim();
   }
 
+  removeChip(event) {
+    this.chips.splice(event.index, 1);
+    this.removeFilteredData(event.chipValue);
+    this.getUrlQueryData();
+    this.getMentors();
+  }
+  
   ionViewDidLeave(){
-    this.searchText = "";
-    this.showSelectedCriteria = "";
-    this.selectedChipLabel = null;
-    this.selectedChipName = null;
+    this.searchAndCriterias = {
+      headerData: {
+        searchText: '',
+        criterias: {
+          name: undefined
+        }
+      }
+    };
+    this.filterIcon = false;
     this.chips = [];
     this.urlQueryData = null;
   }
-
 }

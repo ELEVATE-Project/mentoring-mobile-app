@@ -1,13 +1,41 @@
-<div *ngIf="headerData" class="header-bottom-border">
-  <ion-row class="content-wrapper">
-    <ion-col size="4">
+<div *ngIf="headerData || userNotFound" class="header-bottom-border">
+  @if (userNotFound) {
+    <ion-row class="content-wrapper">
+    <ion-col size="4" class="text-center ">
       <div class="d-flex flex-justify-center flex-align-items-center flex-col">
-        <div class="profile-img">
-          <ion-icon
-            name="people-outline"
-            *ngIf="headerData?.is_connected"
-          ></ion-icon>
-          <ng-container *ngIf="headerData?.image && headerData?.image !== ''; else DefaultImg">
+        <ng-container *ngIf="headerData?.image && headerData?.image !== ''; else DefaultImg">
+            <img [src]="headerData?.image" />
+          </ng-container>
+          <ng-template #DefaultImg>
+            <img src="assets/prof-img/user.png" class="default-img" />
+          </ng-template>
+        <ng-template #Img>
+          <div class="profile-img">
+            <ion-icon
+              name="people-outline"
+              *ngIf="headerData?.is_connected"
+            ></ion-icon>
+            <img src="{{ headerData?.image }}" />
+          </div>
+        </ng-template>
+      </div>
+    </ion-col>
+    <ion-col size="8" class="name-wrapper no-padding">
+        <ion-label class="name">
+          Annoymous User
+        </ion-label>
+    </ion-col>
+  </ion-row>
+  } @else {
+    <ion-row class="content-wrapper">
+      <ion-col size="4">
+        <div class="d-flex flex-justify-center flex-align-items-center flex-col">
+          <div class="profile-img">
+            <ion-icon
+              name="people-outline"
+              *ngIf="headerData?.is_connected"
+            ></ion-icon>
+            <ng-container *ngIf="headerData?.image && headerData?.image !== ''; else DefaultImg">
             <img [src]="headerData?.image" />
           </ng-container>
           <ng-template #DefaultImg>
@@ -31,7 +59,7 @@
           <ion-icon name="star" style="margin-left: 5px"></ion-icon>
         </div>
     
-        <!-- Location -->
+        
         <div *ngIf="headerData?.location" class="location-info">
           <ion-label class="location">
             <ion-icon name="location"></ion-icon>
@@ -77,4 +105,5 @@
       </div>
     </ion-col>
   </ion-row>
+  }
 </div>

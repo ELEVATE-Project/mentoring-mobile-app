@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {  Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 
@@ -16,7 +16,7 @@ export class ChipsAndFilterComponent implements OnInit {
   @Input() isFilterEnable: any;
 
   constructor(private router: Router) { }
-
+ 
   ngOnInit() { 
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -26,7 +26,7 @@ export class ChipsAndFilterComponent implements OnInit {
   }
 
   closeCriteriaChip(){
-    this.sendChildValue.emit(this.searchAndCriteriaData);
+    this.sendChildValue.emit('');
     this.searchAndCriteriaData = '';
   }
 
@@ -44,7 +44,7 @@ export class ChipsAndFilterComponent implements OnInit {
   }
 
   private resetSearch() {
-    this.searchAndCriteriaData = null;
+    this.searchAndCriteriaData = '';
   }
 
 }

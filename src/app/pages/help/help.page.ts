@@ -20,7 +20,7 @@ import * as Bowser from "bowser"
 export class HelpPage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;
   public headerConfig: any = {
-    backButton: true,
+    backButton: false,
     label: "HELP"
   };
   public formData: JsonFormData;

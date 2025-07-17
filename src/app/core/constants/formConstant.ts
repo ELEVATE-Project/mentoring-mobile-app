@@ -97,3 +97,8 @@ export const REQUEST_SESSION_FORM: IFORM = {
 	"type": "requestSession",
 	"sub_type": "requestSessionForm",
 }
+
+export const CHAT_LIB_META_KEYS = {
+	"cantSendMsg": "CANT_SEND_MESSAGE",
+	"cantSendMsgToMentor": "CANT_SEND_MESSAGE_TO_MENTOR",
+}

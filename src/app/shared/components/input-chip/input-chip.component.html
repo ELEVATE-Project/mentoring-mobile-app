@@ -1,9 +1,9 @@
 <div>
   <div
-    class="d-flex flex-align-items-center"
+    class="d-flex flex-align-items-center p-rel"
     *ngIf="showSelectAll"
   >
-    <ion-label class="head-label">{{ label }} <span *ngIf="validators['required']==true" class="star-icon-red">*</span></ion-label>
+    <ion-label class="head-label">{{ label }} <span *ngIf="validators['required']==true && !disabled" class="star-icon-red">*</span></ion-label>
     <div class="toggle">
     <ion-toggle
       [(ngModel)]="_selectAll"

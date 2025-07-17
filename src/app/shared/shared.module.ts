@@ -50,6 +50,7 @@ import { ChipsAndFilterComponent } from './components/chips-and-filter/chips-and
 import { GenericCardComponent } from './components/generic-card/generic-card.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { PreAlertModalComponent } from './components/pre-alert-modal/pre-alert-modal.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     SearchCompetencyComponent,
     SearchbarComponent,
     ChipsAndFilterComponent,
-    GenericCardComponent
+    GenericCardComponent,
+    PreAlertModalComponent
   ],
   imports: [
     CommonModule,
@@ -144,7 +146,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     SearchCompetencyComponent,
     SearchbarComponent,
     ChipsAndFilterComponent,
-    GenericCardComponent
+    GenericCardComponent,
+    PreAlertModalComponent
   ],
 })
 export class SharedModule {}

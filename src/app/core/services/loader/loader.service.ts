@@ -20,6 +20,7 @@ export class LoaderService {
         translucent: true,
         backdropDismiss: false,
       });
+      
       // await this.loading.present();
   }
 

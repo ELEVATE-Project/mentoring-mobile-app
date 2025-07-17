@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-generic-details',
   templateUrl: './generic-details.component.html',
   styleUrls: ['./generic-details.component.scss'],
 })
-export class GenericDetailsComponent implements OnInit {
+export class GenericDetailsComponent implements OnInit, OnChanges {
   @Input() sessionData: any;
   @Input() isMentor: any;
   @Output() onViewList = new EventEmitter();
@@ -23,6 +23,15 @@ selectedImageUrl: string | null = null;
     const resources = this.sessionData?.data?.resources || [];
     this.preResources = resources.filter(res => res.type === 'pre');
     this.postResources = resources.filter(res => res.type === 'post');
+  }
+
+
+    ngOnChanges(changes: SimpleChanges): void {
+    if (changes.sessionData && changes.sessionData.currentValue) {
+      const resources = this.sessionData.data.resources || [];
+      this.preResources = resources.filter(res => res.type === 'pre');
+      this.postResources = resources.filter(res => res.type === 'post');
+    }
   }
 
   onClickViewList(){ 

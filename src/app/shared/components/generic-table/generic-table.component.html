@@ -39,7 +39,7 @@
         <div *ngIf="column.type == 'array'">
           <td mat-cell (click)="onCellClick(column.name,element)" *matCellDef="let element">
             <div class="cell-text" *ngFor="let ele of element[column.name]">
-              {{ele.label}}
+              {{ele.label || ele}}
             </div>
           </td>
         </div>

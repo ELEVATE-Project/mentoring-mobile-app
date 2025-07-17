@@ -1,18 +1,22 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
-import { LocalStorageService, ToastService, UtilService } from 'src/app/core/services';
-import { SessionService } from 'src/app/core/services/session/session.service';
-import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
+import {  Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
-import { MatPaginator } from '@angular/material/paginator';
-import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { Location } from '@angular/common';
+import { environment } from 'src/environments/environment';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
+//ionic
+import { ModalController } from '@ionic/angular';
+//service
+import { SessionService } from 'src/app/core/services/session/session.service';
+import { LocalStorageService, ToastService, UtilService } from 'src/app/core/services';
+import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { FormService } from 'src/app/core/services/form/form.service';
-import { environment } from 'src/environments/environment';
+//3rd party
 import { Subscription } from 'rxjs';
+import { MatPaginator } from '@angular/material/paginator';
+//component
+import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
 
 @Component({
   selector: 'app-home-search',
@@ -20,6 +24,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./home-search.page.scss'],
 })
 export class HomeSearchPage implements OnInit {
+
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @Output() toggleOverlayEvent = new EventEmitter<void>();
@@ -35,6 +40,7 @@ export class HomeSearchPage implements OnInit {
   type:any;
   filterData: any;
   filteredDatas = []
+  filterIcon: boolean;
   page = 1;
   setPaginatorToFirstpage:any = false;
   totalCount: any;
@@ -51,6 +57,7 @@ export class HomeSearchPage implements OnInit {
   searchTextSubscription: Subscription;
   criteriaChipSubscription: Subscription;
   showSelectedCriteria: any;
+searchAndCriterias: any;
 
   constructor(private modalCtrl: ModalController, private router: Router, private toast: ToastService,
     private sessionService: SessionService,
@@ -62,18 +69,28 @@ export class HomeSearchPage implements OnInit {
     private utilService: UtilService,
   ) { }
 
-  async ngOnInit() {
+   ngOnInit() {
     this.searchTextSubscription = this.utilService.currentSearchText.subscribe(searchText => {
       this.searchText = searchText;
     });
     this.criteriaChipSubscription = this.utilService.currentCriteriaChip.subscribe(selectedCriteria => {
       this.criteriaChip = selectedCriteria ? JSON.parse(selectedCriteria) : "";
+      setTimeout(() => {
+        this.searchAndCriterias = {
+          headerData: {
+            searchText: '',
+            criterias: this.criteriaChip
+          },
+        };
+      },500);
+      
     });
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.fetchSessionList()
     this.permissionService.getPlatformConfig().then((config)=>{
       this.overlayChips = config?.result?.search_config?.search?.session?.fields;
     })
+
   }
 
   async ionViewWillEnter() {
@@ -84,15 +101,26 @@ export class HomeSearchPage implements OnInit {
   }
 
   search(event) {
-    if (event.length >= 3) {
-      this.searchText = event;
-      this.showSelectedCriteria = this.criteriaChip;
-      this.isOpen = false;
-      this.fetchSessionList()
-    } else {
-      this.toast.showToast("ENTER_MIN_CHARACTER","danger");
-    }
+    this.searchText = event.searchText;
+    this.searchAndCriterias = {
+      headerData: event,
+    };
+    this.showSelectedCriteria = event.criterias;
+    this.criteriaChip = event.criterias;
+    this.isOpen = false;
+    this.fetchSessionList()
+   
   }
+
+  eventHandler(event: string) {
+    this.criteriaChip = event;
+  }
+
+  onClearSearch($event: string) {
+    this.searchText = '';
+    this.isOpen = false;
+    this.fetchSessionList();
+    }
 
   async onClickFilter() {
     let modal = await this.modalCtrl.create({
@@ -123,6 +151,14 @@ export class HomeSearchPage implements OnInit {
     var obj={page: this.page, limit: this.pageSize, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChip?.name, filterData : this.urlQueryData}
     var response = await this.sessionService.getSessionsList(obj);
     this.results = response.result.data;
+
+    if(response.result.data.length){
+      this.filterIcon = true;
+    } else {
+      if(Object.keys(this.filteredDatas || {}).length === 0 && !this.criteriaChip?.name) {
+        this.filterIcon = false;
+      }
+    }
     this.totalCount = response.result.count;
     this.noDataMessage = obj.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
   }
@@ -138,7 +174,7 @@ export class HomeSearchPage implements OnInit {
     if (this.user.about || environment['isAuthBypassed']) {
       switch (event.type) {
         case 'cardSelect':
-          this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
+          this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`],{replaceUrl:true});
           break;
 
         case 'joinAction':
@@ -181,26 +217,6 @@ export class HomeSearchPage implements OnInit {
     }
   }
 
-  removeChip(chip: string, index: number) {
-    this.chips.splice(index, 1);
-    this.removeFilteredData(chip);
-    this.getUrlQueryData();
-    this.fetchSessionList()
-  }
-
-  closeCriteriaChip(){
-    this.criteriaChip = null;
-    this.showSelectedCriteria = null;
-    this.router.navigate(['/' + CommonRoutes.HOME_SEARCH], { queryParams: {searchString : this.searchText} });
-  }
-
-  selectChip(chip) {
-    if (this.criteriaChip === chip) {
-      this.criteriaChip = null;
-    } else {
-      this.criteriaChip = chip;
-    }
-  }
 
   getUrlQueryData() {
     const queryString = Object.keys(this.filteredDatas)
@@ -231,6 +247,12 @@ export class HomeSearchPage implements OnInit {
           }
       }
     }
+  }
+  removeChip(event) {
+    this.chips.splice(event.index, 1);
+    this.removeFilteredData(event.chipValue);
+    this.getUrlQueryData();
+    this.fetchSessionList()
   }
 
   ionViewDidLeave(){

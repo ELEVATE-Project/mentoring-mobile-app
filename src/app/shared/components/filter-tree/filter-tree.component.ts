@@ -12,21 +12,33 @@ export class FilterTreeComponent implements OnInit {
   @Input() filterData: any;
   @Output() filtersChanged = new EventEmitter<any>();
   @Input() eventData: any;
+  readOnly: boolean = false;
 
 
   constructor() { }
 
-  ngOnInit() { }
-
+  ngOnInit() {
+    if (this.eventData.control.validators.required) {
+      this.filterData.forEach(filter => { 
+        if (filter.name === "type" && filter.key === "connected_mentors" ) {
+          filter.options.forEach(option => {
+            option.selected = false;
+            this.onFilterChange();  
+            option.readOnly = false; 
+          });
+        }
+      });
+    }
+  }
 
   clearAll() {
-    if (this.filterData) {
-      this.filterData.forEach(filter => 
-        filter.options = filter.options.map(option => ({ ...option, selected: false }))
-      );
-    }
-    this.filtersChanged.emit([])
+  if (this.filterData) {
+    this.filterData.forEach(filter => {
+        filter.options = filter.options.map(option => ({ ...option, selected: false }));
+    });
   }
+  this.onFilterChange();
+}
 
   onFilterChange() {
     const selectedOptionsByCategory = {};
@@ -45,13 +57,10 @@ export class FilterTreeComponent implements OnInit {
     if (filter.name === 'type') {
       if (sessionType === 'PUBLIC') {
         return true; 
-      } else if (sessionType === 'PRIVATE') {
-        return !filter.isConnectionEnabled; 
+      } else {
+        return !filter.isConnectionEnabled;
       }
-      
-      return !filter.isConnectionEnabled; 
     }
-    
     return false;
   }
 }

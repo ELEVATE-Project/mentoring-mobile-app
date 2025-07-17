@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
+import * as moment from 'moment';
 import { PLATFORMS } from 'src/app/core/constants/formConstant';
 import { ToastService, UtilService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { DynamicFormComponent } from 'src/app/shared/components';
 import { CommonRoutes } from 'src/global.routes';
+
 
 @Component({
   selector: 'app-session-request-details',
@@ -105,7 +107,7 @@ export class SessionRequestDetailsPage implements OnInit {
         {
           name: 'reason',  
           type: 'textarea',
-          placeholder: `Let ${name} know why you are rejecting there slot...`,
+          placeholder: `Let ${name} know why you are rejecting their slot...`,
         }
       ]
     };
@@ -207,6 +209,10 @@ export class SessionRequestDetailsPage implements OnInit {
   async onStart(data) {
     let result = await this.sessionService.startSession(data);
     result?this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]):null;
+  }
+
+  formatUnixTime(unixTimestamp: number): string {
+    return moment.unix(unixTimestamp).format('h:mm A');
   }
 
 }

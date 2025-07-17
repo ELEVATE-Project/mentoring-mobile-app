@@ -13,10 +13,12 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 export class LanguagePage implements OnInit {
 
   public headerConfig: any = {
-    backButton: {
-      label: 'LANGUAGE',
-      color: 'primary'
-    },
+    // backButton: {
+    //   label: 'LANGUAGE',
+    //   color: 'primary'
+    // },
+    backButton: false,
+    label: 'LANGUAGE',
     notification: false,
     signupButton: false
   };

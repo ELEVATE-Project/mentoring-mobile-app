@@ -1,4 +1,4 @@
 <ion-content class="chat-window">
-  <lib-chat-view [rid]="rid" (backEvent)="onBack()" (limitExceededEvent)="limitExceeded($event)"  (profileEvent)="onClickProfile($event)" *ngIf="showChat">
+  <lib-chat-view [rid]="rid" (backEvent)="onBack()" (limitExceededEvent)="limitExceeded($event)"  (profileEvent)="onClickProfile($event)" *ngIf="showChat" [meta]="translations">
   </lib-chat-view>
 </ion-content>

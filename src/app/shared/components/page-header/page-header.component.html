@@ -1,12 +1,18 @@
 <ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" (click)="onBack()">
+      </ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
   <ion-toolbar class="d-flex flex-justify-center" color="{{config?.headerColor}}">
     <ion-buttons slot="start" *ngIf="config?.menu">
       <ion-menu-button>
       </ion-menu-button>
     </ion-buttons>
-    <ion-buttons slot="start">
+    <!-- <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/home" *ngIf="config?.backButton"></ion-back-button>
-    </ion-buttons>
+    </ion-buttons> -->
     <ion-title >{{config?.backButton?.label || config?.label | translate}}</ion-title>
     <ng-content></ng-content>
     <ion-grid>

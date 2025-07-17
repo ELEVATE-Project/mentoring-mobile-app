@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AttachmentService, LoaderService, ToastService } from 'src/app/core/services';
+import { AttachmentService, LoaderService, LocalStorageService, ToastService } from 'src/app/core/services';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import {
@@ -21,6 +21,8 @@ import { manageSessionAction, permissions } from 'src/app/core/constants/permiss
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { SearchPopoverComponent } from 'src/app/shared/components/search-popover/search-popover.component';
 import { SearchCompetencyComponent } from 'src/app/shared/components/search-competency/search-competency.component';
+import { PreAlertModalComponent } from 'src/app/shared/components/pre-alert-modal/pre-alert-modal.component';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
   selector: 'app-create-session',
@@ -65,12 +67,15 @@ export class CreateSessionPage implements OnInit {
   queryParams: any;
   formConfig: any;
   mentor_id: any;
+  isHome: boolean;
+  user: any;
 
   constructor(
     private sessionService: SessionService,
     private toast: ToastService,
     private activatedRoute: ActivatedRoute,
     private location: Location,
+     private localStorage: LocalStorageService, 
     private attachment: AttachmentService,
     private api: HttpService,
     private loaderService: LoaderService,
@@ -91,7 +96,7 @@ export class CreateSessionPage implements OnInit {
   async ionViewWillEnter() {
     await this.updateFormConfig();
     this.route.queryParams.subscribe(() => this.updateFormConfig());
-    
+    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
     const platformForm = await this.getPlatformFormDetails();
     const result = await this.form.getForm(this.formConfig);
     this.formData = _.get(result, 'data.fields');
@@ -176,21 +181,21 @@ export class CreateSessionPage implements OnInit {
     for (const control of this.formData.controls) {
       if (control.type === 'search' && control.meta?.addPopupType === 'file' && control.value?.length) {
         for (const file of control.value) {
-          if(file?.isLink && file.name){
+          if(file?.isLink && file.link){
             this.updatedFiles.push({
               "name":file.name,
-              "link":file.name,
+              "link":file.link,
               "type":control.name,
               "mime_type":"link",
           });
-          }else if (file instanceof File && file.name) {
-              const signedUrl = await this.getSignedUrl(file.name);
-              const uploadedFileUrl = await this.uploadFile(file, signedUrl);
+          }else if (file.file instanceof File && file.file.name) {
+              const signedUrl = await this.getSignedUrl(file.file.name);
+              const uploadedFileUrl = await this.uploadFile(file.file, signedUrl);
               this.updatedFiles.push({
                 "name":file.name,
                 "link":uploadedFileUrl,
                 "type":control.name,
-                "mime_type":file.type,
+                "mime_type":file.file.type,
             });
           } 
           else if (file.name){
@@ -221,6 +226,7 @@ export class CreateSessionPage implements OnInit {
   async onSubmit() {
     if (!this.isSubmited) {
       this.form1.onSubmit();
+
     }
     if (this.form1.myForm.valid) {
       await this.handleFileUploads();
@@ -242,6 +248,7 @@ export class CreateSessionPage implements OnInit {
       if (!this.profileImageData.image) {
         form.image = [];
       }
+      form.mentor_id = form?.mentor_id ?? this.user.id;
       form.resources= this.updatedFiles;
       this.form1.myForm.markAsPristine();
       const result = await this.sessionService.createSession(form, this.id);
@@ -304,7 +311,7 @@ export class CreateSessionPage implements OnInit {
           this.formData.controls[i].value = this.formData.controls[i].meta.searchData ? this.formData.controls[i].meta.searchData.map(obj => obj.id || obj.value) : [];
         } else {
           this.formData.controls[i].meta.searchData = [{
-            label: `${existingData.mentor_name}, ${existingData.organization.name}`,
+            label: `${existingData.mentor_name}, ${existingData.organization}`,
             id: existingData[this.formData.controls[i].name]
           }];
         }
@@ -341,9 +348,13 @@ export class CreateSessionPage implements OnInit {
         }
       }
       let dependedChildIndex = this.formData.controls.findIndex(formControl => formControl.name === this.formData.controls[i].dependedChild)
+      if(this.formData.controls[i].name === 'mentor_id') {
+        this.mentor_id = existingData[this.formData.controls[i].name];
+      }
       if(this.formData.controls[i].dependedChild && this.formData.controls[i].name === 'type'){
         if(existingData[this.formData.controls[i].name].value){
           this.formData.controls[i].disabled = true;
+          this.sessionType = existingData[this.formData.controls[i].name].value;
           this.formData.controls[dependedChildIndex].validators['required']= existingData[this.formData.controls[i].name].value=='PUBLIC' ? false : true
         }
       }
@@ -462,56 +473,25 @@ handleSelectedFile(file) {
     // Handle file upload logic here
 }
   async showResourcesPopup(event) {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-    if (isMobile) {
-        // Show options for Camera or File
-        const actionSheet = await this.actionSheetController.create({
-            header: 'Select Resource',
-            buttons: [
-                {
-                    text: 'Camera',
-                    icon: 'camera',
-                    handler: () => {
-                        this.openCamera();
-                    }
-                },
-                {
-                    text: 'File',
-                    icon: 'folder',
-                    handler: () => {
-                        this.openFilePicker(event);
-                    }
-                },
-                {
-                    text: 'Cancel',
-                    icon: 'close',
-                    role: 'cancel'
-                }
-            ]
-        });
-        await actionSheet.present();
-    } else {
-        this.openFilePicker(event);
-    }
-}
-
-openCamera() {
-}
-
-openFilePicker(event) {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '*/*';
-  input.onchange = (fileEvent: any) => {
-    const file = fileEvent.target.files[0];
-    event.formControl.control.value = event?.formControl?.control?.value || [];
-    if (event?.formControl?.control?.value) {
-      event.formControl.control.value.push(file);
-    } else {
-    }
-  };
-  input.click();
+       const modal = await this.modalCtrl.create({
+            component: PreAlertModalComponent,
+            cssClass: 'pre-custom-modal',
+            componentProps: {
+              data: event.formControl.control, 
+              type: 'file',
+              heading: 'ADD_FILE'
+            },
+            backdropDismiss: false
+          });
+        
+          modal.onDidDismiss().then((result) => {
+            if (result.data && result.data.success) {
+              event.formControl.control.value = event.formControl.control.value || [];
+              event.formControl.control.value.push(result.data.data);
+            }
+          });
+        
+          return await modal.present();
 }
 
   async showCompetencyPopup(event) {
@@ -556,7 +536,9 @@ openFilePicker(event) {
           viewListMode: false,
           isMobile: this.isMobile,
           sessionType: this.sessionType,
-          mentorId: this.mentor_id
+          mentorId: this.mentor_id,
+          formConfig: this.isHome,
+          isCreator: this.route.snapshot.queryParams.isCreator
         }
       }
     });
@@ -633,25 +615,23 @@ openFilePicker(event) {
     await popover.present();
   }
 
-  async updateFormConfig() {
-    const queryParams = this.route.snapshot.queryParams;
-    const isManagePage = queryParams['source'] === 'manage';
-    const isHome = queryParams['source'] === 'home';
+ async updateFormConfig() {
+  const queryParams = this.route.snapshot.queryParams;
+  const source = queryParams['source'];
+  this.isHome = source === 'home';
+  const isManagePage = source === 'manage';
 
-    if (isManagePage) {
-      const hasPermission = await this.permissionService.hasPermission({
-        module: permissions.MANAGE_SESSION,
-        action: manageSessionAction.SESSION_ACTIONS,
-      });
+  const hasPermission = await this.permissionService.hasPermission({
+    module: permissions.MANAGE_SESSION,
+    action: manageSessionAction.SESSION_ACTIONS,
+  });
 
-      this.formConfig = hasPermission ? MANAGERS_CREATE_SESSION_FORM : CREATE_SESSION_FORM;
-    } else if(isHome) {
-      this.formConfig = CREATE_SESSION_FORM;
-    } else if(queryParams.isCreator) {
-      this.formConfig = CREATE_SESSION_FORM;
-    }else {
-      this.formConfig = MANAGERS_CREATE_SESSION_FORM;
-    }
-    
+  if (isManagePage) {
+    this.formConfig = hasPermission ? MANAGERS_CREATE_SESSION_FORM : CREATE_SESSION_FORM;
+  } else if ((this.isHome || queryParams.isCreator) && !hasPermission) {
+    this.formConfig = CREATE_SESSION_FORM;
+  } else {
+    this.formConfig = MANAGERS_CREATE_SESSION_FORM;
   }
+}
 }

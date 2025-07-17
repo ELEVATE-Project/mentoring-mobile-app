@@ -12,7 +12,7 @@ import { CommonRoutes } from 'src/global.routes';
 export class HelpVideoPage implements OnInit {
 
   public headerConfig: any = {
-    backButton: true,
+    backButton: false,
     label: "HELP_VIDEOS"
   };
 

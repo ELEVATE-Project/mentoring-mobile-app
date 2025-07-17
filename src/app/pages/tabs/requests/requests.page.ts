@@ -34,26 +34,39 @@ export class RequestsPage implements OnInit {
   ) {}
 
   ionViewWillEnter(){
-    this.pendingRequest();
     this.route.data.subscribe((data) => {
       this.routeData = data;
       this.buttonConfig = this.routeData?.button_config;
       this.slotBtnConfig = this.routeData.slotButtonConfig;
     });
-    this.pendingRequest();
     this.sessionService.requestSessionList().then((res) => {
-      this.slotRequests = res.result.data;
-      if (!this.slotRequests.length) {
-        this.noResult = this.routeData?.noDataFound;
-      }
-    });
+        this.slotRequests = res?.result?.data ?? [];
+        if (!this.slotRequests.length) {
+          this.noResult = { subHeader: this.routeData?.noDataFound.noSession };
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching session list:', error);
+      });
+      this.pendingRequest();
+
   }
   ngOnInit() {
   }
 
-  segmentChanged(event) {
-    this.segmentType = event.target.value;
+ segmentChanged(event: any) {
+  this.segmentType = event.target.value;
+  if (this.segmentType === 'slot-requests') {
+    if (!this.slotRequests?.length) {
+      this.noResult = { subHeader: this.routeData?.noDataFound.noSession }
+    }
+  } else {
+    if (!this.data?.length) {
+      this.noResult = { subHeader: this.routeData?.noDataFound.noMessage };
+    }
   }
+}
+
 
   async pendingRequest() {
     const config = {
@@ -62,9 +75,6 @@ export class RequestsPage implements OnInit {
     try {
       let data: any = await this.httpService.get(config);
       this.data = data ? data.result.data : '';
-      if (!this.data.length) {
-        this.noResult = this.routeData?.noDataFound;
-      }
       return data;
     } catch (error) {
       return error;
@@ -80,5 +90,10 @@ export class RequestsPage implements OnInit {
         this.router.navigate([CommonRoutes.SESSION_REQUEST_DETAILS], {queryParams: {id: data}});
         break;
     }
+  }
+
+  ionViewWillLeave() {
+    this.noResult = {};
+    this.segmentType = 'slot-requests';
   }
 }

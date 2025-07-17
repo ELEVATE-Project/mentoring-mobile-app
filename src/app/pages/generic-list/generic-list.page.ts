@@ -23,6 +23,7 @@ import { CommonRoutes } from 'src/global.routes';
   encapsulation: ViewEncapsulation.None,
 })
 export class GenericListPage implements OnInit {
+
   @ViewChild('subscribe') searchbarComponent: SearchbarComponent;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   pageSize = paginatorConstants.defaultPageSize;
@@ -80,7 +81,7 @@ export class GenericListPage implements OnInit {
       this.buttonConfig = this.routeData?.button_config;
     });
     this.filterListData(this.routeData.filterType);
-    this.getData(this.routeData);
+    this.getData();
     if (!this.searchText && this.isMentor && !this.totalCount) {
       this.noResult = NO_RESULT_FOUND_FOR_MENTOR;
       this.enableExploreButton = false;
@@ -94,16 +95,15 @@ export class GenericListPage implements OnInit {
   }
 
   searchResults(event) {
+    this.searchText= event.searchText;
     this.searchAndCriterias = {
       headerData: event,
-      routeData: this.routeData,
     };
-    this.searchAndCriterias = { ...this.searchAndCriterias };
+
     this.selectedCriteria = event?.criterias?.name;
-    this.searchText = event?.searchText;
-    this.getData(this.searchAndCriterias);
+    this.getData();
   }
-  async getData(data) {
+  async getData() {
     let response = await this.httpService.get({
       url:
         this.routeData.url +
@@ -123,16 +123,17 @@ export class GenericListPage implements OnInit {
     if (this.searchText && !this.responseData.length) {
       this.noResult = this.routeData?.noDataFound;
       this.enableExploreButton = false;
-    }
-    if (
-      !this.responseData?.length &&
-      !this.searchText &&
-      !this.filterChipsSelected
-    ) {
-      this.filterIcon = false;
-    } else {
+    } 
+    if(this.responseData.length) {
       this.filterIcon = true;
+    } else {
+      if(Object.keys(this.filteredDatas || {}).length === 0
+      && !this.selectedCriteria) {
+        this.filterIcon = false;
+      } 
     }
+      
+    
   }
 
   async onClickFilter() {
@@ -166,7 +167,7 @@ export class GenericListPage implements OnInit {
         this.getUrlQueryData();
         this.page = 1;
         this.setPaginatorToFirstpage = true;
-        this.getData(this.urlQueryData);
+        this.getData();
         this.filterIcon = true;
       }
     });
@@ -202,7 +203,7 @@ export class GenericListPage implements OnInit {
     this.chips.splice(event.index, 1);
     this.removeFilteredData(event.chipValue);
     this.getUrlQueryData();
-    this.getData(event);
+    this.getData();
   }
 
   removeFilteredData(chip: string) {
@@ -222,7 +223,7 @@ export class GenericListPage implements OnInit {
   onPageChange(event) {
     (this.page = event.pageIndex + 1),
       (this.pageSize = this.paginator.pageSize);
-    this.getData(event);
+    this.getData();
   }
 
   action(event) {
@@ -259,9 +260,9 @@ export class GenericListPage implements OnInit {
     this.router.navigate([CommonRoutes.HOME]);
   }
 
-  showChipsAndFilter(): boolean {
-    this.filterIcon = true;
-    return !!this.responseData?.length || !!this.chips?.length || !!this.searchText || !!this.filterChipsSelected;
-  }
+  onClearSearch($event: string) {
+    this.searchText ='';
+    this.getData();
+    }
   
 }

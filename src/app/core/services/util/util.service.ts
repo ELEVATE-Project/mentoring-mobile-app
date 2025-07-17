@@ -9,9 +9,13 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import * as Papa from 'papaparse';
 import { LocalStorageService } from '../localstorage.service';
 import { environment } from 'src/environments/environment';
+
+import { ToastService } from '../toast.service';
+
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components';
 import { FormService } from '../form/form.service';
 import * as _ from 'lodash-es';
+
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +37,9 @@ export class UtilService {
     private alert: AlertController,
     private translate: TranslateService,
     private localstorage: LocalStorageService,
+
+    private toast: ToastService,
+
     private form : FormService
   ) {
     const browser = Bowser.getParser(window.navigator.userAgent);
@@ -69,27 +76,38 @@ export class UtilService {
           texts = text;
         });
       const alert = await this.alert.create({
-        cssClass: 'my-custom-class',
+        cssClass: 'custom-alert-with-close',
         header: texts[msg.header],
         message: texts[msg.message],
         inputs: msg.inputs || [],
         buttons: [
-          {
-            text: texts[msg.submit],
-            cssClass: 'alert-button-bg-white',
-            handler: (data) => {
-              resolve(msg.inputs ? data : true);
-            },
-          },
-          {
-            text: texts[msg.cancel],
-            role: 'cancel',
-            cssClass: 'alert-button-red',
-            handler: (blah) => {
-              resolve(false);
-            },
-          },
-        ],
+      {
+        text: texts[msg.submit],
+        cssClass: 'alert-button-bg-white',
+        handler: (data) => {
+          resolve(msg.inputs ? data : true);
+        },
+      },
+      {
+        text: texts[msg.cancel],
+        role: 'cancel',
+        cssClass: 'alert-button-red',
+        handler: () => {
+          resolve(false);
+        },
+      },
+    ],
+      });
+      const headerEl = document.querySelector('.custom-alert-with-close .alert-head');
+      if (headerEl) {
+        const closeBtn = document.createElement('span');
+        closeBtn.innerHTML = '&times;';
+        closeBtn.className = 'close-alert-icon';
+        closeBtn.onclick = () => alert.dismiss();
+        headerEl.appendChild(closeBtn);
+      }
+      document.querySelector('.close-alert-icon')?.addEventListener('click', () => {
+        alert.dismiss();
       });
       await alert.present();
     });
@@ -296,6 +314,43 @@ export class UtilService {
     this.messageBadge.next(false);
   }
 
+  uploadFile(): Promise<File | null> {
+    return new Promise((resolve) => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '*/*';
+  
+      input.addEventListener('change', (fileEvent: Event) => {
+        const target = fileEvent.target as HTMLInputElement;
+        const file = target.files?.[0];
+  
+        if (!file) {
+          this.toast.showToast(
+            this.translate.instant('No file selected'),
+            'danger'
+          );
+          return resolve(null);
+        }
+  
+        if (!file.type || file.type.trim() === '') {
+          this.toast.showToast(
+            this.translate.instant('Cannot upload file: File type is not detected. Please try a different file.'),
+            'danger'
+          );
+          return resolve(null);
+        }
+  
+        if (!file.name || file.name.trim() === '') {
+          return resolve(null);
+        }
+  
+        return resolve(file);
+      });
+  
+      input.click();
+    });
+  }
+  
 async openFormModel(data, formType){
   console.log(data,"data");
   console.log(formType,"formData");
@@ -369,5 +424,4 @@ async openFormModel(data, formType){
     modal.present();
   });
 }
-
 }

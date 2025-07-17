@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService, ToastService, UserService, UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
@@ -20,7 +20,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './session-detail.page.html',
   styleUrls: ['./session-detail.page.scss'],
 })
-export class SessionDetailPage implements OnInit {
+export class SessionDetailPage implements OnInit, OnDestroy {
   id: any;
   showEditButton: any;
   isConductor:any =false;
@@ -55,9 +55,9 @@ export class SessionDetailPage implements OnInit {
     this.isMobile = utilService.isMobile()
   }
   ngOnInit() {
-      App.addListener('appStateChange', (state: AppState) => {
+      App.addListener('appStateChange', async (state: AppState) => {
         if (state.isActive == true && this.id && this.sessionDatas && !this.dismissWhenBack) {
-          this.fetchSessionDetails();
+          await this.fetchSessionDetails();
         }
       });
   }
@@ -66,11 +66,11 @@ export class SessionDetailPage implements OnInit {
     this.detailData.form = JSON.parse(JSON.stringify(this.defaultUiForm));
     await this.user.getUserValue();
     this.userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    this.fetchSessionDetails();
+     await this.fetchSessionDetails();
   }
 
   public headerConfig: any = {
-    backButton: true,
+    backButton: false,
     label: "",
     share: false
   };
@@ -172,14 +172,20 @@ export class SessionDetailPage implements OnInit {
       } else {
         this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response?.status?.value=='LIVE')?true:false;
       }
-      this.detailData.data = Object.assign({}, response);
-      this.detailData.data.start_date = readableStartDate;
-      this.detailData.data.meeting_info = response.meeting_info?.platform;
-      this.detailData.data.mentee_count = response.seats_limit - response.seats_remaining
+      this.detailData = {
+        data: {
+            ...response,
+            start_date: readableStartDate,
+            meeting_info: response.meeting_info?.platform,
+            mentee_count: response.seats_limit - response.seats_remaining,
+            mentor_designation: response?.mentor_designation.map(d => d?.label).join(', ')
+          },
+          form: [...this.detailData.form]
+        };
       this.startDate = (response.start_date>0)?new Date(response.start_date * 1000):this.startDate;
       this.endDate = (response.end_date>0)?new Date(response.end_date * 1000):this.endDate;
       this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
-      this.detailData.data.mentor_designation = response?.mentor_designation.map(designation => designation?.label).join(', ');
+     
       if((!this.isConductor && !this.detailData.form.some(obj => obj.title === 'MENTOR'))){
         this.detailData.form.push(
           {
@@ -211,7 +217,14 @@ export class SessionDetailPage implements OnInit {
     } 
     this.dismissWhenBack = true;
   }
-  ionViewWillLeave(){
+
+  ionViewWillLeave() {
+    if(!this.skipWhenDelete && this.snackbarRef){
+      this.snackbarRef = this.toaster.dismiss()
+    }
+   }
+
+   ngOnDestroy() {
     if(!this.skipWhenDelete && this.snackbarRef){
       this.snackbarRef = this.toaster.dismiss()
     }
@@ -226,7 +239,7 @@ export class SessionDetailPage implements OnInit {
         this.isConductor = this.userDetails.id == response.mentor_id ? true : false;
       }
       let twentyFourHoursInSeconds = 24 * 60 * 60;
-      this.headerConfig.edit = (this.isCreator && response?.status?.value !="COMPLETED" && response.end_date > 0 && (currentTimeInSeconds - response.end_date) <= twentyFourHoursInSeconds);
+      this.headerConfig.edit = (this.isCreator  && response.end_date > 0 && (currentTimeInSeconds - response.end_date) <= twentyFourHoursInSeconds);
       this.headerConfig.delete = (this.isCreator && response?.status?.value !="COMPLETED" && response?.status?.value !="LIVE" &&  ((response.end_date>currentTimeInSeconds)))?true:null;
   }
 

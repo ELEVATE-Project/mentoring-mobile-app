@@ -1,18 +1,42 @@
-export const environment = {
-	production: true ,
-	name: window['env' as any]['name' as any] ,
-	baseUrl: window['env' as any]['baseUrl'] ,
-	sqliteDBName: window['env' as any]['sqliteDBName' as any] ,
-	deepLinkUrl: window['env' as any]['deepLinkUrl'],
-	privacyPolicyUrl: window['env' as any]['privacyPolicyUrl' as any] ,
-	termsOfServiceUrl: window['env' as any]['termsOfServiceUrl' as any] ,
-	recaptchaSiteKey: window['env' as any]['recaptchaSiteKey' as any] ,
-	recaptchaSiteKeyOld: window['env' as any]['recaptchaSiteKeyOld'] ,
-	restictedPages: window['env' as any]['restictedPages'],
-	unauthorizedRedirectUrl: window['env' as any]['unauthorizedRedirectUrl' as string] ,
-	supportEmail: window['env' as any]['supportEmail' as any] ,
-	isAuthBypassed: window['env' as any]['isAuthBypassed'] ,
-	password: window['env' as any]['password'] 
-}
+// export const environment = {
+// 	production: true ,
+// 	name: window['env' as any]['name' as any] ,
+// 	baseUrl: window['env' as any]['baseUrl'] ,
+// 	sqliteDBName: window['env' as any]['sqliteDBName' as any] ,
+// 	deepLinkUrl: window['env' as any]['deepLinkUrl'],
+// 	privacyPolicyUrl: window['env' as any]['privacyPolicyUrl' as any] ,
+// 	termsOfServiceUrl: window['env' as any]['termsOfServiceUrl' as any] ,
+// 	recaptchaSiteKey: window['env' as any]['recaptchaSiteKey' as any] ,
+// 	recaptchaSiteKeyOld: window['env' as any]['recaptchaSiteKeyOld'] ,
+// 	restictedPages: window['env' as any]['restictedPages'],
+// 	unauthorizedRedirectUrl: window['env' as any]['unauthorizedRedirectUrl' as string] ,
+// 	supportEmail: window['env' as any]['supportEmail' as any] ,
+// 	isAuthBypassed: window['env' as any]['isAuthBypassed'] ,
+// 	password: window['env' as any]['password'] 
+// }
 
+
+export const environment = {
+	production: true,
+	name: 'debug environment',
+	staging: false,
+	dev: false,
+	baseUrl: 'https://dev.elevate-apis.shikshalokam.org',
+	sqliteDBName: 'mentoring.db',
+	deepLinkUrl: 'https://mentored.shikshalokam.org',
+	privacyPolicyUrl:'https://shikshalokam.org/mentoring/privacy-policy',
+	termsOfServiceUrl:'https://shikshalokam.org/mentoring/term-of-use',
+	supportEmail: "mentoredtest1@yopmail.com",
+	// recaptchaSiteKey:"6LfWEKYpAAAAACxKbR7H42o3BwbJkJA06vIM_6Ea",
+	recaptchaSiteKey:"",
+	recaptchaSiteKeyOld: "6LfWEKYpAAAAACxKbR7H42o3BwbJkJA06vIM_6Ea",
+	restictedPages: ['HELP_VIDEOS_PAGE','HELP_PAGE','FAQ_PAGE','LOGIN_ACTIVITY_PAGE','CHANGE_PASSWORD_PAGE','LOGIN_PAGE','REGISTER_PAGE','RESET_PASSWORD_PAGE','OTP_PAGE'],
+	unauthorizedRedirectUrl:"http://dev.elevate-sandbox.shikshalokam.org",
+	isAuthBypassed: true,
+	password: {
+			minLength: 10,
+			regexPattern: '^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%$&()\\-`.+,/]).{10,}$',
+			errorMessage: 'Password should contain at least one uppercase letter, one number and one special character.',
+	},
+  };
 

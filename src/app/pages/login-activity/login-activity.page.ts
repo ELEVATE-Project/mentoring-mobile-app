@@ -25,7 +25,7 @@ export class LoginActivityPage implements OnInit {
   pageSizeOptions = paginatorConstants.pageSizeOptions;
 
   public headerConfig: any = {
-    backButton: true,
+    backButton: false,
     label: 'LOGIN_ACTIVITY',
     color: 'primary',
   };

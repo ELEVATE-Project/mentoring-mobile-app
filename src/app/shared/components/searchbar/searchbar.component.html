@@ -1,15 +1,18 @@
-<div class="d-flex flex-justify-center my-8">
-  <ion-searchbar 
-  [debounce]="1000" 
-  [placeholder]="data?.placeholder" 
+<div class="d-flex flex-justify-center my-8 contain">
+<ion-searchbar 
+  [placeholder]="placeholder" 
   class="custom" 
-  cdkOverlayOrigin #trigger="cdkOverlayOrigin" 
+  cdkOverlayOrigin 
+  #trigger="cdkOverlayOrigin" 
   (click)="isOpen = !isOpen" 
-  #event
-  [value]="searchText"
-  (keyup.enter)="onSearch(event.value)"></ion-searchbar>
+  [(ngModel)]="searchText"
+  (ionClear)="onClearSearch()"
+  (keyup.enter)="onSearch()">
+</ion-searchbar>
+
 </div>
-<ng-template
+@if (overlayChip) {
+  <ng-template
   cdkConnectedOverlay
   [cdkConnectedOverlayOrigin]="trigger"
   [cdkConnectedOverlayOpen]="isOpen"
@@ -24,7 +27,7 @@
           class="overlay-chip" 
           *ngFor="let chip of overlayChip; let i = index" 
           (click)="selectChip(chip)"
-          [ngClass]="{'selected-chip': criteriaChip?.label === chip.label}">
+          [ngClass]="{'selected-chip': criteriaChip?.name === chip.name}">
           <ion-icon name="close-circle"  style="pointer-events: none;" color="white"></ion-icon>
           <ion-label class="chip-label">{{ chip.label }}</ion-label>
         </ion-chip>
@@ -32,4 +35,6 @@
     </div>
   </ion-grid>
 </ng-template>
+}
+
 

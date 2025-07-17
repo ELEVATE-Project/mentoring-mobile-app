@@ -4,7 +4,7 @@
     <p class="session-detail-heading">{{item.title | translate }}</p>
     <div *ngIf="isArray(sessionData.data[item.key]); else elseBlock">
       <ion-chip outline="true" class="ion-margin-top" *ngFor="let chip of sessionData.data[item.key]">
-        <ion-label>{{chip.label}}</ion-label>
+        <ion-label>{{chip?.label}}</ion-label>
       </ion-chip>
     </div>
     <ng-template #elseBlock>
@@ -23,7 +23,7 @@
     </ng-template>
     <ng-template #elseBlock4>
       <div *ngIf="item?.key=='mentor_name';else elseBlock5">
-        <p class="break-word">{{sessionData.data[item.key] }}</p>
+        <p class="break-word">{{sessionData.data[item.key]['label'] || sessionData.data[item.key]}}</p>
         <div>
           {{sessionData.data.mentor_designation}}
         </div>
@@ -31,21 +31,29 @@
     </ng-template>
     <ng-template #elseBlock5>
       <p *ngIf="item?.key=='experience'" class="value">{{sessionData.data[item.key]}} {{"YEARS"|translate}}</p>
-      <p *ngIf="item?.key!='experience'" class="value">{{sessionData.data[item.key]}}</p>
+      <p *ngIf="item?.key!='experience'" class="value">
+        <span>{{ sessionData.data[item.key]?.label ? sessionData.data[item.key].label : (sessionData.data[item.key] || '') }} </span>
+      </p>
     </ng-template>
   </div>
 </div>
 <div *ngIf="preResources.length > 0">
   <p class="session-detail-heading" style="margin: 0 10px;">{{ 'PRE_RESOURCES' | translate }}</p>
-  <div  style="display: flex; flex-wrap: wrap;">
-    <div   *ngFor="let resource of preResources" 
-        class="resource-content">
-            <img *ngIf="resource.mime_type?.includes('image')" 
-                 [src]="resource.link" 
-                 alt="{{ resource.name }}" 
-                 (click)="openImageModal(resource.link)"
-                 class="clickable-image " />
-            <ng-container *ngIf="resource.mime_type?.includes('pdf') || resource.mime_type?.includes('other')"
+      <div style="display: flex; flex-wrap: wrap;">
+            <div *ngFor="let resource of preResources" 
+              class="resource-content">
+                    <a *ngIf="resource.mime_type?.includes('image')"
+                    [href]="resource.link"
+                    [attr.download]="resource.name"
+                    class="image-download-link">
+                    <img 
+                      [src]="resource.link" 
+                      alt="{{ resource.name }}" 
+                      class="clickable-image" />
+                     </a>
+
+     
+            <ng-container *ngIf="resource.mime_type?.includes('pdf') || resource.mime_type?.includes('other') || resource.mime_type?.includes('application')" 
                  class="file-link" style="flex-direction: column;">
               <a [href]="resource.link" target="_blank" class="truncate-text"><ion-icon name="document" style="width: 150px;height: 150px; vertical-align: middle;"></ion-icon></a>
           </ng-container>
@@ -54,20 +62,32 @@
           class="file-link" style="flex-direction: column;">
        <a [href]="resource.link" target="_blank" class="truncate-text"><ion-icon name="link" style="width: 150px;height: 150px; vertical-align: middle;"></ion-icon></a>
    </ng-container>
+   <ng-container *ngIf="resource.mime_type?.includes('video')"
+      class="file-link" style="flex-direction: column;">
+      <a [href]="resource.link" target="_blank" class="truncate-text"><ion-icon name="videocam" style="width: 150px;height: 150px; vertical-align: middle;"></ion-icon></a>
+   </ng-container>
+   <div class="resource-name truncate-text">
+    {{ resource.name }}
+  </div>
+
     </div>
     </div>
 </div>
 <div *ngIf="postResources.length > 0 && sessionData?.data?.status?.value === 'COMPLETED'">
   <p class="session-detail-heading" style="margin: 0 10px;">{{ 'POST_RESOURCES' | translate }}</p>
-  <div  style="display: flex; flex-wrap: wrap;">
-      <div   *ngFor="let resource of postResources" 
-          class="resource-content">
-              <img *ngIf="resource.mime_type?.includes('image')" 
-                   [src]="resource.link" 
-                   alt="{{ resource.name }}" 
-                   (click)="openImageModal(resource.link)"
-                   class="clickable-image " />
-              <ng-container *ngIf="resource.mime_type?.includes('pdf') || resource.mime_type?.includes('other')"
+      <div style="display: flex; flex-wrap: wrap;">
+            <div *ngFor="let resource of postResources" 
+                class="resource-content">
+                <a *ngIf="resource.mime_type?.includes('image')"
+                [href]="resource.link"
+                [attr.download]="resource.name" 
+                class="image-download-link">
+              <img 
+                [src]="resource.link" 
+                alt="{{ resource.name }}" 
+                class="clickable-image" />
+              </a>
+              <ng-container *ngIf="resource.mime_type?.includes('pdf') || resource.mime_type?.includes('other') || resource.mime_type?.includes('application')"
                    class="file-link" style="flex-direction: column;">
                 <a [href]="resource.link" target="_blank" class="truncate-text"><ion-icon name="document" style="width: 150px;height: 150px; vertical-align: middle;"></ion-icon></a>
             </ng-container>
@@ -76,6 +96,13 @@
             class="file-link" style="flex-direction: column;">
          <a [href]="resource.link" target="_blank" class="truncate-text"><ion-icon name="link" style="width: 150px;height: 150px; vertical-align: middle;"></ion-icon></a>
      </ng-container>
+     <ng-container *ngIf="resource.mime_type?.includes('video')"
+     class="file-link" style="flex-direction: column;">
+     <a [href]="resource.link" target="_blank" class="truncate-text"><ion-icon name="videocam" style="width: 150px;height: 150px; vertical-align: middle;"></ion-icon></a>
+  </ng-container>
+  <div class="resource-name truncate-text">
+    {{ resource.name }}
+  </div>
       </div>
       </div>
 </div>

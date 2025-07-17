@@ -691,3 +691,41 @@ ion-searchbar {
 .height-0 {
   height: auto !important;
 }
+
+.pre-custom-modal {
+  --height: 300px;
+  @media (max-width: 768px) {
+    --height: 300px;
+    padding: 50px;
+  }
+}
+
+ion-item.item-interactive.ion-focused,
+ion-item.item-interactive.item-has-focus {
+  --highlight-color-focused: transparent !important;
+  --highlight-background: transparent !important;
+  box-shadow: none !important;
+
+}
+
+.has-focus.ion-valid.sc-ion-input-md-h {
+  --highlight-color: var(--ion-color-primary);
+}
+
+ion-textarea textarea {
+  font-family: "NotoSans-Regular" !important;
+  font-weight: normal !important;
+}
+
+
+.custom-alert-with-close .alert-header {
+  position: relative;
+}
+.custom-alert-with-close .close-alert-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #000;
+}

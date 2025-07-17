@@ -95,6 +95,7 @@ export class AttachmentService {
         var options = {
             headers: {
                 "Content-Type": "multipart/form-data",
+                "x-ms-blob-type":"BlockBlob"
             },
         };
         return this.http.put(uploadUrl.signedUrl, fileDetails, options)

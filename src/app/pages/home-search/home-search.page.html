@@ -1,74 +1,22 @@
 <app-page-header [config]="headerConfig">
-  <div class="d-flex flex-justify-center my-8">
-    <ion-searchbar class="search-bar" [debounce]="1000" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"  
-    #event [value]="searchText"
-    (keydown.enter)="search(event.value)"
-    type="search"
-    inputmode="search"
-    cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="isOpen = !isOpen">
-    </ion-searchbar>
-  </div>
+  <app-searchbar
+    *ngIf="overlayChips"
+    placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"
+    (clearText)="onClearSearch($event)"
+    [overlayChip]="overlayChips"
+    (outputData)="search($event)"
+    [valueFromParent]="criteriaChip"
+    [parentSearchText]="searchText"
+  ></app-searchbar>
 </app-page-header>
-<ion-toolbar>
-  <ng-template
-  cdkConnectedOverlay
-  [cdkConnectedOverlayOrigin]="trigger"
-  [cdkConnectedOverlayOpen]="isOpen"
-  (overlayOutsideClick)="isOpen = false"
-  [cdkConnectedOverlayOffsetY]="10" 
-  [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.offsetWidth" 
->
-  <ion-grid>
-    <div class="overlay-container">
-      <ion-row>
-        <ion-chip 
-          class="overlay-chip" 
-          *ngFor="let chip of overlayChips; let i = index" 
-          (click)="selectChip(chip)"
-          [ngClass]="{'selected-chip': criteriaChip?.label === chip.label}">
-          <ion-icon name="close-circle"  style="pointer-events: none;" color="white"></ion-icon>
-          <ion-label class="chip-label">{{ chip.label }}</ion-label>
-        </ion-chip>
-      </ion-row>
-    </div>
-  </ion-grid>
-</ng-template>
-  <ion-grid>
-    <ion-row>
-      <ion-col *ngIf="showSelectedCriteria" size="auto">
-        <div style="width: auto">
-          <ion-chip class="chip">
-            <ion-icon name="close-circle" color="white" (click)="closeCriteriaChip()"></ion-icon>
-            <ion-label class="chip-label">{{showSelectedCriteria?.label}}</ion-label>
-          </ion-chip>
-        </div>
-      </ion-col>
-      <ion-col size="auto">
-        <div *ngIf="chips.length && showSelectedCriteria" class="verticalLine"><hr></div>
-      </ion-col>
-      <ion-col class="chip-container">
-        <ion-row>
-          <div>
-            <ion-chip class="chip" *ngFor="let chip of chips ; let i = index">
-              <ion-icon name="close-circle" (click)="removeChip(chip.value, i)" color="white"></ion-icon>
-              <ion-label class="chip-label">{{ chip.label }}</ion-label>
-            </ion-chip>
-          </div>
-        </ion-row>
-      </ion-col>
-      <ion-col size="auto" style="display: flex;align-items: center;">
-        <div style="width: 5em">
-          <div class="filter">
-            <p style="margin: unset;">{{"FILTER" | translate}}</p>
-            <div class="circle-container" (click)="onClickFilter()">
-              <ion-icon class="ion-funnel-icon" name="funnel"></ion-icon>
-            </div>
-          </div>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-toolbar>
+<app-chips-and-filter  [selectedFilters]="chips" [searchAndCriteriaData]="searchAndCriterias" (removeFilterChip)="removeChip($event)" (filterClick)="onClickFilter()" (sendChildValue)="eventHandler($event)" [isFilterEnable]="filterIcon"></app-chips-and-filter>
+<!-- <ion-toolbar> </ion-toolbar> -->
 <ion-content>
-  <app-generic-search [results]="results" [totalCount]="totalCount" [searchValue]="searchText" (onClickEvent)="eventAction($event)" (onPageChangeEvent)="onPageChange($event)"></app-generic-search>
+  <app-generic-search
+    [results]="results"
+    [totalCount]="totalCount"
+    [searchValue]="searchText"
+    (onClickEvent)="eventAction($event)"
+    (onPageChangeEvent)="onPageChange($event)"
+  ></app-generic-search>
 </ion-content>

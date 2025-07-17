@@ -27,15 +27,16 @@
         class="d-flex flex-align-items-flex-end"
         *ngIf="info?.status == 'REQUESTED'"
       >
+      <img
+      [src]="info?.user_details?.image || '../../../../assets/prof-img/user.png'"
+      alt="Profile Picture"
+      class="chat-pic"
+    />
         <div class="chat-card-content">
           {{info?.meta?.message}}
           <span> {{info.created_at | date : 'hh:mm a'}} </span>
         </div>
-        <img
-          [src]="info?.user_details?.image || '../../../../assets/prof-img/user.png'"
-          alt="Profile Picture"
-          class="chat-pic"
-        />
+       
       </div>
     </div>
     <div

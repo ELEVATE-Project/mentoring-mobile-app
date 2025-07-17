@@ -12,8 +12,8 @@ p {
   --ion-grid-column-padding: 0;
 }
 .profile-img {
-  width: 85px;
-  height: 85px;
+  width: 70px;
+  height: 70px;
   object-fit: cover;
   border-radius: 50%;
 }
@@ -51,4 +51,7 @@ p {
 
 .rotate-icon-sent {
   transform: rotate(130deg);
+}
+.pl-5{
+  padding-left: 5px;
 }

@@ -1,6 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ToastService } from 'src/app/core/services';
 
 @Component({
@@ -9,31 +7,37 @@ import { ToastService } from 'src/app/core/services';
   styleUrls: ['./searchbar.component.scss'],
 })
 export class SearchbarComponent implements OnInit {
-  @Input() receivedData: any;
+  searchText: any;
+  @Input() parentSearchText: string;
   @Input() data: any;
   @Input() overlayChip: any;
   @Output() outputData = new EventEmitter();
   @Input() valueFromParent: any;
+
+  @Output() clearText = new EventEmitter<string>();
+  @Input() placeholder: string;
   isOpen = false;
   criteriaChipSubscription: any;
   criteriaChip: any;
   showSelectedCriteria: any;
-  searchText: any;
+
+
 
   constructor(
     private toast: ToastService,
-    private router: Router
   ) { }
 
   ngOnInit() {
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.resetSearch();
-      });
+    if(this.parentSearchText) 
+    this.searchText = this.parentSearchText;
   }
-  ngOnChanges(){
-    this.criteriaChip = this.valueFromParent;
+  ngOnChanges(changes: SimpleChanges){
+    if(this.parentSearchText && !this.searchText) {
+      this.searchText = this.parentSearchText;
+    }if (changes['parentSearchText']) {
+    this.searchText = changes['parentSearchText'].currentValue;
+  } if(changes['valueFromParent'])
+    this.criteriaChip = changes['valueFromParent'].currentValue;
   }
   selectChip(chip) {
     if (this.criteriaChip === chip) {
@@ -43,13 +47,20 @@ export class SearchbarComponent implements OnInit {
     }
   }
 
-  async onSearch(event){
-    if (event.length >= 3) {
-      this.searchText = event ? event : "";
-      this.showSelectedCriteria = this.criteriaChip;
+   onSearch(){
+    if(this.searchText.length === 0) {
+      const emitData = {
+        searchText: '',
+        criterias: this.criteriaChip
+      }
+      this.outputData.emit(emitData);
+      return;
+    }
+    if (this.searchText.length >= 3) {
+      this.searchText = this.searchText ? this.searchText : "";
       const emitData = {
         searchText: this.searchText.trim(),
-        criterias: this.showSelectedCriteria
+        criterias: this.criteriaChip
       }
       this.outputData.emit(emitData);
     } else {
@@ -58,7 +69,9 @@ export class SearchbarComponent implements OnInit {
     this.isOpen = false;
   }
 
-  private resetSearch() {
-    this.searchText = null;
-  }
+  onClearSearch() {
+    this.isOpen =false;
+    this.clearText.emit('')
+    this.criteriaChip= undefined;
+    }
 }

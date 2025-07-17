@@ -52,7 +52,7 @@ export class LoginPage implements OnInit {
       },
     ],
   };
-  siteKey = environment?.recaptchaSiteKey ? environment?.recaptchaSiteKey  :""
+  siteKey :any = environment?.recaptchaSiteKey ? environment?.recaptchaSiteKey  :""
   id: any;
   userDetails: any;
   recaptchaResolved: boolean = this.siteKey ? false : true;

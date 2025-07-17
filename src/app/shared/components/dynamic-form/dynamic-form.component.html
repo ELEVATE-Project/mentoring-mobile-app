@@ -10,7 +10,7 @@
     >
     <div *ngIf="control.label !== '' && !['rating'].includes(control.type) && !['chip'].includes(control.type) && !['search'].includes(control.type)" class="d-flex flex-align-items-center p-rel">
       <ion-label position="stacked">
-        {{ control.label }}&nbsp;<span *ngIf="control?.validators['required']==true" class="star-icon-red">*</span>
+        {{ control.label }}&nbsp;<span *ngIf="control?.validators['required']==true && !readonly" class="star-icon-red">*</span>
       </ion-label>
       <ion-icon *ngIf="control?.info" id="{{control.name}}" class="info" name="information-circle"></ion-icon>
       <ion-popover trigger="{{control.name}}" triggerAction="hover">

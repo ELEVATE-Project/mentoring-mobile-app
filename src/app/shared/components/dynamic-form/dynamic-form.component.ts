@@ -194,10 +194,13 @@ export class DynamicFormComponent implements OnInit {
             break;
         }
       }
+      const controlValue = ['state', 'district', 'block', 'cluster', 'school','professional_role','professional_subroles'].includes(control.name) 
+        ? control.value?.label 
+        : control.value;
       this.myForm.addControl(
         control.name,
         this.fb.control(
-          { value: control.value, disabled: control.disabled },
+          { value: controlValue, disabled: control.disabled },
           validatorsToAdd
         )
       );

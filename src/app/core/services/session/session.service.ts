@@ -19,10 +19,6 @@ export class SessionService {
   ) { }
 
   async createSession(formData, queryParams?: string) {
-    this.userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    if (!formData.hasOwnProperty("mentor_id")) {
-      formData.mentor_id = this.userDetails?.id;
-  }
     await this.loaderService.startLoader();
     const config = {
       url: queryParams == null ? urlConstants.API_URLS.CREATE_SESSION : urlConstants.API_URLS.CREATE_SESSION + `/${queryParams}`,

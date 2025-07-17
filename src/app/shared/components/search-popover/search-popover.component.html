@@ -1,8 +1,7 @@
 <ion-toolbar position="top">
   <div class="container">
     <div class="search-col d-flex flex-justify-center">
-      <ion-searchbar *ngIf="data.showSearch" class="search-style" debounce="1000" [(ngModel)]="searchText"
-        (ionChange)="onSearch()" placeholder="{{data.control.meta.searchLabel}}"></ion-searchbar>
+        <app-searchbar (outputData)="onSearch($event)"  [placeholder]="data.control.meta.searchLabel" (clearText)="onClearSearch($event)"></app-searchbar>
     </div>
     <div class="close-col">
       <ion-icon class="close-button" name="close-outline" (click)="closePopover()"></ion-icon>

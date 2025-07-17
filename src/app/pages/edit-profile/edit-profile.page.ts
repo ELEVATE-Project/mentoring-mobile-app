@@ -153,15 +153,23 @@ export class EditProfilePage implements OnInit, isDeactivatable {
       } else {
         const form = Object.assign({}, this.form1.myForm.value);
         _.forEach(this.entityNames, (entityKey) => {
-          let control = this.formData.controls.find(obj => obj.name === entityKey);
-          form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey]
+          let control = this.formData.controls.find(obj => 
+           obj.name === entityKey
+          );  
+            if (['state', 'cluster', 'block', 'district', 'school', 'professional_role'].includes(entityKey)) {
+              form[entityKey] = control.value?.value || '';
+            } else if (entityKey === 'professional_subroles' && Array.isArray(control.value)) {
+              form[entityKey] = control.value.map(item => item.value);
+            } else {
+            form[entityKey] = control.multiple ? _.map(form[entityKey], 'value') : form[entityKey];
+            }
         });
         this.form1.myForm.markAsPristine();
         const updated = await this.profileService.profileUpdate(form);
         if(updated && this.redirectUrl){ 
           this.router.navigate([this.redirectUrl], { replaceUrl: true })
         }else{
-          this.location.back()
+        this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
         }
       }
     } else {

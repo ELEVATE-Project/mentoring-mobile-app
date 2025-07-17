@@ -11,7 +11,7 @@ import { CommonRoutes } from 'src/global.routes';
 })
 export class FaqPage implements OnInit {
   public headerConfig: any = {
-    backButton: true,
+    backButton: false,
     label: 'FAQ',
   };
   faqArray = [];

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
+import { SKELETON } from 'src/app/core/constants/skeleton.constant';
 import {
   HttpService,
   LocalStorageService,
@@ -23,8 +24,8 @@ export class MentorDetailsPage implements OnInit {
   mentorId;
   public isMobile: any;
   public headerConfig: any = {
-    backButton: true,
-    headerColor: 'primary',
+    backButton: false,
+    headerColor: "primary"
   };
 
   public buttonConfig = {
@@ -82,11 +83,14 @@ export class MentorDetailsPage implements OnInit {
       organizationName: '',
     },
   };
-  userCantAccess: any;
+  userCantAccess?: boolean = false;
   isloaded: boolean = false;
   segmentValue = 'about';
   upcomingSessions;
   mentorProfileData: any;
+  userNotFound: boolean = false;
+  userCanAccess: boolean;
+  SKELETON = SKELETON;
   constructor(
     private routerParams: ActivatedRoute,
     private httpService: HttpService,
@@ -100,17 +104,16 @@ export class MentorDetailsPage implements OnInit {
     this.isMobile = utilService.isMobile();
     routerParams.params.subscribe((params) => {
       this.mentorId = this.buttonConfig.meta.id = params.id;
-      this.userService.getUserValue().then(async (result) => {
-        if (result) {
-          this.getMentor();
-        } else {
-          this.router.navigate(
-            [`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`],
-            { queryParams: { mentorId: this.mentorId } }
-          );
-        }
-      });
-    });
+      this.getMentor();
+      // this.userService.getUserValue().then(async (result) => {
+      //   console.log(result,"resultresultresultresult");
+      //   if (result) {
+      //     this.getMentor();
+      //   } else {
+      //     this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams: { mentorId: this.mentorId } })
+      //   }
+      // })
+    })
   }
 
   ngOnInit() {}
@@ -125,11 +128,21 @@ export class MentorDetailsPage implements OnInit {
     this.mentorProfileData = await this.getMentorDetails();
     this.updateButtonConfig();
     this.isloaded = true;
-    this.userCantAccess =
-      this.mentorProfileData?.responseCode == 'OK' ? false : true;
+    switch (this.mentorProfileData?.responseCode) {
+      case 'OK':
+        this.userCanAccess = true;
+        break;
+      case 'SERVER_ERROR':
+        this.userCantAccess = true;
+        break;
+      case 'CLIENT_ERROR':
+        this.userNotFound = true;
+        break;
+    }
+
     this.detailData.data = this.mentorProfileData?.result;
     this.detailData.data.organizationName =
-      this.mentorProfileData?.result?.organization.name;
+      this.mentorProfileData?.result?.organization?.name;
     this.headerConfig.share = this.detailData.data?.is_mentor;
   }
 
@@ -149,7 +162,8 @@ export class MentorDetailsPage implements OnInit {
   }
 
   async segmentChanged(ev: any) {
-    this.segmentValue = ev.detail.value;
+       this.segmentValue = ev.detail.value;
+    if(this.upcomingSessions) return;
     this.upcomingSessions =
       this.segmentValue == 'upcoming'
         ? await this.sessionService.getUpcomingSessions(this.mentorId)
@@ -188,9 +202,7 @@ export class MentorDetailsPage implements OnInit {
   async onAction(event) {
     switch (event.type) {
       case 'cardSelect':
-        this.router.navigate([
-          `/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`,
-        ]);
+        this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`],{replaceUrl:true});
         break;
 
       case 'joinAction':

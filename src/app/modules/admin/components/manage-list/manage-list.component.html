@@ -6,13 +6,13 @@
                 <ion-segment-button value="manage-user" class="normal-case">
                     <ion-label>{{"MANAGE_REQUEST"|translate}}</ion-label>
                 </ion-segment-button>
-                <ion-segment-button value="bulk-upload" class="normal-case">
+                <!-- <ion-segment-button value="bulk-upload" class="normal-case">
                     <ion-label>{{"BULK_UPLOAD"|translate}}</ion-label>
-                </ion-segment-button>
+                </ion-segment-button> -->
             </ion-segment>
         </ion-header>
     </div>
-    <div class="ion-padding">
+    <div class="ion-padding" >
         <div [ngSwitch]="type">
             <ion-card *ngSwitchCase="'manage-user'">
                 <table *ngIf="requestList" class="table color-black">

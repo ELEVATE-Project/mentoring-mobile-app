@@ -29,3 +29,7 @@ ion-checkbox {
     cursor: pointer;
     text-decoration: underline;
 }
+.readonly-checkbox {
+  pointer-events: none; /* Prevent clicking */
+  opacity: 1 !important; /* Keep normal appearance */
+}

@@ -35,7 +35,7 @@
   </div>
   <ion-grid>
     <ion-row>
-      <ion-col class="columns" size="4" no-padding>
+      <ion-col class="columns" size="3"  no-padding>
         <div class="d-flex flex-justify-center">
           <img
             (click)="onCardClick(data); $event.stopPropagation()"
@@ -44,14 +44,14 @@
           />
         </div>
       </ion-col>
-      <ion-col class="columns" size="8" no-padding>
+      <ion-col class="columns" size="9" no-padding>
         <ion-item lines="none" class="ion-item-padding-none">
           <ion-label
-            class="auto-margin"
+            class="auto-margin pl-5"
             (click)="onCardClick(data); $event.stopPropagation()"
           >
             <h4 class="margin-none wrap-text">
-              {{ data?.name || data?.title }}
+              {{ data?.name || data?.title  | titlecase }}
             </h4>
             <div class="d-flex">
               <p class="wrap-text" *ngIf="data?.designation?.length">
@@ -64,14 +64,15 @@
           </ion-label>
         </ion-item>
         <div
-          class="d-flex flex-justify-flex-end"
+            class="d-flex flex-justify-flex-end"
           [ngClass]="{ 'flex-justify-start': buttonConfig?.length > 1 }"
         >
           <ng-container *ngFor="let button of buttonConfig">
             <ion-button
+            size="small"
               *ngIf="showButton(button, data)"
               [color]="button?.color"
-              (click)="
+x              (click)="
                 handleButtonClick(button?.action, data);
                 $event.stopPropagation()
               "
