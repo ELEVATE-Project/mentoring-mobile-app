@@ -173,7 +173,6 @@ export class PrivatePage implements OnInit {
 
   async ngOnInit() {
     await this.initializeApp();
-    await this.rocketChatService.initializeWebSocketAndCheckUnread();
     if (this.chatService.initialBadge) {
       let page = this.appPages.find(
         (page: any) => page.pageId == PAGE_IDS.messages
@@ -259,6 +258,7 @@ export class PrivatePage implements OnInit {
             : false;
         }
         await this.profile.getChatToken();
+        await this.rocketChatService.initializeWebSocketAndCheckUnread();
         this.getUser();
         resolve();
       }, 0);

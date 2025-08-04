@@ -89,6 +89,17 @@ export class CreateSessionPage implements OnInit {
     private permissionService:PermissionService,
     private actionSheetController: ActionSheetController
   ) {
+    console.log(this.router.getCurrentNavigation().extras,"this.router.getCurrentNavigation().extras");
+    const state = this.router.getCurrentNavigation().extras.state;
+    console.log("120 ------>", state);
+    if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras.state) {
+      const state = this.router.getCurrentNavigation().extras.state;
+      console.log("122 ------>", state);
+      state.start_date = new Date(state.start_date * 1000).toISOString();
+      state.end_date = new Date(state.end_date * 1000).toISOString();
+      this.sessionDetails = state;
+      this.preFillData(state);
+    }
   }
   ngOnInit() {
       
@@ -116,7 +127,8 @@ export class CreateSessionPage implements OnInit {
         this.showForm = true;
       }
     });
-    this.isSubmited = true; //to be removed
+   
+    this.isSubmited = true;
     this.profileImageData.isUploaded = true;
     this.changeDetRef.detectChanges();
   }
@@ -213,7 +225,6 @@ export class CreateSessionPage implements OnInit {
     const data: any = await this.api.get(config);
     return data.result;
   }
-
   async uploadFile(file: File, signedUrl: any) {
     return new Promise((resolve, reject) => {
       this.attachment.cloudImageUpload(file, signedUrl).subscribe({
@@ -226,17 +237,14 @@ export class CreateSessionPage implements OnInit {
   async onSubmit() {
     if (!this.isSubmited) {
       this.form1.onSubmit();
-
     }
     if (this.form1.myForm.valid) {
       await this.handleFileUploads();
-
       const form = Object.assign({}, { ...this.form1.myForm.getRawValue(), ...this.form1.myForm.value });
       form.start_date = (Math.floor((new Date(form.start_date).getTime() / 1000) / 60) * 60).toString();
       form.end_date = (Math.floor((new Date(form.end_date).getTime() / 1000) / 60) * 60).toString();
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       form.time_zone = timezone;
-
       _.forEach(this.entityNames, (entityKey) => {
         const control = this.formData.controls.find(obj => obj.name === entityKey);
         if (control) {
@@ -276,9 +284,8 @@ export class CreateSessionPage implements OnInit {
   }
 
   async preFillData(data) {
+    console.log("data prefill --->", data);
     let existingData = await this.form.formatEntityOptions(data,this.entityNames)
-
-
     for(let j=0;j<this?.meetingPlatforms?.length;j++){
       if( existingData.meeting_info.platform == this?.meetingPlatforms[j].name){
          this.selectedLink = this?.meetingPlatforms[j];

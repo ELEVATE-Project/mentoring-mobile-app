@@ -251,8 +251,9 @@ export class HomePage implements OnInit {
       const cleaned = raw.replace(/```(?:json)?|```/g, '').trim();
       const json = JSON.parse(cleaned);
       console.log(json,"json ---? ");
-      this.utilService.openFormModel(json, MANAGERS_CREATE_SESSION_FORM);
+      // this.utilService.openFormModel(json, MANAGERS_CREATE_SESSION_FORM);
       // this.sessionForm.patchValue(data);
+      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`], { queryParams: { source: 'home' }, state: { formData: json } }); 
 
     } catch (err) {
       console.error('Error processing voice input:', err);
