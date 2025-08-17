@@ -45,11 +45,25 @@ export class UtilService {
 
   async shareLink(param: ISocialSharing) {
     let { text, subject, link } = param;
-    await Share.share({
-      text: text,
-      url: link,
-      dialogTitle: subject,
-    });
+    try {
+      console.log("shareLink 49");
+      if ((window as any).FlutterChannel) {
+      console.log("shareLink 51");
+
+      (window as any).FlutterChannel.postMessage(
+        {
+          channel: "FlutterChannel",
+          type: "share",
+          title:text,
+          url: link,
+        },
+      );
+    }
+    } catch (err) {
+      console.log("shareLink 63", err);
+
+      console.error("Error posting message to Flutter:", err);
+    }
   }
 
   async openModal(componentProps) {
@@ -307,40 +321,47 @@ export class UtilService {
   removeMessageBadge() {
     this.messageBadge.next(false);
   }
-
-  uploadFile(): Promise<File | null> {
+  uploadFile(allowedExtensions?: string[], maxSizeMB?: number, errorMsgs?:any): Promise<File | null> {
     return new Promise((resolve) => {
       const input = document.createElement('input');
       input.type = 'file';
-      input.accept = '*/*';
-  
+      const extensions = allowedExtensions && allowedExtensions.length > 0
+        ? allowedExtensions.map(ext => `.${ext}`).join(',')
+        : '*/*';
+      input.accept = extensions;
       input.addEventListener('change', (fileEvent: Event) => {
         const target = fileEvent.target as HTMLInputElement;
         const file = target.files?.[0];
   
         if (!file) {
-          this.toast.showToast(
-            this.translate.instant('No file selected'),
-            'danger'
-          );
+          this.toast.showToast('No file selected', 'danger');
           return resolve(null);
         }
+        if (allowedExtensions && allowedExtensions.length > 0) {
+          const fileName = file.name;
+          const fileExt = fileName.split('.').pop()?.toLowerCase();
   
-        if (!file.type || file.type.trim() === '') {
-          this.toast.showToast(
-            this.translate.instant('Cannot upload file: File type is not detected. Please try a different file.'),
-            'danger'
-          );
-          return resolve(null);
+          if (!fileExt || !allowedExtensions.includes(fileExt)) {
+            this.toast.showToast(
+              errorMsgs?.invalidFormatError,
+              'danger'
+            );
+            return resolve(null);
+          }
         }
-  
-        if (!file.name || file.name.trim() === '') {
-          return resolve(null);
+        if (maxSizeMB) {
+          const maxSizeBytes = maxSizeMB * 1024 * 1024;
+          console.log(file.size,"file.size", maxSizeBytes);
+          if (file.size > maxSizeBytes) {
+            this.toast.showToast(
+              errorMsgs?.maxSizeError,
+              'danger'
+            );
+            return resolve(null);
+          }
         }
-  
         return resolve(file);
       });
-  
       input.click();
     });
   }
