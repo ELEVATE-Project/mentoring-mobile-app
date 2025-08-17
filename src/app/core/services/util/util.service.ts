@@ -9,6 +9,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import * as Papa from 'papaparse';
 import { LocalStorageService } from '../localstorage.service';
 import { environment } from 'src/environments/environment';
+import { Clipboard } from '@capacitor/clipboard';
 
 import { ToastService } from '../toast.service';
 
@@ -54,10 +55,21 @@ export class UtilService {
           url: link,
         },
       );
+    }else{
+      await this.copyToClipBoard(window.location.href)
+      this.toast.showToast("LINK_COPIED","success")
     }
     } catch (err) {
     }
   }
+  copyToClipBoard = async (copyData: any) => {
+    await Clipboard.write({
+      string: copyData
+    }).then(()=>{
+      this.toast.showToast('Copied successfully',"success");
+    });
+  };
+
 
   async openModal(componentProps) {
     this.modal = await this.modalCtrl.create({
@@ -214,25 +226,9 @@ export class UtilService {
   parseAndDownloadCSV(rawCSVData: string, fileName: string): void {
     Papa.parse(rawCSVData, {
       complete: (result) => {
-    let isMobile = this.isMobile();
-        if (isMobile) {
-          try {
-            if ((window as any).FlutterChannel) {
-            (window as any).FlutterChannel.postMessage(
-              {
-                channel: "FlutterChannel",
-                type: "download",
-                title:fileName,
-                url: result.data,
-                fileType: 'text/csv',
-              },
-            );
-          }
-          } catch (err) {
-            console.error("Error posting message to Flutter:", err);
-          }
-        }else {
-          const csvContent = Papa.unparse(result.data);
+        const csvContent = Papa.unparse(result.data);
+  
+        const downloadCSV = () => {
           const blob = new Blob([csvContent], { type: 'text/csv' });
           const downloadLink = document.createElement('a');
           downloadLink.href = window.URL.createObjectURL(blob);
@@ -240,8 +236,24 @@ export class UtilService {
           document.body.appendChild(downloadLink);
           downloadLink.click();
           document.body.removeChild(downloadLink);
+        };
+  
+        try {
+          if (this.isMobile() && (window as any).FlutterChannel) {
+            (window as any).FlutterChannel.postMessage({
+              channel: "FlutterChannel",
+              type: "download",
+              title: fileName,
+              url: result.data,
+              fileType: "text/csv",
+            });
+          } else {
+            downloadCSV();
+          }
+        } catch (err) {
+          console.error("Error posting message to Flutter:", err);
+          downloadCSV(); // fallback to browser download
         }
-       
       },
     });
   }
