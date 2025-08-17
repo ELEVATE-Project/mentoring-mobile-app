@@ -46,13 +46,9 @@ export class UtilService {
   async shareLink(param: ISocialSharing) {
     let { text, subject, link } = param;
     try {
-      console.log("shareLink 49");
       if ((window as any).FlutterChannel) {
-      console.log("shareLink 51");
-
       (window as any).FlutterChannel.postMessage(
         {
-          channel: "FlutterChannel",
           type: "share",
           title:text,
           url: link,
@@ -60,9 +56,6 @@ export class UtilService {
       );
     }
     } catch (err) {
-      console.log("shareLink 63", err);
-
-      console.error("Error posting message to Flutter:", err);
     }
   }
 
@@ -224,9 +217,7 @@ export class UtilService {
     let isMobile = this.isMobile();
         if (isMobile) {
           try {
-            console.log("shareLink 49");
             if ((window as any).FlutterChannel) {
-            console.log("shareLink 51");
             (window as any).FlutterChannel.postMessage(
               {
                 channel: "FlutterChannel",
@@ -238,8 +229,6 @@ export class UtilService {
             );
           }
           } catch (err) {
-            console.log("shareLink 63", err);
-      
             console.error("Error posting message to Flutter:", err);
           }
         }else {

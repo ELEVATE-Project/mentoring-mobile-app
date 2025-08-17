@@ -260,8 +260,7 @@ export class SessionDetailPage implements OnInit, OnDestroy {
   }
 
   async share() {
-    console.log(navigator.share,"navigator.share");
-    if(this.isMobile && navigator.share){
+    if(this.isMobile){
       if(this.id){
           let url = `/mentoring/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`;
           let link = await this.utilService.getDeepLink(url);
