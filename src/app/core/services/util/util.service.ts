@@ -221,14 +221,38 @@ export class UtilService {
   parseAndDownloadCSV(rawCSVData: string, fileName: string): void {
     Papa.parse(rawCSVData, {
       complete: (result) => {
-        const csvContent = Papa.unparse(result.data);
-        const blob = new Blob([csvContent], { type: 'text/csv' });
-        const downloadLink = document.createElement('a');
-        downloadLink.href = window.URL.createObjectURL(blob);
-        downloadLink.download = fileName;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
+    let isMobile = this.isMobile();
+        if (isMobile) {
+          try {
+            console.log("shareLink 49");
+            if ((window as any).FlutterChannel) {
+            console.log("shareLink 51");
+            (window as any).FlutterChannel.postMessage(
+              {
+                channel: "FlutterChannel",
+                type: "download",
+                title:fileName,
+                url: result.data,
+                fileType: 'text/csv',
+              },
+            );
+          }
+          } catch (err) {
+            console.log("shareLink 63", err);
+      
+            console.error("Error posting message to Flutter:", err);
+          }
+        }else {
+          const csvContent = Papa.unparse(result.data);
+          const blob = new Blob([csvContent], { type: 'text/csv' });
+          const downloadLink = document.createElement('a');
+          downloadLink.href = window.URL.createObjectURL(blob);
+          downloadLink.download = fileName;
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+        }
+       
       },
     });
   }
