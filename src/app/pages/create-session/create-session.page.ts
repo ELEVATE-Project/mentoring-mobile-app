@@ -446,7 +446,7 @@ export class CreateSessionPage implements OnInit {
     let dependedControl = this.form1.myForm.get(event.dependedChild)
     this.sessionType = event?.value;
     if(event.value === "PUBLIC") {
-      if((typeof formRawValue?.mentor_id === 'string' && formRawValue?.mentor_id)) {
+      if((typeof formRawValue?.mentor_id === 'string' && formRawValue?.mentor_id) || this.isHome) {
       this.setControlValidity(dependedControlIndex, dependedControl, false, false);
       return;
       }
