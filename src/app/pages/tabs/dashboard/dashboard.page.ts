@@ -51,7 +51,6 @@ export class DashboardPage implements OnInit {
   chartBodyPayload: any;
   translatedChartConfig : any;
   metaKeys =DASHBOARD_TABLE_META_KEYS
-
   constructor(
     private profile: ProfileService,
     private apiService: HttpService,
@@ -148,6 +147,26 @@ export class DashboardPage implements OnInit {
        this.bigNumberCount();
        this.prepareChartUrl();
       },100);
+  }
+
+  downloadCSV(data){
+    console.log("Downloading CSV 100:", data);
+
+    try {
+      console.log("Downloading CSV 100:", data);
+      if ((window as any).FlutterChannel) {
+      console.log("Downloading CSV 102:", data);
+        (window as any).FlutterChannel.postMessage({
+          channel: "FlutterChannel",
+          type: "download",
+          title: data.fileName,
+          url: data.url,
+          fileType: "text/csv",
+        });
+      }
+    } catch (err) {
+      console.error("Error posting message to Flutter:", err);
+    }
   }
 
   async handleRoleChange(e) {
