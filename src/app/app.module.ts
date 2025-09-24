@@ -2,7 +2,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
@@ -28,47 +28,41 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
 
-@NgModule({
-  declarations: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    IonicModule.forRoot(),
-    AppRoutingModule,
-    HttpClientModule,
-    MatTableModule,
-    MatPaginatorModule,
-    IonicStorageModule.forRoot({
-      name: 'mentoringApp',
-      driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage],
-    }),
-    CoreModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: translateHttpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
-    ReactiveFormsModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: false,
-      // Register the ServiceWorker as soon as the app is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    }),
-    BrowserAnimationsModule,
-    RecaptchaModule,
-    MatToolbarModule,
-    FrontendChatLibraryModule,
-  ],
-  exports: [],
-  providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    TitleCasePipe,
-    SwUpdate,
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    exports: [],
+    bootstrap: [AppComponent], imports: [CommonModule,
+        BrowserModule,
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        MatTableModule,
+        MatPaginatorModule,
+        IonicStorageModule.forRoot({
+            name: 'mentoringApp',
+            driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage],
+        }),
+        CoreModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: translateHttpLoaderFactory,
+                deps: [HttpClient],
+            },
+        }),
+        ReactiveFormsModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: false,
+            // Register the ServiceWorker as soon as the app is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000'
+        }),
+        BrowserAnimationsModule,
+        RecaptchaModule,
+        MatToolbarModule,
+        FrontendChatLibraryModule], providers: [
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        TitleCasePipe,
+        SwUpdate,
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}

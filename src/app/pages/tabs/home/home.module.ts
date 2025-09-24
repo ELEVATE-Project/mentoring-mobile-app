@@ -6,21 +6,15 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { CoreModule } from 'src/app/core/core.module';
 import {OverlayModule} from '@angular/cdk/overlay'
 
-@NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    HomePageRoutingModule,
-    SharedModule,
-    CoreModule,
-    HttpClientModule,
-    OverlayModule
-  ],
-  declarations: [HomePage],
-})
+@NgModule({ declarations: [HomePage], imports: [IonicModule,
+        CommonModule,
+        FormsModule,
+        HomePageRoutingModule,
+        SharedModule,
+        CoreModule,
+        OverlayModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class Tab1PageModule {}
