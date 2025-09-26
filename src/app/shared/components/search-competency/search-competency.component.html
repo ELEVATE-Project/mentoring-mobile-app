@@ -15,14 +15,14 @@
   </div>
   <div *ngIf="entities && !data?.viewListMode" class="competency-list-wrapper">
     <ion-item *ngFor="let option of entities.data" lines="none">
-      <ion-label class="label-wrap"></ion-label>>{{ option?.label }}</ion-label>
+      <ion-label class="label-wrap">{{ option?.label }}</ion-label>
       <ion-checkbox slot="start" [checked]="isOptionSelected(option)" (ionChange)="onCheckboxChange($event, option)"></ion-checkbox>
     </ion-item>
   </div>
 
   <div *ngIf="data?.viewListMode" class="competency-list-wrapper">
     <ion-item *ngFor="let data of data.selectedData" lines="none">
-      <ion-label class="label-wrap"></ion-label>>{{ data?.label }}</ion-label>
+      <ion-label class="label-wrap">{{ data?.label }}</ion-label>
       <ion-checkbox checked="true" (ionChange)="onCheckboxChange($event, data)" slot="start"></ion-checkbox>
     </ion-item>
   </div>
