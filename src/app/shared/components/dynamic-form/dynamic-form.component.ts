@@ -278,4 +278,9 @@ export class DynamicFormComponent implements OnInit {
       this.customEventEmitter.emit(event)
     }    
   }
+  onFocus(event: FocusEvent): void {
+    if (this.isMobile) {
+      (event.target as HTMLInputElement).blur();
+    }
+  }
 }

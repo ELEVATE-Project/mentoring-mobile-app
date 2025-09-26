@@ -92,7 +92,7 @@ export class DashboardPage implements OnInit {
 
   async initialDuration(){
     const today = moment();
-    this.startDate = today.clone().startOf('month').add(1, 'day');
+    this.startDate = today.clone().startOf('month').add(1, 'second');
     this.endDate = today.clone().endOf('month');
     this.groupBy = 'day';
     const startDateEpoch = this.startDate ? this.startDate.unix() : null;
@@ -113,22 +113,22 @@ export class DashboardPage implements OnInit {
   
     switch (this.selectedDuration) {
       case 'week':
-        this.startDate = today.clone().startOf('week').add(1, 'day');
+        this.startDate = today.clone().startOf('week').add(1, 'second');
         this.endDate = today.clone().endOf('week');
         this.groupBy = 'day';
         break;
       case 'month':
-        this.startDate = today.clone().startOf('month').add(1, 'day');
+        this.startDate = today.clone().startOf('month').add(1, 'second');
         this.endDate = today.clone().endOf('month');
         this.groupBy = 'day';
         break;
       case 'quarter':
-        this.startDate = today.clone().startOf('quarter').add(1, 'day');
+        this.startDate = today.clone().startOf('quarter').add(1, 'second');
         this.endDate = today.clone().endOf('quarter');
         this.groupBy = 'month';
         break;
       case 'year':
-        this.startDate = firstDayOfYear.clone().date(1).add(1, 'day');
+        this.startDate = firstDayOfYear.clone().date(1).add(1, 'second');
         this.endDate = lastDayOfYear.clone();
         this.groupBy = 'month';
         break;
@@ -298,7 +298,7 @@ export class DashboardPage implements OnInit {
       `&session_type=${this.session_type}` +
       `&start_date=${this.startDateEpoch || ''}` +
       `&end_date=${this.endDateEpoch || ''}` +
-      `&groupBy=${this.groupBy}`;
+      `&group_by=${this.groupBy}`;
     const params = `${urlConstants.API_URLS.DASHBOARD_REPORT_DATA}` +
       `report_code=${this.report_code}${queryParams}`;
     this.chartBodyPayload =  this.entityTypes ? { entityTypes: this.entityTypes}: {};
@@ -325,7 +325,7 @@ export class DashboardPage implements OnInit {
     `&session_type=${this.session_type}` +
     `&start_date=${this.startDateEpoch || ''}` +
     `&end_date=${this.endDateEpoch || ''}` +
-    `&groupBy=${this.groupBy}`;
+    `&group_by=${this.groupBy}`;
   this.chartBody.chartUrl = this.chartBodyConfig.chartUrl;
   this.chartBodyPayload = this.entityTypes ? { entityTypes: this.entityTypes} : {};
   setTimeout(() => {
