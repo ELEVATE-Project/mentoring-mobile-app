@@ -92,7 +92,7 @@ export class DashboardPage implements OnInit {
 
   async initialDuration(){
     const today = moment();
-    this.startDate = today.clone().startOf('month').add(1, 'day');
+    this.startDate = today.clone().startOf('month').add(1, 'second');
     this.endDate = today.clone().endOf('month');
     this.groupBy = 'day';
     const startDateEpoch = this.startDate ? this.startDate.unix() : null;
