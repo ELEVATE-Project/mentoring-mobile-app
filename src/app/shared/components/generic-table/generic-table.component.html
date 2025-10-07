@@ -39,18 +39,18 @@
         <div *ngIf="column.type == 'array'">
           <td mat-cell (click)="onCellClick(column.name,element)" *matCellDef="let element">
             <ng-container *ngIf="element[column.name]?.length > 0; else noData">
-              <div class="cell-text" *ngFor="let ele of element[column.name]">
+              <div class="cell-text auto-margin" *ngFor="let ele of element[column.name]">
                 {{ ele.label || ele }}
               </div>
             </ng-container>
             <ng-template #noData>
-              <div class="cell-text">-</div>
+              <div class="cell-text auto-margin">-</div>
             </ng-template>
           </td>
         </div>
         <div *ngIf="column.type == 'button'">
           <td mat-cell *matCellDef="let element">
-            <div class="d-flex flex-justify-space-between cell-text">
+            <div class="d-flex flex-justify-space-between cell-text auto-margin">
               <ion-grid>
                 <ion-row class="d-flex flex-justify-center">
                   <div *ngFor="let buttonName of element[column.name]">
