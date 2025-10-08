@@ -49,7 +49,9 @@ ion-chip {
       width: 300px;
     }
   }
-// .white-spc{
+.word-break {
+  word-break: break-word !important;
+}// .white-spc{
 //   white-space: normal;
 // }
 
