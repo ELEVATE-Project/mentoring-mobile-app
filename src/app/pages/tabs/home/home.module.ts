@@ -10,11 +10,12 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { CoreModule } from 'src/app/core/core.module';
 import {OverlayModule} from '@angular/cdk/overlay'
 
-@NgModule({ declarations: [HomePage], imports: [IonicModule,
+@NgModule({ declarations: [], imports: [IonicModule,
         CommonModule,
         FormsModule,
         HomePageRoutingModule,
         SharedModule,
         CoreModule,
-        OverlayModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        OverlayModule,
+        HomePage], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class Tab1PageModule {}

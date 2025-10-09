@@ -28,10 +28,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
 
-@NgModule({ declarations: [AppComponent],
+@NgModule({ declarations: [],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    exports: [],
-    bootstrap: [AppComponent], imports: [CommonModule,
+    exports: [], imports: [CommonModule,
         BrowserModule,
         IonicModule.forRoot(),
         AppRoutingModule,

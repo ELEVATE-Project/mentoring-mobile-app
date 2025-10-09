@@ -12,7 +12,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
 @NgModule({
-  declarations: [PrivatePage],
+  declarations: [],
   imports: [
     CommonModule,
     FormsModule,
@@ -26,6 +26,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
       },
     }),
     SharedModule,
+    PrivatePage
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
 })

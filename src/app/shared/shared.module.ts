@@ -54,7 +54,24 @@ import { PreAlertModalComponent } from './components/pre-alert-modal/pre-alert-m
 import { DynamicSelectModalComponent } from '../dynamic-select-modal/dynamic-select-modal.component';
 
 @NgModule({
-  declarations: [
+  declarations: [],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    IonicModule,
+    TranslateModule,
+    FormsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    OverlayModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    MatExpansionModule,
     DynamicFormComponent,
     SessionCardComponent,
     PageHeaderComponent,
@@ -95,24 +112,6 @@ import { DynamicSelectModalComponent } from '../dynamic-select-modal/dynamic-sel
     PreAlertModalComponent,
     DynamicSelectModalComponent
   ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    IonicModule,
-    TranslateModule,
-    FormsModule,
-    MatDatepickerModule,
-    MatInputModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatTableModule,
-    MatPaginatorModule,
-    OverlayModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    MatExpansionModule
-  ],
   exports: [
     DynamicFormComponent,
     SessionCardComponent,
@@ -150,8 +149,10 @@ import { DynamicSelectModalComponent } from '../dynamic-select-modal/dynamic-sel
     ChipsAndFilterComponent,
     GenericCardComponent,
     PreAlertModalComponent,
-    DynamicSelectModalComponent
-    
+    DynamicSelectModalComponent,
+    InputChipComponent,
+    ModelComponent,
+    NumberOnlyDirective
   ],
 })
 export class SharedModule {}

@@ -20,7 +20,7 @@ export const environment = {
   name: 'debug environment',
   staging: false,
   dev: false,
-  baseUrl: 'https://dev.elevate-apis.shikshalokam.org',
+  baseUrl: 'https://qa.elevate-apis.shikshalokam.org',
   sqliteDBName: 'mentoring.db',
   deepLinkUrl: 'https://mentored.shikshalokam.org',
   privacyPolicyUrl:'https://shikshalokam.org/mentoring/privacy-policy',
@@ -31,7 +31,7 @@ export const environment = {
   // recaptchaSiteKey:"6LfWEKYpAAAAACxKbR7H42o3BwbJkJA06vIM_6Ea",
   recaptchaSiteKey:"",
   restictedPages: [],
-  isAuthBypassed: false,
+  isAuthBypassed: true,
   unauthorizedRedirectUrl: "/auth/login",
   password:{
     minLength:10,

@@ -6,11 +6,18 @@ import { Capacitor } from '@capacitor/core';
 import { SwUpdate } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
+import { IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule
+],
 })
 export class AppComponent {
   constructor(

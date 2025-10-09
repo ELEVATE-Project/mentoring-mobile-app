@@ -5,29 +5,57 @@
   <meta charset="utf-8"/>
   <title>MentorED</title>
 
+  <!-- Correct base href for Angular build -->
   <base href="/"/>
 
-  <meta name="color-scheme" content="light"/>
+  <!-- Viewport & mobile settings -->
   <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="color-scheme" content="light"/>
   <meta name="format-detection" content="telephone=no"/>
   <meta name="msapplication-tap-highlight" content="no"/>
 
-  <!-- <link rel="icon" type="image/png" href="assets/icon/favicon.png"/> -->
-  <!-- <script rel="preload" src="assets/env/env.js" as="script"></script> -->
-
-  <!-- add to homescreen for ios -->
+  <!-- iOS home screen settings -->
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+  <!-- Manifest & theme -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#1976d2">
+
+  <!-- Google Fonts & Material Icons -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block" rel="stylesheet">
 
+  <!-- Content Security Policy (Dev) -->
+  <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self' http://localhost:8100 ws: http: https:;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' http: https:;
+      style-src 'self' 'unsafe-inline' http: https:;
+      connect-src 'self' ws: http: https:;
+      img-src 'self' data:;
+  ">
+
+  <!-- For production, replace with stricter CSP -->
+  <!--
+  <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self';
+      style-src 'self';
+      connect-src 'self';
+      img-src 'self' data:;
+  ">
+  -->
+
+  <!-- Favicon can be added here -->
+  <!-- <link rel="icon" type="image/png" href="assets/icon/favicon.png"/> -->
+
 </head>
 
 <body class="mat-typography">
+  <!-- Angular/Ionic root component -->
   <app-root></app-root>
+
   <noscript>Please enable JavaScript to continue using this application.</noscript>
 </body>
 

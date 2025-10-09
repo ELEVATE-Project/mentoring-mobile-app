@@ -18,8 +18,9 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "baseHref": "/mentoring/",
-            "deployUrl": "/mentoring/",
+            "buildTarget": "app:build",
+            "baseHref": "/",
+            "deployUrl": "/",
             "assets": [
               {
                 "glob": "**/*",
@@ -83,7 +84,10 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "app:build"
+            "buildTarget": "app:build",
+            "baseHref": "/",
+            "deployUrl": "/"
+            
           },
           "configurations": {
             "production": {
