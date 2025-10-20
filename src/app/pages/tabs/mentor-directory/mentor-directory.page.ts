@@ -81,7 +81,7 @@ export class MentorDirectoryPage implements OnInit {
         this.mentors = this.mentors.concat(data.result.data);
 
       } else {
-        this.mentors = this.mentors.concat(data.result.data);
+        this.mentors = data.result.data;
         this.mentorsCount = data.result.count;
       }
       let totalValues = this.mentors.reduce((acc, mentor) => acc + (mentor.values?.length || 0), 0);
