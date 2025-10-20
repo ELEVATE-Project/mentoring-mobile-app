@@ -110,18 +110,32 @@ export class MentorDetailsPage implements OnInit {
       this.detailData.data = this.mentorProfileData?.result;
       this.detailData.data.organizationName = this.mentorProfileData?.result?.organization.name;
   }
-  async getUpcomingSessions() {
+  async getUpcomingSessions(isLoadMore: boolean = false) {
     const config = {
       url: urlConstants.API_URLS.UPCOMING_SESSIONS + this.mentorId + "?page="+this.page + '&limit='+this.limit,
       payload: {}
     };
     try {
       let data = await this.httpService.get(config);
-      this.upcomingSessions = this.upcomingSessions.concat(data.result.data);
-      this.totalCount = data.result.count;
-      this.infiniteScroll.disabled = (this.upcomingSessions.length === this.totalCount) ? true : false;
+      const newSessions = data?.result?.data || [];
+      
+      if (isLoadMore) {
+        this.upcomingSessions = [...this.upcomingSessions, ...newSessions];
+      } else {
+        this.upcomingSessions = newSessions;
+      }
+      
+      this.totalCount = data?.result?.count || 0;
+      
+      if (this.infiniteScroll) {
+        this.infiniteScroll.disabled = this.upcomingSessions.length >= this.totalCount;
+      }
     }
     catch (error) {
+      console.error('Error fetching upcoming sessions:', error);
+      if (this.infiniteScroll) {
+        this.infiniteScroll.disabled = true;
+      }
     }
   }
 
@@ -175,11 +189,9 @@ export class MentorDetailsPage implements OnInit {
     }
   }
 
-  loadMore(event){
-    setTimeout(() => {
-      this.page += 1;
-      this.getUpcomingSessions();
-      event.target.complete();
-    }, 1000);
+  async loadMore(event){
+    this.page += 1;
+    await this.getUpcomingSessions(true);
+    event.target.complete();
   }
 }
