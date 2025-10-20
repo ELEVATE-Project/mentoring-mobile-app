@@ -335,5 +335,7 @@
     "CLUSTER":"Cluster",
     "DISTRICT":"District",
     "BLOCK":"Block",
-    "SCHOOL":"School"
+    "SCHOOL":"School",
+    "LOADING": "Loading more data..."
+
 }

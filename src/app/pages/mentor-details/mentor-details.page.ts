@@ -1,6 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IonInfiniteScroll } from '@ionic/angular';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, LocalStorageService, ToastService, UserService } from 'src/app/core/services';
@@ -13,7 +14,11 @@ import { CommonRoutes } from 'src/global.routes';
   styleUrls: ['./mentor-details.page.scss'],
 })
 export class MentorDetailsPage implements OnInit {
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
   mentorId;
+  page = 1;
+  limit = 100;
+  totalCount = 0;
   public headerConfig: any = {
     backButton: false,
     headerColor: "primary"
@@ -73,7 +78,7 @@ export class MentorDetailsPage implements OnInit {
   userCantAccess:any;
   isloaded:boolean=false
   segmentValue = "about";
-  upcomingSessions;
+  upcomingSessions: any = [];
   mentorProfileData:any;
   constructor(
     private routerParams: ActivatedRoute,
@@ -87,21 +92,15 @@ export class MentorDetailsPage implements OnInit {
     routerParams.params.subscribe(params => {
       this.mentorId = this.buttonConfig.meta.id = params.id;
       this.getMentor();
-      // this.userService.getUserValue().then(async (result) => {
-      //   console.log(result,"resultresultresultresult");
-      //   if (result) {
-      //     this.getMentor();
-      //   } else {
-      //     this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams: { mentorId: this.mentorId } })
-      //   }
-      // })
     })
   }
 
   ngOnInit() {
   }
   async ionViewWillEnter(){
-    this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+    this.page = 1;
+    this.upcomingSessions = [];
+    this.getUpcomingSessions();
   }
   async getMentor() {
     let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
@@ -111,6 +110,20 @@ export class MentorDetailsPage implements OnInit {
       this.detailData.data = this.mentorProfileData?.result;
       this.detailData.data.organizationName = this.mentorProfileData?.result?.organization.name;
   }
+  async getUpcomingSessions() {
+    const config = {
+      url: urlConstants.API_URLS.UPCOMING_SESSIONS + this.mentorId + "?page="+this.page + '&limit='+this.limit,
+      payload: {}
+    };
+    try {
+      let data = await this.httpService.get(config);
+      this.upcomingSessions = this.upcomingSessions.concat(data.result.data);
+      this.totalCount = data.result.count;
+      this.infiniteScroll.disabled = (this.upcomingSessions.length === this.totalCount) ? true : false;
+    }
+    catch (error) {
+    }
+  }
 
   async getMentorDetails(){
     const config = {
@@ -119,7 +132,6 @@ export class MentorDetailsPage implements OnInit {
     };
     try {
       let data = await this.httpService.get(config);
-      console.log("data ----------", data);
       return data;
     }
     catch (error) {
@@ -132,7 +144,11 @@ export class MentorDetailsPage implements OnInit {
 
   async segmentChanged(ev: any) {
     this.segmentValue = ev.detail.value;
-    this.upcomingSessions = (this.segmentValue == "upcoming") ? await this.sessionService.getUpcomingSessions(this.mentorId) : [];
+    if(this.segmentValue == 'upcoming'){
+      this.page = 1;
+      this.upcomingSessions = [];
+      this.getUpcomingSessions();
+    }
   }
   async onAction(event){
     switch (event.type) {
@@ -142,16 +158,28 @@ export class MentorDetailsPage implements OnInit {
 
       case 'joinAction':
         await this.sessionService.joinSession(event.data);
-        this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+        this.page = 1;
+        this.upcomingSessions = [];
+        this.getUpcomingSessions();
         break;
 
         case 'enrollAction':
         let enrollResult = await this.sessionService.enrollSession(event.data.id);
         if(enrollResult.result){
           this.toast.showToast(enrollResult.message, "success")
-          this.upcomingSessions = await this.sessionService.getUpcomingSessions(this.mentorId);
+          this.page = 1;
+          this.upcomingSessions = [];
+          this.getUpcomingSessions();
         }
         break;
     }
+  }
+
+  loadMore(event){
+    setTimeout(() => {
+      this.page += 1;
+      this.getUpcomingSessions();
+      event.target.complete();
+    }, 1000);
   }
 }

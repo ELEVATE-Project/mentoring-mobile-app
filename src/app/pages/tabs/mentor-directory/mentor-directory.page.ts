@@ -15,7 +15,7 @@ import { CommonRoutes } from 'src/global.routes';
 })
 export class MentorDirectoryPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
-  @ViewChild(IonContent) infinitescroll: IonInfiniteScroll;
+  @ViewChild(IonInfiniteScroll) infinitescroll: IonInfiniteScroll;
 
   page = 1; //todo: Enable pagenation
   limit = 50;
@@ -82,9 +82,10 @@ export class MentorDirectoryPage implements OnInit {
 
       } else {
         this.mentors = this.mentors.concat(data.result.data);
+        this.mentorsCount = data.result.count;
       }
-      this.infinitescroll.disabled = this.mentorsCount == 0 ? true : false;
-      this.mentorsCount = data.result.count;
+      let totalValues = this.mentors.reduce((acc, mentor) => acc + (mentor.values?.length || 0), 0);
+      this.infinitescroll.disabled = this.mentorsCount == totalValues ? true : false;
     }
     catch (error) {
       this.isLoaded = true

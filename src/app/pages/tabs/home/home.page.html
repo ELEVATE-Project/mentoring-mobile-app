@@ -67,7 +67,7 @@
     </div>
   </div>
 </div>
-<ion-content>
+<ion-content scrollEvents="true">
   <div *ngIf="sessions&&(selectedSegment=='all-sessions')">
     <ion-grid>
       <ion-row class="d-flex ">
@@ -90,12 +90,12 @@
         <ion-grid>
           <ion-row class="d-flex flex-justify-center">
             <ion-col padding size-xs="12" size-sm="12" size-md="8" size-lg="6" align-self-stretch>
-        <ion-button shape="round" strong="true" class="card-button" (click)="createSession()">
-          {{'CREATE_SESSION' | translate}} <ion-icon class="create-icon" name="add-circle-outline"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+              <ion-button shape="round" strong="true" class="card-button" (click)="createSession()">
+                {{'CREATE_SESSION' | translate}} <ion-icon class="create-icon" name="add-circle-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-card-content>
     </ion-card>
     <div *ngIf="createdSessions?.data?.length">
@@ -111,7 +111,7 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      
+
     </div>
     <div *ngIf="!createdSessions?.data?.length">
       <app-no-data-found [messageHeader]="'NO_SESSIONS_CREATED'" [messageDescription]="'START_CREATING_SESSION'">
@@ -137,14 +137,29 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-     
+
     </div>
-    <div *ngIf="sessions && !sessions?.my_sessions.length">
+    <div *ngIf="sessions && !sessions?.my_sessions?.length">
       <app-no-data-found [messageHeader]="'NO_SESSIONS_ENROLLED'" [messageDescription]="'CHECK_ALLSESSION_TO_ENROLL'">
       </app-no-data-found>
     </div>
   </div>
-  <div *ngIf="!sessions">
+  <div *ngIf="!sessions && selectedSegment === 'all-sessions'">
     <app-skeleton [type]="SKELETON.HOME_SKELETON" [repetition]="4"></app-skeleton>
   </div>
+  
+  <div *ngIf="!createdSessions && selectedSegment === 'created-sessions'">
+    <app-skeleton [type]="SKELETON.HOME_SKELETON" [repetition]="4"></app-skeleton>
+  </div>
+  
+  <div *ngIf="!sessions && selectedSegment === 'my-sessions'">
+    <app-skeleton [type]="SKELETON.HOME_SKELETON" [repetition]="4"></app-skeleton>
+  </div>
+  <ion-infinite-scroll   threshold="100px" 
+    #infiniteScroll 
+    [disabled]="isInfiniteScrollDisabled" 
+    (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'LOADING' | translate}}" >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

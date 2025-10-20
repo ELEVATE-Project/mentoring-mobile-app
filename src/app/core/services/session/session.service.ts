@@ -254,7 +254,7 @@ export class SessionService {
 
   async getSessions(obj) {
     const config = {
-      url: urlConstants.API_URLS.HOME_SESSION + obj.page + '&limit=' + obj.limit,
+      url: urlConstants.API_URLS.HOME_SESSION + obj.page + '&limit=' + obj.limit + (obj.scope ? '&sessionScope=' + obj.scope : ''),
     };
     try {
       let data: any = await this.httpService.get(config);
