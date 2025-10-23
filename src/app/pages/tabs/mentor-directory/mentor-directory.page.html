@@ -19,10 +19,10 @@
       </ion-grid>
     </div>
   </div>
-  <div *ngIf="!mentorsCount && isLoaded">
+  <div *ngIf="!mentorsCount && !mentors.length && isLoaded">
     <app-no-data-found [messageHeader]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
   </div>
-  <ion-infinite-scroll #infinitescroll (ionInfinite)="loadMore($event)" >
+  <ion-infinite-scroll #infinitescroll [disabled]="isInfiniteScrollDisabled" (ionInfinite)="loadMore($event)" >
     <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'LOADING' | translate}}">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
