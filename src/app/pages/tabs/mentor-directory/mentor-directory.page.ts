@@ -82,6 +82,7 @@ export class MentorDirectoryPage implements OnInit {
         this.mentors = [...this.mentors, ...data.result.data];
       } else {
         this.mentors = data.result.data;
+        this.mentorsCount = data.result.count;
       }
       let totalValues = this.mentors.reduce((acc, mentor) => acc + (mentor.values?.length || 0), 0);
       this.isInfiniteScrollDisabled = (totalValues >= this.mentorsCount) ;
