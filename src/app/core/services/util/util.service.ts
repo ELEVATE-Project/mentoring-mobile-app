@@ -274,5 +274,15 @@ export class UtilService {
   subscribeCriteriaChip(criteriaChip: string) {
     this.criteriaChipSource.next(criteriaChip);
   }
+
+    downloadCSVFile(rawCsvUrl: string, fileName: string): void {
+    const link = document.createElement('a');
+    link.href = rawCsvUrl;
+    link.download = fileName.endsWith('.csv') ? fileName : `${fileName}.csv`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
   
 }
