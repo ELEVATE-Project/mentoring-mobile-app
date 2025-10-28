@@ -49,7 +49,7 @@
   <div class="tables inner-div-style"  *ngIf="selectedRole !=='org_admin'">
     <ion-grid>
       <ion-row *ngIf="chartBody?.tableUrl">
-        <lib-table [url]="chartBody?.tableUrl" [headers]="chartBody?.headers" [showDownload]="true" [title]="chartBody?.tableTitle | translate"  style="width: 100%;" [metaKeys]="metaKeys"></lib-table>
+        <lib-table [url]="chartBody?.tableUrl" [headers]="chartBody?.headers" [showDownload]="true" [title]="chartBody?.tableTitle | translate"  style="width: 100%;" [metaKeys]="metaKeys" (downloadEvent)="downloadCSV($event)"></lib-table>
       </ion-row>
     </ion-grid>
   </div>

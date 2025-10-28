@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { BIG_NUMBER_DASHBOARD_FORM , DASHBOARD_TABLE_META_KEYS} from 'src/app/core/constants/formConstant';
-import { HttpService } from 'src/app/core/services';
+import { HttpService, UtilService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import * as moment from 'moment';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
@@ -54,7 +54,9 @@ export class DashboardPage implements OnInit {
     private profile: ProfileService,
     private apiService: HttpService,
     private form: FormService,
-    private translate : TranslateService) { }
+    private translate : TranslateService,
+    private utilService: UtilService
+  ) { }
 
   
   ionViewWillEnter() {
@@ -332,6 +334,10 @@ export class DashboardPage implements OnInit {
   this.chartBody.chartUrl = `${environment.baseUrl}${urlConstants.API_URLS.DASHBOARD_REPORT_DATA}` + 'report_code='+ this.chartBody.report_code + queryParams;
   }, 10);
   this.chartBody.headers = await this.apiService.setHeaders();
+  }
+
+  downloadCSV(data: { url: string; fileName: string }) {
+    this.utilService.downloadCSVFile(data.url, data.fileName);
   }
 }
 
