@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonContent, IonInfiniteScroll } from '@ionic/angular';
+import { IonContent } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import {
   HttpService,
@@ -14,8 +14,7 @@ import { CommonRoutes } from 'src/global.routes';
   styleUrls: ['./mentor-directory.page.scss'],
 })
 export class MentorDirectoryPage implements OnInit {
-  @ViewChild(IonContent) content: IonContent;
-  @ViewChild(IonInfiniteScroll) infinitescroll: IonInfiniteScroll;
+  @ViewChild(IonContent) content: IonContent
 
   page = 1; //todo: Enable pagenation
   limit = 50;
@@ -43,6 +42,7 @@ export class MentorDirectoryPage implements OnInit {
   directory: boolean = true;
   selectedChips: boolean = false;
   data: any;
+  isInfiniteScrollDisabled: boolean = false;
 
   constructor(
     private router: Router,
@@ -54,9 +54,11 @@ export class MentorDirectoryPage implements OnInit {
   ngOnInit() {}
 
   async ionViewWillEnter() {
+    this.isLoaded = false;
     this.page = 1;
     this.mentors = [];
     this.getMentors();
+    this.isInfiniteScrollDisabled = false;
     this.gotToTop();
   }
 
@@ -64,31 +66,31 @@ export class MentorDirectoryPage implements OnInit {
     this.content.scrollToTop(1000);
   }
 
-  async getMentors(showLoader = true) {
+ 
+   async getMentors(showLoader = true ,isLoadMore: boolean =false) {
     showLoader ? await this.loaderService.startLoader() : '';
-    const config = {
+  const config = {
       url: urlConstants.API_URLS.MENTORS_DIRECTORY_LIST + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + '&directory=' + this.directory + '&search_on=' + (this.selectedChipName? this.selectedChipName : '') + '&' + (this.urlFilterData ? this.urlFilterData: ''),
       payload: {}
     };
     try {
       let data: any = await this.httpService.get(config);
       this.data = data.result.data;
-      this.isLoaded = true
+      this.isLoaded = true;
       showLoader ? await this.loaderService.stopLoader() : '';
-      if (this.mentors.length && this.mentors[this.mentors.length - 1].key == data.result.data[0]?.key) {
-        this.mentors[this.mentors.length - 1].values = this.mentors[this.mentors.length - 1].values.concat(data.result.data[0].values)
-        data.result.data.shift();
-        this.mentors = this.mentors.concat(data.result.data);
-
+      if (isLoadMore) {
+        this.mentors = [...this.mentors, ...data.result.data];
       } else {
         this.mentors = data.result.data;
         this.mentorsCount = data.result.count;
       }
       let totalValues = this.mentors.reduce((acc, mentor) => acc + (mentor.values?.length || 0), 0);
-      this.infinitescroll.disabled = this.mentorsCount == totalValues ? true : false;
-    }
-    catch (error) {
-      this.isLoaded = true
+      this.isInfiniteScrollDisabled = (totalValues >= this.mentorsCount) ;
+
+
+    } catch (error) {
+      this.isLoaded = true;
+      this.isInfiniteScrollDisabled = true; 
       showLoader ? await this.loaderService.stopLoader() : '';
     }
   }
@@ -99,10 +101,10 @@ export class MentorDirectoryPage implements OnInit {
         break;
     }
   }
-  async loadMore(event) {
-    if(this.data){
-      this.page = this.directory ? this.page + 1 : this.page;
-      await this.getMentors(false);
+ async loadMore(event) {
+    if (this.data && !this.isInfiniteScrollDisabled) {
+      this.page = this.page + 1;
+      await this.getMentors(false, true);
     }
     event.target.complete();
   }
