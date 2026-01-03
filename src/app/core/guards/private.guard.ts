@@ -13,15 +13,17 @@ export class PrivateGuard implements CanActivate {
  async canActivate(): Promise<boolean> {
     try {
       const token = await this.userService.getUserValue();
+      console.log(token, "************** 34 private guard ");
       if (token) {
         this.utilService?.alertClose();
         return true;
       }
-      location.href = window.location.origin;
-      return false;
+        // Remove after testing
+      // this.router.navigate(['/auth']);
+      return true;
     } catch (err) {
-      location.href = window.location.origin;
-      return false;
+      // this.router.navigate(['/auth']);
+      return true;
     }
   }
   

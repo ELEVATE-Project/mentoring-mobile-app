@@ -18,7 +18,9 @@ export class PublicGuard implements CanActivate {
       if (result) {
         return false;
       } else if(environment['isAuthBypassed']) {
-        this.router.navigate([''])
+        console.log("************** 21 public gausrd ");
+          // Remove after testing
+        this.router.navigate(['/mentoring/tabs/home']);
         return false;
       }
       else {

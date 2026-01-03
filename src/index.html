@@ -2,28 +2,44 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
   <title>MentorED</title>
 
-  <base href="/"/>
+  <!-- App is served under /mentoring -->
+  <base href="/mentoring/" />
 
-  <meta name="color-scheme" content="light"/>
-  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <meta name="format-detection" content="telephone=no"/>
-  <meta name="msapplication-tap-highlight" content="no"/>
+  <!-- Content Security Policy (Angular JIT compatible) -->
+  <meta http-equiv="Content-Security-Policy"
+  content="
+    default-src 'self';
+    script-src 'self' 'unsafe-eval';
+    connect-src
+      'self'
+      http://localhost:4200
+      https://qa.elevate-apis.shikshalokam.org
+      https://chat-dev-temp.elevate-apis.shikshalokam.org
+      wss://chat-dev-temp.elevate-apis.shikshalokam.org;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      img-src 'self' data: https://storage.googleapis.com
+      https://chat-dev-temp.elevate-apis.shikshalokam.org;
+      font-src 'self' data: https://fonts.gstatic.com;
+  ">
+  
 
-  <!-- <link rel="icon" type="image/png" href="assets/icon/favicon.png"/> -->
+  <meta name="color-scheme" content="light" />
+  <meta name="viewport"
+    content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <!-- Environment config -->
   <script rel="preload" src="assets/env/env.js" as="script"></script>
 
-  <!-- add to homescreen for ios -->
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#1976d2">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block" rel="stylesheet">
-
+  <!-- PWA / Mobile -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="theme-color" content="#1976d2" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body class="mat-typography">

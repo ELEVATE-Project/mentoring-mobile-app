@@ -12,12 +12,13 @@ const routes: Routes = [
         (m) => m.PrivatePageModule
       ),
   },
-  {
-    path: CommonRoutes.AUTH,
-    loadChildren: () =>
-      import('./modules/auth/auth.module').then((m) => m.AuthPageModule),
-    canActivate: [PublicGuard],
-  },
+    // Remove after testing
+  // {
+  //   path: CommonRoutes.AUTH,
+  //   loadChildren: () =>
+  //     import('./modules/auth/auth.module').then((m) => m.AuthPageModule),
+  //   // canActivate: [PublicGuard],
+  // },
   {
     path: '**',
     redirectTo: '',
