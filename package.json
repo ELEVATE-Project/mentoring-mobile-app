@@ -69,8 +69,6 @@
     "papaparse": "^5.4.1",
     "rxjs": "^7.5.0",
     "rxjs-compat": "^6.6.7",
-    "sl-chat-library": "file:../Frontend-chat-library/dist/frontend-chat-library/sl-chat-library-1.3.20.tgz",
-    "sl-generic-table": "file:../frontend-util-library-from-rahul/dist/generic-table/sl-generic-table-1.3.13.tgz",
     "tslib": "^2.2.0",
     "yargs": "^17.7.2",
     "zone.js": "^0.14.0"
