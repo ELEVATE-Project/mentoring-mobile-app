@@ -60,17 +60,6 @@ describe('GenericProfileHeaderComponent', () => {
             writable: true
         });
 
-        // --- 3. Mock Capacitor Clipboard: Spy Setup ---
-        // Only spy on the method once, if not already done.
-        if (!clipboardWriteSpy) {
-            clipboardWriteSpy = spyOn(Clipboard, 'write');
-        }
-
-        // FIX 1: Reset calls AND restore default implementation (resolve) before each test.
-        clipboardWriteSpy.calls.reset();
-        clipboardWriteSpy.and.callFake(() => Promise.resolve());
-
-
         // --- 4. Service Mock Defaults ---
         mockUtilService.isMobile.and.returnValue(false);
         mockLocalStorage.getLocalData.and.returnValue(Promise.resolve('false'));
@@ -102,6 +91,11 @@ describe('GenericProfileHeaderComponent', () => {
         fixture = TestBed.createComponent(GenericProfileHeaderComponent);
         component = fixture.componentInstance;
 
+        // Mock Clipboard property on component
+        component.clipboard = jasmine.createSpyObj('Clipboard', ['write']);
+        clipboardWriteSpy = component.clipboard.write as jasmine.Spy;
+        clipboardWriteSpy.and.returnValue(Promise.resolve());
+
         // Reset data
         component.headerData = JSON.parse(JSON.stringify(defaultHeaderData));
         component.buttonConfig = { meta: { id: 'btn-meta-id' } };
@@ -115,15 +109,11 @@ describe('GenericProfileHeaderComponent', () => {
     }));
 
     afterEach(() => {
-        // Clear state but leave the spy implementation reset to the default success state in beforeEach
         mockRouter.navigate.calls.reset();
         mockLocalStorage.getLocalData.calls.reset();
         mockProfileService.viewRolesModal.calls.reset();
         mockProfileService.upDateProfilePopup.calls.reset();
         mockToastService.showToast.calls.reset();
-
-        // Reset calls for the next test, implementation will be set in beforeEach
-        clipboardWriteSpy.calls.reset();
     });
 
     it('should create and call utilService.isMobile in constructor', () => {
@@ -207,7 +197,7 @@ describe('GenericProfileHeaderComponent', () => {
     });
 
     it('action("share") non-mobile should copy to clipboard and show toast', async () => {
-        mockUtilService.isMobile.and.returnValue(false);
+        component.isMobile = false; // Explicitly set property
 
         await component.action('share');
 
@@ -216,8 +206,9 @@ describe('GenericProfileHeaderComponent', () => {
     });
 
     it('action("share") mobile + navigator.share branch should call utilService.shareLink', async () => {
-        mockUtilService.isMobile.and.returnValue(true);
+        component.isMobile = true; // Explicitly set property
 
+        // Mock navigator.share
         Object.defineProperty(navigator, 'share', {
             value: jasmine.createSpy('share').and.returnValue(Promise.resolve()),
             writable: true
@@ -233,7 +224,7 @@ describe('GenericProfileHeaderComponent', () => {
     });
 
     it('action("share") mobile fallback (no navigator.share) should copy to clipboard and show toast', async () => {
-        mockUtilService.isMobile.and.returnValue(true);
+        component.isMobile = true; // Explicitly set property
 
         Object.defineProperty(navigator, 'share', {
             value: undefined,
@@ -303,9 +294,7 @@ describe('GenericProfileHeaderComponent', () => {
 
     it('copyToClipBoard should reject promise on clipboard write failure and not show success toast', async () => {
         const error = new Error('Clipboard failed');
-
-        // FIX 2: Override the default implementation set in beforeEach with a rejection.
-        clipboardWriteSpy.and.callFake(() => Promise.reject(error));
+        clipboardWriteSpy.and.returnValue(Promise.reject(error));
 
         await expectAsync(component.copyToClipBoard('some data')).toBeRejectedWith(error);
 

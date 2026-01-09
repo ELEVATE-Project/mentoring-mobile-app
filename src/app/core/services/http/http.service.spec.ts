@@ -5,7 +5,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
-import { HttpService } from 'src/app/core/services/http/http.service';
+import { HttpService } from './http.service';
 import { UserService } from '../user/user.service';
 import { NetworkService } from '../network.service';
 import { ToastService } from '../toast.service';
@@ -82,19 +82,22 @@ describe('HttpService', () => {
         { provide: Injector, useValue: injector },
       ],
     });
-
-    service = TestBed.inject(HttpService);
-    service.baseUrl = baseUrl;
-    spyOn<any>(service, 'redirectToOrigin').and.stub();
-
-    // Default return values
+    // Default return values - set BEFORE service injection
     userService.getUserValue.and.returnValue(Promise.resolve(token));
     network.getCurrentStatus.and.returnValue(Promise.resolve());
     localStorageSvc.getLocalData.and.returnValue(Promise.resolve('en'));
     injector.get.and.returnValue(auth);
     translate.get.and.returnValue(of({ OK: 'OK' }));
 
-    // Replace httpClient with spy
+    // Inject service AFTER setting up all mocks
+    service = TestBed.inject(HttpService);
+    service.baseUrl = baseUrl;
+
+    // Set up spies on service methods
+    spyOn<any>(service, 'redirectToOrigin').and.stub();
+
+    // Replace httpClient with spy - this must happen after injection
+    // to ensure coverage instrumentation is properly applied
     (service as any).httpClient = {
       post: jasmine.createSpy('post'),
       get: jasmine.createSpy('get'),
