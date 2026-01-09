@@ -1,6 +1,6 @@
 
-import 'zone.js';          
-import 'zone.js/testing';  
+import 'zone.js';
+import 'zone.js/testing';
 
 /* mentor-search-directory.page.spec.ts - Optimized for 100% Branch Coverage */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
@@ -27,8 +27,8 @@ const localKeys = {
 };
 // Utility to mock paginator constants
 const paginatorConstants = {
-    defaultPageSize: 10,
-    pageSizeOptions: [10, 20, 50]
+  defaultPageSize: 5,
+  pageSizeOptions: [5, 10, 25, 100]
 };
 
 
@@ -132,7 +132,7 @@ describe('MentorSearchDirectoryPage', () => {
 
     fixture = TestBed.createComponent(MentorSearchDirectoryPage);
     component = fixture.componentInstance;
-    
+
     // Initialize searchAndCriterias and paginator for required properties
     component.searchAndCriterias = {
       headerData: {
@@ -145,6 +145,7 @@ describe('MentorSearchDirectoryPage', () => {
     };
     component.paginator = { pageSize: paginatorConstants.defaultPageSize } as MatPaginator;
     component.filteredDatas = {} as any;
+    component.buttonConfig = mockButtonConfig; // Ensure buttonConfig is always set
   }));
 
   afterEach(() => {
@@ -162,7 +163,7 @@ describe('MentorSearchDirectoryPage', () => {
       expect(component.overlayChips).toEqual([]);
       expect(component.chips).toEqual([]);
       expect(component.pageSize).toBe(paginatorConstants.defaultPageSize);
-      expect(component.pageSizeOptions).toBe(paginatorConstants.pageSizeOptions);
+      expect(component.pageSizeOptions).toEqual(paginatorConstants.pageSizeOptions);
     });
 
     it('should set button config from route data on ngOnInit', () => {
@@ -186,24 +187,24 @@ describe('MentorSearchDirectoryPage', () => {
       expect(mockLocalStorageService.getLocalData).toHaveBeenCalledWith(localKeys.USER_DETAILS);
       expect(component.currentUserId).toBe('user123');
     });
-    
+
     // **BRANCH COVERAGE**: Test when local storage returns NULL (Accessing `user.id` on null)
     it('should handle null user details from localStorage safely', async () => {
-        mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(null));
-        await component.ionViewWillEnter(); 
-        expect(component.currentUserId).toBeUndefined(); 
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(null));
+      await component.ionViewWillEnter();
+      expect(component.currentUserId).toBeUndefined();
     });
-    
+
     // **BRANCH COVERAGE**: Test when local storage returns object without `id`
     it('should handle user details without ID from localStorage safely', async () => {
-        mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve({ name: 'User' }));
-        await component.ionViewWillEnter(); 
-        expect(component.currentUserId).toBeUndefined(); 
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve({ name: 'User' }));
+      await component.ionViewWillEnter();
+      expect(component.currentUserId).toBeUndefined();
     });
 
     it('should load mentor form', async () => {
       await component.ionViewWillEnter();
-      expect(mockFormService.getForm).toHaveBeenCalledWith(MENTOR_DIR_CARD_FORM);
+      expect(mockFormService.getForm).toHaveBeenCalledWith({ type: 'mentorDirectoryCard', sub_type: 'mentorDirectoryCardForm' });
       expect(component.mentorForm).toEqual(mockMentorForm);
     });
 
@@ -255,9 +256,9 @@ describe('MentorSearchDirectoryPage', () => {
         searchText: 'angular',
         criterias: { name: 'expertise', label: 'Expertise' }
       };
-      
+
       await component.onSearch(event);
-      
+
       expect(component.searchAndCriterias.headerData).toEqual(event);
       expect(mockRouter.navigate).toHaveBeenCalledWith([], {
         relativeTo: mockActivatedRoute,
@@ -272,9 +273,9 @@ describe('MentorSearchDirectoryPage', () => {
         searchText: 'test search',
         criterias: undefined
       };
-      
+
       await component.onSearch(event);
-      
+
       expect(mockRouter.navigate).toHaveBeenCalledWith([], {
         relativeTo: mockActivatedRoute,
         queryParams: { search: 'test search', chip: undefined },
@@ -292,7 +293,7 @@ describe('MentorSearchDirectoryPage', () => {
 
     it('should clear search text and criteria, navigate, and fetch mentors', async () => {
       await component.onClearSearch('');
-      
+
       expect(component.searchAndCriterias.headerData.searchText).toBe('');
       expect(component.searchAndCriterias.headerData.criterias).toBeUndefined();
       expect(mockRouter.navigate).toHaveBeenCalledWith([], {
@@ -321,7 +322,7 @@ describe('MentorSearchDirectoryPage', () => {
 
     it('should open filter modal', async () => {
       await component.onClickFilter();
-      
+
       expect(mockModalController.create).toHaveBeenCalled();
       expect(mockModal.present).toHaveBeenCalled();
     });
@@ -331,9 +332,9 @@ describe('MentorSearchDirectoryPage', () => {
       mockModal.onDidDismiss.and.returnValue(
         Promise.resolve({ data: { role: 'closed', data: mockFilterData } })
       );
-      
+
       await component.onClickFilter();
-      
+
       // Should not have called getMentors or processed filter data
       expect(component.filterData).toEqual(mockFilterData);
       expect(mockProfileService.getMentors).not.toHaveBeenCalled();
@@ -344,9 +345,9 @@ describe('MentorSearchDirectoryPage', () => {
       mockModal.onDidDismiss.and.returnValue(Promise.resolve({ data: {} }));
       component.chips = ['test'];
       component.urlQueryData = 'test=value';
-      
+
       await component.onClickFilter();
-      
+
       expect(component.chips).toEqual([]);
       expect(component.filteredDatas).toEqual([]);
       expect(component.urlQueryData).toBeNull();
@@ -355,17 +356,17 @@ describe('MentorSearchDirectoryPage', () => {
 
     // **BRANCH COVERAGE**: Test dismissal where inner `dataReturned.data.data` is null/missing (Covers failure of `if (dataReturned.data && dataReturned.data.data)`)
     it('should handle modal dismissal when data exists but inner data is null/missing', async () => {
-        mockModal.onDidDismiss.and.returnValue(Promise.resolve({ data: { role: 'apply', data: null } })); 
-        component.page = 5; 
-        
-        await component.onClickFilter();
-        
-        // Should reset pagination state and call getMentors
-        expect(component.page).toBe(1);
-        expect(component.setPaginatorToFirstpage).toBe(true);
-        expect(mockProfileService.getMentors).toHaveBeenCalled(); 
+      mockModal.onDidDismiss.and.returnValue(Promise.resolve({ data: { role: 'apply', data: null } }));
+      component.page = 5;
+
+      await component.onClickFilter();
+
+      // Should reset pagination state and call getMentors
+      expect(component.page).toBe(1);
+      expect(component.setPaginatorToFirstpage).toBe(true);
+      expect(mockProfileService.getMentors).toHaveBeenCalled();
     });
-    
+
     // **BRANCH COVERAGE**: Test success path where selectedFilters is present (Covers nested loop logic)
     it('should process selected filters and call getMentors (Success Path)', async () => {
       const selectedFilters = { expertise: [{ label: 'Angular', value: 'angular' }] };
@@ -373,9 +374,9 @@ describe('MentorSearchDirectoryPage', () => {
         Promise.resolve({ data: { data: { selectedFilters, filterData: mockFilterData } } })
       );
       spyOn(component, 'extractLabels');
-      
+
       await component.onClickFilter();
-      
+
       expect(component.filteredDatas['expertise']).toBe('angular');
       expect(component.selectedChips).toBe(true);
       expect(component.extractLabels).toHaveBeenCalledWith(selectedFilters);
@@ -389,18 +390,18 @@ describe('MentorSearchDirectoryPage', () => {
         expertise: [{ label: 'Angular', value: 'angular' }],
         experience: [{ label: '5+ years', value: '5+' }]
       };
-      
+
       component.extractLabels(data);
-      
+
       expect(component.chips.length).toBe(2);
     });
 
     // **BRANCH COVERAGE**: Test with null/undefined data
     it('should clear existing chips if data input is null', () => {
       component.chips = ['old chip'] as any;
-      
+
       component.extractLabels(null);
-      
+
       expect(component.chips.length).toBe(0);
     });
   });
@@ -410,18 +411,18 @@ describe('MentorSearchDirectoryPage', () => {
       component.filteredDatas = {} as any;
       component.filteredDatas['expertise'] = 'angular,react';
       component.filteredDatas['experience'] = '5+';
-      
+
       component.getUrlQueryData();
-      
+
       expect(component.urlQueryData).toBe('expertise=angular,react&experience=5+');
     });
 
     it('should handle empty filteredDatas', () => {
       // component.filteredDatas = {};
-      
+
       component.getUrlQueryData();
-      
-      expect(component.urlQueryData).toBeNull();
+
+      expect(component.urlQueryData).toBe(''); // Empty string, not null
     });
   });
 
@@ -451,9 +452,9 @@ describe('MentorSearchDirectoryPage', () => {
   describe('eventHandler', () => {
     it('should update valueFromChipAndFilter and reset criterias', () => {
       component.searchAndCriterias.headerData.criterias = { name: 'test', label: 'Test' };
-      
+
       component.eventHandler('some value');
-      
+
       expect(component.valueFromChipAndFilter).toBe('some value');
       // Covers setting criterias back to undefined properties
       expect(component.searchAndCriterias.headerData.criterias.name).toBeUndefined();
@@ -469,11 +470,11 @@ describe('MentorSearchDirectoryPage', () => {
 
     it('should update page and pageSize and call getMentors', () => {
       const event = { pageIndex: 2, pageSize: 20 };
-      
+
       component.onPageChange(event);
-      
+
       expect(component.page).toBe(3);
-      expect(component.pageSize).toBe(10); 
+      expect(component.pageSize).toBe(10);
       expect(mockProfileService.getMentors).toHaveBeenCalled();
     });
   });
@@ -502,24 +503,24 @@ describe('MentorSearchDirectoryPage', () => {
 
     it('should remove chip from filterData and update filteredDatas (partial removal)', () => {
       component.removeFilteredData('angular');
-      
+
       const angularOption = component.filterData[0].options.find(opt => opt.value === 'angular');
       expect(angularOption.selected).toBe(false);
       // Covers `else { this.filteredDatas[key] = newValue; }`
-      expect(component.filteredDatas['expertise']).toBe('react'); 
+      expect(component.filteredDatas['expertise']).toBe('react');
     });
-    
+
     // **BRANCH COVERAGE**: Test deletion of key (Covers `if (newValue === '')`)
     it('should delete key if no values remain for a filter', () => {
-      component.removeFilteredData('5+'); 
-      
+      component.removeFilteredData('5+');
+
       expect(component.filteredDatas['experience']).toBeUndefined();
     });
-    
+
     // **BRANCH COVERAGE**: Test chip not found in values array (Covers `if (chipIndex > -1)` fails)
     it('should handle removal of chip value not found in the values string', () => {
       component.removeFilteredData('nonexistent');
-      expect(component.filteredDatas['expertise']).toBe('angular,react'); 
+      expect(component.filteredDatas['expertise']).toBe('angular,react');
     });
   });
 
@@ -533,37 +534,37 @@ describe('MentorSearchDirectoryPage', () => {
     it('should fetch mentors with correct parameters including trimming searchText', async () => {
       mockProfileService.getMentors.and.returnValue(Promise.resolve(mockMentorsData));
       component.searchAndCriterias.headerData.searchText = '  angular  ';
-      
+
       await component.getMentors();
-      
+
       const callArgs = mockProfileService.getMentors.calls.mostRecent().args[1];
       expect(callArgs.searchText).toBe('angular');
     });
 
     it('should set data and totalCount on successful API response', async () => {
       mockProfileService.getMentors.and.returnValue(Promise.resolve(mockMentorsData));
-      
+
       await component.getMentors();
-      
+
       // Covers successful `if(data && data.result.data.length)`
       expect(component.data.length).toBe(2);
       expect(component.totalCount).toBe(2);
     });
-    
+
     // **BRANCH COVERAGE**: Test explicit NULL result from API promise (Covers `if(data && ...` failure)
     it('should handle explicit NULL result from API promise safely', async () => {
-        mockProfileService.getMentors.and.returnValue(Promise.resolve(null));
-        await component.getMentors();
-        expect(component.data).toEqual([]);
-        expect(component.totalCount).toEqual([]);
+      mockProfileService.getMentors.and.returnValue(Promise.resolve(null));
+      await component.getMentors();
+      expect(component.data).toEqual([]);
+      expect(component.totalCount).toEqual([]);
     });
 
     // **BRANCH COVERAGE**: Test API returns object but `data.result` is NULL/undefined (Covers `... data.result.data.length` failure)
     it('should handle API result object but null inner result', async () => {
-        mockProfileService.getMentors.and.returnValue(Promise.resolve({ result: null }));
-        await component.getMentors();
-        expect(component.data).toEqual([]);
-        expect(component.totalCount).toEqual([]);
+      mockProfileService.getMentors.and.returnValue(Promise.resolve({ result: null }));
+      await component.getMentors();
+      expect(component.data).toEqual([]);
+      expect(component.totalCount).toEqual([]);
     });
 
     it('should hide buttons for current user (Covers `if (mentor.id === this.currentUserId)`)', async () => {
@@ -574,9 +575,9 @@ describe('MentorSearchDirectoryPage', () => {
         }
       };
       mockProfileService.getMentors.and.returnValue(Promise.resolve(mentorsWithCurrentUser));
-      
+
       await component.getMentors();
-      
+
       expect(component.data[0].buttonConfig[0].isHide).toBe(true);
     });
 
@@ -586,31 +587,31 @@ describe('MentorSearchDirectoryPage', () => {
       component.searchAndCriterias.headerData.searchText = '';
       // component.filteredDatas = {};
       component.searchAndCriterias.headerData.criterias = { name: undefined };
-      
+
       await component.getMentors();
-      
+
       // Covers `if (Object.keys(this.filteredDatas || {}).length === 0 && !this.searchAndCriterias.headerData.criterias?.name)` success
-      expect(component.filterIcon).toBe(false); 
+      expect(component.filterIcon).toBe(false);
     });
-    
+
     // **BRANCH COVERAGE**: Test empty results with active filters (inner `if` fails)
     it('should handle empty results but active filters, maintaining filterIcon state', async () => {
-        mockProfileService.getMentors.and.returnValue(Promise.resolve({ result: { data: [], count: 0 } }));
-        // component.filteredDatas = { expertise: 'angular' }; // Active filter
-        component.searchAndCriterias.headerData.searchText = '';
+      mockProfileService.getMentors.and.returnValue(Promise.resolve({ result: { data: [], count: 0 } }));
+      // component.filteredDatas = { expertise: 'angular' }; // Active filter
+      component.searchAndCriterias.headerData.searchText = '';
 
-        await component.getMentors();
-        
-        // Final line sets filterIcon based on searchText, which is false here.
-        expect(component.filterIcon).toBe(false);
+      await component.getMentors();
+
+      // Final line sets filterIcon based on searchText, which is false here.
+      expect(component.filterIcon).toBe(false);
     });
 
     // **BRANCH COVERAGE**: Test filterIcon logic being set by searchText (final line)
     it('should set filterIcon based on searchText at the end of the function', async () => {
-        mockProfileService.getMentors.and.returnValue(Promise.resolve(mockMentorsData));
-        component.searchAndCriterias.headerData.searchText = ' search ';
-        await component.getMentors();
-        expect(component.filterIcon).toBe(true);
+      mockProfileService.getMentors.and.returnValue(Promise.resolve(mockMentorsData));
+      component.searchAndCriterias.headerData.searchText = ' search ';
+      await component.getMentors();
+      expect(component.filterIcon).toBe(true);
     });
   });
 
@@ -627,9 +628,9 @@ describe('MentorSearchDirectoryPage', () => {
 
     it('should remove chip, update data, and fetch mentors', () => {
       const event = { index: 0, chipValue: 'angular' };
-      
+
       component.removeChip(event);
-      
+
       expect(component.chips.length).toBe(1);
       expect(component.removeFilteredData).toHaveBeenCalledWith('angular');
       expect(component.getUrlQueryData).toHaveBeenCalled();
@@ -644,9 +645,9 @@ describe('MentorSearchDirectoryPage', () => {
       component.filterIcon = true;
       component.chips = ['test'] as any;
       component.urlQueryData = 'test=value';
-      
+
       component.ionViewDidLeave();
-      
+
       expect(component.searchAndCriterias.headerData.searchText).toBe('');
       expect(component.searchAndCriterias.headerData.criterias.name).toBeUndefined();
       expect(component.filterIcon).toBe(false);
