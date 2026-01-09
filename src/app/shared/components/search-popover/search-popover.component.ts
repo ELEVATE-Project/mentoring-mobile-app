@@ -85,7 +85,7 @@ export class SearchPopoverComponent implements OnInit {
     let isMobile = this.util.isMobile();
     if(isMobile)
       this.limit = 25;
-      if(this.data.control.name ==="mentees"){
+      if(this.data.control.name ==="mentees" && !this.data.viewListMode){
       this.showCheckbox = true;
       this.showSelectAll = true; 
     }
