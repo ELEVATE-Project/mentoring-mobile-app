@@ -5,7 +5,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
-import { HttpService } from 'src/app/core/services/http/http.service';
+import { HttpService } from './http.service';
 import { UserService } from '../user/user.service';
 import { NetworkService } from '../network.service';
 import { ToastService } from '../toast.service';
