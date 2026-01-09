@@ -1,3 +1,6 @@
+import 'zone.js';          
+import 'zone.js/testing';  
+
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { ProfileImageComponent } from './profile-image.component';
@@ -30,7 +33,9 @@ describe('ProfileImageComponent', () => {
         { provide: UtilService, useValue: mockUtilService }
       ]
     }).compileComponents();
+  }));
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(ProfileImageComponent);
     component = fixture.componentInstance;
 
