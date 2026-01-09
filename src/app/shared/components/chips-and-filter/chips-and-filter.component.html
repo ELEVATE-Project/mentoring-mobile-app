@@ -35,7 +35,7 @@
     </ion-row>
      <div *ngIf="showSelectAll && tableData?.length" class="select">
       <ion-checkbox labelPlacement="end" mode="md" [checked]="isAllSelected()"  (ionChange)="onSelectAllChangeClick($event)">
-       {{ isAllSelected() ? ('DESELECT_ALL' | translate) : ('SELECT_ALL' | translate)}}
+       {{ isAllSelected() ? ('DESELECT_PAGE' | translate) : ('SELECT_PAGE' | translate)}}
       </ion-checkbox>
       <div *ngIf="tableData?.length && showSelectAll " class="header">{{('SELECTED' | translate) + ' : ' + selectedCount}}</div>
       <div *ngIf="tableData?.length && showSelectAll" (click)="onToggleSelectAllX()" style="font-weight:700;color: #3a85e9f3; cursor: pointer;">

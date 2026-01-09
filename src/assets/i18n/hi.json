@@ -383,5 +383,7 @@
   "YOU_CANT_REACH_USER": "आप अब इस उपयोगकर्ता से संपर्क नहीं कर सकते।",
   "SELECT_ALL": "सभी चुनें",
   "DESELECT_ALL": "चयन हटाएँ",
-  "SELECTED": "चयनित"
+  "SELECTED": "चयनित",
+  "SELECT_PAGE": "पेज चुनें",
+  "DESELECT_PAGE": "पेज चयन हटाएँ"
 }

@@ -426,5 +426,7 @@
     "YOU_CANT_REACH_USER":"You can no longer reach this user.",
     "SELECT_ALL" : "Select all",
     "DESELECT_ALL" : "Deselect all",
-    "SELECTED" : "Selected"
+    "SELECTED" : "Selected",
+    "SELECT_PAGE" : "Select page",
+    "DESELECT_PAGE" : "Deselect page"
 }
