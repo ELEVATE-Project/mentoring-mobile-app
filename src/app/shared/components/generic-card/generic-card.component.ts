@@ -5,9 +5,10 @@ import { LocalStorageService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
-  selector: 'app-generic-card',
-  templateUrl: './generic-card.component.html',
-  styleUrls: ['./generic-card.component.scss'],
+    selector: 'app-generic-card',
+    templateUrl: './generic-card.component.html',
+    styleUrls: ['./generic-card.component.scss'],
+    standalone: false
 })
 export class GenericCardComponent implements OnInit {
   chatConfig: string;

@@ -4,9 +4,10 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
-  selector: 'app-no-data-found',
-  templateUrl: './no-data-found.component.html',
-  styleUrls: ['./no-data-found.component.scss'],
+    selector: 'app-no-data-found',
+    templateUrl: './no-data-found.component.html',
+    styleUrls: ['./no-data-found.component.scss'],
+    standalone: false
 })
 export class NoDataFoundComponent implements OnInit {
 @Input() messageHeader;

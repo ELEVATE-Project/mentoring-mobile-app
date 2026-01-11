@@ -5,9 +5,10 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
-  selector: 'app-faq',
-  templateUrl: './faq.page.html',
-  styleUrls: ['./faq.page.scss'],
+    selector: 'app-faq',
+    templateUrl: './faq.page.html',
+    styleUrls: ['./faq.page.scss'],
+    standalone: false
 })
 export class FaqPage implements OnInit {
   public headerConfig: any = {

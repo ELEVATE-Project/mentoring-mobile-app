@@ -32,9 +32,10 @@ import {
 } from 'sl-chat-library';
 
 @Component({
-  selector: 'app-private',
-  templateUrl: './private.page.html',
-  styleUrls: ['./private.page.scss'],
+    selector: 'app-private',
+    templateUrl: './private.page.html',
+    styleUrls: ['./private.page.scss'],
+    standalone: false
 })
 export class PrivatePage implements OnInit {
   user;

@@ -3,9 +3,10 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 
 @Component({
-  selector: 'app-chips-and-filter',
-  templateUrl: './chips-and-filter.component.html',
-  styleUrls: ['./chips-and-filter.component.scss'],
+    selector: 'app-chips-and-filter',
+    templateUrl: './chips-and-filter.component.html',
+    styleUrls: ['./chips-and-filter.component.scss'],
+    standalone: false
 })
 export class ChipsAndFilterComponent implements OnInit {
   @Input() searchAndCriteriaData: any;

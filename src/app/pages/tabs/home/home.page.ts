@@ -17,9 +17,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { CdkConnectedOverlay } from '@angular/cdk/overlay';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+    selector: 'app-home',
+    templateUrl: 'home.page.html',
+    styleUrls: ['home.page.scss'],
+    standalone: false
 })
 export class HomePage{
   public formData: JsonFormData;

@@ -9,9 +9,10 @@ import { SessionService } from 'src/app/core/services/session/session.service';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 
 @Component({
-  selector: 'app-feedback',
-  templateUrl: './feedback.page.html',
-  styleUrls: ['./feedback.page.scss'],
+    selector: 'app-feedback',
+    templateUrl: './feedback.page.html',
+    styleUrls: ['./feedback.page.scss'],
+    standalone: false
 })
 export class FeedbackPage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;

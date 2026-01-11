@@ -1,9 +1,10 @@
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-expandable-card',
-  templateUrl: './expandable-card.component.html',
-  styleUrls: ['./expandable-card.component.scss'],
+    selector: 'app-expandable-card',
+    templateUrl: './expandable-card.component.html',
+    styleUrls: ['./expandable-card.component.scss'],
+    standalone: false
 })
 export class ExpandableCardComponent implements OnInit {
   @ViewChild("expandWrapper", { read: ElementRef }) expandWrapper: ElementRef;

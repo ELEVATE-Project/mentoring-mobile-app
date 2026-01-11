@@ -11,9 +11,10 @@ import { CommonRoutes } from 'src/global.routes';
 
 
 @Component({
-  selector: 'app-session-request-details',
-  templateUrl: './session-request-details.page.html',
-  styleUrls: ['./session-request-details.page.scss'],
+    selector: 'app-session-request-details',
+    templateUrl: './session-request-details.page.html',
+    styleUrls: ['./session-request-details.page.scss'],
+    standalone: false
 })
 export class SessionRequestDetailsPage implements OnInit {
   @ViewChild('platformForm') platformForm: DynamicFormComponent;

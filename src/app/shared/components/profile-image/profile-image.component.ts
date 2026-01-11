@@ -2,9 +2,10 @@ import { Component, Input, OnInit, EventEmitter, Output, ViewChild, ElementRef }
 import { AttachmentService, ToastService, UtilService } from 'src/app/core/services';
 
 @Component({
-  selector: 'app-profile-image',
-  templateUrl: './profile-image.component.html',
-  styleUrls: ['./profile-image.component.scss'],
+    selector: 'app-profile-image',
+    templateUrl: './profile-image.component.html',
+    styleUrls: ['./profile-image.component.scss'],
+    standalone: false
 })
 export class ProfileImageComponent implements OnInit {
   @ViewChild('fileUpload') fileUpload: ElementRef;

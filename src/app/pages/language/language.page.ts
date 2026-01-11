@@ -5,9 +5,10 @@ import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { languagesList } from 'src/app/core/constants/languageConstant';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 @Component({
-  selector: 'app-language',
-  templateUrl: './language.page.html',
-  styleUrls: ['./language.page.scss'],
+    selector: 'app-language',
+    templateUrl: './language.page.html',
+    styleUrls: ['./language.page.scss'],
+    standalone: false
 })
 export class LanguagePage  {
   public headerConfig: any = {

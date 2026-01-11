@@ -6,9 +6,10 @@ import { ToastService } from 'src/app/core/services';
 import { Clipboard } from '@capacitor/clipboard';
 
 @Component({
-  selector: 'app-join-dialog-box',
-  templateUrl: './join-dialog-box.component.html',
-  styleUrls: ['./join-dialog-box.component.scss'],
+    selector: 'app-join-dialog-box',
+    templateUrl: './join-dialog-box.component.html',
+    styleUrls: ['./join-dialog-box.component.scss'],
+    standalone: false
 })
 export class JoinDialogBoxComponent implements OnInit {
   data;

@@ -92,14 +92,15 @@ const CUSTOM_DATE_FORMATS = {
 };
 
 @Component({
-  selector: 'app-dynamic-form',
-  templateUrl: './dynamic-form.component.html',
-  styleUrls: ['./dynamic-form.component.scss'],
-  providers: [
-    {
-      provide: OWL_DATE_TIME_FORMATS, useValue: CUSTOM_DATE_FORMATS
-    }
-]
+    selector: 'app-dynamic-form',
+    templateUrl: './dynamic-form.component.html',
+    styleUrls: ['./dynamic-form.component.scss'],
+    providers: [
+        {
+            provide: OWL_DATE_TIME_FORMATS, useValue: CUSTOM_DATE_FORMATS
+        }
+    ],
+    standalone: false
 })
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;

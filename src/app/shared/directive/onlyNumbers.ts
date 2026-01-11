@@ -1,7 +1,8 @@
 import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
 @Directive({
-    selector: '[numberOnly]'
+    selector: '[numberOnly]',
+    standalone: false
 })
 export class NumberOnlyDirective {
     private value: string;

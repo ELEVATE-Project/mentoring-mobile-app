@@ -8,9 +8,10 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, ToastService, UtilService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 @Component({
-  selector: 'app-chat-request',
-  templateUrl: './chat-request.page.html',
-  styleUrls: ['./chat-request.page.scss'],
+    selector: 'app-chat-request',
+    templateUrl: './chat-request.page.html',
+    styleUrls: ['./chat-request.page.scss'],
+    standalone: false
 })
 export class ChatRequestPage implements OnInit {
   public headerConfig: any = {

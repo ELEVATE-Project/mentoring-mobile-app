@@ -15,9 +15,10 @@ import { IonModal } from '@ionic/angular';
 import { App, AppState } from '@capacitor/app';
 
 @Component({
-  selector: 'app-session-card',
-  templateUrl: './session-card.component.html',
-  styleUrls: ['./session-card.component.scss'],
+    selector: 'app-session-card',
+    templateUrl: './session-card.component.html',
+    styleUrls: ['./session-card.component.scss'],
+    standalone: false
 })
 export class SessionCardComponent implements OnInit {
   @Input() data: any;

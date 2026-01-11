@@ -3,9 +3,10 @@ import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
 import { UtilService } from 'src/app/core/services';
 
 @Component({
-  selector: 'app-model',
-  templateUrl: './model.component.html',
-  styleUrls: ['./model.component.css']
+    selector: 'app-model',
+    templateUrl: './model.component.html',
+    styleUrls: ['./model.component.css'],
+    standalone: false
 })
 export class ModelComponent implements OnInit {
   @Input("readonly") readonly;

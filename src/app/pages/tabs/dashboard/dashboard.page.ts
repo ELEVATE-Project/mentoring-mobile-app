@@ -10,9 +10,10 @@ import { environment } from 'src/environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: 'dashboard.page.html',
-  styleUrls: ['dashboard.page.scss'],
+    selector: 'app-dashboard',
+    templateUrl: 'dashboard.page.html',
+    styleUrls: ['dashboard.page.scss'],
+    standalone: false
 })
 export class DashboardPage  {
   @ViewChild('libTableRef') libTableRef: any;

@@ -13,9 +13,10 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-generic-profile-header',
-  templateUrl: './generic-profile-header.component.html',
-  styleUrls: ['./generic-profile-header.component.scss'],
+    selector: 'app-generic-profile-header',
+    templateUrl: './generic-profile-header.component.html',
+    styleUrls: ['./generic-profile-header.component.scss'],
+    standalone: false
 })
 export class GenericProfileHeaderComponent implements OnInit {
   @Input() headerData: any;

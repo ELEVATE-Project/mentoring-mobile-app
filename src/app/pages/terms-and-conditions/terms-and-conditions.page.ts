@@ -12,9 +12,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { ModalController, Platform } from '@ionic/angular';
 
 @Component({
-  selector: 'app-terms-and-conditions',
-  templateUrl: './terms-and-conditions.page.html',
-  styleUrls: ['./terms-and-conditions.page.scss'],
+    selector: 'app-terms-and-conditions',
+    templateUrl: './terms-and-conditions.page.html',
+    styleUrls: ['./terms-and-conditions.page.scss'],
+    standalone: false
 })
 export class TermsAndConditionsPage implements OnInit {
   items: any;

@@ -27,9 +27,10 @@ import { CommonRoutes } from 'src/global.routes';
 import { PlatformLocation, Location } from '@angular/common';
 
 @Component({
-  selector: 'app-edit-profile',
-  templateUrl: './edit-profile.page.html',
-  styleUrls: ['./edit-profile.page.scss'],
+    selector: 'app-edit-profile',
+    templateUrl: './edit-profile.page.html',
+    styleUrls: ['./edit-profile.page.scss'],
+    standalone: false
 })
 export class EditProfilePage implements OnInit, isDeactivatable {
   private win: any = window;

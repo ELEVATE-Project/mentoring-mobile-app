@@ -10,9 +10,10 @@ import { RecaptchaComponent } from 'ng-recaptcha';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-otp',
-  templateUrl: './otp.page.html',
-  styleUrls: ['./otp.page.scss'],
+    selector: 'app-otp',
+    templateUrl: './otp.page.html',
+    styleUrls: ['./otp.page.scss'],
+    standalone: false
 })
 export class OtpPage implements OnInit {
   @ViewChild('ngOtpInput', { static: false }) ngOtpInputRef: any;

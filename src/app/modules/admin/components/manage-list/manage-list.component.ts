@@ -9,9 +9,10 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 
 @Component({
-  selector: 'app-manage-list',
-  templateUrl: './manage-list.component.html',
-  styleUrls: ['./manage-list.component.css']
+    selector: 'app-manage-list',
+    templateUrl: './manage-list.component.html',
+    styleUrls: ['./manage-list.component.css'],
+    standalone: false
 })
 export class ManageListComponent implements OnInit {
 
