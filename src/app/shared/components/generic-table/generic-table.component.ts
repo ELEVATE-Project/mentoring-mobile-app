@@ -58,7 +58,7 @@ selectAllXActive : boolean;
     if (changes['tableData']) {
       this.dataSource = new MatTableDataSource(this.tableData);
     }
-    if(this.selectedCount === this.totalCount || this.selectedCount == this.maxCount){
+    if(this.selectedCount === this.totalCount || this.selectedCount >= this.maxCount){
       this.selectAllXActive = true;
     } 
     else{

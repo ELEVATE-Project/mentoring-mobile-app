@@ -4,7 +4,7 @@
   <div class="sorting-icon">
   <ion-checkbox *ngIf="tableData?.length && showCheckbox" labelPlacement="end" class="header select-all-checkbox" [checked]="isAllSelected()"  (ionChange)="onSelectAllChangeClick($event)">{{ isAllSelected() ? ('DESELECT_PAGE' | translate) : ('SELECT_PAGE' | translate)}}</ion-checkbox>
   <div *ngIf="tableData?.length && showCheckbox " class="header">{{('SELECTED' | translate) + ' : ' + selectedCount}}</div>
-  <div *ngIf="selectedCount > 0 && showCheckbox && isAllSelected() " (click)="onToggleSelectAllX()" style="font-weight:700;color: #3a85e9f3; cursor: pointer;">{{ selectAllXActive ? ('| ' + ('CLEAR_ALL' | translate) + ' [' + selectedCount + ']') : ('| ' + ('SELECT_ALL' | translate) + ' [' + totalCount + ']') }}</div> 
+  <div *ngIf="selectedCount > 0 && showCheckbox" (click)="onToggleSelectAllX()" style="font-weight:700;color: #3a85e9f3; cursor: pointer;">{{ selectAllXActive ? ('| ' + ('CLEAR_ALL' | translate) + ' [' + selectedCount + ']') : ('| ' + ('SELECT_ALL' | translate) + ' [' + totalCount + ']') }}</div> 
   </div>
   </div>
   <div *ngIf="pageSize && pageSizeOptions" class="d-flex flex-justify-space-between ion-padding">
