@@ -328,5 +328,11 @@
     "CHOOSE_A_DATE": "तिथि चुनें",
     "NO_SESSIONS": "कोई सत्र नहीं",
     "START_DATE": "प्रारंभ तिथि",
-    "END_DATE": "समाप्ति तिथि"
+    "END_DATE": "समाप्ति तिथि",
+    "SELECT_ALL": "सभी चुनें",
+  "DESELECT_ALL": "चयन हटाएँ",
+  "SELECTED": "चयनित",
+  "SELECT_PAGE": "पेज चुनें",
+  "DESELECT_PAGE": "पेज चयन हटाएँ",
+  "SESSION_MENTEE_LIMIT": "सत्र सीमा पहुँच गई  अधिकतम मेंटी जोड़ दिए गए हैं।"
   }

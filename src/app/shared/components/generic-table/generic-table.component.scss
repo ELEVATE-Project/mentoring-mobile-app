@@ -137,10 +137,7 @@ ion-popover {
   padding-bottom: var(--ion-padding, 0px);
 }
 
-.img{
-  width: 15px;
-  height: 15px;
-}
+
 .column-header{
   display: flex;
   flex-direction: row;
@@ -152,8 +149,17 @@ ion-popover {
 .column-name{
   justify-content: start;
 }
-.sorting-icon{
-  padding-top: 5px;
+.sorting-icon {
+  flex: 0 0 auto;  
+  display: flex;
+  align-items: center; 
+  margin-left: 6px;    
+}
+
+.sorting-icon .img {
+  width: 16px;   
+  height: 16px;
+  object-fit: contain;
 }
 .cell-text{
   padding: 0px 2px;

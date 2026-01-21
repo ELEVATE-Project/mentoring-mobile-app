@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, LocalStorageService, ToastService, UtilService } from 'src/app/core/services';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-search-popover',
@@ -36,12 +37,19 @@ export class SearchPopoverComponent implements OnInit {
   actionButtons = {
     'ADD': [{ name: 'ADD', cssColor: 'white-color' }],
     'REMOVE': [{ name: 'REMOVE', cssColor: 'primary-color' }],
-  }
+  }  
   selectedFilters:any = {};
   selectedList: any=[];
   noDataMessage: string;
-
-  constructor(private platform: Platform, private modalController: ModalController, private toast: ToastService, private localStorage: LocalStorageService, private util: UtilService, private httpService: HttpService) { 
+  showPaginator: boolean= true;
+  disabledCheckboxId: string | null = null;
+  showSelectAll : boolean = false;
+  showCheckbox : boolean= false;
+  isSelectAllActive: boolean= false;
+  source: any;
+   sorting : any;
+  
+  constructor(private platform: Platform, private modalController: ModalController, private toast: ToastService, private localStorage: LocalStorageService, private util: UtilService, private httpService: HttpService, private route: ActivatedRoute) { 
     this.platform.backButton.subscribeWithPriority(10, () => {
       this.handleBackButton();
     });
@@ -58,9 +66,20 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   async ngOnInit() {
+    
+    if(this.data.viewListMode){
+      this.showPaginator= false;
+    }
+     this.source = this.route.snapshot.queryParamMap.get('source');
+     if(this.data.control.name ==="mentees" && !this.data.viewListMode){
+      this.showCheckbox = true;
+      this.showSelectAll = true; 
+    }
+    
     this.maxCount = await this.localStorage.getLocalData(localKeys[this.data.control.meta.maxCount])
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
     this.selectedList = this.data.selectedData ? this.data.selectedData : this.selectedList
+     this.countSelectedList = this.selectedList.length
     if (this.data.viewListMode) {
       this.selectedList.forEach((ele) => {
         ele.organization = (typeof ele.organization === 'object' && ele.organization !== null) ? ele.organization.name : ele.organization;
@@ -108,8 +127,13 @@ export class SearchPopoverComponent implements OnInit {
     if(this.data.control.id){
       queryString = queryString + '&session_id=' + this.data.control.id
     }
-    const sorting = `&order=${this.sortingData?.order || ''}&sort_by=${this.sortingData?.sort_by || ''}`;
-    queryString = queryString + sorting
+    if( this.source == "home") {
+       this.sorting = `&order=${this.sortingData?.order || ''}&sort_by=${this.sortingData?.sort_by || 'name'}&mentorId=${this.data?.mentorId ? this.data?.mentorId :  this.user.id}`;
+    }
+    else{
+     this.sorting = `&order=${this.sortingData?.order || ''}&sort_by=${this.sortingData?.sort_by || ''}&mentorId=${this.data?.mentorId ? this.data?.mentorId :  this.user.id}`;
+    }
+    queryString = queryString + this.sorting
     const config = {
       url: urlConstants.API_URLS[this.data.control.meta.url] + this.page + '&limit=' + this.limit + '&search=' + btoa(this.searchText) + queryString,
       payload: {}
@@ -149,10 +173,6 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   onButtonCLick(data: any) {
-    if (this.selectedList.length) {
-      const sessionManager = this.selectedList.some(element => this.user.id === element.id);
-      this.countSelectedList = sessionManager ? this.selectedList.length - 1 : this.selectedList.length;
-    }
     switch(data.action){
       case 'ADD':
         this.countSelectedList = (this.user.id == data.element.id) ?this.countSelectedList : this.countSelectedList+1
@@ -162,10 +182,13 @@ export class SearchPopoverComponent implements OnInit {
           if(this.maxCount && this.maxCount>=this.countSelectedList){
             const index = this.tableData.findIndex(item => item.id === data.element.id);
             this.tableData[index].action = this.actionButtons.REMOVE
+
             let addedData = data.element
             this.selectedList.push(addedData)
+            this.selectedList = [...this.selectedList]; 
+            this.disabledCheckboxId = null;
           } else {
-            this.toast.showToast("Session seat limit exceed","danger")
+            this.toast.showToast('SESSION_MENTEE_LIMIT', 'danger')
           }
         }
         break;
@@ -181,6 +204,10 @@ export class SearchPopoverComponent implements OnInit {
         this.selectedList = this.selectedList.filter(obj => obj.id !== data.element.id);
       default:
         
+    }
+    if (this.selectedList.length) {
+      const sessionManager = this.selectedList.some(element => this.user.id === element.id);
+      this.countSelectedList = sessionManager ? this.selectedList.length - 1 : this.selectedList.length;
     }
   }
 
@@ -203,4 +230,118 @@ export class SearchPopoverComponent implements OnInit {
     this.sortingData = data;
     this.getMenteelist()
   }
+
+   onSelectAll(isChecked : boolean){
+    this.isSelectAllActive= isChecked
+    switch(isChecked) {
+
+     case true:
+
+  let currentCount = this.countSelectedList;
+
+  for (const element of this.tableData) {
+      
+      const alreadySelected = this.selectedList.some(item => item.id === element.id);
+      if (alreadySelected) continue;
+
+      if (element.enrolled_type === 'ENROLLED') continue; 
+
+      const proposedCount = (this.user.id === element.id) 
+          ? currentCount 
+          : currentCount + 1; 
+
+      if (this.maxCount && proposedCount > this.maxCount) {
+          this.toast.showToast('SESSION_MENTEE_LIMIT', 'danger');
+          break; 
+      }
+      const index = this.tableData.findIndex(item => item.id === element.id);
+      if (index !== -1) {
+          this.tableData[index].action = this.actionButtons.REMOVE;
+      }
+      this.selectedList.push(element);
+      currentCount = proposedCount;
+  }
+
+  this.countSelectedList = currentCount;
+  this.tableData = [...this.tableData]; 
+
+  break;
+    
+     case false:
+  const hasInvalid = this.tableData.some(
+    el => this.selectedList.findIndex(item => item.id === el.id) === -1
+  );
+
+  if (hasInvalid) {
+    break; 
+  }
+
+  for (const element of this.tableData) {
+    const selectedIndex = this.selectedList.findIndex(
+      item => item.id === element.id
+    );
+
+    const tableIndex = this.tableData.findIndex(
+      item => item.id === element.id
+    );
+
+    if (tableIndex !== -1) {
+      this.tableData[tableIndex].action = this.actionButtons.ADD;
+    }
+
+    this.selectedList.splice(selectedIndex, 1);
+
+    if (this.user.id !== element.id) {
+      this.countSelectedList -= 1;
+    }
+  }
+
+  this.tableData = [...this.tableData];
+  break;
+  }
+}
+
+async onSelectAllX(isChecked: boolean) {
+  if (!isChecked) {
+    this.selectedList = [];
+    this.countSelectedList = 0;
+    this.page = 1;
+    this.setPaginatorToFirstpage = true;
+    this.tableData = await this.getMenteelist();
+    return;
+  }
+  
+  const originalPage = this.page;
+  const originalLimit = this.limit;
+  this.page = 1;
+  this.limit = this.count;
+  const allMentees = await this.getMenteelist();
+  
+  const hasSessionManager = this.selectedList.some(item => item.id === this.user.id);
+  let currentCount = hasSessionManager ? this.selectedList.length - 1 : this.selectedList.length;
+  let limitReached = false;
+  for (const mentee of allMentees) {
+    if (this.selectedList.some(item => String(item.id) === String(mentee.id)) || mentee.enrolled_type === 'ENROLLED') continue;
+   
+    const newCount = mentee.id === this.user.id ? currentCount : currentCount + 1;
+    if (this.maxCount && newCount > this.maxCount) {
+      limitReached = true;
+      break;
+    }
+    this.selectedList.push(mentee);
+    currentCount = newCount;
+  }
+  
+    this.page = originalPage;
+    this.limit = originalLimit;
+    this.setPaginatorToFirstpage = true;
+    this.tableData = await this.getMenteelist();
+  
+  
+  this.countSelectedList = currentCount;
+
+  if (limitReached) {
+    this.toast.showToast('SESSION_MENTEE_LIMIT', 'danger');
+  }
+}
 }

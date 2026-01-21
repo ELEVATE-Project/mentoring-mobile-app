@@ -328,5 +328,10 @@
     "CHOOSE_A_DATE":"Choose a date",
     "NO_SESSIONS":"No sessions",
     "START_DATE":"Start date",
-    "END_DATE":"End date"
+    "END_DATE":"End date",
+    "SELECT_PAGE" : "Select page",
+    "DESELECT_PAGE" : "Deselect page",
+    "SELECTED" : "Selected",
+     "SELECT_ALL" : "Select all",
+     "SESSION_MENTEE_LIMIT": "Session limit reached maximum mentees added."
 }

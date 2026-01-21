@@ -1,5 +1,24 @@
-<div class="header-container d-flex flex-justify-space-between">
+  <div class="header-container d-flex flex-justify-space-between">
+  <div class="">
   <div class="header">{{ headingText | translate}}</div>
+  <div class="sorting-icon">
+<div class="d-flex items-center " style="gap: 10px;" *ngIf="tableData?.length && showCheckbox">
+  <ion-checkbox
+    slot="start"
+    [checked]="isAllSelected()"
+    (ionChange)="onSelectAllChangeClick($event)"
+    class="">
+  </ion-checkbox>
+  <div style=" font-weight:700;">
+    
+    {{ isAllSelected() ? ('DESELECT_PAGE' | translate) : ('SELECT_PAGE' | translate) }}
+  </div>
+</div> 
+ <div *ngIf="tableData?.length && showCheckbox " class="header">{{('SELECTED' | translate) + ' : ' + selectedCount}}</div>
+  <div *ngIf="selectedCount > 0 && showCheckbox" (click)="onToggleSelectAllX()" style="font-weight:700;color: #3a85e9f3; cursor: pointer;">{{ selectAllXActive ? ('| ' + ('CLEAR_ALL' | translate) + ' [' + selectedCount + ']') : ('| ' + ('SELECT_ALL' | translate) + ' [' + totalCount + ']') }}</div> 
+  </div>
+  </div>
+  
   <div *ngIf="pageSize && pageSizeOptions" class="d-flex flex-justify-space-between ion-padding">
     <ng-content></ng-content>
     <mat-paginator *ngIf="showPaginator" class="paginator" [length]="totalCount" [pageSize]="pageSize"
@@ -9,6 +28,18 @@
 </div>
 <div class="table-container ">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef style="background-color: #f2f2f2;">
+    </th>
+    <td mat-cell *matCellDef="let element">
+        <ion-checkbox 
+        *ngIf="showCheckbox"
+        [checked]="isRowInRemoveState(element)"
+          (ionChange)="onCheckboxAction(element, $event)"
+        >
+</ion-checkbox>
+    </td> 
+</ng-container>
     <ng-container *ngFor="let column of columnData" [matColumnDef]="column.name">
       <ng-container>
         <th mat-header-cell *matHeaderCellDef>
