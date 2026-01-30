@@ -115,7 +115,7 @@ export class SearchPopoverComponent implements OnInit {
       return null;
     }
   }
-
+ 
   async getMenteelist() {
     const organizationsQueryParam = this.selectedFilters && this.selectedFilters.organizations
     ? '&organization_ids=' + this.selectedFilters.organizations.map(org => org.id).join(',')
@@ -123,7 +123,10 @@ export class SearchPopoverComponent implements OnInit {
     const designationQueryParam = this.selectedFilters && this.selectedFilters.designation
         ? '&designation=' + this.selectedFilters.designation.map(des => des.value).join(',')
         : '';
-    let queryString = organizationsQueryParam + designationQueryParam;
+    const locationQueryParam = this.selectedFilters && this.selectedFilters.location
+        ? '&location=' + this.selectedFilters.location.map(des => des.value).join(',')
+        : '';
+    let queryString = organizationsQueryParam + designationQueryParam +locationQueryParam;
     if(this.data.control.id){
       queryString = queryString + '&session_id=' + this.data.control.id
     }
