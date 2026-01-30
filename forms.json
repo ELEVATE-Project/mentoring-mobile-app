@@ -250,7 +250,7 @@
             },
             "placeHolder": "Please use only 150 characters",
             "validators": {
-              "required": true,
+              "required": false,
               "maxLength": 150,
               "pattern": "^[a-zA-Z0-9-.,s ]+$"
             },
