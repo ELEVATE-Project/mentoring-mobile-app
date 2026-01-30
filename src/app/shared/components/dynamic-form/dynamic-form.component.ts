@@ -17,8 +17,7 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { debounceTime } from 'rxjs/operators';
 import { SearchAndSelectComponent } from '../search-and-select/search-and-select.component';
 import { OWL_DATE_TIME_FORMATS } from '@danielmoncada/angular-datetime-picker';
-import * as moment from 'moment-timezone';
-
+import moment from 'moment-timezone';
 interface JsonFormValidators {
   min?: number;
   max?: number;

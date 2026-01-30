@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { BIG_NUMBER_DASHBOARD_FORM, DASHBOARD_TABLE_META_KEYS } from 'src/app/core/constants/formConstant';
 import { HttpService, UtilService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
-import * as moment from 'moment';
+import moment from 'moment-timezone';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { Component, ViewChild } from '@angular/core';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
