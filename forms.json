@@ -656,7 +656,8 @@
                   }
                 ]
               },
-              "filterType": "mentor"
+              "filterType": "mentor",
+              "addPopupType": "addUser"
             },
             "info": [
               {
@@ -697,6 +698,7 @@
                     "label": "Location",
                     "type": "checkbox"
                   }
+                  
                 ],
                 "organizations": [
                   {
@@ -706,7 +708,8 @@
                   }
                 ]
               },
-              "filterType": "mentee"
+              "filterType": "mentee",
+              "addPopupType": "addUser"
             },
             "position": "floating",
             "info": [
