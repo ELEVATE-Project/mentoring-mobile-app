@@ -641,6 +641,11 @@
                     "key": "designation",
                     "label": "Designation",
                     "type": "checkbox"
+                  },
+                  {
+                    "key": "location",
+                    "label": "Location",
+                    "type": "checkbox"
                   }
                 ],
                 "organizations": [
@@ -685,6 +690,11 @@
                   {
                     "key": "designation",
                     "label": "Designation",
+                    "type": "checkbox"
+                  },
+                  {
+                    "key": "location",
+                    "label": "Location",
                     "type": "checkbox"
                   }
                 ],
