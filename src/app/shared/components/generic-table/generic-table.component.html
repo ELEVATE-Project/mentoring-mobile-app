@@ -64,7 +64,7 @@
         <div *ngIf="column.type == 'text'">
           <td class="cell-container" mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">
             <div class="cell-text" [ngClass]="{'session-name cell-text': column.name == 'title' || column.name == 'name'}">
-              {{element[column.name] | translate }}</div>
+              {{ (element[column.name] || element[column.label]) | translate }}</div>
           </td>
         </div>
         <div *ngIf="column.type == 'array'">
