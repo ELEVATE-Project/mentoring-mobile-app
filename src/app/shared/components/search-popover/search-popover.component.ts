@@ -18,6 +18,7 @@ export class SearchPopoverComponent implements OnInit {
     { name: 'name', displayName: 'Name', type: 'text' },
     { name: 'designation', displayName: 'Designation', type: 'array' },
     { name: 'organization', displayName: 'Organisation', type: 'text' },
+    { name: 'location', displayName: 'Location', type: 'text' },
     { name: 'email', displayName: 'E-mail ID', type: 'text' },
     { name: 'type', displayName: 'Enrollment type', type: 'text' },
     { name: 'action', displayName: 'Actions', type: 'button' }
@@ -150,6 +151,7 @@ export class SearchPopoverComponent implements OnInit {
         ele.action = _.includes(selectedIds, ele.id) ? (ele.enrolled_type === 'ENROLLED' ? [] : this.actionButtons.REMOVE) : this.actionButtons.ADD;
         ele.type = ele?.enrolled_type
         ele.organization = ele?.organization?.name;
+        ele.location = ele?.location?.label;
       });
       return data.result.data
     }

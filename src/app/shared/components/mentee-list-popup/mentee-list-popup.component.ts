@@ -16,6 +16,7 @@ export class MenteeListPopupComponent implements OnInit {
     { name: 'name', displayName: 'Name', type: 'text' },
     { name: 'designation', displayName: 'Designation', type: 'array' },
     { name: 'organization', displayName: 'Organization', type: 'text' },
+    { name: 'location', displayName: 'Location', type: 'text' },
     { name: 'email', displayName: 'Email Id', type: 'text'},
     { name: 'type', displayName: 'Enrollment type', type: 'text' },
   ]
@@ -46,6 +47,7 @@ export class MenteeListPopupComponent implements OnInit {
     if (data) {
       data.forEach((ele) => {
         ele.organization = ele?.organization?.name;
+        ele.location = ele?.location?.label;
       });
     }
     this.enrolledMenteeList = data;
