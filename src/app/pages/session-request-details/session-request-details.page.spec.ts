@@ -10,7 +10,7 @@ import { NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { CommonRoutes } from 'src/global.routes';
 import { PLATFORMS } from 'src/app/core/constants/formConstant';
 
-@Pipe({ name: 'translate' })
+@Pipe({ name: 'translate', standalone: false })
 class MockTranslatePipe implements PipeTransform {
   transform(value: string): string {
     return value;
