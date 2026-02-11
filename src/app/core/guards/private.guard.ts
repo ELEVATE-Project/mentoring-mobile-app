@@ -13,7 +13,6 @@ export class PrivateGuard implements CanActivate {
  async canActivate(): Promise<boolean> {
     try {
       const token = await this.userService.getUserValue();
-      console.log(token, "************** 34 private guard ");
       if (token) {
         this.utilService?.alertClose();
         return true;
