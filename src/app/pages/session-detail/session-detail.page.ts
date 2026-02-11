@@ -159,7 +159,7 @@ export class SessionDetailPage implements OnInit, OnDestroy {
     this.sessionDatas = response?.result;
     this.isLoaded = true ;
     this.userCantAccess = response?.responseCode == 'OK' ? false:true
-    this.isCreator = response?.result.created_by == this.userDetails.id ? true:false;
+    this.isCreator = response?.result?.created_by == this.userDetails.id ? true:false;
     this.isConductor = this.userDetails.id == response?.result?.mentor_id ? true : false;
     this.sessionManagerText =  this.isConductor ? "ASSIGNED_BY":"INVITED_BY";
     this.isNotInvited = response?.result?.enrolment_type === 'INVITED'? false : true;
