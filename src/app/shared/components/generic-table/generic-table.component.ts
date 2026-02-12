@@ -5,9 +5,10 @@ import { PopoverController } from '@ionic/angular';
 import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
 
 @Component({
-  selector: 'app-generic-table',
-  templateUrl: './generic-table.component.html',
-  styleUrls: ['./generic-table.component.scss'],
+    selector: 'app-generic-table',
+    templateUrl: './generic-table.component.html',
+    styleUrls: ['./generic-table.component.scss'],
+    standalone: false
 })
 
 export class GenericTableComponent implements OnInit {

@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-filter-tree',
-  templateUrl: './filter-tree.component.html',
-  styleUrls: ['./filter-tree.component.scss'],
+    selector: 'app-filter-tree',
+    templateUrl: './filter-tree.component.html',
+    styleUrls: ['./filter-tree.component.scss'],
+    standalone: false
 })
 export class FilterTreeComponent implements OnInit {
   @Input() enableFilterHeader:any;

@@ -11,9 +11,10 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { HttpService } from 'src/app/core/services';
 
 @Component({
-  selector: 'app-requests',
-  templateUrl: './requests.page.html',
-  styleUrls: ['./requests.page.scss'],
+    selector: 'app-requests',
+    templateUrl: './requests.page.html',
+    styleUrls: ['./requests.page.scss'],
+    standalone: false
 })
 export class RequestsPage implements OnInit {
   public headerConfig: any = {

@@ -6,9 +6,10 @@ import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-change-password',
-  templateUrl: './change-password.page.html',
-  styleUrls: ['./change-password.page.scss'],
+    selector: 'app-change-password',
+    templateUrl: './change-password.page.html',
+    styleUrls: ['./change-password.page.scss'],
+    standalone: false
 })
 export class ChangePasswordPage implements OnInit {
 

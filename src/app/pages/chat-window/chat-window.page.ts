@@ -10,9 +10,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { RocketChatApiService } from 'sl-chat-library';
 
 @Component({
-  selector: 'app-chat-window',
-  templateUrl: './chat-window.page.html',
-  styleUrls: ['./chat-window.page.scss'],
+    selector: 'app-chat-window',
+    templateUrl: './chat-window.page.html',
+    styleUrls: ['./chat-window.page.scss'],
+    standalone: false
 })
 export class ChatWindowPage implements OnInit {
   showChat: boolean = false;

@@ -19,9 +19,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
 
 @Component({
-  selector: 'app-home-search',
-  templateUrl: './home-search.page.html',
-  styleUrls: ['./home-search.page.scss'],
+    selector: 'app-home-search',
+    templateUrl: './home-search.page.html',
+    styleUrls: ['./home-search.page.scss'],
+    standalone: false
 })
 export class HomeSearchPage implements OnInit {
 

@@ -5,9 +5,10 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
-  selector: 'app-help-video',
-  templateUrl: './help-video.page.html',
-  styleUrls: ['./help-video.page.scss'],
+    selector: 'app-help-video',
+    templateUrl: './help-video.page.html',
+    styleUrls: ['./help-video.page.scss'],
+    standalone: false
 })
 export class HelpVideoPage implements OnInit {
 

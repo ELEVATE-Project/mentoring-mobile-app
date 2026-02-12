@@ -4,9 +4,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { ToastService, UtilService } from 'src/app/core/services';
 
 @Component({
-  selector: 'app-add-link-modal',
-  templateUrl: './pre-alert-modal.component.html',
-  styleUrls: ['./pre-alert-modal.component.scss'],
+    selector: 'app-add-link-modal',
+    templateUrl: './pre-alert-modal.component.html',
+    styleUrls: ['./pre-alert-modal.component.scss'],
+    standalone: false
 })
 export class PreAlertModalComponent {
   @ViewChild('fileUpload') fileUpload: ElementRef;

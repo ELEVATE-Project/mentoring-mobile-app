@@ -11,16 +11,17 @@ import { HttpService, ToastService } from 'src/app/core/services';
 import { PreAlertModalComponent } from '../pre-alert-modal/pre-alert-modal.component';
 
 @Component({
-  selector: 'app-search-and-select',
-  templateUrl: './search-and-select.component.html',
-  styleUrls: ['./search-and-select.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: SearchAndSelectComponent,
-    },
-  ],
+    selector: 'app-search-and-select',
+    templateUrl: './search-and-select.component.html',
+    styleUrls: ['./search-and-select.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: SearchAndSelectComponent,
+        },
+    ],
+    standalone: false
 })
 export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   @Input() control;

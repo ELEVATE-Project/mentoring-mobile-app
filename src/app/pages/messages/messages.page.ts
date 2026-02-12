@@ -7,9 +7,10 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
-  selector: 'app-messages',
-  templateUrl: './messages.page.html',
-  styleUrls: ['./messages.page.scss'],
+    selector: 'app-messages',
+    templateUrl: './messages.page.html',
+    styleUrls: ['./messages.page.scss'],
+    standalone: false
 })
 export class MessagesPage implements OnInit {
   showChat: any;

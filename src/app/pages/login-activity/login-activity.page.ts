@@ -13,9 +13,10 @@ import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
 import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
-  selector: 'app-login-activity',
-  templateUrl: './login-activity.page.html',
-  styleUrls: ['./login-activity.page.scss'],
+    selector: 'app-login-activity',
+    templateUrl: './login-activity.page.html',
+    styleUrls: ['./login-activity.page.scss'],
+    standalone: false
 })
 export class LoginActivityPage implements OnInit {
 

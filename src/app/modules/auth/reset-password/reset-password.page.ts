@@ -9,9 +9,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-reset-password',
-  templateUrl: './reset-password.page.html',
-  styleUrls: ['./reset-password.page.scss'],
+    selector: 'app-reset-password',
+    templateUrl: './reset-password.page.html',
+    styleUrls: ['./reset-password.page.scss'],
+    standalone: false
 })
 export class ResetPasswordPage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;

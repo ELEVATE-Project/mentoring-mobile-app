@@ -16,9 +16,10 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-session-detail',
-  templateUrl: './session-detail.page.html',
-  styleUrls: ['./session-detail.page.scss'],
+    selector: 'app-session-detail',
+    templateUrl: './session-detail.page.html',
+    styleUrls: ['./session-detail.page.scss'],
+    standalone: false
 })
 export class SessionDetailPage implements OnInit, OnDestroy {
   id: any;

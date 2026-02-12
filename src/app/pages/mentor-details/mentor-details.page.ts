@@ -19,9 +19,10 @@ import * as _ from 'lodash';
 import { TitleCasePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-mentor-details',
-  templateUrl: './mentor-details.page.html',
-  styleUrls: ['./mentor-details.page.scss'],
+    selector: 'app-mentor-details',
+    templateUrl: './mentor-details.page.html',
+    styleUrls: ['./mentor-details.page.scss'],
+    standalone: false
 })
 export class MentorDetailsPage implements OnInit {
   mentorName;

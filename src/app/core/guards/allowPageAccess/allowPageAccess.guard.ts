@@ -17,7 +17,8 @@ export class AllowPageAccess implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       
       if(environment.restictedPages.includes(route.data.pageId)) {
-        this.router.navigate(["/"]);
+        // Remove after testing
+        this.router.navigate(['/mentoring/tabs/home']);
         return false
       }
       return true

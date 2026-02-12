@@ -2,7 +2,8 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Directive({
-  selector: '[allowTemplateView]',
+    selector: '[allowTemplateView]',
+    standalone: false
 })
 export class AllowTemplateViewDirective {
   @Input() set allowTemplateView( pageId: any ) {

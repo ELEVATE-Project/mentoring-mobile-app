@@ -28,9 +28,10 @@ import { DynamicSelectModalComponent } from 'src/app/dynamic-select-modal/dynami
 import { UtilService } from '../../core/services/util/util.service';
 
 @Component({
-  selector: 'app-create-session',
-  templateUrl: './create-session.page.html',
-  styleUrls: ['./create-session.page.scss'],
+    selector: 'app-create-session',
+    templateUrl: './create-session.page.html',
+    styleUrls: ['./create-session.page.scss'],
+    standalone: false
 })
 export class CreateSessionPage implements OnInit {
 

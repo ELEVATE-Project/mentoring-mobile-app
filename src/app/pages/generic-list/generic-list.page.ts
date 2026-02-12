@@ -19,10 +19,11 @@ import { SearchbarComponent } from 'src/app/shared/components/searchbar/searchba
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
-  selector: 'app-generic-list',
-  templateUrl: './generic-list.page.html',
-  styleUrls: ['./generic-list.page.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'app-generic-list',
+    templateUrl: './generic-list.page.html',
+    styleUrls: ['./generic-list.page.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class GenericListPage implements OnInit {
 

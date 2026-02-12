@@ -4,9 +4,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
-  selector: 'app-persona-selection',
-  templateUrl: './persona-selection.page.html',
-  styleUrls: ['./persona-selection.page.scss'],
+    selector: 'app-persona-selection',
+    templateUrl: './persona-selection.page.html',
+    styleUrls: ['./persona-selection.page.scss'],
+    standalone: false
 })
 export class PersonaSelectionPage implements OnInit {
   personaList = [{

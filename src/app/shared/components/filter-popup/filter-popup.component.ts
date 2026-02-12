@@ -2,9 +2,10 @@ import { Component, Input, OnInit} from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-filter-popup',
-  templateUrl: './filter-popup.component.html',
-  styleUrls: ['./filter-popup.component.scss'],
+    selector: 'app-filter-popup',
+    templateUrl: './filter-popup.component.html',
+    styleUrls: ['./filter-popup.component.scss'],
+    standalone: false
 })
 export class FilterPopupComponent implements OnInit {
   @Input() filterData: any;

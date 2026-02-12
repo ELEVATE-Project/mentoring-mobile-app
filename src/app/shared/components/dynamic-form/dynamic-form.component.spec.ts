@@ -23,7 +23,8 @@ import { AttachmentService, ToastService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-search-and-select',
-  template: ''
+  template: '',
+  standalone: false
 })
 class SearchAndSelectComponentStub {
   @Input() formControlName!: string;
@@ -35,7 +36,8 @@ class SearchAndSelectComponentStub {
 
 @Component({
   selector: 'app-input-chip',
-  template: ''
+  template: '',
+  standalone: false
 })
 class InputChipStub {
   @Input() formControlName!: string;
@@ -49,7 +51,8 @@ class InputChipStub {
 
 @Component({
   selector: 'app-star-rating',
-  template: ''
+  template: '',
+  standalone: false
 })
 class StarRatingStub {
   @Input() formControlName!: string;
@@ -381,7 +384,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -405,7 +408,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -433,7 +436,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -461,7 +464,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -488,7 +491,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -515,7 +518,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -542,7 +545,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -569,7 +572,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -593,7 +596,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -624,7 +627,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     spyOn(component.formValid, 'emit');
     fixture.detectChanges();
     tick();
@@ -648,7 +651,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     spyOn(component.formValid, 'emit');
     fixture.detectChanges();
     tick();
@@ -660,10 +663,10 @@ describe('DynamicFormComponent', () => {
   it('should reset form when reset is called', fakeAsync(() => {
     init();
     tick();
-    
+
     component.myForm.get('firstName')!.setValue('John');
     component.reset();
-    
+
     expect(component.myForm.get('firstName')!.value).toBeNull();
   }));
 
@@ -690,7 +693,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -698,7 +701,7 @@ describe('DynamicFormComponent', () => {
     fileInput.id = 'photo-file';
     fileInput.type = 'file';
     document.body.appendChild(fileInput);
-    
+
     spyOn(fileInput, 'click');
     spyOn(document, 'querySelector').and.returnValue(fileInput);
 
@@ -726,7 +729,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -739,7 +742,7 @@ describe('DynamicFormComponent', () => {
 
     const mockReader = {
       onload: null as any,
-      readAsDataURL: jasmine.createSpy('readAsDataURL').and.callFake(function() {
+      readAsDataURL: jasmine.createSpy('readAsDataURL').and.callFake(function () {
         this.onload();
       }),
       result: 'data:image/jpeg;base64,mockdata'
@@ -796,7 +799,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -832,7 +835,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 
@@ -840,9 +843,9 @@ describe('DynamicFormComponent', () => {
     component.myForm.get('startDate')!.setValue(testDate);
 
     component.dateInputClick(control, mockDatetimePicker);
-    
+
     expect(mockDatetimePicker._selected).toBe(testDate);
-    
+
     tick(500);
     expect(mockDatetimePicker.open).toHaveBeenCalled();
   }));
@@ -853,7 +856,7 @@ describe('DynamicFormComponent', () => {
 
     const mockComponent = new SearchAndSelectComponentStub();
     mockComponent.uniqueId = 'test-id';
-    
+
     component.searchAndSelectComponents = {
       find: jasmine.createSpy('find').and.returnValue(mockComponent)
     } as any;
@@ -902,7 +905,7 @@ describe('DynamicFormComponent', () => {
         }
       ]
     };
-    
+
     fixture.detectChanges();
     tick();
 

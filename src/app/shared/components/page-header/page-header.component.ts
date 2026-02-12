@@ -9,9 +9,10 @@ import { CommonRoutes } from 'src/global.routes';
 import { PopoverController } from '@ionic/angular';
 import { PopoverMenuComponent } from 'src/app/popover-menu/popover-menu.component';
 @Component({
-  selector: 'app-page-header',
-  templateUrl: './page-header.component.html',
-  styleUrls: ['./page-header.component.scss'],
+    selector: 'app-page-header',
+    templateUrl: './page-header.component.html',
+    styleUrls: ['./page-header.component.scss'],
+    standalone: false
 })
 export class PageHeaderComponent implements OnInit {
   @Input() config: any;

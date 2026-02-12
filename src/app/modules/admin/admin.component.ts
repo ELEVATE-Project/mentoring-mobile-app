@@ -4,9 +4,10 @@ import { CommonRoutes } from 'src/global.routes';
 import { permissions, manageSessionAction, manageUserAction } from 'src/app/core/constants/permissionsConstant';
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss'],
+    selector: 'app-admin',
+    templateUrl: './admin.component.html',
+    styleUrls: ['./admin.component.scss'],
+    standalone: false
 })
 export class AdminComponent implements OnInit {
   public headerConfig: any = {

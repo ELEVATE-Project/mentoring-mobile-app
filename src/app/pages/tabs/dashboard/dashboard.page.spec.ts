@@ -9,7 +9,7 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
+import moment from 'moment';
 
 // ---------- MOCKS ----------
 
@@ -485,48 +485,48 @@ describe('DashboardPage', () => {
     expect(prepChartSpy).toHaveBeenCalled();
   }));
 
-it('handleFormControlChange should update session_type when type provided', fakeAsync(() => {
-  // Setup filteredCards to prevent bigNumberCount from failing
-  component.filteredCards = {
-    SOME: {
-      bigNumbers: []
-    }
-  };
-  component.session_type = 'ALL';
-  
-  // Spy on bigNumberCount to prevent actual execution
-  const bigNumSpy = spyOn(component, 'bigNumberCount').and.returnValue(Promise.resolve());
-  const prepChartSpy = spyOn(component, 'prepareChartUrl').and.returnValue(Promise.resolve());
-  
-  component.handleFormControlChange('type', { detail: { value: 'SOME' } } as any);
-  tick(200);
-  
-  expect(component.session_type).toBe('SOME');
-  expect(bigNumSpy).toHaveBeenCalled();
-  expect(prepChartSpy).toHaveBeenCalled();
-}));
+  it('handleFormControlChange should update session_type when type provided', fakeAsync(() => {
+    // Setup filteredCards to prevent bigNumberCount from failing
+    component.filteredCards = {
+      SOME: {
+        bigNumbers: []
+      }
+    };
+    component.session_type = 'ALL';
 
-it('handleFormControlChange should set entityTypes when selection provided', fakeAsync(() => {
-  // Setup filteredCards to prevent bigNumberCount from failing
-  component.filteredCards = {
-    ALL: {
-      bigNumbers: []
-    }
-  };
-  component.session_type = 'ALL';
-  component.entityTypes = null;
-  
-  // Spy on bigNumberCount to prevent actual execution
-  const bigNumSpy = spyOn(component, 'bigNumberCount').and.returnValue(Promise.resolve());
-  const prepChartSpy = spyOn(component, 'prepareChartUrl').and.returnValue(Promise.resolve());
-  
-  component.handleFormControlChange('city', { detail: { value: ['A'] } } as any);
-  tick(200);
-  
-  expect(component.entityTypes.city).toEqual(['A']);
-  expect(bigNumSpy).toHaveBeenCalled();
-  expect(prepChartSpy).toHaveBeenCalled();
-}));
+    // Spy on bigNumberCount to prevent actual execution
+    const bigNumSpy = spyOn(component, 'bigNumberCount').and.returnValue(Promise.resolve());
+    const prepChartSpy = spyOn(component, 'prepareChartUrl').and.returnValue(Promise.resolve());
+
+    component.handleFormControlChange('type', { detail: { value: 'SOME' } } as any);
+    tick(200);
+
+    expect(component.session_type).toBe('SOME');
+    expect(bigNumSpy).toHaveBeenCalled();
+    expect(prepChartSpy).toHaveBeenCalled();
+  }));
+
+  it('handleFormControlChange should set entityTypes when selection provided', fakeAsync(() => {
+    // Setup filteredCards to prevent bigNumberCount from failing
+    component.filteredCards = {
+      ALL: {
+        bigNumbers: []
+      }
+    };
+    component.session_type = 'ALL';
+    component.entityTypes = null;
+
+    // Spy on bigNumberCount to prevent actual execution
+    const bigNumSpy = spyOn(component, 'bigNumberCount').and.returnValue(Promise.resolve());
+    const prepChartSpy = spyOn(component, 'prepareChartUrl').and.returnValue(Promise.resolve());
+
+    component.handleFormControlChange('city', { detail: { value: ['A'] } } as any);
+    tick(200);
+
+    expect(component.entityTypes.city).toEqual(['A']);
+    expect(bigNumSpy).toHaveBeenCalled();
+    expect(prepChartSpy).toHaveBeenCalled();
+  }));
 
   // ---------- handleRoleChange ----------
 

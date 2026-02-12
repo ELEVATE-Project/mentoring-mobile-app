@@ -287,17 +287,17 @@ describe('SessionService', () => {
   describe('joinSession', () => {
     it('should join session with sessionId successfully', async () => {
       const sessionData = { sessionId: '123', title: 'Test Session' };
-      const mockResponse = { 
-        responseCode: 'OK', 
-        result: { link: 'https://join.link' } 
+      const mockResponse = {
+        responseCode: 'OK',
+        result: { link: 'https://join.link' }
       };
-      const mockModal = { 
+      const mockModal = {
         present: jasmine.createSpy('present').and.returnValue(Promise.resolve()),
         dismiss: jasmine.createSpy('dismiss').and.returnValue(Promise.resolve()),
         onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(Promise.resolve({})),
         onWillDismiss: jasmine.createSpy('onWillDismiss').and.returnValue(Promise.resolve({}))
       } as any;
-      
+
       httpServiceMock.get.and.returnValue(Promise.resolve(mockResponse));
       modalControllerMock.create.and.returnValue(Promise.resolve(mockModal as any));
 
@@ -311,23 +311,23 @@ describe('SessionService', () => {
         cssClass: 'example-modal'
       });
       expect(result).not.toBeNull();
-expect(mockModal.present).toHaveBeenCalled();
+      expect(mockModal.present).toHaveBeenCalled();
 
     });
 
     it('should join session with id when sessionId is not present', async () => {
       const sessionData = { id: '456', title: 'Test Session' };
-      const mockResponse = { 
-        responseCode: 'OK', 
-        result: { link: 'https://join.link' } 
+      const mockResponse = {
+        responseCode: 'OK',
+        result: { link: 'https://join.link' }
       };
-      const mockModal = { 
+      const mockModal = {
         present: jasmine.createSpy('present').and.returnValue(Promise.resolve()),
         dismiss: jasmine.createSpy('dismiss').and.returnValue(Promise.resolve()),
         onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(Promise.resolve({})),
         onWillDismiss: jasmine.createSpy('onWillDismiss').and.returnValue(Promise.resolve({}))
       };
-      
+
       httpServiceMock.get.and.returnValue(Promise.resolve(mockResponse));
       modalControllerMock.create.and.returnValue(Promise.resolve(mockModal as any));
 
@@ -398,9 +398,9 @@ expect(mockModal.present).toHaveBeenCalled();
 
       await service.openBrowser(link);
 
-      expect(browserSpy.open).toHaveBeenCalledWith({ 
-        url: link, 
-        windowName: '_self' 
+      expect(browserSpy.open).toHaveBeenCalledWith({
+        url: link,
+        windowName: '_self'
       });
       expect(browserSpy.addListener).toHaveBeenCalledWith('browserFinished', jasmine.any(Function));
     });
@@ -413,9 +413,9 @@ expect(mockModal.present).toHaveBeenCalled();
 
       await service.openBrowser(link, '_blank');
 
-      expect(browserSpy.open).toHaveBeenCalledWith({ 
-        url: link, 
-        windowName: '_blank' 
+      expect(browserSpy.open).toHaveBeenCalledWith({
+        url: link,
+        windowName: '_blank'
       });
     });
 
@@ -705,7 +705,7 @@ expect(mockModal.present).toHaveBeenCalled();
       expect(httpServiceMock.post).toHaveBeenCalledWith({
         url: urlConstants.API_URLS.REQUEST_SESSION_REJECT,
         payload: {
-          request_session_id: '123',
+          request_session_id: 123,
           reason: 'Not available'
         }
       });

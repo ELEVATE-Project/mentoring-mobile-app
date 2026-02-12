@@ -11,9 +11,10 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { FilterPopupComponent } from '../filter-popup/filter-popup.component';
 
 @Component({
-  selector: 'app-search-popover',
-  templateUrl: './search-popover.component.html',
-  styleUrls: ['./search-popover.component.scss'],
+    selector: 'app-search-popover',
+    templateUrl: './search-popover.component.html',
+    styleUrls: ['./search-popover.component.scss'],
+    standalone: false
 })
 export class SearchPopoverComponent implements OnInit {
 

@@ -16,9 +16,10 @@ import { LocalStorageService } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
-  selector: 'app-mentor-search-directory',
-  templateUrl: './mentor-search-directory.page.html',
-  styleUrls: ['./mentor-search-directory.page.scss'],
+    selector: 'app-mentor-search-directory',
+    templateUrl: './mentor-search-directory.page.html',
+    styleUrls: ['./mentor-search-directory.page.scss'],
+    standalone: false
 })
 export class MentorSearchDirectoryPage implements OnInit {
 

@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 import { Pipe, PipeTransform, NO_ERRORS_SCHEMA } from '@angular/core';
 
 // Simple stub for translate pipe used in template
-@Pipe({ name: 'translate' })
+@Pipe({ name: 'translate', standalone: false })
 class FakeTranslatePipe implements PipeTransform {
   transform(value: any): any {
     return value;
@@ -37,7 +37,7 @@ describe('RequestsPage', () => {
       data: of({
         button_config: { some: 'config' },
         slotButtonConfig: { slot: 'cfg' },
-        noDataFound: { noMessage: 'no messages' , noSession: 'no sessions' }
+        noDataFound: { noMessage: 'no messages', noSession: 'no sessions' }
       })
     } as Partial<ActivatedRoute>;
 
