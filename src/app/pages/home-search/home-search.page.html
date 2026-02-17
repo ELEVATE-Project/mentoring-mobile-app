@@ -1,22 +1,15 @@
 <app-page-header [config]="headerConfig">
-  <app-searchbar
-    *ngIf="overlayChips"
-    placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}"
-    (clearText)="onClearSearch($event)"
-    [overlayChip]="overlayChips"
-    (outputData)="search($event)"
-    [valueFromParent]="criteriaChip"
-    [parentSearchText]="searchText"
-  ></app-searchbar>
+  @if (overlayChips()) {
+  <app-searchbar placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}" (clearText)="onClearSearch($event)"
+    [overlayChip]="overlayChips()" (outputData)="search($event)" [valueFromParent]="criteriaChip"
+    [parentSearchText]="searchText"></app-searchbar>
+  }
 </app-page-header>
-<app-chips-and-filter  [selectedFilters]="chips" [searchAndCriteriaData]="searchAndCriterias" (removeFilterChip)="removeChip($event)" (filterClick)="onClickFilter()" (sendChildValue)="eventHandler($event)" [isFilterEnable]="filterIcon"></app-chips-and-filter>
+<app-chips-and-filter [selectedFilters]="chips()" [searchAndCriteriaData]="searchAndCriterias"
+  (removeFilterChip)="removeChip($event)" (filterClick)="onClickFilter()" (sendChildValue)="eventHandler($event)"
+  [isFilterEnable]="filterIcon()"></app-chips-and-filter>
 <!-- <ion-toolbar> </ion-toolbar> -->
 <ion-content>
-  <app-generic-search
-    [results]="results"
-    [totalCount]="totalCount"
-    [searchValue]="searchText"
-    (onClickEvent)="eventAction($event)"
-    (onPageChangeEvent)="onPageChange($event)"
-  ></app-generic-search>
+  <app-generic-search [results]="results()" [totalCount]="totalCount()" [searchValue]="searchText"
+    (onClickEvent)="eventAction($event)" (onPageChangeEvent)="onPageChange($event)"></app-generic-search>
 </ion-content>

@@ -5,6 +5,7 @@ import {
   Output,
   EventEmitter,
   ViewChild,
+  signal
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
@@ -15,10 +16,10 @@ import { IonModal } from '@ionic/angular';
 import { App, AppState } from '@capacitor/app';
 
 @Component({
-    selector: 'app-session-card',
-    templateUrl: './session-card.component.html',
-    styleUrls: ['./session-card.component.scss'],
-    standalone: false
+  selector: 'app-session-card',
+  templateUrl: './session-card.component.html',
+  styleUrls: ['./session-card.component.scss'],
+  standalone: false
 })
 export class SessionCardComponent implements OnInit {
   @Input() data: any;
@@ -27,12 +28,13 @@ export class SessionCardComponent implements OnInit {
   @Output() onClickEvent = new EventEmitter();
   @ViewChild(IonModal) modal: IonModal;
 
-  startDate;
+  startDate = signal<Date | undefined>(undefined);
+  endDate = signal<Date | undefined>(undefined);
+
   isCreator: boolean;
   isConductor: boolean;
   buttonConfig;
   userData: any;
-  endDate;
   isModalOpen = false;
   meetingPlatform: any;
 
@@ -41,7 +43,7 @@ export class SessionCardComponent implements OnInit {
     private sessionService: SessionService,
     private toast: ToastService,
     private localStorage: LocalStorageService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     App.addListener('appStateChange', (state: AppState) => {
@@ -49,26 +51,27 @@ export class SessionCardComponent implements OnInit {
         this.setButtonConfig(this.isCreator, this.isConductor);
       }
     });
+
     this.meetingPlatform = this.data?.meeting_info;
     this.isCreator = await this.checkIfCreator();
     this.isConductor = await this.checkIfConductor();
     this.setButtonConfig(this.isCreator, this.isConductor);
-    this.startDate =
-      this.data.start_date > 0
-        ? new Date(this.data.start_date * 1000)
-        : this.startDate;
-    this.endDate =
-      this.data.end_date > 0
-        ? new Date(this.data.start_date * 1000)
-        : this.endDate;
+
+    if (this.data.start_date > 0) {
+      this.startDate.set(new Date(this.data.start_date * 1000));
+    }
+
+    if (this.data.end_date > 0) {
+      this.endDate.set(new Date(this.data.end_date * 1000));
+    }
   }
 
   setButtonConfig(isCreator: boolean, isConductor: boolean) {
-  const now = Math.floor(Date.now() / 1000);
-  const start = this.data?.start_date;
-  const platform = this.data?.meeting_info?.platform;
+    const now = Math.floor(Date.now() / 1000);
+    const start = this.data?.start_date;
+    const platform = this.data?.meeting_info?.platform;
 
-  if (isConductor) {
+    if (isConductor) {
       this.buttonConfig = { label: 'START', type: 'startAction' };
     } else {
       this.buttonConfig =
@@ -77,38 +80,37 @@ export class SessionCardComponent implements OnInit {
           : { label: 'ENROLL', type: 'enrollAction' };
     }
 
-  let enabled = true;
+    let enabled = true;
 
-  if (start) {
-    const diff = start - now;
-    if (diff > 600) {
+    if (start) {
+      const diff = start - now;
+      if (diff > 600) {
+        enabled = false;
+      }
+    }
+
+    if (platform === 'OFF') {
       enabled = false;
     }
+
+    this.buttonConfig.isEnabled = enabled;
   }
 
-  if (platform === 'OFF') {
-    enabled = false;
+  async checkIfCreator() {
+    this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    if (!this.userData || !this.data?.created_by) {
+      return false;
+    }
+    return this.data.created_by === this.userData.id;
   }
 
-  this.buttonConfig.isEnabled = enabled;
-}
-
-
- async checkIfCreator() {
-  this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-  if (!this.userData || !this.data?.created_by) {
-    return false;
+  async checkIfConductor() {
+    this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    if (!this.userData || !this.data?.mentor_id) {
+      return false;
+    }
+    return this.data.mentor_id === this.userData.id;
   }
-  return this.data.created_by === this.userData.id;
-}
-
-async checkIfConductor() {
-  this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-  if (!this.userData || !this.data?.mentor_id) {
-    return false;
-  }
-  return this.data.mentor_id === this.userData.id;
-}
 
   onCardClick(data) {
     let value = {
@@ -125,6 +127,7 @@ async checkIfConductor() {
     };
     this.onClickEvent.emit(value);
   }
+
   clickOnAddMeetingLink(cardData: any) {
     let id = cardData.id;
     this.router.navigate([CommonRoutes.CREATE_SESSION], {

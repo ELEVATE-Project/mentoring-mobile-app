@@ -3,6 +3,7 @@ import {
   HostListener,
   NgZone,
   OnInit,
+  signal
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, MenuController, Platform } from '@ionic/angular';
@@ -32,13 +33,13 @@ import {
 } from 'sl-chat-library';
 
 @Component({
-    selector: 'app-private',
-    templateUrl: './private.page.html',
-    styleUrls: ['./private.page.scss'],
-    standalone: false
+  selector: 'app-private',
+  templateUrl: './private.page.html',
+  styleUrls: ['./private.page.scss'],
+  standalone: false
 })
 export class PrivatePage implements OnInit {
-  user;
+  user = signal<any>(null);
   PAGE_IDS = PAGE_IDS;
   public appPages = [
     {
@@ -150,14 +151,14 @@ export class PrivatePage implements OnInit {
 
   actionsArrays: any[] = permissionModule.MODULES;
 
-  isMentor: boolean;
+  isMentor = signal<boolean>(false);
   showAlertBox = false;
-  userRoles: any;
+  userRoles = signal<any>(null);
   userEventSubscription: any;
   backButtonSubscription: any;
   menuSubscription: any;
   routerSubscription: any;
-  adminAccess: boolean;
+  adminAccess = signal<boolean>(false);
 
   isAuthBypassed = environment['isAuthBypassed'];
   constructor(
@@ -178,24 +179,25 @@ export class PrivatePage implements OnInit {
     private permissionService: PermissionService,
     private chatService: FrontendChatLibraryService,
     private rocketChatService: RocketChatApiService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     await this.initializeApp();
-    if(this.isMentor) {
+    if (this.isMentor()) {
       const response = await this.profile.getRequestCount();
       const { result = {} } = response || {};
       const { sessionRequestCount = 0, connectionRequestCount = 0 } = result || {};
       if (sessionRequestCount > 0 || connectionRequestCount > 0) {
-      const page = this.appPages.find(
-        (page: any) => page.pageId === PAGE_IDS.requests
-      );
-      if (page) {
-        page.badge = true;
-      }}
+        const page = this.appPages.find(
+          (page: any) => page.pageId === PAGE_IDS.requests
+        );
+        if (page) {
+          page.badge = true;
+        }
+      }
       this.updateBadgeFlag();
     }
-    await this.rocketChatService.initializeWebSocketAndCheckUnread();    
+    await this.rocketChatService.initializeWebSocketAndCheckUnread();
     if (this.chatService.initialBadge) {
       let page = this.appPages.find(
         (page: any) => page.pageId == PAGE_IDS.messages
@@ -213,9 +215,9 @@ export class PrivatePage implements OnInit {
   }
 
   updateBadgeFlag() {
-  const hasBadge = this.appPages.some(p => p.badge);
-  this.utilService.setHasBadge(hasBadge);
-}
+    const hasBadge = this.appPages.some(p => p.badge);
+    this.utilService.setHasBadge(hasBadge);
+  }
 
   subscribeBackButton() {
     this.backButtonSubscription =
@@ -234,7 +236,7 @@ export class PrivatePage implements OnInit {
                 text: texts['CANCEL'],
                 role: 'cancel',
                 cssClass: 'alert-button-bg-white',
-                handler: () => {},
+                handler: () => { },
               },
               {
                 text: texts['CONFIRM'],
@@ -256,7 +258,7 @@ export class PrivatePage implements OnInit {
   async initializeApp() {
     await this.platform.ready();
     this.network.netWorkCheck();
-    let theme: any =  localStorage.getItem('theme');
+    let theme: any = localStorage.getItem('theme');
     if (theme) {
       try {
         theme = JSON.parse(theme);
@@ -278,12 +280,12 @@ export class PrivatePage implements OnInit {
 
         if (userDetails) {
           this.profile.getUserRole(userDetails);
-          this.adminAccess = userDetails.permissions
+          this.adminAccess.set(userDetails.permissions
             ? this.permissionService.hasAdminAcess(
-                this.actionsArrays,
-                userDetails?.permissions
-              )
-            : false;
+              this.actionsArrays,
+              userDetails?.permissions
+            )
+            : false);
         }
         await this.profile.getChatToken();
         this.getUser();
@@ -295,9 +297,9 @@ export class PrivatePage implements OnInit {
 
     await new Promise<void>((resolve) => {
       setTimeout(async () => {
-        this.userRoles = await this.localStorage.getLocalData(
+        this.userRoles.set(await this.localStorage.getLocalData(
           localKeys.USER_ROLES
-        );
+        ));
         resolve();
       }, 1000);
     });
@@ -310,14 +312,14 @@ export class PrivatePage implements OnInit {
     this.userEventSubscription = this.userService.userEventEmitted$.subscribe(
       (data) => {
         if (data) {
-          this.isMentor = this.profile.isMentor;
-          this.user = data;
-          this.adminAccess = data.permissions
+          this.isMentor.set(this.profile.isMentor);
+          this.user.set(data);
+          this.adminAccess.set(data.permissions
             ? this.permissionService.hasAdminAcess(
-                this.actionsArrays,
-                data?.permissions
-              )
-            : false;
+              this.actionsArrays,
+              data?.permissions
+            )
+            : false);
         }
       }
     );
@@ -381,7 +383,7 @@ export class PrivatePage implements OnInit {
           this.menuCtrl.enable(false);
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
   goToProfilePage() {
     this.menuCtrl.toggle();
@@ -405,35 +407,35 @@ export class PrivatePage implements OnInit {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
-}
-
-getUser() {
-  let theme: any = localStorage.getItem('theme');
-  if (theme) {
-    try {
-      theme = JSON.parse(theme);
-      document.documentElement.style.setProperty('--ion-color-primary', theme.primaryColor);
-      document.documentElement.style.setProperty('--ion-color-secondary', theme.secondaryColor);
-    } catch (error) {
-      console.error("Error parsing theme from localStorage:", error);
-    }
   }
-  this.profile.getProfileDetailsFromAPI().then(profileDetails => {
-    if(profileDetails?.organizations && profileDetails?.organizations.length == 1){
-      this.authService.setUserInLocal(profileDetails);
-    }else if(profileDetails?.organizations && profileDetails?.organizations.length >1 ){  
-      // this.showOrganizationModal(profileDetails?.result?.user?.organizations);
+
+  getUser() {
+    let theme: any = localStorage.getItem('theme');
+    if (theme) {
+      try {
+        theme = JSON.parse(theme);
+        document.documentElement.style.setProperty('--ion-color-primary', theme.primaryColor);
+        document.documentElement.style.setProperty('--ion-color-secondary', theme.secondaryColor);
+      } catch (error) {
+        console.error("Error parsing theme from localStorage:", error);
+      }
     }
-    this.adminAccess = profileDetails?.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays,profileDetails?.permissions) : false;
-    this.user = profileDetails;
-    // !environment['isAuthBypassed'] && 
-    // !environment['isAuthBypassed'] && 
-    if (profileDetails?.profile_mandatory_fields && profileDetails?.profile_mandatory_fields.length > 0 || !profileDetails?.about) {
-      this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`], { replaceUrl: true, queryParams: {redirectUrl: '/tabs/home'}});
-    }
-    this.isMentor = this.profile.isMentor;
-  })
-}
+    this.profile.getProfileDetailsFromAPI().then(profileDetails => {
+      if (profileDetails?.organizations && profileDetails?.organizations.length == 1) {
+        this.authService.setUserInLocal(profileDetails);
+      } else if (profileDetails?.organizations && profileDetails?.organizations.length > 1) {
+        // this.showOrganizationModal(profileDetails?.result?.user?.organizations);
+      }
+      this.adminAccess.set(profileDetails?.permissions ? this.permissionService.hasAdminAcess(this.actionsArrays, profileDetails?.permissions) : false);
+      this.user.set(profileDetails);
+      // !environment['isAuthBypassed'] && 
+      // !environment['isAuthBypassed'] && 
+      if (profileDetails?.profile_mandatory_fields && profileDetails?.profile_mandatory_fields.length > 0 || !profileDetails?.about) {
+        this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`], { replaceUrl: true, queryParams: { redirectUrl: '/tabs/home' } });
+      }
+      this.isMentor.set(this.profile.isMentor);
+    })
+  }
 
   async viewRoles() {
     const userRoles = await this.localStorage.getLocalData(

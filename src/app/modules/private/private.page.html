@@ -1,133 +1,74 @@
 <ion-split-pane contentId="main-content">
-  <ion-menu
-    contentId="main-content"
-    menuId="side-menu"
-    type="overlay"
-    swipeGesture="false"
-    class="width-20"
-  >
-    <ion-header
-      [translucent]="true"
-      class="ion-no-border"
-      [ngClass]="{'disable-div': user?.profile_mandatory_fields.length || !user?.about}" 
-    >
-      <div *ngIf="user">
-        <div class="sub-menu-toolbar">
-          <div slot="start" class="img-mainDiv">
-            <div class="image-div" *ngIf="user?.image; else elseBlock">
-              <img class="profile-image" src="{{user?.image}}" />
-            </div>
-            <ng-template #elseBlock>
-              <ion-icon
-                slot="icon-only"
-                name="person-circle"
-                class="no-image-icon"
-              ></ion-icon>
-            </ng-template>
+  <ion-menu contentId="main-content" menuId="side-menu" type="overlay" swipeGesture="false" class="width-20">
+    <ion-header [translucent]="true" class="ion-no-border"
+      [ngClass]="{'disable-div': user()?.profile_mandatory_fields.length || !user()?.about}">
+      @if (user()) {
+      <div class="sub-menu-toolbar">
+        <div slot="start" class="img-mainDiv">
+          @if (user()?.image) {
+          <div class="image-div">
+            <img class="profile-image" src="{{user()?.image}}" />
           </div>
-          <div class="usr-div">
-            <ion-label class="username"
-              ><strong>{{user?.name}}</strong></ion-label
-            >
-            <div class="user-role-labels">
-              <ion-label *ngIf="userRoles">{{ isMentor ? ('MENTOR' | translate): ('MENTEE' | translate)}}
-              </ion-label>
-              <ion-label class="view-roles" (click)="viewRoles()"
-                >{{"VIEW_ROLES" | translate}}</ion-label
-              >
-            </div>
-            <a
-              (click)="goToProfilePage()"
-              class="cursor"
-              *allowTemplateView="PAGE_IDS.profile"
-              >{{"PROFILE" | translate}}</a
-            >
+          } @else {
+          <ion-icon slot="icon-only" name="person-circle" class="no-image-icon"></ion-icon>
+          }
+        </div>
+        <div class="usr-div">
+          <ion-label class="username"><strong>{{user()?.name}}</strong></ion-label>
+          <div class="user-role-labels">
+            @if (userRoles()) {
+            <ion-label>{{ isMentor() ? ('MENTOR' | translate): ('MENTEE' | translate)}}
+            </ion-label>
+            }
+            <ion-label class="view-roles" (click)="viewRoles()">{{"VIEW_ROLES" | translate}}</ion-label>
           </div>
+          <a (click)="goToProfilePage()" class="cursor" *allowTemplateView="PAGE_IDS.profile">{{"PROFILE" |
+            translate}}</a>
         </div>
       </div>
+      }
     </ion-header>
-    <ion-content
-      *ngIf="user"
-      fullscreen
-      [ngClass]="{'disable-div': user?.profile_mandatory_fields.length || !user?.about}" 
-    >
+    @if (user()) {
+    <ion-content fullscreen [ngClass]="{'disable-div': user()?.profile_mandatory_fields.length || !user()?.about}">
       <div class="menu-css">
         <ion-list lines="none" class="sub-menu-list">
-          <ion-menu-toggle
-            auto-hide="false"
-            [class]="adminPage?.class"
-            *ngIf="adminAccess"
-          >
-            <ion-item
-              [routerLink]="adminPage?.url"
-              lines="none"
-              detail="false"
-              (click)="menuItemAction(adminPage)"
-              *allowTemplateView="adminPage?.pageId"
-            >
-              <ng-container
-                *ngIf="isCustomIcon(adminPage?.icon); else defaultAdminIcon"
-              >
-                <img
-                  [src]="adminPage.icon"
-                  class="side-menu-icon custom-icon"
-                  slot="start"
-                  alt="{{ adminPage.title }} icon"
-                />
-              </ng-container>
-              <ng-template #defaultAdminIcon>
-                <ion-icon
-                  class="side-menu-icon"
-                  slot="start"
-                  [ios]="adminPage.icon + '-outline'"
-                  [md]="adminPage.icon + '-outline'"
-                ></ion-icon>
-              </ng-template>
-              <ion-label class="sub-menu-list-label"
-                ><strong>{{ adminPage.title | translate}} </strong></ion-label
-              >
+          @if (adminAccess()) {
+          <ion-menu-toggle auto-hide="false" [class]="adminPage?.class">
+            <ion-item [routerLink]="adminPage?.url" lines="none" detail="false" (click)="menuItemAction(adminPage)"
+              *allowTemplateView="adminPage?.pageId">
+              @if (isCustomIcon(adminPage?.icon)) {
+              <img [src]="adminPage.icon" class="side-menu-icon custom-icon" slot="start"
+                alt="{{ adminPage.title }} icon" />
+              } @else {
+              <ion-icon class="side-menu-icon" slot="start" [ios]="adminPage.icon + '-outline'"
+                [md]="adminPage.icon + '-outline'"></ion-icon>
+              }
+              <ion-label class="sub-menu-list-label"><strong>{{ adminPage.title | translate}} </strong></ion-label>
             </ion-item>
           </ion-menu-toggle>
-          <ion-menu-toggle
-            auto-hide="false"
-            *ngFor="let p of appPages; let i = index"
-            [class]="p?.class"
-          >
-            <ng-container>
-              <span class="badge" *ngIf="p.badge"></span>
-              <ion-item
-                [routerLink]="p?.url"
-                lines="none"
-                detail="false"
-                (click)="menuItemAction(p)"
-                *allowTemplateView="p?.pageId"
-              >
-                <ng-container *ngIf="isCustomIcon(p.icon); else defaultIcon">
-                  <img
-                    [src]="p.icon"
-                    class="side-menu-icon custom-icon"
-                    slot="start"
-                    alt="{{ p.title }} icon"
-                  />
-                </ng-container>
-                <ng-template #defaultIcon>
-                  <ion-icon
-                    class="side-menu-icon"
-                    slot="start"
-                    [ios]="p.icon + '-outline'"
-                    [md]="p.icon + '-outline'"
-                  >
-                  </ion-icon>
-                </ng-template>
-                <ion-label class="sub-menu-list-label"
-                  ><strong>{{ p.title | translate}}</strong>
-                </ion-label>
-              </ion-item>
-            </ng-container>
+          }
+          @for (p of appPages; track p.pageId; let i = $index) {
+          <ion-menu-toggle auto-hide="false" [class]="p?.class">
+            @if (p.badge) {
+            <span class="badge"></span>
+            }
+            <ion-item [routerLink]="p?.url" lines="none" detail="false" (click)="menuItemAction(p)"
+              *allowTemplateView="p?.pageId">
+              @if (isCustomIcon(p.icon)) {
+              <img [src]="p.icon" class="side-menu-icon custom-icon" slot="start" alt="{{ p.title }} icon" />
+              } @else {
+              <ion-icon class="side-menu-icon" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'">
+              </ion-icon>
+              }
+              <ion-label class="sub-menu-list-label"><strong>{{ p.title | translate}}</strong>
+              </ion-label>
+            </ion-item>
           </ion-menu-toggle>
+          }
         </ion-list>
       </div>
     </ion-content>
+    }
     <!-- <ion-footer class="side-menu-footer" *ngIf="user">
       <ion-row (click)="logout()" class="cursor" *allowTemplateView="'PROFILE_PAGE'">
         <ion-col size="12">
