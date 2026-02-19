@@ -1,11 +1,12 @@
 import {
   Component,
-  Input,
   OnInit,
   Output,
   EventEmitter,
   ViewChild,
-  signal
+  signal,
+  input,
+  computed
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
@@ -22,21 +23,76 @@ import { App, AppState } from '@capacitor/app';
   standalone: false
 })
 export class SessionCardComponent implements OnInit {
-  @Input() data: any;
-  @Input() isEnrolled;
-  @Input() showBanner: boolean = false;
+  data = input<any>();
+  isEnrolled = input<any>();
+  showBanner = input<boolean>(false);
   @Output() onClickEvent = new EventEmitter();
   @ViewChild(IonModal) modal: IonModal;
 
-  startDate = signal<Date | undefined>(undefined);
-  endDate = signal<Date | undefined>(undefined);
+  currentUser = signal<any>(null);
+  currentTime = signal<number>(Math.floor(Date.now() / 1000));
 
-  isCreator: boolean;
-  isConductor: boolean;
-  buttonConfig;
-  userData: any;
-  isModalOpen = false;
-  meetingPlatform: any;
+  startDate = computed(() => {
+    const d = this.data();
+    return d?.start_date > 0 ? new Date(d.start_date * 1000) : undefined;
+  });
+
+  endDate = computed(() => {
+    const d = this.data();
+    return d?.end_date > 0 ? new Date(d.end_date * 1000) : undefined;
+  });
+
+  isCreator = computed(() => {
+    const user = this.currentUser();
+    const d = this.data();
+    return (user && d?.created_by) ? d.created_by === user.id : false;
+  });
+
+  isConductor = computed(() => {
+    const user = this.currentUser();
+    const d = this.data();
+    return (user && d?.mentor_id) ? d.mentor_id === user.id : false;
+  });
+
+  meetingPlatform = computed(() => {
+    return this.data()?.meeting_info;
+  });
+
+  buttonConfig = computed(() => {
+    const d = this.data();
+    const isConductor = this.isConductor();
+    const isCreator = this.isCreator();
+    const isEnrolled = this.isEnrolled();
+    const now = this.currentTime();
+
+    if (!d) return null;
+
+    let config: any = {};
+
+    if (isConductor) {
+      config = { label: 'START', type: 'startAction' };
+    } else {
+      config = (!isCreator && !isConductor && d.is_enrolled) || isEnrolled
+        ? { label: 'JOIN', type: 'joinAction' }
+        : { label: 'ENROLL', type: 'enrollAction' };
+    }
+
+    let enabled = true;
+    const start = d?.start_date;
+    if (start) {
+      const diff = start - now;
+      if (diff > 600) {
+        enabled = false;
+      }
+    }
+
+    if (d?.meeting_info?.platform === 'OFF') {
+      enabled = false;
+    }
+
+    config.isEnabled = enabled;
+    return config;
+  });
 
   constructor(
     private router: Router,
@@ -47,69 +103,15 @@ export class SessionCardComponent implements OnInit {
 
   async ngOnInit() {
     App.addListener('appStateChange', (state: AppState) => {
-      if (state.isActive == true) {
-        this.setButtonConfig(this.isCreator, this.isConductor);
+      if (state.isActive) {
+        this.currentTime.set(Math.floor(Date.now() / 1000));
       }
     });
 
-    this.meetingPlatform = this.data?.meeting_info;
-    this.isCreator = await this.checkIfCreator();
-    this.isConductor = await this.checkIfConductor();
-    this.setButtonConfig(this.isCreator, this.isConductor);
+    const user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    this.currentUser.set(user);
 
-    if (this.data.start_date > 0) {
-      this.startDate.set(new Date(this.data.start_date * 1000));
-    }
-
-    if (this.data.end_date > 0) {
-      this.endDate.set(new Date(this.data.end_date * 1000));
-    }
-  }
-
-  setButtonConfig(isCreator: boolean, isConductor: boolean) {
-    const now = Math.floor(Date.now() / 1000);
-    const start = this.data?.start_date;
-    const platform = this.data?.meeting_info?.platform;
-
-    if (isConductor) {
-      this.buttonConfig = { label: 'START', type: 'startAction' };
-    } else {
-      this.buttonConfig =
-        (!isCreator && !isConductor && this.data.is_enrolled) || this.isEnrolled
-          ? { label: 'JOIN', type: 'joinAction' }
-          : { label: 'ENROLL', type: 'enrollAction' };
-    }
-
-    let enabled = true;
-
-    if (start) {
-      const diff = start - now;
-      if (diff > 600) {
-        enabled = false;
-      }
-    }
-
-    if (platform === 'OFF') {
-      enabled = false;
-    }
-
-    this.buttonConfig.isEnabled = enabled;
-  }
-
-  async checkIfCreator() {
-    this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    if (!this.userData || !this.data?.created_by) {
-      return false;
-    }
-    return this.data.created_by === this.userData.id;
-  }
-
-  async checkIfConductor() {
-    this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    if (!this.userData || !this.data?.mentor_id) {
-      return false;
-    }
-    return this.data.mentor_id === this.userData.id;
+    this.currentTime.set(Math.floor(Date.now() / 1000));
   }
 
   onCardClick(data) {

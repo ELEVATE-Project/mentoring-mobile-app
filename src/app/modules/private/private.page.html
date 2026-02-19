@@ -1,58 +1,61 @@
 <ion-split-pane contentId="main-content">
   <ion-menu contentId="main-content" menuId="side-menu" type="overlay" swipeGesture="false" class="width-20">
     <ion-header [translucent]="true" class="ion-no-border"
-      [ngClass]="{'disable-div': user()?.profile_mandatory_fields.length || !user()?.about}">
-      @if (user()) {
+      [ngClass]="{'disable-div': privateService.user()?.profile_mandatory_fields?.length || !privateService.user()?.about}">
+      @if (privateService.user(); as userData) {
       <div class="sub-menu-toolbar">
         <div slot="start" class="img-mainDiv">
-          @if (user()?.image) {
+          @if (userData?.image) {
           <div class="image-div">
-            <img class="profile-image" src="{{user()?.image}}" />
+            <img class="profile-image" [src]="userData?.image" />
           </div>
           } @else {
           <ion-icon slot="icon-only" name="person-circle" class="no-image-icon"></ion-icon>
           }
         </div>
         <div class="usr-div">
-          <ion-label class="username"><strong>{{user()?.name}}</strong></ion-label>
+          <ion-label class="username"><strong>{{userData?.name}}</strong></ion-label>
           <div class="user-role-labels">
-            @if (userRoles()) {
-            <ion-label>{{ isMentor() ? ('MENTOR' | translate): ('MENTEE' | translate)}}
+            @if (privateService.userRoles()) {
+            <ion-label>{{ roleLabel() | translate }}
             </ion-label>
             }
-            <ion-label class="view-roles" (click)="viewRoles()">{{"VIEW_ROLES" | translate}}</ion-label>
+            <ion-label class="view-roles" (click)="privateService.viewRoles()">{{"VIEW_ROLES" | translate}}</ion-label>
           </div>
-          <a (click)="goToProfilePage()" class="cursor" *allowTemplateView="PAGE_IDS.profile">{{"PROFILE" |
+          <a (click)="privateService.goToProfilePage()" class="cursor" *allowTemplateView="PAGE_IDS.profile">{{"PROFILE"
+            |
             translate}}</a>
         </div>
       </div>
       }
     </ion-header>
-    @if (user()) {
-    <ion-content fullscreen [ngClass]="{'disable-div': user()?.profile_mandatory_fields.length || !user()?.about}">
+    @if (privateService.user(); as userData) {
+    <ion-content fullscreen [ngClass]="{'disable-div': userData?.profile_mandatory_fields?.length || !userData?.about}">
       <div class="menu-css">
         <ion-list lines="none" class="sub-menu-list">
-          @if (adminAccess()) {
-          <ion-menu-toggle auto-hide="false" [class]="adminPage?.class">
-            <ion-item [routerLink]="adminPage?.url" lines="none" detail="false" (click)="menuItemAction(adminPage)"
-              *allowTemplateView="adminPage?.pageId">
-              @if (isCustomIcon(adminPage?.icon)) {
-              <img [src]="adminPage.icon" class="side-menu-icon custom-icon" slot="start"
-                alt="{{ adminPage.title }} icon" />
+          @if (privateService.adminAccess()) {
+          <ion-menu-toggle auto-hide="false" [class]="privateService.adminPage?.class">
+            <ion-item [routerLink]="privateService.adminPage?.url" lines="none" detail="false"
+              (click)="privateService.menuItemAction(privateService.adminPage)"
+              *allowTemplateView="privateService.adminPage?.pageId">
+              @if (isCustomIcon(privateService.adminPage?.icon)) {
+              <img [src]="privateService.adminPage.icon" class="side-menu-icon custom-icon" slot="start"
+                alt="{{ privateService.adminPage.title }} icon" />
               } @else {
-              <ion-icon class="side-menu-icon" slot="start" [ios]="adminPage.icon + '-outline'"
-                [md]="adminPage.icon + '-outline'"></ion-icon>
+              <ion-icon class="side-menu-icon" slot="start" [ios]="privateService.adminPage.icon + '-outline'"
+                [md]="privateService.adminPage.icon + '-outline'"></ion-icon>
               }
-              <ion-label class="sub-menu-list-label"><strong>{{ adminPage.title | translate}} </strong></ion-label>
+              <ion-label class="sub-menu-list-label"><strong>{{ privateService.adminPage.title | translate}}
+                </strong></ion-label>
             </ion-item>
           </ion-menu-toggle>
           }
-          @for (p of appPages; track p.pageId; let i = $index) {
+          @for (p of privateService.appPages(); track p.pageId; let i = $index) {
           <ion-menu-toggle auto-hide="false" [class]="p?.class">
             @if (p.badge) {
             <span class="badge"></span>
             }
-            <ion-item [routerLink]="p?.url" lines="none" detail="false" (click)="menuItemAction(p)"
+            <ion-item [routerLink]="p?.url" lines="none" detail="false" (click)="privateService.menuItemAction(p)"
               *allowTemplateView="p?.pageId">
               @if (isCustomIcon(p.icon)) {
               <img [src]="p.icon" class="side-menu-icon custom-icon" slot="start" alt="{{ p.title }} icon" />
