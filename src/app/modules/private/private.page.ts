@@ -1,6 +1,6 @@
 import { Component, OnInit, computed } from '@angular/core';
 import { PAGE_IDS } from 'src/app/core/constants/page.ids';
-import { PrivateService } from 'src/app/core/services/private.service';
+import { PrivateService } from 'src/app/core/services/appinit.service';
 
 @Component({
   selector: 'app-private',
