@@ -24,7 +24,7 @@ import {
     FrontendChatLibraryService,
     RocketChatApiService,
 } from 'sl-chat-library';
-import { APP_PAGES, ADMIN_PAGE } from '../../modules/private/private.constants';
+import { APP_PAGES, ADMIN_PAGE } from '../../modules/private/pages.constants';
 
 @Injectable({
     providedIn: 'root'
