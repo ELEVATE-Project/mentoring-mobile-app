@@ -39,6 +39,12 @@
     </div>
   </div>
   <div class="card-content flex-1 d-flex gap-3 mx-10 py-2">
+    <div class="select">
+    <ion-checkbox *ngIf="showCheckbox" mode="md" class="square-checkbox"
+        (ionChange)="onCheckboxAction(data, $event)"
+         [checked]="isRowInRemoveState(data)"
+        ></ion-checkbox>
+        </div>
     @if(cardConfig.header.image) {
       <div class="image-container" (click)="onCardClick(data)">
         <img

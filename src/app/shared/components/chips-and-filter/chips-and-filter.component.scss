@@ -78,4 +78,8 @@
     flex-direction: row;
     width: -webkit-fill-available;
   }
-
+.select {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px; 
+}
