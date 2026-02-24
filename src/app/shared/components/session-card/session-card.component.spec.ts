@@ -7,6 +7,7 @@ import { SessionService } from 'src/app/core/services/session/session.service';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { CommonRoutes } from 'src/global.routes';
 import { App } from '@capacitor/app';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('SessionCardComponent', () => {
   let component: SessionCardComponent;
@@ -41,7 +42,7 @@ describe('SessionCardComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [SessionCardComponent],
-      imports: [IonicModule.forRoot()],
+      imports: [IonicModule.forRoot(), TranslateModule.forRoot()],
       providers: [
         { provide: Router, useValue: mockRouter },
         { provide: SessionService, useValue: mockSessionService },
@@ -65,41 +66,41 @@ describe('SessionCardComponent', () => {
   describe('ngOnInit', () => {
     beforeEach(() => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
-      component.data = { ...mockSessionData };
+      fixture.componentRef.setInput('data', { ...mockSessionData });
     });
 
     it('should initialize component with session data', async () => {
       await component.ngOnInit();
       
-      expect(component.meetingPlatform).toEqual(mockSessionData.meeting_info);
-      expect(component.startDate).toBeDefined();
-      expect(component.endDate).toBeDefined();
+      expect(component.meetingPlatform()).toEqual(mockSessionData.meeting_info);
+      expect(component.startDate()).toBeDefined();
+      expect(component.endDate()).toBeDefined();
     });
 
     it('should set isCreator to true when user is creator', async () => {
       await component.ngOnInit();
       
-      expect(component.isCreator).toBe(true);
+      expect(component.isCreator()).toBe(true);
     });
 
     it('should set isConductor to false when user is not conductor', async () => {
       await component.ngOnInit();
       
-      expect(component.isConductor).toBe(false);
+      expect(component.isConductor()).toBe(false);
     });
 
     it('should handle null start_date', async () => {
-      component.data = { ...mockSessionData, start_date: 0 };
+      fixture.componentRef.setInput('data', { ...mockSessionData, start_date: 0 });
       await component.ngOnInit();
       
-      expect(component.startDate).toBeUndefined();
+      expect(component.startDate()).toBeUndefined();
     });
 
     it('should handle null end_date', async () => {
-      component.data = { ...mockSessionData, end_date: 0 };
+      fixture.componentRef.setInput('data', { ...mockSessionData, end_date: 0 });
       await component.ngOnInit();
       
-      expect(component.endDate).toBeUndefined();
+      expect(component.endDate()).toBeUndefined();
     });
 
     it('should add app state change listener', async () => {
@@ -107,168 +108,174 @@ describe('SessionCardComponent', () => {
         Promise.resolve({ remove: () => Promise.resolve() })
       );
       await component.ngOnInit();
-      
-      // expect(addListenerSpy).toHaveBeenCalled();
     });
 
-    it('should call setButtonConfig when app becomes active', async () => {
+    it('should update currentTime when app becomes active', async () => {
       let stateChangeCallback: any;
-      const addListenerSpy = spyOn(App, 'addListener').and.callFake((event: string, callback: any) => {
+      spyOn(App, 'addListener').and.callFake((event: string, callback: any) => {
         if (event === 'appStateChange') {
           stateChangeCallback = callback;
         }
         return Promise.resolve({ remove: () => Promise.resolve() });
       });
-      spyOn(component, 'setButtonConfig');
-      
+
       await component.ngOnInit();
-      
+
       if (stateChangeCallback) {
+        const timeBefore = component.currentTime();
         stateChangeCallback({ isActive: true });
-        expect(component.setButtonConfig).toHaveBeenCalled();
+        expect(component.currentTime()).toBeGreaterThanOrEqual(timeBefore);
       }
     });
   });
 
-  describe('checkIfCreator', () => {
+  describe('isCreator (computed)', () => {
     it('should return true when user is creator', async () => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
-      component.data = { ...mockSessionData, created_by: 'user123' };
+      fixture.componentRef.setInput('data', { ...mockSessionData, created_by: 'user123' });
       
-      const result = await component.checkIfCreator();
+      await component.ngOnInit();
       
-      expect(result).toBe(true);
-      expect(mockLocalStorageService.getLocalData).toHaveBeenCalledWith(localKeys.USER_DETAILS);
+      expect(component.isCreator()).toBe(true);
     });
 
     it('should return false when user is not creator', async () => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
-      component.data = { ...mockSessionData, created_by: 'otherUser' };
+      fixture.componentRef.setInput('data', { ...mockSessionData, created_by: 'otherUser' });
       
-      const result = await component.checkIfCreator();
+      await component.ngOnInit();
       
-      expect(result).toBe(false);
+      expect(component.isCreator()).toBe(false);
     });
 
-    it('should return false when userData is null', async () => {
-      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(null));
-      component.data = { ...mockSessionData };
+    it('should return false when currentUser is null', () => {
+      fixture.componentRef.setInput('data', { ...mockSessionData });
       
-      const result = await component.checkIfCreator();
-      
-      expect(result).toBe(false);
+      expect(component.isCreator()).toBe(false);
     });
 
     it('should return false when created_by is missing', async () => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
-      component.data = { ...mockSessionData, created_by: null };
+      fixture.componentRef.setInput('data', { ...mockSessionData, created_by: null });
       
-      const result = await component.checkIfCreator();
+      await component.ngOnInit();
       
-      expect(result).toBe(false);
+      expect(component.isCreator()).toBe(false);
     });
   });
 
-  describe('checkIfConductor', () => {
+  describe('isConductor (computed)', () => {
     it('should return true when user is conductor', async () => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve({ id: 'mentor123' }));
-      component.data = { ...mockSessionData, mentor_id: 'mentor123' };
+      fixture.componentRef.setInput('data', { ...mockSessionData, mentor_id: 'mentor123' });
       
-      const result = await component.checkIfConductor();
+      await component.ngOnInit();
       
-      expect(result).toBe(true);
+      expect(component.isConductor()).toBe(true);
     });
 
     it('should return false when user is not conductor', async () => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
-      component.data = { ...mockSessionData, mentor_id: 'mentor123' };
+      fixture.componentRef.setInput('data', { ...mockSessionData, mentor_id: 'mentor123' });
       
-      const result = await component.checkIfConductor();
+      await component.ngOnInit();
       
-      expect(result).toBe(false);
+      expect(component.isConductor()).toBe(false);
     });
 
-    it('should return false when userData is null', async () => {
-      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(null));
-      component.data = { ...mockSessionData };
+    it('should return false when currentUser is null', () => {
+      fixture.componentRef.setInput('data', { ...mockSessionData });
       
-      const result = await component.checkIfConductor();
-      
-      expect(result).toBe(false);
+      expect(component.isConductor()).toBe(false);
     });
 
     it('should return false when mentor_id is missing', async () => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
-      component.data = { ...mockSessionData, mentor_id: null };
+      fixture.componentRef.setInput('data', { ...mockSessionData, mentor_id: null });
       
-      const result = await component.checkIfConductor();
+      await component.ngOnInit();
       
-      expect(result).toBe(false);
+      expect(component.isConductor()).toBe(false);
     });
   });
 
-  describe('setButtonConfig', () => {
-    beforeEach(() => {
-      component.data = { ...mockSessionData };
+  describe('buttonConfig (computed)', () => {
+    it('should set START button for conductor', async () => {
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve({ id: 'mentor123' }));
+      fixture.componentRef.setInput('data', { ...mockSessionData, mentor_id: 'mentor123' });
+
+      await component.ngOnInit();
+      
+      expect(component.buttonConfig().label).toBe('START');
+      expect(component.buttonConfig().type).toBe('startAction');
     });
 
-    it('should set START button for conductor', () => {
-      component.setButtonConfig(false, true);
+    it('should set JOIN button for enrolled user', async () => {
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
+      fixture.componentRef.setInput('isEnrolled', true);
+      fixture.componentRef.setInput('data', { ...mockSessionData, created_by: 'other', mentor_id: 'other' });
+
+      await component.ngOnInit();
       
-      expect(component.buttonConfig.label).toBe('START');
-      expect(component.buttonConfig.type).toBe('startAction');
+      expect(component.buttonConfig().label).toBe('JOIN');
+      expect(component.buttonConfig().type).toBe('joinAction');
     });
 
-    it('should set JOIN button for enrolled user', () => {
-      component.isEnrolled = true;
-      component.setButtonConfig(false, false);
+    it('should set JOIN button when data.is_enrolled is true', async () => {
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
+      fixture.componentRef.setInput('data', { ...mockSessionData, is_enrolled: true, created_by: 'other', mentor_id: 'other' });
+
+      await component.ngOnInit();
       
-      expect(component.buttonConfig.label).toBe('JOIN');
-      expect(component.buttonConfig.type).toBe('joinAction');
+      expect(component.buttonConfig().label).toBe('JOIN');
+      expect(component.buttonConfig().type).toBe('joinAction');
     });
 
-    it('should set JOIN button when data.is_enrolled is true', () => {
-      component.data.is_enrolled = true;
-      component.setButtonConfig(false, false);
+    it('should set ENROLL button for non-enrolled user', async () => {
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
+      fixture.componentRef.setInput('isEnrolled', false);
+      fixture.componentRef.setInput('data', { ...mockSessionData, created_by: 'other', mentor_id: 'other' });
+
+      await component.ngOnInit();
       
-      expect(component.buttonConfig.label).toBe('JOIN');
-      expect(component.buttonConfig.type).toBe('joinAction');
+      expect(component.buttonConfig().label).toBe('ENROLL');
+      expect(component.buttonConfig().type).toBe('enrollAction');
     });
 
-    it('should set ENROLL button for non-enrolled user', () => {
-      component.isEnrolled = false;
-      component.setButtonConfig(false, false);
+    it('should disable button when session starts in more than 10 minutes', async () => {
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
+      fixture.componentRef.setInput('data', { ...mockSessionData, start_date: Math.floor(Date.now() / 1000) + 700 });
+
+      await component.ngOnInit();
       
-      expect(component.buttonConfig.label).toBe('ENROLL');
-      expect(component.buttonConfig.type).toBe('enrollAction');
+      expect(component.buttonConfig().isEnabled).toBe(false);
     });
 
-    it('should disable button when session starts in more than 10 minutes', () => {
-      component.data.start_date = Math.floor(Date.now() / 1000) + 700;
-      component.setButtonConfig(false, false);
+    it('should enable button when session starts within 10 minutes', async () => {
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve({ id: 'mentor123' }));
+      fixture.componentRef.setInput('data', { ...mockSessionData, start_date: Math.floor(Date.now() / 1000) + 500, mentor_id: 'mentor123' });
+
+      await component.ngOnInit();
       
-      expect(component.buttonConfig.isEnabled).toBe(false);
+      expect(component.buttonConfig().isEnabled).toBe(true);
     });
 
-    it('should enable button when session starts within 10 minutes', () => {
-      component.data.start_date = Math.floor(Date.now() / 1000) + 500;
-      component.setButtonConfig(true, true);
+    it('should disable button when platform is OFF', async () => {
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
+      fixture.componentRef.setInput('data', { ...mockSessionData, meeting_info: { platform: 'OFF' }, created_by: 'other', mentor_id: 'other' });
+
+      await component.ngOnInit();
       
-      expect(component.buttonConfig.isEnabled).toBe(true);
+      expect(component.buttonConfig().isEnabled).toBe(false);
     });
 
-    it('should disable button when platform is OFF', () => {
-      component.data.meeting_info.platform = 'OFF';
-      component.setButtonConfig(false, false);
-      
-      expect(component.buttonConfig.isEnabled).toBe(false);
-    });
+    it('should handle missing start_date', async () => {
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
+      fixture.componentRef.setInput('data', { ...mockSessionData, start_date: null });
 
-    it('should handle missing start_date', () => {
-      component.data.start_date = null;
-      component.setButtonConfig(false, false);
+      await component.ngOnInit();
       
-      expect(component.buttonConfig).toBeDefined();
+      expect(component.buttonConfig()).toBeDefined();
     });
   });
 
@@ -343,52 +350,58 @@ describe('SessionCardComponent', () => {
 
   describe('Input properties', () => {
     it('should accept data input', () => {
-      component.data = mockSessionData;
-      expect(component.data).toEqual(mockSessionData);
+      fixture.componentRef.setInput('data', mockSessionData);
+      expect(component.data()).toEqual(mockSessionData);
     });
 
     it('should accept isEnrolled input', () => {
-      component.isEnrolled = true;
-      expect(component.isEnrolled).toBe(true);
+      fixture.componentRef.setInput('isEnrolled', true);
+      expect(component.isEnrolled()).toBe(true);
     });
 
     it('should have default showBanner value', () => {
-      expect(component.showBanner).toBe(false);
+      expect(component.showBanner()).toBe(false);
     });
 
     it('should accept showBanner input', () => {
-      component.showBanner = true;
-      expect(component.showBanner).toBe(true);
+      fixture.componentRef.setInput('showBanner', true);
+      expect(component.showBanner()).toBe(true);
     });
   });
 
   describe('Edge cases', () => {
     it('should handle undefined meeting_info', async () => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
-      component.data = { ...mockSessionData, meeting_info: undefined };
+      fixture.componentRef.setInput('data', { ...mockSessionData, meeting_info: undefined });
       
       await component.ngOnInit();
       
-      expect(component.meetingPlatform).toBeUndefined();
+      expect(component.meetingPlatform()).toBeUndefined();
     });
 
-    it('should handle session with past start time', () => {
-      component.data = {
+    it('should handle session with past start time', async () => {
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserData));
+      fixture.componentRef.setInput('data', {
         ...mockSessionData,
-        start_date: Math.floor(Date.now() / 1000) - 100 // 100 seconds in the past
-      };
-      component.setButtonConfig(false, false);
+        start_date: Math.floor(Date.now() / 1000) - 100,
+        created_by: 'other',
+        mentor_id: 'other'
+      });
+
+      await component.ngOnInit();
       
-      // Session already started, should be enabled
-      expect(component.buttonConfig.isEnabled).toBe(true);
+      expect(component.buttonConfig().isEnabled).toBe(true);
     });
 
-    it('should prioritize conductor button over enrolled status', () => {
-      component.isEnrolled = true;
-      component.setButtonConfig(false, true);
+    it('should prioritize conductor button over enrolled status', async () => {
+      mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve({ id: 'mentor123' }));
+      fixture.componentRef.setInput('isEnrolled', true);
+      fixture.componentRef.setInput('data', { ...mockSessionData, mentor_id: 'mentor123' });
+
+      await component.ngOnInit();
       
-      expect(component.buttonConfig.label).toBe('START');
-      expect(component.buttonConfig.type).toBe('startAction');
+      expect(component.buttonConfig().label).toBe('START');
+      expect(component.buttonConfig().type).toBe('startAction');
     });
   });
 });

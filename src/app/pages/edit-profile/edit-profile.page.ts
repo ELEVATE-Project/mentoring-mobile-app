@@ -238,8 +238,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     return this.upload(file, data.result).subscribe()
   }
 
-  updateEntityArray(arr1: string[], arr2: string[]) {
-    arr1.forEach(value => {
+  updateEntityArray(arr1: string[] = [], arr2: string[] = []) {
+    (arr1 || []).forEach(value => {
       if (!arr2.includes(value)) {
         arr2.push(value);
       }

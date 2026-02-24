@@ -116,6 +116,9 @@ describe('SessionDetailPage', () => {
     // Clipboard.write spy
     spyOn(Clipboard, 'write').and.returnValue(Promise.resolve());
 
+    // App plugin mocks
+    spyOn(App, 'addListener').and.returnValue(Promise.resolve({ remove: () => {} } as any));
+
 
     // translate.get mock
     mockTranslateService.get.and.callFake((keys: any) => {
@@ -202,7 +205,7 @@ describe('SessionDetailPage', () => {
 
       // Arrange
       component.id = 'session-1';
-      component.sessionDatas = {};
+      component.sessionDatas.set({});
       component.dismissWhenBack = false;
       spyOn(component, 'fetchSessionDetails').and.returnValue(Promise.resolve());
 
@@ -232,7 +235,7 @@ describe('SessionDetailPage', () => {
       }) as any);
 
       component.id = 'session-1';
-      component.sessionDatas = {};
+      component.sessionDatas.set({});
       component.dismissWhenBack = true;
       spyOn(component, 'fetchSessionDetails').and.returnValue(Promise.resolve());
 
@@ -294,9 +297,9 @@ describe('SessionDetailPage', () => {
 
   describe('onJoin', () => {
     it('should call joinSession service', async () => {
-      component.sessionDatas = { id: '123' };
+      component.sessionDatas.set({ id: '123' });
       await component.onJoin();
-      expect(mockSessionService.joinSession).toHaveBeenCalledWith(component.sessionDatas);
+      expect(mockSessionService.joinSession).toHaveBeenCalledWith(component.sessionDatas());
     });
   });
 
@@ -397,7 +400,7 @@ describe('SessionDetailPage', () => {
       component.fetchSessionDetails();
       tick();
 
-      expect(component.isCreator).toBeTrue();
+      expect(component.isCreator()).toBeTrue();
       expect(component.headerConfig.edit).toBeTrue();
       expect(component.headerConfig.delete).toBeTrue();
     }));
@@ -481,7 +484,7 @@ describe('SessionDetailPage', () => {
 
   describe('editSession', () => {
     it('should navigate to create session with segment id if status is LIVE', () => {
-      component.sessionDatas = { status: { value: 'LIVE' } };
+      component.sessionDatas.set({ status: { value: 'LIVE' } });
       component.id = 's1';
       Object.defineProperty(mockRouter, 'url', { get: () => '/current-url' });
 
@@ -491,9 +494,9 @@ describe('SessionDetailPage', () => {
     });
 
     it('should navigate to create session with isCreator flag if status not LIVE', () => {
-      component.sessionDatas = { status: { value: 'PUBLISHED' } };
+      component.sessionDatas.set({ status: { value: 'PUBLISHED' } });
       component.id = 's1';
-      component.isConductor = true;
+      component.isConductor.set(true);
       Object.defineProperty(mockRouter, 'url', { get: () => '/current-url' });
 
       component.editSession();
@@ -543,12 +546,12 @@ describe('SessionDetailPage', () => {
 
 
       const data = component.detailData.data;
-      expect(component.userCantAccess).toBeFalse();
-      expect(component.isCreator).toBeTrue();
-      expect(component.isConductor).toBeFalse();
-      expect(component.platformOff).toBeTrue();
-      expect(component.sessionManagerText).toBe('INVITED_BY');
-      expect(component.isNotInvited).toBeFalse();
+      expect(component.userCantAccess()).toBeFalse();
+      expect(component.isCreator()).toBeTrue();
+      expect(component.isConductor()).toBeFalse();
+      expect(component.platformOff()).toBeTrue();
+      expect(component.sessionManagerText()).toBe('INVITED_BY');
+      expect(component.isNotInvited()).toBeFalse();
       expect(data.id).toBe('session-1');
       expect(data.meeting_info).toBe('OFF');
       expect(data.mentee_count).toBe(5);
@@ -590,8 +593,8 @@ describe('SessionDetailPage', () => {
       tick();
 
 
-      expect(component.userCantAccess).toBeTrue();
-      expect(component.isLoaded).toBeTrue();
+      expect(component.userCantAccess()).toBeTrue();
+      expect(component.isLoaded()).toBeTrue();
     }));
   });
 
@@ -599,7 +602,7 @@ describe('SessionDetailPage', () => {
   describe('setPageHeader', () => {
     it('should set headerConfig correctly', () => {
       component.userDetails = mockUserDetails;
-      component.isCreator = true; // Set this flag since created_by === userDetails.id
+      component.isCreator.set(true); // Set this flag since created_by === userDetails.id
 
       // Use a session that's in the future so edit/delete are enabled
       const futureTime = Math.floor(Date.now() / 1000) + 7200; // 2 hours from now
@@ -668,7 +671,7 @@ describe('SessionDetailPage', () => {
     it('should share via mobile deep link when navigator.share exists', fakeAsync(() => {
       (navigator as any).share = jasmine.createSpy('share').and.returnValue(Promise.resolve());
 
-      component.sessionDatas = { ...baseSessionResult };
+      component.sessionDatas.set({ ...baseSessionResult });
       component.detailData.data.title = ' Test ';
       component.detailData.data.mentor_name = ' Mentor ';
       component.id = 'session-1';
@@ -727,7 +730,7 @@ describe('SessionDetailPage', () => {
   describe('editSession', () => {
     it('should navigate to create session with type segment when LIVE', () => {
       component.id = 'session-1';
-      component.sessionDatas = { ...baseSessionResult, status: { value: 'LIVE' } };
+      component.sessionDatas.set({ ...baseSessionResult, status: { value: 'LIVE' } });
       component.editSession();
 
 
@@ -739,8 +742,8 @@ describe('SessionDetailPage', () => {
 
     it('should navigate to create session with isCreator when not LIVE', () => {
       component.id = 'session-1';
-      component.sessionDatas = { ...baseSessionResult, status: { value: 'PUBLISHED' } };
-      component.isConductor = true;
+      component.sessionDatas.set({ ...baseSessionResult, status: { value: 'PUBLISHED' } });
+      component.isConductor.set(true);
       component.editSession();
 
 
@@ -791,14 +794,14 @@ describe('SessionDetailPage', () => {
 
   describe('onJoin', () => {
     it('should call joinSession with sessionDatas', fakeAsync(() => {
-      component.sessionDatas = { ...baseSessionResult };
+      component.sessionDatas.set({ ...baseSessionResult });
       mockSessionService.joinSession.and.returnValue(Promise.resolve(null));
 
       component.onJoin();
       tick();
 
 
-      expect(mockSessionService.joinSession).toHaveBeenCalledWith(component.sessionDatas);
+      expect(mockSessionService.joinSession).toHaveBeenCalledWith(component.sessionDatas());
     }));
   });
 

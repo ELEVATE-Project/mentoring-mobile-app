@@ -11,6 +11,9 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { of, BehaviorSubject, Subscription } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { TranslateModule } from '@ngx-translate/core';
+import { IonicModule } from '@ionic/angular';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 describe('HomeSearchPage', () => {
   let component: HomeSearchPage;
@@ -83,6 +86,7 @@ describe('HomeSearchPage', () => {
 
     TestBed.configureTestingModule({
       declarations: [HomeSearchPage],
+      imports: [IonicModule.forRoot(), TranslateModule.forRoot()],
       providers: [
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
@@ -107,6 +111,11 @@ describe('HomeSearchPage', () => {
     component.criteriaChipSubscription = new Subscription();
     
     // Default mock returns
+    mockLocalStorage.getLocalData.and.callFake((key: string) => {
+      if (key === localKeys.USER_DETAILS) return Promise.resolve({ about: 'test' });
+      if (key === localKeys.USER_ROLES) return Promise.resolve(['user']);
+      return Promise.resolve(null);
+    });
     mockPermissionService.getPlatformConfig.and.returnValue(Promise.resolve(mockPlatformConfig));
     mockSessionService.getSessionsList.and.returnValue(Promise.resolve(mockSessionListResponse));
     mockFormService.filterList.and.returnValue(Promise.resolve([]));
@@ -200,8 +209,8 @@ describe('HomeSearchPage', () => {
       );
       
       await component.ngOnInit();
-      expect(component.overlayChips).toBeDefined();
-      expect(component.overlayChips.length).toBe(2);
+      expect(component.overlayChips()).toBeDefined();
+      expect(component.overlayChips().length).toBe(2);
     });
   });
 
@@ -216,7 +225,7 @@ describe('HomeSearchPage', () => {
           }
         }
       };
-      component.overlayChips = mockPlatformConfig.result.search_config.search.session.fields;
+      component.overlayChips.set(mockPlatformConfig.result.search_config.search.session.fields);
     });
 
     it('should load search text from query params', async () => {
@@ -394,7 +403,7 @@ describe('HomeSearchPage', () => {
 
       await component.onClickFilter();
 
-      expect(component.chips).toEqual([]);
+      expect(component.chips()).toEqual([]);
       expect(component.filteredDatas).toEqual([]);
       expect(component.urlQueryData).toBeNull();
     });
@@ -405,9 +414,9 @@ describe('HomeSearchPage', () => {
       await component.fetchSessionList();
 
       expect(mockSessionService.getSessionsList).toHaveBeenCalled();
-      expect(component.results.length).toBe(1);
-      expect(component.totalCount).toBe(1);
-      expect(component.filterIcon).toBe(true);
+      expect(component.results().length).toBe(1);
+      expect(component.totalCount()).toBe(1);
+      expect(component.filterIcon()).toBe(true);
     });
 
     it('should set filterIcon to false when no data and no filters', async () => {
@@ -424,7 +433,7 @@ describe('HomeSearchPage', () => {
 
       await component.fetchSessionList();
 
-      expect(component.filterIcon).toBe(false);
+      expect(component.filterIcon()).toBe(false);
     });
 
     it('should set correct noDataMessage based on search text', async () => {
@@ -541,21 +550,21 @@ describe('HomeSearchPage', () => {
 
       component.extractLabels(data);
 
-      expect(component.chips.length).toBe(2);
-      expect(component.chips).toContain(data.category[0]);
-      expect(component.chips).toContain(data.level[0]);
+      expect(component.chips().length).toBe(2);
+      expect(component.chips()).toContain(data.category[0]);
+      expect(component.chips()).toContain(data.level[0]);
     });
 
     it('should clear existing chips before extracting', () => {
-      component.chips = [{ value: 'old', label: 'Old' }];
+      component.chips.set([{ value: 'old', label: 'Old' }]);
       const data = {
         category: [{ value: 'tech', label: 'Technology' }]
       };
 
       component.extractLabels(data);
 
-      expect(component.chips.length).toBe(1);
-      expect(component.chips[0]).toEqual(data.category[0]);
+      expect(component.chips().length).toBe(1);
+      expect(component.chips()[0]).toEqual(data.category[0]);
     });
   });
 
@@ -629,10 +638,10 @@ describe('HomeSearchPage', () => {
 
   describe('removeChip', () => {
     it('should remove chip and update filters', () => {
-      component.chips = [
+      component.chips.set([
         { value: 'tech', label: 'Technology' },
         { value: 'science', label: 'Science' }
-      ];
+      ]);
       spyOn(component, 'removeFilteredData');
       spyOn(component, 'getUrlQueryData');
       spyOn(component, 'fetchSessionList');
@@ -640,7 +649,7 @@ describe('HomeSearchPage', () => {
       const event = { index: 0, chipValue: 'tech' };
       component.removeChip(event);
 
-      expect(component.chips.length).toBe(1);
+      expect(component.chips().length).toBe(1);
       expect(component.removeFilteredData).toHaveBeenCalledWith('tech');
       expect(component.getUrlQueryData).toHaveBeenCalled();
       expect(component.fetchSessionList).toHaveBeenCalled();
@@ -660,7 +669,7 @@ describe('HomeSearchPage', () => {
       component.showSelectedCriteria = 'test';
       component.searchText = 'test';
       component.criteriaChip = 'test';
-      component.chips = [{ value: 'test', label: 'Test' }];
+      component.chips.set([{ value: 'test', label: 'Test' }]);
       component.urlQueryData = 'test=data';
 
       component.ionViewDidLeave();
@@ -668,7 +677,7 @@ describe('HomeSearchPage', () => {
       expect(component.showSelectedCriteria).toBe('');
       expect(component.searchText).toBe('');
       expect(component.criteriaChip).toBe('');
-      expect(component.chips).toEqual([]);
+      expect(component.chips()).toEqual([]);
       expect(component.urlQueryData).toBeNull();
       expect(mockUtilService.subscribeSearchText).toHaveBeenCalledWith('');
       expect(mockUtilService.subscribeCriteriaChip).toHaveBeenCalledWith('');

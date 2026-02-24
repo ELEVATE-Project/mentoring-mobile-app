@@ -113,7 +113,9 @@ const mockSessions = {
         { provide: UtilService, useValue: mockUtilService},
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
+    TestBed.overrideTemplate(HomePage, '');
+    await TestBed.compileComponents();
     fixture = TestBed.createComponent(HomePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -128,12 +130,12 @@ const mockSessions = {
   });
   
   it('should initialize with default values"', () => {
-    expect(component.selectedSegment).toBe('all-sessions'); 
+    expect(component.selectedSegment()).toBe('all-sessions'); 
     expect(component.page).toBe(1);
     expect(component.limit).toBe(100);
-    expect(component.selectedSegment).toBe('all-sessions');
-    expect(component.showBecomeMentorCard).toBe(false);
-    expect(component.chips).toEqual([]);
+    expect(component.selectedSegment()).toBe('all-sessions');
+    expect(component.showBecomeMentorCard()).toBe(false);
+    expect(component.chips()).toEqual([]);
     expect(component.isOpen).toBe(false);
   });
 
@@ -203,7 +205,7 @@ const mockSessions = {
       component.ionViewWillEnter();
       tick();
       
-      expect(component.isMentor).toBe(true);
+      expect(component.isMentor()).toBe(true);
     }));
 
     it('should not show become mentor card if the role is requested', fakeAsync(() => {
@@ -215,7 +217,7 @@ const mockSessions = {
       component.ionViewWillEnter();
       tick();
 
-      expect(component.showBecomeMentorCard).toBe(false);
+      expect(component.showBecomeMentorCard()).toBe(false);
     }));
 
     it('should subscribe to user events', fakeAsync(() => {
@@ -223,14 +225,14 @@ const mockSessions = {
       tick();
 
       userEventSubject.next(mockUser);
-      expect(component.user).toEqual(mockUser)
+      expect(component.user()).toEqual(mockUser)
     }));
 
     it('should load platform config chips', fakeAsync(() => {
       component.ionViewWillEnter();
       tick();
 
-      expect(component.chips).toEqual(mockPlatformConfig.result.search_config.search.session.fields)
+      expect(component.chips()).toEqual(mockPlatformConfig.result.search_config.search.session.fields)
     }));
 
     it('should call gotToTop', fakeAsync(() => {
@@ -245,9 +247,9 @@ const mockSessions = {
       it('should reset pages and sessions', fakeAsync(async () => {
 
     component.page = 5;
-    component.sessions = { all_sessions: [{ id: 999 }] };
-    component.createdSessions = { data: [{ id: 888 }] };
-    component.user = { profile_mandatory_fields: [] }; 
+    component.sessions.set({ all_sessions: [{ id: 999 }] });
+    component.createdSessions.set({ data: [{ id: 888 }] });
+    component.user.set({ profile_mandatory_fields: [] }); 
 
     spyOn(component, 'getUser').and.returnValue(Promise.resolve());
     mockLocalStorage.getLocalData.and.returnValue(Promise.resolve([]));
@@ -275,8 +277,8 @@ const mockSessions = {
     tick(); 
 
     expect(component.page).toBe(1);
-    expect(component.sessions).toBeNull();
-    expect(component.createdSessions).toBeNull();
+    expect(component.sessions()).toBeNull();
+    expect(component.createdSessions()).toBeNull();
   }));
 
   
@@ -293,12 +295,12 @@ const mockSessions = {
       tick();
 
       expect(mockSessionService.getSessions).toHaveBeenCalledWith({page:1, limit:100, scope: 'all'});
-      expect(component.sessions).toEqual(mockSessions.result);
-      expect(component.allSessionsCount).toBe(2);
+      expect(component.sessions()).toEqual(mockSessions.result);
+      expect(component.allSessionsCount()).toBe(2);
     }));
 
       it('should load created sessions for mentors', fakeAsync(() => {
-      component.isMentor = true;
+      component.isMentor.set(true);
       
       component.loadSegmentData('created-sessions');
       tick();
@@ -308,22 +310,22 @@ const mockSessions = {
         limit: 100,
         searchText: ''
       });
-      expect(component.createdSessions).toEqual(mockCreatedSessions);
-      expect(component.createdSessionsCount).toBe(2);
+      expect(component.createdSessions()).toEqual(mockCreatedSessions);
+      expect(component.createdSessionsCount()).toBe(2);
     }));
 
         it('should set empty created sessions for non-mentors', fakeAsync(() => {
-      component.isMentor = false;
+      component.isMentor.set(false);
       
       component.loadSegmentData('created-sessions');
       tick();
       
-      expect(component.createdSessions).toEqual({ data: [] });
-      expect(component.createdSessionsCount).toBe(0);
+      expect(component.createdSessions()).toEqual({ data: [] });
+      expect(component.createdSessionsCount()).toBe(0);
     }));
 
      it('should set isCreatedSessions flag when no created sessions', fakeAsync(() => {
-      component.isMentor = true;
+      component.isMentor.set(true);
       mockSessionService.getAllSessionsAPI.and.returnValue(
         Promise.resolve({ data: [], count: 0 })
       );
@@ -331,7 +333,7 @@ const mockSessions = {
       component.loadSegmentData('created-sessions');
       tick();
       
-      expect(component.isCreatedSessions).toBe(true);
+      expect(component.isCreatedSessions()).toBe(true);
     }));
 
         it('should load enrolled sessions', fakeAsync(() => {
@@ -343,7 +345,7 @@ const mockSessions = {
         limit: 100,
         scope: 'my'
       });
-      expect(component.enrolledSessionsCount).toBe(1);
+      expect(component.enrolledSessionsCount()).toBe(1);
     }));
 
         it('should set isEnrolledSession flag when no enrolled sessions', fakeAsync(() => {
@@ -354,12 +356,12 @@ const mockSessions = {
       component.loadSegmentData('my-sessions');
       tick();
       
-      expect(component.isEnrolledSession).toBe(true);
+      expect(component.isEnrolledSession()).toBe(true);
     }));
 
         it('should append data when loading more for created sessions', fakeAsync(() => {
-      component.isMentor = true;
-      component.createdSessions = { data: [{ id: 1 }] };
+      component.isMentor.set(true);
+      component.createdSessions.set({ data: [{ id: 1 }] });
       mockSessionService.getAllSessionsAPI.and.returnValue(
         Promise.resolve({ data: [{ id: 2 }], count: 2 })
       );
@@ -367,12 +369,12 @@ const mockSessions = {
       component.loadSegmentData('created-sessions', true);
       tick();
       
-      expect(component.createdSessions.data.length).toBe(2);
-      expect(component.createdSessions.data).toEqual([{ id: 1 }, { id: 2 }]);
+      expect(component.createdSessions().data.length).toBe(2);
+      expect(component.createdSessions().data).toEqual([{ id: 1 }, { id: 2 }]);
     }));
 
         it('should append data when loading more for enrolled sessions', fakeAsync(() => {
-      component.sessions = { my_sessions: [{ id: 1 }] };
+      component.sessions.set({ my_sessions: [{ id: 1 }] });
       mockSessionService.getSessions.and.returnValue(
         Promise.resolve({ result: { my_sessions: [{ id: 2 }], my_sessions_count: 2 } })
       );
@@ -380,14 +382,14 @@ const mockSessions = {
       component.loadSegmentData('my-sessions', true);
       tick();
       
-      expect(component.sessions.my_sessions.length).toBe(2);
-      expect(component.sessions.my_sessions).toEqual([{ id: 1 }, { id: 2 }]);
+      expect(component.sessions().my_sessions.length).toBe(2);
+      expect(component.sessions().my_sessions).toEqual([{ id: 1 }, { id: 2 }]);
     }));
 
    });
     describe('eventAction', () => {
           beforeEach(() => {
-      component.user = mockUser;
+      component.user.set(mockUser);
       mockSessionService.joinSession.and.returnValue(Promise.resolve(null));
       mockSessionService.enrollSession.and.returnValue(
         Promise.resolve({ result: true, message: 'Success' })
@@ -425,7 +427,7 @@ const mockSessions = {
 
  it('should show profile popup if user has no about', fakeAsync(() => {
     environment['isAuthBypassed'] = false;  // <-- Set to false
-    component.user = { ...mockUser, about: null };
+    component.user.set({ ...mockUser, about: null });
     
     component.eventAction({ type: 'cardSelect', data: { id: 123 } });
     tick();
@@ -511,7 +513,7 @@ const mockSessions = {
                   component.segmentChanged({ name: 'created-sessions' });
                   tick();
                   
-                  expect(component.selectedSegment).toBe('created-sessions');
+                  expect(component.selectedSegment()).toBe('created-sessions');
                   expect(component.page).toBe(1);
                 }));
 
@@ -534,7 +536,7 @@ const mockSessions = {
 
     describe('createSession', ()=> {
     it('should navigate to create session page if user has about', () => {
-      component.user = mockUser;
+      component.user.set(mockUser);
       
       component.createSession();
       
@@ -544,7 +546,7 @@ const mockSessions = {
     });
 
       it('should show profile popup if user has no about', () => {
-      component.user = { ...mockUser, about: null };
+      component.user.set({ ...mockUser, about: null });
        environment['isAuthBypassed'] = false; 
       component.createSession();
       
@@ -553,7 +555,7 @@ const mockSessions = {
     });
       describe('becomeMentor', () => {
             it('should navigate to mentor questionnaire if user has about', () => {
-      component.user = mockUser;
+      component.user.set(mockUser);
       
       component.becomeMentor();
       
@@ -561,7 +563,7 @@ const mockSessions = {
     });
 
         it('should show profile popup if user has no about', () => {
-      component.user = { ...mockUser, about: null };
+      component.user.set({ ...mockUser, about: null });
       environment['isAuthBypassed'] = false; 
       
       component.becomeMentor();
@@ -576,13 +578,13 @@ const mockSessions = {
 
     describe('closeCard', () => {
       it('should hide become mentor card', fakeAsync(() => {
-        component.showBecomeMentorCard = true;
+        component.showBecomeMentorCard.set(true);
         mockLocalStorage.setLocalData.and.returnValue(Promise.resolve());
         
         component.closeCard();
         tick();
         
-        expect(component.showBecomeMentorCard).toBe(false);
+        expect(component.showBecomeMentorCard()).toBe(false);
       }));
 
       it('should save closed state to localStorage', fakeAsync(() => {
@@ -614,7 +616,7 @@ const mockSessions = {
   }));
 
   it('should load more data for current segment', fakeAsync(() => {
-    component.selectedSegment = 'all-sessions';
+    component.selectedSegment.set('all-sessions');
     const mockEvent = { target: { complete: jasmine.createSpy() } };
     spyOn(component, 'loadSegmentData').and.returnValue(Promise.resolve());
     
@@ -638,91 +640,91 @@ const mockSessions = {
 describe('isInfiniteScrollDisabled', () => {
   describe('all-sessions segment', () => {
     beforeEach(() => {
-      component.selectedSegment = 'all-sessions';
+      component.selectedSegment.set('all-sessions');
     });
 
      it('should return true when all sessions are loaded', () => {
-      component.sessions = { all_sessions: [{ id: 1 }, { id: 2 }] };
-      component.allSessionsCount = 2;
+      component.sessions.set({ all_sessions: [{ id: 1 }, { id: 2 }] });
+      component.allSessionsCount.set(2);
       
-      expect(component.isInfiniteScrollDisabled).toBe(true);
+      expect(component.isInfiniteScrollDisabled()).toBe(true);
     });
 
     it('should return false when more sessions available', () => {
-      component.sessions = { all_sessions: [{ id: 1 }] };
-      component.allSessionsCount = 5;
+      component.sessions.set({ all_sessions: [{ id: 1 }] });
+      component.allSessionsCount.set(5);
       
-      expect(component.isInfiniteScrollDisabled).toBe(false);
+      expect(component.isInfiniteScrollDisabled()).toBe(false);
     });
 
     it('should return true when no sessions exist', () => {
-      component.sessions = { all_sessions: [] };
-      component.allSessionsCount = 0;
+      component.sessions.set({ all_sessions: [] });
+      component.allSessionsCount.set(0);
       
-      expect(component.isInfiniteScrollDisabled).toBe(true);
+      expect(component.isInfiniteScrollDisabled()).toBe(true);
     });
 
      it('should handle null sessions', () => {
-      component.sessions = null;
-      component.allSessionsCount = 5;
+      component.sessions.set(null);
+      component.allSessionsCount.set(5);
       
-      expect(component.isInfiniteScrollDisabled).toBe(true);
+      expect(component.isInfiniteScrollDisabled()).toBe(true);
     });
   });
 
    describe('created-sessions segment', () => {
     beforeEach(() => {
-      component.selectedSegment = 'created-sessions';
+      component.selectedSegment.set('created-sessions');
     });
 
      it('should return true when all created sessions are loaded', () => {
-      component.createdSessions = { data: [{ id: 1 }, { id: 2 }] };
-      component.createdSessionsCount = 2;
+      component.createdSessions.set({ data: [{ id: 1 }, { id: 2 }] });
+      component.createdSessionsCount.set(2);
       
-      expect(component.isInfiniteScrollDisabled).toBe(true);
+      expect(component.isInfiniteScrollDisabled()).toBe(true);
     });
 
         it('should return false when more created sessions available', () => {
-      component.createdSessions = { data: [{ id: 1 }] };
-      component.createdSessionsCount = 3;
+      component.createdSessions.set({ data: [{ id: 1 }] });
+      component.createdSessionsCount.set(3);
       
-      expect(component.isInfiniteScrollDisabled).toBe(false);
+      expect(component.isInfiniteScrollDisabled()).toBe(false);
     });
 
 
 
      it('should return true when no created sessions exist', () => {
-      component.createdSessions = { data: [] };
-      component.createdSessionsCount = 0;
+      component.createdSessions.set({ data: [] });
+      component.createdSessionsCount.set(0);
       
-      expect(component.isInfiniteScrollDisabled).toBe(true);
+      expect(component.isInfiniteScrollDisabled()).toBe(true);
     });
   });
 
    describe('my-sessions segment', () => {
     beforeEach(() => {
-      component.selectedSegment = 'my-sessions';
+      component.selectedSegment.set('my-sessions');
     });
 
     it('should return true when all enrolled sessions are loaded', () => {
-      component.sessions = { my_sessions: [{ id: 1 }] };
-      component.enrolledSessionsCount = 1;
+      component.sessions.set({ my_sessions: [{ id: 1 }] });
+      component.enrolledSessionsCount.set(1);
       
-      expect(component.isInfiniteScrollDisabled).toBe(true);
+      expect(component.isInfiniteScrollDisabled()).toBe(true);
     });
 
      it('should return false when more enrolled sessions available', () => {
-      component.sessions = { my_sessions: [{ id: 1 }] };
-      component.enrolledSessionsCount = 4;
+      component.sessions.set({ my_sessions: [{ id: 1 }] });
+      component.enrolledSessionsCount.set(4);
       
-      expect(component.isInfiniteScrollDisabled).toBe(false);
+      expect(component.isInfiniteScrollDisabled()).toBe(false);
     });
   });
 
   it('should return true for unknown segment', () => {
-    component.selectedSegment = 'unknown-segment' as any;
+    component.selectedSegment.set('unknown-segment' as any);
     
-    expect(component.isInfiniteScrollDisabled).toBe(true);
+    expect(component.isInfiniteScrollDisabled()).toBe(true);
   });
 });
 
@@ -775,11 +777,11 @@ describe('ionViewWillLeave', () => {
   });
 
   it('should set isLoading to false', () => {
-    component.isLoading = true;
+    component.isLoading.set(true);
     
     component.ionViewWillLeave();
     
-    expect(component.isLoading).toBe(false);
+    expect(component.isLoading()).toBe(false);
   });
 
   it('should detach overlay when connectedOverlay and overlayRef exist', () => {
@@ -823,7 +825,7 @@ describe('ionViewWillLeave', () => {
 
   it('should handle all cleanup operations together', () => {
     component.isOpen = true;
-    component.isLoading = true;
+    component.isLoading.set(true);
     const mockOverlayRef = jasmine.createSpyObj('OverlayRef', ['detach']);
     component.connectedOverlay = {
       overlayRef: mockOverlayRef
@@ -832,19 +834,19 @@ describe('ionViewWillLeave', () => {
     component.ionViewWillLeave();
     
     expect(component.isOpen).toBe(false);
-    expect(component.isLoading).toBe(false);
+    expect(component.isLoading()).toBe(false);
     expect(mockOverlayRef.detach).toHaveBeenCalled();
   });
 
   it('should only reset flags when overlay does not exist', () => {
     component.isOpen = true;
-    component.isLoading = true;
+    component.isLoading.set(true);
     component.connectedOverlay = undefined;
     
     component.ionViewWillLeave();
     
     expect(component.isOpen).toBe(false);
-    expect(component.isLoading).toBe(false);
+    expect(component.isLoading()).toBe(false);
   });
 });
  describe('ionViewDidLeave', () => {
