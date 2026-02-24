@@ -169,81 +169,68 @@ describe('PrivatePage', () => {
 
   describe('ngOnInit', () => {
     it('should initialize app and set up badges for mentor users', fakeAsync(() => {
-      component.isMentor = true;
+      component.privateService.isMentor.set(true);
       mockProfileService.getRequestCount.and.returnValue(
         Promise.resolve({ result: { sessionRequestCount: 5, connectionRequestCount: 2 } })
       );
-      spyOn(component, 'initializeApp').and.returnValue(Promise.resolve());
 
-      component.ngOnInit();
+      component.privateService.checkBadges();
       tick();
 
       expect(mockProfileService.getRequestCount).toHaveBeenCalled();
-      const requestsPage = component.appPages.find(p => p.pageId === PAGE_IDS.requests);
+      const requestsPage = component.privateService.appPages().find(p => p.pageId === PAGE_IDS.requests);
       expect(requestsPage?.badge).toBe(true);
-      
-      tick(3000); // Flush any remaining timers
     }));
 
     it('should not set badge when request counts are zero', fakeAsync(() => {
-      component.isMentor = true;
+      component.privateService.isMentor.set(true);
       mockProfileService.getRequestCount.and.returnValue(
         Promise.resolve({ result: { sessionRequestCount: 0, connectionRequestCount: 0 } })
       );
-      spyOn(component, 'initializeApp').and.returnValue(Promise.resolve());
 
-      component.ngOnInit();
+      component.privateService.checkBadges();
       tick();
 
-      const requestsPage = component.appPages.find(p => p.pageId === PAGE_IDS.requests);
+      const requestsPage = component.privateService.appPages().find(p => p.pageId === PAGE_IDS.requests);
       expect(requestsPage?.badge).toBeFalsy();
-      
-      tick(3000); // Flush any remaining timers
     }));
 
     it('should initialize rocket chat and set message badge', fakeAsync(() => {
       mockChatService.initialBadge = true;
-      spyOn(component, 'initializeApp').and.returnValue(Promise.resolve());
 
-      component.ngOnInit();
+      component.privateService.checkBadges();
       tick();
 
       expect(mockRocketChatService.initializeWebSocketAndCheckUnread).toHaveBeenCalled();
-      const messagesPage = component.appPages.find(p => p.pageId === PAGE_IDS.messages);
+      const messagesPage = component.privateService.appPages().find(p => p.pageId === PAGE_IDS.messages);
       expect(messagesPage?.badge).toBe(true);
-      
-      tick(3000); // Flush any remaining timers
     }));
 
     it('should subscribe to chat service badge updates', fakeAsync(() => {
-      spyOn(component, 'initializeApp').and.returnValue(Promise.resolve());
-
-      component.ngOnInit();
+      component.privateService.checkBadges();
       tick();
 
       showBadgeSubject.next(true);
       tick();
 
-      const messagesPage = component.appPages.find(p => p.pageId === PAGE_IDS.messages);
+      const messagesPage = component.privateService.appPages().find(p => p.pageId === PAGE_IDS.messages);
       expect(messagesPage?.badge).toBe(true);
-      
-      tick(3000); // Flush any remaining timers
     }));
   });
 
   describe('updateBadgeFlag', () => {
     it('should set hasBadge to true when any page has badge', () => {
-      component.appPages[0].badge = true;
+      component.privateService.appPages()[0].badge = true;
 
-      component.updateBadgeFlag();
+      component.privateService.updateBadgeFlag();
 
       expect(mockUtilService.setHasBadge).toHaveBeenCalledWith(true);
     });
 
     it('should set hasBadge to false when no page has badge', () => {
-      component.appPages.forEach(p => p.badge = false);
+      component.privateService.appPages().forEach(p => p.badge = false);
 
-      component.updateBadgeFlag();
+      component.privateService.updateBadgeFlag();
 
       expect(mockUtilService.setHasBadge).toHaveBeenCalledWith(false);
     });
@@ -252,10 +239,10 @@ describe('PrivatePage', () => {
   describe('initializeApp', () => {
     it('should initialize platform and network', fakeAsync(() => {
       spyOn(localStorage, 'getItem').and.returnValue(null);
-      spyOn(component, 'languageSetting');
-      spyOn(component, 'setHeader');
-      spyOn(component, 'getUser');
-      spyOn(component, 'subscribeBackButton');
+      spyOn(component.privateService, 'languageSetting');
+      spyOn(component.privateService, 'setHeader');
+      spyOn(component.privateService, 'getUser');
+      spyOn(component.privateService, 'subscribeBackButton');
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockUserDetails));
 
       // Test the individual pieces instead of the full initializeApp
@@ -310,7 +297,7 @@ describe('PrivatePage', () => {
       mockPermissionService.hasAdminAcess.and.returnValue(true);
 
       const hasAccess = mockPermissionService.hasAdminAcess(
-        component.actionsArrays,
+        component.privateService.actionsArrays,
         userWithPermissions.permissions
       );
 
@@ -328,13 +315,13 @@ describe('PrivatePage', () => {
       
       // Mock the parts of initializeApp that we need without calling the full method
       // This avoids the Capacitor App.addListener call
-      component.userEventSubscription = userEventSubject.subscribe((data) => {
+      component.privateService.userEventSubscription = userEventSubject.subscribe((data) => {
         if (data) {
-          component.isMentor = mockProfileService.isMentor;
-          component.user = data;
-          component.adminAccess = data.permissions
-            ? mockPermissionService.hasAdminAcess(component.actionsArrays, data?.permissions)
-            : false;
+          component.privateService.isMentor.set(mockProfileService.isMentor);
+          component.privateService.user.set(data);
+          component.privateService.adminAccess.set(data.permissions
+            ? mockPermissionService.hasAdminAcess(component.privateService.actionsArrays, data?.permissions)
+            : false);
         }
       });
 
@@ -345,9 +332,9 @@ describe('PrivatePage', () => {
       userEventSubject.next(updatedUser);
       tick();
 
-      expect(component.user).toEqual(updatedUser);
-      expect(component.isMentor).toBe(true);
-      expect(component.adminAccess).toBe(true);
+      expect(component.privateService.user()).toEqual(updatedUser);
+      expect(component.privateService.isMentor()).toBe(true);
+      expect(component.privateService.adminAccess()).toBe(true);
       
       flush(); // Flush all remaining timers
     }));
@@ -361,7 +348,7 @@ describe('PrivatePage', () => {
       };
       mockAlertController.create.and.returnValue(Promise.resolve(mockAlert as any));
 
-      component.subscribeBackButton();
+      component.privateService.subscribeBackButton();
       
       const backButtonSpy = mockPlatform.backButton.subscribeWithPriority as jasmine.Spy;
       const subscribeFn = backButtonSpy.calls.argsFor(0)[1];
@@ -375,7 +362,7 @@ describe('PrivatePage', () => {
     it('should navigate back when not on home page', () => {
       mockLocation.isCurrentPathEqualTo.and.returnValue(false);
 
-      component.subscribeBackButton();
+      component.privateService.subscribeBackButton();
       
       const backButtonSpy = mockPlatform.backButton.subscribeWithPriority as jasmine.Spy;
       const subscribeFn = backButtonSpy.calls.argsFor(0)[1];
@@ -389,7 +376,7 @@ describe('PrivatePage', () => {
     it('should use stored language if available', fakeAsync(() => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve('es'));
 
-      component.languageSetting();
+      component.privateService.languageSetting();
       tick();
 
       expect(mockTranslateService.use).toHaveBeenCalledWith('es');
@@ -397,28 +384,28 @@ describe('PrivatePage', () => {
 
     it('should default to English if no language stored', fakeAsync(() => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(null));
-      spyOn(component, 'setLanguage');
+      spyOn(component.privateService, 'setLanguage');
 
-      component.languageSetting();
+      component.privateService.languageSetting();
       tick();
 
-      expect(component.setLanguage).toHaveBeenCalledWith('en');
+      expect(component.privateService.setLanguage).toHaveBeenCalledWith('en');
     }));
 
     it('should default to English on error', fakeAsync(() => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.reject('error'));
-      spyOn(component, 'setLanguage');
+      spyOn(component.privateService, 'setLanguage');
 
-      component.languageSetting();
+      component.privateService.languageSetting();
       tick();
 
-      expect(component.setLanguage).toHaveBeenCalledWith('en');
+      expect(component.privateService.setLanguage).toHaveBeenCalledWith('en');
     }));
   });
 
   describe('setLanguage', () => {
     it('should store and apply language', fakeAsync(() => {
-      component.setLanguage('fr');
+      component.privateService.setLanguage('fr');
       tick();
 
       expect(mockLocalStorageService.setLocalData).toHaveBeenCalledWith(localKeys.SELECTED_LANGUAGE, 'fr');
@@ -428,7 +415,7 @@ describe('PrivatePage', () => {
     it('should apply language even if storage fails', fakeAsync(() => {
       mockLocalStorageService.setLocalData.and.returnValue(Promise.reject('error'));
 
-      component.setLanguage('de');
+      component.privateService.setLanguage('de');
       tick();
 
       expect(mockTranslateService.use).toHaveBeenCalledWith('de');
@@ -439,7 +426,7 @@ describe('PrivatePage', () => {
     it('should logout user when confirmed', fakeAsync(() => {
       mockUtilService.alertPopup.and.returnValue(Promise.resolve(true));
 
-      component.logout();
+      component.privateService.logout();
       tick();
 
       expect(mockAuthService.logoutAccount).toHaveBeenCalled();
@@ -450,7 +437,7 @@ describe('PrivatePage', () => {
     it('should not logout when cancelled', fakeAsync(() => {
       mockUtilService.alertPopup.and.returnValue(Promise.resolve(false));
 
-      component.logout();
+      component.privateService.logout();
       tick();
 
       expect(mockAuthService.logoutAccount).not.toHaveBeenCalled();
@@ -460,7 +447,7 @@ describe('PrivatePage', () => {
       mockUtilService.alertPopup.and.returnValue(Promise.reject('error'));
 
       expect(() => {
-        component.logout();
+        component.privateService.logout();
         tick();
       }).not.toThrow();
     }));
@@ -468,7 +455,7 @@ describe('PrivatePage', () => {
 
   describe('goToProfilePage', () => {
     it('should toggle menu and navigate to profile', () => {
-      component.goToProfilePage();
+      component.privateService.goToProfilePage();
 
       expect(mockMenuController.toggle).toHaveBeenCalled();
       expect(mockRouter.navigate).toHaveBeenCalled();
@@ -479,7 +466,7 @@ describe('PrivatePage', () => {
     it('should navigate to menu item URL', fakeAsync(() => {
       const menuItem = { url: '/test-page' };
 
-      component.menuItemAction(menuItem);
+      component.privateService.menuItemAction(menuItem);
       tick();
 
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/test-page']);
@@ -493,17 +480,17 @@ describe('PrivatePage', () => {
       spyOn(document.documentElement.style, 'setProperty');
       mockProfileService.getProfileDetailsFromAPI.and.returnValue(Promise.resolve(mockUserDetails));
 
-      component.getUser();
+      component.privateService.getUser();
       tick();
 
       expect(mockProfileService.getProfileDetailsFromAPI).toHaveBeenCalled();
-      expect(component.user).toEqual(mockUserDetails);
+      expect(component.privateService.user()).toEqual(mockUserDetails);
     }));
 
     it('should set user in local storage for single organization', fakeAsync(() => {
       mockProfileService.getProfileDetailsFromAPI.and.returnValue(Promise.resolve(mockUserDetails));
 
-      component.getUser();
+      component.privateService.getUser();
       tick();
 
       expect(mockAuthService.setUserInLocal).toHaveBeenCalledWith(mockUserDetails);
@@ -516,7 +503,7 @@ describe('PrivatePage', () => {
       };
       mockProfileService.getProfileDetailsFromAPI.and.returnValue(Promise.resolve(userWithMandatoryFields));
 
-      component.getUser();
+      component.privateService.getUser();
       tick();
 
       expect(mockRouter.navigate).toHaveBeenCalled();
@@ -526,7 +513,7 @@ describe('PrivatePage', () => {
       const userWithoutAbout = { ...mockUserDetails, about: null };
       mockProfileService.getProfileDetailsFromAPI.and.returnValue(Promise.resolve(userWithoutAbout));
 
-      component.getUser();
+      component.privateService.getUser();
       tick();
 
       expect(mockRouter.navigate).toHaveBeenCalled();
@@ -536,10 +523,10 @@ describe('PrivatePage', () => {
       mockProfileService.isMentor = true;
       mockProfileService.getProfileDetailsFromAPI.and.returnValue(Promise.resolve(mockUserDetails));
 
-      component.getUser();
+      component.privateService.getUser();
       tick();
 
-      expect(component.isMentor).toBe(true);
+      expect(component.privateService.isMentor()).toBe(true);
     }));
   });
 
@@ -548,7 +535,7 @@ describe('PrivatePage', () => {
       const mockRoles = ['mentor', 'admin'];
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(mockRoles));
 
-      component.viewRoles();
+      component.privateService.viewRoles();
       tick();
 
       expect(mockProfileService.viewRolesModal).toHaveBeenCalledWith(mockRoles);
@@ -577,53 +564,31 @@ describe('PrivatePage', () => {
     });
   });
 
-  describe('ngOnDestroy', () => {
-    it('should unsubscribe from all subscriptions', () => {
-      const mockSubscription = {
-        unsubscribe: jasmine.createSpy('unsubscribe')
-      };
 
-      component.userEventSubscription = mockSubscription;
-      component.backButtonSubscription = mockSubscription;
-      component.menuSubscription = mockSubscription;
-      component.routerSubscription = mockSubscription;
-
-      component.ngOnDestroy();
-
-      expect(mockSubscription.unsubscribe).toHaveBeenCalledTimes(4);
-    });
-
-    it('should handle missing subscriptions gracefully', () => {
-      component.userEventSubscription = undefined;
-      component.backButtonSubscription = undefined;
-
-      expect(() => component.ngOnDestroy()).not.toThrow();
-    });
-  });
 
   describe('setHeader', () => {
     it('should call getUserValue', () => {
-      component.setHeader();
+      component.privateService.setHeader();
       expect(mockUserService.getUserValue).toHaveBeenCalled();
     });
   });
 
   describe('appPages array', () => {
     it('should have correct page structure', () => {
-      expect(component.appPages.length).toBeGreaterThan(0);
-      expect(component.appPages[0].title).toBeDefined();
-      expect(component.appPages[0].url).toBeDefined();
-      expect(component.appPages[0].pageId).toBeDefined();
+      expect(component.privateService.appPages().length).toBeGreaterThan(0);
+      expect(component.privateService.appPages()[0].title).toBeDefined();
+      expect(component.privateService.appPages()[0].url).toBeDefined();
+      expect(component.privateService.appPages()[0].pageId).toBeDefined();
     });
 
     it('should include home page', () => {
-      const homePage = component.appPages.find(p => p.pageId === PAGE_IDS.home);
+      const homePage = component.privateService.appPages().find(p => p.pageId === PAGE_IDS.home);
       expect(homePage).toBeDefined();
       expect(homePage?.title).toBe('HOME');
     });
 
     it('should include messages page', () => {
-      const messagesPage = component.appPages.find(p => p.pageId === PAGE_IDS.messages);
+      const messagesPage = component.privateService.appPages().find(p => p.pageId === PAGE_IDS.messages);
       expect(messagesPage).toBeDefined();
       expect(messagesPage?.title).toBe('MESSAGES');
     });
@@ -631,9 +596,9 @@ describe('PrivatePage', () => {
 
   describe('adminPage', () => {
     it('should have admin workspace configuration', () => {
-      expect(component.adminPage).toBeDefined();
-      expect(component.adminPage.title).toBe('ADMIN_WORKSPACE');
-      expect(component.adminPage.pageId).toBe(PAGE_IDS.adminWorkspace);
+      expect(component.privateService.adminPage).toBeDefined();
+      expect(component.privateService.adminPage.title).toBe('ADMIN_WORKSPACE');
+      expect(component.privateService.adminPage.pageId).toBe(PAGE_IDS.adminWorkspace);
     });
   });
 
@@ -818,19 +783,18 @@ describe('PrivatePage', () => {
     });
 
     it('should have actionsArrays defined', () => {
-      expect(component.actionsArrays).toBeDefined();
+      expect(component.privateService.actionsArrays).toBeDefined();
     });
 
     it('should initialize with default values', () => {
-      expect(component.showAlertBox).toBe(false);
-      expect(component.appPages).toBeDefined();
-      expect(component.adminPage).toBeDefined();
+      expect(component.privateService.appPages()).toBeDefined();
+      expect(component.privateService.adminPage).toBeDefined();
     });
   });
 
   describe('Back button subscription', () => {
     it('should create subscription with priority', () => {
-      component.subscribeBackButton();
+      component.privateService.subscribeBackButton();
       expect(mockPlatform.backButton.subscribeWithPriority).toHaveBeenCalledWith(10, jasmine.any(Function));
     });
   });
@@ -847,7 +811,7 @@ describe('PrivatePage', () => {
         return Promise.resolve(mockAlert as any);
       });
 
-      component.subscribeBackButton();
+      component.privateService.subscribeBackButton();
       const subscribeFn = (mockPlatform.backButton.subscribeWithPriority as jasmine.Spy).calls.argsFor(0)[1];
       subscribeFn();
       tick();
@@ -861,7 +825,7 @@ describe('PrivatePage', () => {
   describe('Language operations', () => {
     it('should handle language setting with data', fakeAsync(() => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve('fr'));
-      component.languageSetting();
+      component.privateService.languageSetting();
       tick();
       expect(mockTranslateService.use).toHaveBeenCalledWith('fr');
     }));
@@ -892,17 +856,17 @@ describe('PrivatePage', () => {
       };
       mockProfileService.getProfileDetailsFromAPI.and.returnValue(Promise.resolve(userWithMultiOrgs));
       
-      component.getUser();
+      component.privateService.getUser();
       tick();
       
-      expect(component.user).toBeDefined();
+      expect(component.privateService.user()).toBeDefined();
     }));
 
     it('should set admin access for user with permissions', fakeAsync(() => {
       mockPermissionService.hasAdminAcess.and.returnValue(true);
       mockProfileService.getProfileDetailsFromAPI.and.returnValue(Promise.resolve(mockUserDetails));
       
-      component.getUser();
+      component.privateService.getUser();
       tick();
       
       expect(mockPermissionService.hasAdminAcess).toHaveBeenCalled();
@@ -912,10 +876,10 @@ describe('PrivatePage', () => {
       const userNoPermissions = { ...mockUserDetails, permissions: null };
       mockProfileService.getProfileDetailsFromAPI.and.returnValue(Promise.resolve(userNoPermissions));
       
-      component.getUser();
+      component.privateService.getUser();
       tick();
       
-      expect(component.adminAccess).toBe(false);
+      expect(component.privateService.adminAccess()).toBe(false);
     }));
 
     it('should apply theme in getUser when theme exists', fakeAsync(() => {
@@ -923,7 +887,7 @@ describe('PrivatePage', () => {
       spyOn(localStorage, 'getItem').and.returnValue(mockTheme);
       spyOn(document.documentElement.style, 'setProperty');
       
-      component.getUser();
+      component.privateService.getUser();
       tick();
       
       expect(document.documentElement.style.setProperty).toHaveBeenCalledWith('--ion-color-primary', '#ABC123');
@@ -933,7 +897,7 @@ describe('PrivatePage', () => {
       spyOn(localStorage, 'getItem').and.returnValue('invalid{json');
       spyOn(console, 'error');
       
-      component.getUser();
+      component.privateService.getUser();
       tick();
       
       expect(console.error).toHaveBeenCalled();
@@ -942,76 +906,67 @@ describe('PrivatePage', () => {
 
   describe('Badge management in ngOnInit', () => {
     it('should not call getRequestCount for non-mentor users', fakeAsync(() => {
-      component.isMentor = false;
-      spyOn(component, 'initializeApp').and.returnValue(Promise.resolve());
+      component.privateService.isMentor.set(false);
       
-      component.ngOnInit();
+      component.privateService.checkBadges();
       tick();
       
       expect(mockProfileService.getRequestCount).not.toHaveBeenCalled();
-      tick(3000);
     }));
 
     it('should handle request count result as null', fakeAsync(() => {
-      component.isMentor = true;
+      component.privateService.isMentor.set(true);
       mockProfileService.getRequestCount.and.returnValue(Promise.resolve({ result: null }));
-      spyOn(component, 'initializeApp').and.returnValue(Promise.resolve());
       
-      component.ngOnInit();
+      component.privateService.checkBadges();
       tick();
       
-      const requestsPage = component.appPages.find(p => p.pageId === PAGE_IDS.requests);
+      const requestsPage = component.privateService.appPages().find(p => p.pageId === PAGE_IDS.requests);
       expect(requestsPage?.badge).toBeFalsy();
       tick(3000);
     }));
 
     it('should set badge for only session requests', fakeAsync(() => {
-      component.isMentor = true;
+      component.privateService.isMentor.set(true);
       mockProfileService.getRequestCount.and.returnValue(
         Promise.resolve({ result: { sessionRequestCount: 3, connectionRequestCount: 0 } })
       );
-      spyOn(component, 'initializeApp').and.returnValue(Promise.resolve());
       
-      component.ngOnInit();
+      component.privateService.checkBadges();
       tick();
       
-      const requestsPage = component.appPages.find(p => p.pageId === PAGE_IDS.requests);
+      const requestsPage = component.privateService.appPages().find(p => p.pageId === PAGE_IDS.requests);
       expect(requestsPage?.badge).toBe(true);
-      tick(3000);
     }));
 
     it('should set badge for only connection requests', fakeAsync(() => {
-      component.isMentor = true;
+      component.privateService.isMentor.set(true);
       mockProfileService.getRequestCount.and.returnValue(
         Promise.resolve({ result: { sessionRequestCount: 0, connectionRequestCount: 2 } })
       );
-      spyOn(component, 'initializeApp').and.returnValue(Promise.resolve());
       
-      component.ngOnInit();
+      component.privateService.checkBadges();
       tick();
       
-      const requestsPage = component.appPages.find(p => p.pageId === PAGE_IDS.requests);
+      const requestsPage = component.privateService.appPages().find(p => p.pageId === PAGE_IDS.requests);
       expect(requestsPage?.badge).toBe(true);
-      tick(3000);
     }));
 
     it('should not find requests page if pageId doesnt match', fakeAsync(() => {
-      component.isMentor = true;
+      component.privateService.isMentor.set(true);
       mockProfileService.getRequestCount.and.returnValue(
         Promise.resolve({ result: { sessionRequestCount: 5, connectionRequestCount: 2 } })
       );
-      spyOn(component, 'initializeApp').and.returnValue(Promise.resolve());
       
       // Temporarily remove requests page
-      const originalPages = [...component.appPages];
-      component.appPages = component.appPages.filter(p => p.pageId !== PAGE_IDS.requests);
+      const originalPages = [...component.privateService.appPages()];
+      component.privateService.appPages.set(component.privateService.appPages().filter(p => p.pageId !== PAGE_IDS.requests));
       
-      component.ngOnInit();
+      component.privateService.checkBadges();
       tick();
       
       // Restore
-      component.appPages = originalPages;
-      tick(3000);
+      component.privateService.appPages.set(originalPages);
     }));
   });
 
@@ -1029,18 +984,18 @@ describe('PrivatePage', () => {
       ];
       
       requiredPageIds.forEach(pageId => {
-        const page = component.appPages.find(p => p.pageId === pageId);
+        const page = component.privateService.appPages().find(p => p.pageId === pageId);
         expect(page).toBeDefined();
       });
     });
 
     it('should have requests page with badge property', () => {
-      const requestsPage = component.appPages.find(p => p.pageId === PAGE_IDS.requests);
+      const requestsPage = component.privateService.appPages().find(p => p.pageId === PAGE_IDS.requests);
       expect(requestsPage?.badge).toBeDefined();
     });
 
     it('should have messages page with badge property', () => {
-      const messagesPage = component.appPages.find(p => p.pageId === PAGE_IDS.messages);
+      const messagesPage = component.privateService.appPages().find(p => p.pageId === PAGE_IDS.messages);
       expect(messagesPage?.badge).toBeDefined();
     });
   });
@@ -1048,22 +1003,22 @@ describe('PrivatePage', () => {
   describe('Language setting edge cases', () => {
     it('should call setLanguage with en when getLocalData returns null', fakeAsync(() => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(null));
-      spyOn(component, 'setLanguage');
+      spyOn(component.privateService, 'setLanguage');
       
-      component.languageSetting();
+      component.privateService.languageSetting();
       tick();
       
-      expect(component.setLanguage).toHaveBeenCalledWith('en');
+      expect(component.privateService.setLanguage).toHaveBeenCalledWith('en');
     }));
 
     it('should call setLanguage with en on catch block', fakeAsync(() => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.reject('Storage error'));
-      spyOn(component, 'setLanguage');
+      spyOn(component.privateService, 'setLanguage');
       
-      component.languageSetting();
+      component.privateService.languageSetting();
       tick();
       
-      expect(component.setLanguage).toHaveBeenCalledWith('en');
+      expect(component.privateService.setLanguage).toHaveBeenCalledWith('en');
     }));
   });
 
@@ -1071,7 +1026,7 @@ describe('PrivatePage', () => {
     it('should use translate service even when setLocalData succeeds', fakeAsync(() => {
       mockLocalStorageService.setLocalData.and.returnValue(Promise.resolve(true));
       
-      component.setLanguage('es');
+      component.privateService.setLanguage('es');
       tick();
       
       expect(mockTranslateService.use).toHaveBeenCalledWith('es');
@@ -1080,7 +1035,7 @@ describe('PrivatePage', () => {
     it('should use translate service when setLocalData fails', fakeAsync(() => {
       mockLocalStorageService.setLocalData.and.returnValue(Promise.reject('error'));
       
-      component.setLanguage('de');
+      component.privateService.setLanguage('de');
       tick();
       
       expect(mockTranslateService.use).toHaveBeenCalledWith('de');
@@ -1091,7 +1046,7 @@ describe('PrivatePage', () => {
     it('should set language to en before logout', fakeAsync(() => {
       mockUtilService.alertPopup.and.returnValue(Promise.resolve(true));
       
-      component.logout();
+      component.privateService.logout();
       tick();
       
       expect(mockLocalStorageService.setLocalData).toHaveBeenCalledWith(localKeys.SELECTED_LANGUAGE, 'en');
@@ -1100,7 +1055,7 @@ describe('PrivatePage', () => {
     it('should not call logoutAccount when user cancels', fakeAsync(() => {
       mockUtilService.alertPopup.and.returnValue(Promise.resolve(false));
       
-      component.logout();
+      component.privateService.logout();
       tick();
       
       expect(mockAuthService.logoutAccount).not.toHaveBeenCalled();
@@ -1111,7 +1066,7 @@ describe('PrivatePage', () => {
       mockUtilService.alertPopup.and.returnValue(Promise.reject('User dismissed'));
       
       expect(() => {
-        component.logout();
+        component.privateService.logout();
         tick();
       }).not.toThrow();
     }));
@@ -1121,7 +1076,7 @@ describe('PrivatePage', () => {
     it('should call back when not on home page', () => {
       mockLocation.isCurrentPathEqualTo.and.returnValue(false);
       
-      component.subscribeBackButton();
+      component.privateService.subscribeBackButton();
       const subscribeFn = (mockPlatform.backButton.subscribeWithPriority as jasmine.Spy).calls.argsFor(0)[1];
       subscribeFn();
       
@@ -1135,7 +1090,7 @@ describe('PrivatePage', () => {
       };
       mockAlertController.create.and.returnValue(Promise.resolve(mockAlert as any));
       
-      component.subscribeBackButton();
+      component.privateService.subscribeBackButton();
       const subscribeFn = (mockPlatform.backButton.subscribeWithPriority as jasmine.Spy).calls.argsFor(0)[1];
       subscribeFn();
       tick();
@@ -1153,7 +1108,7 @@ describe('PrivatePage', () => {
       };
       mockAlertController.create.and.returnValue(Promise.resolve(mockAlert as any));
       
-      component.subscribeBackButton();
+      component.privateService.subscribeBackButton();
       const subscribeFn = (mockPlatform.backButton.subscribeWithPriority as jasmine.Spy).calls.argsFor(0)[1];
       subscribeFn();
       tick();
@@ -1181,28 +1136,12 @@ describe('PrivatePage', () => {
     });
   });
 
-  describe('ngOnDestroy comprehensive', () => {
-    it('should only unsubscribe defined subscriptions', () => {
-      const mockSubscription = {
-        unsubscribe: jasmine.createSpy('unsubscribe')
-      };
-      
-      component.userEventSubscription = mockSubscription;
-      component.backButtonSubscription = undefined;
-      component.menuSubscription = mockSubscription;
-      component.routerSubscription = undefined;
-      
-      component.ngOnDestroy();
-      
-      expect(mockSubscription.unsubscribe).toHaveBeenCalledTimes(2);
-    });
-  });
 
   describe('viewRoles with different data', () => {
     it('should handle empty roles array', fakeAsync(() => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve([]));
       
-      component.viewRoles();
+      component.privateService.viewRoles();
       tick();
       
       expect(mockProfileService.viewRolesModal).toHaveBeenCalledWith([]);
@@ -1211,7 +1150,7 @@ describe('PrivatePage', () => {
     it('should handle null roles', fakeAsync(() => {
       mockLocalStorageService.getLocalData.and.returnValue(Promise.resolve(null));
       
-      component.viewRoles();
+      component.privateService.viewRoles();
       tick();
       
       expect(mockProfileService.viewRolesModal).toHaveBeenCalledWith(null);
@@ -1223,7 +1162,7 @@ describe('PrivatePage', () => {
       const userWithEmptyAbout = { ...mockUserDetails, about: '' };
       mockProfileService.getProfileDetailsFromAPI.and.returnValue(Promise.resolve(userWithEmptyAbout));
       
-      component.getUser();
+      component.privateService.getUser();
       tick();
       
       expect(mockRouter.navigate).toHaveBeenCalled();
@@ -1233,7 +1172,7 @@ describe('PrivatePage', () => {
       const userWithUndefinedAbout = { ...mockUserDetails, about: undefined };
       mockProfileService.getProfileDetailsFromAPI.and.returnValue(Promise.resolve(userWithUndefinedAbout));
       
-      component.getUser();
+      component.privateService.getUser();
       tick();
       
       expect(mockRouter.navigate).toHaveBeenCalled();
@@ -1243,7 +1182,7 @@ describe('PrivatePage', () => {
       mockProfileService.getProfileDetailsFromAPI.and.returnValue(Promise.resolve(mockUserDetails));
       mockRouter.navigate.calls.reset();
       
-      component.getUser();
+      component.privateService.getUser();
       tick();
       
       expect(mockRouter.navigate).not.toHaveBeenCalled();

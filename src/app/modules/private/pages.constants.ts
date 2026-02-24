@@ -1,0 +1,110 @@
+import { CommonRoutes } from "src/global.routes";
+import { PAGE_IDS } from "src/app/core/constants/page.ids";
+
+export const APP_PAGES = [
+    {
+        title: 'HOME',
+        action: 'home',
+        icon: 'home',
+        class: 'hide-on-small-screen',
+        url: CommonRoutes.TABS + '/' + CommonRoutes.HOME,
+        pageId: PAGE_IDS.home,
+    },
+    {
+        title: 'MENTORS',
+        action: 'mentor-directory',
+        icon: 'people',
+        class: 'hide-on-small-screen',
+        url: CommonRoutes.TABS + '/' + CommonRoutes.MENTOR_DIRECTORY,
+        pageId: PAGE_IDS.mentorDirectory,
+    },
+    {
+        title: 'REQUESTS',
+        action: 'requests',
+        icon: 'mail',
+        url: CommonRoutes.TABS + '/' + CommonRoutes.REQUESTS,
+        pageId: PAGE_IDS.requests,
+        badge: false,
+    },
+    {
+        title: 'MY_CONNECTIONS',
+        action: 'my-connections',
+        icon: 'people',
+        url: CommonRoutes.MY_CONNECTIONS,
+        pageId: PAGE_IDS.myConnections,
+    },
+    {
+        title: 'MESSAGES',
+        action: 'messages',
+        icon: 'chatbubbles',
+        url: CommonRoutes.MESSAGES,
+        badge: false,
+        pageId: PAGE_IDS.messages,
+    },
+    {
+        title: 'DASHBOARD',
+        action: 'dashboard',
+        icon: 'stats-chart',
+        class: 'hide-on-small-screen',
+        url: CommonRoutes.TABS + '/' + CommonRoutes.DASHBOARD,
+        pageId: PAGE_IDS.dashboard,
+    },
+    {
+        title: 'HELP_SIDEMENU',
+        action: 'help',
+        icon: 'help-circle',
+        url: CommonRoutes.HELP,
+        pageId: PAGE_IDS.help,
+    },
+    {
+        title: 'FAQ',
+        action: 'faq',
+        icon: 'alert-circle',
+        url: CommonRoutes.FAQ,
+        pageId: PAGE_IDS.faq,
+    },
+    {
+        title: 'USER_GUIDE_VIDEOS',
+        action: 'help videos',
+        icon: 'videocam',
+        url: CommonRoutes.HELP_VIDEOS,
+        pageId: PAGE_IDS.helpVideos,
+    },
+    {
+        title: 'LANGUAGE',
+        action: 'selectLanguage',
+        icon: 'language',
+        url: CommonRoutes.LANGUAGE,
+        pageId: PAGE_IDS.language,
+    },
+    {
+        title: 'BLOCKED_USERS',
+        action: 'blocked-users',
+        icon: 'ban',
+        url: CommonRoutes.BLOCKED_USERS,
+        pageId: PAGE_IDS.blockedUsers,
+    },
+    {
+        title: 'CHANGE_PASSWORD',
+        action: 'change-password',
+        icon: 'key',
+        url: CommonRoutes.CHANGE_PASSWORD,
+        pageId: PAGE_IDS.changePassword,
+    },
+    {
+        title: 'LOGIN_ACTIVITY',
+        action: 'login-activity',
+        icon: 'time',
+        url: CommonRoutes.LOGIN_ACTIVITY,
+        pageId: PAGE_IDS.loginActivity,
+    },
+];
+
+export const ADMIN_PAGE = {
+    title: 'ADMIN_WORKSPACE',
+    action: 'admin',
+    icon: 'briefcase',
+    class: '',
+    url: CommonRoutes.ADMIN + '/' + CommonRoutes.ADMIN_DASHBOARD,
+    pageId: PAGE_IDS.adminWorkspace,
+};

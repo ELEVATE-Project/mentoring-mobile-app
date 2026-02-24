@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService, ToastService, UserService, UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
@@ -16,58 +16,58 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-    selector: 'app-session-detail',
-    templateUrl: './session-detail.page.html',
-    styleUrls: ['./session-detail.page.scss'],
-    standalone: false
+  selector: 'app-session-detail',
+  templateUrl: './session-detail.page.html',
+  styleUrls: ['./session-detail.page.scss'],
+  standalone: false
 })
 export class SessionDetailPage implements OnInit, OnDestroy {
   id: any;
   showEditButton: any;
-  isConductor:any =false;
-  isCreator:any = false;
+  isConductor = signal<boolean>(false);
+  isCreator = signal<boolean>(false);
   userDetails: any;
-  isEnabled: boolean;
-  startDate: any;
-  endDate: any;
-  sessionDatas: any;
+  isEnabled = signal<boolean>(false);
+  startDate = signal<any>(null);
+  endDate = signal<any>(null);
+  sessionDatas = signal<any>(null);
   snackbarRef: any;
-  skipWhenDelete: boolean= false;
+  skipWhenDelete: boolean = false;
   dismissWhenBack: boolean = false;
-  platformOff: any;
-  isLoaded : boolean = false
-  public isMobile:any
-  userCantAccess:any = true;
-  enrolledMenteeList:any;
-  sessionManagerText="";
- activeUrl:any;
- isNotInvited: any;
- defaultUiForm = [
-  {
-    title: "Meeting Platform",
-    key: "meeting_info",
-  }
- ];
+  platformOff = signal<any>(null);
+  isLoaded = signal<boolean>(false);
+  public isMobile: any
+  userCantAccess = signal<any>(true);
+  enrolledMenteeList: any;
+  sessionManagerText = signal<string>("");
+  activeUrl: any;
+  isNotInvited = signal<any>(null);
+  defaultUiForm = [
+    {
+      title: "Meeting Platform",
+      key: "meeting_info",
+    }
+  ];
 
   constructor(private localStorage: LocalStorageService, private router: Router,
     private activatedRoute: ActivatedRoute, private sessionService: SessionService,
-    private utilService: UtilService, private toast: ToastService, private user: UserService ,private toaster: ToastController,private translate : TranslateService,private modalCtrl: ModalController, private permissionService:PermissionService, private form: FormService) {
+    private utilService: UtilService, private toast: ToastService, private user: UserService, private toaster: ToastController, private translate: TranslateService, private modalCtrl: ModalController, private permissionService: PermissionService, private form: FormService) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id')
     this.isMobile = utilService.isMobile()
   }
   ngOnInit() {
-      App.addListener('appStateChange', async (state: AppState) => {
-        if (state.isActive == true && this.id && this.sessionDatas && !this.dismissWhenBack) {
-          await this.fetchSessionDetails();
-        }
-      });
+    App.addListener('appStateChange', async (state: AppState) => {
+      if (state.isActive == true && this.id && this.sessionDatas() && !this.dismissWhenBack) {
+        await this.fetchSessionDetails();
+      }
+    });
   }
 
   async ionViewWillEnter() {
     this.detailData.controls = JSON.parse(JSON.stringify(this.defaultUiForm));
     await this.user.getUserValue();
     this.userDetails = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-     await this.fetchSessionDetails();
+    await this.fetchSessionDetails();
   }
 
   public headerConfig: any = {
@@ -77,10 +77,10 @@ export class SessionDetailPage implements OnInit, OnDestroy {
   };
   detailData = {
     controls: [
-      
+
     ],
     data: {
-      id:'',
+      id: '',
       image: [],
       description: '',
       recommended_for: [
@@ -126,52 +126,52 @@ export class SessionDetailPage implements OnInit, OnDestroy {
         },
       ],
       mentor_name: null,
-      status:null,
-      is_enrolled:null,
-      title:"",
-      start_date:"",
-      meeting_info:"",
-      mentee_count:0,
-      isCreator:false,
-      isConductor:false,
-      manager_name:"",
-      mentor_designation:[]
+      status: null,
+      is_enrolled: null,
+      title: "",
+      start_date: "",
+      meeting_info: "",
+      mentee_count: 0,
+      isCreator: false,
+      isConductor: false,
+      manager_name: "",
+      mentor_designation: []
     },
   };
 
-  async fetchSessionDetails() { 
+  async fetchSessionDetails() {
     let entityList = await this.form.getEntities({}, 'SESSION')
     var response = await this.sessionService.getSessionDetailsAPI(this.id);
-    if(response && entityList.result.length){
+    if (response && entityList.result.length) {
       entityList.result.forEach(entity => {
         Object.entries(response?.result).forEach(([key, value]) => {
-          if(Array.isArray(value) &&   entity.value == key && !this.detailData.controls.some(obj => obj.key === entity.value) ){
+          if (Array.isArray(value) && entity.value == key && !this.detailData.controls.some(obj => obj.key === entity.value)) {
             this.detailData.controls.push(
               {
-                  title: entity.label,
-                  key: entity.value,
-                },
+                title: entity.label,
+                key: entity.value,
+              },
             )
           }
         });
       });
     }
-    this.sessionDatas = response?.result;
-    this.isLoaded = true ;
-    this.userCantAccess = response?.responseCode == 'OK' ? false:true
-    this.isCreator = response?.result?.created_by == this.userDetails.id ? true:false;
-    this.isConductor = this.userDetails.id == response?.result?.mentor_id ? true : false;
-    this.sessionManagerText =  this.isConductor ? "ASSIGNED_BY":"INVITED_BY";
-    this.isNotInvited = response?.result?.enrolment_type === 'INVITED'? false : true;
-    if (!this.userCantAccess) {
+    this.sessionDatas.set(response?.result);
+    this.isLoaded.set(true);
+    this.userCantAccess.set(response?.responseCode == 'OK' ? false : true);
+    this.isCreator.set(response?.result?.created_by == this.userDetails.id ? true : false);
+    this.isConductor.set(this.userDetails.id == response?.result?.mentor_id ? true : false);
+    this.sessionManagerText.set(this.isConductor() ? "ASSIGNED_BY" : "INVITED_BY");
+    this.isNotInvited.set(response?.result?.enrolment_type === 'INVITED' ? false : true);
+    if (!this.userCantAccess()) {
       response = response.result;
       this.setPageHeader(response);
       let readableStartDate = new Date(response.start_date * 1000).toLocaleString();
-      let currentTimeInSeconds=Math.floor(Date.now()/1000);
-      if(response.is_enrolled){
-        this.isEnabled = ((response.start_date - currentTimeInSeconds) < 600 || response?.status?.value=='LIVE') ? true : false
+      let currentTimeInSeconds = Math.floor(Date.now() / 1000);
+      if (response.is_enrolled) {
+        this.isEnabled.set(((response.start_date - currentTimeInSeconds) < 600 || response?.status?.value == 'LIVE') ? true : false);
       } else {
-        this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response?.status?.value=='LIVE')?true:false;
+        this.isEnabled.set(((response.start_date - currentTimeInSeconds) < 600 || response?.status?.value == 'LIVE') ? true : false);
       }
       this.detailData = {
         data: {
@@ -180,69 +180,69 @@ export class SessionDetailPage implements OnInit, OnDestroy {
           meeting_info: response.meeting_info?.platform,
           mentee_count: response.seats_limit - response.seats_remaining,
           mentor_designation: response?.mentor_designation?.length
-          ? response.mentor_designation.map((d: any) => d?.label).join(', ')
-          : []
-          },
-          controls: [...this.detailData.controls]
-        };
-      this.startDate = (response.start_date>0)?new Date(response.start_date * 1000):this.startDate;
-      this.endDate = (response.end_date>0)?new Date(response.end_date * 1000):this.endDate;
-      this.platformOff = (response?.meeting_info?.platform == 'OFF') ? true : false;
-      if((!this.detailData.controls.some(obj =>  obj.key === 'mentor_name'))){
+            ? response.mentor_designation.map((d: any) => d?.label).join(', ')
+            : []
+        },
+        controls: [...this.detailData.controls]
+      };
+      this.startDate.set((response.start_date > 0) ? new Date(response.start_date * 1000) : this.startDate());
+      this.endDate.set((response.end_date > 0) ? new Date(response.end_date * 1000) : this.endDate());
+      this.platformOff.set((response?.meeting_info?.platform == 'OFF') ? true : false);
+      if ((!this.detailData.controls.some(obj => obj.key === 'mentor_name'))) {
         this.detailData.controls.push(
           {
             title: 'Mentor',
             key: 'mentor_name',
           },
         );
-      } 
-      if((this.isCreator || this.isConductor) && !this.detailData.controls.some(obj => obj.key === 'mentee_count')){
-        
+      }
+      if ((this.isCreator() || this.isConductor()) && !this.detailData.controls.some(obj => obj.key === 'mentee_count')) {
+
         this.detailData.controls.push(
           {
             title: 'Mentee Count',
             key: 'mentee_count',
           },
         );
-      } 
+      }
     }
-    if((response?.meeting_info?.platform == 'OFF') && this.isCreator && response?.status?.value=='PUBLISHED'){
-      this.showToasts('ADD_MEETING_LINK', 0 , [
-          {
-            text: 'Add meeting link',
-            role: 'cancel',
-            handler: () => {
-              this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'} });
-            }
+    if ((response?.meeting_info?.platform == 'OFF') && this.isCreator() && response?.status?.value == 'PUBLISHED') {
+      this.showToasts('ADD_MEETING_LINK', 0, [
+        {
+          text: 'Add meeting link',
+          role: 'cancel',
+          handler: () => {
+            this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id, type: 'segment' } });
           }
-        ])
-    } 
+        }
+      ])
+    }
     this.dismissWhenBack = true;
   }
 
   ionViewWillLeave() {
-    if(!this.skipWhenDelete && this.snackbarRef){
+    if (!this.skipWhenDelete && this.snackbarRef) {
       this.snackbarRef = this.toaster.dismiss()
     }
-   }
+  }
 
-   ngOnDestroy() {
-    if(!this.skipWhenDelete && this.snackbarRef){
+  ngOnDestroy() {
+    if (!this.skipWhenDelete && this.snackbarRef) {
       this.snackbarRef = this.toaster.dismiss()
     }
-   }
+  }
 
   setPageHeader(response) {
-    let currentTimeInSeconds=Math.floor(Date.now()/1000);
-    this.isEnabled = ((response.start_date-currentTimeInSeconds)<600 || response?.status?.value=='LIVE')?true:false;
-      this.headerConfig.share = (response?.status?.value=="COMPLETED" || response.type.value == "PRIVATE")?false:true;
-      this.id = response.id;
-      if(this.userDetails){
-        this.isConductor = this.userDetails.id == response.mentor_id ? true : false;
-      }
-      let twentyFourHoursInSeconds = 24 * 60 * 60;
-      this.headerConfig.edit = (this.isCreator  && response.end_date > 0 && (currentTimeInSeconds - response.end_date) <= twentyFourHoursInSeconds);
-      this.headerConfig.delete = (this.isCreator && response?.status?.value !="COMPLETED" && response?.status?.value !="LIVE" &&  ((response.end_date>currentTimeInSeconds)))?true:null;
+    let currentTimeInSeconds = Math.floor(Date.now() / 1000);
+    this.isEnabled.set(((response.start_date - currentTimeInSeconds) < 600 || response?.status?.value == 'LIVE') ? true : false);
+    this.headerConfig.share = (response?.status?.value == "COMPLETED" || response.type.value == "PRIVATE") ? false : true;
+    this.id = response.id;
+    if (this.userDetails) {
+      this.isConductor.set(this.userDetails.id == response.mentor_id ? true : false);
+    }
+    let twentyFourHoursInSeconds = 24 * 60 * 60;
+    this.headerConfig.edit = (this.isCreator() && response.end_date > 0 && (currentTimeInSeconds - response.end_date) <= twentyFourHoursInSeconds);
+    this.headerConfig.delete = (this.isCreator() && response?.status?.value != "COMPLETED" && response?.status?.value != "LIVE" && ((response.end_date > currentTimeInSeconds))) ? true : null;
   }
 
   action(event) {
@@ -260,34 +260,34 @@ export class SessionDetailPage implements OnInit, OnDestroy {
   }
 
   async share() {
-    if(this.isMobile && navigator.share){
-      if(this.id){
-          let url = `/mentoring/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`;
-          let link = await this.utilService.getDeepLink(url);
-          this.detailData.data.mentor_name = this.detailData.data.mentor_name.trim();
-          this.detailData.data.title = this.detailData.data.title.trim();
-          let params = { link: link, subject: this.detailData.data.title, text: "Join an expert session on " + `${this.detailData.data.title} ` + "hosted by " + `${this.detailData.data.mentor_name}` + " using the link" }
-          await this.utilService.shareLink(params);
+    if (this.isMobile && navigator.share) {
+      if (this.id) {
+        let url = `/mentoring/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`;
+        let link = await this.utilService.getDeepLink(url);
+        this.detailData.data.mentor_name = this.detailData.data.mentor_name.trim();
+        this.detailData.data.title = this.detailData.data.title.trim();
+        let params = { link: link, subject: this.detailData.data.title, text: "Join an expert session on " + `${this.detailData.data.title} ` + "hosted by " + `${this.detailData.data.mentor_name}` + " using the link" }
+        await this.utilService.shareLink(params);
       } else {
-        this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id, isMentor:false}});
-      } 
+        this.router.navigate([`${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams: { sessionId: this.id, isMentor: false } });
+      }
     } else {
       await this.copyToClipBoard(window.location.href)
-      this.toast.showToast("LINK_COPIED","success")
+      this.toast.showToast("LINK_COPIED", "success")
     }
   }
 
   copyToClipBoard = async (copyData: any) => {
     await Clipboard.write({
       string: copyData
-    }).then(()=>{
-      this.toast.showToast('Copied successfully',"success");
+    }).then(() => {
+      this.toast.showToast('Copied successfully', "success");
     });
   };
 
   editSession() {
     this.activeUrl = this.router.url;
-    (this.sessionDatas?.status?.value=='LIVE') ? this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id , type: 'segment'} }) : this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id, isCreator: this.isConductor } });
+    (this.sessionDatas()?.status?.value == 'LIVE') ? this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id, type: 'segment' } }) : this.router.navigate([CommonRoutes.CREATE_SESSION], { queryParams: { id: this.id, isCreator: this.isConductor() } });
   }
 
   deleteSession() {
@@ -301,7 +301,7 @@ export class SessionDetailPage implements OnInit, OnDestroy {
       if (data) {
         let result = await this.sessionService.deleteSession(this.id);
         if (result.responseCode == "OK") {
-          this.skipWhenDelete= true;
+          this.skipWhenDelete = true;
           this.id = null;
           this.toast.showToast(result.message, "success");
           this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
@@ -312,7 +312,7 @@ export class SessionDetailPage implements OnInit, OnDestroy {
   }
 
   async onJoin() {
-    await this.sessionService.joinSession(this.sessionDatas);
+    await this.sessionService.joinSession(this.sessionDatas());
   }
 
   async onEnroll() {
@@ -326,14 +326,14 @@ export class SessionDetailPage implements OnInit, OnDestroy {
       } else {
         this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.PROFILE}`]);
       }
-    }else {
-      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams:{sessionId: this.id}});
+    } else {
+      this.router.navigate([`/${CommonRoutes.AUTH}/${CommonRoutes.LOGIN}`], { queryParams: { sessionId: this.id } });
     }
   }
 
   async onStart(data) {
     let result = await this.sessionService.startSession(data);
-    result?this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]):null;
+    result ? this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]) : null;
   }
 
   async onCancel() {
@@ -353,36 +353,36 @@ export class SessionDetailPage implements OnInit, OnDestroy {
       }
     }).catch(error => { })
   }
-  showToasts(message: any,duration : any, toastButton : any){
+  showToasts(message: any, duration: any, toastButton: any) {
     let texts;
-        this.translate.get([message]).subscribe(resp =>{
-          texts = resp;
-        });
+    this.translate.get([message]).subscribe(resp => {
+      texts = resp;
+    });
     this.snackbarRef = this.toaster.create({
-            message: texts[message],
-            // color: "danger",
-            buttons: toastButton,
-            cssClass: 'custom-toast'
-        }).then((toastData) => {
-      
+      message: texts[message],
+      // color: "danger",
+      buttons: toastButton,
+      cssClass: 'custom-toast'
+    }).then((toastData) => {
+
       toastData.present();
     });
   }
-  
+
   goToHome() {
     this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`]);
   }
 
-  async onViewList($event){
-     
+  async onViewList($event) {
+
     let modal = await this.modalCtrl.create({
-      component: MenteeListPopupComponent, 
+      component: MenteeListPopupComponent,
       cssClass: 'large-width-popover-config',
-      componentProps: { id:this.id }
+      componentProps: { id: this.id }
     });
 
     modal.onDidDismiss().then(async (dataReturned) => {
-   
+
     });
     modal.present()
   }

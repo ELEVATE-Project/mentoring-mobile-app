@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, signal, computed } from '@angular/core';
 import { JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
 import { CommonRoutes } from 'src/global.routes';
 import { ModalController, NavController, IonContent } from '@ionic/angular';
@@ -17,24 +17,24 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { CdkConnectedOverlay } from '@angular/cdk/overlay';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: 'home.page.html',
-    styleUrls: ['home.page.scss'],
-    standalone: false
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'],
+  standalone: false
 })
-export class HomePage{
+export class HomePage {
   public formData: JsonFormData;
-  user;
-  public isLoading: boolean = false;
+  user = signal<any>(null);
+  public isLoading = signal<boolean>(false);
   SESSIONS: string = CommonRoutes.SESSIONS;
   SKELETON = SKELETON;
   page = 1;
   limit = 100;
-  sessions;
+  sessions = signal<any>(null);
   sessionsCount = 0;
   isNativeApp = Capacitor.isNativePlatform()
   status = "PUBLISHED,LIVE";
-  showBecomeMentorCard = false;
+  showBecomeMentorCard = signal<boolean>(false);
   @ViewChild(IonContent) content: IonContent;
   @ViewChild(CdkConnectedOverlay) connectedOverlay: CdkConnectedOverlay;
   sessionForm: FormGroup;
@@ -47,21 +47,21 @@ export class HomePage{
   };
   public segmentButtons = [{ name: "all-sessions", label: "ALL_SESSIONS" }, { name: "created-sessions", label: "MY_MENTORING_SESSIONS" }, { name: "my-sessions", label: "ENROLLED_SESSIONS" }]
   public mentorSegmentButton = ["created-sessions"]
-  selectedSegment = "all-sessions";
-  createdSessions: any;
-  isMentor: boolean;
+  selectedSegment = signal<string>("all-sessions");
+  createdSessions = signal<any>(null);
+  isMentor = signal<boolean>(false);
   userEventSubscription: any;
   isOpen = false;
-  chips= [];
+  chips = signal<any[]>([]);
   criteriaChip: any;
   searchText: string;
-  isCreatedSessions: boolean;
-  isEnrolledSession: boolean;
+  isCreatedSessions = signal<boolean>(false);
+  isEnrolledSession = signal<boolean>(false);
 
-  allSessionsCount = 0;
-  createdSessionsCount = 0;
-  enrolledSessionsCount = 0;
-  
+  allSessionsCount = signal<number>(0);
+  createdSessionsCount = signal<number>(0);
+  enrolledSessionsCount = signal<number>(0);
+
   constructor(
     private router: Router,
     private profileService: ProfileService,
@@ -72,7 +72,7 @@ export class HomePage{
     private toast: ToastService,
     private permissionService: PermissionService,
     private utilService: UtilService,
-  private fb: FormBuilder) { 
+    private fb: FormBuilder) {
     this.sessionForm = this.fb.group({
       date: [''],
       time: [''],
@@ -80,69 +80,69 @@ export class HomePage{
       link: ['']
     });
   }
- 
 
-  
+
+
   gotToTop() {
     this.content.scrollToTop(1000);
   }
-async ionViewWillEnter() {
-    if (this.isLoading) return;
-    this.isLoading = true;
-    this.isCreatedSessions = false;
-    this.isEnrolledSession = false;
+  async ionViewWillEnter() {
+    if (this.isLoading()) return;
+    this.isLoading.set(true);
+    this.isCreatedSessions.set(false);
+    this.isEnrolledSession.set(false);
     this.page = 1;
-    this.sessions = null;
-    this.createdSessions = null;
+    this.sessions.set(null);
+    this.createdSessions.set(null);
     await this.getUser();
     let roles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
-    this.isMentor = roles?.includes('mentor')?true:false;
+    this.isMentor.set(roles?.includes('mentor') ? true : false);
     this.gotToTop();
     let isRoleRequested = await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED);;
     let isBecomeMentorTileClosed = await this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED);
-    this.showBecomeMentorCard = (isRoleRequested || this.isMentor || isBecomeMentorTileClosed) ? false : true;
-     if (!this.userEventSubscription) {
+    this.showBecomeMentorCard.set((isRoleRequested || this.isMentor() || isBecomeMentorTileClosed) ? false : true);
+    if (!this.userEventSubscription) {
       this.userEventSubscription = this.userService.userEventEmitted$.subscribe(data => {
         if (data) {
-          this.user = data;
+          this.user.set(data);
         }
       });
     }
-    if (this.user && !this.user.profile_mandatory_fields.length) {
-      await this.loadSegmentData(this.selectedSegment);
+    if (this.user() && !this.user().profile_mandatory_fields.length) {
+      await this.loadSegmentData(this.selectedSegment());
     }
-    if (this.chips.length == 0) {
+    if (this.chips().length == 0) {
       this.permissionService.getPlatformConfig().then((config) => {
-        this.chips = config.result.search_config.search.session.fields;
+        this.chips.set(config.result.search_config.search.session.fields);
       });
     }
-    
-    this.isLoading = false;
+
+    this.isLoading.set(false);
   }
 
   async loadSegmentData(segmentName: string, isLoadMore: boolean = false) {
-    this.isCreatedSessions =false;
-    this.isEnrolledSession =false;
-    switch(segmentName) {
+    this.isCreatedSessions.set(false);
+    this.isEnrolledSession.set(false);
+    switch (segmentName) {
       case 'all-sessions':
         await this.getSessions('all', isLoadMore);
         break;
       case 'created-sessions':
-        if (this.isMentor) {
+        if (this.isMentor()) {
           var obj = { page: this.page, limit: this.limit, searchText: "" };
           let data = await this.sessionService.getAllSessionsAPI(obj);
           if (!data || !data.data || data.data.length === 0) {
-          this.isCreatedSessions = true;
-          }   
-          if (isLoadMore && this.createdSessions?.data) {
-            this.createdSessions.data = [...this.createdSessions.data, ...data.data];
-          } else {
-            this.createdSessions = data;
+            this.isCreatedSessions.set(true);
           }
-          this.createdSessionsCount = data?.count || 0;
+          if (isLoadMore && this.createdSessions()?.data) {
+            this.createdSessions.update(prev => ({ ...prev, data: [...prev.data, ...data.data] }));
+          } else {
+            this.createdSessions.set(data);
+          }
+          this.createdSessionsCount.set(data?.count || 0);
         } else {
-          this.createdSessions = { data: [] };
-          this.createdSessionsCount = 0;
+          this.createdSessions.set({ data: [] });
+          this.createdSessionsCount.set(0);
         }
         break;
       case 'my-sessions':
@@ -151,7 +151,7 @@ async ionViewWillEnter() {
     }
   }
   async eventAction(event) {
-    if (this.user.about || environment['isAuthBypassed']) {
+    if (this.user()?.about || environment['isAuthBypassed']) {
       switch (event.type) {
         case 'cardSelect':
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
@@ -160,7 +160,7 @@ async ionViewWillEnter() {
         case 'joinAction':
           await this.sessionService.joinSession(event.data)
           this.page = 1;
-          await this.loadSegmentData(this.selectedSegment);
+          await this.loadSegmentData(this.selectedSegment());
           break;
 
         case 'enrollAction':
@@ -168,14 +168,14 @@ async ionViewWillEnter() {
           if (enrollResult.result) {
             this.toast.showToast(enrollResult.message, "success")
             this.page = 1;
-            await this.loadSegmentData(this.selectedSegment);
+            await this.loadSegmentData(this.selectedSegment());
           }
           break;
 
         case 'startAction':
           this.sessionService.startSession(event.data.id).then(async () => {
             this.page = 1;
-            await this.loadSegmentData(this.selectedSegment);
+            await this.loadSegmentData(this.selectedSegment());
           })
           break;
       }
@@ -189,7 +189,7 @@ async ionViewWillEnter() {
 
   search(event: string) {
     this.isOpen = false;
-    if(event && event.length >= 3){
+    if (event && event.length >= 3) {
       this.searchText = event ? event : "";
       this.utilService.subscribeSearchText(this.searchText);
       this.utilService.subscribeCriteriaChip(JSON.stringify(this.criteriaChip))
@@ -199,39 +199,39 @@ async ionViewWillEnter() {
           chip: this.criteriaChip?.name
         }
       });
-    }else {
-      this.toast.showToast("ENTER_MIN_CHARACTER","danger");
+    } else {
+      this.toast.showToast("ENTER_MIN_CHARACTER", "danger");
     }
   }
   async getUser() {
     let data = await this.profileService.getProfileDetailsFromAPI();
-    this.user = data;
-    if (!this.user?.terms_and_conditions) {
+    this.user.set(data);
+    if (!this.user()?.terms_and_conditions) {
       // this.openModal();
     }
   }
 
   async getSessions(scope: string = 'all', isLoadMore: boolean = false) {
-    var obj = {page: this.page, limit: this.limit, scope: scope};
+    var obj = { page: this.page, limit: this.limit, scope: scope };
     let data = await this.sessionService.getSessions(obj);
-    
+
     if (scope === 'all') {
-      if (isLoadMore && this.sessions?.all_sessions) {
-        this.sessions.all_sessions = [...this.sessions.all_sessions, ...(data.result.all_sessions || [])];
+      if (isLoadMore && this.sessions()?.all_sessions) {
+        this.sessions.update(prev => ({ ...prev, all_sessions: [...prev.all_sessions, ...(data.result.all_sessions || [])] }));
       } else {
-        this.sessions = data.result;
+        this.sessions.set(data.result);
       }
-      this.allSessionsCount = data.result.allSessions_count || 0;
+      this.allSessionsCount.set(data.result.allSessions_count || 0);
     } else if (scope === 'my') {
-      if (isLoadMore && this.sessions?.my_sessions) {
-        this.sessions.my_sessions = [...this.sessions.my_sessions, ...(data.result.my_sessions || [])];
+      if (isLoadMore && this.sessions()?.my_sessions) {
+        this.sessions.update(prev => ({ ...prev, my_sessions: [...prev.my_sessions, ...(data.result.my_sessions || [])] }));
       } else {
-        this.sessions = data.result;
+        this.sessions.set(data.result);
       }
-      if (!this.sessions.my_sessions || this.sessions.my_sessions.length === 0) {
-      this.isEnrolledSession = true;
-    }
-      this.enrolledSessionsCount = data.result.my_sessions_count || 0;
+      if (!this.sessions()?.my_sessions || this.sessions()?.my_sessions.length === 0) {
+        this.isEnrolledSession.set(true);
+      }
+      this.enrolledSessionsCount.set(data.result.my_sessions_count || 0);
     }
   }
 
@@ -243,54 +243,54 @@ async ionViewWillEnter() {
     return await modal.present();
   }
   async segmentChanged(event) {
-    this.selectedSegment = event.name;
+    this.selectedSegment.set(event.name);
     this.page = 1;
-    await this.loadSegmentData(this.selectedSegment);
+    await this.loadSegmentData(this.selectedSegment());
   }
   async createSession() {
-    if (this.user?.about != null || environment['isAuthBypassed']) {
-      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`], { queryParams: { source: 'home' } }); 
+    if (this.user()?.about != null || environment['isAuthBypassed']) {
+      this.router.navigate([`${CommonRoutes.CREATE_SESSION}`], { queryParams: { source: 'home' } });
     } else {
       this.profileService.upDateProfilePopup()
     }
   }
 
   async becomeMentor() {
-    if(this.user?.about != null || environment['isAuthBypassed']){
-      this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);   
-    } else{
+    if (this.user()?.about != null || environment['isAuthBypassed']) {
+      this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);
+    } else {
       this.profileService.upDateProfilePopup()
     }
   }
 
   async closeCard() {
-    this.showBecomeMentorCard = false;
+    this.showBecomeMentorCard.set(false);
     await this.localStorage.setLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED, true)
   }
 
   async loadMore(event) {
     this.page++;
-    await this.loadSegmentData(this.selectedSegment, true);
+    await this.loadSegmentData(this.selectedSegment(), true);
     event.target.complete();
   }
 
-  get isInfiniteScrollDisabled(): boolean {
-    switch(this.selectedSegment) {
+  isInfiniteScrollDisabled = computed(() => {
+    switch (this.selectedSegment()) {
       case 'all-sessions':
-        const allSessionsLength = this.sessions?.all_sessions?.length || 0;
-        return allSessionsLength >= this.allSessionsCount || allSessionsLength === 0;
-      
+        const allSessionsLength = this.sessions()?.all_sessions?.length || 0;
+        return allSessionsLength >= this.allSessionsCount() || allSessionsLength === 0;
+
       case 'created-sessions':
-        const createdSessionsLength = this.createdSessions?.data?.length || 0;
-        return createdSessionsLength >= this.createdSessionsCount || createdSessionsLength === 0;
-      
+        const createdSessionsLength = this.createdSessions()?.data?.length || 0;
+        return createdSessionsLength >= this.createdSessionsCount() || createdSessionsLength === 0;
+
       case 'my-sessions':
-        const enrolledSessionsLength = this.sessions?.my_sessions?.length || 0;
-        return enrolledSessionsLength >= this.enrolledSessionsCount || enrolledSessionsLength === 0;
+        const enrolledSessionsLength = this.sessions()?.my_sessions?.length || 0;
+        return enrolledSessionsLength >= this.enrolledSessionsCount() || enrolledSessionsLength === 0;
       default:
         return true;
     }
-  }
+  });
 
   ngOnDestroy(): void {
     if (this.userEventSubscription) {
@@ -306,15 +306,15 @@ async ionViewWillEnter() {
     }
   }
 
-  ionViewWillLeave(){
+  ionViewWillLeave() {
     this.isOpen = false;
-    this.isLoading = false;
+    this.isLoading.set(false);
     if (this.connectedOverlay && this.connectedOverlay.overlayRef) {
-    this.connectedOverlay.overlayRef.detach();
+      this.connectedOverlay.overlayRef.detach();
     }
   }
 
-  ionViewDidLeave(){
+  ionViewDidLeave() {
     this.criteriaChip = '';
     this.searchText = '';
     this.page = 1;

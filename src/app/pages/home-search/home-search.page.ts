@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { Location } from '@angular/common';
@@ -19,10 +19,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
 
 @Component({
-    selector: 'app-home-search',
-    templateUrl: './home-search.page.html',
-    styleUrls: ['./home-search.page.scss'],
-    standalone: false
+  selector: 'app-home-search',
+  templateUrl: './home-search.page.html',
+  styleUrls: ['./home-search.page.scss'],
+  standalone: false
 })
 export class HomeSearchPage implements OnInit {
 
@@ -36,30 +36,30 @@ export class HomeSearchPage implements OnInit {
     headerColor: 'primary',
     // label:'MENU'
   };
-  searchText:string;
-  results=[];
-  type:any;
+  searchText: string;
+  results = signal<any[]>([]);
+  type: any;
   filterData: any;
   filteredDatas = []
-  filterIcon:boolean;
+  filterIcon = signal<boolean>(false);
   page = 1;
-  setPaginatorToFirstpage:any = false;
-  totalCount: any;
+  setPaginatorToFirstpage: any = false;
+  totalCount = signal<any>(null);
   noDataMessage: any;
   createdSessions: any;
   user: any;
   criteriaChip: any;
-  chips =[]
+  chips = signal<any[]>([]);
   criteriaChipName: any;
-  overlayChips: any;
+  overlayChips = signal<any>(null);
   isOpen = false;
   urlQueryData: string;
-  pageSize: any =5;
+  pageSize: any = 5;
   isMentor: boolean;
   searchTextSubscription: Subscription;
   criteriaChipSubscription: Subscription;
   showSelectedCriteria: any;
-searchAndCriterias: any;
+  searchAndCriterias: any;
 
   constructor(private modalCtrl: ModalController, private router: Router, private toast: ToastService,
     private sessionService: SessionService,
@@ -72,7 +72,7 @@ searchAndCriterias: any;
     private route: ActivatedRoute,
   ) { }
 
-   async ngOnInit() {
+  async ngOnInit() {
     this.searchAndCriterias = {
       headerData: {
         searchText: '',
@@ -95,14 +95,14 @@ searchAndCriterias: any;
             criterias: this.criteriaChip
           },
         };
-      },500);
-      
+      }, 500);
+
     });
     this.user = this.localStorage.getLocalData(localKeys.USER_DETAILS)
     let roles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
-    this.isMentor = roles.includes('mentor')?true:false;
-    this.permissionService.getPlatformConfig().then((config)=>{
-      this.overlayChips = config?.result?.search_config?.search?.session?.fields;
+    this.isMentor = roles.includes('mentor') ? true : false;
+    this.permissionService.getPlatformConfig().then((config) => {
+      this.overlayChips.set(config?.result?.search_config?.search?.session?.fields);
     })
 
   }
@@ -124,10 +124,10 @@ searchAndCriterias: any;
     }
 
     const config = await this.permissionService.getPlatformConfig();
-    this.overlayChips = config?.result?.search_config?.search?.session?.fields;
+    this.overlayChips.set(config?.result?.search_config?.search?.session?.fields);
 
     if (chip) {
-      const matchedField = this.overlayChips?.find(d => d.name === chip);
+      const matchedField = this.overlayChips()?.find(d => d.name === chip);
       if (matchedField && search) {
         this.searchAndCriterias = {
           ...this.searchAndCriterias,
@@ -149,7 +149,7 @@ searchAndCriterias: any;
 
     this.fetchSessionList();
 
-    const obj = {filterType: 'session', org: false};
+    const obj = { filterType: 'session', org: false };
     let data = await this.formService.filterList(obj);
     this.filterData = await this.utilService.transformToFilterData(data, obj);
   }
@@ -164,14 +164,14 @@ searchAndCriterias: any;
     this.isOpen = false;
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { 
-        search: event.searchText, 
-        chip: event?.criterias?.name 
+      queryParams: {
+        search: event.searchText,
+        chip: event?.criterias?.name
       },
       queryParamsHandling: 'merge',
     });
     this.fetchSessionList()
-   
+
   }
 
   eventHandler(event: string) {
@@ -200,14 +200,14 @@ searchAndCriterias: any;
 
     modal.onDidDismiss().then(async (dataReturned) => {
       this.filteredDatas = []
-        if(dataReturned?.data?.role === 'closed'){
+      if (dataReturned?.data?.role === 'closed') {
         this.filterData = dataReturned?.data?.data;
         return;
       }
-        if(Object.keys(dataReturned?.data).length === 0){
-            this.chips = [];
-            this.filteredDatas = [];
-            this.urlQueryData = null;
+      if (Object.keys(dataReturned?.data).length === 0) {
+        this.chips.set([]);
+        this.filteredDatas = [];
+        this.urlQueryData = null;
       }
       if (dataReturned.data && dataReturned.data.data) {
         if (dataReturned.data.data.selectedFilters) {
@@ -226,23 +226,23 @@ searchAndCriterias: any;
   }
 
   async fetchSessionList() {
-    var obj={page: this.page, limit: this.pageSize, type: this.type, searchText : this.searchText, selectedChip : this.criteriaChip?.name, filterData : this.urlQueryData}
+    var obj = { page: this.page, limit: this.pageSize, type: this.type, searchText: this.searchText, selectedChip: this.criteriaChip?.name, filterData: this.urlQueryData }
     var response = await this.sessionService.getSessionsList(obj);
-    if(response.result.data.length){
-      this.filterIcon = true;
+    if (response.result.data.length) {
+      this.filterIcon.set(true);
     } else {
-      if(Object.keys(this.filteredDatas || {}).length === 0 && !this.criteriaChip?.name) {
-        this.filterIcon = false;
+      if (Object.keys(this.filteredDatas || {}).length === 0 && !this.criteriaChip?.name) {
+        this.filterIcon.set(false);
       }
     }
-    this.results = response.result.data;
-    this.totalCount = response.result.count;
+    this.results.set(response.result.data);
+    this.totalCount.set(response.result.count);
     this.noDataMessage = obj.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
   }
 
-  onPageChange(event){
+  onPageChange(event) {
     this.page = event.page,
-    this.pageSize = event.pageSize;
+      this.pageSize = event.pageSize;
     this.fetchSessionList()
   }
 
@@ -270,7 +270,7 @@ searchAndCriterias: any;
         case 'startAction':
           this.sessionService.startSession(event.data.id).then(async () => {
             var obj = { page: this.page, limit: this.pageSize, searchText: "" };
-            if(this.isMentor){
+            if (this.isMentor) {
               this.createdSessions = await this.sessionService.getAllSessionsAPI(obj);
             }
           })
@@ -281,15 +281,15 @@ searchAndCriterias: any;
     }
   }
 
-  locationBack(){
+  locationBack() {
     this.location.back()
   }
 
   extractLabels(data) {
-    this.chips = [];
+    this.chips.set([]);
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
-        this.chips.push(...data[key]);
+        this.chips.update(prev => [...prev, ...data[key]]);
       }
     }
   }
@@ -303,7 +303,7 @@ searchAndCriterias: any;
     this.urlQueryData = queryString;
   }
 
-  removeFilteredData(chip){
+  removeFilteredData(chip) {
     this.filterData.map((filter) => {
       filter.options.map((option) => {
         if (option.value === chip) {
@@ -315,40 +315,44 @@ searchAndCriterias: any;
     for (let key in this.filteredDatas) {
       if (this.filteredDatas.hasOwnProperty(key)) {
 
-          let values = this.filteredDatas[key].split(',');
-          let chipIndex = values.indexOf(chip);
+        let values = this.filteredDatas[key].split(',');
+        let chipIndex = values.indexOf(chip);
 
-          if (chipIndex > -1) {
-              values.splice(chipIndex, 1);
+        if (chipIndex > -1) {
+          values.splice(chipIndex, 1);
 
-              let newValue = values.join(',');
+          let newValue = values.join(',');
 
-              if (newValue === '') {
-                delete this.filteredDatas[key];
-            } else {
-                this.filteredDatas[key] = newValue;
-            }
+          if (newValue === '') {
+            delete this.filteredDatas[key];
+          } else {
+            this.filteredDatas[key] = newValue;
           }
+        }
       }
     }
   }
   removeChip(event) {
-    this.chips.splice(event.index, 1);
+    this.chips.update(prev => {
+      const updated = [...prev];
+      updated.splice(event.index, 1);
+      return updated;
+    });
     this.removeFilteredData(event.chipValue);
     this.getUrlQueryData();
     this.fetchSessionList()
   }
 
-  ionViewDidLeave(){
+  ionViewDidLeave() {
     this.showSelectedCriteria = "";
     this.searchText = "";
     this.criteriaChip = "";
-    this.chips = [];
+    this.chips.set([]);
     this.utilService.subscribeSearchText('');
     this.utilService.subscribeCriteriaChip('');
     this.urlQueryData = null;
   }
-  
+
   ngOnDestroy() {
     this.searchTextSubscription.unsubscribe();
     this.criteriaChipSubscription.unsubscribe();

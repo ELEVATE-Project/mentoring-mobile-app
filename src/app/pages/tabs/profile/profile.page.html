@@ -3,10 +3,11 @@
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <div *ngIf="showProfileDetails">
+    @if (showProfileDetails) {
         <app-generic-profile-header [headerData]='formData.data'[buttonConfig]="buttonConfig" [isMentor]='isMentor' [showRole]="true"></app-generic-profile-header>
-        <div *ngIf="showProfileDetails; else elseBlock">
-            <ion-card *ngIf="isMentor" class="card-wrapper">
+        @if (showProfileDetails) {
+            @if (isMentor) {
+            <ion-card class="card-wrapper">
                 <ion-card-content class="padding-top-10">
                     <ion-row>
                         <ion-col class="d-flex flex-justify-center card-header-config">{{"SESSIONS_CONDUCTED"|translate}}</ion-col>
@@ -18,12 +19,12 @@
                     </ion-row>
                 </ion-card-content>
             </ion-card>
+            }
             <div class="details-wrapper">
                 <app-generic-details [sessionData]='formData' [isMentor]='isMentor'></app-generic-details>
             </div>
-        </div>
-        <ng-template #elseBlock>
+        } @else {
             <p class="no-details-message">{{ "NO_USER_DETAILS_FOUND" | translate }}</p>
-        </ng-template>
-    </div>
+        }
+    }
 </ion-content>

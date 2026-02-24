@@ -179,6 +179,15 @@ export class EditProfilePage implements OnInit, isDeactivatable {
             }
         });
         this.form1.myForm.markAsPristine();
+        if(!form['about']){
+            form['about'] = 'NA';
+          }
+          if(!form['education_qualification']){
+            form['education_qualification'] = 'NA';
+          }
+          if(!form['experience']){
+            form['experience'] = 0;
+          } 
         this.updated = await this.profileService.profileUpdate(form);
         this.userDetails.profile_mandatory_fields =[];
         if(this.updated && this.redirectUrl){ 
@@ -229,8 +238,8 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     return this.upload(file, data.result).subscribe()
   }
 
-  updateEntityArray(arr1: string[], arr2: string[]) {
-    arr1.forEach(value => {
+  updateEntityArray(arr1: string[] = [], arr2: string[] = []) {
+    (arr1 || []).forEach(value => {
       if (!arr2.includes(value)) {
         arr2.push(value);
       }
