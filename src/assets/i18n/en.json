@@ -424,12 +424,9 @@
     "SCROLL_TO_EXPLORE_CHART":"Scroll to view session-wise data.",
     "CONNECTION_DELETE":"The connection has been deleted",
     "YOU_CANT_REACH_USER":"You can no longer reach this user.",
-    "BLOCKED_USERS":"Blocked Users",
-    "CONFIRM_UNBLOCK_HEADER": "Are you sure you want to unblock?",
-    "CONFIRM_UNBLOCK_MESSAGE": "You can continue conversations with {{name}} once they send you a connection request again.",
-    "UNBLOCK": "Unblock",
-    "UNBLOCK_TOAST_MESSAGE" : "You have unblocked successfully!",
-    "CONFIRM_BLOCK_HEADER": "Are you sure you want to block {{name}}?",
-    "CONFIRM_BLOCK_MESSAGE":"Blocking {{name}} will remove them from your connection and prevent them from messaging you",
-    "BLOCK_TOAST_MESSAGE" :"You have blocked {{name}} successfully!"
+    "SELECT_ALL" : "Select all",
+    "DESELECT_ALL" : "Deselect all",
+    "SELECTED" : "Selected",
+    "SELECT_PAGE" : "Select page",
+    "DESELECT_PAGE" : "Deselect page"
 }
