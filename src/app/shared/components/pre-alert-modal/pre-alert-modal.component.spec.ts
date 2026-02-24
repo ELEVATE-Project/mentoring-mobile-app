@@ -6,18 +6,10 @@ import { PreAlertModalComponent } from './pre-alert-modal.component';
 import { ModalController, ActionSheetController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService, UtilService } from 'src/app/core/services';
-import { CUSTOM_ELEMENTS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
-// --- Mock pipe to stub ngx-translate pipe usage in template ---
-@Pipe({ name: 'translate' })
-class MockTranslatePipe implements PipeTransform {
-  transform(value: any, ...args: any[]) {
-    // return key directly or a mock string; keeps template stable in unit tests
-    return value ?? 'mock-translation';
-  }
-}
-// --- End mock pipe ---
 
 describe('PreAlertModalComponent', () => {
   let component: PreAlertModalComponent;
@@ -34,14 +26,22 @@ describe('PreAlertModalComponent', () => {
     actionSheetControllerSpy = jasmine.createSpyObj('ActionSheetController', ['create']);
 
     // Keep translate spy in case the component calls TranslateService directly
-    translateServiceSpy = jasmine.createSpyObj('TranslateService', ['instant', 'get']);
+    translateServiceSpy = jasmine.createSpyObj(
+      'TranslateService',
+      ['instant', 'get'],
+      {
+        onLangChange: of({}),
+        onTranslationChange: of({}),
+        onDefaultLangChange: of({})
+      }
+    );
     translateServiceSpy.get.and.returnValue(of('mock translation'));
 
     toastServiceSpy = jasmine.createSpyObj('ToastService', ['presentToast']);
 
     TestBed.configureTestingModule({
-      // No TranslateModule.forRoot() — we use MockTranslatePipe to satisfy template pipe usage
-      declarations: [PreAlertModalComponent, MockTranslatePipe],
+      imports: [TranslateModule.forRoot()],
+      declarations: [PreAlertModalComponent],
       providers: [
         { provide: ModalController, useValue: modalControllerSpy },
         { provide: UtilService, useValue: utilServiceSpy },
@@ -57,8 +57,6 @@ describe('PreAlertModalComponent', () => {
 
     // minimal input used by template to prevent undefined errors
     component.data = { name: 'TestType' };
-
-    fixture.detectChanges();
   }));
 
   it('should create', () => {
@@ -68,45 +66,45 @@ describe('PreAlertModalComponent', () => {
   describe('onLinkInput', () => {
     it('should reset error if input is empty', () => {
       component.link = '   ';
-      component.showLinkError = true;
+      component.showLinkError.set(true);
 
       component.onLinkInput();
 
-      expect(component.showLinkError).toBeFalse();
+      expect(component.showLinkError()).toBeFalse();
     });
 
     it('should set error to false for valid https url', () => {
       component.link = 'https://google.com';
       component.onLinkInput();
-      expect(component.showLinkError).toBeFalse();
+      expect(component.showLinkError()).toBeFalse();
     });
 
     it('should set error to false for valid http url', () => {
       component.link = 'http://example.com/path?query=1';
       component.onLinkInput();
-      expect(component.showLinkError).toBeFalse();
+      expect(component.showLinkError()).toBeFalse();
     });
 
     it('should set error to true for invalid url (missing protocol)', () => {
       component.link = 'www.google.com';
       component.onLinkInput();
-      expect(component.showLinkError).toBeTrue();
+      expect(component.showLinkError()).toBeTrue();
     });
 
     it('should set error to true for invalid url string', () => {
       component.link = 'not-a-url';
       component.onLinkInput();
-      expect(component.showLinkError).toBeTrue();
+      expect(component.showLinkError()).toBeTrue();
     });
   });
 
   describe('dismissModal', () => {
     it('should reset error and dismiss modal', () => {
-      component.showLinkError = true;
+      component.showLinkError.set(true);
 
       component.dismissModal();
 
-      expect(component.showLinkError).toBeFalse();
+      expect(component.showLinkError()).toBeFalse();
       expect(modalControllerSpy.dismiss).toHaveBeenCalled();
     });
   });
@@ -115,7 +113,7 @@ describe('PreAlertModalComponent', () => {
     it('should dismiss with FILE object when type is "file"', () => {
       component.type = 'file';
       const mockFile = new File([''], 'test-file.png');
-      component.uploadedFile = mockFile;
+      component.uploadedFile.set(mockFile);
       component.name = 'Custom Name';
 
       component.saveLink();
@@ -132,7 +130,7 @@ describe('PreAlertModalComponent', () => {
     it('should use filename if name input is empty when saving file', () => {
       component.type = 'file';
       const mockFile = new File([''], 'original.png');
-      component.uploadedFile = mockFile;
+      component.uploadedFile.set(mockFile);
       component.name = '';
 
       component.saveLink();
@@ -192,7 +190,7 @@ describe('PreAlertModalComponent', () => {
       tick(); // resolve promise
 
       expect(utilServiceSpy.uploadFile).toHaveBeenCalledWith(['pdf'], 5, 'Error');
-      expect(component.uploadedFile).toBe(mockFile);
+      expect(component.uploadedFile()).toBe(mockFile);
     }));
 
     it('should log error if upload fails', fakeAsync(() => {
@@ -203,15 +201,15 @@ describe('PreAlertModalComponent', () => {
       tick();
 
       expect(console.error).toHaveBeenCalledWith('File upload failed:', 'Upload Failed');
-      expect(component.uploadedFile).toBeUndefined();
+      expect(component.uploadedFile()).toBeNull();
     }));
   });
 
   describe('removeFile', () => {
     it('should set uploadedFile to null', () => {
-      component.uploadedFile = new File([''], 'test.png');
+      component.uploadedFile.set(new File([''], 'test.png'));
       component.removeFile();
-      expect(component.uploadedFile).toBeNull();
+      expect(component.uploadedFile()).toBeNull();
     });
   });
 

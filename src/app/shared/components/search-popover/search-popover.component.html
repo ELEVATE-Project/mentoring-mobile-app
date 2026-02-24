@@ -1,63 +1,84 @@
- <ion-toolbar *ngIf="data.isMobile" class="d-flex gap-2" color="{{headerConfig?.headerColor}}">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="" text="" (click)="closePopover()">
-      </ion-back-button>
-    </ion-buttons>
-    
+@if (data.isMobile) {
+<ion-toolbar class="d-flex gap-2" color="{{headerConfig?.headerColor}}">
+  <ion-buttons slot="start">
+    <ion-back-button defaultHref="" text="" (click)="closePopover()">
+    </ion-back-button>
+  </ion-buttons>
 
+  <div class="text-lg font-semibold">{{ headerConfig?.label | translate }}</div>
+</ion-toolbar>
+}
 
-    <div class="text-lg font-semibold">{{ headerConfig?.label | translate }}</div>
-    </ion-toolbar>
-    
-<ion-toolbar position="top" *ngIf="!data.isMobile || (data.isMobile && showPaginator)">
+@if (!data.isMobile || (data.isMobile && showPaginator())) {
+<ion-toolbar position="top">
   <div class="container">
-    <div class="search-col" [class.p-1]="data.isMobile" *ngIf="showPaginator">
-      <app-searchbar 
-        (outputData)="onSearch($event)" 
-        [placeholder]="data.control.meta.searchLabel" 
+    @if (showPaginator()) {
+    <div class="search-col" [class.p-1]="data.isMobile">
+      <app-searchbar (outputData)="onSearch($event)" [placeholder]="data.control.meta.searchLabel"
         (clearText)="onClearSearch($event)">
       </app-searchbar>
     </div>
-    <div class="close-col" *ngIf="!data.isMobile">
+    }
+    @if (!data.isMobile) {
+    <div class="close-col">
       <ion-icon class="close-button" name="close-outline" (click)="closePopover()"></ion-icon>
     </div>
+    }
   </div>
 </ion-toolbar>
-<ion-grid class="ion-no-margin" *ngIf="!data.isMobile;">
+}
+@if (!data.isMobile) {
+<ion-grid class="ion-no-margin">
   <ion-row>
-    <ion-col class="col-width-25" *ngIf="data.showFilter && tableData">
+    @if (data.showFilter && tableData()) {
+    <ion-col class="col-width-25">
       <div class="scrollable-filter">
-        <app-filter-tree [enableFilterHeader]="true" [enableFilterLabel]="true" *ngIf="filterData" [filterData]="filterData" [eventData]="data"
-        (filtersChanged)="filtersChanged($event)"></app-filter-tree>
+        @if (filterData()) {
+        <app-filter-tree [enableFilterHeader]="true" [enableFilterLabel]="true" [filterData]="filterData()"
+          [eventData]="data" (filtersChanged)="filtersChanged($event)"></app-filter-tree>
+        }
       </div>
     </ion-col>
-    <ion-col class="ion-text-end" *ngIf="tableData">
+    }
+    @if (tableData()) {
+    <ion-col class="ion-text-end">
       <div class="scrollable-table ">
-      <app-generic-table [headingText]="this.data.control.meta.url" [columnData]="columnData" [tableData]="tableData"
-        [totalCount]="count" (onClickEvent)='onButtonCLick($event)' (paginatorChanged)="onPaginatorChange($event)" (onSorting)="onSorting($event)" 
-        [noDataMessage]="noDataMessage" [setPaginatorToFirstpage]="setPaginatorToFirstpage" [showPaginator]="showPaginator" (onSelectAllChange)="onSelectAll($event)" [maxCount]="maxCount" [selectedCount]="selectedList.length" (onSelectAllXChange)="onSelectAllX($event)" [selectedList]="selectedList" [disabledCheckboxId]="disabledCheckboxId" [showSelectAll]="showSelectAll" [showCheckbox]="showCheckbox"></app-generic-table>
+      <app-generic-table [headingText]="this.data.control.meta.url" [columnData]="columnData" [tableData]="tableData()"
+        [totalCount]="count()" (onClickEvent)='onButtonCLick($event)' (paginatorChanged)="onPaginatorChange($event)" (onSorting)="onSorting($event)" 
+        [noDataMessage]="noDataMessage()" [setPaginatorToFirstpage]="setPaginatorToFirstpage()" [showPaginator]="showPaginator()" (onSelectAllChange)="onSelectAll($event)" [maxCount]="maxCount" [selectedCount]="selectedList.length" (onSelectAllXChange)="onSelectAllX($event)" [selectedList]="selectedList" [disabledCheckboxId]="disabledCheckboxId" [showSelectAll]="showSelectAll" [showCheckbox]="showCheckbox"></app-generic-table>
       </div>
     </ion-col>
+    }
   </ion-row>
 </ion-grid>
-<ion-content *ngIf="data.isMobile;" scrollEvents="true" class="p-1">
-    <div *ngIf="tableData">
-      <app-chips-and-filter *ngIf="showPaginator"   [selectedFilters]="chips" (removeFilterChip)="removeChip($event)" (filterClick)="onClickFilter()"  [isFilterEnable]="true" [selectedCount]="selectedList.length" [totalCount]="count" [tableData]="tableData" [maxCount]="maxCount" (onSelectAllChange)="onSelectAll($event)" (onSelectAllXChange)="onSelectAllX($event)" [showSelectAll]="showSelectAll"></app-chips-and-filter>
-      <ion-grid >
+}
+@if (data.isMobile) {
+<ion-content scrollEvents="true" class="p-1">
+  @if (tableData()) {
+    <div>
+      @if (showPaginator()) {
+      <app-chips-and-filter [selectedFilters]="chips()" (removeFilterChip)="removeChip($event)" (filterClick)="onClickFilter()" [isFilterEnable]="true" [selectedCount]="selectedList.length" [totalCount]="count()" [tableData]="tableData()" [maxCount]="maxCount" (onSelectAllChange)="onSelectAll($event)" (onSelectAllXChange)="onSelectAllX($event)" [showSelectAll]="showSelectAll"></app-chips-and-filter>
+      }
+      <ion-grid>
         <ion-row class="d-flex ">
-          <ion-col *ngFor="let value of tableData" padding size-xs="12" size-sm="12"  align-self-stretch>
-            <app-generic-card [data]="value" [disableButton]="value?.action?.[0].isDisabled" (onClickEvent)="onButtonCLick($event)" [buttonConfig]="value?.action  "[cardConfig]="mentorForm" [disableNavigation]="disableNavigation" [disabledCheckboxId]="disabledCheckboxId"  [selectedList]="selectedList"  [maxCount]="maxCount" [showSelectAll]="showSelectAll" [showCheckbox]="showCheckbox"  [selectedCount]="selectedList.length"></app-generic-card>
+          @for (value of tableData(); track $index) {
+          <ion-col padding size-xs="12" size-sm="12" align-self-stretch>
+            <app-generic-card [data]="value" [disableButton]="value?.action?.[0].isDisabled" (onClickEvent)="onButtonCLick($event)" [buttonConfig]="value?.action  "[cardConfig]="mentorForm" [disableNavigation]="disableNavigation" [disabledCheckboxId]="disabledCheckboxId" [selectedList]="selectedList" [maxCount]="maxCount" [showSelectAll]="showSelectAll" [showCheckbox]="showCheckbox" [selectedCount]="selectedList.length"></app-generic-card>
           </ion-col>
+          }
         </ion-row>
       </ion-grid>
     </div>
-      <div *ngIf="!tableData?.length">
-        <app-no-data-found [messageDescription]="noDataMessage">
-        </app-no-data-found>
-      </div>
-        <ion-infinite-scroll #infinitescroll [disabled]="disableInfiniteScroll || !showPaginator" (ionInfinite)="loadMore($event)">
+  }
+  @if (!tableData()?.length) {
+    <div>
+      <app-no-data-found [messageDescription]="noDataMessage()">
+      </app-no-data-found>
+    </div>
+  }
+  <ion-infinite-scroll #infinitescroll [disabled]="disableInfiniteScroll() || !showPaginator()" (ionInfinite)="loadMore($event)">
     <ion-infinite-scroll-content loadingSpinner="bubbles">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
-    
+}

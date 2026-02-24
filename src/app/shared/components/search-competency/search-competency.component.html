@@ -8,24 +8,34 @@
 </ion-toolbar>
 
 <ion-content>
-  <div *ngIf="!data?.viewListMode" class="search-col d-flex flex-justify-center ion-padding-top ion-margin-top ion-margin-start">
-    <ion-searchbar *ngIf="data.showSearch" class="search-style"  [(ngModel)]="searchText"
-      (ionChange)="onSearch()"  (ionClear)="clearText()" placeholder="Search {{data.control.label}}"></ion-searchbar>
+  @if (!data?.viewListMode) {
+  <div class="search-col d-flex flex-justify-center ion-padding-top ion-margin-top ion-margin-start">
+    @if (data.showSearch) {
+    <ion-searchbar class="search-style" [(ngModel)]="searchText"
+      (ionChange)="onSearch()" (ionClear)="clearText()" placeholder="Search {{data.control.label}}"></ion-searchbar>
+    }
     <h2 class="ion-padding-start label-button" (click)="clearAll()">{{ "CLEAR_ALL" | translate }}</h2>
   </div>
-  <div *ngIf="entities && !data?.viewListMode" class="competency-list-wrapper">
-    <ion-item *ngFor="let option of entities.data" lines="none">
-      <ion-label>{{ option?.label }}</ion-label>
-      <ion-checkbox slot="start" [checked]="isOptionSelected(option)" (ionChange)="onCheckboxChange($event, option)"></ion-checkbox>
+  }
+  @if (entities() && !data?.viewListMode) {
+  <div class="competency-list-wrapper">
+    @for (option of entities().data; track $index) {
+    <ion-item lines="none">
+      <ion-checkbox slot="start" labelPlacement="end" [checked]="isOptionSelected(option)" (ionChange)="onCheckboxChange($event, option)">{{ option?.label }}</ion-checkbox>
     </ion-item>
+    }
   </div>
+  }
 
-  <div *ngIf="data?.viewListMode" class="competency-list-wrapper">
-    <ion-item *ngFor="let data of data.selectedData" lines="none">
-      <ion-label>{{ data?.label }}</ion-label>
-      <ion-checkbox checked="true" (ionChange)="onCheckboxChange($event, data)" slot="start"></ion-checkbox>
+  @if (data?.viewListMode) {
+  <div class="competency-list-wrapper">
+    @for (item of data.selectedData; track $index) {
+    <ion-item lines="none">
+      <ion-checkbox slot="start" labelPlacement="end" checked="true" (ionChange)="onCheckboxChange($event, item)">{{ item?.label }}</ion-checkbox>
     </ion-item>
+    }
   </div>
+  }
   <ion-infinite-scroll (ionInfinite)="loadMore($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>

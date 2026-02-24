@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -50,7 +50,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     private translateService: TranslateService,
     private toast:ToastService,
     private httpService : HttpService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private cdr: ChangeDetectorRef
   ) { }
 
   onChange = (quantity) => {};
@@ -178,6 +179,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
             this.selectedChips.push(obj.value)
             this.onChange(this.selectedData.map(data => data.value));
             this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
+            this.cdr.detectChanges();
           }
       }
       
@@ -203,6 +205,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     modal.onDidDismiss().then((result) => {
       if (result.data && result.data.success) {
         data.value.push(result.data.data);
+        this.cdr.detectChanges();
       }
     });
   

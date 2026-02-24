@@ -2,7 +2,7 @@
   <div class="custom-pre-toolbar">
     <ion-title>
       {{
-        heading | translate
+      heading | translate
       }}
     </ion-title>
     <ion-buttons slot="end">
@@ -14,58 +14,47 @@
 
   <ion-content class="custom-content">
     <ion-item class="custom-input">
-      <ion-label position="stacked">  {{"NAME" | translate}}</ion-label>
-      <ion-input
-        [(ngModel)]="name"
-        [placeholder]="'ADD_NAME' | translate"
-        maxlength="50"
-      >
+      <ion-label position="stacked"> {{"NAME" | translate}}</ion-label>
+      <ion-input [(ngModel)]="name" [placeholder]="'ADD_NAME' | translate" maxlength="50">
       </ion-input>
     </ion-item>
 
-    <ion-item *ngIf="type === 'link'" class="custom-input">
-      <ion-label position="stacked">  {{"LINK" | translate}}</ion-label>
-      <ion-input
-        [(ngModel)]="link"
-        [placeholder]="'ADD_URL' | translate"
-        maxlength="50"
-        (ionInput)="onLinkInput()"
-        [debounce]="500"
-      >
+    @if (type === 'link') {
+    <ion-item class="custom-input">
+      <ion-label position="stacked"> {{"LINK" | translate}}</ion-label>
+      <ion-input [(ngModel)]="link" [placeholder]="'ADD_URL' | translate" maxlength="50" (ionInput)="onLinkInput()"
+        [debounce]="500">
       </ion-input>
-      <ion-text color="danger" *ngIf="showLinkError">
+      @if (showLinkError()) {
+      <ion-text color="danger">
         {{ "INVALID_LINK" | translate }}
       </ion-text>
+      }
     </ion-item>
+    }
     <div class="pre-button-container">
-      <ion-button
-      fill="outline"
-      shape="round"
-      *ngIf="type === 'file' && !uploadedFile" 
-      (click)="openFilePicker()"
-        >
-      <ion-icon name="add-circle-outline" style="margin-right: 8px;"></ion-icon>
-      {{"FILE_UPLOAD" | translate}}
-        </ion-button>
-    @if (uploadedFile) {
-      <ng-container >
-        <ion-chip  class="color-red">
+      @if (type === 'file' && !uploadedFile()) {
+      <ion-button fill="outline" shape="round" (click)="openFilePicker()">
+        <ion-icon name="add-circle-outline" style="margin-right: 8px;"></ion-icon>
+        {{"FILE_UPLOAD" | translate}}
+      </ion-button>
+      }
+      @if (uploadedFile()) {
+      <ng-container>
+        <ion-chip class="color-red">
           <ion-icon color="#fff" name="close-circle" (click)="removeFile()" class="remove-icon"></ion-icon>
-          <ion-label class="capitalize file-name-ellipsis">{{uploadedFile.name}}</ion-label>
+          <ion-label class="capitalize file-name-ellipsis">{{uploadedFile().name}}</ion-label>
         </ion-chip>
       </ng-container>
-    }
+      }
     </div>
   </ion-content>
 
   <div class="modal-footer">
     <ion-buttons slot="end">
-      <ion-button
-        color="primary"
-        fill="solid"
-        [disabled]="(type === 'link' && (!link || showLinkError)) || (type === 'file' && !uploadedFile)"
-        (click)="saveLink()"
-      >
+      <ion-button color="primary" fill="solid"
+        [disabled]="(type === 'link' && (!link || showLinkError())) || (type === 'file' && !uploadedFile())"
+        (click)="saveLink()">
         {{ "ADD" | translate }}
       </ion-button>
     </ion-buttons>

@@ -41,6 +41,12 @@ describe('SearchAndSelectComponent', () => {
 
     fixture = TestBed.createComponent(SearchAndSelectComponent);
     component = fixture.componentInstance;
+    component.control = {
+      name: 'test-control',
+      label: 'Test Control',
+      meta: {},
+      validators: {}
+    };
   });
 
   afterEach(() => {
@@ -565,6 +571,52 @@ describe('SearchAndSelectComponent', () => {
       await component.addLink(testData);
       
       expect(testData.value.length).toBe(0);
+    });
+
+    it('should call cdr.detectChanges after successfully adding a link', async () => {
+      const testData = { value: [] };
+      const newLink = { url: 'https://example.com', label: 'Example' };
+      
+      const mockModal = {
+        present: jasmine.createSpy('present').and.returnValue(Promise.resolve()),
+        onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(
+          Promise.resolve({ 
+            data: { 
+              success: true, 
+              data: newLink 
+            } 
+          })
+        )
+      };
+      
+      mockModalController.create.and.returnValue(Promise.resolve(mockModal as any));
+      
+      const cdr = (component as any).cdr;
+      spyOn(cdr, 'detectChanges');
+      
+      await component.addLink(testData);
+      
+      expect(cdr.detectChanges).toHaveBeenCalled();
+    });
+
+    it('should not call cdr.detectChanges when modal is dismissed without success', async () => {
+      const testData = { value: [] };
+      
+      const mockModal = {
+        present: jasmine.createSpy('present').and.returnValue(Promise.resolve()),
+        onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(
+          Promise.resolve({ data: null })
+        )
+      };
+      
+      mockModalController.create.and.returnValue(Promise.resolve(mockModal as any));
+      
+      const cdr = (component as any).cdr;
+      spyOn(cdr, 'detectChanges');
+      
+      await component.addLink(testData);
+      
+      expect(cdr.detectChanges).not.toHaveBeenCalled();
     });
   });
 

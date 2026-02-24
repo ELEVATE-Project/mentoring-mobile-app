@@ -123,3 +123,9 @@ ion-popover {
   margin-top: 10px;
   font-family:  sans-serif !important;
 }
+
+ion-select {
+  &::part(icon) {
+    display: none;
+  }
+}

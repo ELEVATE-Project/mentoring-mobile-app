@@ -41,32 +41,32 @@ describe('DynamicSelectModalComponent', () => {
         it('should initialize filteredItems with items', () => {
             component.items = ['A', 'B'];
             component.ngOnInit();
-            expect(component.filteredItems).toEqual(['A', 'B']);
+            expect(component.filteredItems()).toEqual(['A', 'B']);
         });
     });
 
     describe('filterItems', () => {
         beforeEach(() => {
             component.items = ['Apple', 'Banana', 'Cherry'];
-            component.filteredItems = [...component.items];
+            component.filteredItems.set([...component.items]);
         });
 
         it('should filter items case-insensitively', () => {
             const event = { target: { value: 'ap' } };
             component.filterItems(event);
-            expect(component.filteredItems).toEqual(['Apple']);
+            expect(component.filteredItems()).toEqual(['Apple']);
         });
 
         it('should handle empty search term', () => {
             const event = { target: { value: '' } };
             component.filterItems(event);
-            expect(component.filteredItems).toEqual(component.items);
+            expect(component.filteredItems()).toEqual(component.items);
         });
 
         it('should return empty list if no match', () => {
             const event = { target: { value: 'xyz' } };
             component.filterItems(event);
-            expect(component.filteredItems).toEqual([]);
+            expect(component.filteredItems()).toEqual([]);
         });
     });
 
