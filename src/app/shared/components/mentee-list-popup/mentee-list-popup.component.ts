@@ -4,9 +4,10 @@ import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admi
 import { SessionService } from 'src/app/core/services/session/session.service';
 
 @Component({
-  selector: 'app-mentee-list-popup',
-  templateUrl: './mentee-list-popup.component.html',
-  styleUrls: ['./mentee-list-popup.component.scss'],
+    selector: 'app-mentee-list-popup',
+    templateUrl: './mentee-list-popup.component.html',
+    styleUrls: ['./mentee-list-popup.component.scss'],
+    standalone: false
 })
 export class MenteeListPopupComponent implements OnInit {
   @Input() id;

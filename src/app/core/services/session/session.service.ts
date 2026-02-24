@@ -14,14 +14,23 @@ import { localKeys } from '../../constants/localStorage.keys';
 export class SessionService {
   userDetails: any;
 
-  constructor(private loaderService: LoaderService, private httpService: HttpService, private toast: ToastService, private router: Router, private modalCtrl: ModalController,
+  private browser = Browser;
+
+  constructor(
+    private loaderService: LoaderService,
+    private httpService: HttpService,
+    private toast: ToastService,
+    private router: Router,
+    private modalCtrl: ModalController,
     private localStorage: LocalStorageService
   ) { }
 
   async createSession(formData, queryParams?: string) {
     await this.loaderService.startLoader();
     const config = {
-      url: queryParams == null ? urlConstants.API_URLS.CREATE_SESSION : urlConstants.API_URLS.CREATE_SESSION + `/${queryParams}`,
+      url: queryParams == null
+        ? urlConstants.API_URLS.CREATE_SESSION
+        : urlConstants.API_URLS.CREATE_SESSION + `/${queryParams}`,
       payload: formData
     };
     try {
@@ -31,20 +40,18 @@ export class SessionService {
       this.loaderService.stopLoader();
       this.toast.showToast(msg, "success");
       return result;
-    }
-    catch (error) {
+    } catch (error) {
       this.loaderService.stopLoader();
-      return false
+      return false;
     }
   }
 
   async getAllSessionsAPI(obj) {
-    //await this.loaderService.startLoader();
     let params;
     if (obj.status) {
-      params = '&status=' + obj.status + '&search=' + obj.searchText
+      params = '&status=' + obj.status + '&search=' + obj.searchText;
     } else {
-      params = '&search=' + obj.searchText
+      params = '&search=' + obj.searchText;
     }
     const config = {
       url: urlConstants.API_URLS.CREATED_SESSIONS + obj.page + '&limit=' + obj.limit + params,
@@ -54,13 +61,9 @@ export class SessionService {
       let data = await this.httpService.get(config);
       let result = _.get(data, 'result');
       this.loaderService.stopLoader();
-      return result;
-      return {}
-    }
-    catch (error) {
-      // this.loaderService.stopLoader();
-      let res = []
-      return res;
+      return result || [];
+    } catch (error) {
+      return [];
     }
   }
 
@@ -71,24 +74,21 @@ export class SessionService {
     try {
       let data: any = await this.httpService.get(config);
       return data;
-    }
-    catch (error) {
+    } catch (error) {
+      return null;
     }
   }
 
   async getSessionDetailsAPI(id) {
-    //await this.loaderService.startLoader();
     const config = {
-      url: urlConstants.API_URLS.GET_SESSION_DETAILS + id + '?get_mentees='+true,
+      url: urlConstants.API_URLS.GET_SESSION_DETAILS + id + '?get_mentees=true',
       payload: {}
     };
     try {
       let data = await this.httpService.get(config);
-      //this.loaderService.stopLoader();
       return data;
-    }
-    catch (error) {
-      //this.loaderService.stopLoader();
+    } catch (error) {
+      return null;
     }
   }
 
@@ -103,9 +103,9 @@ export class SessionService {
       let result = _.get(data, 'result');
       this.loaderService.stopLoader();
       return result;
-    }
-    catch (error) {
+    } catch (error) {
       this.loaderService.stopLoader();
+      return null;
     }
   }
 
@@ -115,10 +115,9 @@ export class SessionService {
       payload: {}
     };
     try {
-      let data = await this.httpService.post(config);
-      return data;
-    }
-    catch (error) {
+      return await this.httpService.post(config);
+    } catch (error) {
+      return null;
     }
   }
 
@@ -128,10 +127,9 @@ export class SessionService {
       payload: {}
     };
     try {
-      let data = await this.httpService.post(config);
-      return data;
-    }
-    catch (error) {
+      return await this.httpService.post(config);
+    } catch (error) {
+      return null;
     }
   }
 
@@ -144,14 +142,12 @@ export class SessionService {
     try {
       let data = await this.httpService.post(config);
       this.loaderService.stopLoader();
-      if (data.responseCode == "OK") {
-        await this.openBrowser(data.result.link);
+      if (data?.responseCode === 'OK') {
+        await this.openBrowser(data?.result?.link);
         return true;
-      } else {
-        return false;
       }
-    }
-    catch (error) {
+      return false;
+    } catch (error) {
       this.loaderService.stopLoader();
       return false;
     }
@@ -167,17 +163,19 @@ export class SessionService {
     try {
       let data = await this.httpService.get(config);
       this.loaderService.stopLoader();
-      if (data.responseCode == "OK") {
+      if (data?.responseCode === 'OK') {
         let modal = await this.modalCtrl.create({
           component: JoinDialogBoxComponent,
           componentProps: { data: data.result, sessionData: sessionData },
           cssClass: 'example-modal'
         });
-        modal.present()
+        await modal.present();
+        return modal;
       }
-    }
-    catch (error) {
+      return null;
+    } catch (error) {
       this.loaderService.stopLoader();
+      return null;
     }
   }
 
@@ -191,16 +189,20 @@ export class SessionService {
       let data = await this.httpService.delete(config);
       this.loaderService.stopLoader();
       return data;
-    }
-    catch (error) {
+    } catch (error) {
       this.loaderService.stopLoader();
+      return null;
     }
   }
 
   async openBrowser(link, windowName: any = "_self") {
-    await Browser.open({ url: link, windowName: windowName });
-    Browser.addListener('browserFinished', () => {
-    });
+    if (!this.browser?.open) {
+      return;
+    }
+    await this.browser.open({ url: link, windowName });
+    if (this.browser?.addListener) {
+      this.browser.addListener('browserFinished', () => {});
+    }
   }
 
   async submitFeedback(feedbackData, sessionId) {
@@ -209,10 +211,9 @@ export class SessionService {
       payload: feedbackData
     };
     try {
-      let data = await this.httpService.post(config);
-      return data;
-    }
-    catch (error) {
+      return await this.httpService.post(config);
+    } catch (error) {
+      return null;
     }
   }
 
@@ -223,36 +224,35 @@ export class SessionService {
     };
     try {
       let data = await this.httpService.get(config);
-      return data.result.data;
-    }
-    catch (error) {
+      return data?.result?.data || [];
+    } catch (error) {
+      return [];
     }
   }
 
-  async getEnrolledMenteeList(id){
+  async getEnrolledMenteeList(id) {
     const config = {
-      url:  `${urlConstants.API_URLS.ENROLLED_MENTEES_LIST}${id || ''}`,
+      url: `${urlConstants.API_URLS.ENROLLED_MENTEES_LIST}${id || ''}`,
       payload: {}
     };
     try {
       let data = await this.httpService.get(config);
-      return data.result;
+      return data?.result || [];
+    } catch (error) {
+      return [];
     }
-    catch (error) {
-    }
-    
   }
 
-  async sessionActivity(pageSize, page){
+  async sessionActivity(pageSize, page) {
     const config = {
-      url: urlConstants.API_URLS.LOGIN_ACTIVITY + "?status="+ "&page=" + page + '&limit=' + pageSize,
+      url: urlConstants.API_URLS.LOGIN_ACTIVITY + "?status=&page=" + page + '&limit=' + pageSize,
       payload: {},
     };
     try {
       let data = await this.httpService.get(config);
-      return data.result;
-    }
-    catch (error) {
+      return data?.result || [];
+    } catch (error) {
+      return [];
     }
   }
 
@@ -261,10 +261,9 @@ export class SessionService {
       url: urlConstants.API_URLS.HOME_SESSION + obj.page + '&limit=' + obj.limit + (obj.scope ? '&sessionScope=' + obj.scope : ''),
     };
     try {
-      let data: any = await this.httpService.get(config);
-      return data
-    }
-    catch (error) {
+      return await this.httpService.get(config);
+    } catch (error) {
+      return null;
     }
   }
 
@@ -274,22 +273,20 @@ export class SessionService {
       payload: obj
     };
     try {
-      let data: any = await this.httpService.post(config);
-      return data
-    }
-    catch (error) {
+      return await this.httpService.post(config);
+    } catch (error) {
+      return null;
     }
   }
 
   async requestSessionList(page: number) {
     const config = {
-      url: urlConstants.API_URLS.REQUEST_SESSION_LIST + '?pageNo=' + page + '&pageSize=100' + '&status=REQUESTED,EXPIRED',
+      url: urlConstants.API_URLS.REQUEST_SESSION_LIST + '?pageNo=' + page + '&pageSize=100&status=REQUESTED,EXPIRED',
     };
     try {
-      let data: any = await this.httpService.get(config);
-      return data
-    }
-    catch (error) {
+      return await this.httpService.get(config);
+    } catch (error) {
+      return null;
     }
   }
 
@@ -298,43 +295,37 @@ export class SessionService {
       url: urlConstants.API_URLS.REQUEST_SESSION_DETAILS + '?request_session_id=' + id,
     };
     try {
-      let data: any = await this.httpService.get(config);
-      return data
-    }
-    catch (error) {
+      return await this.httpService.get(config);
+    } catch (error) {
+      return null;
     }
   }
 
-  async requestSessionUserAvailability(startDate: number, endDate: number){
+  async requestSessionUserAvailability(startDate: number, endDate: number) {
     const config = {
       url: urlConstants.API_URLS.REQUEST_SESSION_USER_AVAILABILITY +
-      `?pageNo=1&pageSize=5&searchText=&status=PUBLISHED&start_date=${startDate}&end_date=${endDate}`,
+        `?pageNo=1&pageSize=5&searchText=&status=PUBLISHED&start_date=${startDate}&end_date=${endDate}`,
     };
     try {
-      let data: any = await this.httpService.get(config);
-      return data
-    }
-    catch (error) {
+      return await this.httpService.get(config);
+    } catch (error) {
+      return null;
     }
   }
 
   async requestSessionAccept(id){
     const config = {
       url: urlConstants.API_URLS.REQUEST_SESSION_ACCEPT,
-      payload: {
-        "request_session_id" : id
-      }
+      payload: { request_session_id: id }
     };
     try {
-      let data: any = await this.httpService.post(config);
-      return data
-    }
-    catch (error) {
+      return await this.httpService.post(config);
+    } catch (error) {
+      return null;
     }
   }
 
   async requestSessionReject(id, reason){
-    id = id.toString();
     const config = {
       url: urlConstants.API_URLS.REQUEST_SESSION_REJECT,
       payload: {
@@ -343,10 +334,9 @@ export class SessionService {
       }
     };
     try {
-      let data: any = await this.httpService.post(config);
-      return data
-    }
-    catch (error) {
+      return await this.httpService.post(config);
+    } catch (error) {
+      return null;
     }
   }
 }

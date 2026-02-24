@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-dynamic-select-modal',
-  templateUrl: './dynamic-select-modal.component.html',
-  styleUrls: ['./dynamic-select-modal.component.scss'],
+    selector: 'app-dynamic-select-modal',
+    templateUrl: './dynamic-select-modal.component.html',
+    styleUrls: ['./dynamic-select-modal.component.scss'],
+    standalone: false
 })
 export class DynamicSelectModalComponent implements OnInit {
   @Input() items: string[] = [];           

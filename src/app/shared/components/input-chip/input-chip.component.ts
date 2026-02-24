@@ -12,16 +12,17 @@ import * as _ from 'lodash-es';
 import { ToastService } from 'src/app/core/services';
 
 @Component({
-  selector: 'app-input-chip',
-  templateUrl: './input-chip.component.html',
-  styleUrls: ['./input-chip.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: InputChipComponent,
-    },
-  ],
+    selector: 'app-input-chip',
+    templateUrl: './input-chip.component.html',
+    styleUrls: ['./input-chip.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: InputChipComponent,
+        },
+    ],
+    standalone: false
 })
 export class InputChipComponent implements OnInit, ControlValueAccessor {
   @Input() label;

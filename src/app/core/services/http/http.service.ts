@@ -24,7 +24,8 @@ export class HttpService {
   baseUrl;
   isFeedbackTriggered = false;
   isAlertOpen: any = false;
-  extraHeaders
+  extraHeaders;
+  private httpClient = CapacitorHttp;
 
   constructor(
     private userService: UserService,
@@ -38,7 +39,7 @@ export class HttpService {
     private alert: AlertController,
     private router : Router,
     private toast: ToastService
-  ) {  
+  ) {
     this.baseUrl = environment['baseUrl'];
   }
 
@@ -46,7 +47,7 @@ export class HttpService {
     let token = await this.getToken();
     if(!token) {
       return null;
-    } 
+    }
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const acceptLanguage = await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE);
     const headers = {
@@ -66,22 +67,22 @@ export class HttpService {
 
   async post(requestParam: RequestParams) {
     if (!(await this.checkNetworkAvailability())) {
-      
-  throw Error(null);
-}
+
+      throw Error(null);
+    }
 
     let defaultHeaders = await this.setHeaders();
     const headers = requestParam.headers ?  { ...requestParam.headers, ...defaultHeaders } : defaultHeaders;
     let body = requestParam.payload ? requestParam.payload : {};
     if (body?.time_zone) {
-    headers.timeZone = body.time_zone;        
-  }
+      headers.timeZone = body.time_zone;
+    }
     const options = {
       url: this.baseUrl + requestParam.url,
       headers: headers,
       data: body,
     };
-    return CapacitorHttp.post(options)
+    return this.httpClient.post(options)
       .then((data: any) => {
         let result: any = data.data;
         if (result.responseCode === "OK") {
@@ -94,15 +95,15 @@ export class HttpService {
 
   async get(requestParam: RequestParams) {
     if (!(await this.checkNetworkAvailability())) {
-  throw Error(null);
-}
+      throw Error(null);
+    }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     const options = {
       url: this.baseUrl + requestParam.url,
       headers: headers,
       params: {},
     };
-    return CapacitorHttp.get(options)
+    return this.httpClient.get(options)
       .then((data: any) => {
         let result: any = data.data;
         if(result?.meta?.data?.length && !this.isFeedbackTriggered){
@@ -120,15 +121,15 @@ export class HttpService {
 
   async delete(requestParam: RequestParams) {
     if (!(await this.checkNetworkAvailability())) {
-  throw Error(null);
-}
+      throw Error(null);
+    }
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     const options = {
       url: this.baseUrl + requestParam.url,
       headers: headers,
       data: '',
     };
-    return CapacitorHttp.delete(options)
+    return this.httpClient.delete(options)
       .then((data: any) => {
         let result: any = data.data;
         if (result.responseCode === "OK") {
@@ -141,8 +142,8 @@ export class HttpService {
 
   async patch(requestParam: RequestParams) {
     if (!(await this.checkNetworkAvailability())) {
-  throw Error(null);
-}
+      throw Error(null);
+    }
     let body = requestParam.payload ? requestParam.payload : {};
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     const options = {
@@ -150,7 +151,7 @@ export class HttpService {
       headers: headers,
       data: body,
     };
-    return CapacitorHttp.patch(options)
+    return this.httpClient.patch(options)
       .then((data: any) => {
         let result: any = data.data;
         if (result.responseCode === "OK") {
@@ -168,12 +169,12 @@ export class HttpService {
       this.toastService.showToast('MSG_PLEASE_NETWORK', 'danger')
       return false;
     } else {
-    return true;
+      return true;
     }
   }
 
 
-async getToken() {
+  async getToken() {
     const token = await this.userService.getUserValue();
     //need to verify token validity
     if (!token) {
@@ -196,8 +197,8 @@ async getToken() {
 
   async getAccessToken() {
     if (!(await this.checkNetworkAvailability())) {
-  throw Error(null);
-}
+      throw Error(null);
+    }
     const options = {
       url: this.baseUrl + urlConstants.API_URLS.REFRESH_TOKEN,
       headers: {
@@ -207,7 +208,7 @@ async getToken() {
         refresh_token: _.get(this.userService.token, 'refresh_token')
       },
     };
-    return CapacitorHttp.post(options)
+    return this.httpClient.post(options)
       .then((data: any) => {
         let result: any = data.data;
         if (result.responseCode === "OK") {
@@ -240,7 +241,7 @@ async getToken() {
         } else {
           localStorage.clear();
           auth.clearLocalData();
-          location.href = window.location.origin;
+          this.redirectToOrigin();
         }
         break;
       default:
@@ -262,7 +263,7 @@ async getToken() {
   }
 
   async triggerLogoutConfirmationAlert(result) {
-    this.toast.setDisableToast(true); 
+    this.toast.setDisableToast(true);
     if(await this.modalController.getTop()) {
       await this.modalController.dismiss()
     }
@@ -274,7 +275,7 @@ async getToken() {
         .subscribe((text) => {
           texts = text;
         });
-        this.isAlertOpen = true;
+      this.isAlertOpen = true;
       const alert = await this.alert.create({
         message: msg,
         buttons: [
@@ -284,7 +285,7 @@ async getToken() {
             cssClass: 'alert-button-red',
             handler: () => {
               this.isAlertOpen = false;
-              this.toast.setDisableToast(false); 
+              this.toast.setDisableToast(false);
             },
           },
         ],
@@ -293,12 +294,11 @@ async getToken() {
       await alert.present();
       let data = await alert.onDidDismiss();
       if (data.role == 'cancel') {
+        let auth = this.injector.get(AuthService);
         if(environment.isAuthBypassed) {
-          let auth = this.injector.get(AuthService);
           auth.clearLocalData();
-          location.href = window.location.origin
+          this.redirectToOrigin();
         } else {
-          let auth = this.injector.get(AuthService);
           auth.logoutAccount(true);
         }
       }
@@ -308,15 +308,15 @@ async getToken() {
     }
   }
 
- async getFile(requestParam: RequestParams){
-    
+  async getFile(requestParam: RequestParams){
+
     const headers = requestParam.headers ? requestParam.headers : await this.setHeaders();
     const options = {
       url: this.baseUrl + requestParam.url,
       headers: headers,
       params: {},
     };
-    return CapacitorHttp.get(options)
+    return this.httpClient.get(options)
       .then((data: any) => {
         if (data.status == 200) {
           return data;
@@ -325,5 +325,11 @@ async getToken() {
           return data;
         }
       });
+  }
+
+  _window = window;
+
+  private redirectToOrigin(): void {
+    this._window.location.href = this._window.location.origin;
   }
 }

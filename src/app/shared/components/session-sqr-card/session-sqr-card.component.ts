@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
-  selector: 'app-session-sqr-card',
-  templateUrl: './session-sqr-card.component.html',
-  styleUrls: ['./session-sqr-card.component.scss'],
+    selector: 'app-session-sqr-card',
+    templateUrl: './session-sqr-card.component.html',
+    styleUrls: ['./session-sqr-card.component.scss'],
+    standalone: false
 })
 export class SessionSqrCardComponent implements OnInit {
 

@@ -32,9 +32,10 @@ import {
 } from 'sl-chat-library';
 
 @Component({
-  selector: 'app-private',
-  templateUrl: './private.page.html',
-  styleUrls: ['./private.page.scss'],
+    selector: 'app-private',
+    templateUrl: './private.page.html',
+    styleUrls: ['./private.page.scss'],
+    standalone: false
 })
 export class PrivatePage implements OnInit {
   user;
@@ -182,7 +183,8 @@ export class PrivatePage implements OnInit {
   async ngOnInit() {
     await this.initializeApp();
     if(this.isMentor) {
-      const { result } = await this.profile.getRequestCount();
+      const response = await this.profile.getRequestCount();
+      const { result = {} } = response || {};
       const { sessionRequestCount = 0, connectionRequestCount = 0 } = result || {};
       if (sessionRequestCount > 0 || connectionRequestCount > 0) {
       const page = this.appPages.find(

@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { UtilService } from 'src/app/core/services';
 
 @Component({
-  selector: 'app-generic-details',
-  templateUrl: './generic-details.component.html',
-  styleUrls: ['./generic-details.component.scss'],
+    selector: 'app-generic-details',
+    templateUrl: './generic-details.component.html',
+    styleUrls: ['./generic-details.component.scss'],
+    standalone: false
 })
 export class GenericDetailsComponent implements OnInit, OnChanges {
   @Input() sessionData: any;

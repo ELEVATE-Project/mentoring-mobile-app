@@ -19,9 +19,10 @@ import * as _ from 'lodash';
 import { TitleCasePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-mentor-details',
-  templateUrl: './mentor-details.page.html',
-  styleUrls: ['./mentor-details.page.scss'],
+    selector: 'app-mentor-details',
+    templateUrl: './mentor-details.page.html',
+    styleUrls: ['./mentor-details.page.scss'],
+    standalone: false
 })
 export class MentorDetailsPage implements OnInit {
   mentorName;
@@ -217,7 +218,7 @@ export class MentorDetailsPage implements OnInit {
   async share() {
     if(this.isMobile && navigator.share){
           let url = `/mentoring/${CommonRoutes.MENTOR_DETAILS}/${this.buttonConfig.meta.id}`;
-          let link = await this.utilService.getDeepLink(url);
+          let link = this.utilService.getDeepLink(url);
           let params = {
             link: link,
             subject: "Profile Share",
@@ -289,7 +290,7 @@ export class MentorDetailsPage implements OnInit {
     }
   }
   
-  private updateButtonConfig() {
+   updateButtonConfig() {
     this.buttonConfig.buttons = !this.mentorProfileData?.result?.is_mentor
       ? [
           {

@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { ToastService } from 'src/app/core/services';
 
 @Component({
-  selector: 'app-searchbar',
-  templateUrl: './searchbar.component.html',
-  styleUrls: ['./searchbar.component.scss'],
+    selector: 'app-searchbar',
+    templateUrl: './searchbar.component.html',
+    styleUrls: ['./searchbar.component.scss'],
+    standalone: false
 })
 export class SearchbarComponent implements OnInit {
   searchText: any;

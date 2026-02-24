@@ -12,9 +12,10 @@ import { ModalController } from '@ionic/angular';
 import { DynamicSelectModalComponent } from 'src/app/dynamic-select-modal/dynamic-select-modal.component';
 
 @Component({
-  selector: 'app-session-request',
-  templateUrl: './session-request.page.html',
-  styleUrls: ['./session-request.page.scss'],
+    selector: 'app-session-request',
+    templateUrl: './session-request.page.html',
+    styleUrls: ['./session-request.page.scss'],
+    standalone: false
 })
 export class SessionRequestPage implements OnInit {
 

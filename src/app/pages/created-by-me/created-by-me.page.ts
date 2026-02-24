@@ -8,9 +8,10 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService } from 'src/app/core/services';
 
 @Component({
-  selector: 'app-created-by-me',
-  templateUrl: './created-by-me.page.html',
-  styleUrls: ['./created-by-me.page.scss'],
+    selector: 'app-created-by-me',
+    templateUrl: './created-by-me.page.html',
+    styleUrls: ['./created-by-me.page.scss'],
+    standalone: false
 })
 export class CreatedByMePage implements OnInit {
   page = 1;

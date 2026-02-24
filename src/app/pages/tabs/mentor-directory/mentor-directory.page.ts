@@ -12,9 +12,10 @@ import { LocalStorageService } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
-  selector: 'app-mentor-directory',
-  templateUrl: './mentor-directory.page.html',
-  styleUrls: ['./mentor-directory.page.scss'],
+    selector: 'app-mentor-directory',
+    templateUrl: './mentor-directory.page.html',
+    styleUrls: ['./mentor-directory.page.scss'],
+    standalone: false
 })
 export class MentorDirectoryPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;

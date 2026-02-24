@@ -17,14 +17,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { CdkConnectedOverlay } from '@angular/cdk/overlay';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+    selector: 'app-home',
+    templateUrl: 'home.page.html',
+    styleUrls: ['home.page.scss'],
+    standalone: false
 })
 export class HomePage{
   public formData: JsonFormData;
   user;
-  private isLoading: boolean = false;
+  public isLoading: boolean = false;
   SESSIONS: string = CommonRoutes.SESSIONS;
   SKELETON = SKELETON;
   page = 1;
@@ -94,7 +95,6 @@ async ionViewWillEnter() {
     this.sessions = null;
     this.createdSessions = null;
     await this.getUser();
-    await this.getUser();
     let roles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
     this.isMentor = roles?.includes('mentor')?true:false;
     this.gotToTop();
@@ -131,10 +131,9 @@ async ionViewWillEnter() {
         if (this.isMentor) {
           var obj = { page: this.page, limit: this.limit, searchText: "" };
           let data = await this.sessionService.getAllSessionsAPI(obj);
-          if (!data || data.length === 0) {
+          if (!data || !data.data || data.data.length === 0) {
           this.isCreatedSessions = true;
-        }
-          
+          }   
           if (isLoadMore && this.createdSessions?.data) {
             this.createdSessions.data = [...this.createdSessions.data, ...data.data];
           } else {

@@ -17,8 +17,7 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { debounceTime } from 'rxjs/operators';
 import { SearchAndSelectComponent } from '../search-and-select/search-and-select.component';
 import { OWL_DATE_TIME_FORMATS } from '@danielmoncada/angular-datetime-picker';
-import * as moment from 'moment-timezone';
-
+import moment from 'moment-timezone';
 interface JsonFormValidators {
   min?: number;
   max?: number;
@@ -92,14 +91,15 @@ const CUSTOM_DATE_FORMATS = {
 };
 
 @Component({
-  selector: 'app-dynamic-form',
-  templateUrl: './dynamic-form.component.html',
-  styleUrls: ['./dynamic-form.component.scss'],
-  providers: [
-    {
-      provide: OWL_DATE_TIME_FORMATS, useValue: CUSTOM_DATE_FORMATS
-    }
-]
+    selector: 'app-dynamic-form',
+    templateUrl: './dynamic-form.component.html',
+    styleUrls: ['./dynamic-form.component.scss'],
+    providers: [
+        {
+            provide: OWL_DATE_TIME_FORMATS, useValue: CUSTOM_DATE_FORMATS
+        }
+    ],
+    standalone: false
 })
 export class DynamicFormComponent implements OnInit {
   @Input() jsonFormData: any;

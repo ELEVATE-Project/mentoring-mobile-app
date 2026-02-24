@@ -13,9 +13,10 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import * as Bowser from "bowser"
 
 @Component({
-  selector: 'app-help',
-  templateUrl: './help.page.html',
-  styleUrls: ['./help.page.scss'],
+    selector: 'app-help',
+    templateUrl: './help.page.html',
+    styleUrls: ['./help.page.scss'],
+    standalone: false
 })
 export class HelpPage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;

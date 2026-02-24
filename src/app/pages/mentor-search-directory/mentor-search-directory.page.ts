@@ -16,9 +16,10 @@ import { LocalStorageService } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
-  selector: 'app-mentor-search-directory',
-  templateUrl: './mentor-search-directory.page.html',
-  styleUrls: ['./mentor-search-directory.page.scss'],
+    selector: 'app-mentor-search-directory',
+    templateUrl: './mentor-search-directory.page.html',
+    styleUrls: ['./mentor-search-directory.page.scss'],
+    standalone: false
 })
 export class MentorSearchDirectoryPage implements OnInit {
 
@@ -32,7 +33,7 @@ export class MentorSearchDirectoryPage implements OnInit {
     headerColor: 'primary',
     // label:'MENU'
   };
-  
+
   isOpen = false;
   overlayChips = [];
   filterData: any;
@@ -78,53 +79,53 @@ export class MentorSearchDirectoryPage implements OnInit {
     this.route.data.subscribe(data => {
       this.buttonConfig = data.button_config;
     })
-   }
-
-async ionViewWillEnter() {
-  let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-  this.currentUserId= user.id
-  const result = await this.formService.getForm(MENTOR_DIR_CARD_FORM);
-  this.mentorForm = _.get(result, 'data.fields.controls');
-  const queryParams = this.route.snapshot.queryParams;
-  const search = queryParams['search'];
-  const chip = queryParams['chip'];
-
-  if (search) {
-    this.searchAndCriterias = {
-      ...this.searchAndCriterias,
-      headerData: {
-        ...this.searchAndCriterias.headerData,
-        searchText: search
-      }
-    };
   }
 
-  this.getMentors();
+  async ionViewWillEnter() {
+    let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
+    this.currentUserId= user?.id
+    const result = await this.formService.getForm(MENTOR_DIR_CARD_FORM);
+    this.mentorForm = _.get(result, 'data.fields.controls');
+    const queryParams = this.route.snapshot.queryParams;
+    const search = queryParams['search'];
+    const chip = queryParams['chip'];
 
-  const config = await this.permissionService.getPlatformConfig();
-  this.overlayChips = config?.result?.search_config?.search?.mentor?.fields;
-
-  if (chip) {
-    const matchedField = this.overlayChips?.find(d => d.name === chip);
-    if (matchedField && search) {
+    if (search) {
       this.searchAndCriterias = {
         ...this.searchAndCriterias,
         headerData: {
           ...this.searchAndCriterias.headerData,
-          criterias: {
-            name: matchedField.name,
-            label: matchedField.label
-          }
+          searchText: search
         }
       };
     }
+
+    this.getMentors();
+
+    const config = await this.permissionService.getPlatformConfig();
+    this.overlayChips = config?.result?.search_config?.search?.mentor?.fields;
+
+    if (chip) {
+      const matchedField = this.overlayChips?.find(d => d.name === chip);
+      if (matchedField && search) {
+        this.searchAndCriterias = {
+          ...this.searchAndCriterias,
+          headerData: {
+            ...this.searchAndCriterias.headerData,
+            criterias: {
+              name: matchedField.name,
+              label: matchedField.label
+            }
+          }
+        };
+      }
+    }
+
+    const obj = {filterType: 'mentor', org: true};
+    let data = await this.formService.filterList(obj);
+    this.filterData = await this.utilService.transformToFilterData(data, obj);
+
   }
-
-  const obj = {filterType: 'mentor', org: true};
-  let data = await this.formService.filterList(obj);
-  this.filterData = await this.utilService.transformToFilterData(data, obj);
-
-}
 
 
   async onSearch(event){
@@ -133,9 +134,9 @@ async ionViewWillEnter() {
     };
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { 
-        search: event.searchText, 
-        chip: event?.criterias?.name 
+      queryParams: {
+        search: event.searchText,
+        chip: event?.criterias?.name
       },
       queryParamsHandling: 'merge',
     });
@@ -160,16 +161,16 @@ async ionViewWillEnter() {
       componentProps: { filterData: this.filterData }
     });
 
-    modal.onDidDismiss().then(async (dataReturned) => { 
+    modal.onDidDismiss().then(async (dataReturned) => {
       this.filteredDatas = [];
       if(dataReturned?.data?.role === 'closed'){
         this.filterData = dataReturned?.data?.data;
         return;
       }
       if(Object.keys(dataReturned?.data).length === 0){
-            this.chips = [];
-            this.filteredDatas = [];
-            this.urlQueryData = null;
+        this.chips = [];
+        this.filteredDatas = [];
+        this.urlQueryData = null;
       }
       if (dataReturned.data && dataReturned.data.data) {
         if (dataReturned.data.data.selectedFilters) {
@@ -180,7 +181,7 @@ async ionViewWillEnter() {
         }
         this.extractLabels(dataReturned.data.data.selectedFilters);
         this.getUrlQueryData();
-      } 
+      }
       this.page = 1;
       this.setPaginatorToFirstpage = true;
       this.getMentors()
@@ -218,7 +219,7 @@ async ionViewWillEnter() {
         break;
     }
   }
-  
+
   eventHandler(event: any) {
     this.valueFromChipAndFilter = event;
     this.searchAndCriterias.headerData.criterias = {name: undefined, label: undefined}
@@ -226,14 +227,14 @@ async ionViewWillEnter() {
 
   onPageChange(event){
     this.page = event.pageIndex + 1,
-    this.pageSize = this.paginator.pageSize;
+      this.pageSize = this.paginator.pageSize;
     this.getMentors()
   }
 
   removeFilteredData(chip){
     this.filterData.map((filter) => {
       filter.options.map((option) => {
-       if (option.value === chip) {
+        if (option.value === chip) {
           option.selected = false;
         }
       });
@@ -242,45 +243,45 @@ async ionViewWillEnter() {
     for (let key in this.filteredDatas) {
       if (this.filteredDatas.hasOwnProperty(key)) {
 
-          let values = this.filteredDatas[key].split(',');
+        let values = this.filteredDatas[key].split(',');
 
-          let chipIndex = values.indexOf(chip);
+        let chipIndex = values.indexOf(chip);
 
-          if (chipIndex > -1) {
-              values.splice(chipIndex, 1);
+        if (chipIndex > -1) {
+          values.splice(chipIndex, 1);
 
-              let newValue = values.join(',');
+          let newValue = values.join(',');
 
-              if (newValue === '') {
-                delete this.filteredDatas[key];
-            } else {
-                this.filteredDatas[key] = newValue;
-            }
+          if (newValue === '') {
+            delete this.filteredDatas[key];
+          } else {
+            this.filteredDatas[key] = newValue;
           }
+        }
       }
     }
   }
 
- async getMentors(){
+  async getMentors(){
     var obj = {
-      page: this.page, 
-      pageSize: this.pageSize, 
-      searchText: this.searchAndCriterias.headerData.searchText?.trim(), 
-      selectedChip: this.searchAndCriterias.headerData.criterias?.name, 
+      page: this.page,
+      pageSize: this.pageSize,
+      searchText: this.searchAndCriterias.headerData.searchText?.trim(),
+      selectedChip: this.searchAndCriterias.headerData.criterias?.name,
       urlQueryData: this.urlQueryData
     };
     let data = await this.profileService.getMentors(true,obj);
-    if(data && data.result.data.length){
+    if (data?.result?.data?.length) {
       this.isOpen = false;
       this.data = data.result.data;
       this.totalCount = data.result.count;
       this.data.forEach(mentor => {
-      if (mentor.id === this.currentUserId) {
-        mentor.buttonConfig = this.buttonConfig.map(btn => ({ ...btn, isHide: true }));
-      } else {
-        mentor.buttonConfig = this.buttonConfig.map(btn => ({ ...btn }));
-      }
-    });
+        if (mentor.id === this.currentUserId) {
+          mentor.buttonConfig = this.buttonConfig.map(btn => ({ ...btn, isHide: true }));
+        } else {
+          mentor.buttonConfig = this.buttonConfig.map(btn => ({ ...btn }));
+        }
+      });
       // this.filterIcon = true;
     } else {
       this.data = [];
@@ -298,7 +299,7 @@ async ionViewWillEnter() {
     this.getUrlQueryData();
     this.getMentors();
   }
-  
+
   ionViewDidLeave(){
     this.searchAndCriterias = {
       headerData: {

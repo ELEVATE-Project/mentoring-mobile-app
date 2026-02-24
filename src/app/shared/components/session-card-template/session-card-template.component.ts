@@ -4,9 +4,10 @@ import { ToastService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
-  selector: 'app-session-card-template',
-  templateUrl: './session-card-template.component.html',
-  styleUrls: ['./session-card-template.component.scss'],
+    selector: 'app-session-card-template',
+    templateUrl: './session-card-template.component.html',
+    styleUrls: ['./session-card-template.component.scss'],
+    standalone: false
 })
 export class SessionCardTemplateComponent implements OnInit {
   @Input() data: any;

@@ -22,7 +22,7 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { RecaptchaModule } from 'ng-recaptcha';
+// import { RecaptchaModule } from 'ng-recaptcha';
 import { FrontendChatLibraryModule } from 'sl-chat-library';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { translateFactory } from './shared/components/translationFactory';
@@ -61,7 +61,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
       registrationStrategy: 'registerWhenStable:30000'
     }),
     BrowserAnimationsModule,
-    RecaptchaModule,
+    // RecaptchaModule,
     MatToolbarModule,
     FrontendChatLibraryModule,
   ],

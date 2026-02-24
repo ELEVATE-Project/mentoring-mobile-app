@@ -11,9 +11,10 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { EDIT_PROFILE_FORM } from 'src/app/core/constants/formConstant';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.page.html',
-  styleUrls: ['./profile.page.scss'],
+    selector: 'app-profile',
+    templateUrl: './profile.page.html',
+    styleUrls: ['./profile.page.scss'],
+    standalone: false
 })
 export class ProfilePage implements OnInit {
   @ViewChild(IonContent) content: IonContent;

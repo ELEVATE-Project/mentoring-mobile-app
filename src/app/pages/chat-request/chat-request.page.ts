@@ -8,9 +8,10 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, ToastService, UtilService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 @Component({
-  selector: 'app-chat-request',
-  templateUrl: './chat-request.page.html',
-  styleUrls: ['./chat-request.page.scss'],
+    selector: 'app-chat-request',
+    templateUrl: './chat-request.page.html',
+    styleUrls: ['./chat-request.page.scss'],
+    standalone: false
 })
 export class ChatRequestPage implements OnInit {
   public headerConfig: any = {
@@ -42,31 +43,46 @@ export class ChatRequestPage implements OnInit {
     this.getConnectionInfo();
   }
 
-  getConnectionInfo() {
-    const payload = {
-      url: urlConstants.API_URLS.GET_CHAT_INFO,
-      payload: {
-        user_id: this.id,
-      },
-    };
-    this.httpService.post(payload).then((resp) => {
-      this.info = resp?.result;
-      if (resp?.result?.status == 'REQUESTED') {
+getConnectionInfo() {
+  const payload = {
+    url: urlConstants.API_URLS.GET_CHAT_INFO,
+    payload: {
+      user_id: this.id,
+    },
+  };
+  this.httpService.post(payload)
+    .then((resp) => {
+      const result = resp?.result;
+      if (!result) {
+        this.info = null;
+        return;
+      }
+      this.info = result;
+      this.info.status = result.status ?? 'PENDING';
+      if (this.info.status === 'REQUESTED') {
         this.message = '';
+      } else if (this.info.status === 'ACCEPTED') {
+        const roomId = result.meta?.room_id;
+        if (roomId) {
+          this.router.navigate(
+            [CommonRoutes.CHAT, roomId],
+            { queryParams: { id: result.id }, replaceUrl: true }
+          );
+        }
       }
-      else if(resp?.result?.status == 'ACCEPTED') {
-        this.router.navigate([CommonRoutes.CHAT, resp?.result?.meta.room_id],{queryParams:{id:resp?.result?.id}, replaceUrl: true });
-      }
-      this.info.status = !resp?.result?.status
-        ? 'PENDING'
-        : resp?.result?.status;
-      if (this.info.created_by === this.info.user_id) {
-        this.messages = CHAT_MESSAGES.INITIATOR;
+      if (this.info.created_by && this.info.user_id) {
+        this.messages =
+          this.info.created_by === this.info.user_id
+            ? CHAT_MESSAGES.INITIATOR
+            : CHAT_MESSAGES.RECEIVER;
       } else {
         this.messages = CHAT_MESSAGES.RECEIVER;
       }
+    })
+    .catch((err) => {
+      console.error('getConnectionInfo error', err);
     });
-  }
+}
   sendRequest() {
     if(this.message.trim() === ''){
       return;
@@ -87,21 +103,33 @@ export class ChatRequestPage implements OnInit {
       this.getConnectionInfo();
     });
   }
-  acceptRequest() {
-    const payload = {
-      url: urlConstants.API_URLS.ACCEPT_MSG_REQ,
-      payload: {
-        user_id: this.id,
-      },
-    };
-    this.httpService.post(payload).then((resp) => {
-      const name = this.info?.user_details?.name || 'the user';
+ acceptRequest() {
+  const payload = {
+    url: urlConstants.API_URLS.ACCEPT_MSG_REQ,
+    payload: {
+      user_id: this.id,
+    },
+  };
+  this.httpService.post(payload)
+    .then((resp) => {
+      this.info = this.info ?? {};
+      const name = this.info.user_details?.name ?? 'the user';
       const message = this.translate.instant('ACCEPTED_MESSAGE_REQ', { name });
       this.toast.showToast(message, 'success');
       this.info.status = 'ACCEPTED';
-        this.router.navigate([CommonRoutes.CHAT, resp?.result?.meta.room_id],{replaceUrl: true, queryParams:{id:resp?.result?.id}});
+      const roomId = resp?.result?.meta?.room_id;
+      const connId = resp?.result?.id ?? null;
+      if (roomId) {
+        this.router.navigate([CommonRoutes.CHAT, roomId], {
+          replaceUrl: true,
+          queryParams: { id: connId },
+        });
+      }
+    })
+    .catch((err) => {
+      console.error('acceptRequest error', err);
     });
-  }
+}
 
    async rejectConfirmation() {  
     let texts: any;

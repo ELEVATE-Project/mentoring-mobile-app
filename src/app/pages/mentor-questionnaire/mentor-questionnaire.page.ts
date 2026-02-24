@@ -11,9 +11,10 @@ import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dy
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
-  selector: 'app-mentor-questionnaire',
-  templateUrl: './mentor-questionnaire.page.html',
-  styleUrls: ['./mentor-questionnaire.page.scss'],
+    selector: 'app-mentor-questionnaire',
+    templateUrl: './mentor-questionnaire.page.html',
+    styleUrls: ['./mentor-questionnaire.page.scss'],
+    standalone: false
 })
 export class MentorQuestionnairePage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;

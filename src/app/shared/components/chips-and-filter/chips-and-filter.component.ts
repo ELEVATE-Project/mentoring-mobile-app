@@ -1,11 +1,12 @@
-import {  Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {  Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 
 @Component({
-  selector: 'app-chips-and-filter',
-  templateUrl: './chips-and-filter.component.html',
-  styleUrls: ['./chips-and-filter.component.scss'],
+    selector: 'app-chips-and-filter',
+    templateUrl: './chips-and-filter.component.html',
+    styleUrls: ['./chips-and-filter.component.scss'],
+    standalone: false
 })
 export class ChipsAndFilterComponent implements OnInit {
   @Input() searchAndCriteriaData: any;
@@ -13,7 +14,17 @@ export class ChipsAndFilterComponent implements OnInit {
   @Output() removeFilterChip = new EventEmitter();
   @Input() selectedFilters:  any;
   @Output() sendChildValue = new EventEmitter();
+  @Output() onSelectAllChange =new EventEmitter<boolean>();
+  @Output() onSelectAllXChange =new EventEmitter<boolean>()
   @Input() isFilterEnable: any;
+  @Input () selectedCount
+  @Input() totalCount
+  @Input() tableData;
+  @Input() maxCount
+  @Input() showSelectAll
+    
+  selectAllXActive : boolean;
+  disableCheckbox : boolean;
 
   constructor(private router: Router) { }
  
@@ -23,7 +34,16 @@ export class ChipsAndFilterComponent implements OnInit {
       .subscribe(() => {
         this.resetSearch();
       });
-  }
+  }  
+  
+  ngOnChanges(changes: SimpleChanges) {
+     if(this.selectedCount === this.totalCount || this.selectedCount == this.maxCount){
+      this.selectAllXActive = true;
+    } 
+    else{
+      this.selectAllXActive = false;
+    }
+    } 
 
   closeCriteriaChip(){
     this.sendChildValue.emit('');
@@ -46,5 +66,35 @@ export class ChipsAndFilterComponent implements OnInit {
   private resetSearch() {
     this.searchAndCriteriaData = '';
   }
+  
+  onSelectAllChangeClick(event: any){
+    this.onSelectAllChange.emit(event.detail.checked)
+  }
 
+    isAllSelected(): boolean {
+  if (!this.tableData || this.tableData.length === 0) {
+    return false;
+  }
+  
+  for (const item of this.tableData) {
+    
+    if (item.enrolled_type === 'ENROLLED') {
+      continue;
+    }
+    
+    const hasRemoveAction = item.action?.some(a => a.action === 'REMOVE') ?? false;
+    if (!hasRemoveAction) {
+      return false;
+    } 
+    if(this.selectedCount == this.maxCount){
+      return true;
+    }
+  }
+  return true;
+}
+
+ onToggleSelectAllX(){
+    this.selectAllXActive = !this.selectAllXActive
+    this.onSelectAllXChange.emit(this.selectAllXActive)
+  }
 }

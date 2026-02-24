@@ -8,9 +8,10 @@ import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 
 @Component({
-  selector: 'app-manage-session',
-  templateUrl: './manage-session.component.html',
-  styleUrls: ['./manage-session.component.scss'],
+    selector: 'app-manage-session',
+    templateUrl: './manage-session.component.html',
+    styleUrls: ['./manage-session.component.scss'],
+    standalone: false
 })
 export class ManageSessionComponent implements OnInit {
   public headerConfig: any = {

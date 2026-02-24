@@ -7,9 +7,10 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { SessionService } from 'src/app/core/services/session/session.service';
 
 @Component({
-  selector: 'app-sessions',
-  templateUrl: './sessions.html',
-  styleUrls: ['./sessions.scss'],
+    selector: 'app-sessions',
+    templateUrl: './sessions.html',
+    styleUrls: ['./sessions.scss'],
+    standalone: false
 })
 export class SessionsPage implements OnInit {
   type: string;

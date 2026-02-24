@@ -3,9 +3,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
 
 @Component({
-  selector: 'app-generic-search',
-  templateUrl: './generic-search.component.html',
-  styleUrls: ['./generic-search.component.scss'],
+    selector: 'app-generic-search',
+    templateUrl: './generic-search.component.html',
+    styleUrls: ['./generic-search.component.scss'],
+    standalone: false
 })
 export class GenericSearchComponent implements OnInit {
 

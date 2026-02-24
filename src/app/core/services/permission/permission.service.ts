@@ -16,8 +16,13 @@ export class PermissionService {
 
   async hasPermission(permissions: any): Promise <boolean> {
     await this.fetchPermissions();
+    
+    if (!this.userPermissions || !Array.isArray(this.userPermissions)) {
+      return undefined;
+    }
+    
     for (let userPermission of this.userPermissions) {
-      if (permissions && userPermission.request_type.length && permissions.module === userPermission.module) {
+      if (permissions && userPermission.request_type && userPermission.request_type.length && permissions.module === userPermission.module) {
         const permissionRequired = (permissions?.action?.length) ? (permissions?.action[0]) : actions.GET;
         if (userPermission.request_type.includes(permissionRequired)) {
           return true;
@@ -26,23 +31,30 @@ export class PermissionService {
         }
       }
     }
+    
+    // Return undefined when no matching module found or permissions is null
+    return undefined;
   }
   
-  async fetchPermissions():Promise<any []> {
-    return new Promise((resolve, reject) => {
-      try {
-        this.localStorage.getLocalData(localKeys.USER_DETAILS)
-          .then(async (data) => {
-            if(data) {
-              this.userPermissions = data?.permissions;
-              resolve(data?.permissions);
-            }
-          })
-      } catch (error) {}
-    });
-    
+  async fetchPermissions(): Promise<any[]> {
+    try {
+      const data = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+      
+      if (data && data.permissions) {
+        this.userPermissions = data.permissions;
+        return data.permissions;
+      } else if (data && !data.permissions) {
+        this.userPermissions = undefined;
+        return undefined;
+      } else {
+        return undefined;
+      }
+    } catch (error) {
+      return undefined;
+    }
   }
-  hasAdminAcess(permissionArray,userPermissions): boolean {
+  
+  hasAdminAcess(permissionArray, userPermissions): boolean {
     return permissionArray.some(action => userPermissions.some(permission => permission.module === action.module));
   }
 
@@ -53,16 +65,16 @@ export class PermissionService {
     };
     try {
       const data: any = await this.httpService.get(config);
-      this.setConfigInLocal(data.result)
-      return data
+      this.setConfigInLocal(data.result);
+      return data;
     }
     catch (error) {
       return null;
     }
   }
 
-setConfigInLocal(result: any) {
+  setConfigInLocal(result: any) {
     this.localStorage.setLocalData(localKeys.MAX_MENTEE_ENROLLMENT_COUNT, result.session_mentee_limit);
     this.localStorage.setLocalData(localKeys.CHAT_CONFIG, result.chat_config);
-}
+  }
 }

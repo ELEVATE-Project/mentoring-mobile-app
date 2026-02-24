@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-persona-selection-card',
-  templateUrl: './persona-selection-card.component.html',
-  styleUrls: ['./persona-selection-card.component.scss'],
+    selector: 'app-persona-selection-card',
+    templateUrl: './persona-selection-card.component.html',
+    styleUrls: ['./persona-selection-card.component.scss'],
+    standalone: false
 })
 export class PersonaSelectionCardComponent implements OnInit {
   @Input() personaList;

@@ -3,11 +3,13 @@ import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
+import { ToastService } from 'src/app/core/services';
 
 @Component({
-  selector: 'app-generic-card',
-  templateUrl: './generic-card.component.html',
-  styleUrls: ['./generic-card.component.scss'],
+    selector: 'app-generic-card',
+    templateUrl: './generic-card.component.html',
+    styleUrls: ['./generic-card.component.scss'],
+    standalone: false
 })
 export class GenericCardComponent implements OnInit {
   chatConfig: string;
@@ -19,8 +21,16 @@ export class GenericCardComponent implements OnInit {
   @Input() disableButton: boolean;
   @Input() showTag: any;
   @Input() disableNavigation: boolean= false;
+  @Input() disabledCheckboxId: string | null = null;
+  @Input () selectedList
+  @Input () maxCount
+  @Input () showCheckbox
+  @Input () showSelectAll
+  @Input () selectedCount
+  
 
-  constructor(private router: Router, private localStorage: LocalStorageService) {}
+  constructor(private router: Router, private localStorage: LocalStorageService, private toast : ToastService
+  ) {}
 
   async ngOnInit() {
     this.chatConfig = await this.localStorage.getLocalData(localKeys['CHAT_CONFIG'])
@@ -56,4 +66,26 @@ export class GenericCardComponent implements OnInit {
       return false;
     }
   }
+
+  onCheckboxAction(data: any, event: any) {
+  const isChecked = event.detail.checked;
+  if (isChecked && this.selectedCount >= this.maxCount) {
+    event.target.checked = false;
+    this.toast.showToast('SESSION_MENTEE_LIMIT', 'danger');
+    return;
+  }
+  const action = isChecked ? 'ADD' : 'REMOVE';
+  let value = {
+      data: data.id || data.user_id,
+      type: action,
+      rid: data?.connection_meta?.room_id,
+      element: data
+    }; 
+  this.onClickEvent.emit(value);
+}
+
+ isRowInRemoveState(data: any): boolean {
+  return data?.action?.some(a => a.action === 'REMOVE') ?? false;
+}
+
 }

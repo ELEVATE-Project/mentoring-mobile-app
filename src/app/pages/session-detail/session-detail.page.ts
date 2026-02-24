@@ -16,9 +16,10 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-session-detail',
-  templateUrl: './session-detail.page.html',
-  styleUrls: ['./session-detail.page.scss'],
+    selector: 'app-session-detail',
+    templateUrl: './session-detail.page.html',
+    styleUrls: ['./session-detail.page.scss'],
+    standalone: false
 })
 export class SessionDetailPage implements OnInit, OnDestroy {
   id: any;
@@ -158,7 +159,7 @@ export class SessionDetailPage implements OnInit, OnDestroy {
     this.sessionDatas = response?.result;
     this.isLoaded = true ;
     this.userCantAccess = response?.responseCode == 'OK' ? false:true
-    this.isCreator = response?.result.created_by == this.userDetails.id ? true:false;
+    this.isCreator = response?.result?.created_by == this.userDetails.id ? true:false;
     this.isConductor = this.userDetails.id == response?.result?.mentor_id ? true : false;
     this.sessionManagerText =  this.isConductor ? "ASSIGNED_BY":"INVITED_BY";
     this.isNotInvited = response?.result?.enrolment_type === 'INVITED'? false : true;

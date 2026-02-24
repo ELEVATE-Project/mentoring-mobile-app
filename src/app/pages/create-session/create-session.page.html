@@ -1,5 +1,5 @@
 <app-page-header [config]="headerConfig"></app-page-header>
-<ion-segment (ionChange)="segmentChanged($event)" [value]="type" *ngIf="showForm">
+<ion-segment (ionChange)="segmentChanged($event)" [value]="type" *ngIf="showForm" class="bg-white">
   <ion-segment-button value="default" [disabled]="editSessionDisable" layout="icon-start">
     <div class="icon-2">1</div>
     <ion-label>{{ firstStepperTitle | translate}}</ion-label>
@@ -9,7 +9,7 @@
     <ion-label>{{"MEETING_LINK" | translate}}</ion-label>
   </ion-segment-button>
 </ion-segment>
-<ion-content>
+<ion-content class="bg-white">
   <div class="height">
     <div class="height" [ngSwitch]="type">
       <ion-list class="height" *ngSwitchCase="'default'">

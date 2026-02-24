@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'snakeCaseToUpperCase'
+    name: 'snakeCaseToUpperCase',
+    standalone: false
 })
 export class snakeCaseToUpperCasePipe implements PipeTransform {
   transform(value: string): string {

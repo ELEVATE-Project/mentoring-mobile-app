@@ -5,9 +5,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
-  selector: 'app-landing',
-  templateUrl: './landing.page.html',
-  styleUrls: ['./landing.page.scss'],
+    selector: 'app-landing',
+    templateUrl: './landing.page.html',
+    styleUrls: ['./landing.page.scss'],
+    standalone: false
 })
 export class LandingPage implements OnInit {
   labels=["CREATE_ACCOUNT_TO_CONNECT_SOLVE_&_SHARE"];

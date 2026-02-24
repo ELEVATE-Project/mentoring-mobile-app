@@ -13,9 +13,10 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-generic-profile-header',
-  templateUrl: './generic-profile-header.component.html',
-  styleUrls: ['./generic-profile-header.component.scss'],
+    selector: 'app-generic-profile-header',
+    templateUrl: './generic-profile-header.component.html',
+    styleUrls: ['./generic-profile-header.component.scss'],
+    standalone: false
 })
 export class GenericProfileHeaderComponent implements OnInit {
   @Input() headerData: any;
@@ -29,6 +30,7 @@ export class GenericProfileHeaderComponent implements OnInit {
   public isMobile: any;
   roles: any;
   chatConfig: string;
+  clipboard = Clipboard;
 
   constructor(
     private router: Router,
@@ -42,9 +44,9 @@ export class GenericProfileHeaderComponent implements OnInit {
   }
 
   async ngOnInit() {
-     this.chatConfig = await this.localStorage.getLocalData(localKeys['CHAT_CONFIG'])
+    this.chatConfig = await this.localStorage.getLocalData(localKeys['CHAT_CONFIG'])
     this.roles = this.headerData.organizations?.length && this.headerData?.organizations[0]?.roles.filter((role: any) => role["title"] === "mentor");
-    this.isMentor =this.roles?.length && this.roles .some((role: any) => role.title === 'mentor');
+    this.isMentor =this.roles?.length && this.roles.some((role: any) => role.title === 'mentor');
   }
 
   async action(event) {
@@ -84,13 +86,13 @@ export class GenericProfileHeaderComponent implements OnInit {
       case 'chat':
         this.headerData.is_connected
           ? this.router.navigate([
-              `/${CommonRoutes.CHAT}`,
-              this.headerData.connection_details?.room_id,
-            ],{queryParams: {id: this.headerData.id}})
+            `/${CommonRoutes.CHAT}`,
+            this.headerData.connection_details?.room_id,
+          ],{queryParams: {id: this.headerData.id}})
           : this.router.navigate([
-              `/${CommonRoutes.CHAT_REQ}`,
-              this.headerData.id,
-            ]);
+            `/${CommonRoutes.CHAT_REQ}`,
+            this.headerData.id,
+          ]);
     }
   }
 
@@ -105,7 +107,7 @@ export class GenericProfileHeaderComponent implements OnInit {
   }
 
   copyToClipBoard = async (copyData: any) => {
-    await Clipboard.write({
+    await this.clipboard.write({
       string: copyData,
     }).then(() => {
       this.toast.showToast('COPIED', 'success');

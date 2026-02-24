@@ -9,17 +9,18 @@ export class NetworkService {
   connectSubscription;
   disconnectSubscription;
   isNetworkAvailable: boolean = false;
+  network = Network; 
   constructor() {}
 
   public netWorkCheck() {
     this.getCurrentStatus();
-    Network.addListener('networkStatusChange', status => {
+    this.network.addListener('networkStatusChange', status => {
       this.isNetworkAvailable = status.connected;
     });
   }
 
   async getCurrentStatus() {
-    let status = await Network.getStatus();
+    let status = await this.network.getStatus();
     this.isNetworkAvailable = status.connected
   }
 

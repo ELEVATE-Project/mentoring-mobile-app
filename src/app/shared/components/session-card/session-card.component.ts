@@ -15,9 +15,10 @@ import { IonModal } from '@ionic/angular';
 import { App, AppState } from '@capacitor/app';
 
 @Component({
-  selector: 'app-session-card',
-  templateUrl: './session-card.component.html',
-  styleUrls: ['./session-card.component.scss'],
+    selector: 'app-session-card',
+    templateUrl: './session-card.component.html',
+    styleUrls: ['./session-card.component.scss'],
+    standalone: false
 })
 export class SessionCardComponent implements OnInit {
   @Input() data: any;
@@ -63,8 +64,11 @@ export class SessionCardComponent implements OnInit {
   }
 
   setButtonConfig(isCreator: boolean, isConductor: boolean) {
-    let currentTimeInSeconds = Math.floor(Date.now() / 1000);
-    if (isConductor) {
+  const now = Math.floor(Date.now() / 1000);
+  const start = this.data?.start_date;
+  const platform = this.data?.meeting_info?.platform;
+
+  if (isConductor) {
       this.buttonConfig = { label: 'START', type: 'startAction' };
     } else {
       this.buttonConfig =
@@ -72,26 +76,39 @@ export class SessionCardComponent implements OnInit {
           ? { label: 'JOIN', type: 'joinAction' }
           : { label: 'ENROLL', type: 'enrollAction' };
     }
-    this.buttonConfig.isEnabled =
-      this.data.start_date - currentTimeInSeconds < 600 &&
-      !(this.data?.meeting_info?.platform == 'OFF')
-        ? true
-        : false;
+
+  let enabled = true;
+
+  if (start) {
+    const diff = start - now;
+    if (diff > 600) {
+      enabled = false;
+    }
   }
 
-  async checkIfCreator() {
-    this.userData = await this.localStorage.getLocalData(
-      localKeys.USER_DETAILS
-    );
-    return this.data.created_by == this.userData.id ? true : false;
+  if (platform === 'OFF') {
+    enabled = false;
   }
 
-  async checkIfConductor() {
-    this.userData = await this.localStorage.getLocalData(
-      localKeys.USER_DETAILS
-    );
-    return this.data.mentor_id == this.userData.id ? true : false;
+  this.buttonConfig.isEnabled = enabled;
+}
+
+
+ async checkIfCreator() {
+  this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+  if (!this.userData || !this.data?.created_by) {
+    return false;
   }
+  return this.data.created_by === this.userData.id;
+}
+
+async checkIfConductor() {
+  this.userData = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+  if (!this.userData || !this.data?.mentor_id) {
+    return false;
+  }
+  return this.data.mentor_id === this.userData.id;
+}
 
   onCardClick(data) {
     let value = {

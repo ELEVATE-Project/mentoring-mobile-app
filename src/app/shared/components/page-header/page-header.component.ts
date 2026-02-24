@@ -9,9 +9,10 @@ import { CommonRoutes } from 'src/global.routes';
 import { PopoverController } from '@ionic/angular';
 import { PopoverMenuComponent } from 'src/app/popover-menu/popover-menu.component';
 @Component({
-  selector: 'app-page-header',
-  templateUrl: './page-header.component.html',
-  styleUrls: ['./page-header.component.scss'],
+    selector: 'app-page-header',
+    templateUrl: './page-header.component.html',
+    styleUrls: ['./page-header.component.scss'],
+    standalone: false
 })
 export class PageHeaderComponent implements OnInit {
   @Input() config: any;
@@ -37,7 +38,7 @@ export class PageHeaderComponent implements OnInit {
      {title: 'ADMIN_WORKSPACE', action: "admin", icon: 'briefcase' ,class:'', url: CommonRoutes.ADMIN+'/'+CommonRoutes.ADMIN_DASHBOARD, pageId: PAGE_IDS.adminWorkspace}
    ];
   ngOnInit() {
-      this.utilService.hasBadge$.subscribe((flag) => {
+    this.utilService.hasBadge$.subscribe((flag) => {
       this.hasBadge = flag;
     });
   }
@@ -48,8 +49,7 @@ export class PageHeaderComponent implements OnInit {
   onBack() {
     const currentUrl = this.router.url;
     if (currentUrl === `/${CommonRoutes.TABS}/${CommonRoutes.HOME}`) {
-      const baseUrl = window.location.origin;
-      window.location.href = `${baseUrl}/home`;
+      this.redirectToHome();
     } else {
       this.location.pop();
     }
@@ -84,5 +84,9 @@ export class PageHeaderComponent implements OnInit {
         this.actionEvent.next(event);
         break;
     }
+  }
+  redirectToHome() {
+    const baseUrl = window.location.origin;
+    window.location.href = `${baseUrl}/home`;
   }
 }

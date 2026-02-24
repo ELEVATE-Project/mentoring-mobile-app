@@ -4,9 +4,10 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService } from 'src/app/core/services';
 
 @Component({
-  selector: 'app-search-competency',
-  templateUrl: './search-competency.component.html',
-  styleUrls: ['./search-competency.component.scss'],
+    selector: 'app-search-competency',
+    templateUrl: './search-competency.component.html',
+    styleUrls: ['./search-competency.component.scss'],
+    standalone: false
 })
 export class SearchCompetencyComponent implements OnInit {
 

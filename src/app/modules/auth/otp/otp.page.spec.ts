@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+// import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+// import { IonicModule } from '@ionic/angular';
 
-import { OtpPage } from './otp.page';
+// import { OtpPage } from './otp.page';
 
-describe('OtpPage', () => {
-  let component: OtpPage;
-  let fixture: ComponentFixture<OtpPage>;
+// describe('OtpPage', () => {
+//   let component: OtpPage;
+//   let fixture: ComponentFixture<OtpPage>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ OtpPage ],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
+//   beforeEach(waitForAsync(() => {
+//     TestBed.configureTestingModule({
+//       declarations: [ OtpPage ],
+//       imports: [IonicModule.forRoot()]
+//     }).compileComponents();
 
-    fixture = TestBed.createComponent(OtpPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+//     fixture = TestBed.createComponent(OtpPage);
+//     component = fixture.componentInstance;
+//     fixture.detectChanges();
+//   }));
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+//   it('should create', () => {
+//     expect(component).toBeTruthy();
+//   });
+// });

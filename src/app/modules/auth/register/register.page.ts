@@ -12,9 +12,10 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.page.html',
-  styleUrls: ['./register.page.scss'],
+    selector: 'app-register',
+    templateUrl: './register.page.html',
+    styleUrls: ['./register.page.scss'],
+    standalone: false
 })
 export class RegisterPage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;

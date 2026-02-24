@@ -7,8 +7,6 @@ export const urlConstants = {
     TERMS_CONDITIONS: '/user/v1/account/acceptTermsAndCondition',
     PROFILE_UPDATE: '/interface/v1/account/update',
     PROFILE_DETAILS: '/user/v1/user/read/',
-    MENTOR_PROFILE_DETAILS: '/mentoring/v1/mentors/profile/',
-    MENTEE_PROFILE_DETAILS: '/mentoring/v1/mentees/profile/',
     MENTORS_DIRECTORY: '/mentoring/v1/users/list?type=mentor&page=',
     FILE_UPLOAD: '/user/v1/cloud-services/file/upload',
     SESSIONS: '/mentoring/v1/mentees/sessions?enrolled=', //sessions?enrolled=true/false&page=1&limit=5&search=:search
@@ -23,7 +21,6 @@ export const urlConstants = {
     PROFILE_READ: '/interface/v1/profile/read',
     CREATED_SESSIONS: '/mentoring/v1/mentors/createdSessions?page=',
     MENTORS_DIRECTORY_LIST: '/mentoring/v1/mentors/list?page=',
-    MENTORS_PROFILE_DETAILS: '/interface/v1/mentors/details/',
     SESSION_DOWNLOAD_CSV: '/mentoring/v1/sessions/getSampleCSV',
     SESSION_BULK_UPLOAD: '/mentoring/v1/sessions/bulkSessionCreate',
     THEME_READ: "/mentoring/v1/org-admin/themeDetails",

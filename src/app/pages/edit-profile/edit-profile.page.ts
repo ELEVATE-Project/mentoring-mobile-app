@@ -27,9 +27,10 @@ import { CommonRoutes } from 'src/global.routes';
 import { PlatformLocation, Location } from '@angular/common';
 
 @Component({
-  selector: 'app-edit-profile',
-  templateUrl: './edit-profile.page.html',
-  styleUrls: ['./edit-profile.page.scss'],
+    selector: 'app-edit-profile',
+    templateUrl: './edit-profile.page.html',
+    styleUrls: ['./edit-profile.page.scss'],
+    standalone: false
 })
 export class EditProfilePage implements OnInit, isDeactivatable {
   private win: any = window;
@@ -178,6 +179,15 @@ export class EditProfilePage implements OnInit, isDeactivatable {
             }
         });
         this.form1.myForm.markAsPristine();
+        if(!form['about']){
+            form['about'] = 'NA';
+          }
+          if(!form['education_qualification']){
+            form['education_qualification'] = 'NA';
+          }
+          if(!form['experience']){
+            form['experience'] = 0;
+          } 
         this.updated = await this.profileService.profileUpdate(form);
         this.userDetails.profile_mandatory_fields =[];
         if(this.updated && this.redirectUrl){ 
