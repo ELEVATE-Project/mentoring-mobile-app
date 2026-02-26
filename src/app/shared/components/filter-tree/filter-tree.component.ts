@@ -1,5 +1,4 @@
 import { Component, EventEmitter, input, OnInit, Output, signal } from '@angular/core';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-filter-tree',

@@ -12,70 +12,67 @@
 </ion-segment>
 }
 <ion-content class="bg-white">
-  <div class="height">
-    <div class="height" [ngSwitch]="type">
-      <ion-list class="height" *ngSwitchCase="'default'">
-        <ion-content class="ion-padding">
+    @switch (type) {
+      @case ('default') {
+      <ion-list>
+        <div class="ion-padding">
           @if (showForm) {
           <app-profile-image [profileImageData]='profileImageData' [uploadImage]="isNotCompleted" (imageUploadEvent)="imageUploadEvent($event)" (imageRemoveEvent)="imageRemoveEvent($event)"></app-profile-image>
-          }
-          @if (formData && showForm) {
+          @if (formData) {
           <div>
             <app-dynamic-form [jsonFormData]="formData" #form1 [sesionId]="id" (formValid)="isValid($event)" (formValueChanged)="formValueChanged($event)" (customEventEmitter)="eventHandler($event)" (dynamicSelectClicked)="onDynamicSelectClicked()" [selectedDynamicValue]="selectedTimezone"> </app-dynamic-form>
           </div>
           }
-        </ion-content>
+        }
+      </div>
       </ion-list>
+      }
+      @case ('segment') {
       @if (isNotCompleted) {
-      <ion-list class="height" *ngSwitchCase="'segment'">
+      <ion-list class="height">
         <ion-card class="form-content">
           <ion-card-header>
             <ion-card-title class="ion-text-center card-title">{{"SELECT_MEETING_PLATFORM" | translate}}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-list>
-              <ion-select #link class="select" [(ngModel)]="selectedLink" interface="popover" (ionChange)="clickOptions($event)" [compareWith]="compareWithFn" [value]="selectedLink">
-                @for (option of meetingPlatforms; track $index) {
+              <ion-select #link class="select" [(ngModel)]="selectedLink" interface="popover" (ionChange)="clickOptions($event)" [compareWith]="compareWithFn" >
+                @for (option of meetingPlatforms; track option.name) {
                 <ion-select-option [value]="option">
                   {{ option.name }}
                 </ion-select-option>
-                }
+              }
               </ion-select>
               <ion-item lines="none">
                 <ion-icon class="hint-icon" name="alert-circle"></ion-icon>
                 <ion-label class="hint-label">{{selectedHint}}</ion-label>
               </ion-item>
             </ion-list>
-            @for (option of meetingPlatforms; track option.name) {
-              @if (selectedLink.name === option.name) {
-              <app-dynamic-form [jsonFormData]=option.form #platformForm></app-dynamic-form>
-              }
+            @if (selectedPlatformForm) {
+              <app-dynamic-form [jsonFormData]="selectedPlatformForm" #platformForm></app-dynamic-form>
             }
           </ion-card-content>
         </ion-card>
       </ion-list>
       }
-    </div>
-  </div>
+      }
+    }
 </ion-content>
 
-<section [ngClass]="{'btn-disabled': form1?.myForm.invalid , 'btn-valid':form1?.myForm.valid}">
-  <div class="ion-no-border" submitButton>
-    @if (type == 'default' && !id) {
-    <ion-button expand="full" (click)="onSubmit()">{{'PUBLISH_AND_ADD_LINK' | translate}}</ion-button>
-    }
-    @if (type == 'default' && id) {
-    <ion-button expand="full" (click)="onSubmit()">{{'SAVE' | translate}}</ion-button>
-    }
-  </div>
-  @if (isNotCompleted) {
-    @if (type == 'segment') {
-    <div class="ion-no-border segment" submitButton>
-      @if (sessionDetails?.meeting_info?.platform === 'OFF') {
-      <ion-button class="btns" size="default" fill="solid" (click)="setItLater()">{{'SET_IT_LATER' | translate}}</ion-button>
-      }
-      <ion-button [disabled]="platformForm && !platformForm.myForm.valid" class="btns" size="default" (click)="onSubmitLink()">{{'SUBMIT' | translate}}</ion-button>
+<ion-footer>
+  <section [ngClass]="footerButtonClass">
+    @if (showDefaultSubmit) {
+    <div class="ion-no-border" submitButton>
+      <ion-button expand="full" (click)="onSubmit()">{{defaultSubmitLabel | translate}}</ion-button>
     </div>
     }
-  }
-</section>
+    @if (showMeetingSubmit) {
+    <div class="ion-no-border segment" submitButton>
+      @if (showSetItLater) {
+      <ion-button class="btns" size="default" fill="solid" (click)="setItLater()">{{'SET_IT_LATER' | translate}}</ion-button>
+      }
+      <ion-button [disabled]="isMeetingSubmitDisabled" class="btns" size="default" (click)="onSubmitLink()">{{'SUBMIT' | translate}}</ion-button>
+    </div>
+    }
+  </section>
+</ion-footer>

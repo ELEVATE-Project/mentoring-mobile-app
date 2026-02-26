@@ -11,10 +11,10 @@
 </ion-header>
 }
 @if (filterData()) {
-@for (filter of filterData(); track $index) {
+@for (filter of filterData(); track filter?.name || filter?.title) {
 <div class="ion-padding-start ion-padding-top">
   <ion-label class="sub-header">{{filter?.title}}</ion-label>
-  @for (data of filter?.options; track $index) {
+  @for (data of filter?.options; track data?.name) {
   <div class="ion-padding-top d-flex flex-align-items-center">
     <ion-checkbox [disabled]="isCheckboxDisabled(filter, eventData()?.sessionType)" slot="start"
       [(ngModel)]="data.selected" (ionChange)="onFilterChange()"

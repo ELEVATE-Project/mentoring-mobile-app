@@ -11,13 +11,13 @@
 </div>
 
 <ion-content>
-  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filterItems($event)" placeholder="Search..."
+  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filterItems($event)" placeholder="{{'SEARCH' | translate}}" 
     showClearButton="focus">
   </ion-searchbar>
 
   <ion-radio-group [(ngModel)]="selectedItem">
     <ion-list>
-      @for (item of filteredItems(); track $index) {
+      @for (item of filteredItems(); track item) {
       <ion-item button (click)="selectItem(item)">
         <ion-label>{{ item }}</ion-label>
         <ion-radio slot="start" [value]="item">

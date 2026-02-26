@@ -1,17 +1,18 @@
 @if (showForm) {
 <form [formGroup]="myForm">
-  @for (control of jsonFormData?.controls; track $index; let i = $index) {
+  @for (control of jsonFormData?.controls; track control?.name; let i = $index) {
   <div class="fields">
+    @let ctrl = myForm.get(control.name);
     @if (control?.showField != false) {
     <ion-item
       class="ion-no-padding"
       [class]="control.class"
       [ngClass]="{
         'form-invalid':
-          myForm.get(control.name)?.touched && myForm.get(control.name)?.invalid
+          ctrl?.touched && ctrl?.invalid
       }"
     >
-      @if (control.label !== '' && !['rating'].includes(control.type) && !['chip'].includes(control.type) && !['search'].includes(control.type)) {
+      @if (control.label !== '' && !hiddenLabelTypes.includes(control.type)) {
       <div class="d-flex flex-align-items-center p-rel">
         <ion-label position="stacked">
           {{ control.label }}&nbsp;@if (control?.validators['required']==true && !readonly) {<span class="star-icon-red">*</span>}
@@ -22,7 +23,7 @@
         <ion-popover [trigger]="control.name" triggerAction="hover">
           <ng-template>
             <ion-content class="ion-padding">
-              @for (info of control.info; track $index) {
+              @for (info of control.info; track info?.header || info?.message) {
               <div class="ion-padding-bottom"><span class="popover-header">{{info?.header}}:</span> {{info?.message}}</div>
               }
             </ion-content>
@@ -82,7 +83,7 @@
       ></ion-toggle>
 
       <div class="placeholder">
-      {{ myForm.get(control.name)?.value ? control.placeholderOn : control.placeholderOff }}
+      {{ ctrl?.value ? control.placeholderOn : control.placeholderOff }}
       </div>
       }
 
@@ -139,7 +140,7 @@
         (ionChange)="selectionChanged(control,$event)"
         [cancelText]="'CANCEL' | translate"
       >
-        @for (option of control.options; track $index) {
+        @for (option of control.options; track option?.value || option?.label) {
         <ion-select-option
           [value]="option.value"
         >{{ option.label }}</ion-select-option>
@@ -192,12 +193,13 @@
 
     @if (control?.showField != false) {
     <small class="error-msg d-flex error-msg flex-align-items-center">
-      @if (myForm.get(control.name)?.touched && myForm.get(control.name)?.invalid) {
+      @if (ctrl?.touched && ctrl?.invalid) {
+      @let firstErrorKey = (ctrl?.errors | keyvalue)[0]?.key;
       <div>
         <ion-icon name="alert-circle-outline"></ion-icon>
-         @if (control?.errorMessage[(myForm.get(control.name).errors | keyvalue)[0].key]) {
+         @if (control?.errorMessage[firstErrorKey]) {
         <span class="mx-10">
-          {{ control?.errorMessage[(myForm.get(control.name).errors | keyvalue)[0].key] }}
+          {{ control?.errorMessage[firstErrorKey] }}
         </span>
         } @else {
         <span class="mx-10">Enter {{control?.label}}</span>

@@ -25,6 +25,10 @@ export class ProfileImageComponent implements OnInit {
 
   ngOnInit() { }
 
+  get hasImage(): boolean {
+    return !!this.profileImageData?.image;
+  }
+
   clearFileInput() {
     if (this.fileUpload) {
       this.fileUpload.nativeElement.value = '';

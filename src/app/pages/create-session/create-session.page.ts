@@ -485,6 +485,38 @@ export class CreateSessionPage implements OnInit {
     return o1 === o2;
   };
 
+  get selectedPlatformForm(): any {
+    if (!this.meetingPlatforms || !this.selectedLink) return null;
+    return this.meetingPlatforms.find(p => p.name === this.selectedLink.name)?.form ?? null;
+  }
+
+  get showDefaultSubmit(): boolean {
+    return this.type === 'default';
+  }
+
+  get defaultSubmitLabel(): string {
+    return this.id ? 'SAVE' : 'PUBLISH_AND_ADD_LINK';
+  }
+
+  get showMeetingSubmit(): boolean {
+    return this.isNotCompleted && this.type === 'segment';
+  }
+
+  get showSetItLater(): boolean {
+    return this.sessionDetails?.meeting_info?.platform === 'OFF';
+  }
+
+  get isMeetingSubmitDisabled(): boolean {
+    return !!this.platformForm && !this.platformForm.myForm.valid;
+  }
+
+  get footerButtonClass(): { [key: string]: boolean } {
+    return {
+      'btn-disabled': !!this.form1?.myForm?.invalid,
+      'btn-valid': !!this.form1?.myForm?.valid
+    };
+  }
+
   formValueChanged(event) {
     const formRawValue = this.form1.myForm.getRawValue();
     let dependedControlIndex = this.formData.controls.findIndex(formControl => formControl.name === event.dependedChild)

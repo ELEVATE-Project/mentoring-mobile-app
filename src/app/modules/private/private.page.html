@@ -50,7 +50,7 @@
             </ion-item>
           </ion-menu-toggle>
           }
-          @for (p of privateService.appPages(); track p.pageId; let i = $index) {
+          @for (p of privateService.appPages(); track p.pageId) {
           <ion-menu-toggle auto-hide="false" [class]="p?.class">
             @if (p.badge) {
             <span class="badge"></span>

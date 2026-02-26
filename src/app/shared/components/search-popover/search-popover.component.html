@@ -61,7 +61,7 @@
       }
       <ion-grid>
         <ion-row class="d-flex ">
-          @for (value of tableData(); track $index) {
+          @for (value of tableData(); track value?.id || value?.name || value?.title || value?.label) {
           <ion-col padding size-xs="12" size-sm="12" align-self-stretch>
             <app-generic-card [data]="value" [disableButton]="value?.action?.[0].isDisabled" (onClickEvent)="onButtonCLick($event)" [buttonConfig]="value?.action  "[cardConfig]="mentorForm" [disableNavigation]="disableNavigation" [disabledCheckboxId]="disabledCheckboxId" [selectedList]="selectedList" [maxCount]="maxCount" [showSelectAll]="showSelectAll" [showCheckbox]="showCheckbox" [selectedCount]="selectedList.length"></app-generic-card>
           </ion-col>

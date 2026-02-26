@@ -19,7 +19,7 @@
   }
   @if (entities() && !data?.viewListMode) {
   <div class="competency-list-wrapper">
-    @for (option of entities().data; track $index) {
+    @for (option of entities().data; track option?.label) {
     <ion-item lines="none">
       <ion-checkbox slot="start" labelPlacement="end" [checked]="isOptionSelected(option)" (ionChange)="onCheckboxChange($event, option)">{{ option?.label }}</ion-checkbox>
     </ion-item>
@@ -29,7 +29,7 @@
 
   @if (data?.viewListMode) {
   <div class="competency-list-wrapper">
-    @for (item of data.selectedData; track $index) {
+    @for (item of data.selectedData; track item?.label) {
     <ion-item lines="none">
       <ion-checkbox slot="start" labelPlacement="end" checked="true" (ionChange)="onCheckboxChange($event, item)">{{ item?.label }}</ion-checkbox>
     </ion-item>

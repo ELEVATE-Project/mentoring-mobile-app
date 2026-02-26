@@ -8,7 +8,7 @@
   <ion-popover [trigger]="control.name" triggerAction="hover">
     <ng-template>
       <ion-content class="ion-padding">
-        @for (info of control.info; track $index) {
+        @for (info of control.info; track info?.header) {
         <div class="ion-padding-bottom">
           @if (info?.header) {<span class="popover-header">{{info?.header}}:</span>} {{info?.message}}
         </div>
@@ -35,8 +35,8 @@
     <ion-label> {{ "ADD_LINK" | translate}}</ion-label>
   </ion-chip>
   }
-  @for (data of selectedData; track $index) {
-    @if ($index < 5 && (data.name || data.label) && control.meta.addPopupType != 'file') {
+  @for (data of selectedData; track (data?.name ?? data?.label); let i = $index) {
+    @if (i < 5 && (data.name || data.label) && control.meta.addPopupType != 'file') {
     <ion-chip class="color-red" [disabled]="control?.disabled || data?.type === 'ENROLLED'">
       <ion-icon class="icon" [name]="icon.name" [color]="icon.color"
         (click)="handleCloseIconClick($event, data)"></ion-icon>
@@ -45,19 +45,19 @@
     }
   }
   @if (control.meta.addPopupType == 'file') {
-    @for (file of control?.value; track $index) {
+    @for (file of control?.value; track file?.name; let i = $index) {
     <ion-chip class="color-red" [disabled]="control?.disabled">
-      <ion-icon color="#fff" name="close-circle" (click)="removeFile(file,$index)" class="remove-icon"></ion-icon>
+      <ion-icon color="#fff" name="close-circle" (click)="removeFile(file,i)" class="remove-icon"></ion-icon>
       <ion-label class="capitalize">{{file.name || file.label}}</ion-label>
     </ion-chip>
     }
   }
 
-  @if (selectedData.length > 5) {
+  @if (showMoreChip) {
   <ion-chip (click)="viewSelectedList()" class="color-red"
     [disabled]="control?.disabled">
     <ion-icon class="icon" name="add-outline" color="light"></ion-icon>
-    <ion-label>{{selectedData.length-5}} more</ion-label>
+    <ion-label>{{remainingSelectedCount}} more</ion-label>
   </ion-chip>
   }
 </div>

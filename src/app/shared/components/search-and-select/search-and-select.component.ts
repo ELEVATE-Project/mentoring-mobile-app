@@ -37,7 +37,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   _selectAll;
   addIconDark = {name: 'add-outline', color: 'dark'}
   closeIconLight = {name: 'close-circle-sharp', color: 'light'}
-  selectedData=[];
+  selectedData: any[] = [];
   originalLabel: any;
   icon = this.addIconDark;
   value: any[];
@@ -62,6 +62,14 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     this.originalLabel = this.control.label;
     this.isMobile = window.innerWidth <= 950;
     this.allowCustomEntities = this.control.meta.allow_custom_entities;
+  }
+
+  get showMoreChip(): boolean {
+    return this.selectedData.length > 5;
+  }
+
+  get remainingSelectedCount(): number {
+    return this.selectedData.length - 5;
   }
 
   writeValue(value: any[]) {

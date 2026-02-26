@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild, signal } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, computed, signal } from '@angular/core';
 import { ActionSheetController, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService, UtilService } from 'src/app/core/services';
@@ -22,6 +22,9 @@ export class PreAlertModalComponent {
   link: string = '';
   showLinkError = signal<boolean>(false);
   uploadedFile = signal<File | null>(null);
+  hasLinkError = computed(() => this.showLinkError());
+  hasUploadedFile = computed(() => !!this.uploadedFile());
+  uploadedFileName = computed(() => this.uploadedFile()?.name || '');
 
   constructor(
     private modalController: ModalController,
@@ -49,9 +52,13 @@ export class PreAlertModalComponent {
 
   saveLink() {
     if (this.type === 'file') {
+      const file = this.uploadedFile();
+      if (!file) {
+        return;
+      }
       const obj = {
-        name: this.name ? this.name : this.uploadedFile().name,
-        file: this.uploadedFile()
+        name: this.name ? this.name : file.name,
+        file
       };
       this.modalController.dismiss({
         data: obj,
@@ -84,17 +91,17 @@ export class PreAlertModalComponent {
 
     if (isMobile) {
       const actionSheet = await this.actionSheetController.create({
-        header: 'Select Resource',
+        header: this.translateService.instant('SELECT_RESOURCE'),
         buttons: [
           {
-            text: 'File',
+            text: this.translateService.instant('FILE'),
             icon: 'folder',
             handler: () => {
               this.selectFile();
             }
           },
           {
-            text: 'Cancel',
+            text: this.translateService.instant('CANCEL'),
             icon: 'close',
             role: 'cancel'
           }

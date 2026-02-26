@@ -1,6 +1,6 @@
 <div>
   <div class="d-flex flex-justify-center">
-    @if (!profileImageData?.image || profileImageData?.image=='') {
+    @if (!hasImage) {
     <div class="profile-container ">
       <img class="thumbnail-image" src="assets/prof-img/user.png" />
       @if (isMobile()) {
@@ -16,7 +16,7 @@
   @if (uploadImage) {
   <div class="d-flex flex-justify-center">
     <input type="file" (change)="upload($event)" #fileUpload accept="image/*" hidden>
-    @if (!profileImageData?.image || profileImageData?.image=='') {
+    @if (!hasImage) {
     <ion-button fill="clear" expand="block" class="add-image-button"
       (click)="uploadPhoto('ADD_PHOTO'); clearFileInput();">
       {{ "ADD_PHOTO" | translate }}
@@ -36,9 +36,7 @@
     </div>
     }
     @if (profileImageData?.location) {
-    <div>
       <p class="region text-config">{{ profileImageData?.location[0]?.label }}</p>
-    </div>
     }
   </div>
   }
