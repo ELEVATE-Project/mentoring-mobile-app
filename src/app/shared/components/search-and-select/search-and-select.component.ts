@@ -73,15 +73,18 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(value: any[]) {
-    if(this.control.name === 'mentees') {
-    SearchAndSelectComponent.menteeControlRef = this.control;
-    }
-    this.selectedData = this.control.meta.searchData ? this.control.meta.searchData : []
-    this.selectedChips = this.selectedData.map( data => data.id )
-    this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
-    if (this.control.name === 'mentees') {
-     this.selectedData = this.selectedData.map(data => ({...data, isDisabled: true}));
-  }
+    setTimeout(() => {
+      if(this.control.name === 'mentees') {
+        SearchAndSelectComponent.menteeControlRef = this.control;
+      }
+      this.selectedData = this.control.meta.searchData ? this.control.meta.searchData : [];
+      this.selectedChips = this.selectedData.map( data => data.id );
+      this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark;
+      if (this.control.name === 'mentees') {
+        this.selectedData = this.selectedData.map(data => ({...data, isDisabled: true}));
+      }
+      this.cdr.detectChanges();
+    });
   }
   registerOnChange(onChange: any) {
     this.onChange = onChange;
