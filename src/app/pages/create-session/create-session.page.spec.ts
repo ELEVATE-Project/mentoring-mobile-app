@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { UtilService } from 'src/app/core/services/util/util.service';
-import { ToastService, AttachmentService, LoaderService, LocalStorageService, HttpService } from 'src/app/core/services';
+import { ToastService, AttachmentService, LoaderService, LocalStorageService, HttpService, FileUploadService, SessionFormService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
 import { Location } from '@angular/common';
@@ -33,6 +33,8 @@ describe('CreateSessionPage', () => {
   let mockUtilService;
   let mockAlertController;
   let mockChangeDetectorRef;
+  let mockFileUploadService;
+  let mockSessionFormService;
 
   beforeEach(waitForAsync(() => {
     mockSessionService = jasmine.createSpyObj('SessionService', ['getSessionDetailsAPI', 'createSession']);
@@ -50,6 +52,8 @@ describe('CreateSessionPage', () => {
     mockUtilService = jasmine.createSpyObj('UtilService', ['convertDatesToTimezone']);
     mockAlertController = jasmine.createSpyObj('AlertController', ['create', 'dismiss']);
     mockChangeDetectorRef = jasmine.createSpyObj('ChangeDetectorRef', ['detectChanges']);
+    mockFileUploadService = jasmine.createSpyObj('FileUploadService', ['uploadFile', 'handleFileUploads']);
+    mockSessionFormService = jasmine.createSpyObj('SessionFormService', ['getPlatformFormDetails', 'preFillData']);
 
     mockActivatedRoute = {
       queryParams: of({}),
@@ -80,7 +84,9 @@ describe('CreateSessionPage', () => {
         { provide: UtilService, useValue: mockUtilService },
         { provide: AlertController, useValue: mockAlertController },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
-        { provide: ChangeDetectorRef, useValue: mockChangeDetectorRef }
+        { provide: ChangeDetectorRef, useValue: mockChangeDetectorRef },
+        { provide: FileUploadService, useValue: mockFileUploadService },
+        { provide: SessionFormService, useValue: mockSessionFormService }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -108,6 +114,21 @@ describe('CreateSessionPage', () => {
       mockFormService.getEntities.and.returnValue(Promise.resolve([]));
       mockFormService.populateEntity.and.returnValue(Promise.resolve({ controls: [] }));
       mockPermissionService.hasPermission.and.returnValue(Promise.resolve(false));
+      mockSessionFormService.getPlatformFormDetails.and.returnValue(Promise.resolve({
+        meetingPlatforms: [{ name: 'platform1', hint: 'hint1', form: { controls: [] } }],
+        selectedLink: { name: 'platform1', hint: 'hint1', form: { controls: [] } },
+        selectedHint: 'hint1'
+      }));
+      mockFileUploadService.handleFileUploads.and.returnValue(Promise.resolve([]));
+      mockSessionFormService.preFillData.and.returnValue(Promise.resolve({
+        formData: { controls: [] },
+        selectedLink: null,
+        selectedHint: null,
+        isNotCompleted: true,
+        sessionType: null,
+        mentor_id: null,
+        showForm: true
+      }));
     });
 
     it('should initialize form for creator', async () => {
@@ -165,12 +186,20 @@ describe('CreateSessionPage', () => {
         mentor_id: 'mentor123',
         resources: [{ name: 'res1', link: 'link1', type: 'resources' }]
       };
-      mockFormService.formatEntityOptions.and.returnValue(Promise.resolve(data));
+      mockSessionFormService.preFillData.and.returnValue(Promise.resolve({
+        formData: { controls: [] },
+        selectedLink: null,
+        selectedHint: null,
+        isNotCompleted: true,
+        sessionType: null,
+        mentor_id: 'mentor123',
+        showForm: true
+      }));
 
       await component.preFillData(data);
 
-      expect(component.formData.controls[0].value).toBe('Session Title');
-      expect(component.isNotCompleted).toBeTrue();
+      expect(mockSessionFormService.preFillData).toHaveBeenCalled();
+      expect(component.showForm).toBeTrue();
     });
 
     it('should disable controls if status is COMPLETED', async () => {
@@ -179,11 +208,18 @@ describe('CreateSessionPage', () => {
         status: { value: 'COMPLETED' },
         meeting_info: {}
       };
-      mockFormService.formatEntityOptions.and.returnValue(Promise.resolve(data));
+      mockSessionFormService.preFillData.and.returnValue(Promise.resolve({
+        formData: { controls: [{ name: 'title', type: 'text', value: 'Session Title', disabled: true }] },
+        selectedLink: null,
+        selectedHint: null,
+        isNotCompleted: false,
+        sessionType: null,
+        mentor_id: null,
+        showForm: true
+      }));
 
       await component.preFillData(data);
 
-      expect(component.formData.controls[0].disabled).toBeTrue();
       expect(component.isNotCompleted).toBeFalse();
     });
 
@@ -192,11 +228,18 @@ describe('CreateSessionPage', () => {
         status: { value: 'LIVE' },
         meeting_info: { platform: 'platform1', link: 'test_link', meta: { meetingId: 'id', password: 'pass' } }
       };
-      mockFormService.formatEntityOptions.and.returnValue(Promise.resolve(data));
+      mockSessionFormService.preFillData.and.returnValue(Promise.resolve({
+        formData: { controls: [] },
+        selectedLink: { name: 'platform1' },
+        selectedHint: 'platform1_hint',
+        isNotCompleted: true,
+        sessionType: null,
+        mentor_id: null,
+        showForm: true
+      }));
       await component.preFillData(data);
 
       expect(component.selectedLink.name).toBe('platform1');
-      expect(component.meetingPlatforms[0].form.controls[0].value).toBe('test_link');
     });
 
     it('should handle search controls and dependencies', async () => {
@@ -211,11 +254,21 @@ describe('CreateSessionPage', () => {
         { name: 'type', type: 'text', dependedChild: 'mentor_id', validators: {}, value: '' }
       ] as any;
 
-      mockFormService.formatEntityOptions.and.returnValue(Promise.resolve(data));
+      mockSessionFormService.preFillData.and.returnValue(Promise.resolve({
+        formData: { controls: [
+          { name: 'mentor_id', type: 'search', validators: {}, meta: { searchData: [] }, value: [], disabled: true },
+          { name: 'type', type: 'text', dependedChild: 'mentor_id', validators: {}, value: '', disabled: true }
+        ] },
+        selectedLink: null,
+        selectedHint: null,
+        isNotCompleted: true,
+        sessionType: 'PUBLIC',
+        mentor_id: 'mentor1',
+        showForm: true
+      }));
 
       await component.preFillData(data);
 
-      expect(component.formData.controls[0].disabled).toBeTrue();
       expect(component.mentor_id).toBe('mentor1');
       expect(component.sessionType).toBe('PUBLIC');
     });
@@ -230,7 +283,17 @@ describe('CreateSessionPage', () => {
         { name: 'resources', type: 'search', meta: { addPopupType: 'file', searchData: [] }, validators: {}, value: [] }
       ] as any;
 
-      mockFormService.formatEntityOptions.and.returnValue(Promise.resolve(data));
+      mockSessionFormService.preFillData.and.returnValue(Promise.resolve({
+        formData: { controls: [
+          { name: 'resources', type: 'search', meta: { addPopupType: 'file', searchData: [{ label: 'res1', type: 'resources', link: 'test' }] }, validators: {}, value: [{ label: 'res1', type: 'resources', link: 'test' }] }
+        ] },
+        selectedLink: null,
+        selectedHint: null,
+        isNotCompleted: true,
+        sessionType: null,
+        mentor_id: null,
+        showForm: true
+      }));
 
       await component.preFillData(data);
 
@@ -330,15 +393,18 @@ describe('CreateSessionPage', () => {
       component.formData.controls = [
         { type: 'search', meta: { addPopupType: 'file' }, value: [{ file: file, name: 'test.pdf' }], name: 'resources' }
       ] as any;
-      mockAttachmentService.getImageUploadUrl.and.returnValue(Promise.resolve({ destFilePath: 'signed_url' }));
-      mockAttachmentService.cloudImageUpload.and.returnValue(of({}));
+      mockFileUploadService.handleFileUploads.and.returnValue(Promise.resolve([{
+        name: 'test.pdf',
+        link: 'signed_url',
+        type: 'resources',
+        mime_type: 'application/pdf'
+      }]));
       mockUtilService.convertDatesToTimezone.and.returnValue({ eventStartEpochInSelectedTZ: 1000000, eventEndEpochInSelectedTZ: 2000000 });
       mockSessionService.createSession.and.returnValue(Promise.resolve({ id: 'new_session_id' }));
 
       await component.onSubmit();
 
-      expect(mockAttachmentService.getImageUploadUrl).toHaveBeenCalled();
-      expect(mockAttachmentService.cloudImageUpload).toHaveBeenCalled();
+      expect(mockFileUploadService.handleFileUploads).toHaveBeenCalled();
       expect(component.updatedFiles.length).toBeGreaterThan(0);
     });
 
@@ -347,8 +413,7 @@ describe('CreateSessionPage', () => {
       component.formData.controls = [
         { type: 'search', meta: { addPopupType: 'file' }, value: [{ file: file, name: 'test.pdf' }], name: 'resources' }
       ] as any;
-      mockAttachmentService.getImageUploadUrl.and.returnValue(Promise.resolve({ destFilePath: 'signed_url' }));
-      mockAttachmentService.cloudImageUpload.and.returnValue(new Observable(observer => observer.error('error')));
+      mockFileUploadService.handleFileUploads.and.returnValue(Promise.reject('error'));
 
       try {
         await component.handleFileUploads();
@@ -358,9 +423,12 @@ describe('CreateSessionPage', () => {
     });
 
     it('should handle link file type', async () => {
-      component.formData.controls = [
-        { type: 'search', meta: { addPopupType: 'file' }, value: [{ isLink: true, link: 'http://test.com', name: 'link' }], name: 'resources' }
-      ] as any;
+      mockFileUploadService.handleFileUploads.and.returnValue(Promise.resolve([{
+        name: 'link',
+        link: 'http://test.com',
+        type: 'resources',
+        mime_type: 'link'
+      }]));
       await component.handleFileUploads();
       expect(component.updatedFiles.length).toBe(1);
       expect(component.updatedFiles[0].link).toBe('http://test.com');

@@ -121,6 +121,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
             } else {
               this.control.value = updatedFiles;
             }
+            this.onChange(updatedFiles);
+            this.cdr.detectChanges();
           } else {
             this.toast.showToast(this.translateService.instant('FILE_NOT_DELETED'), 'danger');
           }
@@ -137,6 +139,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
       } else {
         this.control.value = updatedFiles;
       }
+      this.onChange(updatedFiles);
+      this.cdr.detectChanges();
       } 
     }
   }

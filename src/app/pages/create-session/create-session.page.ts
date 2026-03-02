@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AttachmentService, LoaderService, LocalStorageService, ToastService } from 'src/app/core/services';
+import { AttachmentService, LoaderService, LocalStorageService, ToastService, FileUploadService, SessionFormService } from 'src/app/core/services';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import {
@@ -15,6 +15,7 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { TranslateService } from '@ngx-translate/core';
 import { CREATE_SESSION_FORM, MANAGERS_CREATE_SESSION_FORM, PLATFORMS } from 'src/app/core/constants/formConstant';
 import { FormService } from 'src/app/core/services/form/form.service';
+import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Validators } from '@angular/forms';
 import { manageSessionAction, permissions } from 'src/app/core/constants/permissionsConstant';
@@ -33,7 +34,7 @@ import { UtilService } from '../../core/services/util/util.service';
   styleUrls: ['./create-session.page.scss'],
   standalone: false
 })
-export class CreateSessionPage implements OnInit {
+export class CreateSessionPage implements OnInit, OnDestroy {
 
   timezones: string[] = moment.tz.names(); // All timezones
   selectedTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -79,6 +80,7 @@ export class CreateSessionPage implements OnInit {
   isManagePage: boolean;
   user: any;
   showConnectedMentees: boolean = false;
+  private queryParamsSub: Subscription;
 
   constructor(
     private sessionService: SessionService,
@@ -98,17 +100,35 @@ export class CreateSessionPage implements OnInit {
     private permissionService: PermissionService,
     private actionSheetController: ActionSheetController,
     private utilService: UtilService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private fileUploadService: FileUploadService,
+    private createSessionFormService: SessionFormService
   ) {
   }
   ngOnInit() {
 
   }
   async ionViewWillEnter() {
+    await this.initializePage();
+  }
+
+  async initializePage() {
+    await this.loadConfig();
+    await this.loadForm();
+    await this.loadSession();
+  }
+
+  private async loadConfig() {
     await this.updateFormConfig();
-    this.route.queryParams.subscribe(() => this.updateFormConfig());
-    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    const platformForm = await this.getPlatformFormDetails();
+    this.queryParamsSub = this.route.queryParams.subscribe(() => this.updateFormConfig());
+    this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+  }
+
+  private async loadForm() {
+    const platformResult = await this.createSessionFormService.getPlatformFormDetails();
+    this.meetingPlatforms = platformResult.meetingPlatforms;
+    this.selectedLink = platformResult.selectedLink;
+    this.selectedHint = platformResult.selectedHint;
     const result = await this.form.getForm(this.formConfig);
     this.formData = _.get(result, 'data.fields');
     this.entityNames = await this.form.getEntityNames(this.formData);
@@ -116,6 +136,9 @@ export class CreateSessionPage implements OnInit {
     this.formData = await this.form.populateEntity(this.formData, this.entityList);
     this.cdr.detectChanges();
     this.permissionService.getPlatformConfig();
+  }
+
+  private async loadSession() {
     this.activatedRoute.queryParamMap.subscribe(async (params) => {
       this.id = params?.get('id');
       this.headerConfig.label = this.id ? "EDIT_SESSION" : "CREATE_NEW_SESSION";
@@ -141,13 +164,6 @@ export class CreateSessionPage implements OnInit {
     await this.preFillData(response);
     this.editSessionDisable = (this.sessionDetails?.status?.value == 'LIVE');
     this.cdr.detectChanges();
-  }
-
-  async getPlatformFormDetails() {
-    let form = await this.form.getForm(PLATFORMS);
-    this.meetingPlatforms = form.data.fields.forms;
-    this.selectedLink = this.meetingPlatforms[0];
-    this.selectedHint = this.meetingPlatforms[0].hint;
   }
 
   async canPageLeave() {
@@ -189,43 +205,11 @@ export class CreateSessionPage implements OnInit {
   }
 
   async handleFileUploads() {
-    for (const control of this.formData.controls) {
-      if (control.type === 'search' && control.meta?.addPopupType === 'file' && control.value?.length) {
-        for (const file of control.value) {
-          if (file?.isLink && file.link) {
-            this.updatedFiles.push({
-              "name": file.name,
-              "link": file.link,
-              "type": control.name,
-              "mime_type": "link",
-            });
-          } else if (file.file instanceof File && file.file.name) {
-            const signedUrl = await this.attachment.getImageUploadUrl(file.file);
-            const uploadedFileUrl = await this.uploadFile(file.file, signedUrl);
-            this.updatedFiles.push({
-              "name": file.name,
-              "link": uploadedFileUrl,
-              "type": control.name,
-              "mime_type": file.file.type,
-            });
-          }
-          else if (file.name) {
-            this.updatedFiles.push(file);
-          }
-        }
-      }
-    }
+    this.updatedFiles = await this.fileUploadService.handleFileUploads(this.formData.controls);
   }
 
-
-
   async uploadFile(file: File, signedUrl: any) {
-    return new Promise((resolve, reject) => {
-      this.attachment.cloudImageUpload(file, signedUrl).subscribe({
-        next: () => resolve(signedUrl.destFilePath),
-        error: (err) => reject(err)
-      });
-    });
+    return this.fileUploadService.uploadFile(file, signedUrl);
   }
 
   async onSubmit() {
@@ -296,134 +280,21 @@ export class CreateSessionPage implements OnInit {
   }
 
   async preFillData(data) {
-    let existingData = await this.form.formatEntityOptions(data, this.entityNames)
-
-
-    for (let j = 0; j < this?.meetingPlatforms?.length; j++) {
-      if (existingData.meeting_info.platform == this?.meetingPlatforms[j].name) {
-        this.selectedLink = this?.meetingPlatforms[j];
-        this.selectedHint = this.meetingPlatforms[j].hint;
-        let obj = this?.meetingPlatforms[j]?.form?.controls.find((link: any) => link?.name == 'link');
-        let meetingId = this?.meetingPlatforms[j]?.form?.controls.find((meetingId: any) => meetingId?.name == 'meetingId')
-        let password = this?.meetingPlatforms[j]?.form?.controls.find((password: any) => password?.name == 'password')
-        if (obj && existingData?.meeting_info?.link) {
-          obj.value = existingData?.meeting_info?.link;
-        }
-        if (existingData?.meeting_info?.meta?.meetingId) {
-          meetingId.value = existingData?.meeting_info?.meta?.meetingId;
-          password.value = existingData?.meeting_info?.meta?.password;
-        }
-      }
-    }
-
-    for (let i = 0; i < this.formData.controls.length; i++) {
-      this.formData.controls[i].value =
-        existingData[this.formData.controls[i].name];
-      this.formData.controls[i].disabled = this.formData.controls[i].name !== "post" && existingData.status.value === "COMPLETED" ? true : false;
-      this.isNotCompleted = existingData.status.value !== "COMPLETED";
-      if (
-        this.formData.controls[i].name == "post" && existingData.status.value !== "COMPLETED"
-      ) {
-        this.formData.controls[i].disabled = true;
-      }
-      if (this.formData.controls[i].type == 'search' && this.formData.controls[i].meta.addPopupType !== 'file') {
-        this.formData.controls[i].id = this.id;
-        if (this.formData.controls[i].meta.multiSelect) {
-          this.formData.controls[i] = {
-            ...this.formData.controls[i],
-            meta: {
-              ...this.formData.controls[i].meta,
-              searchData: existingData[this.formData.controls[i].name]
-            }
-          };
-
-          this.formData.controls[i].value = this.formData.controls[i].meta.searchData ? this.formData.controls[i].meta.searchData.map(obj => obj.id || obj.value) : [];
-        } else {
-          if (existingData[this.formData.controls[i].name]) {
-            this.formData.controls[i] = {
-              ...this.formData.controls[i],
-              meta: {
-                ...this.formData.controls[i].meta,
-                searchData: [{
-                  label: `${existingData.mentor_name}, ${existingData.organization}`,
-                  id: existingData[this.formData.controls[i].name]
-                }]
-              }
-            };
-          }
-        }
-        if (!this.formData.controls[i].meta.disableIfSelected && existingData.status.value !== "COMPLETED") {
-          this.formData.controls[i].disabled = false;
-        }
-        if (this.formData.controls[i].meta.disableIfSelected && this.formData.controls[i].value && existingData.status.value !== "COMPLETED" && this.formData.controls[i].meta.addPopupType !== 'file') {
-          if (this.formData.controls[i].name === 'mentor_id') {
-            if (existingData[this.formData.controls[i].name]) {
-              this.formData.controls[i].disabled = true;
-            }
-          } else {
-            this.formData.controls[i].disabled = true;
-          }
-        }
-      } else if (this.formData.controls[i].type === 'search' && this.formData.controls[i].meta.addPopupType === 'file') {
-        const controlName = this.formData.controls[i].name;
-        if (existingData.resources?.length) {
-          const filteredResources = existingData.resources
-            .filter(resource => resource.type === controlName)
-            .map(resource =>
-            ({
-              label: resource.name,
-              id: resource.id,
-              type: resource.type,
-              link: resource.link
-            })
-            );
-          if (filteredResources) {
-            this.formData.controls[i].value = filteredResources.map(r => r);
-
-            this.formData.controls[i] = {
-              ...this.formData.controls[i],
-              meta: {
-                ...this.formData.controls[i].meta,
-                searchData: filteredResources
-              }
-            };
-          }
-        }
-        this.formData.controls[i].id = this.id;
-        if (!this.formData.controls[i].meta.disableIfSelected && existingData.status.value !== "COMPLETED" && this.formData.controls[i].meta.addPopupType !== 'file') {
-          this.formData.controls[i].disabled = false;
-        }
-        if (this.formData.controls[i].meta.disableIfSelected && this.formData.controls[i].value?.length && existingData.status.value !== "COMPLETED") {
-          this.formData.controls[i].disabled = true;
-        }
-      }
-      let dependedChildIndex = this.formData.controls.findIndex(formControl => formControl.name === this.formData.controls[i].dependedChild)
-      if (existingData['mentor_id']) {
-        this.mentor_id = existingData['mentor_id'];
-      }
-      if (this.formData.controls[i].dependedChild && this.formData.controls[i].name === 'type') {
-        if (existingData[this.formData.controls[i].name].value) {
-          this.formData.controls[i].disabled = true;
-          this.sessionType = existingData[this.formData.controls[i].name].value;
-          this.formData.controls[dependedChildIndex].validators['required'] = existingData[this.formData.controls[i].name].value == 'PUBLIC' ? false : true
-        }
-      }
-      if (this.formData.controls[i]?.name === "mentees") {
-        const { isCreator } = this.route.snapshot.queryParams;
-        if (!this.mentor_id) {
-          this.formData.controls[i].disabled = true;
-        }
-        if (isCreator === 'true' && this.sessionType === 'PUBLIC') {
-          this.formData.controls[i].showField = false;
-        }
-      }
-      this.formData.controls[i].options = _.unionBy(
-        this.formData.controls[i].options,
-        this.formData.controls[i].value, 'value'
-      );
-    }
-    this.formData.controls = [...this.formData.controls];
-    this.showForm = true;
+    const result = await this.createSessionFormService.preFillData(
+      data,
+      this.formData,
+      this.meetingPlatforms,
+      this.id,
+      this.entityNames,
+      this.route.snapshot.queryParams
+    );
+    this.formData = result.formData;
+    if (result.selectedLink) this.selectedLink = result.selectedLink;
+    if (result.selectedHint) this.selectedHint = result.selectedHint;
+    this.isNotCompleted = result.isNotCompleted;
+    this.sessionType = result.sessionType;
+    this.mentor_id = result.mentor_id;
+    this.showForm = result.showForm;
   }
 
   async imageUploadEvent(event) {
@@ -790,6 +661,11 @@ export class CreateSessionPage implements OnInit {
   ionViewWillLeave() {
     this.formData = null;
     this.sessionType = '';
+    this.queryParamsSub?.unsubscribe();
     this.modalDismiss();
+  }
+
+  ngOnDestroy() {
+    this.queryParamsSub?.unsubscribe();
   }
 }
