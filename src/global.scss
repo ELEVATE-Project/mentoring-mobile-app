@@ -336,16 +336,18 @@ ion-accordion-group {
 .example-modal .wrapper {
   margin-bottom: 10px;
 }
+ion-toast.custom-toast {
+  --background: var(--ion-color-primary);
+  --color: #ffffff !important;
+  color: #ffffff !important;
+}
+
 ion-toast.custom-toast::part(button) {
   border-radius: 5px;
   background-color: #39a464;
   font-size: 15px;
   text-transform: none;
 }
-ion-toast.custom-toast {
-  --background: var(--ion-color-primary);
-}
-
 @media (max-width: 991px) {
   .hide-on-small-screen {
     display: none;
