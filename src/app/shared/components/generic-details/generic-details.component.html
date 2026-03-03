@@ -1,112 +1,128 @@
-<div class="field-wrapper" *ngFor="let item of sessionData.controls">
-  <div 
-    *ngIf="(!sessionData?.menteeForm?.includes(item.title) || (sessionData?.menteeForm?.includes(item.title) && !isMentor)) && (item?.visible !== undefined ? item.visible : true) && (item?.visibility === 'main' || !item?.visibility)">
+@for (item of sessionData.controls; track (item?.key || item?.title || item?.label || 'control') + '-' + $index) {
+<div class="field-wrapper">
+  @if (shouldShowControl(item)) {
+  @let value = sessionData.data[item.key];
+  <div>
     <p class="session-detail-heading">{{ item.title || item?.label }}</p>
-    
-    <!-- Handle Array type data -->
-    <div *ngIf="isArray(sessionData.data[item.key]); else nonArrayBlock">
-      <ng-container *ngIf="sessionData.data[item.key].length > 0; else noData">
-        <ion-chip outline="true" class="ion-margin-top break-word" *ngFor="let chip of sessionData.data[item.key]">
+
+    @if (isArray(value)) {
+      @if (value.length > 0) {
+        @for (chip of value; track chip?.id || chip?.value || chip?.label || chip?.name) {
+        <ion-chip outline="true" class="ion-margin-top break-word">
           <ion-label>{{ chip?.label || ('NOT_UPDATED_MSG' | translate) }}</ion-label>
         </ion-chip>
-      </ng-container>
-      <ng-template #noData>
+        }
+      } @else {
         <p class="value">{{ 'NOT_UPDATED_MSG' | translate }}</p>
-      </ng-template>
-    </div>
-
-    <!-- Handle non-array data types -->
-    <ng-template #nonArrayBlock>
-      <ng-container [ngSwitch]="item.key">
-        
-        <!-- Duration field -->
-        <p *ngSwitchCase="'duration'" class="value">
-          {{ sessionData.data.duration.hours }} hr
-          {{ sessionData.data.duration.minutes }} minutes
+      }
+    } @else {
+      @switch (item.key) {
+        @case ('duration') {
+        <p class="value">
+          {{ sessionData.data.duration?.hours || 0 }} hr
+          {{ sessionData.data.duration?.minutes || 0 }} minutes
         </p>
+        }
 
-        <!-- Date fields -->
-        <p *ngSwitchCase="'startDate'" class="value">
-          {{ sessionData.data[item.key] | date:'MMM d, y, h:mm a' }}
+        @case ('startDate') {
+        <p class="value">
+          {{ value | date:'MMM d, y, h:mm a' }}
         </p>
-        <p *ngSwitchCase="'endDate'" class="value">
-          {{ sessionData.data[item.key] | date:'MMM d, y, h:mm a' }}
+        }
+        @case ('endDate') {
+        <p class="value">
+          {{ value | date:'MMM d, y, h:mm a' }}
         </p>
+        }
 
-        <!-- Mentee count with view list button -->
-        <div *ngSwitchCase="'mentee_count'" class="d-flex">
-          <p class="mentee-count">{{ sessionData.data[item.key] }}</p>
+        @case ('mentee_count') {
+        <div class="d-flex">
+          <p class="mentee-count">{{ value }}</p>
           <ion-button class="view-mentee-list" color="white" (click)="onClickViewList()">
             View List
           </ion-button>
         </div>
+        }
 
-        <!-- Mentor name with designation -->
-        <div *ngSwitchCase="'mentor_name'">
+        @case ('mentor_name') {
+        <div>
           <p class="break-word">
-            {{ sessionData.data[item.key]?.label || sessionData.data[item.key] }}
+            {{ value?.label || value }}
           </p>
           <div>{{ sessionData.data.mentor_designation }}</div>
         </div>
+        }
 
-        <!-- Experience field -->
-        <p *ngSwitchCase="'experience'" class="value">
-          {{ sessionData.data[item.key] ? 
-             sessionData.data[item.key] + ' ' + "Years": 
+        @case ('experience') {
+        <p class="value">
+          {{ value ? 
+             value + ' ' + "Years": 
              ('NOT_UPDATED_MSG' | translate) }}
         </p>
+        }
 
-        <!-- Default case for all other fields -->
-        <p *ngSwitchDefault class="value">
+        @default {
+        <p class="value">
           <span>
-            {{ sessionData.data[item.key]?.label || 
-               sessionData.data[item.key]?.name || 
-               sessionData.data[item.key] || 
+            {{ value?.label || 
+               value?.name || 
+               value || 
                ('NOT_UPDATED_MSG' | translate) }}
           </span>
         </p>
-      </ng-container>
-    </ng-template>
+        }
+      }
+    }
   </div>
+  }
 </div>
-<div *ngIf="preResources.length > 0">
+}
+@if (preResources.length > 0) {
+<div>
   <p class="session-detail-heading" style="margin: 0 10px;">Pre resources</p>
       <div style="display: flex; flex-direction: column; flex-wrap: wrap;">
-            <div *ngFor="let resource of preResources" >
+            @for (resource of preResources; track resource?.id || resource?.link || resource?.name) {
+            <div>
               <a
                 (click)="downloadFile($event, resource);"
                 [href]="resource.link"
                 class="resource-content">
-                         <ion-icon *ngIf="resource.mime_type?.includes('image')" name="image" class="icon-size" ></ion-icon>
-                         <ion-icon *ngIf="resource.mime_type?.includes('pdf') || resource.mime_type?.includes('other') || resource.mime_type?.includes('application')"  name="document" class="icon-size"></ion-icon>
-                         <ion-icon *ngIf="resource.mime_type?.includes('link')" name="link" class="icon-size"></ion-icon>
-                         <ion-icon *ngIf="resource.mime_type?.includes('video')" name="videocam" class="icon-size"></ion-icon>
+                         @if (resource.mime_type?.includes('image')) {<ion-icon name="image" class="icon-size" ></ion-icon>}
+                         @if (resource.mime_type?.includes('pdf') || resource.mime_type?.includes('other') || resource.mime_type?.includes('application')) {<ion-icon name="document" class="icon-size"></ion-icon>}
+                         @if (resource.mime_type?.includes('link')) {<ion-icon name="link" class="icon-size"></ion-icon>}
+                         @if (resource.mime_type?.includes('video')) {<ion-icon name="videocam" class="icon-size"></ion-icon>}
                           <div class=" truncate-text my-text">
                           {{ resource.name }}
                         </div>
               </a>
     </div>
+    }
     </div>
 </div>
-<div *ngIf="postResources.length > 0 && sessionData?.data?.status?.value === 'COMPLETED'">
+}
+@if (postResources.length > 0 && sessionData?.data?.status?.value === 'COMPLETED') {
+<div>
   <p class="session-detail-heading" style="margin: 0 10px;">Post resources</p>
       <div>
-            <div *ngFor="let resource of postResources" style="display: flex; flex-direction: column; flex-wrap: wrap;">
+            @for (resource of postResources; track resource?.id || resource?.link || resource?.name) {
+            <div style="display: flex; flex-direction: column; flex-wrap: wrap;">
                 <a 
                 (click)="downloadFile($event, resource)"
                 [href]="resource.link"
                 class=" resource-content">
-                         <ion-icon *ngIf="resource.mime_type?.includes('image')" name="image" class="icon-size" ></ion-icon>
-                         <ion-icon *ngIf="resource.mime_type?.includes('pdf') || resource.mime_type?.includes('other') || resource.mime_type?.includes('application')"  name="document" class="icon-size"></ion-icon>
-                         <ion-icon *ngIf="resource.mime_type?.includes('link')" name="link" class="icon-size"></ion-icon>
-                         <ion-icon *ngIf="resource.mime_type?.includes('video')" name="videocam" class="icon-size"></ion-icon>
+                         @if (resource.mime_type?.includes('image')) {<ion-icon name="image" class="icon-size" ></ion-icon>}
+                         @if (resource.mime_type?.includes('pdf') || resource.mime_type?.includes('other') || resource.mime_type?.includes('application')) {<ion-icon name="document" class="icon-size"></ion-icon>}
+                         @if (resource.mime_type?.includes('link')) {<ion-icon name="link" class="icon-size"></ion-icon>}
+                         @if (resource.mime_type?.includes('video')) {<ion-icon name="videocam" class="icon-size"></ion-icon>}
                           <div class=" truncate-text my-text">
                           {{ resource.name }}
                         </div>
               </a>
       </div>
+      }
       </div>
 </div>
+}
 <ion-modal [isOpen]="isImageModalOpen" (ionModalDidDismiss)="closeImageModal()">
   <ng-template>
     <ion-content>
@@ -115,4 +131,3 @@
     </ion-content>
   </ng-template>
 </ion-modal>
-

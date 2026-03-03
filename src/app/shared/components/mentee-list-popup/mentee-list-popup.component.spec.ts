@@ -3,9 +3,11 @@ import 'zone.js/testing';
 
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { MenteeListPopupComponent } from './mentee-list-popup.component';
-import { ModalController } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
+import { TranslateModule } from '@ngx-translate/core';
 import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admin-workapce.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 // Mock Data
 const mockMenteeList = [
@@ -47,11 +49,13 @@ describe('MenteeListPopupComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MenteeListPopupComponent],
+      imports: [IonicModule.forRoot(), TranslateModule.forRoot()],
       providers: [
         { provide: SessionService, useValue: mockSessionService },
         { provide: AdminWorkapceService, useValue: mockAdminWorkapceService },
         { provide: ModalController, useValue: mockModalController },
       ],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   });
 
@@ -82,14 +86,14 @@ describe('MenteeListPopupComponent', () => {
     // Mock innerWidth to simulate mobile device
     spyOnProperty(window, 'innerWidth', 'get').and.returnValue(500);
     component.ngOnInit();
-    expect(component.isMobile).toBeTrue();
+    expect(component.isMobile()).toBeTrue();
   });
 
   it('should set isMobile to false when window width is greater than 800 on initialization', () => {
     // Mock innerWidth to simulate desktop device
     spyOnProperty(window, 'innerWidth', 'get').and.returnValue(1024);
     component.ngOnInit();
-    expect(component.isMobile).toBeFalse();
+    expect(component.isMobile()).toBeFalse();
   });
 
   it('should call fetchMenteeList on ngOnInit', () => {
@@ -116,9 +120,9 @@ describe('MenteeListPopupComponent', () => {
 
     // 2. Verify data transformation
     // The component should have flattened the nested 'organization.name'
-    expect(component.enrolledMenteeList.length).toBe(2);
-    expect(component.enrolledMenteeList[0].organization).toBe('TechCorp');
-    expect(component.enrolledMenteeList[1].organization).toBe('Innovate Solutions');
+    expect(component.enrolledMenteeList().length).toBe(2);
+    expect(component.enrolledMenteeList()[0].organization).toBe('TechCorp');
+    expect(component.enrolledMenteeList()[1].organization).toBe('Innovate Solutions');
   }));
 
   it('should handle null data returned from getEnrolledMenteeList gracefully', fakeAsync(() => {
@@ -129,7 +133,7 @@ describe('MenteeListPopupComponent', () => {
     tick(); // Wait for the promise
 
     // Verify list is null/undefined (depending on how the test initializes it)
-    expect(component.enrolledMenteeList).toBeNull();
+    expect(component.enrolledMenteeList()).toBeNull();
     
     // Restore spy for other tests
     mockSessionService.getEnrolledMenteeList.and.returnValue(Promise.resolve(mockMenteeList));

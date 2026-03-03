@@ -76,7 +76,7 @@ describe('ManageSessionComponent', () => {
       action: 'mentor_name',
       element: { mentor_id: '123' }
     };
-    component.onCLickEvent(data);
+    component.onClickEvent(data);
     expect(mockRouter.navigate).toHaveBeenCalledWith([CommonRoutes.MENTOR_DETAILS, '123']);
   });
 
@@ -85,7 +85,7 @@ describe('ManageSessionComponent', () => {
       action: 'mentee_count',
       element: { id: 'session1' }
     };
-    await component.onCLickEvent(data);
+    await component.onClickEvent(data);
     expect(mockModalController.create).toHaveBeenCalledWith({
       component: MenteeListPopupComponent,
       cssClass: 'large-width-popover-config',
@@ -98,7 +98,7 @@ describe('ManageSessionComponent', () => {
       action: 'DELETE',
       element: { id: 'session1' }
     };
-    await component.onCLickEvent(data);
+    await component.onClickEvent(data);
     expect(mockAdminWorkapceService.deleteSession).toHaveBeenCalledWith('session1');
     expect(mockAdminWorkapceService.createdSessionBySessionManager).toHaveBeenCalledTimes(2); // Init + Refresh
   });
@@ -108,7 +108,7 @@ describe('ManageSessionComponent', () => {
       action: 'EDIT',
       element: { id: 'session1', status: 'Upcoming' }
     };
-    component.onCLickEvent(data);
+    component.onClickEvent(data);
     expect(mockRouter.navigate).toHaveBeenCalledWith([CommonRoutes.CREATE_SESSION], { queryParams: { id: 'session1' } });
   });
 
@@ -170,7 +170,7 @@ describe('ManageSessionComponent', () => {
   it('should change segment', () => {
     const event = { target: { value: 'new-segment' } };
     component.segmentChanged(event as any);
-    expect(component.segmentType).toBe('new-segment');
+    expect(component.segmentType()).toBe('new-segment');
   });
 
   it('should clear search and refresh', () => {
@@ -196,7 +196,7 @@ describe('ManageSessionComponent', () => {
       action: 'DELETE',
       element: { id: 'session1' }
     };
-    await component.onCLickEvent(data);
+    await component.onClickEvent(data);
     expect(mockAdminWorkapceService.deleteSession).toHaveBeenCalledWith('session1');
   });
 
@@ -205,7 +205,7 @@ describe('ManageSessionComponent', () => {
       action: 'mentee_count',
       element: { id: 'session1' }
     };
-    await component.onCLickEvent(data);
+    await component.onClickEvent(data);
     expect(mockModalController.create).toHaveBeenCalled();
   });
   it('should navigate to session details default action', () => {
@@ -213,7 +213,7 @@ describe('ManageSessionComponent', () => {
       action: 'UNKNOWN_ACTION',
       element: { id: 'session1' }
     };
-    component.onCLickEvent(data);
+    component.onClickEvent(data);
     expect(mockRouter.navigate).toHaveBeenCalledWith([CommonRoutes.SESSIONS_DETAILS, 'session1']);
   });
 
@@ -222,7 +222,7 @@ describe('ManageSessionComponent', () => {
       action: 'EDIT',
       element: { id: 'session1', status: 'Live' }
     };
-    component.onCLickEvent(data);
+    component.onClickEvent(data);
     expect(mockRouter.navigate).toHaveBeenCalledWith([CommonRoutes.CREATE_SESSION], { queryParams: { id: 'session1', type: 'segment' } });
   });
 
@@ -240,7 +240,7 @@ describe('ManageSessionComponent', () => {
       }]
     }));
     await component.fetchSessionList();
-    expect(component.tableData[0].action).toEqual(component.actionButtons['LIVE']);
+    expect(component.tableData()[0].action).toEqual(component.actionButtons['LIVE']);
   });
 
   it('should handle fetchSessionList with UPCOMING status', async () => {
@@ -257,7 +257,7 @@ describe('ManageSessionComponent', () => {
       }]
     }));
     await component.fetchSessionList();
-    expect(component.tableData[0].action).toEqual(component.actionButtons['UPCOMING']);
+    expect(component.tableData()[0].action).toEqual(component.actionButtons['UPCOMING']);
   });
 
   it('should handle fetchSessionList with COMPLETED status', async () => {
@@ -274,7 +274,7 @@ describe('ManageSessionComponent', () => {
       }]
     }));
     await component.fetchSessionList();
-    expect(component.tableData[0].action).toEqual(component.actionButtons['COMPLETED']);
+    expect(component.tableData()[0].action).toEqual(component.actionButtons['COMPLETED']);
   });
 
   it('should handle fetchSessionList with empty data', async () => {
@@ -283,8 +283,8 @@ describe('ManageSessionComponent', () => {
       data: []
     }));
     await component.fetchSessionList();
-    expect(component.tableData).toEqual([]);
-    expect(component.noDataMessage).toBe('SEARCH_RESULT_NOT_FOUND');
+    expect(component.tableData()).toEqual([]);
+    expect(component.noDataMessage()).toBe('SEARCH_RESULT_NOT_FOUND');
   });
 
   it('should handle filter modal dismissal with role closed', async () => {

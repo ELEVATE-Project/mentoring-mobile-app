@@ -1,11 +1,12 @@
 <app-page-header [config]="headerConfig">
-    <app-searchbar *ngIf="segmentType === 'manage-session'" placeholder="{{'SSESSIONS_MENTOR_SEARCH_PLACEHOLDER' | translate}}" (clearText)="onClearSearch($event)"  (outputData)="searchResults($event)"></app-searchbar>
-
+    @if (segmentType() === 'manage-session') {
+    <app-searchbar placeholder="{{'SSESSIONS_MENTOR_SEARCH_PLACEHOLDER' | translate}}" (clearText)="onClearSearch($event)" (outputData)="searchResults($event)"></app-searchbar>
+    }
 </app-page-header>
 <ion-content>
   <div class="d-flex flex-justify-center">
     <ion-header>
-      <ion-segment (ionChange)="segmentChanged($event)" [value]="segmentType">
+      <ion-segment (ionChange)="segmentChanged($event)" [value]="segmentType()">
         <ion-segment-button value="manage-session" class="normal-case">
           <ion-label>{{ "CREATE_SESSIONS" | translate }}</ion-label>
         </ion-segment-button>
@@ -15,9 +16,10 @@
       </ion-segment>
     </ion-header>
   </div>
-  <div [ngSwitch]="segmentType">
-    <div>
-      <div *ngSwitchCase="'manage-session'">
+
+  @switch (segmentType()) {
+    @case ('manage-session') {
+      <div>
         <ion-card class="session-sqr-card">
           <ion-card-content class="card-content">
             <div class="segment-button d-flex flex-justify-center flex-align-items-flex-end">
@@ -25,9 +27,9 @@
             </div>
             <ion-grid>
               <ion-row class="d-flex flex-justify-center">
-                <ion-col padding size-xs="12" size-sm="12" size-md="8" size-lg="6" align-self-stretch>
+	                <ion-col class="ion-padding" size-xs="12" size-sm="12" size-md="8" size-lg="6" align-self-stretch>
                   <ion-button shape="round" strong="true" class="card-button" (click)="createSession()">
-                    {{"CREATE_SESSION" | translate }} <ion-icon class="create-icon"name="add-circle-outline"></ion-icon>
+                    {{"CREATE_SESSION" | translate }} <ion-icon class="create-icon" name="add-circle-outline"></ion-icon>
                   </ion-button>
                 </ion-col>
               </ion-row>
@@ -40,24 +42,28 @@
             <ion-icon class="ion-funnel-icon" name="funnel"></ion-icon>
           </div>
         </div>
-        <div *ngIf="tableData">
+        @if (tableData()) {
+        <div>
           <app-generic-table [headingText]="headingText"
             [columnData]="columnData"
-            [noDataMessage]="noDataMessage"
-            [tableData]="tableData"
-            [totalCount]="totalCount"
-            (onClickEvent)="onCLickEvent($event)"
+            [noDataMessage]="noDataMessage()"
+            [tableData]="tableData()"
+            [totalCount]="totalCount()"
+            (onClickEvent)="onClickEvent($event)"
             (paginatorChanged)="onPaginatorChange($event)"
             (onSorting)="onSorting($event)"
-            [setPaginatorToFirstpage]="setPaginatorToFirstpage"
+            [setPaginatorToFirstpage]="setPaginatorToFirstpage()"
             [showPaginator]="true">
             <div class="download" (click)="onClickDownload()">{{ download | translate}}</div>
           </app-generic-table>
         </div>
+        }
       </div>
-      <div *ngSwitchCase="'bulk-upload'" class="d-flex flex-justify-center flex-align-items-center">
+    }
+    @case ('bulk-upload') {
+      <div class="d-flex flex-justify-center flex-align-items-center">
         <app-bulk-upload [data]="manageSessionUrls"></app-bulk-upload>
       </div>
-    </div>
-  </div>
+    }
+  }
 </ion-content>

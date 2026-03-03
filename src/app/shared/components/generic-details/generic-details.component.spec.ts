@@ -19,7 +19,10 @@ describe('GenericDetailsComponent', () => {
       declarations: [GenericDetailsComponent],
       providers: [{ provide: UtilService, useValue: mockUtil }],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
+
+    TestBed.overrideTemplate(GenericDetailsComponent, '');
+    await TestBed.compileComponents();
 
     fixture = TestBed.createComponent(GenericDetailsComponent);
     component = fixture.componentInstance;
@@ -91,7 +94,7 @@ describe('GenericDetailsComponent', () => {
     // Call ngOnChanges with a SimpleChange describing the transition
     component.ngOnChanges({
       sessionData: new SimpleChange(
-        { data: [] }, // previousValue
+        { data: { resources: [] } }, // previousValue
         newSession,   // currentValue
         false         // isFirstChange
       )

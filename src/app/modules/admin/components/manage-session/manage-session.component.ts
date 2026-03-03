@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admin-workapce.service';
 import { CommonRoutes } from 'src/global.routes';
@@ -13,12 +13,11 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
     styleUrls: ['./manage-session.component.scss'],
     standalone: false
 })
-export class ManageSessionComponent implements OnInit {
+export class ManageSessionComponent {
   public headerConfig: any = {
     menu: true,
     notification: true,
     headerColor: 'primary',
-    // label: 'MANAGE_SESSION'
   };
   receivedEventData: any;
 
@@ -27,16 +26,21 @@ export class ManageSessionComponent implements OnInit {
     uploadCsvApiUrl: urlConstants.API_URLS.SESSION_BULK_UPLOAD
   }
 
-  constructor(private adminWorkapceService: AdminWorkapceService, private router: Router, private modalCtrl: ModalController) { }
+  constructor(
+    private adminWorkapceService: AdminWorkapceService,
+    private router: Router,
+    private modalCtrl: ModalController
+  ) { }
+
   headingText = "SESSION_LIST"
   download = "DOWNLOAD";
   page = 1;
   limit = 5;
   searchText: string = '';
   type = "";
-  totalCount: any;
+  totalCount = signal<any>(null);
   sortingData: any;
-  setPaginatorToFirstpage:any = false;
+  setPaginatorToFirstpage = signal<any>(false);
   columnData = [
     { name: 'id', displayName: 'Session Id', type: 'text'},
     { name: 'title', displayName: 'Session name', type: 'text', sortingData: [{ sort_by: 'title', order: 'ASC', label: 'A -> Z' }, { sort_by: 'title', order: 'DESC', label: 'Z -> A' }] },
@@ -86,10 +90,10 @@ export class ManageSessionComponent implements OnInit {
         "type": "checkbox"
       }
     ]
-  tableData: any;
+  tableData = signal<any>(null);
   dummyTableData: any = false;
-  noDataMessage: any;
-  segmentType = 'manage-session';
+  noDataMessage = signal<any>(null);
+  segmentType = signal<'manage-session' | 'bulk-upload'>('manage-session');
   filteredDatas = []
   actionButtons = {
     'UPCOMING': [{ icon: 'eye', cssColor: 'white-color' , action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}, { icon: 'trash', cssColor: 'white-color',action:'DELETE' }],
@@ -97,15 +101,11 @@ export class ManageSessionComponent implements OnInit {
     'COMPLETED': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}]
   };
 
-  async ngOnInit() {
-    this.fetchSessionList()
-  }
-
   async ionViewWillEnter() {
     this.fetchSessionList()
   }
 
-  async onCLickEvent(data: any) {
+  async onClickEvent(data: any) {
     this.receivedEventData = data;
     switch (this.receivedEventData.action) {
       case 'mentor_name':
@@ -143,7 +143,7 @@ export class ManageSessionComponent implements OnInit {
   }
 
   onPaginatorChange(data: any) {
-    this.setPaginatorToFirstpage= false;
+    this.setPaginatorToFirstpage.set(false);
     this.page = data.page;
     this.limit = data.pageSize
     this.fetchSessionList()
@@ -152,20 +152,20 @@ export class ManageSessionComponent implements OnInit {
   onSorting(data: any) {
     this.sortingData = data;
     this.page=1;
-    this.setPaginatorToFirstpage= true
+    this.setPaginatorToFirstpage.set(true);
     this.fetchSessionList()
   }
 
   onSearch() {
     this.page = 1;
-    this.setPaginatorToFirstpage = true
+    this.setPaginatorToFirstpage.set(true);
     this.fetchSessionList()
   }
 
   searchResults(event) {
     this.searchText= event.searchText;
     this.page = 1;
-    this.setPaginatorToFirstpage = true
+    this.setPaginatorToFirstpage.set(true);
     this.fetchSessionList()
   }
 
@@ -190,7 +190,7 @@ export class ManageSessionComponent implements OnInit {
         }
       }
       this.page = 1;
-      this.setPaginatorToFirstpage = true
+      this.setPaginatorToFirstpage.set(true);
       this.fetchSessionList()
     });
     modal.present()
@@ -202,7 +202,7 @@ export class ManageSessionComponent implements OnInit {
   async fetchSessionList() {
     var obj = { page: this.page, limit: this.limit, status: this.type, order: this.sortingData?.order, sort_by: this.sortingData?.sort_by, searchText: this.searchText, filteredData:this.filteredDatas };
     var response = await this.adminWorkapceService.createdSessionBySessionManager(obj);
-    this.totalCount = response.count;
+    this.totalCount.set(response.count);
     let data = response.data
     if (data && data.length) {
       data.forEach((ele) => {
@@ -217,15 +217,15 @@ export class ManageSessionComponent implements OnInit {
         ele.duration_in_minutes =Math.round(ele?.duration_in_minutes) 
       });
     }
-    this.tableData = data;
-    this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "SEARCH_RESULT_NOT_FOUND"
+    this.tableData.set(data);
+    this.noDataMessage.set(this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "SEARCH_RESULT_NOT_FOUND");
   }
 
   createSession(){
       this.router.navigate([`${CommonRoutes.CREATE_SESSION}`], { queryParams: { source: 'manage' } }); 
   } 
   segmentChanged(event){
-    this.segmentType = event.target.value;
+    this.segmentType.set(event.target.value);
   }
 
     onClearSearch($event: string) {

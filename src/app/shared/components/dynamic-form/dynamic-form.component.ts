@@ -138,7 +138,7 @@ export class DynamicFormComponent implements OnInit {
   hiddenLabelTypes = ['rating', 'chip', 'search'];
 
   constructor(private fb: UntypedFormBuilder, private toast: ToastService,
-        private attachment: AttachmentService
+        private attachment: AttachmentService, private cdr: ChangeDetectorRef
   ) {}
   ngOnInit() {
     this.jsonFormData.controls.find((element, index) => {
@@ -154,6 +154,7 @@ export class DynamicFormComponent implements OnInit {
     setTimeout(() => {
       this.createForm(this.jsonFormData.controls);
       this.showForm = true;
+      this.cdr.detectChanges();
     });
   }
 
