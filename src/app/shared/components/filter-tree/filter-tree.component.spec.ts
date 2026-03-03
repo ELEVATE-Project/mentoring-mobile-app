@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FilterTreeComponent } from './filter-tree.component';
 import { EventEmitter } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('FilterTreeComponent', () => {
   let component: FilterTreeComponent;
@@ -8,7 +10,9 @@ describe('FilterTreeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FilterTreeComponent ]
+      declarations: [ FilterTreeComponent ],
+      imports: [FormsModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
 
@@ -25,45 +29,45 @@ describe('FilterTreeComponent', () => {
   });
 
   it('should initialize readOnly as false', () => {
-    expect(component.readOnly).toBe(false);
+    expect(component.readOnly()).toBe(false);
   });
 
   describe('ngOnInit', () => {
     it('should not modify filterData when eventData is undefined', () => {
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'type',
           options: [
             { label: 'Option 1', selected: true, readOnly: true }
           ]
         }
-      ];
-      component.eventData = undefined;
+      ]);
+      fixture.componentRef.setInput('eventData', undefined);
 
       component.ngOnInit();
 
-      expect(component.filterData[0].options[0].selected).toBe(true);
+      expect(component.filterData()[0].options[0].selected).toBe(true);
     });
 
     it('should not modify filterData when eventData.sessionType is undefined', () => {
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'type',
           options: [
             { label: 'Option 1', selected: true, readOnly: true }
           ]
         }
-      ];
-      component.eventData = {};
+      ]);
+      fixture.componentRef.setInput('eventData', {});
 
       component.ngOnInit();
 
-      expect(component.filterData[0].options[0].selected).toBe(true);
+      expect(component.filterData()[0].options[0].selected).toBe(true);
     });
 
     it('should reset type filter options when eventData.sessionType exists', () => {
       spyOn(component.filtersChanged, 'emit');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'type',
           options: [
@@ -71,20 +75,20 @@ describe('FilterTreeComponent', () => {
             { label: 'Option 2', selected: true, readOnly: true }
           ]
         }
-      ];
-      component.eventData = { sessionType: 'virtual' };
+      ]);
+      fixture.componentRef.setInput('eventData', { sessionType: 'virtual' });
 
       component.ngOnInit();
 
-      expect(component.filterData[0].options[0].selected).toBe(false);
-      expect(component.filterData[0].options[0].readOnly).toBe(false);
-      expect(component.filterData[0].options[1].selected).toBe(false);
-      expect(component.filterData[0].options[1].readOnly).toBe(false);
+      expect(component.filterData()[0].options[0].selected).toBe(false);
+      expect(component.filterData()[0].options[0].readOnly).toBe(false);
+      expect(component.filterData()[0].options[1].selected).toBe(false);
+      expect(component.filterData()[0].options[1].readOnly).toBe(false);
       expect(component.filtersChanged.emit).toHaveBeenCalled();
     });
 
     it('should not modify non-type filters when eventData.sessionType exists', () => {
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'category',
           options: [
@@ -97,32 +101,32 @@ describe('FilterTreeComponent', () => {
             { label: 'Type 1', selected: true, readOnly: true }
           ]
         }
-      ];
-      component.eventData = { sessionType: 'virtual' };
+      ]);
+      fixture.componentRef.setInput('eventData', { sessionType: 'virtual' });
 
       component.ngOnInit();
 
-      expect(component.filterData[0].options[0].selected).toBe(true);
-      expect(component.filterData[1].options[0].selected).toBe(false);
+      expect(component.filterData()[0].options[0].selected).toBe(true);
+      expect(component.filterData()[1].options[0].selected).toBe(false);
     });
 
     it('should handle filterData being undefined', () => {
-      component.filterData = undefined;
-      component.eventData = { sessionType: 'virtual' };
+      fixture.componentRef.setInput('filterData', undefined);
+      fixture.componentRef.setInput('eventData', { sessionType: 'virtual' });
 
       expect(() => component.ngOnInit()).not.toThrow();
     });
 
     it('should handle empty filterData array', () => {
-      component.filterData = [];
-      component.eventData = { sessionType: 'virtual' };
+      fixture.componentRef.setInput('filterData', []);
+      fixture.componentRef.setInput('eventData', { sessionType: 'virtual' });
 
       expect(() => component.ngOnInit()).not.toThrow();
     });
 
     it('should call onFilterChange for each option in type filter', () => {
       spyOn(component, 'onFilterChange');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'type',
           options: [
@@ -130,8 +134,8 @@ describe('FilterTreeComponent', () => {
             { label: 'Option 2', selected: true }
           ]
         }
-      ];
-      component.eventData = { sessionType: 'virtual' };
+      ]);
+      fixture.componentRef.setInput('eventData', { sessionType: 'virtual' });
 
       component.ngOnInit();
 
@@ -142,7 +146,7 @@ describe('FilterTreeComponent', () => {
   describe('clearAll', () => {
     it('should clear all selected options in filterData', () => {
       spyOn(component, 'onFilterChange');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'category',
           options: [
@@ -156,40 +160,40 @@ describe('FilterTreeComponent', () => {
             { label: 'Type 1', selected: true, value: 3 }
           ]
         }
-      ];
+      ]);
 
       component.clearAll();
 
-      expect(component.filterData[0].options[0].selected).toBe(false);
-      expect(component.filterData[0].options[1].selected).toBe(false);
-      expect(component.filterData[1].options[0].selected).toBe(false);
+      expect(component.filterData()[0].options[0].selected).toBe(false);
+      expect(component.filterData()[0].options[1].selected).toBe(false);
+      expect(component.filterData()[1].options[0].selected).toBe(false);
     });
 
     it('should preserve other properties when clearing selections', () => {
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'category',
           options: [
             { label: 'Option 1', selected: true, value: 1, customProp: 'test' }
           ]
         }
-      ];
+      ]);
 
       component.clearAll();
 
-      expect(component.filterData[0].options[0].label).toBe('Option 1');
-      expect(component.filterData[0].options[0].value).toBe(1);
-      expect(component.filterData[0].options[0].customProp).toBe('test');
+      expect(component.filterData()[0].options[0].label).toBe('Option 1');
+      expect(component.filterData()[0].options[0].value).toBe(1);
+      expect(component.filterData()[0].options[0].customProp).toBe('test');
     });
 
     it('should call onFilterChange after clearing', () => {
       spyOn(component, 'onFilterChange');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'category',
           options: [{ label: 'Option 1', selected: true }]
         }
-      ];
+      ]);
 
       component.clearAll();
 
@@ -197,7 +201,7 @@ describe('FilterTreeComponent', () => {
     });
 
     it('should handle undefined filterData', () => {
-      component.filterData = undefined;
+      fixture.componentRef.setInput('filterData', undefined);
       spyOn(component, 'onFilterChange');
 
       expect(() => component.clearAll()).not.toThrow();
@@ -205,7 +209,7 @@ describe('FilterTreeComponent', () => {
     });
 
     it('should handle null filterData', () => {
-      component.filterData = null;
+      fixture.componentRef.setInput('filterData', null);
       spyOn(component, 'onFilterChange');
 
       expect(() => component.clearAll()).not.toThrow();
@@ -213,7 +217,7 @@ describe('FilterTreeComponent', () => {
     });
 
     it('should handle empty filterData array', () => {
-      component.filterData = [];
+      fixture.componentRef.setInput('filterData', []);
       spyOn(component, 'onFilterChange');
 
       component.clearAll();
@@ -222,9 +226,9 @@ describe('FilterTreeComponent', () => {
     });
 
     it('should handle filters with no options', () => {
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         { name: 'category', options: [] }
-      ];
+      ]);
       spyOn(component, 'onFilterChange');
 
       component.clearAll();
@@ -236,14 +240,14 @@ describe('FilterTreeComponent', () => {
   describe('onFilterChange', () => {
     it('should emit empty object when no filters are selected', () => {
       spyOn(component.filtersChanged, 'emit');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'category',
           options: [
             { label: 'Option 1', selected: false }
           ]
         }
-      ];
+      ]);
 
       component.onFilterChange();
 
@@ -252,7 +256,7 @@ describe('FilterTreeComponent', () => {
 
     it('should emit selected options grouped by category', () => {
       spyOn(component.filtersChanged, 'emit');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'category',
           options: [
@@ -261,7 +265,7 @@ describe('FilterTreeComponent', () => {
             { label: 'Option 3', selected: true, value: 3 }
           ]
         }
-      ];
+      ]);
 
       component.onFilterChange();
 
@@ -276,7 +280,7 @@ describe('FilterTreeComponent', () => {
 
     it('should handle multiple categories with selected options', () => {
       spyOn(component.filtersChanged, 'emit');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'category',
           options: [
@@ -289,7 +293,7 @@ describe('FilterTreeComponent', () => {
             { label: 'Type 1', selected: true, value: 2 }
           ]
         }
-      ];
+      ]);
 
       component.onFilterChange();
 
@@ -302,14 +306,14 @@ describe('FilterTreeComponent', () => {
 
     it('should add categoryName property to selected options', () => {
       spyOn(component.filtersChanged, 'emit');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'status',
           options: [
             { label: 'Active', selected: true }
           ]
         }
-      ];
+      ]);
 
       component.onFilterChange();
 
@@ -319,7 +323,7 @@ describe('FilterTreeComponent', () => {
 
     it('should handle mix of selected and unselected across multiple categories', () => {
       spyOn(component.filtersChanged, 'emit');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'category1',
           options: [
@@ -340,7 +344,7 @@ describe('FilterTreeComponent', () => {
             { label: 'C3-O1', selected: false }
           ]
         }
-      ];
+      ]);
 
       component.onFilterChange();
 
@@ -353,14 +357,14 @@ describe('FilterTreeComponent', () => {
 
     it('should preserve original option properties', () => {
       spyOn(component.filtersChanged, 'emit');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'test',
           options: [
             { label: 'Test', selected: true, value: 123, customField: 'custom' }
           ]
         }
-      ];
+      ]);
 
       component.onFilterChange();
 
@@ -372,7 +376,7 @@ describe('FilterTreeComponent', () => {
 
     it('should handle undefined filterData gracefully', () => {
       spyOn(component.filtersChanged, 'emit');
-      component.filterData = undefined;
+      fixture.componentRef.setInput('filterData', undefined);
 
       expect(() => component.onFilterChange()).toThrow();
     });
@@ -397,25 +401,25 @@ describe('FilterTreeComponent', () => {
 
   describe('Input and Output properties', () => {
     it('should have enableFilterHeader input', () => {
-      component.enableFilterHeader = true;
-      expect(component.enableFilterHeader).toBe(true);
+      fixture.componentRef.setInput('enableFilterHeader', true);
+      expect(component.enableFilterHeader()).toBe(true);
     });
 
     it('should have enableFilterLabel input', () => {
-      component.enableFilterLabel = false;
-      expect(component.enableFilterLabel).toBe(false);
+      fixture.componentRef.setInput('enableFilterLabel', false);
+      expect(component.enableFilterLabel()).toBe(false);
     });
 
     it('should have filterData input', () => {
       const data = [{ name: 'test', options: [] }];
-      component.filterData = data;
-      expect(component.filterData).toEqual(data);
+      fixture.componentRef.setInput('filterData', data);
+      expect(component.filterData()).toEqual(data);
     });
 
     it('should have eventData input', () => {
       const data = { sessionType: 'virtual' };
-      component.eventData = data;
-      expect(component.eventData).toEqual(data);
+      fixture.componentRef.setInput('eventData', data);
+      expect(component.eventData()).toEqual(data);
     });
 
     it('should have filtersChanged output emitter', () => {
@@ -427,9 +431,9 @@ describe('FilterTreeComponent', () => {
   describe('Edge cases', () => {
     it('should handle filterData with empty options array', () => {
       spyOn(component.filtersChanged, 'emit');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         { name: 'empty', options: [] }
-      ];
+      ]);
 
       component.onFilterChange();
 
@@ -438,7 +442,7 @@ describe('FilterTreeComponent', () => {
 
     it('should handle multiple selected options in same category', () => {
       spyOn(component.filtersChanged, 'emit');
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'multi',
           options: [
@@ -447,7 +451,7 @@ describe('FilterTreeComponent', () => {
             { label: 'C', selected: true }
           ]
         }
-      ];
+      ]);
 
       component.onFilterChange();
 
@@ -456,20 +460,20 @@ describe('FilterTreeComponent', () => {
     });
 
     it('should create new objects when clearing to avoid mutations', () => {
-      component.filterData = [
+      fixture.componentRef.setInput('filterData', [
         {
           name: 'test',
           options: [
             { label: 'Original', selected: true, id: 1 }
           ]
         }
-      ];
-      const originalOption = component.filterData[0].options[0];
+      ]);
+      const originalOption = component.filterData()[0].options[0];
 
       component.clearAll();
 
-      expect(component.filterData[0].options[0]).not.toBe(originalOption);
-      expect(component.filterData[0].options[0].selected).toBe(false);
+      expect(component.filterData()[0].options[0]).not.toBe(originalOption);
+      expect(component.filterData()[0].options[0].selected).toBe(false);
     });
   });
 });

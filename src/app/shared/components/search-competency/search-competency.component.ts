@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService } from 'src/app/core/services';
@@ -12,17 +12,17 @@ import { HttpService } from 'src/app/core/services';
 export class SearchCompetencyComponent implements OnInit {
 
   @Input() data: any;
-  selectedOptions: any;
+  selectedOptions = signal<any[]>([]);
   searchText: string='';
   page=1;
   limit=10;
-  entities: any;
-  count: any;
+  entities = signal<any>(null);
+  count = signal<any>(null);
   constructor(private modalController: ModalController, private httpService: HttpService) { }
 
   async ngOnInit() {
-    this.selectedOptions = JSON.parse(JSON.stringify(this.data.selectedData));
-    this.entities = await this.getEntityList()
+    this.selectedOptions.set(JSON.parse(JSON.stringify(this.data.selectedData)));
+    this.entities.set(await this.getEntityList());
   }
 
   async getEntityList() {
@@ -32,7 +32,7 @@ export class SearchCompetencyComponent implements OnInit {
     };
     try {
       const data: any = await this.httpService.post(config);
-      this.count = data.result.count;
+      this.count.set(data.result.count);
       return data.result
     }
     catch (error) {
@@ -42,27 +42,27 @@ export class SearchCompetencyComponent implements OnInit {
 
   onCheckboxChange(event, selectedOption) {
     if (event.detail.checked) {
-      this.selectedOptions.push(selectedOption);
+      this.selectedOptions.update(prev => [...prev, selectedOption]);
     } else {
-      this.selectedOptions = this.selectedOptions.filter(item => item.value !== selectedOption.value);
+      this.selectedOptions.update(prev => prev.filter(item => item.value !== selectedOption.value));
     }
   }
 
   isOptionSelected(option: any): boolean {
-    return this.selectedOptions.some(selectedOption => selectedOption.value == option.value);
+    return this.selectedOptions().some(selectedOption => selectedOption.value == option.value);
   }
 
   async clearAll(){
-    this.selectedOptions = this.selectedOptions.filter(option => option.type === 'other');
+    this.selectedOptions.update(prev => prev.filter(option => option.type === 'other'));
     this.searchText = '';
     this.page = 1;
-    this.entities = await this.getEntityList();
+    this.entities.set(await this.getEntityList());
   }
 
   async clearText(){
     this.searchText = '';
     this.page = 1;
-    this.entities = await this.getEntityList();
+    this.entities.set(await this.getEntityList());
   }
 
   closePopover() {
@@ -70,18 +70,19 @@ export class SearchCompetencyComponent implements OnInit {
   }
 
   onSave() {
-    this.modalController.dismiss(this.selectedOptions);
+    this.modalController.dismiss(this.selectedOptions());
   }
 
   async onSearch() {
-    this.entities = await this.getEntityList()
+    this.entities.set(await this.getEntityList());
   }
 
   async loadMore(event){
     this.page = this.page + 1;
-    if(this.count > this.entities.data.length){
+    const currentEntities = this.entities();
+    if(this.count() > currentEntities.data.length){
       let newEntities = await this.getEntityList();
-      this.entities.data = this.entities.data.concat(newEntities.data)
+      this.entities.set({ ...currentEntities, data: currentEntities.data.concat(newEntities.data) });
       event.target.complete();
     } else {
       event.target.disabled = true;

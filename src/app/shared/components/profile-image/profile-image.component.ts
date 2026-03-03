@@ -1,11 +1,11 @@
-import { Component, Input, OnInit, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output, ViewChild, ElementRef, signal } from '@angular/core';
 import { AttachmentService, ToastService, UtilService } from 'src/app/core/services';
 
 @Component({
-    selector: 'app-profile-image',
-    templateUrl: './profile-image.component.html',
-    styleUrls: ['./profile-image.component.scss'],
-    standalone: false
+  selector: 'app-profile-image',
+  templateUrl: './profile-image.component.html',
+  styleUrls: ['./profile-image.component.scss'],
+  standalone: false
 })
 export class ProfileImageComponent implements OnInit {
   @ViewChild('fileUpload') fileUpload: ElementRef;
@@ -15,7 +15,7 @@ export class ProfileImageComponent implements OnInit {
   @Input() uploadImage: boolean = false;
   @Output() imageUploadEvent = new EventEmitter();
   @Output() imageRemoveEvent = new EventEmitter();
-  isMobile = this.utilService.isMobile();
+  isMobile = signal<boolean>(this.utilService.isMobile());
 
   constructor(
     private attachment: AttachmentService,
@@ -24,6 +24,10 @@ export class ProfileImageComponent implements OnInit {
   ) { }
 
   ngOnInit() { }
+
+  get hasImage(): boolean {
+    return !!this.profileImageData?.image;
+  }
 
   clearFileInput() {
     if (this.fileUpload) {

@@ -135,6 +135,7 @@ export class DynamicFormComponent implements OnInit {
   dependedParent: any;
   dependedParentDate: any;
   isMobile = window.innerWidth <= 950;
+  hiddenLabelTypes = ['rating', 'chip', 'search'];
 
   constructor(private fb: UntypedFormBuilder, private toast: ToastService,
         private attachment: AttachmentService

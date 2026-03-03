@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -37,7 +37,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
   _selectAll;
   addIconDark = {name: 'add-outline', color: 'dark'}
   closeIconLight = {name: 'close-circle-sharp', color: 'light'}
-  selectedData=[];
+  selectedData: any[] = [];
   originalLabel: any;
   icon = this.addIconDark;
   value: any[];
@@ -50,7 +50,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     private translateService: TranslateService,
     private toast:ToastService,
     private httpService : HttpService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private cdr: ChangeDetectorRef
   ) { }
 
   onChange = (quantity) => {};
@@ -63,16 +64,27 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     this.allowCustomEntities = this.control.meta.allow_custom_entities;
   }
 
-  writeValue(value: any[]) {
-    if(this.control.name === 'mentees') {
-    SearchAndSelectComponent.menteeControlRef = this.control;
-    }
-    this.selectedData = this.control.meta.searchData ? this.control.meta.searchData : []
-    this.selectedChips = this.selectedData.map( data => data.id )
-    this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
-    if (this.control.name === 'mentees') {
-     this.selectedData = this.selectedData.map(data => ({...data, isDisabled: true}));
+  get showMoreChip(): boolean {
+    return this.selectedData.length > 5;
   }
+
+  get remainingSelectedCount(): number {
+    return this.selectedData.length - 5;
+  }
+
+  writeValue(value: any[]) {
+    setTimeout(() => {
+      if(this.control.name === 'mentees') {
+        SearchAndSelectComponent.menteeControlRef = this.control;
+      }
+      this.selectedData = this.control.meta.searchData ? this.control.meta.searchData : [];
+      this.selectedChips = this.selectedData.map( data => data.id );
+      this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark;
+      if (this.control.name === 'mentees') {
+        this.selectedData = this.selectedData.map(data => ({...data, isDisabled: true}));
+      }
+      this.cdr.detectChanges();
+    });
   }
   registerOnChange(onChange: any) {
     this.onChange = onChange;
@@ -112,6 +124,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
             } else {
               this.control.value = updatedFiles;
             }
+            this.onChange(updatedFiles);
+            this.cdr.detectChanges();
           } else {
             this.toast.showToast(this.translateService.instant('FILE_NOT_DELETED'), 'danger');
           }
@@ -128,6 +142,8 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
       } else {
         this.control.value = updatedFiles;
       }
+      this.onChange(updatedFiles);
+      this.cdr.detectChanges();
       } 
     }
   }
@@ -178,6 +194,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
             this.selectedChips.push(obj.value)
             this.onChange(this.selectedData.map(data => data.value));
             this.icon = this.selectedData.length ? this.closeIconLight : this.addIconDark
+            this.cdr.detectChanges();
           }
       }
       
@@ -203,6 +220,7 @@ export class SearchAndSelectComponent implements OnInit, ControlValueAccessor {
     modal.onDidDismiss().then((result) => {
       if (result.data && result.data.success) {
         data.value.push(result.data.data);
+        this.cdr.detectChanges();
       }
     });
   

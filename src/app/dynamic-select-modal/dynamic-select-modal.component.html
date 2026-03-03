@@ -8,28 +8,22 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-</div >
+</div>
 
 <ion-content>
-  <ion-searchbar
-    [(ngModel)]="searchTerm"
-    (ionInput)="filterItems($event)"
-    placeholder="Search..."
+  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filterItems($event)" placeholder="{{'SEARCH' | translate}}" 
     showClearButton="focus">
   </ion-searchbar>
 
   <ion-radio-group [(ngModel)]="selectedItem">
     <ion-list>
-      <ion-item
-        button
-        *ngFor="let item of filteredItems"
-        (click)="selectItem(item)">
+      @for (item of filteredItems(); track item) {
+      <ion-item button (click)="selectItem(item)">
         <ion-label>{{ item }}</ion-label>
-        <ion-radio
-          slot="start"
-          [value]="item">
+        <ion-radio slot="start" [value]="item">
         </ion-radio>
       </ion-item>
+      }
     </ion-list>
   </ion-radio-group>
 </ion-content>

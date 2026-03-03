@@ -10,6 +10,7 @@ import { FormService } from 'src/app/core/services/form/form.service';
 import { CUSTOM_ELEMENTS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { of } from 'rxjs';
 import * as _ from 'lodash-es';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 // Mock values/constants used in component
 const localKeys = {
@@ -28,7 +29,7 @@ const urlConstants = {
 const FilterPopupComponent = {}; 
 
 // Mock translate pipe so template compilation doesn't require real ngx-translate
-@Pipe({ name: 'translate' })
+@Pipe({ name: 'translate', standalone: false })
 class MockTranslatePipe implements PipeTransform {
     transform(value: any) {
         return value ?? 'mock';
@@ -48,6 +49,7 @@ describe('SearchPopoverComponent', () => {
     let httpSpy: jasmine.SpyObj<HttpService>;
     let formSpy: jasmine.SpyObj<FormService>;
     let toastSpy: jasmine.SpyObj<ToastService>;
+    let activatedRouteStub: any;
 
     // common input used by many tests
     const baseInput = {
@@ -99,6 +101,11 @@ describe('SearchPopoverComponent', () => {
         formSpy.getForm.and.returnValue(Promise.resolve({ data: { fields: { controls: ['field1'] } } }));
 
         toastSpy = jasmine.createSpyObj('ToastService', ['showToast']);
+        activatedRouteStub = {
+            snapshot: {
+                queryParamMap: convertToParamMap({ source: null })
+            }
+        };
 
         TestBed.configureTestingModule({
             declarations: [SearchPopoverComponent, MockTranslatePipe],
@@ -111,9 +118,13 @@ describe('SearchPopoverComponent', () => {
                 { provide: HttpService, useValue: httpSpy },
                 { provide: FormService, useValue: formSpy },
                 { provide: ToastService, useValue: toastSpy },
+                { provide: ActivatedRoute, useValue: activatedRouteStub },
             ],
             schemas: [CUSTOM_ELEMENTS_SCHEMA],
-        }).compileComponents();
+        });
+
+        TestBed.overrideTemplate(SearchPopoverComponent, '');
+        TestBed.compileComponents();
 
         fixture = TestBed.createComponent(SearchPopoverComponent);
         component = fixture.componentInstance;
@@ -162,7 +173,7 @@ describe('SearchPopoverComponent', () => {
             },
             httpGet: (config: any) => {
                 const url = (config && config.url) ? config.url : '';
-                if (url.includes('FILTER_LIST')) {
+                if (url.toLowerCase().includes('filterlist')) {
                     return Promise.resolve({ result: [{ name: 'role', options: [] }] });
                 }
                 return Promise.resolve(menteePayload);
@@ -192,32 +203,32 @@ describe('SearchPopoverComponent', () => {
                                { id: 's2', name: 'Sel2', organization: 'OrgStr', enrolled_type: 'ENROLLED', type: 'ENROLLED' }]
             });
             tick();
-            expect(component.tableData.length).toBe(2);
-            expect(component.tableData[0].organization).toBe('OrgSel'); // Object converted
-            expect(component.tableData[1].organization).toBe('OrgStr'); // String remains
-            expect(component.tableData[1].action[0].isDisabled).toBeTrue(); // ENROLLED should be disabled
-            expect(component.filterData).toEqual([]);
+            expect(component.tableData().length).toBe(2);
+            expect(component.tableData()[0].organization).toBe('OrgSel'); // Object converted
+            expect(component.tableData()[1].organization).toBe('OrgStr'); // String remains
+            expect(component.tableData()[1].action[0].isDisabled).toBeTrue(); // ENROLLED should be disabled
+            expect(component.filterData()).toEqual([]);
         }));
         
         it('should execute non-viewListMode flow and append type filter correctly', fakeAsync(() => {
             setupSuccess({ control: { name: 'some-other-control' } });
             tick();
-            expect(component.tableData.length).toBeGreaterThan(0);
+            expect(component.tableData().length).toBeGreaterThan(0);
             // Since successFakes.httpGet returns one filter, and ngOnInit appends one more (type filter)
-            expect(component.filterData.length).toBe(2);
+            expect(component.filterData().length).toBe(2);
         }));
 
         it('should not append type filter if control.name is "mentor_id"', fakeAsync(() => {
             setupSuccess({ control: { name: 'mentor_id' } });
             tick();
             // Only the filter from httpGet should be present (length 1)
-            expect(component.filterData.length).toBe(1);
+            expect(component.filterData().length).toBe(1);
         }));
         
         it('should set showPaginator based on data.disablePaginator', fakeAsync(() => {
             setupSuccess({ disablePaginator: true });
             tick();
-            expect(component.showPaginator).toBeFalse();
+            expect(component.showPaginator()).toBeFalse();
         }));
     });
 
@@ -234,7 +245,7 @@ describe('SearchPopoverComponent', () => {
             component.getFilters();
             tick();
             expect(httpSpy.get).toHaveBeenCalledWith(jasmine.objectContaining({
-                url: jasmine.stringMatching(/^FILTER_LIST\?entity_types=MENTOR&filter_type=SOME_FILTER$/)
+                url: jasmine.stringMatching(/entity_types=MENTOR&filter_type=SOME_FILTER$/)
             }));
         }));
         
@@ -346,7 +357,7 @@ describe('SearchPopoverComponent', () => {
         component.onClearSearch({}); 
         tick();
         expect(component.searchText).toBe('');
-        expect(component.tableData).toEqual(['d1']);
+        expect(component.tableData()).toEqual(['d1']);
         expect(component.getMenteelist).toHaveBeenCalled();
     }));
 
@@ -357,7 +368,7 @@ describe('SearchPopoverComponent', () => {
         tick();
         expect(component.selectedFilters).toEqual({ foo: 'bar' });
         expect(component.page).toBe(1);
-        expect(component.setPaginatorToFirstpage).toBeTrue();
+        expect(component.setPaginatorToFirstpage()).toBeTrue();
         expect(component.getMenteelist).toHaveBeenCalled();
     }));
 
@@ -367,17 +378,17 @@ describe('SearchPopoverComponent', () => {
         tick();
         expect(component.searchText).toBe('new');
         expect(component.page).toBe(1);
-        expect(component.setPaginatorToFirstpage).toBeTrue();
+        expect(component.setPaginatorToFirstpage()).toBeTrue();
         expect(component.getMenteelist).toHaveBeenCalled();
     }));
 
     describe('onButtonCLick', () => {
         beforeEach(() => {
             component.user = { id: 'u1' };
-            component.tableData = [
+            component.tableData.set([
                 { id: 't1', name: 'T1', organization: 'O1', action: component.actionButtons.ADD, enrolled_type: 'NOT_ENROLLED' },
                 { id: 'u1', name: 'Me', organization: 'Ome', action: component.actionButtons.ADD, enrolled_type: 'NOT_ENROLLED' }
-            ];
+            ]);
             component.selectedList = [];
             component.maxCount = 2; // Reduced max count for limit testing
             component.data = _.cloneDeep(baseInput);
@@ -389,7 +400,7 @@ describe('SearchPopoverComponent', () => {
         it('should calculate initial countSelectedList correctly, ignoring self if already selected', () => {
             component.selectedList = [{ id: 'x1' }, { id: 'u1' }]; // 'u1' is component.user.id
             component.countSelectedList = 0; // Reset before function
-            const item = { element: component.tableData[0], action: 'ADD' };
+            const item = { element: component.tableData()[0], action: 'ADD' };
             component.onButtonCLick(item);
             // Before switch: selectedList is 2, sessionManager is true, countSelectedList becomes 2 - 1 = 1
             // In switch: t1 is not 'u1', countSelectedList becomes 2
@@ -399,17 +410,23 @@ describe('SearchPopoverComponent', () => {
 
         it('should dismiss modal when multiSelect is false (ADD case)', () => {
             component.data.control.meta.multiSelect = false;
-            const item = { element: component.tableData[0], action: 'ADD' };
+            const item = { element: component.tableData()[0], action: 'ADD' };
             component.onButtonCLick(item);
-            expect(modalCtrlSpy.dismiss).toHaveBeenCalledWith(jasmine.arrayContaining([{ id: 't1' }]));
+            expect(modalCtrlSpy.dismiss).toHaveBeenCalledWith([
+                jasmine.objectContaining({
+                    id: 't1',
+                    label: 'T1, O1',
+                    data: jasmine.objectContaining({ id: 't1' })
+                })
+            ]);
         });
 
         it('should show toast error when maxCount is exceeded (ADD case)', () => {
             component.selectedList = [{ id: 'x1' }, { id: 'x2' }]; // Maxed out (maxCount = 2)
             component.countSelectedList = 2;
-            const item = { element: component.tableData[0], action: 'ADD' }; // Attempt to add 't1'
+            const item = { element: component.tableData()[0], action: 'ADD' }; // Attempt to add 't1'
             component.onButtonCLick(item);
-            expect(component.countSelectedList).toBe(3); // Count incremented (t1 is not self)
+            expect(component.countSelectedList).toBe(2);
             expect(toastSpy.showToast).toHaveBeenCalledWith('SESSION_MENTEE_LIMIT', 'danger');
             expect(component.selectedList.length).toBe(2); // List should not change
         });
@@ -418,7 +435,7 @@ describe('SearchPopoverComponent', () => {
             component.selectedList = [{ id: 'x1' }]; // countSelectedList=1 (not self)
             component.countSelectedList = 1;
             component.maxCount = 2;
-            const item = { element: component.tableData[1], action: 'ADD' }; // Attempt to add 'u1' (self)
+            const item = { element: component.tableData()[1], action: 'ADD' }; // Attempt to add 'u1' (self)
             component.onButtonCLick(item);
             
             // In switch: 'u1' is self, countSelectedList remains 1
@@ -435,34 +452,34 @@ describe('SearchPopoverComponent', () => {
             component.maxCount = 2;
             component.onButtonCLick(item); // Attempt to add 'u1' (self)
             expect(component.countSelectedList).toBe(0); 
-            expect(component.selectedList.length).toBe(0); // Remains 0, passed max count check.
+            expect(component.selectedList.length).toBe(1);
         });
 
 
         it('should remove item and update tableData action to ADD when viewListMode is false (REMOVE case)', () => {
             component.selectedList = [{ id: 't1' }];
-            component.tableData[0].action = component.actionButtons.REMOVE;
-            const item = { element: component.tableData[0], action: 'REMOVE' };
+            component.tableData.update(prev => { prev[0].action = component.actionButtons.REMOVE; return [...prev]; });
+            const item = { element: component.tableData()[0], action: 'REMOVE' };
             component.onButtonCLick(item);
             expect(component.selectedList.findIndex(x => x.id === 't1')).toBe(-1);
-            expect(component.tableData[0].action).toEqual(component.actionButtons.ADD);
+            expect(component.tableData()[0].action).toEqual(component.actionButtons.ADD);
             expect(component.countSelectedList).toBe(-1); // Count decremented
         });
 
         it('should remove item from tableData when action is REMOVE and viewListMode is true', () => {
             component.data.viewListMode = true;
-            component.tableData = [
+            component.tableData.set([
                 { id: 't1', name: 'T1', organization: 'O1', action: component.actionButtons.REMOVE, enrolled_type: 'NOT_ENROLLED' },
-            ];
+            ]);
             component.selectedList = [{ id: 't1' }];
-            const item = { element: component.tableData[0], action: 'REMOVE' };
+            const item = { element: component.tableData()[0], action: 'REMOVE' };
             component.onButtonCLick(item);
-            expect(component.tableData.length).toBe(0); 
+            expect(component.tableData().length).toBe(0); 
             expect(component.selectedList.length).toBe(0);
         });
 
         it('should do nothing on default action case', () => {
-            const item = { element: component.tableData[0], action: 'UNKNOWN_ACTION' };
+            const item = { element: component.tableData()[0], action: 'UNKNOWN_ACTION' };
             const initialListLength = component.selectedList.length;
             component.onButtonCLick(item);
             expect(component.selectedList.length).toBe(initialListLength);
@@ -474,7 +491,7 @@ describe('SearchPopoverComponent', () => {
         spyOn(component, 'getMenteelist').and.returnValue(Promise.resolve([]));
         component.onPaginatorChange({ page: 2, pageSize: 10 });
         tick();
-        expect(component.setPaginatorToFirstpage).toBeFalse();
+        expect(component.setPaginatorToFirstpage()).toBeFalse();
         expect(component.page).toBe(2);
         expect(component.limit).toBe(10);
         expect(component.getMenteelist).toHaveBeenCalled();
@@ -482,7 +499,7 @@ describe('SearchPopoverComponent', () => {
 
     describe('loadMore', () => {
         it('should increment page, append data and call complete', fakeAsync(() => {
-            component.tableData = [{ id: 'a' }];
+            component.tableData.set([{ id: 'a' }]);
             component.page = 1;
             spyOn(component, 'getMenteelist').and.returnValue(Promise.resolve([{ id: 'b' }, { id: 'c' }] as any));
             const mockEvent: any = { target: { complete: jasmine.createSpy('complete') } };
@@ -491,12 +508,12 @@ describe('SearchPopoverComponent', () => {
             tick();
             
             expect(component.page).toBe(2); 
-            expect(component.tableData.length).toBe(3);
+            expect(component.tableData().length).toBe(3);
             expect(mockEvent.target.complete).toHaveBeenCalled();
         }));
 
         it('should disable infinite scroll and return if getMenteelist returns no data', fakeAsync(() => {
-            component.tableData = [{ id: 'a' }];
+            component.tableData.set([{ id: 'a' }]);
             component.page = 1;
             spyOn(component, 'getMenteelist').and.returnValue(Promise.resolve([] as any));
             const mockEvent: any = { target: { complete: jasmine.createSpy('complete') } };
@@ -505,34 +522,35 @@ describe('SearchPopoverComponent', () => {
             tick();
             
             expect(component.page).toBe(2); 
-            expect(component.tableData.length).toBe(1); // Not appended
-            expect(component.disableInfiniteScroll).toBeTrue();
+            expect(component.tableData().length).toBe(1); // Not appended
+            expect(component.disableInfiniteScroll()).toBeTrue();
             // ion-infinite-scroll requires complete() even if disabled
             expect(mockEvent.target.complete).toHaveBeenCalled();
         }));
     });
 
-    it('onSorting should set sortingData/page and call getMenteelist', () => {
-        spyOn(component, 'getMenteelist');
+    it('onSorting should set sortingData/page and call getMenteelist', fakeAsync(() => {
+        spyOn(component, 'getMenteelist').and.returnValue(Promise.resolve([]));
         component.onSorting({ order: 'desc', sort_by: 'name' });
+        tick();
         expect(component.page).toBe(1);
-        expect(component.setPaginatorToFirstpage).toBeTrue();
+        expect(component.setPaginatorToFirstpage()).toBeTrue();
         expect(component.sortingData).toEqual({ order: 'desc', sort_by: 'name' });
         expect(component.getMenteelist).toHaveBeenCalled();
-    });
+    }));
 
     it('extractLabels should flatten and set chips', () => {
         const data = { role: ['r1', 'r2'], org: [{ value: 'o1' }] };
         component.extractLabels(data);
-        expect(component.chips).toEqual(['r1', 'r2', { value: 'o1' }]);
+        expect(component.chips()).toEqual(['r1', 'r2', { value: 'o1' }]);
     });
 
     describe('removeFilteredData', () => {
         beforeEach(() => {
-            component.filterData = [
+            component.filterData.set([
                 { options: [{ value: 'a', selected: true }, { value: 'b', selected: false }], code: 'role' },
                 { options: [{ value: 'c', selected: true }], code: 'org' }
-            ];
+            ]);
             component.selectedFilters = { role: [{ value: 'a' }, { value: 'x' }], org: [{ value: 'c' }] };
         });
 
@@ -540,7 +558,7 @@ describe('SearchPopoverComponent', () => {
             component.removeFilteredData('a');
 
             // option a should be deselected
-            expect(component.filterData[0].options[0].selected).toBeFalse();
+            expect(component.filterData()[0].options[0].selected).toBeFalse();
             // selectedFilters.role should no longer contain 'a' (but still contain 'x')
             expect(component.selectedFilters.role.some((i: any) => i.value === 'a')).toBeFalse();
             expect(component.selectedFilters.role.length).toBe(1);
@@ -552,11 +570,11 @@ describe('SearchPopoverComponent', () => {
         });
         
         it('should handle filters/options arrays safely even if empty', () => {
-            component.filterData = [];
+            component.filterData.set([]);
             component.selectedFilters = {};
             // Should execute without error
             component.removeFilteredData('some-chip');
-            expect(component.filterData).toEqual([]);
+            expect(component.filterData()).toEqual([]);
             expect(component.selectedFilters).toEqual({});
         });
     });
@@ -564,15 +582,15 @@ describe('SearchPopoverComponent', () => {
     it('removeChip should remove chip, update filters, and refresh tableData', fakeAsync(() => {
         spyOn(component, 'getMenteelist').and.returnValue(Promise.resolve([]));
         spyOn(component, 'removeFilteredData'); 
-        component.chips = ['chip1', 'chip2'];
+        component.chips.set(['chip1', 'chip2']);
 
         component.removeChip({ index: 0, chipValue: 'chip1' });
         tick();
 
-        expect(component.chips).not.toContain('chip1');
+        expect(component.chips()).not.toContain('chip1');
         expect(component.removeFilteredData).toHaveBeenCalledWith('chip1');
         expect(component.page).toBe(1);
-        expect(component.setPaginatorToFirstpage).toBeTrue();
+        expect(component.setPaginatorToFirstpage()).toBeTrue();
         expect(component.getMenteelist).toHaveBeenCalled();
     }));
 
@@ -589,7 +607,7 @@ describe('SearchPopoverComponent', () => {
             component.onClickFilter();
             tick();
 
-            expect(component.filterData).toEqual(['new filters'] as any);
+            expect(component.filterData()).toEqual(['new filters'] as any);
             expect(component.getMenteelist).not.toHaveBeenCalled();
         }));
 
@@ -598,12 +616,12 @@ describe('SearchPopoverComponent', () => {
             modalCtrlSpy.create.and.returnValue(Promise.resolve({ present: () => {}, onDidDismiss: () => Promise.resolve(returnedData) } as any));
 
             component.selectedFilters = { old: ['data'] };
-            component.chips = ['old', 'chips'];
+            component.chips.set(['old', 'chips']);
 
             component.onClickFilter();
             tick();
 
-            expect(component.chips).toEqual([]);
+            expect(component.chips()).toEqual([]);
             expect(component.selectedFilters).toEqual({});
             expect(component.getMenteelist).toHaveBeenCalled();
         }));

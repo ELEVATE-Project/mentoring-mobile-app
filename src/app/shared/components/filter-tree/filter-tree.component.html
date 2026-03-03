@@ -1,16 +1,27 @@
-<ion-header *ngIf="enableFilterHeader && filterData" class="header-class" >
+@if (enableFilterHeader() && filterData()) {
+<ion-header class="header-class">
   <div class="ion-padding-start d-flex py-2 px-4">
-    <ion-label *ngIf="enableFilterLabel" class="header">{{"FILTER"|translate}}</ion-label>
-    <ion-label style="margin-left: auto;" [ngClass]="{'filter-underline': enableFilterLabel, 'underline': !enableFilterLabel}" (click)="clearAll()">{{"CLEAR_ALL"|translate}}</ion-label>
+    @if (enableFilterLabel()) {
+    <ion-label class="header">{{"FILTER"|translate}}</ion-label>
+    }
+    <ion-label style="margin-left: auto;"
+      [ngClass]="{'filter-underline': enableFilterLabel(), 'underline': !enableFilterLabel()}"
+      (click)="clearAll()">{{"CLEAR_ALL"|translate}}</ion-label>
   </div>
 </ion-header>
-<ng-container *ngIf="filterData">
-  <div class="ion-padding-start ion-padding-top" *ngFor="let filter of filterData">
-    <ion-label class="sub-header">{{filter?.title}}</ion-label>
-    <div class="ion-padding-top d-flex flex-align-items-center" *ngFor="let data of filter.options">
-      <ion-checkbox [disabled]="isCheckboxDisabled(filter, eventData?.sessionType)" slot="start" [(ngModel)]="data.selected" (ionChange)="onFilterChange()"
+}
+@if (filterData()) {
+@for (filter of filterData(); track filter?.name || filter?.title) {
+<div class="ion-padding-start ion-padding-top">
+  <ion-label class="sub-header">{{filter?.title}}</ion-label>
+  @for (data of filter?.options; track data?.name) {
+  <div class="ion-padding-top d-flex flex-align-items-center">
+    <ion-checkbox [disabled]="isCheckboxDisabled(filter, eventData()?.sessionType)" slot="start"
+      [(ngModel)]="data.selected" (ionChange)="onFilterChange()"
       [ngClass]="{'readonly-checkbox': data?.readOnly}"></ion-checkbox>
-      <ion-label class="ion-padding-start ">{{data?.name || data?.label}}</ion-label>
-    </div>
+    <ion-label class="ion-padding-start ">{{data?.name || data?.label}}</ion-label>
   </div>
-</ng-container> 
+  }
+</div>
+}
+}

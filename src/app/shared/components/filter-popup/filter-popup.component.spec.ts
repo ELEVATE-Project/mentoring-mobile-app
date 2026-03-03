@@ -50,33 +50,34 @@ describe('FilterPopupComponent', () => {
       component.filterData = mockFilterData;
       component.ngOnInit();
       
-      expect(component.initialFilterData).toEqual(mockFilterData);
-      expect(component.initialFilterData).not.toBe(mockFilterData); // Deep copy check
+      expect(component.initialFilterData()).toEqual(mockFilterData);
+      expect(component.initialFilterData()).not.toBe(mockFilterData); // Deep copy check
     });
 
     it('should not initialize initialFilterData when filterData is null', () => {
       component.filterData = null;
       component.ngOnInit();
       
-      expect(component.initialFilterData).toBeUndefined();
+      expect(component.initialFilterData()).toBeNull();
     });
 
     it('should not initialize initialFilterData when filterData is undefined', () => {
       component.filterData = undefined;
       component.ngOnInit();
       
-      expect(component.initialFilterData).toBeUndefined();
+      expect(component.initialFilterData()).toBeNull();
     });
 
     it('should create a deep copy of filterData', () => {
-      component.filterData = mockFilterData;
+      const mutableData = JSON.parse(JSON.stringify(mockFilterData));
+      component.filterData = mutableData;
       component.ngOnInit();
       
       // Modify original data
-      component.filterData[0].options[0].selected = true;
+      mutableData[0].options[0].selected = true;
       
       // Initial data should remain unchanged
-      expect(component.initialFilterData[0].options[0].selected).toBe(false);
+      expect(component.initialFilterData()[0].options[0].selected).toBe(false);
     });
   });
 
@@ -85,34 +86,34 @@ describe('FilterPopupComponent', () => {
       const testData = { category: 'test', value: 'data' };
       component.filtersChanged(testData);
       
-      expect(component.selectedFilters).toEqual(testData);
+      expect(component.selectedFilters()).toEqual(testData);
     });
 
     it('should handle null data', () => {
       component.filtersChanged(null);
       
-      expect(component.selectedFilters).toBeNull();
+      expect(component.selectedFilters()).toBeNull();
     });
 
     it('should handle undefined data', () => {
       component.filtersChanged(undefined);
       
-      expect(component.selectedFilters).toBeUndefined();
+      expect(component.selectedFilters()).toBeUndefined();
     });
 
     it('should overwrite previous selectedFilters', () => {
-      component.selectedFilters = { old: 'data' };
+      component.selectedFilters.set({ old: 'data' });
       const newData = { new: 'data' };
       
       component.filtersChanged(newData);
       
-      expect(component.selectedFilters).toEqual(newData);
+      expect(component.selectedFilters()).toEqual(newData);
     });
   });
 
   describe('closePopup', () => {
     it('should dismiss modal with initial filter data and closed role', () => {
-      component.initialFilterData = mockFilterData;
+      component.initialFilterData.set(mockFilterData);
       component.closePopup();
       
       expect(modalCtrl.dismiss).toHaveBeenCalledWith({
@@ -122,7 +123,7 @@ describe('FilterPopupComponent', () => {
     });
 
     it('should dismiss modal with undefined data when initialFilterData is not set', () => {
-      component.initialFilterData = undefined;
+      component.initialFilterData.set(undefined);
       component.closePopup();
       
       expect(modalCtrl.dismiss).toHaveBeenCalledWith({
@@ -159,7 +160,7 @@ describe('FilterPopupComponent', () => {
 
     it('should use selectedFilters property if it is a non-empty object', () => {
       const customFilters = { customCategory: [{ id: 5, name: 'Custom' }] };
-      component.selectedFilters = customFilters;
+      component.selectedFilters.set(customFilters);
       
       component.onClickApply();
       
@@ -171,7 +172,7 @@ describe('FilterPopupComponent', () => {
     });
 
     it('should not use selectedFilters if it is null', () => {
-      component.selectedFilters = null;
+      component.selectedFilters.set(null);
       component.onClickApply();
       
       const dismissCall = modalCtrl.dismiss.calls.mostRecent().args[0];
@@ -180,7 +181,7 @@ describe('FilterPopupComponent', () => {
     });
 
     it('should not use selectedFilters if it is undefined', () => {
-      component.selectedFilters = undefined;
+      component.selectedFilters.set(undefined);
       component.onClickApply();
       
       const dismissCall = modalCtrl.dismiss.calls.mostRecent().args[0];
@@ -188,7 +189,7 @@ describe('FilterPopupComponent', () => {
     });
 
     it('should not use selectedFilters if it is an empty object', () => {
-      component.selectedFilters = {};
+      component.selectedFilters.set({});
       component.onClickApply();
       
       const dismissCall = modalCtrl.dismiss.calls.mostRecent().args[0];
@@ -196,7 +197,7 @@ describe('FilterPopupComponent', () => {
     });
 
     it('should not use selectedFilters if it is not an object (string)', () => {
-      component.selectedFilters = 'string value';
+      component.selectedFilters.set('string value' as any);
       component.onClickApply();
       
       const dismissCall = modalCtrl.dismiss.calls.mostRecent().args[0];
@@ -204,7 +205,7 @@ describe('FilterPopupComponent', () => {
     });
 
     it('should not use selectedFilters if it is not an object (number)', () => {
-      component.selectedFilters = 123;
+      component.selectedFilters.set(123 as any);
       component.onClickApply();
       
       const dismissCall = modalCtrl.dismiss.calls.mostRecent().args[0];
@@ -289,24 +290,24 @@ describe('FilterPopupComponent', () => {
 
   describe('ionViewWillLeave', () => {
     it('should reset selectedFilters to null', () => {
-      component.selectedFilters = { some: 'data' };
+      component.selectedFilters.set({ some: 'data' });
       component.ionViewWillLeave();
       
-      expect(component.selectedFilters).toBeNull();
+      expect(component.selectedFilters()).toBeNull();
     });
 
     it('should reset selectedFilters even if it was already null', () => {
-      component.selectedFilters = null;
+      component.selectedFilters.set(null);
       component.ionViewWillLeave();
       
-      expect(component.selectedFilters).toBeNull();
+      expect(component.selectedFilters()).toBeNull();
     });
 
     it('should reset selectedFilters even if it was undefined', () => {
-      component.selectedFilters = undefined;
+      component.selectedFilters.set(undefined);
       component.ionViewWillLeave();
       
-      expect(component.selectedFilters).toBeNull();
+      expect(component.selectedFilters()).toBeNull();
     });
   });
 });

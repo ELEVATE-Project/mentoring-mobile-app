@@ -1,31 +1,30 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import * as _ from 'lodash';
+import { Component, EventEmitter, input, OnInit, Output, signal } from '@angular/core';
 
 @Component({
-    selector: 'app-filter-tree',
-    templateUrl: './filter-tree.component.html',
-    styleUrls: ['./filter-tree.component.scss'],
-    standalone: false
+  selector: 'app-filter-tree',
+  templateUrl: './filter-tree.component.html',
+  styleUrls: ['./filter-tree.component.scss'],
+  standalone: false
 })
 export class FilterTreeComponent implements OnInit {
-  @Input() enableFilterHeader:any;
-  @Input() enableFilterLabel: any;
-  @Input() filterData: any;
+  enableFilterHeader = input<any>();
+  enableFilterLabel = input<any>();
+  filterData = input<any>();
   @Output() filtersChanged = new EventEmitter<any>();
-  @Input() eventData: any;
-  readOnly: boolean = false;
+  eventData = input<any>();
+  readOnly = signal<boolean>(false);
 
 
   constructor() { }
 
   ngOnInit() {
-    if (this.eventData?.sessionType) {
-      this.filterData?.forEach(filter => { 
-        if (filter.name === "type" ) {
+    if (this.eventData()?.sessionType) {
+      this.filterData()?.forEach(filter => {
+        if (filter?.name === "type") {
           filter.options.forEach(option => {
             option.selected = false;
-            this.onFilterChange();  
-            option.readOnly = false; 
+            this.onFilterChange();
+            option.readOnly = false;
           });
         }
       });
@@ -33,19 +32,19 @@ export class FilterTreeComponent implements OnInit {
   }
 
   clearAll() {
-  if (this.filterData) {
-    this.filterData.forEach(filter => {
+    if (this.filterData()) {
+      this.filterData().forEach(filter => {
         filter.options = filter.options.map(option => ({ ...option, selected: false }));
-    });
+      });
+    }
+    this.onFilterChange();
   }
-  this.onFilterChange();
-}
 
   onFilterChange() {
     const selectedOptionsByCategory = {};
-    this.filterData.forEach(category => {
-      const selectedOptions = category.options.filter(option => option.selected);
-      if (selectedOptions.length > 0) {
+    this.filterData().forEach(category => {
+      const selectedOptions = category?.options.filter(option => option.selected);
+      if (selectedOptions?.length > 0) {
         const optionsWithCategory = selectedOptions.map(option => ({ ...option, categoryName: category.name }));
         selectedOptionsByCategory[category.name] = selectedOptionsByCategory[category.name] || [];
         selectedOptionsByCategory[category.name].push(...optionsWithCategory);

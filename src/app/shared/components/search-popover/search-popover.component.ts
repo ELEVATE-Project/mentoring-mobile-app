@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import {  ModalController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash-es';
@@ -34,31 +34,31 @@ export class SearchPopoverComponent implements OnInit {
     { name: 'action', displayName: 'Actions', type: 'button' }
   ]
 
-  filterData;
-  tableData: any;
+  filterData = signal<any>(null);
+  tableData = signal<any>(null);
   page = 1
   limit = 5
   searchText = '';
-  count: any;
+  count = signal<any>(null);
   maxCount;
   countSelectedList:any = 0 ;
   user;
   roles: any;
   sortingData;
-  setPaginatorToFirstpage:any = false;
+  setPaginatorToFirstpage = signal<any>(false);
   actionButtons = {
     'ADD': [{ label: 'ADD', action: 'ADD', color: 'light', name: 'ADD', cssColor: 'white-color', isDisabled: false }],
     'REMOVE': [{ label: 'REMOVE', action: 'REMOVE', color: 'primary',name: 'REMOVE', cssColor: 'primary-color', isDisabled: false }],
   }
   selectedFilters:any = {};
   selectedList: any=[];
-  noDataMessage: string;
+  noDataMessage = signal<string>('');
   hasSessionManager: any;
   mentorForm: any;
-  chips : any[] = [];
-  disableInfiniteScroll = false; 
+  chips = signal<any[]>([]);
+  disableInfiniteScroll = signal<boolean>(false);
   disableNavigation= true;
-  showPaginator: boolean= true;
+  showPaginator = signal<boolean>(true);
   disabledCheckboxId: string | null = null;
   showSelectAll : boolean = false;
   showCheckbox : boolean= false;
@@ -82,6 +82,9 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.data?.control?.meta) {
+      return;
+    }
     this.source = this.route.snapshot.queryParamMap.get('source');
     let isMobile = this.util.isMobile();
     if(isMobile)
@@ -103,16 +106,17 @@ export class SearchPopoverComponent implements OnInit {
         ele.organization = (typeof ele.organization === 'object' && ele.organization !== null) ? ele.organization.name : ele.organization;
         ele.action = ele.type=='ENROLLED' ? [{ label: 'REMOVE', action: 'REMOVE', color: 'primary', name: 'REMOVE', cssColor: 'primary-color' , isDisabled: true}] : this.actionButtons.REMOVE;
       });
-      this.tableData = this.selectedList
-      this.filterData = [];
+      this.tableData.set(this.selectedList);
+      this.filterData.set([]);
     } else {
-      this.tableData = await this.getMenteelist();
-      this.filterData =  await this.getFilters();
-      this.filterData = await this.util.getFormatedFilterData(this.filterData, this.data.control.meta);
+      this.tableData.set(await this.getMenteelist());
+      let filters = await this.getFilters();
+      let formattedFilters = (await this.util.getFormatedFilterData(filters, this.data.control.meta)) || [];
       if(this.data.control.name != "mentor_id")
-      this.filterData = [...this.filterData, this.data?.control?.meta?.filters?.type[0]];
+      formattedFilters = [...formattedFilters, this.data?.control?.meta?.filters?.type?.[0]];
+      this.filterData.set(formattedFilters);
     }   
-    this.showPaginator = this.data.disablePaginator ? false : true;
+    this.showPaginator.set(this.data.disablePaginator ? false : true);
   }
 
   async getFilters() {
@@ -171,10 +175,10 @@ export class SearchPopoverComponent implements OnInit {
     };
     try {
       const data: any = await this.httpService.get(config);
-      if (this.page === 1 || !this.count) {
-        this.count = data.result.count;
+      if (this.page === 1 || !this.count()) {
+        this.count.set(data.result.count);
       }
-      this.noDataMessage = this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY"
+      this.noDataMessage.set(this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "THIS_SPACE_LOOKS_EMPTY");
       let selectedIds =  _.map(this.selectedList, 'id');
       data.result.data.forEach((ele) => {
         ele.action = _.includes(selectedIds, ele.id) ? (ele.enrolled_type === 'ENROLLED' ?  [{ label: 'REMOVE', action: 'REMOVE', color: 'primary', name: 'REMOVE', cssColor: 'primary-color' , isDisabled: true}] : this.actionButtons.REMOVE) : this.actionButtons.ADD;
@@ -194,21 +198,21 @@ export class SearchPopoverComponent implements OnInit {
 
   async onClearSearch(event: any) {
     this.searchText =''
-    this.tableData = await this.getMenteelist();
+    this.tableData.set(await this.getMenteelist());
   }
 
   async filtersChanged(event) {
     this.selectedFilters = event
     this.page=1;
-    this.setPaginatorToFirstpage= true
-    this.tableData = await this.getMenteelist()
+    this.setPaginatorToFirstpage.set(true);
+    this.tableData.set(await this.getMenteelist());
   }
 
   async onSearch(event: any){
     this.searchText = event.searchText;
     this.page=1;
-    this.setPaginatorToFirstpage= true
-    this.tableData = await this.getMenteelist()
+    this.setPaginatorToFirstpage.set(true);
+    this.tableData.set(await this.getMenteelist());
   }
 
   onButtonCLick(data: any) {
@@ -219,8 +223,12 @@ export class SearchPopoverComponent implements OnInit {
           this.modalController.dismiss([{label: data.element.name+', '+data.element.organization, id: data.element.id, data: data.element}])
         } else {
           if(this.maxCount && this.maxCount>=this.countSelectedList){
-            const index = this.tableData.findIndex(item => item.id === data.element.id);
-            this.tableData[index].action = this.actionButtons.REMOVE;
+            this.tableData.update(prev => {
+              const updated = [...prev];
+              const index = updated.findIndex(item => item.id === data.element.id);
+              updated[index] = { ...updated[index], action: this.actionButtons.REMOVE };
+              return updated;
+            });
             let addedData = data.element
             this.selectedList.push(addedData)
             this.selectedList = [...this.selectedList]; 
@@ -233,11 +241,15 @@ export class SearchPopoverComponent implements OnInit {
 
       case 'REMOVE':
         this.countSelectedList = (this.user.id == data.element.id) ?this.countSelectedList : this.countSelectedList-1
-        const index = this.tableData.findIndex(item => item.id === data.element.id);
         if(this.data.viewListMode) {
-          this.tableData = this.tableData.filter(obj => obj.id !== data.element.id);
+          this.tableData.update(prev => prev.filter(obj => obj.id !== data.element.id));
         } else {
-          this.tableData[index].action = this.actionButtons.ADD;
+          this.tableData.update(prev => {
+            const updated = [...prev];
+            const index = updated.findIndex(item => item.id === data.element.id);
+            updated[index] = { ...updated[index], action: this.actionButtons.ADD };
+            return updated;
+          });
         }
         this.selectedList = this.selectedList.filter(obj => obj.id !== data.element.id);
       default:
@@ -250,10 +262,10 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   async onPaginatorChange(data:any) {
-    this.setPaginatorToFirstpage= false;
+    this.setPaginatorToFirstpage.set(false);
       this.page = data.page;
       this.limit = data.pageSize 
-      this.tableData = await this.getMenteelist();
+      this.tableData.set(await this.getMenteelist());
   }
 
   async loadMore(event) {
@@ -261,40 +273,46 @@ export class SearchPopoverComponent implements OnInit {
 
       let data = await this.getMenteelist();
         if(data.length === 0) {
-          this.disableInfiniteScroll = true; 
+          this.disableInfiniteScroll.set(true); 
       }
-    this.tableData = this.tableData.concat(data)
+    this.tableData.update(prev => prev.concat(data));
     if(this.isSelectAllActive){
       this.onSelectAll(this.isSelectAllActive);
     }
     event.target.complete();
   }
 
-  onSorting(data: any) {
+  async onSorting(data: any) {
     this.page=1;
-    this.setPaginatorToFirstpage= true
+    this.setPaginatorToFirstpage.set(true);
     this.sortingData = data;
-    this.getMenteelist()
+    this.tableData.set(await this.getMenteelist());
   }
 
   extractLabels(data) {
-    this.chips = [];
+    const newChips = [];
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
-        this.chips.push(...data[key]);
+        newChips.push(...data[key]);
       }
     }
+    this.chips.set(newChips);
   }
 
   removeFilteredData(chip) {
-    this.filterData.map((filter) => {
-      filter.options.map((option) => {
-        if (option.value === chip) {
-          option.selected = false;
-        }
+    this.filterData?.update(prev => {
+      return prev.filter(Boolean).map((filter) => {
+        return {
+          ...filter,
+          options: filter.options?.map((option) => {
+            if (option.value === chip) {
+              return { ...option, selected: false };
+            }
+            return option;
+          })
+        };
       });
-      return filter;
-    })
+    });
     for (let key in this.selectedFilters) {
       if (this.selectedFilters.hasOwnProperty(key)) {
         this.selectedFilters[key] = this.selectedFilters[key].filter(item => item.value !== chip);
@@ -306,11 +324,15 @@ export class SearchPopoverComponent implements OnInit {
   }
 
   async removeChip(event) {
-    this.chips.splice(event.index, 1);
+    this.chips.update(prev => {
+      const updated = [...prev];
+      updated.splice(event.index, 1);
+      return updated;
+    });
     this.removeFilteredData(event.chipValue);
     this.page = 1;
-    this.setPaginatorToFirstpage = true;
-    this.tableData = await this.getMenteelist();
+    this.setPaginatorToFirstpage.set(true);
+    this.tableData.set(await this.getMenteelist());
   }
 
 
@@ -318,16 +340,16 @@ export class SearchPopoverComponent implements OnInit {
     let modal = await this.modalController.create({
       component: FilterPopupComponent,
       cssClass: 'filter-modal',
-      componentProps: { filterData: this.filterData }
+      componentProps: { filterData: this.filterData() }
     });
   
     modal.onDidDismiss().then(async (dataReturned) => {
       if(dataReturned?.data?.role === 'closed'){
-        this.filterData = dataReturned?.data?.data;
+        this.filterData.set(dataReturned?.data?.data);
         return;
       }
       if(Object.keys(dataReturned?.data).length === 0){
-        this.chips = [];
+        this.chips.set([]);
         this.selectedFilters = {};
       }
       if (dataReturned.data && dataReturned.data.data) {
@@ -337,8 +359,8 @@ export class SearchPopoverComponent implements OnInit {
         }
       }
       this.page = 1;
-      this.setPaginatorToFirstpage = true
-      this.tableData = await this.getMenteelist();
+      this.setPaginatorToFirstpage.set(true);
+      this.tableData.set(await this.getMenteelist());
     });
     modal.present()
   }
@@ -350,7 +372,8 @@ export class SearchPopoverComponent implements OnInit {
      case true:
   let currentCount = this.countSelectedList;
 
-  for (const element of this.tableData) {
+  const currentTableData = this.tableData();
+  for (const element of currentTableData) {
       
       const alreadySelected = this.selectedList.some(item => item.id === element.id);
       if (alreadySelected) continue;
@@ -365,31 +388,32 @@ export class SearchPopoverComponent implements OnInit {
           this.toast.showToast('SESSION_MENTEE_LIMIT', 'danger');
           break; 
       }
-      const index = this.tableData.findIndex(item => item.id === element.id);
+      const index = currentTableData.findIndex(item => item.id === element.id);
       if (index !== -1) {
-          this.tableData[index].action = this.actionButtons.REMOVE;
+          currentTableData[index].action = this.actionButtons.REMOVE;
       }
       this.selectedList.push(element);
       currentCount = proposedCount;
   }
 
   this.countSelectedList = currentCount;
-  this.tableData = [...this.tableData]; 
+  this.tableData.set([...currentTableData]); 
 
   break;
     
      case false:
     
-    for (const element of this.tableData) {
+    const tableDataForDeselect = this.tableData();
+    for (const element of tableDataForDeselect) {
         
         const selectedIndex = this.selectedList.findIndex(item => item.id === element.id);
         
         if (selectedIndex !== -1) {
-            const tableIndex = this.tableData.findIndex(item => item.id === element.id);
+            const tableIndex = tableDataForDeselect.findIndex(item => item.id === element.id);
 
             if (tableIndex !== -1) {
                 
-                this.tableData[tableIndex].action = this.actionButtons.ADD;
+                tableDataForDeselect[tableIndex].action = this.actionButtons.ADD;
             }
             this.selectedList.splice(selectedIndex, 1);
             if (this.user.id !== element.id) {
@@ -397,7 +421,7 @@ export class SearchPopoverComponent implements OnInit {
             }
         }
     }
-    this.tableData = [...this.tableData];
+    this.tableData.set([...tableDataForDeselect]);
     break;
   }
 }
@@ -407,16 +431,16 @@ async onSelectAllX(isChecked: boolean) {
     this.selectedList = [];
     this.countSelectedList = 0;
     this.page = 1;
-    this.setPaginatorToFirstpage = true;
-    this.disableInfiniteScroll = false;
-    this.tableData = await this.getMenteelist();
+    this.setPaginatorToFirstpage.set(true);
+    this.disableInfiniteScroll.set(false);
+    this.tableData.set(await this.getMenteelist());
     return;
   }
   
   const originalPage = this.page;
   const originalLimit = this.limit;
   this.page = 1;
-  this.limit = this.count;
+  this.limit = this.count();
   const allMentees = await this.getMenteelist();
   
   const hasSessionManager = this.selectedList.some(item => item.id === this.user.id);
@@ -436,8 +460,8 @@ async onSelectAllX(isChecked: boolean) {
   }
   
   if (this.data.isMobile) {
-    this.disableInfiniteScroll = true;
-    this.tableData = allMentees.map(item => {
+    this.disableInfiniteScroll.set(true);
+    this.tableData.set(allMentees.map(item => {
       const isSelected = this.selectedList.some(selected => selected.id === item.id);
       if (isSelected) {
         item.action = item.enrolled_type === 'ENROLLED' 
@@ -445,12 +469,12 @@ async onSelectAllX(isChecked: boolean) {
           : this.actionButtons.REMOVE;
       }
       return item;
-    });
+    }));
   } else {
     this.page = originalPage;
     this.limit = originalLimit;
-    this.setPaginatorToFirstpage = true;
-    this.tableData = await this.getMenteelist();
+    this.setPaginatorToFirstpage.set(true);
+    this.tableData.set(await this.getMenteelist());
   }
   
   this.countSelectedList = currentCount;

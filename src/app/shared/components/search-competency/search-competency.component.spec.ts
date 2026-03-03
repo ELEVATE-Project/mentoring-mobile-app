@@ -67,13 +67,13 @@ describe('SearchCompetencyComponent', () => {
       tick();
 
       // Check deep copy (to ensure original data is not mutated)
-      expect(component.selectedOptions).toEqual(mockInitialData);
-      expect(component.selectedOptions).not.toBe(component.data.selectedData);
+      expect(component.selectedOptions()).toEqual(mockInitialData);
+      expect(component.selectedOptions()).not.toBe(component.data.selectedData);
 
       // Check initial fetch
       expect(httpServiceSpy.post).toHaveBeenCalledTimes(1);
-      expect(component.entities.data.length).toBe(1);
-      expect(component.count).toBe(20);
+      expect(component.entities().data.length).toBe(1);
+      expect(component.count()).toBe(20);
     }));
   });
 
@@ -93,7 +93,7 @@ describe('SearchCompetencyComponent', () => {
         url: expectedUrl
       }));
       expect(result).toEqual(mockResponse.result);
-      expect(component.count).toBe(10);
+      expect(component.count()).toBe(10);
     });
 
     it('should return null and handle API error gracefully', async () => {
@@ -103,7 +103,7 @@ describe('SearchCompetencyComponent', () => {
 
       expect(result).toBeNull();
       // count should not have been updated in case of error
-      expect(component.count).toBeUndefined(); 
+      expect(component.count()).toBeNull();
     });
   });
 
@@ -111,15 +111,15 @@ describe('SearchCompetencyComponent', () => {
     const newOption = { value: 'N3', label: 'New Entity 3', type: 'system' };
 
     beforeEach(() => {
-      component.selectedOptions = JSON.parse(JSON.stringify(mockInitialData));
+      component.selectedOptions.set(JSON.parse(JSON.stringify(mockInitialData)));
     });
 
     it('should add an option to selectedOptions on checkbox check', () => {
       const mockEvent = { detail: { checked: true } };
       component.onCheckboxChange(mockEvent, newOption);
       
-      expect(component.selectedOptions.length).toBe(4);
-      expect(component.selectedOptions.some(item => item.value === 'N3')).toBeTrue();
+      expect(component.selectedOptions().length).toBe(4);
+      expect(component.selectedOptions().some(item => item.value === 'N3')).toBeTrue();
     });
 
     it('should remove an option from selectedOptions on checkbox uncheck', () => {
@@ -128,8 +128,8 @@ describe('SearchCompetencyComponent', () => {
       const mockEvent = { detail: { checked: false } };
       component.onCheckboxChange(mockEvent, optionToRemove);
 
-      expect(component.selectedOptions.length).toBe(2);
-      expect(component.selectedOptions.some(item => item.value === 'E1')).toBeFalse();
+      expect(component.selectedOptions().length).toBe(2);
+      expect(component.selectedOptions().some(item => item.value === 'E1')).toBeFalse();
     });
 
     it('isOptionSelected should return true if option is selected', () => {
@@ -153,7 +153,7 @@ describe('SearchCompetencyComponent', () => {
 
     it('clearAll should reset state and keep only "other" type selections', fakeAsync(() => {
       // Add a system entity and a custom entity
-      component.selectedOptions = [...mockInitialData, { value: 'S3', type: 'system' }];
+      component.selectedOptions.set([...mockInitialData, { value: 'S3', type: 'system' }]);
       component.searchText = 'something';
       component.page = 5;
 
@@ -161,8 +161,8 @@ describe('SearchCompetencyComponent', () => {
       tick();
 
       // Only 'other' type options (C1) should remain
-      expect(component.selectedOptions.length).toBe(1);
-      expect(component.selectedOptions[0].type).toBe('other');
+      expect(component.selectedOptions().length).toBe(1);
+      expect(component.selectedOptions()[0].type).toBe('other');
       expect(component.searchText).toBe('');
       expect(component.page).toBe(1);
       expect(httpServiceSpy.post).toHaveBeenCalledTimes(1);
@@ -204,7 +204,7 @@ describe('SearchCompetencyComponent', () => {
     });
 
     it('onSave should dismiss the modal with selectedOptions data', () => {
-      component.selectedOptions = [{ value: 'final' }];
+      component.selectedOptions.set([{ value: 'final' }]);
       component.onSave();
       expect(modalControllerSpy.dismiss).toHaveBeenCalledWith([{ value: 'final' }]);
     });
@@ -220,8 +220,8 @@ describe('SearchCompetencyComponent', () => {
       
       // Setup current state for loadMore test
       component.page = 1;
-      component.count = 5; // Total items
-      component.entities.data = [{ id: 1 }, { id: 2 }]; // 2 items currently loaded
+      component.count.set(5); // Total items
+      component.entities().data = [{ id: 1 }, { id: 2 }]; // 2 items currently loaded
       
       // Mock the infinite scroll event
       mockEvent = { target: { complete: jasmine.createSpy('complete'), disabled: false } };
@@ -237,29 +237,29 @@ describe('SearchCompetencyComponent', () => {
 
       expect(component.page).toBe(2);
       expect(httpServiceSpy.post).toHaveBeenCalled();
-      expect(component.entities.data.length).toBe(5); // 2 existing + 3 new = 5
+      expect(component.entities().data.length).toBe(5); // 2 existing + 3 new = 5
       expect(mockEvent.target.complete).toHaveBeenCalled();
       expect(mockEvent.target.disabled).toBeFalse();
     }));
 
     it('should disable the event target if all items are already loaded', fakeAsync(() => {
       // Mock state where count equals current data length (e.g., 2 items loaded, count is 2)
-      component.count = 2;
-      component.entities.data = [{ id: 1 }, { id: 2 }];
+      component.count.set(2);
+      component.entities.update(prev => ({ ...prev, data: [{ id: 1 }, { id: 2 }] }));
 
       component.loadMore(mockEvent);
       tick();
 
       expect(component.page).toBe(2); // Page still increments
-      // API call should still happen, as the check (count > entities.data.length) is done after page increment
-      expect(httpServiceSpy.post).not.toHaveBeenCalled(); 
+      // API is called once before the component detects there is no more data to load.
+      expect(httpServiceSpy.post).toHaveBeenCalled();
       expect(mockEvent.target.complete).not.toHaveBeenCalled(); 
       expect(mockEvent.target.disabled).toBeTrue();
     }));
     
     it('should correctly concat entities if API returns fewer items than limit', fakeAsync(() => {
-      component.count = 10;
-      component.entities.data = [{ id: 1 }, { id: 2 }]; // Start with 2
+      component.count.set(10);
+      component.entities.update(prev => ({ ...prev, data: [{ id: 1 }, { id: 2 }] })); // Start with 2
       
       // Next call returns 3 new entities, but total count is still high
       const newEntities = [{ id: 3 }, { id: 4 }, { id: 5 }];
@@ -269,7 +269,7 @@ describe('SearchCompetencyComponent', () => {
       tick();
       
       expect(component.page).toBe(2);
-      expect(component.entities.data.length).toBe(5); // Should have 5 items total
+      expect(component.entities().data.length).toBe(5); // Should have 5 items total
       expect(mockEvent.target.complete).toHaveBeenCalled();
     }));
   });

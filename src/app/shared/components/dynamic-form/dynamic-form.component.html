@@ -1,31 +1,39 @@
-<form [formGroup]="myForm" *ngIf="showForm">
-  <div class="fields" *ngFor="let control of jsonFormData?.controls; let i=index">
+@if (showForm) {
+<form [formGroup]="myForm">
+  @for (control of jsonFormData?.controls; track control?.name; let i = $index) {
+  <div class="fields">
+    @let ctrl = myForm.get(control.name);
+    @if (control?.showField != false) {
     <ion-item
-      *ngIf="control?.showField != false"
       class="ion-no-padding"
       [class]="control.class"
       [ngClass]="{
         'form-invalid':
-          myForm.get(control.name)?.touched && myForm.get(control.name)?.invalid
+          ctrl?.touched && ctrl?.invalid
       }"
     >
-    <div *ngIf="control.label !== '' && !['rating'].includes(control.type) && !['chip'].includes(control.type) && !['search'].includes(control.type)" class="d-flex flex-align-items-center p-rel">
-      <ion-label position="stacked">
-        {{ control.label }}&nbsp;<span *ngIf="control?.validators['required']==true && !readonly" class="star-icon-red">*</span>
-      </ion-label>
-      <ion-icon *ngIf="control?.info" id="{{control.name}}" class="info" name="information-circle"></ion-icon>
-      <ion-popover trigger="{{control.name}}" triggerAction="hover">
-        <ng-template>
-          <ion-content class="ion-padding">
-            <div class="ion-padding-bottom" *ngFor="let info of control.info"><span class="popover-header">{{info?.header}}:</span> {{info?.message}}</div>
-          </ion-content>
-        </ng-template>
-      </ion-popover>
-    </div>
+      @if (control.label !== '' && !hiddenLabelTypes.includes(control.type)) {
+      <div class="d-flex flex-align-items-center p-rel">
+        <ion-label position="stacked">
+          {{ control.label }}&nbsp;@if (control?.validators['required']==true && !readonly) {<span class="star-icon-red">*</span>}
+        </ion-label>
+        @if (control?.info) {
+        <ion-icon [id]="control.name" class="info" name="information-circle"></ion-icon>
+        }
+        <ion-popover [trigger]="control.name" triggerAction="hover">
+          <ng-template>
+            <ion-content class="ion-padding">
+              @for (info of control.info; track info?.header || info?.message) {
+              <div class="ion-padding-bottom"><span class="popover-header">{{info?.header}}:</span> {{info?.message}}</div>
+              }
+            </ion-content>
+          </ng-template>
+        </ion-popover>
+      </div>
+      }
+
+      @if (control.type==='text' && control?.isNumberOnly) {
       <ion-input
-        *ngIf="
-          control.type==='text' && control?.isNumberOnly
-        "
         [type]="control.type"
         [formControlName]="control.name"
         [value]="control.value"
@@ -34,18 +42,10 @@
         (ionChange)="removeSpace($event)"
         numberOnly
       ></ion-input>
+      }
+
+      @if (['text', 'password', 'email', 'number', 'tel', 'url', 'secretCode'].includes(control.type) && !control?.isNumberOnly) {
       <ion-input
-        *ngIf="
-          [
-            'text',
-            'password',
-            'email',
-            'number',
-            'tel',
-            'url',
-            'secretCode'
-          ].includes(control.type) && !control?.isNumberOnly
-        "
         [type]="control.type"
         [formControlName]="control.name"
         [value]="control.value"
@@ -55,8 +55,10 @@
         [placeholder]="control.platformPlaceHolder"
         (keyup.enter)="onEnterPress($event)"
       ></ion-input>
+      }
+
+      @if (control.type === 'textarea') {
       <ion-textarea
-        *ngIf="control.type === 'textarea'"
         [formControlName]="control.name"
         [value]="control.value"
         autocomplete="new-password"
@@ -64,23 +66,29 @@
         (ionChange)="removeSpace($event)"
         [placeholder]="control.platformPlaceHolder"
       ></ion-textarea>
+      }
+
+      @if (control.type === 'checkbox') {
       <ion-checkbox
-        *ngIf="control.type === 'checkbox'"
         [formControlName]="control.name"
         [checked]="control.value"
       ></ion-checkbox>
+      }
+
+      @if (control.type === 'toggle') {
       <ion-toggle
-        *ngIf="control.type === 'toggle'"
         [formControlName]="control.name"
         [checked]="control.value"
-        [slot]="control.slot"
+        [slot]="control.slot || 'end'"
       ></ion-toggle>
-      
-      <div *ngIf="control.type === 'toggle'" class="placeholder">
-      {{ myForm.get(control.name)?.value ? control.placeholderOn : control.placeholderOff }}
+
+      <div class="placeholder">
+      {{ ctrl?.value ? control.placeholderOn : control.placeholderOff }}
       </div>
+      }
+
+      @if (control.type === 'range') {
       <ion-range
-        *ngIf="control.type === 'range'"
         [min]="control.options.min"
         [max]="control.options.max"
         [formControlName]="control.name"
@@ -92,11 +100,17 @@
         ></ion-icon>
         <ion-icon slot="end" [name]="control.options.icon"></ion-icon>
       </ion-range>
-      <div *ngIf="control.type === 'search-select'"  (click)="openDynamicSelectModal()">
+      }
+
+      @if (control.type === 'search-select') {
+      <div (click)="openDynamicSelectModal()">
         <ion-input type="text" [readonly]="true" [value]="selectedDynamicValue">
         </ion-input>
       </div>
-      <div class="date-input-container" *ngIf="control.type === 'date'">
+      }
+
+      @if (control.type === 'date') {
+      <div class="date-input-container">
         <input matInput class="date-input" [owlDateTimeTrigger]="dt" [owlDateTime]="dt" #dateInput
           [formControlName]="control.name"
           [value]="control.value"
@@ -113,9 +127,11 @@
           [hour12Timer]="enableMeridian"
         ></owl-date-time>
         <ion-icon class="calendar-icon" (click)="dateInput.click()" name="calendar-outline"></ion-icon>
-      </div> 
+      </div>
+      }
+
+      @if (control.type === 'select') {
       <ion-select class="p-rel"
-        *ngIf="control.type === 'select'"
         [multiple]="control.multiple"
         [formControlName]="control.name"
         [compareWith]="compareWith"
@@ -124,14 +140,16 @@
         (ionChange)="selectionChanged(control,$event)"
         [cancelText]="'CANCEL' | translate"
       >
+        @for (option of control.options; track option?.value || option?.label) {
         <ion-select-option
-          *ngFor="let option of control.options"
           [value]="option.value"
-          >{{ option.label }}</ion-select-option
-        >
+        >{{ option.label }}</ion-select-option>
+        }
       </ion-select>
+      }
+
+      @if (control.type === 'chip') {
       <app-input-chip class="p-rel"
-        *ngIf="control.type === 'chip'"
         [formControlName]="control.name"
         [label]="control.alertLabel?control.alertLabel:control.label"
         [chips]="control.options"
@@ -141,37 +159,56 @@
         [validators]="control.validators"
         [allowCustomEntities]="control.meta.allow_custom_entities"
       ></app-input-chip>
+      }
+
+      @if (control.type === 'search') {
       <app-search-and-select
-        *ngIf="control.type === 'search'"
         [formControlName]="control.name"
         [control]="control"
         (showSelectionPopover)="searchEventEmitter($event)"
         [uniqueId]="i"
         [sessionId]="sesionId"
       ></app-search-and-select>
+      }
+
+      @if (control.type === 'password' || control.showPasswordIcon) {
       <ion-icon
         size="small"
         slot="end"
         [name]="control.type === 'password' ? 'eye-off' : 'eye'"
-        *ngIf="control.type === 'password' || control.showPasswordIcon"
         class="icon"
         (click)="hideShowPassword(control)"
       ></ion-icon>
+      }
+
+      @if (control.type === 'rating') {
       <app-star-rating
-        *ngIf="control.type === 'rating'"
         [formControlName]="control.name"
         [label]="control.label"
         [numberOfStars]="control.no_of_stars"
       ></app-star-rating>
+      }
     </ion-item>
-    <small class="error-msg d-flex error-msg flex-align-items-center" *ngIf="control?.showField != false" >
-      <div *ngIf="myForm.get(control.name)?.touched && myForm.get(control.name)?.invalid ">
+    }
+
+    @if (control?.showField != false) {
+    <small class="error-msg d-flex error-msg flex-align-items-center">
+      @if (ctrl?.touched && ctrl?.invalid) {
+      @let firstErrorKey = (ctrl?.errors | keyvalue)[0]?.key;
+      <div>
         <ion-icon name="alert-circle-outline"></ion-icon>
-         <span *ngIf="control?.errorMessage[(myForm.get(control.name).errors | keyvalue)[0].key]" class="mx-10">
-          {{ control?.errorMessage[(myForm.get(control.name).errors | keyvalue)[0].key] }}
+         @if (control?.errorMessage[firstErrorKey]) {
+        <span class="mx-10">
+          {{ control?.errorMessage[firstErrorKey] }}
         </span>
-        <span *ngIf="!control?.errorMessage[(myForm.get(control.name).errors | keyvalue)[0].key]" class="mx-10">Enter {{control?.label}}</span> 
+        } @else {
+        <span class="mx-10">Enter {{control?.label}}</span>
+        }
       </div>
+      }
     </small>
+    }
   </div>
+  }
 </form>
+}
