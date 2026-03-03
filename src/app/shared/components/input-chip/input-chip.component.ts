@@ -25,17 +25,17 @@ import { ToastService } from 'src/app/core/services';
     standalone: false
 })
 export class InputChipComponent implements OnInit, ControlValueAccessor {
-  @Input() label;
-  @Input() chips;
-  @Input() showSelectAll;
-  @Input() showAddOption;
-  @Input() validators;
-  @Input() allowCustomEntities;
-  disabled;
+  @Input() label = '';
+  @Input() chips: any[] = [];
+  @Input() showSelectAll = false;
+  @Input() showAddOption: any;
+  @Input() validators: any = {};
+  @Input() allowCustomEntities = false;
+  disabled = false;
   touched = false;
-  selectedChips;
-  _selectAll;
-  lowerCaseLabel;
+  selectedChips = new Set<any>();
+  _selectAll = false;
+  lowerCaseLabel = '';
 
   constructor(
     private alertController: AlertController,
@@ -48,17 +48,23 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
   onTouched = () => { };
 
   ngOnInit() { 
-    this.lowerCaseLabel = this.label.toLowerCase();
+    this.lowerCaseLabel = (this.label || '').toLowerCase();
   }
 
-  writeValue(value: any[]) {
+  get isRequired(): boolean {
+    return !!this.validators?.required && !this.disabled;
+  }
+
+  get addChipLabelKey(): string {
+    return this.showAddOption?.addChipLabel || 'ADD';
+  }
+
+  writeValue(value: any[] = []) {
     this.selectedChips = new Set();
-    this.chips.map((chip) =>
+    this.chips.forEach((chip) =>
       _.some(value, chip) ? this.selectedChips.add(chip) : null
     );
-    if (this.selectedChips.size === this.chips.length) {
-      this._selectAll = true;
-    }
+    this._selectAll = this.chips.length > 0 && this.selectedChips.size === this.chips.length;
   }
   registerOnChange(onChange: any) {
     this.onChange = onChange;
@@ -91,11 +97,7 @@ export class InputChipComponent implements OnInit, ControlValueAccessor {
     } else {
       this.onChange([...this.selectedChips]);
     }
-    if (this.selectedChips.size !== this.chips.length) {
-      this._selectAll = false;
-    } else {
-      this._selectAll = true;
-    }
+    this._selectAll = this.chips.length > 0 && this.selectedChips.size === this.chips.length;
   }
 
   selectAll() {

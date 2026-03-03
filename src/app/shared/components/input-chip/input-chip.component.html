@@ -1,30 +1,40 @@
 <div>
-  <div
-    class="d-flex flex-align-items-center p-rel"
-    *ngIf="showSelectAll"
-  >
-    <ion-label class="head-label">{{ label }} <span *ngIf="validators['required']==true && !disabled" class="star-icon-red">*</span></ion-label>
-    <div class="toggle">
+  @if (showSelectAll) {
+  <div class="d-flex flex-align-items-center p-rel">
+    <ion-label class="head-label">
+      {{ label }} @if (isRequired) {<span class="star-icon-red">*</span>}
+    </ion-label>
+    <div class="toggle" >
     <ion-toggle
+      slot="end"
       [(ngModel)]="_selectAll"
       (ngModelChange)="selectAll()"
       [disabled]="disabled"
     ></ion-toggle>
     </div>
   </div>
+  }
   <div>
+    @for (chip of chips; track (chip?.value || chip?.label || chip || 'chip') + '-' + $index) {
+    @let isSelected = selectedChips.has(chip);
     <ion-chip
       (click)="onChipClick(chip)"
-      *ngFor="let chip of chips" 
-      [ngClass]="selectedChips.has(chip) ? 'selected-chip' : ''"
+      [ngClass]="isSelected ? 'selected-chip' : ''"
     >
-      <ion-icon name="add" *ngIf="!selectedChips.has(chip)"></ion-icon>
-      <ion-icon name="close-circle" color="white" *ngIf="selectedChips.has(chip) && !disabled"></ion-icon>
+      @if (!isSelected) {
+      <ion-icon name="add"></ion-icon>
+      }
+      @if (isSelected && !disabled) {
+      <ion-icon name="close-circle" color="white"></ion-icon>
+      }
       <ion-label class="chip-label word-break">{{ chip.label }}</ion-label>
     </ion-chip>
-    <ion-chip *ngIf="allowCustomEntities" (click)="addNewOption()">
+    }
+    @if (allowCustomEntities) {
+    <ion-chip (click)="addNewOption()">
       <ion-icon name="add"></ion-icon>
-      <ion-label> {{ !showAddOption?.addChipLabel ? ("ADD"| translate) : showAddOption?.addChipLabel | translate}}</ion-label>
+      <ion-label> {{ addChipLabelKey | translate }}</ion-label>
     </ion-chip>
+    }
   </div>
 </div>

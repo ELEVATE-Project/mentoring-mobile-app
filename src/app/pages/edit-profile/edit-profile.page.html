@@ -3,9 +3,11 @@
   <div class="main-wrapper">
     <app-profile-image [profileImageData]='profileImageData' [uploadImage]="true"
       (imageRemoveEvent)="removeCurrentPhoto($event)" (imageUploadEvent)="imageUploadEvent($event)"></app-profile-image>
-    <div *ngIf="showForm" class="mx-10">
+    @if (showFormSignal()) {
+    <div class="mx-10">
       <app-dynamic-form [jsonFormData]="formData" #form1> </app-dynamic-form>
     </div>
+    }
   </div>
 </ion-content>
 

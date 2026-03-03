@@ -3,10 +3,12 @@
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    @if (showProfileDetails) {
-        <app-generic-profile-header [headerData]='formData.data'[buttonConfig]="buttonConfig" [isMentor]='isMentor' [showRole]="true"></app-generic-profile-header>
-        @if (showProfileDetails) {
-            @if (isMentor) {
+    @if (showProfileDetails()) {
+        @let form = formData();
+        @let profile = profileData();
+        <app-generic-profile-header [headerData]="profile" [buttonConfig]="buttonConfig()" [isMentor]="isMentor()" [showRole]="true"></app-generic-profile-header>
+        @if (showProfileDetails()) {
+            @if (isMentor()) {
             <ion-card class="card-wrapper">
                 <ion-card-content class="padding-top-10">
                     <ion-row>
@@ -14,14 +16,14 @@
                         <ion-col class="d-flex flex-justify-center card-header-config">{{"RATING"|translate}}</ion-col>
                     </ion-row>
                     <ion-row>
-                        <ion-col class="d-flex flex-justify-center card-value-config">{{formData?.data?.sessions_hosted}}</ion-col>
-                        <ion-col class="d-flex flex-justify-center card-value-config"><app-star-rating [numberOfStars]="5" [rate]="formData?.data?.rating?.average" [isDisabled]="true"></app-star-rating></ion-col>
+                        <ion-col class="d-flex flex-justify-center card-value-config">{{profile?.sessions_hosted}}</ion-col>
+                        <ion-col class="d-flex flex-justify-center card-value-config"><app-star-rating [numberOfStars]="5" [rate]="profile?.rating?.average" [isDisabled]="true"></app-star-rating></ion-col>
                     </ion-row>
                 </ion-card-content>
             </ion-card>
             }
             <div class="details-wrapper">
-                <app-generic-details [sessionData]='formData' [isMentor]='isMentor'></app-generic-details>
+                <app-generic-details [sessionData]="form" [isMentor]="isMentor()"></app-generic-details>
             </div>
         } @else {
             <p class="no-details-message">{{ "NO_USER_DETAILS_FOUND" | translate }}</p>
