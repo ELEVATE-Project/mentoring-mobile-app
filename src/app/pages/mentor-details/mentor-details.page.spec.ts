@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
+import { Pipe, PipeTransform } from '@angular/core';
 import { IonicModule, NavController } from '@ionic/angular';
 import { MentorDetailsPage } from './mentor-details.page';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import {
   HttpService,
   LocalStorageService,
@@ -16,6 +17,16 @@ import { CommonRoutes } from 'src/global.routes';
 
 import { Clipboard } from '@capacitor/clipboard';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
+
+@Pipe({ 
+  name: 'translate',
+  standalone: false 
+})
+class MockTranslatePipe implements PipeTransform {
+  transform(value: string): string {
+    return value;
+  }
+}
 
 describe('MentorDetailsPage', () => {
   let component: MentorDetailsPage;
@@ -36,7 +47,7 @@ describe('MentorDetailsPage', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [MentorDetailsPage],
+      declarations: [MentorDetailsPage, MockTranslatePipe],
       imports: [IonicModule.forRoot()],
       providers: [
         {
@@ -109,15 +120,15 @@ describe('MentorDetailsPage', () => {
       component.ionViewWillEnter();
       tick();
 
-      expect(component.isMobile).toBe(true);
-      expect(component.isLoading).toBe(false);
-      expect(component.isUpcomingSession).toBe(false);
+      expect(component.isMobile()).toBe(true);
+      expect(component.isLoading()).toBe(false);
+      expect(component.isUpcomingSession()).toBe(false);
       expect(localStorage.getLocalData).toHaveBeenCalledWith(localKeys.USER_DETAILS);
-      expect(component.mentorId).toBe('123');
+      expect(component.mentorId()).toBe('123');
       expect(component.getMentor).toHaveBeenCalled();
-      expect(component.currentUserId).toBe('456');
-      expect(component.page).toBe(1);
-      expect(component.upcomingSessions).toEqual([]);
+      expect(component.currentUserId()).toBe('456');
+      expect(component.page()).toBe(1);
+      expect(component.upcomingSessions()).toEqual([]);
     }));
   });
 
@@ -128,21 +139,21 @@ describe('MentorDetailsPage', () => {
           displayProperties: [],
           organization: { name: 'Test Org' },
           is_mentor: true,
+          username: 'testuser',
+          is_connected: false
         },
       };
       spyOn(component, 'getMentorDetails').and.returnValue(Promise.resolve(mentorDetails));
-      spyOn(component, 'updateButtonConfig');
 
       component.getMentor();
       tick();
 
       expect(component.getMentorDetails).toHaveBeenCalled();
-      expect(component.updateButtonConfig).toHaveBeenCalled();
-      expect(component.isloaded).toBe(true);
-      expect(component.detailData.controls).toEqual([]);
-      expect(component.detailData.data).toEqual(mentorDetails.result);
-      expect(component.detailData.data.organizationName).toBe('Test Org');
-      expect(component.headerConfig.share).toBe(true);
+      expect(component.isloaded()).toBe(true);
+      expect(component.detailData().controls).toEqual([]);
+      expect(component.detailData().data).toEqual(jasmine.objectContaining(mentorDetails.result));
+      expect(component.detailData().data.organizationName).toBe('Test Org');
+      expect(component.headerConfig().actions).toEqual(['share']);
     }));
   });
 
@@ -155,10 +166,10 @@ describe('MentorDetailsPage', () => {
       tick();
 
       expect(httpService.get).toHaveBeenCalled();
-      expect(component.isUpcomingSession).toBe(true);
-      expect(component.upcomingSessions).toEqual([{ id: 1 }]);
-      expect(component.totalCount).toBe(1);
-      expect(component.disableInfiniteScroll).toBe(true);
+      expect(component.isUpcomingSession()).toBe(true);
+      expect(component.upcomingSessions()).toEqual([{ id: 1 }]);
+      expect(component.totalCount()).toBe(1);
+      expect(component.disableInfiniteScroll()).toBe(true);
     }));
 
     it('should handle error while fetching upcoming sessions', fakeAsync(() => {
@@ -168,7 +179,7 @@ describe('MentorDetailsPage', () => {
       tick();
 
       expect(httpService.get).toHaveBeenCalled();
-      expect(component.disableInfiniteScroll).toBe(true);
+      expect(component.disableInfiniteScroll()).toBe(true);
     }));
   });
 
@@ -182,7 +193,7 @@ describe('MentorDetailsPage', () => {
       tick();
 
       expect(httpService.get).toHaveBeenCalled();
-      expect(component.userCanAccess).toBe(true);
+      expect(component.userCanAccess()).toBe(true);
       expect(result).toEqual(mentorData);
     }));
 
@@ -193,7 +204,7 @@ describe('MentorDetailsPage', () => {
       tick();
 
       expect(httpService.get).toHaveBeenCalled();
-      expect(component.userNotFound).toBe(true);
+      expect(component.userNotFound()).toBe(true);
     }));
 
     it('should handle 403 error', fakeAsync(() => {
@@ -203,7 +214,7 @@ describe('MentorDetailsPage', () => {
       tick();
 
       expect(httpService.get).toHaveBeenCalled();
-      expect(component.userCantAccess).toBe(true);
+      expect(component.userCantAccess()).toBe(true);
     }));
 
     it('should handle other errors', fakeAsync(() => {
@@ -233,10 +244,10 @@ describe('MentorDetailsPage', () => {
       component.segmentChanged(event);
       tick();
 
-      expect(component.segmentValue).toBe('upcoming');
-      expect(component.isUpcomingSession).toBe(false);
-      expect(component.page).toBe(1);
-      expect(component.upcomingSessions).toEqual([]);
+      expect(component.segmentValue()).toBe('upcoming');
+      expect(component.isUpcomingSession()).toBe(false);
+      expect(component.page()).toBe(1);
+      expect(component.upcomingSessions()).toEqual([]);
       expect(component.getUpcomingSessions).toHaveBeenCalled();
     }));
   });
@@ -252,7 +263,7 @@ describe('MentorDetailsPage', () => {
   describe('share', () => {
 
     it('should copy to clipboard on web', fakeAsync(() => {
-      component.isMobile = false;
+      component.isMobile.set(false);
       spyOn(component, 'copyToClipBoard');
 
       component.share();
@@ -267,7 +278,7 @@ describe('MentorDetailsPage', () => {
     it('should navigate to session details on cardSelect', () => {
       const event = { type: 'cardSelect', data: { id: '456' } };
       component.onAction(event);
-      expect(router.navigate).toHaveBeenCalledWith([`/${CommonRoutes.SESSIONS_DETAILS}/456`], { replaceUrl: true });
+      expect(router.navigate).toHaveBeenCalledWith([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`], { replaceUrl: true });
     });
 
     it('should join session and refresh upcoming sessions on joinAction', fakeAsync(() => {
@@ -279,9 +290,9 @@ describe('MentorDetailsPage', () => {
       tick();
 
       expect(sessionService.joinSession).toHaveBeenCalledWith(event.data);
-      expect(component.page).toBe(1);
-      expect(component.isUpcomingSession).toBe(false);
-      expect(component.upcomingSessions).toEqual([]);
+      expect(component.page()).toBe(1);
+      expect(component.isUpcomingSession()).toBe(false);
+      expect(component.upcomingSessions()).toEqual([]);
       expect(component.getUpcomingSessions).toHaveBeenCalled();
     }));
 
@@ -295,49 +306,49 @@ describe('MentorDetailsPage', () => {
 
       expect(sessionService.enrollSession).toHaveBeenCalledWith(event.data.id);
       expect(toast.showToast).toHaveBeenCalledWith('Enrolled', 'success');
-      expect(component.page).toBe(1);
-      expect(component.isUpcomingSession).toBe(false);
-      expect(component.upcomingSessions).toEqual([]);
+      expect(component.page()).toBe(1);
+      expect(component.isUpcomingSession()).toBe(false);
+      expect(component.upcomingSessions()).toEqual([]);
       expect(component.getUpcomingSessions).toHaveBeenCalled();
     }));
   });
 
-  describe('updateButtonConfig', () => {
+  describe('Computed buttonConfig', () => {
     it('should show chat and request session buttons for mentors', () => {
-      component.mentorProfileData = { result: { is_mentor: true, id: '123' } };
-      component.currentUserId = '456';
-      component.updateButtonConfig();
-      expect(component.buttonConfig.buttons.length).toBe(2);
-      expect(component.buttonConfig.buttons[0].label).toBe('CHAT');
-      expect(component.buttonConfig.buttons[1].label).toBe('REQUEST_SESSION');
+      component.mentorProfileData.set({ result: { is_mentor: true, id: '123' } });
+      component.currentUserId.set('456');
+      fixture.detectChanges();
+      expect(component.buttonConfig().buttons.length).toBe(2);
+      expect(component.buttonConfig().buttons[0].label).toBe('CHAT');
+      expect(component.buttonConfig().buttons[1].label).toBe('REQUEST_SESSION');
     });
 
     it('should show only chat button for non-mentors', () => {
-      component.mentorProfileData = { result: { is_mentor: false, id: '123' } };
-      component.currentUserId = '456';
-      component.updateButtonConfig();
-      expect(component.buttonConfig.buttons.length).toBe(1);
-      expect(component.buttonConfig.buttons[0].label).toBe('CHAT');
+      component.mentorProfileData.set({ result: { is_mentor: false, id: '123' } });
+      component.currentUserId.set('456');
+      fixture.detectChanges();
+      expect(component.buttonConfig().buttons.length).toBe(1);
+      expect(component.buttonConfig().buttons[0].label).toBe('CHAT');
     });
 
     it('should hide buttons for own profile', () => {
-      component.mentorProfileData = { result: { is_mentor: true, id: '123' } };
-      component.currentUserId = '123';
-      component.updateButtonConfig();
-      expect(component.buttonConfig.buttons.every(btn => btn.isHide)).toBe(true);
+      component.mentorProfileData.set({ result: { is_mentor: true, id: '123' } });
+      component.currentUserId.set('123');
+      fixture.detectChanges();
+      expect(component.buttonConfig().buttons.every((btn) => btn.isHide)).toBe(true);
     });
   });
 
   describe('loadMore', () => {
     it('should increment page and fetch more sessions', fakeAsync(() => {
-      component.page = 1;
+      component.page.set(1);
       spyOn(component, 'getUpcomingSessions');
       const event = { target: { complete: jasmine.createSpy() } };
 
       component.loadMore(event);
       tick();
 
-      expect(component.page).toBe(2);
+      expect(component.page()).toBe(2);
       expect(component.getUpcomingSessions).toHaveBeenCalledWith(true);
       expect(event.target.complete).toHaveBeenCalled();
     }));
@@ -346,50 +357,52 @@ describe('MentorDetailsPage', () => {
   describe('block', () => {
     it('should show alert and block user if confirmed', fakeAsync(() => {
       utilService.alertPopup.and.returnValue(Promise.resolve(true));
-      component.mentorName = 'Mentor Name';
-      component.mentorId = '123';
+      component.mentorProfileData.set({ result: { username: 'Mentor Name' } });
+      component.mentorId.set('123');
 
       component.block('123');
       tick();
 
       expect(utilService.alertPopup).toHaveBeenCalled();
-      expect(toast.showToast).toHaveBeenCalledWith("BLOCK_TOAST_MESSAGE", "success", 5000, [], undefined, { name: 'Mentor Name' });
-      expect(component.isdisabled).toBe(true);
+      expect(toast.showToast).toHaveBeenCalledWith('BLOCK_TOAST_MESSAGE', 'success', 5000, [], undefined, { name: 'Mentor Name' });
+      expect(component.isdisabled()).toBe(true);
     }));
 
     it('should show alert and NOT block user if cancelled', fakeAsync(() => {
       utilService.alertPopup.and.returnValue(Promise.resolve(false));
-      component.mentorName = 'Mentor Name';
+      component.mentorProfileData.set({ result: { username: 'Mentor Name' } });
 
       component.block('123');
       tick();
 
       expect(utilService.alertPopup).toHaveBeenCalled();
       expect(toast.showToast).not.toHaveBeenCalled();
-      expect(component.isdisabled).toBeUndefined();
+      expect(component.isdisabled()).toBe(false);
     }));
   });
 
   describe('unblock', () => {
     it('should unblock user', () => {
-      component.isdisabled = true;
+      component.isdisabled.set(true);
       component.unblock();
-      expect(component.isdisabled).toBe(false);
+      expect(component.isdisabled()).toBe(false);
     });
   });
 
   describe('action', () => {
     it('should call block method when action is "block"', () => {
       spyOn(component, 'block');
+      component.mentorId.set('123');
       component.action('block');
-      expect(component.block).toHaveBeenCalledWith(component.mentorId);
+      expect(component.block).toHaveBeenCalledWith('123');
     });
   });
 
   describe('share (mobile)', () => {
     it('should share link using utilService on mobile', fakeAsync(() => {
-      component.isMobile = true;
-      component.buttonConfig.meta.id = '123';
+      component.isMobile.set(true);
+      component.mentorId.set('123');
+      
       utilService.getDeepLink.and.returnValue('deep-link');
       // Mocking navigator.share
       const originalShare = navigator.share;
@@ -412,7 +425,7 @@ describe('MentorDetailsPage', () => {
 
   describe('ionViewWillEnter edge case', () => {
     it('should not do anything if isLoading is true', fakeAsync(() => {
-      component.isLoading = true;
+      component.isLoading.set(true);
       component.ionViewWillEnter();
       tick();
       expect(localStorage.getLocalData).not.toHaveBeenCalled();
@@ -422,7 +435,7 @@ describe('MentorDetailsPage', () => {
       localStorage.getLocalData.and.returnValue(Promise.resolve(user));
       spyOn(component, 'getMentor');
       spyOn(component, 'getUpcomingSessions');
-      component.mentorProfileData = { result: { is_mentor: true } };
+      component.mentorProfileData.set({ result: { is_mentor: true } });
 
       component.ionViewWillEnter();
       tick();

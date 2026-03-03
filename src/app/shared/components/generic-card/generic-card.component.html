@@ -1,13 +1,17 @@
 <ion-card
   class="shadow-with-radious generic-card min-h-100 d-flex flex-col"
 >
-  <div class="generic-card-header d-grid relative" *ngIf="meta">
+  @let header = cardConfig?.header;
+  @if (meta) {
+  @let resp = meta?.resp;
+  <div class="generic-card-header d-grid relative">
     <div class="tag-container absolute">
-  <div *ngIf="showTag" [ngClass]="['tag', showTag.cssClass]">
-    {{ showTag.label | translate }}
-  </div>
-
-  </div>
+      @if (showTag) {
+      <div [ngClass]="['tag', showTag.cssClass]">
+        {{ showTag.label | translate }}
+      </div>
+      }
+    </div>
     <div class="d-flex flex-align-items-center mx-10">
       <ion-icon
         [ngClass]="meta.isSent ? 'rotate-icon-sent' : 'rotate-icon-receive'"
@@ -18,93 +22,89 @@
       </p>
     </div>
     <div class="d-flex flex-align-items-center mx-10">
-      <ng-container *ngIf="meta.message; else timeIcon">
+      @if (meta.message) {
         <ion-icon name="chatbox"></ion-icon>
-      </ng-container>
-      <ng-template #timeIcon>
-        <ion-icon name="time"></ion-icon>
-      </ng-template>
-
-      <ng-container *ngIf="meta.message; else timeBlock">
         <p class="max-width-70 wrap-text" style="margin: 2px 5px">{{ meta.message }}</p>
-      </ng-container>
-
-      <ng-template #timeBlock>
+      } @else {
+        <ion-icon name="time"></ion-icon>
         <small style="padding-left: 5px">
-          {{ meta.resp.start_date * 1000 | date : "dd MMM yyyy," }}
-          {{ meta.resp.start_date * 1000 | date : "h:mm a" }} -
-          {{ meta.resp.end_date * 1000 | date : "h:mm a" }}
+          {{ resp?.start_date * 1000 | date : "dd MMM yyyy," }}
+          {{ resp?.start_date * 1000 | date : "h:mm a" }} -
+          {{ resp?.end_date * 1000 | date : "h:mm a" }}
         </small>
-      </ng-template>
+      }
     </div>
   </div>
+  }
   <div class="card-content flex-1 d-flex gap-3 mx-10 py-2">
     <div class="select">
-    <ion-checkbox *ngIf="showCheckbox" mode="md" class="square-checkbox"
-        (ionChange)="onCheckboxAction(data, $event)"
-         [checked]="isRowInRemoveState(data)"
-        ></ion-checkbox>
-        </div>
-    @if(cardConfig.header.image) {
+      @if (showCheckbox) {
+      <ion-checkbox mode="md" class="square-checkbox"
+          (ionChange)="onCheckboxAction(data, $event)"
+          [checked]="isRowInRemoveState(data)"
+      ></ion-checkbox>
+      }
+    </div>
+    @if (header?.image) {
       <div class="image-container" (click)="onCardClick(data)">
         <img
           class="profile-img"
-          [src]="data?.[cardConfig.header.image] ? data?.[cardConfig.header.image] : 'assets/prof-img/user.png'"
+          [src]="data?.[header.image] ? data?.[header.image] : 'assets/prof-img/user.png'"
         />
       </div>
     }
 
     <div class="text-content flex-1">
       <div class="text-row" (click)="onCardClick(data)">
-        @if(cardConfig.header.title) {
+        @if (header?.title) {
           <h4 class="card-title wrap-text">
-            {{ data?.[cardConfig.header.title] | titlecase }}
+            {{ data?.[header.title] | titlecase }}
           </h4>
         }
-        @for(item of cardConfig.body; track item.name) {
+        @for (item of cardConfig.body; track item.name) {
+          @let itemValue = data?.[item.name];
           <div class="d-flex flex-align-items-center">
             <p class="card-text wrap-text">
-        {{ 
-          item.type === 'array' && data?.[item.name]?.length 
-          ? data[item.name][0]?.label + (data[item.name].length > 1 ? ' +' + (data[item.name].length - 1) : '') 
-          : data?.[item.name] ? data[item.name] + (item.subText ? ' ' + (item.subText | translate) : '') : '' 
-        }}
+          {{
+            item.type === 'array' && itemValue?.length
+            ? itemValue[0]?.label + (itemValue.length > 1 ? ' +' + (itemValue.length - 1) : '')
+            : itemValue ? itemValue + (item.subText ? ' ' + (item.subText | translate) : '') : ''
+          }}
             </p>
-            @if(item.children) {
-            @for(child of item.children; track child.name) {
-              @if(data?.[child.name]) {
-                <p class="experience-text wrap-text">
-                  ({{ data?.[child.name] }} {{child?.subText | translate}})
-                </p>
+            @if (item.children) {
+              @for (child of item.children; track child.name) {
+                @let childValue = data?.[child.name];
+                @if (childValue) {
+                  <p class="experience-text wrap-text">
+                    ({{ childValue }} {{child?.subText | translate}})
+                  </p>
+                }
               }
             }
-          }
           </div>
         }
       </div>
     </div>
   </div>
 
-      <div
-       class="d-flex flex-justify-flex-end p-1"
-          [ngClass]="{ 'flex-justify-start': buttonConfig?.length > 1 }"
+  <div
+    class="d-flex flex-justify-flex-end p-1"
+    [ngClass]="{ 'flex-justify-start': buttonConfig?.length > 1 }"
+  >
+    @for (button of buttonConfig; track (button?.action || button?.label || button?.name || 'btn') + '-' + $index) {
+      @if (!button?.isHide && showButton(button, data)) {
+        <ion-button
+          size="small"
+          [color]="button?.color"
+          [style.background]="button?.bgColor"
+          [style.color]="button?.textColor"
+          (click)="handleButtonClick(button?.action, data); $event.stopPropagation()"
+          [disabled]="disableButton"
         >
-          <ng-container *ngFor="let button of buttonConfig">
-            <ion-button
-            size="small"
-              *ngIf="!button?.isHide && showButton(button, data)"
-              [color]="button?.color"
-              [style.background]="button?.bgColor"
-              [style.color]="button?.textColor"
+          {{ button?.label | translate }}
+        </ion-button>
+      }
+    }
+  </div>
 
-              (click)="
-                handleButtonClick(button?.action, data);
-                $event.stopPropagation()
-              "
-              [disabled]="disableButton"
-            >
-              {{ button?.label | translate }}
-            </ion-button>
-          </ng-container>
-        </div>
 </ion-card>

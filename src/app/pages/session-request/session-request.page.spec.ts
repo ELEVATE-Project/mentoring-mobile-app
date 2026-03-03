@@ -139,7 +139,7 @@ describe('SessionRequestPage', () => {
 
     expect(component.ids.requestee_id).toBe(42);
     expect(mockFormService.getForm).toHaveBeenCalled();
-    expect(component.formData.foo).toBe('bar');
+    expect(component.formData().foo).toBe('bar');
   });
 
   // --- onDynamicSelectClicked Tests (100% Coverage) ---

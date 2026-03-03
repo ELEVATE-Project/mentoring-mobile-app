@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, input, computed, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import {
@@ -16,21 +16,33 @@ import { environment } from 'src/environments/environment';
     selector: 'app-generic-profile-header',
     templateUrl: './generic-profile-header.component.html',
     styleUrls: ['./generic-profile-header.component.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GenericProfileHeaderComponent implements OnInit {
-  @Input() headerData: any;
-  @Input() buttonConfig: any;
-  @Input() showRole: any;
-  @Input() isMentor: any;
-  @Input() userNotFound?: any;
-  @Input() isblocked:any;
-  labels = ['CHECK_OUT_MENTOR', 'PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS'];
+  headerData = input<any>();
+  buttonConfig = input<any>();
+  showRole = input<any>();
+  isMentorInput = input<any>(undefined, { alias: 'isMentor' });
+  userNotFound = input<any>();
+  isblocked = input<any>();
+  
+  labels = signal(['CHECK_OUT_MENTOR', 'PROFILE_ON_MENTORED_EXPLORE_THE_SESSIONS']);
 
-  public isMobile: any;
-  roles: any;
-  chatConfig: string;
+  public isMobile: boolean;
+  chatConfig = signal<string>('');
   clipboard = Clipboard;
+
+  roles = computed(() => {
+    const data = this.headerData();
+    return data?.organizations?.[0]?.roles?.filter((role: any) => role["title"] === "mentor") || [];
+  });
+
+  isMentor = computed(() => {
+    const inputVal = this.isMentorInput();
+    if (inputVal !== undefined) return inputVal;
+    return !!(this.roles()?.length && this.roles().some((role: any) => role.title === 'mentor'));
+  });
 
   constructor(
     private router: Router,
@@ -44,9 +56,8 @@ export class GenericProfileHeaderComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.chatConfig = await this.localStorage.getLocalData(localKeys['CHAT_CONFIG'])
-    this.roles = this.headerData.organizations?.length && this.headerData?.organizations[0]?.roles.filter((role: any) => role["title"] === "mentor");
-    this.isMentor =this.roles?.length && this.roles.some((role: any) => role.title === 'mentor');
+    const chatConfigValue = await this.localStorage.getLocalData(localKeys['CHAT_CONFIG']);
+    this.chatConfig.set(chatConfigValue);
   }
 
   async action(event) {
@@ -56,7 +67,7 @@ export class GenericProfileHeaderComponent implements OnInit {
         break;
 
       case 'role':
-        if (this.headerData?.about != null || environment['isAuthBypassed']) {
+        if (this.headerData()?.about != null || environment['isAuthBypassed']) {
           this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);
         } else {
           this.profileService.upDateProfilePopup();
@@ -64,15 +75,15 @@ export class GenericProfileHeaderComponent implements OnInit {
         break;
 
       case 'share':
-        if (this.isMobile && navigator.share && this.buttonConfig.meta) {
+        if (this.isMobile && navigator.share && this.buttonConfig()?.meta) {
           this.translateText();
-          let url = `/mentoring/${CommonRoutes.MENTOR_DETAILS}/${this.buttonConfig.meta.id}`;
+          let url = `/mentoring/${CommonRoutes.MENTOR_DETAILS}/${this.buttonConfig().meta.id}`;
           let link = await this.utilService.getDeepLink(url);
-          this.headerData.name = this.headerData.name.trim();
+          const name = (this.headerData()?.name || '').trim();
           let params = {
             link: link,
-            subject: this.headerData?.name,
-            text: this.labels[0] + ` ${this.headerData.name}` + this.labels[1],
+            subject: name,
+            text: this.labels()[0] + ` ${name}` + this.labels()[1],
           };
           await this.utilService.shareLink(params);
         } else {
@@ -81,28 +92,32 @@ export class GenericProfileHeaderComponent implements OnInit {
         }
         break;
       case 'requestSession':
-        this.router.navigate([`/${CommonRoutes.SESSION_REQUEST}`], {queryParams: {data: this.headerData.id}});
+        this.router.navigate([`/${CommonRoutes.SESSION_REQUEST}`], {queryParams: {data: this.headerData().id}});
         break;
       case 'chat':
-        this.headerData.is_connected
+        this.headerData().is_connected
           ? this.router.navigate([
             `/${CommonRoutes.CHAT}`,
-            this.headerData.connection_details?.room_id,
-          ],{queryParams: {id: this.headerData.id}})
+            this.headerData().connection_details?.room_id,
+          ],{queryParams: {id: this.headerData().id}})
           : this.router.navigate([
             `/${CommonRoutes.CHAT_REQ}`,
-            this.headerData.id,
+            this.headerData().id,
           ]);
     }
   }
 
   translateText() {
-    this.translateService.get(this.labels).subscribe((translatedLabel) => {
+    this.translateService.get(this.labels()).subscribe((translatedLabel) => {
       let labelKeys = Object.keys(translatedLabel);
+      const newLabels = [...this.labels()];
       labelKeys.forEach((key) => {
-        let index = this.labels.findIndex((label) => label === key);
-        this.labels[index] = translatedLabel[key];
+        let index = newLabels.findIndex((label) => label === key);
+        if (index !== -1) {
+          newLabels[index] = translatedLabel[key];
+        }
       });
+      this.labels.set(newLabels);
     });
   }
 
@@ -115,7 +130,7 @@ export class GenericProfileHeaderComponent implements OnInit {
   };
 
   async viewRoles(){
-    const titlesArray = this.headerData.organizations[0].roles.map(item => item.title);
+    const titlesArray = this.headerData().organizations[0].roles.map(item => item.title);
     this.profileService.viewRolesModal(titlesArray);
   }
 }

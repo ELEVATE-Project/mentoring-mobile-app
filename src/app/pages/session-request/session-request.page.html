@@ -4,9 +4,11 @@
   <ion-title class="ion-text-center" style="height: 10%; padding-top: 2%;">
     <p style="font-size: larger;font-weight: 700;">{{'AGENDA_FOR_SESSION' | translate}}</p>
   </ion-title>
-  <div style="padding: 5%;" *ngIf="formData">
-    <app-dynamic-form [jsonFormData]="formData" (dynamicSelectClicked)="onDynamicSelectClicked()" [selectedDynamicValue]="selectedTimezone" #form1></app-dynamic-form>
+  @if (formData()) {
+  <div style="padding: 5%;">
+    <app-dynamic-form [jsonFormData]="formData()" (dynamicSelectClicked)="onDynamicSelectClicked()" [selectedDynamicValue]="selectedTimezone" #form1></app-dynamic-form>
   </div>
+  }
 </ion-content>
 
 <ion-footer class="ion-no-border footer-button" submitButton>
