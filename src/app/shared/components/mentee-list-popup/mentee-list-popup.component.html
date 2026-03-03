@@ -1,27 +1,35 @@
 <ion-content>
-<div *ngIf="enrolledMenteeList">
+@if (enrolledMenteeList()) {
+<div>
   <div class="close-icon" (click)="closePopup()">
     <ion-icon name="close"></ion-icon>
   </div>
-  <div *ngIf="isMobile;">
-    <div *ngIf="enrolledMenteeList.length;">
+  @if (isMobile()) {
+    @if (enrolledMenteeList().length) {
+    <div>
       <div class="mob-download">
-        <div class="download"  (click)="onClickDownload()">{{ download | translate}}</div>
+        <div class="download" (click)="onClickDownload()">{{ download | translate}}</div>
       </div>
-      <div class="card-wrapper" *ngFor="let data of enrolledMenteeList">
+      @for (data of enrolledMenteeList(); track data?.id || data?.email || data?.name) {
+      <div class="card-wrapper">
         <div class="card-header d-flex flex-justify-center">{{data.name}}{{data.organization ? ', ' + data.organization : ''}}</div>
         <div class="card-data d-flex flex-justify-center">{{data.email}}</div>
       </div>
+      }
     </div>
-    <div *ngIf="!enrolledMenteeList?.length">
+    } @else {
+    <div>
       <app-no-data-found [messageHeader]="noDataMessage">
       </app-no-data-found>
     </div>
-  </div>
-  <div *ngIf="!isMobile;">
-    <app-generic-table [headingText]="headingText" [columnData]="columnData" [tableData]="enrolledMenteeList" [showPaginator]="false">
-      <div class="download"  (click)="onClickDownload()">{{ download | translate}}</div>
+    }
+  } @else {
+  <div>
+    <app-generic-table [headingText]="headingText" [columnData]="columnData" [tableData]="enrolledMenteeList()" [showPaginator]="false">
+      <div class="download" (click)="onClickDownload()">{{ download | translate}}</div>
     </app-generic-table>
   </div>
+  }
 </div>
+}
 </ion-content>

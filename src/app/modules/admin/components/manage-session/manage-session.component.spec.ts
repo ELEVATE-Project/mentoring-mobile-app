@@ -170,7 +170,7 @@ describe('ManageSessionComponent', () => {
   it('should change segment', () => {
     const event = { target: { value: 'new-segment' } };
     component.segmentChanged(event as any);
-    expect(component.segmentType).toBe('new-segment');
+    expect(component.segmentType()).toBe('new-segment');
   });
 
   it('should clear search and refresh', () => {
@@ -240,7 +240,7 @@ describe('ManageSessionComponent', () => {
       }]
     }));
     await component.fetchSessionList();
-    expect(component.tableData[0].action).toEqual(component.actionButtons['LIVE']);
+    expect(component.tableData()[0].action).toEqual(component.actionButtons['LIVE']);
   });
 
   it('should handle fetchSessionList with UPCOMING status', async () => {
@@ -257,7 +257,7 @@ describe('ManageSessionComponent', () => {
       }]
     }));
     await component.fetchSessionList();
-    expect(component.tableData[0].action).toEqual(component.actionButtons['UPCOMING']);
+    expect(component.tableData()[0].action).toEqual(component.actionButtons['UPCOMING']);
   });
 
   it('should handle fetchSessionList with COMPLETED status', async () => {
@@ -274,7 +274,7 @@ describe('ManageSessionComponent', () => {
       }]
     }));
     await component.fetchSessionList();
-    expect(component.tableData[0].action).toEqual(component.actionButtons['COMPLETED']);
+    expect(component.tableData()[0].action).toEqual(component.actionButtons['COMPLETED']);
   });
 
   it('should handle fetchSessionList with empty data', async () => {
@@ -283,8 +283,8 @@ describe('ManageSessionComponent', () => {
       data: []
     }));
     await component.fetchSessionList();
-    expect(component.tableData).toEqual([]);
-    expect(component.noDataMessage).toBe('SEARCH_RESULT_NOT_FOUND');
+    expect(component.tableData()).toEqual([]);
+    expect(component.noDataMessage()).toBe('SEARCH_RESULT_NOT_FOUND');
   });
 
   it('should handle filter modal dismissal with role closed', async () => {

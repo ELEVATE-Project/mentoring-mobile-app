@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, signal } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admin-workapce.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
@@ -22,17 +22,22 @@ export class MenteeListPopupComponent implements OnInit {
    
   ]
   download= "DOWNLOAD"
-  enrolledMenteeList:any;
+  enrolledMenteeList = signal<any>(null);
   totalCount:any;
   page:any;
   limit:any
-  isMobile: boolean;
+  isMobile = signal<boolean>(false);
   noDataMessage = 'NO_DATA_AVAILABLE';
  
-  constructor(private sessionService: SessionService,private adminWorkapceService: AdminWorkapceService,private modalController: ModalController) { }
+  constructor(
+    private sessionService: SessionService,
+    private adminWorkapceService: AdminWorkapceService,
+    private modalController: ModalController,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
-    this.isMobile = window.innerWidth <= 800;
+    this.isMobile.set(window.innerWidth <= 800);
     this.fetchMenteeList()
   }
 
@@ -50,17 +55,12 @@ export class MenteeListPopupComponent implements OnInit {
         ele.organization = ele?.organization?.name;
       });
     }
-    this.enrolledMenteeList = data;
+    this.enrolledMenteeList.set(data);
+    this.cdr.detectChanges();
   }
 
   closePopup(){
     this.modalController.dismiss();
   }
-
-  // onPaginatorChange(data: any) {
-  //   this.page = data.page;
-  //   this.limit = data.pageSize
-  //   this.fetchMenteeList()
-  // }
 
 }

@@ -64,7 +64,7 @@ describe('GenericTableComponent', () => {
 
   it('ngOnInit should set displayedColumns and dataSource', () => {
     component.ngOnInit();
-    expect(component.displayedColumns).toEqual(['col1', 'col2']);
+    expect(component.displayedColumns).toEqual(['select', 'col1', 'col2']);
     expect(component.dataSource).toBeTruthy();
     expect(component.dataSource instanceof MatTableDataSource).toBeTrue();
     expect((component.dataSource as MatTableDataSource<any>).data.length).toBe(2);

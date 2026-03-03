@@ -2,17 +2,27 @@
   <div class="header-container">
   <div class="header">{{ headingText | translate}}</div>
   <div class="sorting-icon">
-  <ion-checkbox *ngIf="tableData?.length && showCheckbox" labelPlacement="end" class="header select-all-checkbox" [checked]="isAllSelected()"  (ionChange)="onSelectAllChangeClick($event)">{{ isAllSelected() ? ('DESELECT_PAGE' | translate) : ('SELECT_PAGE' | translate)}}</ion-checkbox>
-  <div *ngIf="tableData?.length && showCheckbox " class="header">{{('SELECTED' | translate) + ' : ' + selectedCount}}</div>
-  <div *ngIf="selectedCount > 0 && showCheckbox" (click)="onToggleSelectAllX()" style="font-weight:700;color: #3a85e9f3; cursor: pointer;">{{ selectAllXActive ? ('| ' + ('CLEAR_ALL' | translate) + ' [' + selectedCount + ']') : ('| ' + ('SELECT_ALL' | translate) + ' [' + totalCount + ']') }}</div> 
+  @if (tableData?.length && showCheckbox) {
+  <ion-checkbox labelPlacement="end" class="header select-all-checkbox" [checked]="isAllSelected()" (ionChange)="onSelectAllChangeClick($event)">{{ isAllSelected() ? ('DESELECT_PAGE' | translate) : ('SELECT_PAGE' | translate)}}</ion-checkbox>
+  }
+  @if (tableData?.length && showCheckbox) {
+  <div class="header">{{('SELECTED' | translate) + ' : ' + selectedCount}}</div>
+  }
+  @if (selectedCount > 0 && showCheckbox) {
+  <div (click)="onToggleSelectAllX()" style="font-weight:700;color: #3a85e9f3; cursor: pointer;">{{ selectAllXActive ? ('| ' + ('CLEAR_ALL' | translate) + ' [' + selectedCount + ']') : ('| ' + ('SELECT_ALL' | translate) + ' [' + totalCount + ']') }}</div>
+  }
   </div>
   </div>
-  <div *ngIf="pageSize && pageSizeOptions" class="d-flex flex-justify-space-between ion-padding">
+  @if (pageSize && pageSizeOptions) {
+  <div class="d-flex flex-justify-space-between ion-padding">
     <ng-content></ng-content>
-    <mat-paginator *ngIf="showPaginator" class="paginator" [length]="totalCount" [pageSize]="pageSize"
+    @if (showPaginator) {
+    <mat-paginator class="paginator" [length]="totalCount" [pageSize]="pageSize"
       [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)">
     </mat-paginator>
+    }
   </div>
+  }
 </div>
 <div class="table-container ">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -20,85 +30,101 @@
     <th mat-header-cell *matHeaderCellDef style="background-color: #f2f2f2;">
     </th>
     <td mat-cell *matCellDef="let element">
-        <ion-checkbox 
-        *ngIf="showCheckbox"
+        @if (showCheckbox) {
+        <ion-checkbox
          (ionChange)="onCheckboxAction(element, $event)"
          [checked]="isRowInRemoveState(element)"
         >
-</ion-checkbox>
+        </ion-checkbox>
+        }
     </td> 
 </ng-container>
-    <ng-container *ngFor="let column of columnData" [matColumnDef]="column.name">
+    @for (column of columnData; track column?.name) {
+    <ng-container [matColumnDef]="column.name">
       <ng-container>
         <th mat-header-cell *matHeaderCellDef style="background-color: #f2f2f2;">
           <div class="column-header"
             [ngClass]="(column.name == 'title' || column.name == 'name') ? 'column-name':'column-header'">
-            {{ column.displayName }} <div class="sorting-icon" *ngIf="column.sortingData">
+            {{ column.displayName }}
+            @if (column.sortingData) {
+            <div class="sorting-icon">
               <img class="img" [id]="column.displayName" src="assets/images/swap-vertical.svg" />
               <ion-popover [trigger]="column.displayName" triggerAction="click">
                 <ng-template class="popover-container">
                   <ion-content class="ion-padding popover-container">
-                    <div class="popover-div d-flex flex-justify-center" *ngFor="let data of column.sortingData">
+                    @for (data of column.sortingData; track data?.value || data?.label) {
+                    <div class="popover-div d-flex flex-justify-center">
                       <span (click)="onClickSorting($event,data)" class="popover-header">{{data.label}}</span>
                     </div>
+                    }
                   </ion-content>
                 </ng-template>
               </ion-popover>
             </div>
+            }
           </div>
         </th>
       </ng-container>
       <ng-container>
-        <div *ngIf="column.type == 'text'">
+        @if (column.type == 'text') {
           <td class="cell-container" mat-cell (click)="onCellClick(column.name,element[column.name],element)" *matCellDef="let element">
             <div class="cell-text" [ngClass]="{'session-name cell-text': column.name == 'title' || column.name == 'name'}">
             {{ element[column.name] ? (element[column.name] | translate) : '-' }}</div>
           </td>
-        </div>
-        <div *ngIf="column.type == 'array'">
+        }
+        @if (column.type == 'array') {
           <td mat-cell (click)="onCellClick(column.name,element)" *matCellDef="let element">
-            <ng-container *ngIf="element[column.name]?.length > 0; else noData">
-              <div class="cell-text auto-margin" *ngFor="let ele of element[column.name]">
+            @if (element[column.name]?.length > 0) {
+              @for (ele of element[column.name]; track ele?.id || ele?.value || ele?.label || ele) {
+              <div class="cell-text auto-margin">
                 {{ ele.label || ele }}
               </div>
-            </ng-container>
-            <ng-template #noData>
+              }
+            } @else {
               <div class="cell-text auto-margin">-</div>
-            </ng-template>
+            }
           </td>
-        </div>
-        <div *ngIf="column.type == 'button'">
+        }
+        @if (column.type == 'button') {
           <td mat-cell *matCellDef="let element">
             <div class="d-flex flex-justify-space-between cell-text auto-margin">
               <ion-grid>
                 <ion-row class="d-flex flex-justify-center">
-                  <div *ngFor="let buttonName of element[column.name]">
-                    <ion-button *ngIf="buttonName.name" [class]="buttonName.cssColor"
+                  @for (buttonName of element[column.name]; track buttonName?.name || buttonName?.action || buttonName?.icon) {
+                  <div>
+                    @if (buttonName.name) {
+                    <ion-button [class]="buttonName.cssColor"
                       (click)="onCellClick(buttonName.name,column,element)"
-                      [disabled] = "buttonName.isDisabled"
+                      [disabled]="buttonName.isDisabled"
                       >
                       {{ buttonName.name | translate }}
                     </ion-button>
-                    <ion-button *ngIf="buttonName.icon" [class]="buttonName.cssColor"
+                    }
+                    @if (buttonName.icon) {
+                    <ion-button [class]="buttonName.cssColor"
                       (click)="onCellClick( buttonName.action,column,element)">
-                      <ion-icon *ngIf="buttonName.icon" [icon]=" buttonName.icon"></ion-icon>
+                      <ion-icon [icon]="buttonName.icon"></ion-icon>
                     </ion-button>
+                    }
                   </div>
+                  }
                 </ion-row>
               </ion-grid>
             </div>
           </td>
-        </div>
+        }
       </ng-container>
     </ng-container>
-
+    }
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
   </table>
-  <div *ngIf="!(tableData?.length)">
+  @if (!(tableData?.length)) {
+  <div>
     <app-no-data-found [messageDescription]="noDataMessage">
     </app-no-data-found>
   </div>
+  }
 </div>
