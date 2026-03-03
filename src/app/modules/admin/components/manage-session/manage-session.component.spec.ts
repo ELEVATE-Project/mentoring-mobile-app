@@ -76,7 +76,7 @@ describe('ManageSessionComponent', () => {
       action: 'mentor_name',
       element: { mentor_id: '123' }
     };
-    component.onCLickEvent(data);
+    component.onClickEvent(data);
     expect(mockRouter.navigate).toHaveBeenCalledWith([CommonRoutes.MENTOR_DETAILS, '123']);
   });
 
@@ -85,7 +85,7 @@ describe('ManageSessionComponent', () => {
       action: 'mentee_count',
       element: { id: 'session1' }
     };
-    await component.onCLickEvent(data);
+    await component.onClickEvent(data);
     expect(mockModalController.create).toHaveBeenCalledWith({
       component: MenteeListPopupComponent,
       cssClass: 'large-width-popover-config',
@@ -98,7 +98,7 @@ describe('ManageSessionComponent', () => {
       action: 'DELETE',
       element: { id: 'session1' }
     };
-    await component.onCLickEvent(data);
+    await component.onClickEvent(data);
     expect(mockAdminWorkapceService.deleteSession).toHaveBeenCalledWith('session1');
     expect(mockAdminWorkapceService.createdSessionBySessionManager).toHaveBeenCalledTimes(2); // Init + Refresh
   });
@@ -108,7 +108,7 @@ describe('ManageSessionComponent', () => {
       action: 'EDIT',
       element: { id: 'session1', status: 'Upcoming' }
     };
-    component.onCLickEvent(data);
+    component.onClickEvent(data);
     expect(mockRouter.navigate).toHaveBeenCalledWith([CommonRoutes.CREATE_SESSION], { queryParams: { id: 'session1' } });
   });
 
@@ -196,7 +196,7 @@ describe('ManageSessionComponent', () => {
       action: 'DELETE',
       element: { id: 'session1' }
     };
-    await component.onCLickEvent(data);
+    await component.onClickEvent(data);
     expect(mockAdminWorkapceService.deleteSession).toHaveBeenCalledWith('session1');
   });
 
@@ -205,7 +205,7 @@ describe('ManageSessionComponent', () => {
       action: 'mentee_count',
       element: { id: 'session1' }
     };
-    await component.onCLickEvent(data);
+    await component.onClickEvent(data);
     expect(mockModalController.create).toHaveBeenCalled();
   });
   it('should navigate to session details default action', () => {
@@ -213,7 +213,7 @@ describe('ManageSessionComponent', () => {
       action: 'UNKNOWN_ACTION',
       element: { id: 'session1' }
     };
-    component.onCLickEvent(data);
+    component.onClickEvent(data);
     expect(mockRouter.navigate).toHaveBeenCalledWith([CommonRoutes.SESSIONS_DETAILS, 'session1']);
   });
 
@@ -222,7 +222,7 @@ describe('ManageSessionComponent', () => {
       action: 'EDIT',
       element: { id: 'session1', status: 'Live' }
     };
-    component.onCLickEvent(data);
+    component.onClickEvent(data);
     expect(mockRouter.navigate).toHaveBeenCalledWith([CommonRoutes.CREATE_SESSION], { queryParams: { id: 'session1', type: 'segment' } });
   });
 

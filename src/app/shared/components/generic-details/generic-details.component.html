@@ -1,12 +1,13 @@
-@for (item of sessionData.controls; track item?.key || item?.title || item?.label) {
+@for (item of sessionData.controls; track (item?.key || item?.title || item?.label || 'control') + '-' + $index) {
 <div class="field-wrapper">
-  @if ((!sessionData?.menteeForm?.includes(item.title) || (sessionData?.menteeForm?.includes(item.title) && !isMentor)) && (item?.visible !== undefined ? item.visible : true) && (item?.visibility === 'main' || !item?.visibility)) {
+  @if (shouldShowControl(item)) {
+  @let value = sessionData.data[item.key];
   <div>
     <p class="session-detail-heading">{{ item.title || item?.label }}</p>
 
-    @if (isArray(sessionData.data[item.key])) {
-      @if (sessionData.data[item.key].length > 0) {
-        @for (chip of sessionData.data[item.key]; track chip?.id || chip?.value || chip?.label || chip?.name) {
+    @if (isArray(value)) {
+      @if (value.length > 0) {
+        @for (chip of value; track chip?.id || chip?.value || chip?.label || chip?.name) {
         <ion-chip outline="true" class="ion-margin-top break-word">
           <ion-label>{{ chip?.label || ('NOT_UPDATED_MSG' | translate) }}</ion-label>
         </ion-chip>
@@ -18,25 +19,25 @@
       @switch (item.key) {
         @case ('duration') {
         <p class="value">
-          {{ sessionData.data.duration.hours }} hr
-          {{ sessionData.data.duration.minutes }} minutes
+          {{ sessionData.data.duration?.hours || 0 }} hr
+          {{ sessionData.data.duration?.minutes || 0 }} minutes
         </p>
         }
 
         @case ('startDate') {
         <p class="value">
-          {{ sessionData.data[item.key] | date:'MMM d, y, h:mm a' }}
+          {{ value | date:'MMM d, y, h:mm a' }}
         </p>
         }
         @case ('endDate') {
         <p class="value">
-          {{ sessionData.data[item.key] | date:'MMM d, y, h:mm a' }}
+          {{ value | date:'MMM d, y, h:mm a' }}
         </p>
         }
 
         @case ('mentee_count') {
         <div class="d-flex">
-          <p class="mentee-count">{{ sessionData.data[item.key] }}</p>
+          <p class="mentee-count">{{ value }}</p>
           <ion-button class="view-mentee-list" color="white" (click)="onClickViewList()">
             View List
           </ion-button>
@@ -46,7 +47,7 @@
         @case ('mentor_name') {
         <div>
           <p class="break-word">
-            {{ sessionData.data[item.key]?.label || sessionData.data[item.key] }}
+            {{ value?.label || value }}
           </p>
           <div>{{ sessionData.data.mentor_designation }}</div>
         </div>
@@ -54,8 +55,8 @@
 
         @case ('experience') {
         <p class="value">
-          {{ sessionData.data[item.key] ? 
-             sessionData.data[item.key] + ' ' + "Years": 
+          {{ value ? 
+             value + ' ' + "Years": 
              ('NOT_UPDATED_MSG' | translate) }}
         </p>
         }
@@ -63,9 +64,9 @@
         @default {
         <p class="value">
           <span>
-            {{ sessionData.data[item.key]?.label || 
-               sessionData.data[item.key]?.name || 
-               sessionData.data[item.key] || 
+            {{ value?.label || 
+               value?.name || 
+               value || 
                ('NOT_UPDATED_MSG' | translate) }}
           </span>
         </p>

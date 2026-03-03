@@ -85,4 +85,13 @@ export class GenericDetailsComponent implements OnInit, OnChanges {
     this.selectedImageUrl = null;
     this.isImageModalOpen = false;
   }
+
+  shouldShowControl(item: any): boolean {
+    const menteeForm = this.sessionData?.menteeForm || [];
+    const isInMenteeForm = menteeForm.includes(item?.title);
+    const allowedByRole = !isInMenteeForm || !this.isMentor;
+    const isVisible = item?.visible !== undefined ? item.visible : true;
+    const isMainVisibility = item?.visibility === 'main' || !item?.visibility;
+    return allowedByRole && isVisible && isMainVisibility;
+  }
 }

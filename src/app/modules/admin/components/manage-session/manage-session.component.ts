@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminWorkapceService } from 'src/app/core/services/admin-workspace/admin-workapce.service';
 import { CommonRoutes } from 'src/global.routes';
@@ -13,7 +13,7 @@ import { urlConstants } from 'src/app/core/constants/urlConstants';
     styleUrls: ['./manage-session.component.scss'],
     standalone: false
 })
-export class ManageSessionComponent implements OnInit {
+export class ManageSessionComponent {
   public headerConfig: any = {
     menu: true,
     notification: true,
@@ -29,8 +29,7 @@ export class ManageSessionComponent implements OnInit {
   constructor(
     private adminWorkapceService: AdminWorkapceService,
     private router: Router,
-    private modalCtrl: ModalController,
-    private cdr: ChangeDetectorRef
+    private modalCtrl: ModalController
   ) { }
 
   headingText = "SESSION_LIST"
@@ -94,7 +93,7 @@ export class ManageSessionComponent implements OnInit {
   tableData = signal<any>(null);
   dummyTableData: any = false;
   noDataMessage = signal<any>(null);
-  segmentType = signal<string>('manage-session');
+  segmentType = signal<'manage-session' | 'bulk-upload'>('manage-session');
   filteredDatas = []
   actionButtons = {
     'UPCOMING': [{ icon: 'eye', cssColor: 'white-color' , action:'VIEW'}, { icon: 'create', cssColor: 'white-color' ,action:'EDIT'}, { icon: 'trash', cssColor: 'white-color',action:'DELETE' }],
@@ -102,15 +101,11 @@ export class ManageSessionComponent implements OnInit {
     'COMPLETED': [{ icon: 'eye', cssColor: 'white-color' ,action:'VIEW'}]
   };
 
-  async ngOnInit() {
-    this.fetchSessionList()
-  }
-
   async ionViewWillEnter() {
     this.fetchSessionList()
   }
 
-  async onCLickEvent(data: any) {
+  async onClickEvent(data: any) {
     this.receivedEventData = data;
     switch (this.receivedEventData.action) {
       case 'mentor_name':
@@ -224,7 +219,6 @@ export class ManageSessionComponent implements OnInit {
     }
     this.tableData.set(data);
     this.noDataMessage.set(this.searchText ? "SEARCH_RESULT_NOT_FOUND" : "SEARCH_RESULT_NOT_FOUND");
-    this.cdr.detectChanges();
   }
 
   createSession(){
