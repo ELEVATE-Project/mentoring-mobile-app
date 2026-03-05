@@ -47,7 +47,7 @@
                   <ion-grid>
                     <ion-row class="d-flex">
                       @for (data of upcomingSessions(); track data.id) {
-                        <ion-col padding size-xs="12" size-sm="12" size-md="6" size-lg="6" align-self-stretch>
+                        <ion-col class="ion-padding" size-xs="12" size-sm="12" size-md="6" size-lg="6" align-self-stretch>
                           <app-session-card [data]="data" [showBanner]="false" (onClickEvent)="onAction($event)"></app-session-card>
                         </ion-col>
                       }
