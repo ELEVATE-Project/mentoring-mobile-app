@@ -141,6 +141,40 @@ describe('InputChipComponent', () => {
     expect(component.disabled).toBeFalse();
   });
 
+  it('isRequired should depend on validators.required and disabled state', () => {
+    component.validators = { required: true };
+    component.disabled = false;
+    expect(component.isRequired).toBeTrue();
+
+    component.disabled = true;
+    expect(component.isRequired).toBeFalse();
+
+    component.validators = {};
+    component.disabled = false;
+    expect(component.isRequired).toBeFalse();
+  });
+
+  it('addChipLabelKey should return showAddOption.addChipLabel fallback to ADD', () => {
+    component.showAddOption = { addChipLabel: 'ADD_SKILL' };
+    expect(component.addChipLabelKey).toBe('ADD_SKILL');
+
+    component.showAddOption = {};
+    expect(component.addChipLabelKey).toBe('ADD');
+  });
+
+  it('writeValue should clear selection when value is empty/undefined', () => {
+    component.selectedChips = new Set(component.chips);
+    component._selectAll = true;
+
+    component.writeValue();
+    expect(component.selectedChips.size).toBe(0);
+    expect(component._selectAll).toBeFalse();
+
+    component.writeValue([]);
+    expect(component.selectedChips.size).toBe(0);
+    expect(component._selectAll).toBeFalse();
+  });
+
   it('onChipClick should toggle selection and call onChange with array or "" when empty', () => {
     const changeSpy = jasmine.createSpy('changeSpy');
     component.registerOnChange(changeSpy);
@@ -158,6 +192,19 @@ describe('InputChipComponent', () => {
     component.onChipClick(component.chips[0]);
     expect(component.selectedChips.has(component.chips[0])).toBeFalse();
     expect(changeSpy).toHaveBeenCalledWith('');
+  });
+
+  it('onChipClick should update _selectAll when all chips are selected', () => {
+    const changeSpy = jasmine.createSpy('changeSpy');
+    component.registerOnChange(changeSpy);
+    component.selectedChips = new Set();
+    component._selectAll = false;
+
+    component.onChipClick(component.chips[0]);
+    expect(component._selectAll).toBeFalse();
+
+    component.onChipClick(component.chips[1]);
+    expect(component._selectAll).toBeTrue();
   });
 
   it('onChipClick should not change selection when disabled', () => {
@@ -192,6 +239,20 @@ describe('InputChipComponent', () => {
     component.selectAll();
     expect(component.selectedChips.size).toBe(0);
     expect(changeSpy).toHaveBeenCalledWith('');
+  });
+
+  it('selectAll should mark control as touched only once across calls', () => {
+    const touchedFn = jasmine.createSpy('touchedFn');
+    component.registerOnTouched(touchedFn);
+    component.touched = false;
+
+    component._selectAll = true;
+    component.selectAll();
+    component._selectAll = false;
+    component.selectAll();
+
+    expect(touchedFn).toHaveBeenCalledTimes(1);
+    expect(component.touched).toBeTrue();
   });
 
   describe('addNewOption alert flow', () => {

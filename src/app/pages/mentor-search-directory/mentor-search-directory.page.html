@@ -1,36 +1,49 @@
-<app-page-header [config]="headerConfig">
-    <app-searchbar *ngIf="overlayChips" placeholder="{{'MENTOR_SEARCH_PLACEHOLDER' | translate}}" (clearText)="onClearSearch($event)" [overlayChip]="overlayChips"  (outputData)="onSearch($event)" [valueFromParent]="valueFromChipAndFilter ? valueFromChipAndFilter : searchAndCriterias.headerData.criterias" [parentSearchText]="searchAndCriterias.headerData.searchText" ></app-searchbar>
+@let searchCriteria = searchAndCriterias();
+@let headerData = searchCriteria?.headerData;
+
+<app-page-header [config]="headerConfig()">
+    @if (overlayChips()) {
+    <app-searchbar placeholder="{{'MENTOR_SEARCH_PLACEHOLDER' | translate}}" (clearText)="onClearSearch($event)" [overlayChip]="overlayChips()" (outputData)="onSearch($event)" [valueFromParent]="valueFromChipAndFilter() ? valueFromChipAndFilter() : headerData?.criterias" [parentSearchText]="headerData?.searchText"></app-searchbar>
+    }
 </app-page-header>
 
-<app-chips-and-filter  [selectedFilters]="chips" [searchAndCriteriaData]="searchAndCriterias" (removeFilterChip)="removeChip($event)" (filterClick)="onClickFilter()" (sendChildValue)="eventHandler($event)" [isFilterEnable]="filterIcon"></app-chips-and-filter>
+<app-chips-and-filter [selectedFilters]="chips()" [searchAndCriteriaData]="searchCriteria" (removeFilterChip)="removeChip($event)" (filterClick)="onClickFilter()" (sendChildValue)="eventHandler($event)" [isFilterEnable]="filterIcon()"></app-chips-and-filter>
 
-<ion-content >
+<ion-content>
   <div class="search-navigation">
     <div class="search-result">
       <div class="search-result-label">
         <ion-buttons slot="start">
           <ion-back-button defaultHref="/tabs/home"></ion-back-button>
         </ion-buttons>
-        <ion-label *ngIf="searchAndCriterias.headerData.searchText && totalCount > 0">
-          {{"MENTOR_SEARCH_RESULT" | translate}} "{{searchAndCriterias.headerData.searchText}}"
+        @if (headerData?.searchText && totalCount() > 0) {
+        <ion-label>
+          {{"MENTOR_SEARCH_RESULT" | translate}} "{{headerData?.searchText}}"
         </ion-label>
+        }
       </div>
-      <div *ngIf="totalCount > 0 && searchAndCriterias.headerData.searchText" class="search-result-count">
-        <ion-label>{{totalCount}} {{"SEARCH_RESULT" | translate}}</ion-label>
+      @if (totalCount() > 0 && headerData?.searchText) {
+      <div class="search-result-count">
+        <ion-label>{{totalCount()}} {{"SEARCH_RESULT" | translate}}</ion-label>
       </div>
+      }
     </div>
     <div class="paginator">
-    <mat-paginator  [length]="totalCount" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"></mat-paginator>
+      <mat-paginator [length]="totalCount()" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"></mat-paginator>
     </div>
   </div>
-  <ion-grid >
+  <ion-grid>
     <ion-row class="d-flex ">
-      <ion-col *ngFor="let value of data" padding size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="4" align-self-stretch>
-        <app-generic-card [data]="value" (onClickEvent)="eventAction($event)" [buttonConfig]="value.buttonConfig" [cardConfig]="mentorForm"></app-generic-card>
+      @for (value of data(); track (value?.id || value?.userId || value?.name || value?.label || 'mentor') + '-' + $index) {
+      <ion-col class="ion-padding" size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="4" align-self-stretch>
+        <app-generic-card [data]="value" (onClickEvent)="eventAction($event)" [buttonConfig]="value.buttonConfig" [cardConfig]="mentorForm()"></app-generic-card>
       </ion-col>
+      }
     </ion-row>
   </ion-grid>
-  <div *ngIf="totalCount == 0 || !data">
-      <app-no-data-found [messageHeader]="'SEARCH_RESULT_NOT_FOUND'" [messageDescription]="'NO_SESSION_MESSAGE_DESCRIPTION'"> </app-no-data-found>
+  @if (totalCount() == 0 || !data()?.length) {
+  <div>
+    <app-no-data-found [messageHeader]="'SEARCH_RESULT_NOT_FOUND'" [messageDescription]="'NO_SESSION_MESSAGE_DESCRIPTION'"> </app-no-data-found>
   </div>
+  }
 </ion-content>

@@ -189,6 +189,16 @@ describe('EditProfilePage', () => {
       await component.ngOnInit();
       expect(mockChangeDetectorRef.detectChanges).toHaveBeenCalled();
     });
+
+    it('should expose showForm through signal-backed getter/setter', () => {
+      component.showForm = false;
+      expect(component.showForm).toBeFalse();
+      expect(component.showFormSignal()).toBeFalse();
+
+      component.showForm = true;
+      expect(component.showForm).toBeTrue();
+      expect(component.showFormSignal()).toBeTrue();
+    });
   });
 
   describe('ionViewWillEnter', () => {
@@ -313,6 +323,49 @@ describe('EditProfilePage', () => {
       const result = await component.canPageLeave();
       expect(result).toBe(false);
     });
+
+    it('should return true when form is pristine and image is uploaded with backButton true', async () => {
+      component.form1 = {
+        myForm: { pristine: true },
+        onSubmit: jasmine.createSpy('onSubmit'),
+        reset: jasmine.createSpy('reset')
+      } as any;
+      component.profileImageData.isUploaded = true;
+      component.headerConfig.backButton = true;
+
+      const mockAlert = {
+        present: jasmine.createSpy('present').and.returnValue(Promise.resolve()),
+        onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(Promise.resolve({ role: 'cancel' }))
+      };
+      mockAlertController.create.and.returnValue(Promise.resolve(mockAlert as any));
+
+      const result = await component.canPageLeave();
+
+      expect(mockAlert.present).not.toHaveBeenCalled();
+      expect(result).toBe(true);
+    });
+
+    it('should return false when form is pristine and backButton is false', async () => {
+      component.userDetails = { ...mockUserDetails, profile_mandatory_fields: ['field1'] };
+      component.form1 = {
+        myForm: { pristine: true },
+        onSubmit: jasmine.createSpy('onSubmit'),
+        reset: jasmine.createSpy('reset')
+      } as any;
+      component.profileImageData.isUploaded = true;
+      component.headerConfig.backButton = false;
+
+      const mockAlert = {
+        present: jasmine.createSpy('present').and.returnValue(Promise.resolve()),
+        onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(Promise.resolve({ role: 'cancel' }))
+      };
+      mockAlertController.create.and.returnValue(Promise.resolve(mockAlert as any));
+
+      const result = await component.canPageLeave();
+
+      expect(mockAlert.present).toHaveBeenCalled();
+      expect(result).toBe(false);
+    });
   });
 
   describe('onSubmit', () => {
@@ -415,6 +468,37 @@ describe('EditProfilePage', () => {
       await component.onSubmit();
 
       expect(mockProfileService.profileUpdate).toHaveBeenCalled();
+    });
+
+    it('should send fallback values when optional fields are missing', async () => {
+      component.formData = {
+        controls: [
+          { name: 'about', value: '', multiple: false },
+          { name: 'education_qualification', value: '', multiple: false },
+          { name: 'experience', value: null, multiple: false }
+        ]
+      };
+      component.entityNames = ['about', 'education_qualification', 'experience'];
+      component.userDetails = { ...mockUserDetails, profile_mandatory_fields: ['a'] };
+      component.form1 = {
+        myForm: {
+          valid: true,
+          value: { about: '', education_qualification: '', experience: null },
+          markAsPristine: jasmine.createSpy('markAsPristine')
+        },
+        onSubmit: jasmine.createSpy('onSubmit'),
+        reset: jasmine.createSpy('reset')
+      } as any;
+      component.profileImageData.isUploaded = true;
+      mockProfileService.profileUpdate.and.returnValue(Promise.resolve(true));
+
+      await component.onSubmit();
+
+      const payload = mockProfileService.profileUpdate.calls.mostRecent().args[0];
+      expect(payload.about).toBe('NA');
+      expect(payload.education_qualification).toBe('NA');
+      expect(payload.experience).toBe(0);
+      expect(component.userDetails.profile_mandatory_fields).toEqual([]);
     });
   });
 

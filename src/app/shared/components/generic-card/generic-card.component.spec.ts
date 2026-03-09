@@ -80,7 +80,7 @@ describe('GenericCardComponent', () => {
   it('ngOnInit should read chatConfig from LocalStorageService', async () => {
     // getLocalData called during beforeEach ngOnInit; assert it was called with the correct key
     expect(mockLocalStorage.getLocalData).toHaveBeenCalledWith(localKeys['CHAT_CONFIG']);
-    expect(component.chatConfig).toBe('false');
+    expect(component.chatConfig()).toBe('false');
   });
 
   it('onCardClick should navigate to mentor details when disableNavigation is false', () => {
@@ -108,6 +108,7 @@ describe('GenericCardComponent', () => {
     component.handleButtonClick(action, data);
     expect(component.onClickEvent.emit).toHaveBeenCalledWith({
       data: data.id,
+      name: undefined,
       type: action,
       rid: data.connection_meta.room_id,
       element: data
@@ -116,7 +117,7 @@ describe('GenericCardComponent', () => {
 
   it('showButton should return false for chat action when chatConfig != "true"', () => {
     // chatConfig is 'false' by default
-    component.chatConfig = 'false';
+    component.chatConfig.set('false');
     const event = { action: 'chat', hasCondition: false };
     const data = {};
     const result = component.showButton(event as any, data as any);
@@ -154,5 +155,6 @@ describe('GenericCardComponent', () => {
     const event = { action: 'chat', hasCondition: false };
     const data = {};
     expect(component.showButton(event as any, data as any)).toBeTrue();
+    expect(component.chatConfig()).toBe('true');
   });
 });

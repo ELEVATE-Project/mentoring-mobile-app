@@ -1,117 +1,98 @@
-<div *ngIf="headerData || userNotFound" class="header-bottom-border">
-  @if (userNotFound) {
-    <ion-row class="content-wrapper">
-    <ion-col size="4" class="text-center ">
-      <div class="d-flex flex-justify-center flex-align-items-center flex-col">
-        <ng-container *ngIf="headerData?.image && headerData?.image !== ''; else DefaultImg">
-            <img [src]="headerData?.image" />
-          </ng-container>
-          <ng-template #DefaultImg>
-            <img src="assets/prof-img/user.png" class="default-img" />
-          </ng-template>
-        <ng-template #Img>
-          <div class="profile-img">
-            <ion-icon
-              name="people-outline"
-              *ngIf="headerData?.is_connected"
-            ></ion-icon>
-            <img src="{{ headerData?.image }}" />
+@if (headerData() || userNotFound()) {
+  @let header = headerData();
+  @let buttons = buttonConfig()?.buttons;
+  @let blocked = isblocked();
+  @let chatEnabled = chatConfig() === 'true';
+  <div class="header-bottom-border">
+    @if (userNotFound()) {
+      <ion-row class="content-wrapper">
+        <ion-col size="4" class="text-center">
+          <div class="d-flex flex-justify-center flex-align-items-center flex-col">
+            <img [src]="header?.image || 'assets/prof-img/user.png'" 
+                 [class.default-img]="!header?.image" />
           </div>
-        </ng-template>
-      </div>
-    </ion-col>
-    <ion-col size="8" class="name-wrapper no-padding">
-        <ion-label class="name">
-             {{ "USER_NOT_FOUND" | translate }}
-        </ion-label>
-    </ion-col>
-  </ion-row>
-  } @else {
-    <ion-row class="content-wrapper">
-      <ion-col size="4">
-        <div class="d-flex flex-justify-center flex-align-items-center flex-col">
-          <div class="profile-img">
-            <ion-icon
-              name="people-outline"
-              *ngIf="headerData?.is_connected && !isblocked"
-            ></ion-icon>
-            <ng-container *ngIf="headerData?.image && headerData?.image !== ''; else DefaultImg">
-            <img [src]="headerData?.image" />
-          </ng-container>
-          <ng-template #DefaultImg>
-            <img src="assets/prof-img/user.png" class="default-img" />
-          </ng-template>
-        </div>
-        <ng-template #Img>
-          <div class="profile-img">
-            <ion-icon
-              name="people-outline"
-              *ngIf="headerData?.is_connected"
-            ></ion-icon>
-            <img src="{{ headerData?.image }}" />
-          </div>
-        </ng-template>
-        <div
-          class="ratings-banner"
-          *ngIf="headerData?.rating?.average"
-        >
-          {{ headerData?.rating?.average }} 
-          <ion-icon name="star" style="margin-left: 5px"></ion-icon>
-        </div>
-    
-        
-        <div *ngIf="(headerData?.district || headerData?.state) && !isblocked" class="location-info">
-          <ion-label class="location">
-             <ion-icon name="location"></ion-icon>
-            <ng-container *ngIf="headerData.district?.label as district">
-            {{ district }}
-             <ng-container *ngIf="headerData.state?.label">, </ng-container>
-           </ng-container>
-
-           <ng-container *ngIf="headerData.state?.label as state">
-          
-              {{ state }}
-            </ng-container>
-
+        </ion-col>
+        <ion-col size="8" class="name-wrapper no-padding">
+          <ion-label class="name">
+            {{ "USER_NOT_FOUND" | translate }}
           </ion-label>
-        </div>
-      </div>
-    </ion-col>
-    
-    <ion-col size="8" class="details-wrapper">
-      <div>
-        <ion-label *ngIf="headerData?.name" class="name"
-          >{{ headerData?.name| titlecase }}
-        </ion-label>
-      </div>
-     <div class="roles-div" *ngIf="headerData?.designation?.[0]?.label && headerData?.experience">
-      <ion-label>
-        {{ headerData.designation[0].label }} ({{ headerData.experience }} years)
-      </ion-label>
-    </div>
-      <div class="d-inline-flex flex-align-items-center my-4">
-        <ion-label class="location" *ngIf="headerData?.is_mentor && !isblocked"
-          >{{ "SESSIONS_CONDUCTED" | translate }} :
-          {{ headerData?.sessions_hosted || 0 }}</ion-label
-        >
-        <ion-label class="location" *ngIf="!headerData?.is_mentor"
-          >{{ "SESSIONS_ATTENDED" | translate }} :
-          {{ headerData?.sessions_attended || 0 }}</ion-label
-        >
-      </div>
-      <div *ngIf="buttonConfig && !isblocked" class="flex flex-justify-start mt-4 wrap">
-        <div *ngFor="let button of buttonConfig.buttons">
-        <ion-button
-          *ngIf="((button.action === 'chat' && chatConfig == 'true') || button.action !== 'chat') && !button.isHide"
-          color="light"
-          expand="block"
-          (click)="action(button?.action)"
-        >
-          {{ button?.label | translate }}
-        </ion-button>
-      </div>
-      </div>
-    </ion-col>
-  </ion-row>
-  }
-</div>
+        </ion-col>
+      </ion-row>
+    } @else {
+      <ion-row class="content-wrapper">
+        <ion-col size="4">
+          <div class="d-flex flex-justify-center flex-align-items-center flex-col">
+            <div class="profile-img">
+              @if (header?.is_connected && !blocked) {
+                <ion-icon name="people-outline"></ion-icon>
+              }
+              <img [src]="header?.image || 'assets/prof-img/user.png'" 
+                   [class.default-img]="!header?.image" />
+            </div>
+
+            @if (header?.rating?.average) {
+              <div class="ratings-banner">
+                {{ header.rating.average }} 
+                <ion-icon name="star" style="margin-left: 5px"></ion-icon>
+              </div>
+            }
+        
+            @if ((header?.district || header?.state) && !blocked) {
+              <div class="location-info">
+                <ion-label class="location">
+                  <ion-icon name="location"></ion-icon>
+                  @if (header?.district?.label; as district) {
+                    {{ district }}@if (header?.state?.label) {<span>, </span>}
+                  }
+                  @if (header?.state?.label; as state) {
+                    {{ state }}
+                  }
+                </ion-label>
+              </div>
+            }
+          </div>
+        </ion-col>
+        
+        <ion-col size="8" class="details-wrapper">
+          <div>
+            @if (header?.name) {
+              <ion-label class="name">{{ header.name | titlecase }}</ion-label>
+            }
+          </div>
+          @if (header?.designation?.[0]?.label && header?.experience) {
+            <div class="roles-div">
+              <ion-label>
+                {{ header.designation[0].label }} ({{ header.experience }} years)
+              </ion-label>
+            </div>
+          }
+          <div class="d-inline-flex flex-align-items-center my-4">
+            @if (header?.is_mentor && !blocked) {
+              <ion-label class="location">
+                {{ "SESSIONS_CONDUCTED" | translate }} : {{ header?.sessions_hosted || 0 }}
+              </ion-label>
+            } @else if (!header?.is_mentor) {
+              <ion-label class="location">
+                {{ "SESSIONS_ATTENDED" | translate }} : {{ header?.sessions_attended || 0 }}
+              </ion-label>
+            }
+          </div>
+          
+          @if (buttons && !blocked) {
+            <div class="flex flex-justify-start mt-4 wrap">
+              @for (button of buttons; track button.action) {
+                @if ((((button.action === 'chat' && chatEnabled) || button.action !== 'chat') && !button.isHide)) {
+                  <div>
+                    <ion-button color="light" expand="block" (click)="action(button?.action)">
+                      {{ button?.label | translate }}
+                    </ion-button>
+                  </div>
+                }
+              }
+            </div>
+          }
+        </ion-col>
+      </ion-row>
+    }
+  </div>
+}

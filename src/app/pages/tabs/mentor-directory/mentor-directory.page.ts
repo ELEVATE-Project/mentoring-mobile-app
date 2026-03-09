@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
 import * as _ from 'lodash';
-import { CHAT_MESSAGES } from 'src/app/core/constants/chatConstants';
 import { MENTOR_DIR_CARD_FORM } from 'src/app/core/constants/formConstant';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { HttpService, LoaderService, ToastService } from 'src/app/core/services';
@@ -15,41 +14,30 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
     selector: 'app-mentor-directory',
     templateUrl: './mentor-directory.page.html',
     styleUrls: ['./mentor-directory.page.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MentorDirectoryPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
 
-  page = 1;
-  limit = 100;
-  searchText: string = '';
-  public headerConfig: any = {
+  page = signal(1);
+  limit = signal(100);
+  searchText = signal('');
+  public headerConfig = signal({
     menu: true,
     headerColor: 'primary',
     notification: false,
-  };
+  });
 
-  mentors = [];
-  mentorForm: any;
-  mentorsCount;
-  isLoaded: boolean = false;
-  filterData: any;
-  filteredDatas = [];
-  chips = [];
-  setPaginatorToFirstpage: boolean;
-  criteriaData = [];
-  isOpen = false;
-  selectedChipLabel: any;
-  overlayChips = [];
-  selectedChipName: any;
-  urlFilterData: string;
-  directory: boolean = true;
-  selectedChips: boolean = false;
-  data: any;
+  mentors = signal<any[]>([]);
+  mentorForm = signal<any>(null);
+  mentorsCount = signal<any>(null);
+  isLoaded = signal<boolean>(false);
+  
   buttonConfig: any;
-  currentUserId: any;
-  isInfiniteScrollDisabled: boolean = false;
-  loading: boolean =false;
+  currentUserId = signal<any>(null);
+  isInfiniteScrollDisabled = signal<boolean>(false);
+  loading = signal<boolean>(false);
 
   constructor(
     private router: Router,
@@ -58,7 +46,7 @@ export class MentorDirectoryPage implements OnInit {
     private route: ActivatedRoute,
     private toast: ToastService,
     private form: FormService,
-    private localStorage: LocalStorageService,
+    private localStorage: LocalStorageService
   ) {}
 
   ngOnInit() {
@@ -68,19 +56,20 @@ export class MentorDirectoryPage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    if(this.loading) {
+    if (this.loading()) {
       this.gotToTop();
       return;
     }
-    this.loading =true;
+    this.loading.set(true);
     let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
-    this.currentUserId= user.id;
+    this.currentUserId.set(user.id);
     const result = await this.form.getForm(MENTOR_DIR_CARD_FORM);
-    this.mentorForm = _.get(result, 'data.fields.controls');
-    this.page = 1;
-    this.mentors = [];
-    this.isInfiniteScrollDisabled = false;
-    this.getMentors();  
+    this.mentorForm.set(_.get(result, 'data.fields.controls'));
+    this.page.set(1);
+    this.mentors.set([]);
+    this.isInfiniteScrollDisabled.set(false);
+    await this.getMentors();
+    this.loading.set(false);
     this.gotToTop();
   }
 
@@ -93,75 +82,78 @@ export class MentorDirectoryPage implements OnInit {
     const config = {
       url:
         urlConstants.API_URLS.MENTORS_DIRECTORY_LIST +
-        this.page +
+        this.page() +
         '&limit=' +
-        this.limit +
+        this.limit() +
         '&search=' +
-        btoa(this.searchText) +
-        '&directory=' +
-        this.directory +
-        '&search_on=' +
-        (this.selectedChipName ? this.selectedChipName : '') +
-        '&' +
-        (this.urlFilterData ? this.urlFilterData : ''),
+        btoa(this.searchText()) +
+        '&directory=true',
       payload: {},
     };
     try {
       let data: any = await this.httpService.get(config);
-      this.data = data.result.data;
-      this.isLoaded = true;
-      showLoader ? await this.loaderService.stopLoader() : '';
-      if (isLoadMore) {
-        this.mentors = [...this.mentors, ...data.result.data];
-      } else {
-        this.mentors = data.result.data;
-        this.mentorsCount = data.result.count;
-      }
-      let totalValues = this.mentors.reduce((acc, mentor) => acc + (mentor.values?.length || 0), 0);
-      this.isInfiniteScrollDisabled = (totalValues >= this.mentorsCount) || (data.result.data.length === 0);
-
-      for (const group of this.mentors) {
-        group.values.forEach(mentor => {
-            mentor.buttonConfig = this.buttonConfig.map(btn => ({ ...btn }));
-
-            if (mentor.id === this.currentUserId) {
-              mentor.buttonConfig = this.buttonConfig.map(btn => ({
-                ...btn,
-                isHide: true
-              }));
+      const newMentorsData = data.result.data;
+      
+      // Map button configurations
+      const processedMentors = newMentorsData.map(group => ({
+        ...group,
+        values: group.values.map(mentor => {
+          const mentorCopy = { ...mentor };
+          if (mentorCopy.id === this.currentUserId()) {
+            mentorCopy.buttonConfig = this.buttonConfig.map(btn => ({ ...btn, isHide: true }));
+          } else {
+            mentorCopy.buttonConfig = this.buttonConfig.map(btn => ({ ...btn }));
           }
-        });
+          return mentorCopy;
+        })
+      }));
+
+      if (isLoadMore) {
+        this.mentors.set([...this.mentors(), ...processedMentors]);
+      } else {
+        this.mentors.set(processedMentors);
+        this.mentorsCount.set(data.result.count);
       }
+
+      this.isLoaded.set(true);
+      showLoader ? await this.loaderService.stopLoader() : '';
+      
+      const currentMentors = this.mentors();
+      let totalValues = currentMentors.reduce((acc, mentor) => acc + (mentor.values?.length || 0), 0);
+      this.isInfiniteScrollDisabled.set((totalValues >= this.mentorsCount()) || (newMentorsData.length === 0));
 
     } catch (error) {
-      this.isLoaded = true;
-      this.isInfiniteScrollDisabled = true; 
+      this.isLoaded.set(true);
+      this.isInfiniteScrollDisabled.set(true);
       showLoader ? await this.loaderService.stopLoader() : '';
     }
   }
+
   eventAction(event) {
     switch (event.type) {
       case 'cardSelect':
         this.router.navigate([CommonRoutes.MENTOR_DETAILS, event?.data?.id]);
         break;
       case 'chat':
-        this.router.navigate([CommonRoutes.CHAT_REQ, event.data],{queryParams:{id:event.data.id}});
+        this.router.navigate([CommonRoutes.CHAT_REQ, event.data], { queryParams: { id: event.data.id } });
         break;
       case 'requestSession':
-        this.router.navigate([CommonRoutes.SESSION_REQUEST], {queryParams: {data: event.data}});
+        this.router.navigate([CommonRoutes.SESSION_REQUEST], { queryParams: { data: event.data } });
         break;
     }
   }
+
   async loadMore(event) {
-    if (this.data && !this.isInfiniteScrollDisabled) {
-      this.page = this.page + 1;
+    if (!this.isInfiniteScrollDisabled()) {
+      this.page.set(this.page() + 1);
       await this.getMentors(false, true);
     }
     event.target.complete();
   }
+
   onSearch() {
     this.router.navigate(['/' + CommonRoutes.MENTOR_SEARCH_DIRECTORY], {
-      queryParams: { search: this.searchText },
+      queryParams: { search: this.searchText() },
     });
   }
 }

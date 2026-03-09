@@ -1,34 +1,36 @@
-<app-page-header [config]="headerConfig">
+<app-page-header [config]="headerConfig()">
  <div class="d-flex flex-justify-center my-8 ">
-    <ion-searchbar class="custom" type="search" inputmode="search"  debounce="1000" placeholder="{{'MENTOR_SEARCH_PLACEHOLDER' | translate}}"(click)="onSearch()"></ion-searchbar>
+    <ion-searchbar class="custom" type="search" inputmode="search" debounce="1000" placeholder="{{'MENTOR_SEARCH_PLACEHOLDER' | translate}}" (click)="onSearch()"></ion-searchbar>
   </div>
 </app-page-header>
 <ion-content scrollEvents="true" >
-  <div *ngIf="isLoaded">
-    <div *ngFor="let mentor of mentors">
+  @if (isLoaded()) {
+  <div>
+    @for (mentor of mentors(); track mentor?.key) {
+    <div>
       <div class="index-label">
         {{mentor.key}}
       </div>
-      <ion-grid >
+      <ion-grid>
         <ion-row class="d-flex ">
-          <ion-col *ngFor="let value of mentor.values" padding size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="4" align-self-stretch>
-            <app-generic-card [data]="value" (onClickEvent)="eventAction($event)" [buttonConfig]="value.buttonConfig"[cardConfig]="mentorForm"></app-generic-card>
+          @for (value of mentor.values; track (value?.id || value?.userId || value?.name || value?.label || 'mentor') + '-' + $index) {
+          <ion-col class="ion-padding" size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="4" align-self-stretch>
+            <app-generic-card [data]="value" (onClickEvent)="eventAction($event)" [buttonConfig]="value.buttonConfig" [cardConfig]="mentorForm()"></app-generic-card>
           </ion-col>
+          }
         </ion-row>
       </ion-grid>
     </div>
+    }
   </div>
-  <div *ngIf="!mentorsCount && isLoaded">
+  }
+  @if (!mentorsCount() && isLoaded()) {
+  <div>
     <app-no-data-found [messageHeader]="'NO_MENTORS_AVAILABLE'"> </app-no-data-found>
   </div>
-  <ion-infinite-scroll [disabled]="isInfiniteScrollDisabled" threshold="100px"  (ionInfinite)="loadMore($event)" >
+  }
+  <ion-infinite-scroll [disabled]="isInfiniteScrollDisabled()" threshold="100px" (ionInfinite)="loadMore($event)">
     <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{'LOADING' | translate}}">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
-<!-- <ion-footer *ngIf="mentors?.length">
-  <ion-button class="view-more" expand="block" (click)="loadMore()"
-    *ngIf="mentorsCount > mentors?.length">
-    {{ 'LOAD_MORE' | translate }}
-  </ion-button>
-</ion-footer> -->

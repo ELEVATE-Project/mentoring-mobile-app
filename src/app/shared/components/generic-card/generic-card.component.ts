@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService } from 'src/app/core/services';
@@ -12,7 +12,8 @@ import { ToastService } from 'src/app/core/services';
     standalone: false
 })
 export class GenericCardComponent implements OnInit {
-  chatConfig: string;
+  chatConfig = signal<string>(null);
+
   @Input() data: any;
   @Output() onClickEvent = new EventEmitter();
   @Input() buttonConfig: any;
@@ -20,44 +21,49 @@ export class GenericCardComponent implements OnInit {
   @Input() cardConfig: any;
   @Input() disableButton: boolean;
   @Input() showTag: any;
-  @Input() disableNavigation: boolean= false;
+  @Input() disableNavigation: boolean = false;
   @Input() disabledCheckboxId: string | null = null;
-  @Input () selectedList
-  @Input () maxCount
-  @Input () showCheckbox
-  @Input () showSelectAll
-  @Input () selectedCount
-  
+  @Input() selectedList: any;
+  @Input() maxCount: any;
+  @Input() showCheckbox: any;
+  @Input() showSelectAll: any;
+  @Input() selectedCount: any;
 
-  constructor(private router: Router, private localStorage: LocalStorageService, private toast : ToastService
+  constructor(
+    private router: Router,
+    private localStorage: LocalStorageService,
+    private toast: ToastService,
   ) {}
 
   async ngOnInit() {
-    this.chatConfig = await this.localStorage.getLocalData(localKeys['CHAT_CONFIG'])
+    const config = await this.localStorage.getLocalData(localKeys['CHAT_CONFIG']);
+    this.chatConfig.set(config);
   }
 
   onCardClick(data) {
-    if(!this.disableNavigation){
-    this.router.navigate([
-      CommonRoutes.MENTOR_DETAILS,
-      data?.id || data?.user_id,
-    ]);
+    if (!this.disableNavigation) {
+      this.router.navigate([
+        CommonRoutes.MENTOR_DETAILS,
+        data?.id || data?.user_id,
+      ]);
     }
   }
+
   handleButtonClick(action: string, data) {
     let value = {
       data: data.id || data.user_id,
-      name : data.name,
+      name: data.name,
       type: action,
       rid: data?.connection_meta?.room_id,
       element: data
     };
     this.onClickEvent.emit(value);
   }
+
   showButton(event, data) {
-    if (event.action === 'chat' && this.chatConfig != 'true') {
+    if (event.action === 'chat' && this.chatConfig() != 'true') {
       return false;
-      }
+    }
     if (!event.hasCondition) {
       return true;
     } else if (event[event.onCheck] == data[event.onCheck]) {
@@ -68,24 +74,23 @@ export class GenericCardComponent implements OnInit {
   }
 
   onCheckboxAction(data: any, event: any) {
-  const isChecked = event.detail.checked;
-  if (isChecked && this.selectedCount >= this.maxCount) {
-    event.target.checked = false;
-    this.toast.showToast('SESSION_MENTEE_LIMIT', 'danger');
-    return;
-  }
-  const action = isChecked ? 'ADD' : 'REMOVE';
-  let value = {
+    const isChecked = event.detail.checked;
+    if (isChecked && this.selectedCount >= this.maxCount) {
+      event.target.checked = false;
+      this.toast.showToast('SESSION_MENTEE_LIMIT', 'danger');
+      return;
+    }
+    const action = isChecked ? 'ADD' : 'REMOVE';
+    let value = {
       data: data.id || data.user_id,
       type: action,
       rid: data?.connection_meta?.room_id,
       element: data
-    }; 
-  this.onClickEvent.emit(value);
-}
+    };
+    this.onClickEvent.emit(value);
+  }
 
- isRowInRemoveState(data: any): boolean {
-  return data?.action?.some(a => a.action === 'REMOVE') ?? false;
-}
-
+  isRowInRemoveState(data: any): boolean {
+    return data?.action?.some(a => a.action === 'REMOVE') ?? false;
+  }
 }

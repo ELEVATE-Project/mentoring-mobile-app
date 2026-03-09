@@ -59,15 +59,15 @@ describe('PageHeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should subscribe to hasBadge$ on init', () => {
-    expect(component.hasBadge).toBeTrue();
+  it('should have badge status from hasBadge$', () => {
+    expect(component.hasBadge()).toBeTrue();
   });
 
   it('should emit actionEvent onAction', () => {
-    spyOn(component.actionEvent, 'next');
-    const event = { target: {} };
+    spyOn(component.actionEvent, 'emit');
+    const event = 'edit';
     component.onAction(event);
-    expect(component.actionEvent.next).toHaveBeenCalledWith(event);
+    expect(component.actionEvent.emit).toHaveBeenCalledWith(event);
   });
 
   it('should pop navigation onBack if not on home', () => {
@@ -101,13 +101,6 @@ describe('PageHeaderComponent', () => {
           actions: []
         }
       });
-      // specific spy verification for present is tricky as it's on the object returned by create
-      // but we mocked the return value in beforeEach so it should be fine if we had access to the spy.
-      // In beforeEach: 
-      // create returns { present: spy, onDidDismiss: spy returning {data: 'some-action'} }
-
-      // Since we can't easily access the created object's spy from here without refactoring the mock in beforeEach to store it,
-      // let's at least verify handleAction is called because onDidDismiss returns data.
       expect(component.handleAction).toHaveBeenCalledWith('some-action');
     });
 
@@ -127,23 +120,21 @@ describe('PageHeaderComponent', () => {
 
   describe('handleAction', () => {
     it('should emit block action', () => {
-      spyOn(component.actionEvent, 'next');
+      spyOn(component.actionEvent, 'emit');
       component.handleAction('block');
-      expect(component.actionEvent.next).toHaveBeenCalledWith('block');
+      expect(component.actionEvent.emit).toHaveBeenCalledWith('block');
     });
 
     it('should emit share action', () => {
-      spyOn(component.actionEvent, 'next');
+      spyOn(component.actionEvent, 'emit');
       component.handleAction('share');
-      expect(component.actionEvent.next).toHaveBeenCalledWith('share');
+      expect(component.actionEvent.emit).toHaveBeenCalledWith('share');
     });
 
     it('should not emit for unknown action', () => {
-      spyOn(component.actionEvent, 'next');
+      spyOn(component.actionEvent, 'emit');
       component.handleAction('unknown');
-      expect(component.actionEvent.next).not.toHaveBeenCalled();
+      expect(component.actionEvent.emit).not.toHaveBeenCalled();
     });
   });
-
-
 });

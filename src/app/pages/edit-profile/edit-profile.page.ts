@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, signal } from '@angular/core';
 import { HttpService } from 'src/app/core/services/http/http.service';
 import {
   DynamicFormComponent,
@@ -34,6 +34,7 @@ import { PlatformLocation, Location } from '@angular/common';
 })
 export class EditProfilePage implements OnInit, isDeactivatable {
   private win: any = window;
+  private readonly showFormState = signal(false);
   updated: boolean;
   @ViewChild('form1') form1: DynamicFormComponent;
   profileImageData: any = {
@@ -46,7 +47,16 @@ export class EditProfilePage implements OnInit, isDeactivatable {
   };
   path;
   localImage;
-  showForm: any = false;
+  get showForm(): boolean {
+    return this.showFormState();
+  }
+
+  set showForm(value: boolean) {
+    this.showFormState.set(!!value);
+  }
+
+  showFormSignal = this.showFormState.asReadonly();
+
   userDetails: any;
   entityNames: any;
   entityList: any;
@@ -91,12 +101,12 @@ export class EditProfilePage implements OnInit, isDeactivatable {
     this.entityNames = await this.updateEntityArray(this.userDetails?.profile_mandatory_fields, entityNames);
     this.entityList = await this.form.getEntities(this.entityNames, 'PROFILE');
     this.formData = await this.form.populateEntity(this.formData, this.entityList)
-    this.changeDetRef.detectChanges();
     if (this.userDetails) {
       this.profileImageData.image = this.userDetails.image;
       this.profileService.prefillData(this.userDetails, this.entityNames, this.formData);
       this.showForm = true;
     }
+    this.changeDetRef.detectChanges();
     if(this.userDetails?.profile_mandatory_fields?.length || !this.userDetails?.about){
     this.headerConfig.backButton = false;
     let msg = {

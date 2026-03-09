@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import * as _ from 'lodash';
-import { CHAT_MESSAGES } from 'src/app/core/constants/chatConstants';
 import { MENTOR_DIR_CARD_FORM } from 'src/app/core/constants/formConstant';
 import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
 import { ToastService, UtilService } from 'src/app/core/services';
@@ -19,7 +18,8 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
     selector: 'app-mentor-search-directory',
     templateUrl: './mentor-search-directory.page.html',
     styleUrls: ['./mentor-search-directory.page.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MentorSearchDirectoryPage implements OnInit {
 
@@ -27,29 +27,28 @@ export class MentorSearchDirectoryPage implements OnInit {
   pageSize = paginatorConstants.defaultPageSize;
   pageSizeOptions = paginatorConstants.pageSizeOptions;
 
-  public headerConfig: any = {
+  public headerConfig = signal({
     menu: true,
     notification: true,
     headerColor: 'primary',
-    // label:'MENU'
-  };
+  });
 
-  isOpen = false;
-  overlayChips = [];
-  filterData: any;
-  filteredDatas: any[];
-  filterIcon: boolean;
-  selectedChips: boolean;
-  urlQueryData: string;
-  setPaginatorToFirstpage: boolean;
-  page: any = 1;
-  data: any;
-  isLoaded: boolean;
-  totalCount: any;
-  limit: any;
-  chips = [];
+  isOpen = signal(false);
+  overlayChips = signal<any>(null);
+  filterData = signal<any>(null);
+  filteredDatas = signal<any>({});
+  filterIcon = signal<boolean>(false);
+  selectedChips = signal(false);
+  urlQueryData = signal<string | null>(null);
+  setPaginatorToFirstpage = signal(false);
+  page = signal<number>(1);
+  data = signal<any[]>([]);
+  isLoaded = signal<boolean>(false);
+  totalCount = signal<any>(null);
+  limit = signal<any>(null);
+  chips = signal<any[]>([]);
   buttonConfig: any;
-  searchAndCriterias: any = {
+  searchAndCriterias = signal({
     headerData: {
       searchText: '',
       criterias: {
@@ -57,11 +56,10 @@ export class MentorSearchDirectoryPage implements OnInit {
         label: undefined
       }
     }
-  };
-  valueFromChipAndFilter: string;
-  mentorForm: any
-  currentUserId: any;
-
+  });
+  valueFromChipAndFilter = signal<string | null>(null);
+  mentorForm = signal<any>(null);
+  currentUserId = signal<any>(null);
 
   constructor(
     private router: Router,
@@ -72,66 +70,64 @@ export class MentorSearchDirectoryPage implements OnInit {
     private utilService: UtilService,
     private toast: ToastService,
     private route: ActivatedRoute,
-    private localStorage: LocalStorageService,
+    private localStorage: LocalStorageService
   ) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.buttonConfig = data.button_config;
-    })
+    });
   }
 
   async ionViewWillEnter() {
-    let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    this.currentUserId= user?.id
+    let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    this.currentUserId.set(user?.id);
     const result = await this.formService.getForm(MENTOR_DIR_CARD_FORM);
-    this.mentorForm = _.get(result, 'data.fields.controls');
+    this.mentorForm.set(_.get(result, 'data.fields.controls'));
     const queryParams = this.route.snapshot.queryParams;
     const search = queryParams['search'];
     const chip = queryParams['chip'];
 
     if (search) {
-      this.searchAndCriterias = {
-        ...this.searchAndCriterias,
+      this.searchAndCriterias.set({
+        ...this.searchAndCriterias(),
         headerData: {
-          ...this.searchAndCriterias.headerData,
+          ...this.searchAndCriterias().headerData,
           searchText: search
         }
-      };
+      });
     }
 
     this.getMentors();
 
     const config = await this.permissionService.getPlatformConfig();
-    this.overlayChips = config?.result?.search_config?.search?.mentor?.fields;
+    this.overlayChips.set(config?.result?.search_config?.search?.mentor?.fields);
 
     if (chip) {
-      const matchedField = this.overlayChips?.find(d => d.name === chip);
+      const matchedField = this.overlayChips()?.find(d => d.name === chip);
       if (matchedField && search) {
-        this.searchAndCriterias = {
-          ...this.searchAndCriterias,
+        this.searchAndCriterias.set({
+          ...this.searchAndCriterias(),
           headerData: {
-            ...this.searchAndCriterias.headerData,
+            ...this.searchAndCriterias().headerData,
             criterias: {
               name: matchedField.name,
               label: matchedField.label
             }
           }
-        };
+        });
       }
     }
 
-    const obj = {filterType: 'mentor', org: true};
+    const obj = { filterType: 'mentor', org: true };
     let data = await this.formService.filterList(obj);
-    this.filterData = await this.utilService.transformToFilterData(data, obj);
-
+    this.filterData.set(await this.utilService.transformToFilterData(data, obj));
   }
 
-
-  async onSearch(event){
-    this.searchAndCriterias = {
+  async onSearch(event) {
+    this.searchAndCriterias.set({
       headerData: event,
-    };
+    });
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
@@ -144,8 +140,11 @@ export class MentorSearchDirectoryPage implements OnInit {
   }
 
   async onClearSearch($event: string) {
-    this.searchAndCriterias.headerData.searchText = '';
-    this.searchAndCriterias.headerData.criterias = undefined;
+    const current = this.searchAndCriterias();
+    current.headerData.searchText = '';
+    current.headerData.criterias = undefined;
+    this.searchAndCriterias.set({ ...current });
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { search: '', chip: '' },
@@ -158,55 +157,57 @@ export class MentorSearchDirectoryPage implements OnInit {
     let modal = await this.modalCtrl.create({
       component: FilterPopupComponent,
       cssClass: 'filter-modal',
-      componentProps: { filterData: this.filterData }
+      componentProps: { filterData: this.filterData() }
     });
 
     modal.onDidDismiss().then(async (dataReturned) => {
-      this.filteredDatas = [];
-      if(dataReturned?.data?.role === 'closed'){
-        this.filterData = dataReturned?.data?.data;
+      if (dataReturned?.data?.role === 'closed') {
+        this.filterData.set(dataReturned?.data?.data);
         return;
       }
-      if(Object.keys(dataReturned?.data).length === 0){
-        this.chips = [];
-        this.filteredDatas = [];
-        this.urlQueryData = null;
+      if (Object.keys(dataReturned?.data || {}).length === 0) {
+        this.chips.set([]);
+        this.filteredDatas.set({});
+        this.urlQueryData.set(null);
       }
       if (dataReturned.data && dataReturned.data.data) {
         if (dataReturned.data.data.selectedFilters) {
+          const newFilteredDatas = {};
           for (let key in dataReturned.data.data.selectedFilters) {
-            this.filteredDatas[key] = dataReturned.data.data.selectedFilters[key].slice(0, dataReturned.data.data.selectedFilters[key].length).map(obj => obj.value).join(',').toString()
+            newFilteredDatas[key] = dataReturned.data.data.selectedFilters[key].slice(0, dataReturned.data.data.selectedFilters[key].length).map(obj => obj.value).join(',').toString();
           }
-          this.selectedChips = true;
+          this.filteredDatas.set(newFilteredDatas);
+          this.selectedChips.set(true);
         }
         this.extractLabels(dataReturned.data.data.selectedFilters);
         this.getUrlQueryData();
       }
-      this.page = 1;
-      this.setPaginatorToFirstpage = true;
-      this.getMentors()
+      this.page.set(1);
+      this.setPaginatorToFirstpage.set(true);
+      this.getMentors();
     });
     modal.present();
   }
 
   extractLabels(data) {
-    this.chips = [];
+    const newChips = [];
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
-        this.chips.push(...data[key]);
+        newChips.push(...data[key]);
       }
     }
+    this.chips.set(newChips);
   }
 
   getUrlQueryData() {
-    const queryString = Object.keys(this.filteredDatas)
-      .map(key => `${key}=${this.filteredDatas[key]}`)
+    const currentFiltered = this.filteredDatas();
+    const queryString = Object.keys(currentFiltered)
+      .map(key => `${key}=${currentFiltered[key]}`)
       .join('&');
-
-    this.urlQueryData = queryString;
+    this.urlQueryData.set(queryString);
   }
 
-  eventAction(event){
+  eventAction(event) {
     switch (event.type) {
       case 'cardSelect':
         this.router.navigate([CommonRoutes.MENTOR_DETAILS, event?.data?.id]);
@@ -215,102 +216,111 @@ export class MentorSearchDirectoryPage implements OnInit {
         this.router.navigate([CommonRoutes.CHAT_REQ, event.data]);
         break;
       case 'requestSession':
-        this.router.navigate([CommonRoutes.SESSION_REQUEST], {queryParams: {data: event.data}});
+        this.router.navigate([CommonRoutes.SESSION_REQUEST], { queryParams: { data: event.data } });
         break;
     }
   }
 
   eventHandler(event: any) {
-    this.valueFromChipAndFilter = event;
-    this.searchAndCriterias.headerData.criterias = {name: undefined, label: undefined}
+    this.valueFromChipAndFilter.set(event);
+    const current = this.searchAndCriterias();
+    current.headerData.criterias = { name: undefined, label: undefined };
+    this.searchAndCriterias.set({ ...current });
   }
 
-  onPageChange(event){
-    this.page = event.pageIndex + 1,
-      this.pageSize = this.paginator.pageSize;
-    this.getMentors()
+  onPageChange(event) {
+    this.page.set(event.pageIndex + 1);
+    this.pageSize = this.paginator.pageSize;
+    this.getMentors();
   }
 
-  removeFilteredData(chip){
-    this.filterData.map((filter) => {
+  removeFilteredData(chip) {
+    const updatedFilterData = this.filterData().map((filter) => {
       filter.options.map((option) => {
         if (option.value === chip) {
           option.selected = false;
         }
       });
       return filter;
-    })
-    for (let key in this.filteredDatas) {
-      if (this.filteredDatas.hasOwnProperty(key)) {
+    });
+    this.filterData.set(updatedFilterData);
 
-        let values = this.filteredDatas[key].split(',');
-
+    const currentFiltered = { ...this.filteredDatas() };
+    for (let key in currentFiltered) {
+      if (currentFiltered.hasOwnProperty(key)) {
+        let values = currentFiltered[key].split(',');
         let chipIndex = values.indexOf(chip);
-
         if (chipIndex > -1) {
           values.splice(chipIndex, 1);
-
           let newValue = values.join(',');
-
           if (newValue === '') {
-            delete this.filteredDatas[key];
+            delete currentFiltered[key];
           } else {
-            this.filteredDatas[key] = newValue;
+            currentFiltered[key] = newValue;
           }
         }
       }
     }
+    this.filteredDatas.set(currentFiltered);
   }
 
-  async getMentors(){
+  async getMentors() {
+    const searchData = this.searchAndCriterias().headerData;
     var obj = {
-      page: this.page,
+      page: this.page(),
       pageSize: this.pageSize,
-      searchText: this.searchAndCriterias.headerData.searchText?.trim(),
-      selectedChip: this.searchAndCriterias.headerData.criterias?.name,
-      urlQueryData: this.urlQueryData
+      searchText: searchData.searchText?.trim(),
+      selectedChip: searchData.criterias?.name,
+      urlQueryData: this.urlQueryData()
     };
-    let data = await this.profileService.getMentors(true,obj);
-    if (data?.result?.data?.length) {
-      this.isOpen = false;
-      this.data = data.result.data;
-      this.totalCount = data.result.count;
-      this.data.forEach(mentor => {
-        if (mentor.id === this.currentUserId) {
-          mentor.buttonConfig = this.buttonConfig.map(btn => ({ ...btn, isHide: true }));
+    let response = await this.profileService.getMentors(true, obj);
+    if (response?.result?.data?.length) {
+      this.isOpen.set(false);
+      
+      const processedData = response.result.data.map(mentor => {
+        const mentorCopy = { ...mentor };
+        if (mentorCopy.id === this.currentUserId()) {
+          mentorCopy.buttonConfig = this.buttonConfig.map(btn => ({ ...btn, isHide: true }));
         } else {
-          mentor.buttonConfig = this.buttonConfig.map(btn => ({ ...btn }));
+          mentorCopy.buttonConfig = this.buttonConfig.map(btn => ({ ...btn }));
         }
+        return mentorCopy;
       });
-      // this.filterIcon = true;
+
+      this.data.set(processedData);
+      this.totalCount.set(response.result.count);
     } else {
-      this.data = [];
-      this.totalCount = [];
-      if (Object.keys(this.filteredDatas || {}).length === 0 && !this.searchAndCriterias.headerData.criterias?.name) {
-        this.filterIcon = false;
+      this.data.set([]);
+      this.totalCount.set(0);
+      if (Object.keys(this.filteredDatas() || {}).length === 0 && !searchData.criterias?.name) {
+        this.filterIcon.set(false);
       }
     }
-    this.filterIcon = !!obj.searchText?.trim();
+    this.filterIcon.set(!!obj.searchText?.trim());
+    this.isLoaded.set(true);
   }
 
   removeChip(event) {
-    this.chips.splice(event.index, 1);
+    const current = [...this.chips()];
+    current.splice(event.index, 1);
+    this.chips.set(current);
     this.removeFilteredData(event.chipValue);
     this.getUrlQueryData();
     this.getMentors();
   }
 
-  ionViewDidLeave(){
-    this.searchAndCriterias = {
+  ionViewDidLeave() {
+    this.searchAndCriterias.set({
       headerData: {
         searchText: '',
         criterias: {
-          name: undefined
+          name: undefined,
+          label: undefined
         }
       }
-    };
-    this.filterIcon = false;
-    this.chips = [];
-    this.urlQueryData = null;
+    });
+    this.filterIcon.set(false);
+    this.chips.set([]);
+    this.urlQueryData.set(null);
   }
 }

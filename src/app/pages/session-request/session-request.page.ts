@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {  Component, OnInit, ViewChild, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService, UtilService } from 'src/app/core/services';
 import { DynamicFormComponent } from 'src/app/shared/components';
@@ -22,7 +22,7 @@ export class SessionRequestPage implements OnInit {
   @ViewChild('form1') form1: DynamicFormComponent;
   isSubmited: boolean = false;
   ids: any = {};
-  formData: any;
+  readonly formData = signal<any>(null);
   timezones: string[] = moment.tz.names(); // All timezones
   selectedTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -34,9 +34,11 @@ export class SessionRequestPage implements OnInit {
   }
 
   async ionViewWillEnter() {
+    this.formData.set(null);
+    this.isSubmited = false;
     this.activatedRoute.queryParams.subscribe(({ data }) => this.ids.requestee_id = data);
     const result = await this.form.getForm(REQUEST_SESSION_FORM);
-    this.formData = _.get(result, 'data.fields');
+    this.formData.set(_.get(result, 'data.fields'));
   }
 
  
