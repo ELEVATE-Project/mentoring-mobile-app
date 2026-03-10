@@ -61,13 +61,15 @@ export class GenericProfileHeaderComponent implements OnInit {
   }
 
   async action(event) {
+    const header = this.headerData();
+    const meta = this.buttonConfig()?.meta;
     switch (event) {
       case 'edit':
         this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`], {replaceUrl:true});
         break;
 
       case 'role':
-        if (this.headerData()?.about != null || environment['isAuthBypassed']) {
+        if (header?.about != null || environment['isAuthBypassed']) {
           this.router.navigate([`/${CommonRoutes.MENTOR_QUESTIONNAIRE}`]);
         } else {
           this.profileService.upDateProfilePopup();
@@ -75,11 +77,11 @@ export class GenericProfileHeaderComponent implements OnInit {
         break;
 
       case 'share':
-        if (this.isMobile && navigator.share && this.buttonConfig()?.meta) {
+        if (this.isMobile && navigator.share && meta) {
           this.translateText();
-          let url = `/mentoring/${CommonRoutes.MENTOR_DETAILS}/${this.buttonConfig().meta.id}`;
+          let url = `/mentoring/${CommonRoutes.MENTOR_DETAILS}/${meta.id}`;
           let link = await this.utilService.getDeepLink(url);
-          const name = (this.headerData()?.name || '').trim();
+          const name = (header?.name || '').trim();
           let params = {
             link: link,
             subject: name,
@@ -92,17 +94,17 @@ export class GenericProfileHeaderComponent implements OnInit {
         }
         break;
       case 'requestSession':
-        this.router.navigate([`/${CommonRoutes.SESSION_REQUEST}`], {queryParams: {data: this.headerData().id}});
+        this.router.navigate([`/${CommonRoutes.SESSION_REQUEST}`], {queryParams: {data: header?.id}});
         break;
       case 'chat':
-        this.headerData().is_connected
+        header?.is_connected
           ? this.router.navigate([
             `/${CommonRoutes.CHAT}`,
-            this.headerData().connection_details?.room_id,
-          ],{queryParams: {id: this.headerData().id}})
+            header?.connection_details?.room_id,
+          ],{queryParams: {id: header?.id}})
           : this.router.navigate([
             `/${CommonRoutes.CHAT_REQ}`,
-            this.headerData().id,
+            header?.id,
           ]);
     }
   }
@@ -130,7 +132,8 @@ export class GenericProfileHeaderComponent implements OnInit {
   };
 
   async viewRoles(){
-    const titlesArray = this.headerData().organizations[0].roles.map(item => item.title);
+    const roles = this.headerData()?.organizations?.[0]?.roles || [];
+    const titlesArray = roles.map(item => item.title);
     this.profileService.viewRolesModal(titlesArray);
   }
 }

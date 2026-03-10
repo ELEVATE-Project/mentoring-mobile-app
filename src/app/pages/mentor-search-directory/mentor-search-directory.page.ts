@@ -140,10 +140,14 @@ export class MentorSearchDirectoryPage implements OnInit {
   }
 
   async onClearSearch($event: string) {
-    const current = this.searchAndCriterias();
-    current.headerData.searchText = '';
-    current.headerData.criterias = undefined;
-    this.searchAndCriterias.set({ ...current });
+    this.searchAndCriterias.update(current => ({
+      ...current,
+      headerData: {
+        ...current.headerData,
+        searchText: '',
+        criterias: undefined
+      }
+    }));
 
     this.router.navigate([], {
       relativeTo: this.route,
@@ -223,9 +227,13 @@ export class MentorSearchDirectoryPage implements OnInit {
 
   eventHandler(event: any) {
     this.valueFromChipAndFilter.set(event);
-    const current = this.searchAndCriterias();
-    current.headerData.criterias = { name: undefined, label: undefined };
-    this.searchAndCriterias.set({ ...current });
+    this.searchAndCriterias.update(current => ({
+      ...current,
+      headerData: {
+        ...current.headerData,
+        criterias: { name: undefined, label: undefined }
+      }
+    }));
   }
 
   onPageChange(event) {
@@ -235,14 +243,12 @@ export class MentorSearchDirectoryPage implements OnInit {
   }
 
   removeFilteredData(chip) {
-    const updatedFilterData = this.filterData().map((filter) => {
-      filter.options.map((option) => {
-        if (option.value === chip) {
-          option.selected = false;
-        }
-      });
-      return filter;
-    });
+    const updatedFilterData = this.filterData().map(filter => ({
+      ...filter,
+      options: filter.options.map(option => (
+        option.value === chip ? { ...option, selected: false } : option
+      ))
+    }));
     this.filterData.set(updatedFilterData);
 
     const currentFiltered = { ...this.filteredDatas() };

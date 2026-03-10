@@ -8,7 +8,7 @@ import {
 import { MenuController } from '@ionic/angular';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import jwt_decode from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode';
 import { paginatorConstants } from 'src/app/core/constants/paginatorConstants';
 import { MatPaginator } from '@angular/material/paginator';
 
@@ -49,7 +49,7 @@ export class LoginActivityPage implements OnInit {
   async ngOnInit() {
     this.sessionActivities();
     let token = await this.localStorage.getLocalData(localKeys.TOKEN);
-    this.sessionData = jwt_decode(token.access_token);
+    this.sessionData = jwtDecode(token.access_token);
     this.sessionId = this.sessionData?.data?.session_id;
   }
 

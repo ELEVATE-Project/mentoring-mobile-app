@@ -388,4 +388,8 @@
   "SELECTED": "चयनित",
   "SELECT_PAGE": "पेज चुनें",
   "DESELECT_PAGE": "पेज चयन हटाएँ"
+  ,
+  "YOU_HAVE_BLOCKED": "आपने {{name}} को ब्लॉक किया है",
+  "DO_YOU_WISH_TO_UNBLOCK": "क्या आप अनब्लॉक करना चाहते हैं?",
+  "TYPE_MESSAGE_HERE": "यहाँ संदेश टाइप करें..."
 }

@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CHAT_LIB_META_KEYS } from 'src/app/core/constants/formConstant';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
@@ -15,64 +15,84 @@ import { RocketChatApiService } from 'sl-chat-library';
     styleUrls: ['./chat-window.page.scss'],
     standalone: false
 })
-export class ChatWindowPage implements OnInit {
-  showChat: boolean = false;
+export class ChatWindowPage implements OnInit, OnDestroy {
+  private readonly routerParams = inject(ActivatedRoute);
+  private readonly location = inject(Location);
+  private readonly profileService = inject(ProfileService);
+  private readonly router = inject(Router);
+  private readonly apiServer = inject(HttpService);
+  private readonly toastService = inject(ToastService);
+  private readonly translate = inject(TranslateService);
+  private readonly rocket = inject(RocketChatApiService);
+
+  readonly showChat = signal(false);
   public headerConfig: any = {
     menu: false,
     headerColor: 'primary',
   };
-  rid: any;
-  id : any;
-  translations: any;
-  constructor(
-    private routerParams: ActivatedRoute,
-    private location: Location,
-    private profileService: ProfileService,
-    private router: Router,
-    private apiServer : HttpService,
-    private toastService: ToastService,
-    private translate: TranslateService,
-    private rocket: RocketChatApiService
-  ) {
-    routerParams.params.subscribe((parameters) => {
-      this.rid = parameters?.id;
-      this.ngOnInit();
+  readonly rid = signal<string | null>(null);
+  readonly id = signal<string | null>(null);
+  readonly translations = signal<Record<string, string>>({});
+
+  constructor() {
+    this.routerParams.params.subscribe((parameters) => {
+      this.rid.set(parameters?.id ?? null);
+      void this.initializeChat();
     });
-    routerParams.queryParams.subscribe((parameters) => {
-      this.id = parameters?.id;
-    })
+
+    this.routerParams.queryParams.subscribe((parameters) => {
+      this.id.set(parameters?.id ?? null);
+    });
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
+    if (!this.rid()) {
+      return;
+    }
+
+    await this.initializeChat();
+  }
+
+  private async initializeChat(): Promise<void> {
+    if (!this.rid()) {
+      return;
+    }
+
     await this.profileService.getChatToken();
-    this.showChat = true;
+    this.showChat.set(true);
     const keys = Object.values(CHAT_LIB_META_KEYS);
     this.translate.get(keys).subscribe(res => {
-      this.translations = res;
+      this.translations.set(res);
     });
   }
-  onBack() {
+
+  onBack(): void {
     this.location.back();
   }
 
-  onClickProfile(externalId){
-    this.apiServer.post({url:urlConstants.API_URLS.GETUSERIDBYRID, payload:{"external_user_id":externalId}}).then((resp) =>{
+  async onClickProfile(externalId: string): Promise<void> {
+    const resp = await this.apiServer.post({
+      url: urlConstants.API_URLS.GETUSERIDBYRID,
+      payload: { external_user_id: externalId }
+    });
+    if (resp?.result?.user_id) {
       this.router.navigate([CommonRoutes.MENTOR_DETAILS, resp?.result?.user_id]);
-    })
+    }
   }
 
-  limitExceeded(event){
+  limitExceeded(_event: unknown): void {
     this.toastService.showToast('MESSAGE_TEXT_LIMIT','danger');
   }
 
   ngOnDestroy(): void {
-    if(this.rid)
-    this.rocket.isWebSocketInitialized =false;
-    
+    if (this.rid()) {
+      this.rocket.isWebSocketInitialized = false;
+    }
   }
 
-  ionViewWillLeave() {
-    if(this.rid)
-      this.rocket.isWebSocketInitialized =false;
+  ionViewWillLeave(): void {
+    if (this.rid()) {
+      this.rocket.isWebSocketInitialized = false;
+    }
   }
 }

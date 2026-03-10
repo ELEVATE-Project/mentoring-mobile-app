@@ -4,13 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { PrivatePage } from './private.page';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translate/http-loader';
 import { RouteReuseStrategy } from '@angular/router';
 import { PrivatePageRoutingModule } from './private-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
-export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
-  new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
 @NgModule({
   declarations: [PrivatePage],
   imports: [
@@ -21,12 +18,17 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: translateHttpLoaderFactory,
-        deps: [HttpClient],
+        useClass: TranslateHttpLoader,
       },
     }),
     SharedModule,
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {
+      provide: TRANSLATE_HTTP_LOADER_CONFIG,
+      useValue: { prefix: './assets/i18n/', suffix: '.json' }
+    },
+  ],
 })
 export class PrivatePageModule {}

@@ -72,7 +72,7 @@ describe('ChatRequestPage', () => {
   });
 
   it('should initialize with default values', () => {
-    expect(component.message).toBe('Hi, I would like to connect with you.');
+    expect(component.message()).toBe('Hi, I would like to connect with you.');
     expect(component.headerConfig).toEqual({
       menu: false,
       headerColor: 'primary'
@@ -81,7 +81,7 @@ describe('ChatRequestPage', () => {
   });
 
   it('should extract id from route params', () => {
-    expect(component.id).toBe('123');
+    expect(component.id()).toBe('123');
   });
 
   describe('ngOnInit', () => {
@@ -108,7 +108,7 @@ describe('ChatRequestPage', () => {
 
       fixture.whenStable().then(() => {
         expect(httpService.post).toHaveBeenCalled();
-        expect(component.info.status).toBe('PENDING');
+        expect(component.info().status).toBe('PENDING');
       });
     }));
 
@@ -126,7 +126,7 @@ describe('ChatRequestPage', () => {
       component.getConnectionInfo();
 
       fixture.whenStable().then(() => {
-        expect(component.message).toBe('');
+        expect(component.message()).toBe('');
       });
     }));
 
@@ -165,7 +165,7 @@ describe('ChatRequestPage', () => {
       component.getConnectionInfo();
 
       fixture.whenStable().then(() => {
-        expect(component.messages).toEqual(CHAT_MESSAGES.INITIATOR);
+        expect(component.messages()).toEqual(CHAT_MESSAGES.INITIATOR);
       });
     }));
 
@@ -182,25 +182,25 @@ describe('ChatRequestPage', () => {
       component.getConnectionInfo();
 
       fixture.whenStable().then(() => {
-        expect(component.messages).toEqual(CHAT_MESSAGES.RECEIVER);
+        expect(component.messages()).toEqual(CHAT_MESSAGES.RECEIVER);
       });
     }));
   });
 
   describe('sendRequest', () => {
     beforeEach(() => {
-      component.id = '123';
-      component.message = 'Test message';
+      component.id.set('123');
+      component.message.set('Test message');
     });
 
     it('should not send request if message is empty or whitespace', () => {
-      component.message = '   ';
+      component.message.set('   ');
       component.sendRequest();
       expect(httpService.post).not.toHaveBeenCalled();
     });
 
     it('should show error toast if message exceeds limit', () => {
-      component.message = 'a'.repeat(component.messageLimit + 1);
+      component.message.set('a'.repeat(component.messageLimit + 1));
       component.sendRequest();
       expect(toastService.showToast).toHaveBeenCalledWith('MESSAGE_TEXT_LIMIT', 'danger');
       expect(httpService.post).not.toHaveBeenCalled();
@@ -215,7 +215,7 @@ describe('ChatRequestPage', () => {
 
       fixture.whenStable().then(() => {
         expect(httpService.post).toHaveBeenCalled();
-        expect(component.info.status).toBe('REQUESTED');
+        expect(component.info().status).toBe('REQUESTED');
         expect(component.getConnectionInfo).toHaveBeenCalled();
       });
     }));
@@ -236,10 +236,10 @@ describe('ChatRequestPage', () => {
 
   describe('acceptRequest', () => {
     beforeEach(() => {
-      component.id = '123';
-      component.info = {
+      component.id.set('123');
+      component.info.set({
         user_details: { name: 'Jane Doe' }
-      };
+      });
     });
 
     it('should accept request and navigate to chat', waitForAsync(() => {
@@ -260,7 +260,7 @@ describe('ChatRequestPage', () => {
           'Accepted message request from Jane Doe',
           'success'
         );
-        expect(component.info.status).toBe('ACCEPTED');
+        expect(component.info().status).toBe('ACCEPTED');
         expect(router.navigate).toHaveBeenCalledWith(
           [CommonRoutes.CHAT, 'room789'],
           { replaceUrl: true, queryParams: { id: 'conn123' } }
@@ -269,7 +269,7 @@ describe('ChatRequestPage', () => {
     }));
 
     it('should use default name if user details name is not available', waitForAsync(() => {
-      component.info = { user_details: {} };
+      component.info.set({ user_details: {} });
       const mockResponse = {
         result: {
           id: 'conn123',
@@ -330,7 +330,7 @@ describe('ChatRequestPage', () => {
 
   describe('rejectRequest', () => {
     beforeEach(() => {
-      component.id = '123';
+      component.id.set('123');
     });
 
     it('should reject request and show toast', waitForAsync(() => {
@@ -341,8 +341,8 @@ describe('ChatRequestPage', () => {
 
       fixture.whenStable().then(() => {
         expect(httpService.post).toHaveBeenCalled();
-        expect(component.info.status).toBe('REJECTED');
-        expect(component.messages).toEqual(CHAT_MESSAGES.RECEIVER);
+        expect(component.info().status).toBe('REJECTED');
+        expect(component.messages()).toEqual(CHAT_MESSAGES.RECEIVER);
         expect(toastService.showToast).toHaveBeenCalledWith('REJECTED_MESSAGE_REQ', 'danger');
       });
     }));
@@ -362,7 +362,7 @@ describe('ChatRequestPage', () => {
 
   describe('goToProfile', () => {
     it('should navigate to mentor details page', () => {
-      component.id = '123';
+      component.id.set('123');
       component.goToProfile();
       expect(router.navigate).toHaveBeenCalledWith([CommonRoutes.MENTOR_DETAILS, '123']);
     });
@@ -375,12 +375,12 @@ describe('ChatRequestPage', () => {
       component.getConnectionInfo();
       
       fixture.whenStable().then(() => {
-        expect(component.info).toBeNull();
+        expect(component.info()).toBeNull();
       });
     }));
 
     it('should handle message with exact character limit', () => {
-      component.message = 'a'.repeat(component.messageLimit);
+      component.message.set('a'.repeat(component.messageLimit));
       const mockResponse = { result: {} };
       httpService.post.and.returnValue(Promise.resolve(mockResponse));
       spyOn(component, 'getConnectionInfo');
@@ -391,13 +391,13 @@ describe('ChatRequestPage', () => {
     });
 
     it('should trim whitespace from message before validation', () => {
-      component.message = '  ';
+      component.message.set('  ');
       component.sendRequest();
       expect(httpService.post).not.toHaveBeenCalled();
     });
 
     it('should handle response without meta in acceptRequest', waitForAsync(() => {
-      component.info = { user_details: { name: 'Test User' } };
+      component.info.set({ user_details: { name: 'Test User' } });
       const mockResponse = {
         result: {
           id: 'conn123',
@@ -410,7 +410,7 @@ describe('ChatRequestPage', () => {
       component.acceptRequest();
 
       fixture.whenStable().then(() => {
-        expect(component.info.status).toBe('ACCEPTED');
+        expect(component.info().status).toBe('ACCEPTED');
       });
     }));
 
@@ -430,11 +430,11 @@ describe('ChatRequestPage', () => {
 
   describe('Message validation', () => {
     beforeEach(() => {
-      component.id = '123';
+      component.id.set('123');
     });
 
     it('should trim leading whitespace before checking if empty', () => {
-      component.message = '   hello';
+      component.message.set('   hello');
       const mockResponse = { result: {} };
       httpService.post.and.returnValue(Promise.resolve(mockResponse));
       
@@ -444,7 +444,7 @@ describe('ChatRequestPage', () => {
     });
 
     it('should handle message at exactly the limit boundary', () => {
-      component.message = 'a'.repeat(component.messageLimit);
+      component.message.set('a'.repeat(component.messageLimit));
       const mockResponse = { result: {} };
       httpService.post.and.returnValue(Promise.resolve(mockResponse));
       
@@ -455,7 +455,7 @@ describe('ChatRequestPage', () => {
     });
 
     it('should reject message one character over limit', () => {
-      component.message = 'a'.repeat(component.messageLimit + 1);
+      component.message.set('a'.repeat(component.messageLimit + 1));
       
       component.sendRequest();
       
@@ -466,7 +466,7 @@ describe('ChatRequestPage', () => {
 
   describe('Constructor', () => {
     it('should subscribe to route params', () => {
-      expect(component.id).toBe('123');
+      expect(component.id()).toBe('123');
     });
   });
 
@@ -484,7 +484,7 @@ describe('ChatRequestPage', () => {
       component.getConnectionInfo();
 
       fixture.whenStable().then(() => {
-        expect(component.info.status).toBe('PENDING');
+        expect(component.info().status).toBe('PENDING');
       });
     }));
 
@@ -501,8 +501,63 @@ describe('ChatRequestPage', () => {
       component.getConnectionInfo();
 
       fixture.whenStable().then(() => {
-        expect(component.info.status).toBe('REJECTED');
+        expect(component.info().status).toBe('REJECTED');
       });
     }));
+  });
+
+  describe('Computed signals', () => {
+    it('should compute status from info', () => {
+      component.info.set({ status: 'PENDING' });
+      expect(component.status()).toBe('PENDING');
+    });
+
+    it('should compute userDetails from info', () => {
+      component.info.set({ user_details: { name: 'Test' } });
+      expect(component.userDetails()).toEqual({ name: 'Test' });
+    });
+
+    it('should compute profileImage with fallback', () => {
+      component.info.set({ user_details: {} });
+      expect(component.profileImage()).toBe('assets/prof-img/user.png');
+
+      component.info.set({ user_details: { image: 'custom.png' } });
+      expect(component.profileImage()).toBe('custom.png');
+    });
+
+    it('should compute isInitiator correctly', () => {
+      component.info.set({ created_by: '123', user_id: '123' });
+      expect(component.isInitiator()).toBeTrue();
+
+      component.info.set({ created_by: '456', user_id: '123' });
+      expect(component.isInitiator()).toBeFalse();
+    });
+
+    it('should wait for participant role resolution before showing current status actions', () => {
+      component.info.set({ status: 'REQUESTED' });
+      expect(component.hasResolvedParticipantRole()).toBeFalse();
+      expect(component.showCurrentStatusActions()).toBeFalse();
+
+      component.info.set({ created_by: '456', user_id: '123', status: 'REQUESTED' });
+      expect(component.hasResolvedParticipantRole()).toBeTrue();
+      expect(component.showCurrentStatusActions()).toBeTrue();
+
+      component.info.set({ created_by: '123', user_id: '123', status: 'REQUESTED' });
+      expect(component.showCurrentStatusActions()).toBeFalse();
+    });
+
+    it('should compute showMessageInput correctly', () => {
+      component.info.set({ created_by: '123', user_id: '123', status: 'PENDING' });
+      expect(component.showMessageInput()).toBeTrue();
+
+      component.info.set({ created_by: '123', user_id: '123', status: 'ACCEPTED' });
+      expect(component.showMessageInput()).toBeFalse();
+    });
+
+    it('should compute statusMessage from messages and status', () => {
+      component.info.set({ status: 'PENDING' });
+      component.messages.set(CHAT_MESSAGES.INITIATOR);
+      expect(component.statusMessage()).toEqual(CHAT_MESSAGES.INITIATOR['PENDING']);
+    });
   });
 });

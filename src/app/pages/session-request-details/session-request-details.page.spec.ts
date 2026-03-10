@@ -62,7 +62,7 @@ describe('SessionRequestDetailsPage', () => {
     fixture = TestBed.createComponent(SessionRequestDetailsPage);
     component = fixture.componentInstance;
     component.modal = mockModal as any;
-    component.params = { id: '123' };
+    component.params.set({ id: '123' });
 
     // Default mocks/spies
     mockFormService.getForm.and.returnValue(Promise.resolve({ data: { fields: { forms: [{ name: 'zoom', hint: 'zoom_hint', value: 'zoom_val' }] } } }));
@@ -77,7 +77,7 @@ describe('SessionRequestDetailsPage', () => {
     mockSessionService.requestSessionUserAvailability.and.returnValue(Promise.resolve({ result: [] }));
 
     // Initialize component data to prevent template errors
-    component.apiResponse = {
+    component.apiResponse.set({
       id: 'req_1',
       session_id: 'sess_1',
       start_date: 100,
@@ -92,9 +92,9 @@ describe('SessionRequestDetailsPage', () => {
         image: 'img.png',
         designation: [{ label: 'dev' }]
       }
-    };
-    component.userId = 'user_123';
-    component.scheduledSessionDetals = []; // Initialize to prevent template error
+    });
+    component.userId.set('user_123');
+    component.scheduledSessionDetals.set([]); // Initialize to prevent template error
 
     fixture.detectChanges();
   }));
@@ -112,10 +112,10 @@ describe('SessionRequestDetailsPage', () => {
 
       component.ionViewWillEnter();
       tick();
-      expect(component.userId).toBeDefined();
-      expect(component.params).toEqual({ id: '123' });
+      expect(component.userId()).toBeDefined();
+      expect(component.params()).toEqual({ id: '123' });
       expect(mockSessionService.getReqSessionDetails).toHaveBeenCalledWith('123');
-      expect(component.apiResponse).toBeDefined();
+      expect(component.apiResponse()).toBeDefined();
     }));
 
     it('should fetch session details if ACCEPTED', fakeAsync(() => {
@@ -127,18 +127,18 @@ describe('SessionRequestDetailsPage', () => {
       tick();
 
       expect(mockSessionService.getSessionDetailsAPI).toHaveBeenCalledWith('sess_1');
-      expect(component.isMeetingLinkAdded).toBeTrue();
-      expect(component.isEnabled).toBeFalse(); // far future
+      expect(component.isMeetingLinkAdded()).toBeTrue();
+      expect(component.isEnabled()).toBeFalse(); // far future
     }));
   });
 
   describe('toggleText', () => {
     it('should toggle showFullText', () => {
-      component.showFullText = false;
+      component.showFullText.set(false);
       component.toggleText();
-      expect(component.showFullText).toBeTrue();
+      expect(component.showFullText()).toBeTrue();
       component.toggleText();
-      expect(component.showFullText).toBeFalse();
+      expect(component.showFullText()).toBeFalse();
     });
   });
 
@@ -153,7 +153,7 @@ describe('SessionRequestDetailsPage', () => {
       expect(mockSessionService.requestSessionAccept).toHaveBeenCalledWith('req_1');
       expect(mockToastService.showToast).toHaveBeenCalledWith('Accepted', 'success');
       expect(mockSessionService.requestSessionUserAvailability).toHaveBeenCalled(); // via getAllUpdatedSession
-      expect(component.isAccepted).toBeTrue();
+      expect(component.isAccepted()).toBeTrue();
     }));
   });
 
@@ -169,7 +169,7 @@ describe('SessionRequestDetailsPage', () => {
       expect(mockUtilService.alertPopup).toHaveBeenCalled();
       expect(mockSessionService.requestSessionReject).toHaveBeenCalledWith('req_1', 'Busy');
       expect(mockToastService.showToast).toHaveBeenCalledWith('Rejected', 'danger');
-      expect(component.isRejected).toBeTrue();
+      expect(component.isRejected()).toBeTrue();
     }));
 
     it('should not reject if cancelled', fakeAsync(() => {
@@ -186,8 +186,8 @@ describe('SessionRequestDetailsPage', () => {
   describe('addLink', () => {
     it('should open modal and set session id', () => {
       component.addLink(true, 'sess_1');
-      expect(component.isModalOpen).toBeTrue();
-      expect(component.sessionId).toBe('sess_1');
+      expect(component.isModalOpen()).toBeTrue();
+      expect(component.sessionId()).toBe('sess_1');
     });
   });
 
@@ -201,8 +201,8 @@ describe('SessionRequestDetailsPage', () => {
           value: { link: 'http://zoom.us', password: 'pass', meetingId: '123' }
         }
       } as any;
-      component.sessionId = 'sess_1';
-      component.params = { id: 'req_1' };
+      component.sessionId.set('sess_1');
+      component.params.set({ id: 'req_1' });
 
       mockSessionService.createSession.and.returnValue(Promise.resolve({}));
       mockSessionService.getReqSessionDetails.and.returnValue(Promise.resolve({
@@ -235,8 +235,8 @@ describe('SessionRequestDetailsPage', () => {
         }
       });
       expect(mockSessionService.createSession).toHaveBeenCalledWith(component.meetingInfo, 'sess_1');
-      expect(component.isMeetingLinkAdded).toBeTrue();
-      expect(component.editSessionBtn).toBeTrue();
+      expect(component.isMeetingLinkAdded()).toBeTrue();
+      expect(component.editSessionBtn()).toBeTrue();
     }));
   });
 
@@ -256,17 +256,17 @@ describe('SessionRequestDetailsPage', () => {
           }
         }
       ];
-      component.sessionDetails = {
+      component.sessionDetails.set({
         meeting_info: {
           platform: 'Google Meet',
           link: 'http://meet.google.com',
           meta: { meetingId: 'm1', password: 'p1' }
         }
-      };
+      });
 
       component.editLink(true, 'sess_1');
 
-      expect(component.isModalOpen).toBeTrue();
+      expect(component.isModalOpen()).toBeTrue();
       expect(component.selectedLink.name).toBe('Google Meet');
       // Verify controls were updated (by reference)
       const controls = component.meetingPlatforms[0].form.controls;
@@ -280,7 +280,7 @@ describe('SessionRequestDetailsPage', () => {
       component.modal = mockModal; // Ensure modal is set
       component.addLater();
       expect(mockModal.dismiss).toHaveBeenCalled();
-      expect(component.isModalOpen).toBeFalse();
+      expect(component.isModalOpen()).toBeFalse();
     });
   });
 
