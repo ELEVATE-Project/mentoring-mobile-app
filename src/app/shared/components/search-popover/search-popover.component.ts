@@ -407,10 +407,13 @@ async onSelectAllX(isChecked: boolean) {
     this.countSelectedList = 0;
     this.page = 1;
     this.setPaginatorToFirstpage = true;
+    this.count = 0;
     this.disableInfiniteScroll = false;
     this.tableData = await this.getMenteelist();
     return;
   }
+
+  this.selectedList = [];
   
   const originalPage = this.page;
   const originalLimit = this.limit;
