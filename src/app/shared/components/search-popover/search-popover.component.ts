@@ -308,6 +308,8 @@ export class SearchPopoverComponent implements OnInit {
     this.chips.splice(event.index, 1);
     this.removeFilteredData(event.chipValue);
     this.page = 1;
+    if(this.data.isMobile)
+    this.limit = 25;
     this.setPaginatorToFirstpage = true;
     this.tableData = await this.getMenteelist();
   }
@@ -438,7 +440,6 @@ async onSelectAllX(isChecked: boolean) {
   }
   
   if (this.data.isMobile) {
-    this.disableInfiniteScroll = true;
     this.tableData = allMentees.map(item => {
       const isSelected = this.selectedList.some(selected => selected.id === item.id);
       if (isSelected) {
