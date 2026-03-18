@@ -26,7 +26,7 @@ export class GenericTableComponent implements OnInit {
   @Output() onSelectAllChange =new EventEmitter<boolean>();
   @Output() onSelectAllXChange =new EventEmitter<boolean>()
   @Input () maxCount;
-  @Input () selectedCount
+  @Input () selectedCount;
   @Input() disabledCheckboxId: string | null = null;
   @Input () selectedList
   @Input () showSelectAll
@@ -58,7 +58,7 @@ selectAllXActive : boolean;
     if (changes['tableData']) {
       this.dataSource = new MatTableDataSource(this.tableData);
     }
-    if(this.selectedCount === this.totalCount || this.selectedCount >= this.maxCount){
+    if(this.selectedCount === this.totalCount || this.selectedCount >= this.maxCount || this.selectedCount >= 100 && this.maxCount >= 100){
       this.selectAllXActive = true;
     } 
     else{
