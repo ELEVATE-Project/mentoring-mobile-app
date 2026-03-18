@@ -9,6 +9,8 @@ import * as _ from 'lodash';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { HttpService } from 'src/app/core/services';
+import { LocalStorageService } from 'src/app/core/services';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
   selector: 'app-requests',
@@ -38,6 +40,7 @@ export class RequestsPage implements OnInit {
   isInfiniteScrollDisabled = false;
   isLoading: boolean = false;
   isDataAvailable: boolean;
+  showMessageRequests = true;
   
   constructor(
     private httpService: HttpService,
@@ -45,11 +48,17 @@ export class RequestsPage implements OnInit {
     private router: Router,
     private sessionService: SessionService,
     private form: FormService,
+    private localStorage: LocalStorageService,
   ) {}
 
   async ionViewWillEnter(){
     if(this.isLoading)
       return;
+    const chatConfig = await this.localStorage.getLocalData(localKeys.CHAT_CONFIG);
+    this.showMessageRequests = chatConfig === true || chatConfig === 'true';
+    if (!this.showMessageRequests) {
+      this.segmentType = 'slot-requests';
+    }
     this.isDataAvailable = false;
     this.isLoading = true;
     const result = await this.form.getForm(MENTOR_REQ_CARD_FORM);
@@ -78,6 +87,9 @@ export class RequestsPage implements OnInit {
 
   async segmentChanged(event: any) {
     this.segmentType = event.target.value;
+    if (!this.showMessageRequests && this.segmentType === 'message-requests') {
+      this.segmentType = 'slot-requests';
+    }
     this.page = 1;
     this.isInfiniteScrollDisabled = false;
     this.noResult = '';

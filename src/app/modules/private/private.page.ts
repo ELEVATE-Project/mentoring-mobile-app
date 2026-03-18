@@ -39,7 +39,7 @@ import {
 export class PrivatePage implements OnInit {
   user;
   PAGE_IDS = PAGE_IDS;
-  public appPages = [
+  private readonly allAppPages = [
     {
       title: 'HOME',
       action: 'home',
@@ -130,6 +130,7 @@ export class PrivatePage implements OnInit {
       pageId: PAGE_IDS.loginActivity,
     },
   ];
+  public appPages = [...this.allAppPages];
 
   adminPage = {
     title: 'ADMIN_WORKSPACE',
@@ -150,6 +151,7 @@ export class PrivatePage implements OnInit {
   menuSubscription: any;
   routerSubscription: any;
   adminAccess: boolean;
+  chatConfig: any;
 
   isAuthBypassed = environment['isAuthBypassed'];
   constructor(
@@ -174,6 +176,8 @@ export class PrivatePage implements OnInit {
 
   async ngOnInit() {
     await this.initializeApp();
+    this.chatConfig = await this.localStorage.getLocalData(localKeys['CHAT_CONFIG']);
+    this.syncVisibleAppPages();
     if(this.isMentor) {
       const { result } = await this.profile.getRequestCount();
       const { sessionRequestCount = 0, connectionRequestCount = 0 } = result || {};
@@ -207,6 +211,23 @@ export class PrivatePage implements OnInit {
   const hasBadge = this.appPages.some(p => p.badge);
   this.utilService.setHasBadge(hasBadge);
 }
+
+  private isChatEnabled(): boolean {
+    return this.chatConfig === true || this.chatConfig === 'true';
+  }
+
+  private syncVisibleAppPages(): void {
+    this.appPages = this.allAppPages.filter((page: any) => {
+      if (
+        !this.isChatEnabled() &&
+        [PAGE_IDS.myConnections, PAGE_IDS.messages].includes(page.pageId)
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  }
 
   subscribeBackButton() {
     this.backButtonSubscription =
@@ -276,6 +297,7 @@ export class PrivatePage implements OnInit {
               )
             : false;
         }
+        await this.permissionService.getPlatformConfig();
         await this.profile.getChatToken();
         this.getUser();
         resolve();
