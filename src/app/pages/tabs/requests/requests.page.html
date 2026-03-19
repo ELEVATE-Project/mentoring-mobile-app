@@ -1,9 +1,15 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 
 <ion-content scrollEvents="true">
+  @let currentSegment = segmentType();
+  @let cardConfig = mentorForm();
+  @let messageRequests = data();
+  @let sessionRequests = slotRequests();
+  @let hasNoResults = currentSegment === 'slot-requests' ? !sessionRequests.length : !messageRequests.length;
+
   <div class="d-flex flex-justify-center">
     <ion-header>
-      <ion-segment (ionChange)="segmentChanged($event)" [value]="segmentType">
+      <ion-segment (ionChange)="segmentChanged($event)" [value]="currentSegment">
         <ion-segment-button value="slot-requests" class="normal-case">
           <ion-label>{{ "SLOT_REQUESTS" | translate }}</ion-label>
         </ion-segment-button>
@@ -13,49 +19,56 @@
       </ion-segment>
     </ion-header>
   </div>
-  <div [ngSwitch]="segmentType">
-    <div *ngSwitchCase="'slot-requests'">
-      <ion-grid >
-        <ion-row class="d-flex ">
-          <ion-col *ngFor="let value of slotRequests" padding size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="4" align-self-stretch>
-            <app-generic-card
-              [data]="value.user_details"
-              [meta]="value.meta"
-              [showTag]="value.showTag"
-              [buttonConfig]="slotBtnConfig"
-              (onClickEvent)="onCardClick($event, value.id)"
-              [cardConfig]="mentorForm"
-              [disableButton]="value.disableButton">
-            </app-generic-card>
-          </ion-col>
+
+  @switch (currentSegment) {
+    @case ('slot-requests') {
+      <ion-grid>
+        <ion-row class="d-flex">
+          @for (value of sessionRequests; track value.id) {
+            <ion-col class="ion-padding" size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="4" align-self-stretch>
+              <app-generic-card
+                [data]="value.user_details"
+                [meta]="value.meta"
+                [showTag]="value.showTag"
+                [buttonConfig]="slotBtnConfig()"
+                (onClickEvent)="onCardClick($event, value.id)"
+                [cardConfig]="cardConfig"
+                [disableButton]="value.disableButton">
+              </app-generic-card>
+            </ion-col>
+          }
         </ion-row>
       </ion-grid>
-    
-    </div>
-    
-    <div *ngSwitchCase="'message-requests'">
-      <ion-grid >
-        <ion-row class="d-flex ">
-          <ion-col *ngFor="let value of data" padding size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="4" align-self-stretch>
-            <app-generic-card 
-              [data]="value?.user_details" 
-              [meta]="{ isSent: value?.created_by === value?.user_id, message: value?.meta?.message, timeStamp: '' }" 
-              [buttonConfig]="buttonConfig" (onClickEvent)="onCardClick($event)" [cardConfig]="mentorForm">
-            </app-generic-card>
-          </ion-col>
+    }
+    @case ('message-requests') {
+      <ion-grid>
+        <ion-row class="d-flex">
+          @for (value of messageRequests; track value.id) {
+            <ion-col class="ion-padding" size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="4" align-self-stretch>
+              <app-generic-card
+                [data]="value?.user_details"
+                [meta]="getMessageRequestMeta(value)"
+                [buttonConfig]="buttonConfig()"
+                (onClickEvent)="onCardClick($event)"
+                [cardConfig]="cardConfig">
+              </app-generic-card>
+            </ion-col>
+          }
         </ion-row>
       </ion-grid>
-    </div>
-  </div>
-    <ion-infinite-scroll 
-        #infinitescroll 
-        [disabled]="isInfiniteScrollDisabled" 
-        (ionInfinite)="loadMore($event)"
-        threshold="100px">
-        <ion-infinite-scroll-content loadingSpinner="bubbles"  loadingText="{{'LOADING' | translate}}">
-        </ion-infinite-scroll-content>
-      </ion-infinite-scroll>
-  <div *ngIf="(segmentType === 'slot-requests' && !slotRequests?.length &&  isDataAvailable) || (segmentType === 'message-requests' && !data?.length && isDataAvailable) ">
-    <app-no-data-found [messageHeader]="noResult"></app-no-data-found>
-  </div>
+    }
+  }
+
+  <ion-infinite-scroll
+    #infinitescroll
+    [disabled]="isInfiniteScrollDisabled()"
+    (ionInfinite)="loadMore($event)"
+    threshold="100px">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{ 'LOADING' | translate }}">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  @if (hasNoResults && isDataAvailable()) {
+    <app-no-data-found [messageHeader]="noResult()"></app-no-data-found>
+  }
 </ion-content>

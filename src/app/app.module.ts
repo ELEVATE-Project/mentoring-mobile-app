@@ -1,8 +1,8 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, APP_INITIALIZER } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, inject, provideAppInitializer } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import {
   TranslateModule,
   TranslateService,
 } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translate/http-loader';
 import { CoreModule } from './core/core.module';
 import { Drivers, Storage } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
@@ -27,9 +27,6 @@ import { FrontendChatLibraryModule } from 'sl-chat-library';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { translateFactory } from './shared/components/translationFactory';
 import { LocalStorageService } from './core/services';
-export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
-  new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
-
 @NgModule({
   declarations: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -38,7 +35,6 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule,
     MatTableModule,
     MatPaginatorModule,
     IonicStorageModule.forRoot({
@@ -49,8 +45,7 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: translateHttpLoaderFactory,
-        deps: [HttpClient],
+        useClass: TranslateHttpLoader,
       },
     }),
     ReactiveFormsModule,
@@ -68,14 +63,19 @@ export const translateHttpLoaderFactory = (httpClient: HttpClient) =>
   exports: [],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {
+      provide: TRANSLATE_HTTP_LOADER_CONFIG,
+      useValue: { prefix: './assets/i18n/', suffix: '.json' }
+    },
     TitleCasePipe,
     SwUpdate,
-      {
-      provide: APP_INITIALIZER,
-      useFactory: translateFactory,
-      deps: [TranslateService, LocalStorageService],
-      multi: true
-    }
+    provideHttpClient(),
+    provideAppInitializer(() => {
+      const translateService = inject(TranslateService);
+      const localStorageService = inject(LocalStorageService);
+
+      return translateFactory(translateService, localStorageService)();
+    }),
   ],
   bootstrap: [AppComponent],
 })

@@ -77,32 +77,33 @@ describe('ChatWindowPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(component.showChat).toBeTruthy();
+    expect(component.showChat()).toBeFalsy();
     expect(component.headerConfig).toBeDefined();
   });
 
-  it('should react to params emission: set rid and call ngOnInit', fakeAsync(() => {
-    const initSpy = spyOn(component, 'ngOnInit').and.callThrough();
+  it('should react to params emission: set rid and initialize chat', fakeAsync(() => {
+    const initSpy = spyOn<any>(component, 'initializeChat').and.callThrough();
     paramsSubject.next({ id: 'room-1' });
     tick();
-    expect(component.rid).toBe('room-1');
+    expect(component.rid()).toBe('room-1');
     expect(initSpy).toHaveBeenCalled();
   }));
 
   it('should set id from queryParams', fakeAsync(() => {
     queryParamsSubject.next({ id: 'external-1' });
     tick();
-    expect(component.id).toBe('external-1');
+    expect(component.id()).toBe('external-1');
   }));
 
   it('ngOnInit should call getChatToken, set showChat true and load translations', async () => {
     const fakeTranslations = { 'KEY1': 'one', 'KEY2': 'two' };
     mockTranslate.get.and.returnValue(of(fakeTranslations));
     mockProfileService.getChatToken.and.returnValue(Promise.resolve(true));
+    component.rid.set('room-1');
     await component.ngOnInit();
     expect(mockProfileService.getChatToken).toHaveBeenCalled();
-    expect(component.showChat).toBeTrue();
-    expect(component.translations).toEqual(fakeTranslations);
+    expect(component.showChat()).toBeTrue();
+    expect(component.translations()).toEqual(fakeTranslations);
   });
 
   it('onBack should call location.back', () => {
@@ -139,21 +140,21 @@ describe('ChatWindowPage', () => {
   });
 
   it('ionViewWillLeave should set rocket.isWebSocketInitialized false when rid exists', () => {
-    component.rid = 'abc';
+    component.rid.set('abc');
     (mockRocket as any).isWebSocketInitialized = true;
     component.ionViewWillLeave();
     expect((mockRocket as any).isWebSocketInitialized).toBeFalse();
   });
 
   it('ngOnDestroy should set rocket.isWebSocketInitialized false when rid exists', () => {
-    component.rid = 'room-2';
+    component.rid.set('room-2');
     (mockRocket as any).isWebSocketInitialized = true;
     component.ngOnDestroy();
     expect((mockRocket as any).isWebSocketInitialized).toBeFalse();
   });
 
   it('ngOnDestroy should not throw when no rid present (defensive)', () => {
-    component.rid = null;
+    component.rid.set(null);
     (mockRocket as any).isWebSocketInitialized = true;
     expect(() => component.ngOnDestroy()).not.toThrow();
     expect((mockRocket as any).isWebSocketInitialized).toBeTrue();
@@ -162,16 +163,17 @@ describe('ChatWindowPage', () => {
   it('constructor queryParams subscription updates id when later emitted', fakeAsync(() => {
     queryParamsSubject.next({ id: 'first' });
     tick();
-    expect(component.id).toBe('first');
+    expect(component.id()).toBe('first');
 
     queryParamsSubject.next({ id: 'second' });
     tick();
-    expect(component.id).toBe('second');
+    expect(component.id()).toBe('second');
   }));
 
   it('translate.get should be called with keys from CHAT_LIB_META_KEYS', async () => {
     const keys = Object.values(CHAT_LIB_META_KEYS);
     mockTranslate.get.and.returnValue(of({}));
+    component.rid.set('room-1');
     await component.ngOnInit();
     expect(mockTranslate.get).toHaveBeenCalledWith(keys);
   });

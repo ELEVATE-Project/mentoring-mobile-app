@@ -412,6 +412,8 @@
     "CLUSTER":"Cluster",
     "DISTRICT":"District",
     "BLOCK":"Block",
+    "YOU_HAVE_BLOCKED":"You have blocked {{name}}",
+    "DO_YOU_WISH_TO_UNBLOCK":"Do you wish to unblock?",
     "SCHOOL":"School",
     "LOADING": "Loading more data...",
     "YOU_HAVE" :"You have requested",
@@ -430,5 +432,6 @@
     "DESELECT_ALL" : "Deselect all",
     "SELECTED" : "Selected",
     "SELECT_PAGE" : "Select page",
-    "DESELECT_PAGE" : "Deselect page"
+    "DESELECT_PAGE" : "Deselect page",
+    "TYPE_MESSAGE_HERE": "Type a message ..."
 }

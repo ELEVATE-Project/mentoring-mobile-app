@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
@@ -23,23 +23,25 @@ export class RequestsPage implements OnInit {
     headerColor: 'primary',
     notification: false,
   };
-  segmentType = 'slot-requests';
-  buttonConfig: any;
-  data: any[] = [];
-  noResult: any;
-  routeData: any;
-  slotBtnConfig: any;
-  slotRequests: any[] = [];
-  mentorForm:any;
+
+  segmentType = signal<'slot-requests' | 'message-requests'>('slot-requests');
+  buttonConfig = signal<any>(null);
+  data = signal<any[]>([]);
+  noResult = signal<string>('');
+  routeData = signal<any>(null);
+  slotBtnConfig = signal<any>(null);
+  slotRequests = signal<any[]>([]);
+  mentorForm = signal<any>(null);
+  isInfiniteScrollDisabled = signal<boolean>(false);
+  isLoading = signal<boolean>(false);
+  isDataAvailable = signal<boolean>(false);
+
   expiryTag = {
     label: 'EXPIRED',
     cssClass: 'expired-tag'
   };
   page = 1;
-  isInfiniteScrollDisabled = false;
-  isLoading: boolean = false;
-  isDataAvailable: boolean;
-  
+
   constructor(
     private httpService: HttpService,
     private route: ActivatedRoute,
@@ -48,44 +50,46 @@ export class RequestsPage implements OnInit {
     private form: FormService,
   ) {}
 
-  async ionViewWillEnter(){
-    if(this.isLoading)
-      return;
-    this.isDataAvailable = false;
-    this.isLoading = true;
+  async ionViewWillEnter() {
+    if (this.isLoading()) return;
+
+    this.isDataAvailable.set(false);
+    this.isLoading.set(true);
+
     const result = await this.form.getForm(MENTOR_REQ_CARD_FORM);
-    this.mentorForm = _.get(result, 'data.fields.controls');
+    this.mentorForm.set(_.get(result, 'data.fields.controls'));
+
     this.route.data.subscribe((data) => {
-      this.routeData = data;
-      this.buttonConfig = this.routeData?.button_config;
-      this.slotBtnConfig = this.routeData.slotButtonConfig;
+      this.routeData.set(data);
+      this.buttonConfig.set(data?.button_config);
+      this.slotBtnConfig.set(data?.slotButtonConfig);
     });
-    
+
     this.page = 1;
-    this.slotRequests = [];
-    this.data = [];
-    this.isInfiniteScrollDisabled = false;
-    
-    if (this.segmentType === 'slot-requests') {
+    this.slotRequests.set([]);
+    this.data.set([]);
+    this.isInfiniteScrollDisabled.set(false);
+
+    if (this.segmentType() === 'slot-requests') {
       await this.slotRequestData();
     } else {
       await this.pendingRequest();
     }
-    this.isLoading = false;
-  }
-  
-  ngOnInit() {
+    this.isLoading.set(false);
   }
 
+  ngOnInit() {}
+
   async segmentChanged(event: any) {
-    this.segmentType = event.target.value;
+    this.segmentType.set(event.target.value);
     this.page = 1;
-    this.isInfiniteScrollDisabled = false;
-    this.noResult = '';
-    this.slotRequests = [];
-    this.data = [];
-    this.isDataAvailable = false;
-    if (this.segmentType === 'slot-requests') {
+    this.isInfiniteScrollDisabled.set(false);
+    this.noResult.set('');
+    this.slotRequests.set([]);
+    this.data.set([]);
+    this.isDataAvailable.set(false);
+
+    if (this.segmentType() === 'slot-requests') {
       await this.slotRequestData();
     } else {
       await this.pendingRequest();
@@ -95,34 +99,34 @@ export class RequestsPage implements OnInit {
   async pendingRequest(isLoadMore: boolean = false) {
     const config = {
       url: urlConstants.API_URLS.CONNECTION_REQUEST +
-      '?pageNo=' + this.page +
-      '&pageSize=100',
+        '?pageNo=' + this.page +
+        '&pageSize=100',
     };
-    
+
     try {
       let response: any = await this.httpService.get(config);
-       this.isDataAvailable = true;
-      let newData = response?.result?.data || [];
-      
+      this.isDataAvailable.set(true);
+      const newData = response?.result?.data || [];
+
       if (isLoadMore) {
-        this.data = [...this.data, ...newData];
+        this.data.update(prev => [...prev, ...newData]);
       } else {
-        this.data = newData;
+        this.data.set(newData);
       }
-      
+
       const totalCount = response?.result?.count || 0;
-      this.isInfiniteScrollDisabled = this.data.length >= totalCount;
-      
-      if (this.data.length === 0 && this.page === 1) {
-        this.noResult = this.routeData?.noDataFound?.noMessage;
+      this.isInfiniteScrollDisabled.set(this.data().length >= totalCount);
+
+      if (this.data().length === 0 && this.page === 1) {
+        this.noResult.set(this.routeData()?.noDataFound?.noMessage);
       } else {
-        this.noResult = '';
+        this.noResult.set('');
       }
-      
+
       return response;
     } catch (error) {
       console.error('Error fetching pending requests:', error);
-      this.isInfiniteScrollDisabled = true;
+      this.isInfiniteScrollDisabled.set(true);
       return error;
     }
   }
@@ -130,20 +134,20 @@ export class RequestsPage implements OnInit {
   async slotRequestData(isLoadMore: boolean = false) {
     try {
       const res = await this.sessionService.requestSessionList(this.page);
-       this.isDataAvailable = true;
-      let data = [];
-      
+      this.isDataAvailable.set(true);
+
+      let data: any[];
       if (isLoadMore) {
-        data = [...this.slotRequests, ...(res?.result?.data || [])];
+        data = [...this.slotRequests(), ...(res?.result?.data || [])];
       } else {
         data = res?.result?.data || [];
       }
-      
+
       const totalCount = res?.result?.count || 0;
-      this.isInfiniteScrollDisabled = data.length >= totalCount;
-      
+      this.isInfiniteScrollDisabled.set(data.length >= totalCount);
+
       if (data.length === 0 && this.page === 1) {
-        this.noResult = this.routeData?.noDataFound?.noSession;
+        this.noResult.set(this.routeData()?.noDataFound?.noSession);
         return;
       }
 
@@ -154,11 +158,11 @@ export class RequestsPage implements OnInit {
         disableButton: this.isSessionExpired(value)
       }));
 
-      this.slotRequests = formattedData;
+      this.slotRequests.set(formattedData);
 
     } catch (error) {
       console.error('Error fetching session list:', error);
-      this.isInfiniteScrollDisabled = true;
+      this.isInfiniteScrollDisabled.set(true);
     }
   }
 
@@ -171,32 +175,40 @@ export class RequestsPage implements OnInit {
     };
   }
 
-  isSessionExpired(meta): boolean {
+  getMessageRequestMeta(value: any) {
+    return {
+      isSent: value?.created_by === value?.user_id,
+      message: value?.meta?.message,
+      timeStamp: ''
+    };
+  }
+
+  isSessionExpired(meta: any): boolean {
     const endDate = meta?.end_date;
-    if (!endDate) return false; 
+    if (!endDate) return false;
     return Date.now() > endDate * 1000;
   }
-  
-  onCardClick(event, data?) {
+
+  onCardClick(event: any, data?: any) {
     switch (event.type) {
       case 'viewMessage':
         this.router.navigate([CommonRoutes.CHAT_REQ, event.data]);
         break;
       case 'viewDetails':
-        this.router.navigate([CommonRoutes.SESSION_REQUEST_DETAILS], {queryParams: {id: data}});
+        this.router.navigate([CommonRoutes.SESSION_REQUEST_DETAILS], { queryParams: { id: data } });
         break;
     }
   }
 
   async loadMore($event: any) {
     this.page = this.page + 1;
-    
-    if (this.segmentType === 'slot-requests') {
+
+    if (this.segmentType() === 'slot-requests') {
       await this.slotRequestData(true);
     } else {
       await this.pendingRequest(true);
     }
-    
+
     $event.target.complete();
   }
 }

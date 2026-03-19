@@ -1,223 +1,238 @@
 <app-page-header [config]="headerConfig"></app-page-header>
 
 <ion-content class="ion-padding">
-  <div class="profile-container" *ngIf="apiResponse">
-    <ion-avatar class="profile-avatar">
-      <img [src]="apiResponse?.user_details?.image || 'assets/prof-img/user.png'" alt="Profile Picture" />
-    </ion-avatar>    
+  @if (apiResponse(); as response) {
+    @let details = sessionDetails();
+    @let schedule = scheduledSessionDetals();
+    <div class="profile-container">
+      <ion-avatar class="profile-avatar">
+        <img [src]="response?.user_details?.image || 'assets/prof-img/user.png'" alt="Profile Picture" />
+      </ion-avatar>
 
-    <h2 class="profile-name">{{apiResponse?.user_details?.name | titlecase}}</h2>
-    <p class="profile-description">
-      <ng-container *ngIf="apiResponse?.user_details?.designation?.length">
-        <ng-container *ngFor="let item of apiResponse.user_details.designation let last = last">
-          {{ item.label | titlecase }}<span *ngIf="!last">, </span>
-        </ng-container>
-      </ng-container>
-    </p>
-    <ion-button color="primary" (click)="viewProfile(apiResponse?.user_details?.user_id)">{{"VIEW_PROFILE" | translate}}</ion-button>
-    <ion-text class="description">
-      <h2 class="text-left">{{"AGENDA" | translate }}</h2>
-      <p style="margin: 0px;" class="text-left">
-        {{ showFullText ? (apiResponse.agenda |  titlecase)  : (apiResponse.agenda |  titlecase | slice:0:150 ) }}{{ apiResponse.agenda.length > 150 && !showFullText ? '...' : '' }}
+      <h2 class="profile-name">{{ response?.user_details?.name | titlecase }}</h2>
+      <p class="profile-description">
+        @if (response?.user_details?.designation?.length) {
+          @for (item of response.user_details.designation; track item.label; let last = $last) {
+            {{ item.label | titlecase }}
+            @if (!last) {
+              <span>, </span>
+            }
+          }
+        }
       </p>
-    </ion-text>
+      <ion-button color="primary" (click)="viewProfile(response?.user_details?.user_id)">{{ 'VIEW_PROFILE' | translate }}</ion-button>
+      <ion-text class="description">
+        <h2 class="text-left">{{ 'AGENDA' | translate }}</h2>
+        <p style="margin: 0px;" class="text-left">
+          {{ showFullText() ? (response.agenda | titlecase) : (response.agenda | titlecase | slice:0:150) }}{{ response.agenda.length > 150 && !showFullText() ? '...' : '' }}
+        </p>
+      </ion-text>
 
-    <ion-label
-      *ngIf="apiResponse.agenda.length > 150" 
-      class="viewMore"
-      (click)="toggleText()">
-      {{ showFullText ? 'View Less' : 'View More' }}
-    </ion-label>    
+      @if (response.agenda.length > 150) {
+        <ion-label class="viewMore" (click)="toggleText()">
+          {{ showFullText() ? 'View Less' : 'View More' }}
+        </ion-label>
+      }
 
-    <p *ngIf="apiResponse.status !== 'ACCEPTED'" class="request-info text-left">
-      {{
-        apiResponse?.created_by == apiResponse?.user_details?.user_id 
-      ? (apiResponse?.user_details?.name | titlecase)  + ' ' + ("IS_REQUESTING" | translate)
-      : ("YOU_HAVE" | translate)
-      }}
-      {{"A_SLOT" | translate}}<strong style="padding-left: 5px;">
-        {{
-          formatUnixTime(apiResponse.start_date)
-        }} -
-        {{
-          formatUnixTime(apiResponse.end_date)
-        }} 
-        {{"ON" | translate}}
-         {{ apiResponse.start_date * 1000 | date : "EEEE (dd MMM yyyy)" }}
-      </strong>
-    </p>
+      @if (response.status !== 'ACCEPTED') {
+        <p class="request-info text-left">
+          {{
+            response?.created_by == response?.user_details?.user_id
+              ? (response?.user_details?.name | titlecase) + ' ' + ('IS_REQUESTING' | translate)
+              : ('YOU_HAVE' | translate)
+          }}
+          {{ 'A_SLOT' | translate }}<strong style="padding-left: 5px;">
+            {{ formatUnixTime(response.start_date) }} -
+            {{ formatUnixTime(response.end_date) }}
+            {{ 'ON' | translate }}
+            {{ response.start_date * 1000 | date : 'EEEE (dd MMM yyyy)' }}
+          </strong>
+        </p>
+      } @else {
+        <p class="request-info text-left">
+          {{ 'SLOT_BOOKED' | translate }}
+          {{
+            response?.created_by == response?.user_details?.user_id
+              ? (response?.user_details?.name | titlecase)
+              : ('YOU_HAVE' | translate)
+          }}
+          at <strong style="padding-left: 5px;">
+            {{ formatUnixTime(response.start_date) }} -
+            {{ formatUnixTime(response.end_date) }}
+            {{ 'ON' | translate }}
+            {{ response.start_date * 1000 | date : 'EEEE (dd MMM yyyy)' }}
+          </strong>
+        </p>
+      }
 
-    <p *ngIf="apiResponse.status === 'ACCEPTED'" class="request-info text-left">
-      
-       {{"SLOT_BOOKED" | translate}} {{
-        apiResponse?.created_by == apiResponse?.user_details?.user_id 
-      ? (apiResponse?.user_details?.name | titlecase) 
-      : ("YOU_HAVE" | translate)
-      }} 
-      at <strong style="padding-left: 5px;">
-        {{
-          formatUnixTime(apiResponse.start_date)
-        }} -
-        {{
-          formatUnixTime(apiResponse.end_date)
-        }} 
-         {{"ON" | translate}}
-         {{ apiResponse.start_date * 1000 | date : "EEEE (dd MMM yyyy)" }}
-      </strong>
-    </p>
-
-    <ng-container *ngIf="apiResponse">
-      <div class="text-left" *ngIf="apiResponse && apiResponse.requestor_id === apiResponse.user_details.user_id && apiResponse.status === 'ACCEPTED'">
-        <h2 class="auto-margin">{{"MEETING_LINK" | translate}}</h2>
-          @if (sessionDetails && sessionDetails?.meeting_info?.value === 'Zoom') {
+      @if (response && response.requestor_id === response.user_details.user_id && response.status === 'ACCEPTED') {
+        <div class="text-left">
+          <h2 class="auto-margin">{{ 'MEETING_LINK' | translate }}</h2>
+          @if (details && details?.meeting_info?.value === 'Zoom') {
             <div>
-              <ion-label>{{"MEETING_TAKE_PLACE" | translate}} <b>{{sessionDetails?.meeting_info?.platform}}</b></ion-label><br>
-              <ion-label>{{"MEETING_ID" | translate}} : {{sessionDetails?.meeting_info?.meta?.meetingId}}</ion-label><br>
-              <ion-label>{{"PASSCODE" | translate}} : {{sessionDetails?.meeting_info?.meta?.password}}</ion-label>
+              <ion-label>{{ 'MEETING_TAKE_PLACE' | translate }} <b>{{ details?.meeting_info?.platform }}</b></ion-label><br>
+              <ion-label>{{ 'MEETING_ID' | translate }} : {{ details?.meeting_info?.meta?.meetingId }}</ion-label><br>
+              <ion-label>{{ 'PASSCODE' | translate }} : {{ details?.meeting_info?.meta?.password }}</ion-label>
             </div>
-          } @else if (sessionDetails?.meeting_info?.value === 'Gmeet') {
-            <div>
-              <ion-label>
-                {{sessionDetails?.meeting_info?.platform}} : {{sessionDetails?.meeting_info?.link}}
-              </ion-label>
-            </div>
-          } @else if(sessionDetails?.meeting_info?.value === 'Whatsapp') {
+          } @else if (details?.meeting_info?.value === 'Gmeet') {
             <div>
               <ion-label>
-                {{sessionDetails?.meeting_info?.platform}} : {{sessionDetails?.meeting_info?.link}}
+                {{ details?.meeting_info?.platform }} : {{ details?.meeting_info?.link }}
               </ion-label>
             </div>
-          } @else if(sessionDetails?.meeting_info?.value === 'BBB' || sessionDetails?.meeting_info?.value === 'Default') {
+          } @else if (details?.meeting_info?.value === 'Whatsapp') {
             <div>
               <ion-label>
-                {{sessionDetails?.meeting_info?.platform}} : Default
+                {{ details?.meeting_info?.platform }} : {{ details?.meeting_info?.link }}
               </ion-label>
             </div>
-          } @else if(sessionDetails?.meeting_info?.value ==='OFF') {
+          } @else if (details?.meeting_info?.value === 'BBB' || details?.meeting_info?.value === 'Default') {
+            <div>
+              <ion-label>
+                {{ details?.meeting_info?.platform }} : Default
+              </ion-label>
+            </div>
+          } @else if (details?.meeting_info?.value === 'OFF') {
           } @else {
             <div>
               <ion-label>
-                {{sessionDetails?.meeting_info?.platform}} : {{sessionDetails?.meeting_info?.link}}
+                {{ details?.meeting_info?.platform }} : {{ details?.meeting_info?.link }}
               </ion-label>
             </div>
           }
-        <ion-button color="primary" *ngIf="!isMeetingLinkAdded" (click)="addLink(true, apiResponse.session_id)"> {{"ADD_LINK" | translate}} </ion-button>
-        <ion-button color="primary" *ngIf="isMeetingLinkAdded" (click)="editLink(true, apiResponse.session_id)"> {{"EDIT_LINK" | translate}} </ion-button>
-      </div>
+          @if (!isMeetingLinkAdded()) {
+            <ion-button color="primary" (click)="addLink(true, response.session_id)"> {{ 'ADD_LINK' | translate }} </ion-button>
+          } @else {
+            <ion-button color="primary" (click)="editLink(true, response.session_id)"> {{ 'EDIT_LINK' | translate }} </ion-button>
+          }
+        </div>
+      }
 
       <ion-chip color="warning" style="color: var(--black); background-color: #fdf6b4; margin-bottom: 2%;">
         <ion-icon name="alert-circle"></ion-icon>
-        @if (isRejected) {
-          <ion-label class="text-left">{{"SLOT_REJECT" | translate}}</ion-label>
-        } @else if (isAccepted) {
-          <ion-label class="text-left">{{"START_BTN_ENABLE" | translate}}</ion-label>
-        } @else if (apiResponse && apiResponse.user_details.user_id === apiResponse.requestor_id) {
-          <ion-label class="text-left">{{"SLOT_AVAILABLE" | translate}}</ion-label>
+        @if (isRejected()) {
+          <ion-label class="text-left">{{ 'SLOT_REJECT' | translate }}</ion-label>
+        } @else if (isAccepted()) {
+          <ion-label class="text-left">{{ 'START_BTN_ENABLE' | translate }}</ion-label>
+        } @else if (response && response.user_details.user_id === response.requestor_id) {
+          <ion-label class="text-left">{{ 'SLOT_AVAILABLE' | translate }}</ion-label>
         } @else {
-          <ion-label class="text-left"> {{ "PENDING" | translate}}</ion-label>
+          <ion-label class="text-left"> {{ 'PENDING' | translate }}</ion-label>
         }
       </ion-chip>
-      
-      <ion-modal #modal [isOpen]="isModalOpen" [backdropDismiss]="false" *ngIf="sessionDetails && scheduledSessionDetals.length > 0 && apiResponse && apiResponse.user_details.user_id === apiResponse.requestor_id">
-        <ng-template>
-          <ion-content>
-            <ion-list>
-              <ion-card  class="form-content">
-                <ion-card-header>
-                  <ion-card-title class="ion-text-center card-title">{{"SELECT_MEETING_PLATFORM" | translate}}</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-list>
-                    <ion-select #link class="select" [(ngModel)]="selectedLink" interface="popover" (ionChange)="clickOptions($event)" [compareWith]="compareWithFn" [value]="selectedLink">
-                      <ion-select-option [value]="option" *ngFor="let option of meetingPlatforms">
-                        {{ option.name }}
-                      </ion-select-option>
-                    </ion-select>
-                    <ion-item lines="none">
-                      <ion-icon class="hint-icon" name="alert-circle"></ion-icon>
-                      <ion-label class="hint-label">{{selectedHint}}</ion-label>
-                    </ion-item>
-                  </ion-list>
-                  <div *ngFor="let option of meetingPlatforms">
-                    <app-dynamic-form *ngIf="selectedLink==option" [jsonFormData]="option?.form" #platformForm></app-dynamic-form>
+
+      @if (details && schedule.length > 0 && response && response.user_details.user_id === response.requestor_id) {
+        <ion-modal #modal [isOpen]="isModalOpen()" [backdropDismiss]="false">
+          <ng-template>
+            <ion-content>
+              <ion-list>
+                <ion-card class="form-content">
+                  <ion-card-header>
+                    <ion-card-title class="ion-text-center card-title">{{ 'SELECT_MEETING_PLATFORM' | translate }}</ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <ion-list>
+                      <ion-select #link class="select" [(ngModel)]="selectedLink" interface="popover" (ionChange)="clickOptions($event)" [compareWith]="compareWithFn" [value]="selectedLink">
+                        @for (option of meetingPlatforms; track option.value) {
+                          <ion-select-option [value]="option">
+                            {{ option.name }}
+                          </ion-select-option>
+                        }
+                      </ion-select>
+                      <ion-item lines="none">
+                        <ion-icon class="hint-icon" name="alert-circle"></ion-icon>
+                        <ion-label class="hint-label">{{ selectedHint }}</ion-label>
+                      </ion-item>
+                    </ion-list>
+                    @for (option of meetingPlatforms; track option.value) {
+                      @if (selectedLink == option) {
+                        <app-dynamic-form [jsonFormData]="option?.form" #platformForm></app-dynamic-form>
+                      }
+                    }
+                  </ion-card-content>
+                </ion-card>
+              </ion-list>
+            </ion-content>
+            <ion-footer>
+              <ion-toolbar>
+                <div class="w-full flex flex-justify-flex-end">
+                  <ion-button color="primary" [disabled]="platformForm && !platformForm.myForm.valid" (click)="addNow()">{{ 'ADD_NOW' | translate }}</ion-button>
+                  <ion-button color="primary" (click)="addLater()">{{ 'ADD_LATER' | translate }}</ion-button>
                 </div>
-                </ion-card-content>
-              </ion-card>
-            </ion-list>
-          </ion-content>
-          <ion-footer>
-            <ion-toolbar>
-              <div class="w-full flex flex-justify-flex-end">
-                <ion-button color="primary"[disabled]="platformForm && !platformForm.myForm.valid" (click)="addNow()">{{"ADD_NOW" | translate}}</ion-button>
-                <ion-button color="primary" (click)="addLater()">{{"ADD_LATER" | translate}}</ion-button>
+              </ion-toolbar>
+            </ion-footer>
+          </ng-template>
+        </ion-modal>
+      }
+
+      @if (schedule.length > 0 && response && response.user_details.user_id === response.requestor_id) {
+        <mat-accordion>
+          <mat-expansion-panel style="background: #f3f3f3;">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <ion-icon size="large" name="calendar-outline"></ion-icon>
+              </mat-panel-title>
+              <mat-panel-description style="font-size: large;">
+                {{ 'SCHEDULE' | translate }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            @for (dateEvent of schedule; track dateEvent.date) {
+              <div class="timeline">
+                <div class="timeline-date">
+                  {{ dateEvent.date }}
+                </div>
+
+                <div class="timeline-description">
+                  <div style="position: relative; width: 5%; display: flex; justify-content: center;">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-line"></div>
+                  </div>
+                  <div class="timeline-cards">
+                    @for (slotEvent of dateEvent.bookedSlots; track slotEvent.startTime) {
+                      <div class="timeline-card">
+                        <ion-row class="px-4">
+                          <ion-col size="3">
+                            <p class="margin-none text-left ">{{ formatUnixTime(slotEvent?.startTime) }}</p> <br />
+                            <p class="margin-none text-left ">{{ formatUnixTime(slotEvent?.endTime) }}</p>
+                          </ion-col>
+                          <ion-col size="9" class="d-flex ion-align-items-center">
+                            <h3 class="margin-none session-title text-left">{{ slotEvent?.title | titlecase }}</h3>
+                          </ion-col>
+                        </ion-row>
+                      </div>
+                    }
+                  </div>
+                </div>
               </div>
-            </ion-toolbar>
-          </ion-footer>
-        </ng-template>
-      </ion-modal>
-      <mat-accordion *ngIf="scheduledSessionDetals && scheduledSessionDetals.length > 0 && apiResponse && apiResponse.user_details.user_id === apiResponse.requestor_id">
-        <mat-expansion-panel style="background: #f3f3f3;">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <ion-icon size="large" name="calendar-outline"></ion-icon>
-            </mat-panel-title>
-            <mat-panel-description style="font-size: large;">
-              {{"SCHEDULE" | translate}}
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <div class="timeline" *ngFor="let event of scheduledSessionDetals">
-            <div class="timeline-date" >
-                {{event.date}}
-            </div>
-           
-           <div class="timeline-description">
-            <div style="position: relative; width: 5%; display: flex; justify-content: center;">
-              <div class="timeline-dot"></div>
-              <div class="timeline-line"></div>
-            </div>
-            <div class="timeline-cards">
-              <div class="timeline-card" *ngFor="let event of event.bookedSlots">
-
-                <ion-row class="px-4">
-                  <ion-col size="3">
-                    <p class="margin-none text-left ">{{  formatUnixTime(event?.startTime)  }}</p> <br />
-                    <p class="margin-none text-left ">{{ formatUnixTime(event?.endTime) }}</p>
-                  </ion-col>
-                  <ion-col size="9" class="d-flex  ion-align-items-center"> <h3 class="margin-none session-title text-left">{{event?.title | titlecase}}</h3> </ion-col>
-                </ion-row>
-            </div>
-            </div>
-           
-           
-           </div>
-             
-            
-          
-          </div>
-          
-        </mat-expansion-panel>
-      </mat-accordion>
-    </ng-container>
-  </div>
+            }
+          </mat-expansion-panel>
+        </mat-accordion>
+      }
+    </div>
+  }
 </ion-content>
-<ion-footer class="ion-no-border footer-button" *ngIf="apiResponse && apiResponse.user_details.user_id === apiResponse.requestor_id && apiResponse.status !== 'REJECTED'">
-  <ion-toolbar>
-    <ng-container *ngIf="!isAccepted && apiResponse.status === 'REQUESTED'; else templateA">
-      <div class="w-full flex flex-justify-space-around">
-        <ion-button shape="round" color="light" (click)="accept(apiResponse?.id)" class="height-0">
-          <ion-icon style="color: var(--green);" name="checkmark-outline" slot="start"></ion-icon> {{"ACCEPT" | translate}}
-        </ion-button>
-        <ion-button shape="round" color="light" (click)="reject(apiResponse?.id, apiResponse?.user_details?.name)" class="height-0">
-          <ion-icon style="color:  var(--red);" name="checkmark-outline" slot="start"></ion-icon> {{"REJECT" | translate}}
-        </ion-button>
-      </div>
-    </ng-container> 
-    <ng-template #templateA>
-        <ion-button *ngIf="sessionDetails?.status?.value=='PUBLISHED' || sessionDetails?.status?.value=='LIVE'" expand="full"
-        (click)="onStart(sessionDetails?.id)" [disabled]="!isEnabled">{{"START_SESSIONS" | translate}}
-      </ion-button>
-    </ng-template>
-  </ion-toolbar>
-</ion-footer>
 
-
+@if (apiResponse(); as response) {
+  @let details = sessionDetails();
+  @if (response.user_details.user_id === response.requestor_id && response.status !== 'REJECTED') {
+    <ion-footer class="ion-no-border footer-button">
+      <ion-toolbar>
+        @if (!isAccepted() && response.status === 'REQUESTED') {
+          <div class="w-full flex flex-justify-space-around">
+            <ion-button shape="round" color="light" (click)="accept(response?.id)" class="height-0">
+              <ion-icon style="color: var(--green);" name="checkmark-outline" slot="start"></ion-icon> {{ 'ACCEPT' | translate }}
+            </ion-button>
+            <ion-button shape="round" color="light" (click)="reject(response?.id, response?.user_details?.name)" class="height-0">
+              <ion-icon style="color:  var(--red);" name="checkmark-outline" slot="start"></ion-icon> {{ 'REJECT' | translate }}
+            </ion-button>
+          </div>
+        } @else {
+          @if (details?.status?.value == 'PUBLISHED' || details?.status?.value == 'LIVE') {
+            <ion-button expand="full" (click)="onStart(details?.id)" [disabled]="!isEnabled()">{{ 'START_SESSIONS' | translate }}
+            </ion-button>
+          }
+        }
+      </ion-toolbar>
+    </ion-footer>
+  }
+}

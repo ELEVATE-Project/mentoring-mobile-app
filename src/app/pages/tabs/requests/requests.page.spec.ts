@@ -72,11 +72,11 @@ describe('RequestsPage', () => {
     await component.ionViewWillEnter();
 
     expect(formServiceSpy.getForm).toHaveBeenCalled();
-    expect(component.mentorForm).toEqual(_.get(fakeFormResult, 'data.fields.controls'));
-    expect(component.buttonConfig).toBeDefined();
-    expect(component.slotBtnConfig).toBeDefined();
+    expect(component.mentorForm()).toEqual(_.get(fakeFormResult, 'data.fields.controls'));
+    expect(component.buttonConfig()).toBeDefined();
+    expect(component.slotBtnConfig()).toBeDefined();
     expect(sessionServiceSpy.requestSessionList).toHaveBeenCalledWith(1);
-    expect(component.isLoading).toBeFalse();
+    expect(component.isLoading()).toBeFalse();
   }));
 
   it('segmentChanged should switch to message-requests and call pendingRequest', waitForAsync(async () => {
@@ -85,7 +85,7 @@ describe('RequestsPage', () => {
 
     await component.segmentChanged(event);
 
-    expect(component.segmentType).toBe('message-requests');
+    expect(component.segmentType()).toBe('message-requests');
     expect(component.page).toBe(1);
     expect(component.pendingRequest).toHaveBeenCalled();
   }));
@@ -97,10 +97,10 @@ describe('RequestsPage', () => {
     const result = await component.pendingRequest();
 
     expect(httpServiceSpy.get).toHaveBeenCalled();
-    expect(component.data.length).toBe(0);
-    expect(component.noResult).toBe(component.routeData?.noDataFound?.noMessage);
-    // when response count is 0, component.data.length >= totalCount -> true
-    expect(component.isInfiniteScrollDisabled).toBeTrue();
+    expect(component.data().length).toBe(0);
+    expect(component.noResult()).toBe(component.routeData()?.noDataFound?.noMessage);
+    // when response count is 0, component.data().length >= totalCount -> true
+    expect(component.isInfiniteScrollDisabled()).toBeTrue();
     expect(result).toBe(resp);
   }));
 
@@ -117,10 +117,10 @@ describe('RequestsPage', () => {
     await component.slotRequestData();
 
     expect(sessionServiceSpy.requestSessionList).toHaveBeenCalledWith(component.page);
-    expect(component.slotRequests.length).toBe(2);
+    expect(component.slotRequests().length).toBe(2);
 
-    const expired = component.slotRequests.find((s: any) => s.id === 'expired');
-    const active = component.slotRequests.find((s: any) => s.id === 'active');
+    const expired = component.slotRequests().find((s: any) => s.id === 'expired');
+    const active = component.slotRequests().find((s: any) => s.id === 'active');
 
     expect(expired.showTag).toEqual(component.expiryTag);
     expect(expired.disableButton).toBeTrue();
@@ -145,7 +145,7 @@ describe('RequestsPage', () => {
     spyOn(component, 'slotRequestData').and.returnValue(Promise.resolve());
     const event = { target: { complete: jasmine.createSpy('complete') } } as any;
 
-    component.segmentType = 'slot-requests';
+    component.segmentType.set('slot-requests');
     component.page = 1;
 
     await component.loadMore(event);
@@ -160,7 +160,7 @@ describe('RequestsPage', () => {
 
     const resp = await component.pendingRequest();
 
-    expect(component.isInfiniteScrollDisabled).toBeTrue();
+    expect(component.isInfiniteScrollDisabled()).toBeTrue();
     expect(resp).toBe('err');
   }));
 
