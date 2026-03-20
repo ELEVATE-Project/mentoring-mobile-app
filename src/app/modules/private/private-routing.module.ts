@@ -184,7 +184,7 @@ const routes: Routes = [
         canActivate: [PrivateGuard],
         data: {
           pageId: PAGE_IDS.mentorSearchDirectory,
-          placeholder: 'Search for mentors',
+          placeholder: 'MENTOR_SEARCH_PLACEHOLDER',
           button_config: CHAT_MESSAGES.GENERIC_CARD_MENTOR_DIRECTORY_BTN_CONFIG,
         },
       },

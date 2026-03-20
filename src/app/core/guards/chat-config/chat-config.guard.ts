@@ -17,8 +17,9 @@ export class ChatConfigGuard implements CanActivate {
     const chatConfig = await this.localStorage.getLocalData(
       localKeys.CHAT_CONFIG
     );
+    const isEnabled = String(chatConfig) === 'true';
 
-    if (chatConfig === true || chatConfig === 'true') {
+    if (isEnabled) {
       return true;
     }
 

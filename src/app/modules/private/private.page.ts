@@ -215,7 +215,8 @@ export class PrivatePage implements OnInit {
 }
 
   private isChatEnabled(): boolean {
-    return this.chatConfig === true || this.chatConfig === 'true';
+    const isEnabled = String(this.chatConfig) === 'true';
+    return isEnabled;
   }
 
   private syncVisibleAppPages(): void {

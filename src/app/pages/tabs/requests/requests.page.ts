@@ -55,7 +55,8 @@ export class RequestsPage implements OnInit {
     if(this.isLoading)
       return;
     const chatConfig = await this.localStorage.getLocalData(localKeys.CHAT_CONFIG);
-    this.showMessageRequests = chatConfig === true || chatConfig === 'true';
+    const isEnabled = String(chatConfig) === 'true';
+    this.showMessageRequests = isEnabled;
     if (!this.showMessageRequests) {
       this.segmentType = 'slot-requests';
     }

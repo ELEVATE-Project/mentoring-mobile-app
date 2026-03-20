@@ -285,7 +285,7 @@ export class ProfileService {
       url: urlConstants.API_URLS.GET_CHAT_TOKEN,
     };
     const chatConfig = await this.localStorage.getLocalData(localKeys['CHAT_CONFIG'])
-    const isEnabled = chatConfig === true || chatConfig === 'true';
+    const isEnabled = String(chatConfig) === 'true';
 
     if (!isEnabled) return;
     
