@@ -37,7 +37,7 @@ export class ChipsAndFilterComponent implements OnInit {
   }  
   
   ngOnChanges(changes: SimpleChanges) {
-     if(this.selectedCount === this.totalCount || this.selectedCount == this.maxCount){
+    if(this.selectedCount === this.totalCount || this.selectedCount >= this.maxCount || this.selectedCount >= 100 && this.maxCount >= 100){
       this.selectAllXActive = true;
     } 
     else{

@@ -331,6 +331,8 @@ export class SearchPopoverComponent implements OnInit {
     });
     this.removeFilteredData(event.chipValue);
     this.page = 1;
+    if(this.data.isMobile)
+    this.limit = 25;
     this.setPaginatorToFirstpage.set(true);
     this.tableData.set(await this.getMenteelist());
   }
@@ -432,10 +434,13 @@ async onSelectAllX(isChecked: boolean) {
     this.countSelectedList = 0;
     this.page = 1;
     this.setPaginatorToFirstpage.set(true);
+    this.count.set(0);
     this.disableInfiniteScroll.set(false);
     this.tableData.set(await this.getMenteelist());
     return;
   }
+
+  this.selectedList = [];
   
   const originalPage = this.page;
   const originalLimit = this.limit;
