@@ -3,12 +3,11 @@
 <ion-content scrollEvents="true">
   <div class="d-flex flex-justify-center">
     <ion-header>
-      <ion-segment (ionChange)="segmentChanged($event)" [value]="segmentType">
-        <ion-segment-button value="slot-requests" class="normal-case">
+      <ion-segment (ionChange)="segmentChanged($event)" *ngIf="showMessageRequests" [value]="segmentType">
+        <ion-segment-button value="slot-requests" class="normal-case" >
           <ion-label>{{ "SLOT_REQUESTS" | translate }}</ion-label>
         </ion-segment-button>
         <ion-segment-button
-          *ngIf="showMessageRequests"
           value="message-requests"
           class="normal-case"
         >
