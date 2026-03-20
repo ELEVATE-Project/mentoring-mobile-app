@@ -232,18 +232,18 @@ describe('DashboardPage', () => {
     expect(initialDurationSpy).toHaveBeenCalled();
 
     // getUserRole adds "mentee" first if missing
-    expect(component.user[0]).toBe('mentee');
-    expect(component.selectedRole).toBe('mentee');
+    expect(component.user()[0]).toBe('mentee');
+    expect(component.selectedRole()).toBe('mentee');
 
-    expect(component.isMentor).toBeTrue();
-    expect(component.segment).toBe('mentor');
-    expect(component.filteredCards).toBeTruthy();
+    expect(component.isMentor()).toBeTrue();
+    expect(component.segment()).toBe('mentor');
+    expect(component.filteredCards()).toBeTruthy();
   }));
 
   // ---------- calculateDuration ----------
 
   it('calculateDuration should set month range and groupBy', fakeAsync(() => {
-    component.selectedDuration = 'month';
+    component.selectedDuration.set('month');
 
     // we don’t want real bigNumberCount / prepareChartUrl (they touch filteredCards etc)
     const bigNumberSpy = spyOn(component, 'bigNumberCount').and.returnValue(
@@ -270,17 +270,17 @@ describe('DashboardPage', () => {
     const bigNumberSpy = spyOn(component, 'bigNumberCount').and.returnValue(Promise.resolve());
     const chartSpy = spyOn(component, 'prepareChartUrl').and.returnValue(Promise.resolve());
 
-    component.selectedDuration = 'week';
+    component.selectedDuration.set('week');
     component.calculateDuration();
     tick(200);
     expect(component.groupBy).toBe('day');
 
-    component.selectedDuration = 'quarter';
+    component.selectedDuration.set('quarter');
     component.calculateDuration();
     tick(200);
     expect(component.groupBy).toBe('month');
 
-    component.selectedDuration = 'year';
+    component.selectedDuration.set('year');
     component.calculateDuration();
     tick(200);
     expect(component.groupBy).toBe('month');
@@ -338,28 +338,28 @@ describe('DashboardPage', () => {
   // ---------- getTranslatedLabel ----------
 
   it('getTranslatedLabel should build translatedChartConfig', () => {
-    component.session_type = 'ALL';
-    component.chartBody = {
+    component.session_type.set('ALL');
+    component.chartBody.set({
       ALL: {
         chartConfig: [
           { label: 'DASHBOARD_LABEL', backgroundColor: '#fff' }
         ]
       }
-    };
+    });
 
     // translate.instant mocked in beforeEach to return key itself
     component.getTranslatedLabel();
 
-    expect(component.translatedChartConfig).toBeDefined();
-    expect(component.translatedChartConfig.length).toBe(1);
-    expect(component.translatedChartConfig[0].label).toBe('DASHBOARD_LABEL');
+    expect(component.translatedChartConfig()).toBeDefined();
+    expect(component.translatedChartConfig().length).toBe(1);
+    expect(component.translatedChartConfig()[0].label).toBe('DASHBOARD_LABEL');
   });
 
   // ---------- preparedUrl ----------
 
   it('preparedUrl should call reportData and return data when value is provided', fakeAsync(() => {
-    component.selectedRole = 'mentor';
-    component.session_type = 'ALL';
+    component.selectedRole.set('mentor');
+    component.session_type.set('ALL');
     component.groupBy = 'day';
     component.report_code = 'TEST_REPORT';
     component.startDateEpoch = moment().unix();
@@ -394,7 +394,7 @@ describe('DashboardPage', () => {
 
   it('bigNumberCount should call preparedUrl and set big number values', fakeAsync(() => {
     // set filteredCards with one report that has one bigNumber entry
-    component.filteredCards = {
+    component.filteredCards.set({
       ALL: {
         bigNumbers: [
           {
@@ -405,49 +405,49 @@ describe('DashboardPage', () => {
           }
         ]
       }
-    };
+    });
     component.report_code = 'BN_REPORT';
     // spy preparedUrl to return an object containing the key
     const preparedSpy = spyOn<any>(component, 'preparedUrl').and.returnValue(Promise.resolve({ total: 42 }));
     component.bigNumberCount();
     tick();
     expect(preparedSpy).toHaveBeenCalled();
-    expect(component.filteredCards.ALL.bigNumbers[0].data[0].value).toBe(42);
+    expect(component.filteredCards().ALL.bigNumbers[0].data[0].value).toBe(42);
   }));
 
   // ---------- prepareTableUrl ----------
 
   it('prepareTableUrl should build tableUrl and headers', fakeAsync(() => {
-    (component as any).chartBodyConfig = {
+    (component as any).chartBodyConfig.set({
       tableUrl: '/table',
       table_report_code: 'TABLE_1'
-    };
+    });
 
-    component.chartBody = {};
-    component.selectedRole = 'mentor';
-    component.session_type = 'ALL';
+    component.chartBody.set({});
+    component.selectedRole.set('mentor');
+    component.session_type.set('ALL');
     component.startDateEpoch = 1700000000;
     component.endDateEpoch = 1700003600;
 
     component.prepareTableUrl();
     tick();
 
-    expect(component.chartBody.tableUrl).toContain('report_code=');
-    expect(component.chartBody.headers).toBeDefined();
+    expect(component.chartBody().tableUrl).toContain('report_code=');
+    expect(component.chartBody().headers).toBeDefined();
     expect(httpService.setHeaders).toHaveBeenCalled();
   }));
 
   // ---------- prepareChartUrl ----------
 
   it('prepareChartUrl should build chartUrl and headers', fakeAsync(() => {
-    (component as any).chartBodyConfig = {
+    (component as any).chartBodyConfig.set({
       chartUrl: '/chart',
       report_code: 'CHART_1'
-    };
+    });
 
-    component.chartBody = {};
-    component.selectedRole = 'mentor';
-    component.session_type = 'ALL';
+    component.chartBody.set({});
+    component.selectedRole.set('mentor');
+    component.session_type.set('ALL');
     component.groupBy = 'day';
     component.startDateEpoch = 1700000000;
     component.endDateEpoch = 1700003600;
@@ -455,8 +455,8 @@ describe('DashboardPage', () => {
     component.prepareChartUrl();
     tick(50); // for internal setTimeout(10)
 
-    expect(component.chartBody.chartUrl).toContain('report_code=');
-    expect(component.chartBody.headers).toBeDefined();
+    expect(component.chartBody().chartUrl).toContain('report_code=');
+    expect(component.chartBody().headers).toBeDefined();
     expect(httpService.setHeaders).toHaveBeenCalled();
   }));
 
@@ -480,19 +480,19 @@ describe('DashboardPage', () => {
     component.handleFormControlChange('duration', { detail: { value: 'month' } } as any);
     tick(200);
 
-    expect(component.selectedDuration).toBe('month');
+    expect(component.selectedDuration()).toBe('month');
     expect(bigNumSpy).toHaveBeenCalled();
     expect(prepChartSpy).toHaveBeenCalled();
   }));
 
   it('handleFormControlChange should update session_type when type provided', fakeAsync(() => {
     // Setup filteredCards to prevent bigNumberCount from failing
-    component.filteredCards = {
+    component.filteredCards.set({
       SOME: {
         bigNumbers: []
       }
-    };
-    component.session_type = 'ALL';
+    });
+    component.session_type.set('ALL');
 
     // Spy on bigNumberCount to prevent actual execution
     const bigNumSpy = spyOn(component, 'bigNumberCount').and.returnValue(Promise.resolve());
@@ -501,20 +501,20 @@ describe('DashboardPage', () => {
     component.handleFormControlChange('type', { detail: { value: 'SOME' } } as any);
     tick(200);
 
-    expect(component.session_type).toBe('SOME');
+    expect(component.session_type()).toBe('SOME');
     expect(bigNumSpy).toHaveBeenCalled();
     expect(prepChartSpy).toHaveBeenCalled();
   }));
 
   it('handleFormControlChange should set entityTypes when selection provided', fakeAsync(() => {
     // Setup filteredCards to prevent bigNumberCount from failing
-    component.filteredCards = {
+    component.filteredCards.set({
       ALL: {
         bigNumbers: []
       }
-    };
-    component.session_type = 'ALL';
-    component.entityTypes = null;
+    });
+    component.session_type.set('ALL');
+    component.entityTypes.set(null);
 
     // Spy on bigNumberCount to prevent actual execution
     const bigNumSpy = spyOn(component, 'bigNumberCount').and.returnValue(Promise.resolve());
@@ -523,7 +523,7 @@ describe('DashboardPage', () => {
     component.handleFormControlChange('city', { detail: { value: ['A'] } } as any);
     tick(200);
 
-    expect(component.entityTypes.city).toEqual(['A']);
+    expect(component.entityTypes()?.city).toEqual(['A']);
     expect(bigNumSpy).toHaveBeenCalled();
     expect(prepChartSpy).toHaveBeenCalled();
   }));
@@ -537,7 +537,7 @@ describe('DashboardPage', () => {
     spyOn(component, 'prepareChartUrl').and.returnValue(Promise.resolve());
     spyOn(component, 'prepareTableUrl').and.returnValue(Promise.resolve());
     // simulate form data coming from formService
-    component.bigNumberFormData = {
+    component.bigNumberFormData.set({
       mentee: {
         ALL: {
           bigNumbers: [],
@@ -554,13 +554,13 @@ describe('DashboardPage', () => {
           table_report_code: 'T2'
         }
       }
-    };
+    });
 
     component.handleRoleChange({ detail: { value: 'mentor' } } as any);
     tick(200);
 
-    expect(component.selectedRole).toBe('mentor');
-    expect(component.session_type).toBe('ALL');
+    expect(component.selectedRole()).toBe('mentor');
+    expect(component.session_type()).toBe('ALL');
   }));
 
   // ---------- ionViewWillLeave ----------

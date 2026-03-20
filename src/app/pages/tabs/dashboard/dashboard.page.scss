@@ -78,6 +78,24 @@
 .no-label-item ion-select {
     width: 100%;
 }
+
+.no-label-item {
+  --border-color: var(--gray);
+  --border-width: 1px;
+  transition: box-shadow 0.2s ease;
+}
+
+.no-label-item:hover,
+.no-label-item.ion-focused,
+.no-label-item.item-has-focus {
+  --border-color: var(--ion-color-primary);
+}
+
+.no-label-item:hover::part(native),
+.no-label-item.ion-focused::part(native),
+.no-label-item.item-has-focus::part(native) {
+  border-color: var(--gray);
+}
   
 
 .custom-border-radius {

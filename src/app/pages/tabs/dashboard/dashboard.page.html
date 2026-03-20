@@ -1,59 +1,76 @@
 <app-page-header [config]="headerConfig"></app-page-header>
-
 <ion-content>
   <div class="select-role d-flex">
     <h2 style="margin: revert;">{{"ROLE" | translate}}</h2>
-    <ion-item *ngIf="user?.length" fill="outline" style="margin-left: 4%;" class="no-label-item custom-height">
-      <ion-select placeholder="Select Role" [value]="user[0]" (ionChange)="handleRoleChange($event)">
-        <ion-select-option *ngFor="let role of user" [value]="role">{{ role | snakeCaseToUpperCase }}</ion-select-option>
-      </ion-select>
-    </ion-item>
+    @if (user()?.length) {
+      <ion-item fill="outline" style="margin-left: 4%;" class="no-label-item custom-height">
+        <ion-select placeholder="Select Role" [value]="user()[0]" (ionChange)="handleRoleChange($event)">
+          @for (role of user(); track role) {
+            <ion-select-option [value]="role">{{ role | snakeCaseToUpperCase }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+    }
   </div>
 
-  <div class="graphs-and-charts inner-div-style"  *ngIf="selectedRole !=='org_admin'">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="3" sizeXs="6" sizeLg="3" class="filter-column" *ngFor="let control of dynamicFormControls">
-          <h3>{{ control.label | translate}}</h3>
-          <ion-item fill="outline" lines="none" class="no-label-item custom-border-radius custom-height">
-            <ion-select [placeholder]="'Select ' + control.label" [value]="control.defaultValue" (ionChange)="handleFormControlChange(control.value, $event)" [multiple]="control.isMultiple" style="font-size: 13px;">
-              <ion-select-option class="custom-font-size" *ngFor="let option of control.entities" [value]="option.value">
-                {{ option.label }}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ng-container  *ngFor="let card of filteredCards[session_type]?.bigNumbers">
-        <ion-col [size]="card?.data.length > 2 ? 3 : 2" sizeXs="12" [sizeLg]="card?.data.length > 2 ? 4 : 6" style="padding: 0 !important;"  *ngFor="let data of card?.data" >
-          <ion-card style="border-radius: 10px;">
-            <ion-card-content>
-              <h1 style="text-align: center; color: var(--ion-color-primary);" class="my-0">
-                {{ data.value }}
-              </h1>
-              <p style="text-align: center;" class="my-0">{{ data.label | translate}}</p>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-        </ng-container>
-      </ion-row>
-      <ion-row>
-      <ion-col *ngIf="chartBody?.chartUrl && chartBody?.headers">
-          <lib-bar-chart [url]="chartBody?.chartUrl" [headers]="chartBody?.headers" [legends]="translatedChartConfig"  [chartBody]="chartBodyPayload" [scrollLabel]="scrollLabelForMonth"></lib-bar-chart>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
+  @if (!isOrgAdmin()) {
+    <div class="graphs-and-charts inner-div-style">
+      <ion-grid>
+        <ion-row>
+          @for (control of dynamicFormControls(); track control.value) {
+            <ion-col size="3" sizeXs="6" sizeLg="3" class="filter-column">
+              <h3>{{ control.label | translate }}</h3>
+              <ion-item fill="outline" lines="none" class="no-label-item custom-border-radius custom-height">
+                <ion-select [placeholder]="'Select ' + control.label" [value]="control.defaultValue" (ionChange)="handleFormControlChange(control.value, $event)" [multiple]="control.isMultiple" style="font-size: 13px;">
+                  @for (option of control.entities; track option.value) {
+                    <ion-select-option class="custom-font-size" [value]="option.value">
+                      {{ option.label }}
+                    </ion-select-option>
+                  }
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          }
+        </ion-row>
+        <ion-row>
+          @for (card of filteredCards()[session_type()]?.bigNumbers; track $index) {
+            @for (data of card?.data; track $index) {
+              <ion-col [size]="card?.data.length > 2 ? 3 : 2" sizeXs="12" [sizeLg]="card?.data.length > 2 ? 4 : 6" style="padding: 0 !important;">
+                <ion-card style="border-radius: 10px;">
+                  <ion-card-content>
+                    <h1 style="text-align: center; color: var(--ion-color-primary);" class="my-0">
+                      {{ data.value }}
+                    </h1>
+                    <p style="text-align: center;" class="my-0">{{ data.label | translate }}</p>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            }
+          }
+        </ion-row>
+        <ion-row>
+          @if (chartBody()?.chartUrl && chartBody()?.headers) {
+            <ion-col>
+              <lib-bar-chart [url]="chartBody()?.chartUrl" [headers]="chartBody()?.headers" [legends]="translatedChartConfig()" [chartBody]="chartBodyPayload()" [scrollLabel]="scrollLabelForMonth()"></lib-bar-chart>
+            </ion-col>
+          }
+        </ion-row>
+      </ion-grid>
+    </div>
+    <div class="tables inner-div-style">
+      <ion-grid>
+        @if (chartBody()?.tableUrl) {
+          <ion-row>
+            <lib-table #libTableRef [url]="chartBody()?.tableUrl" [headers]="chartBody()?.headers" [showDownload]="true" [title]="chartBody()?.tableTitle | translate" style="width: 100%;" [metaKeys]="metaKeys()" (downloadEvent)="downloadCSV($event)"></lib-table>
+          </ion-row>
+        }
+      </ion-grid>
+    </div>
+  }
 
-  <div class="tables inner-div-style"  *ngIf="selectedRole !=='org_admin'">
-    <ion-grid>
-      <ion-row *ngIf="chartBody?.tableUrl">
-        <lib-table #libTableRef [url]="chartBody?.tableUrl" [headers]="chartBody?.headers" [showDownload]="true" [title]="chartBody?.tableTitle | translate"  style="width: 100%;" [metaKeys]="metaKeys" (downloadEvent)="downloadCSV($event)"></lib-table>
-      </ion-row>
-    </ion-grid>
-  </div>
-  <div *ngIf="selectedRole ==='org_admin'" style="text-align: center;">
-    <h1>Coming soon</h1>
-  </div>
-</ion-content>  
+  @if (isOrgAdmin()) {
+    <div style="text-align: center;">
+      <h1>Coming soon</h1>
+    </div>
+  }
+</ion-content>
