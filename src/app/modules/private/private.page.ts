@@ -70,6 +70,7 @@ export class PrivatePage implements OnInit {
       icon: 'people',
       url: CommonRoutes.MY_CONNECTIONS,
       pageId: PAGE_IDS.myConnections,
+      showTab: false,
     },
     {
       title: 'MESSAGES',
@@ -78,6 +79,7 @@ export class PrivatePage implements OnInit {
       url: CommonRoutes.MESSAGES,
       badge: false,
       pageId: PAGE_IDS.messages,
+      showTab: false,
     },
     {
       title: 'DASHBOARD',
@@ -217,15 +219,20 @@ export class PrivatePage implements OnInit {
   }
 
   private syncVisibleAppPages(): void {
-    this.appPages = this.allAppPages.filter((page: any) => {
-      if (
-        !this.isChatEnabled() &&
-        [PAGE_IDS.myConnections, PAGE_IDS.messages].includes(page.pageId)
-      ) {
-        return false;
+    const isChatEnabled = this.isChatEnabled();
+
+    this.appPages = this.allAppPages.map((page: any) => {
+      if ([PAGE_IDS.myConnections, PAGE_IDS.messages].includes(page.pageId)) {
+        return {
+          ...page,
+          showTab: isChatEnabled,
+        };
       }
 
-      return true;
+      return {
+        ...page,
+        showTab: page.showTab ?? true,
+      };
     });
   }
 

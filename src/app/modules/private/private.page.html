@@ -93,7 +93,7 @@
             *ngFor="let p of appPages; let i = index"
             [class]="p?.class"
           >
-            <ng-container>
+            <ng-container *ngIf="p?.showTab !== false">
               <span class="badge" *ngIf="p.badge"></span>
               <ion-item
                 [routerLink]="p?.url"
