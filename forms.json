@@ -2563,7 +2563,7 @@
   {
     "type": "requestSession",
     "sub_type": "requestSessionForm",
-    "action": "update",
+    "action": "create",
     "data": {
       "template_name": "defaultTemplate",
       "fields": {
@@ -2644,7 +2644,7 @@
 {
   "type": "mentorDirectoryCard",
   "sub_type": "mentorDirectoryCardForm",
-  "action": "update",
+  "action": "create",
   "data": {
     "template_name": "defaultTemplate",
     "fields": {
@@ -2671,7 +2671,7 @@
 {
   "type": "mentorRequestCard",
   "sub_type": "mentorRequestCardForm",
-  "action": "update",
+  "action": "create",
   "data": {
     "template_name": "defaultTemplate",
     "fields": {
@@ -2698,7 +2698,7 @@
 {
   "type": "mentorConnectionCard",
   "sub_type": "mentorConnectionCardForm",
-  "action": "update",
+  "action": "create",
   "data": {
     "template_name": "defaultTemplate",
     "fields": {
@@ -2725,7 +2725,7 @@
 {
   "type": "menteeCard",
   "sub_type": "menteeCardForm",
-  "action": "update",
+  "action": "create",
   "data": {
     "template_name": "defaultTemplate",
     "fields": {

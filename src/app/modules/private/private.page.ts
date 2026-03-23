@@ -39,7 +39,7 @@ import {
 export class PrivatePage implements OnInit {
   user;
   PAGE_IDS = PAGE_IDS;
-  public appPages = [
+  private readonly allAppPages = [
     {
       title: 'HOME',
       action: 'home',
@@ -70,6 +70,7 @@ export class PrivatePage implements OnInit {
       icon: 'people',
       url: CommonRoutes.MY_CONNECTIONS,
       pageId: PAGE_IDS.myConnections,
+      showTab: false,
     },
     {
       title: 'MESSAGES',
@@ -78,6 +79,7 @@ export class PrivatePage implements OnInit {
       url: CommonRoutes.MESSAGES,
       badge: false,
       pageId: PAGE_IDS.messages,
+      showTab: false,
     },
     {
       title: 'DASHBOARD',
@@ -130,6 +132,7 @@ export class PrivatePage implements OnInit {
       pageId: PAGE_IDS.loginActivity,
     },
   ];
+  public appPages = [...this.allAppPages];
 
   adminPage = {
     title: 'ADMIN_WORKSPACE',
@@ -150,6 +153,7 @@ export class PrivatePage implements OnInit {
   menuSubscription: any;
   routerSubscription: any;
   adminAccess: boolean;
+  chatConfig: any;
 
   isAuthBypassed = environment['isAuthBypassed'];
   constructor(
@@ -174,6 +178,8 @@ export class PrivatePage implements OnInit {
 
   async ngOnInit() {
     await this.initializeApp();
+    this.chatConfig = await this.localStorage.getLocalData(localKeys['CHAT_CONFIG']);
+    this.syncVisibleAppPages();
     if(this.isMentor) {
       const { result } = await this.profile.getRequestCount();
       const { sessionRequestCount = 0, connectionRequestCount = 0 } = result || {};
@@ -207,6 +213,29 @@ export class PrivatePage implements OnInit {
   const hasBadge = this.appPages.some(p => p.badge);
   this.utilService.setHasBadge(hasBadge);
 }
+
+  private isChatEnabled(): boolean {
+    const isEnabled = String(this.chatConfig) === 'true';
+    return isEnabled;
+  }
+
+  private syncVisibleAppPages(): void {
+    const isChatEnabled = this.isChatEnabled();
+
+    this.appPages = this.allAppPages.map((page: any) => {
+      if ([PAGE_IDS.myConnections, PAGE_IDS.messages].includes(page.pageId)) {
+        return {
+          ...page,
+          showTab: isChatEnabled,
+        };
+      }
+
+      return {
+        ...page,
+        showTab: page.showTab ?? true,
+      };
+    });
+  }
 
   subscribeBackButton() {
     this.backButtonSubscription =
@@ -276,6 +305,7 @@ export class PrivatePage implements OnInit {
               )
             : false;
         }
+        await this.permissionService.getPlatformConfig();
         await this.profile.getChatToken();
         this.getUser();
         resolve();

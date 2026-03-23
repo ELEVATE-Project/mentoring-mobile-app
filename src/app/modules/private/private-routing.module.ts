@@ -8,6 +8,7 @@ import { AllowPageAccess } from 'src/app/core/guards/allowPageAccess/allowPageAc
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { CHAT_MESSAGES } from 'src/app/core/constants/chatConstants';
 import { MY_CONNECTIONS_NO_RESULT_FOUND } from 'src/app/core/constants/genericConstants';
+import { ChatConfigGuard } from 'src/app/core/guards/chat-config/chat-config.guard';
 
 const routes: Routes = [
   {
@@ -183,7 +184,7 @@ const routes: Routes = [
         canActivate: [PrivateGuard],
         data: {
           pageId: PAGE_IDS.mentorSearchDirectory,
-          placeholder: 'Search for mentors',
+          placeholder: 'MENTOR_SEARCH_PLACEHOLDER',
           button_config: CHAT_MESSAGES.GENERIC_CARD_MENTOR_DIRECTORY_BTN_CONFIG,
         },
       },
@@ -193,7 +194,7 @@ const routes: Routes = [
           import('../../pages/generic-list/generic-list.module').then(
             (m) => m.GenericListPageModule
           ),
-        canActivate: [PrivateGuard, AllowPageAccess],
+        canActivate: [PrivateGuard, AllowPageAccess, ChatConfigGuard],
         data: {
           pageId: PAGE_IDS.myConnections,
           placeholder: 'SEARCH_CONNECTIONS',
@@ -205,28 +206,28 @@ const routes: Routes = [
         },
       },
       {
-        path: 'messages',
+        path: CommonRoutes.MESSAGES,
         loadChildren: () =>
           import('../../pages/messages/messages.module').then(
             (m) => m.MessagesPageModule
           ),
-        canActivate: [PrivateGuard],
+        canActivate: [PrivateGuard, ChatConfigGuard],
       },
       {
-        path: 'chat/:id',
+        path: `${CommonRoutes.CHAT}/:id`,
         loadChildren: () =>
           import('../../pages/chat-window/chat-window.module').then(
             (m) => m.ChatWindowPageModule
           ),
-        canActivate: [PrivateGuard],
+        canActivate: [PrivateGuard, ChatConfigGuard],
       },
       {
-        path: 'chat-request/:id',
+        path: `${CommonRoutes.CHAT_REQ}/:id`,
         loadChildren: () =>
           import('../../pages/chat-request/chat-request.module').then(
             (m) => m.ChatRequestPageModule
           ),
-        canActivate: [PrivateGuard],
+        canActivate: [PrivateGuard, ChatConfigGuard],
       },
       {
         path: CommonRoutes.SESSION_REQUEST,
