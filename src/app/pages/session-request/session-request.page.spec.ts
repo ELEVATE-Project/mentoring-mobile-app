@@ -82,6 +82,11 @@ describe('SessionRequestPage', () => {
   let mockModalCtrl: MockModalController;
   let mockUtil: MockUtilService;
 
+  const attachDummyForm = () => {
+    component.form1 = new DummyForm() as any;
+    spyOnProperty(component.form1.myForm, 'valid', 'get').and.returnValue(true);
+  };
+
   beforeEach(waitForAsync(async () => {
     mockRouter = new MockRouter();
     mockToast = new MockToastService();
@@ -111,21 +116,21 @@ describe('SessionRequestPage', () => {
         { provide: UtilService, useValue: mockUtil },
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    })
+      .overrideTemplate(SessionRequestPage, '')
+      .compileComponents();
 
     fixture = TestBed.createComponent(SessionRequestPage);
     component = fixture.componentInstance;
+  }));
 
-    // Attach a dummy form to the ViewChild
-    component.form1 = new DummyForm() as any;
-
-    // Reset spies and set default form validity before each test
+  beforeEach(() => {
+    attachDummyForm();
     mockRouter.navigate.calls.reset();
     mockToast.showToast.calls.reset();
     (component.form1.reset as jasmine.Spy).calls.reset();
     (component.form1.myForm.markAsPristine as jasmine.Spy).calls.reset();
-    spyOnProperty(component.form1.myForm, 'valid', 'get').and.returnValue(true);
-  }));
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -180,13 +185,18 @@ describe('SessionRequestPage', () => {
   });
 
   it('onSubmit should not call requestSession when form is invalid', () => {
-    spyOnProperty(component.form1.myForm, 'valid', 'get').and.returnValue(false);
+    attachDummyForm();
+    Object.defineProperty(component.form1.myForm, 'valid', {
+      get: () => false,
+      configurable: true
+    });
     component.onSubmit();
     expect(mockSessionService.requestSession).not.toHaveBeenCalled();
     expect(mockUtil.convertDatesToTimezone).not.toHaveBeenCalled();
   });
 
   it('onSubmit success path: should call requestSession, navigate, show toast, reset form, and set isSubmited', async () => {
+    attachDummyForm();
     component.isSubmited = false;
     component.ids = { requestee_id: 100 };
     component.selectedTimezone = 'Europe/Berlin';
@@ -216,20 +226,19 @@ describe('SessionRequestPage', () => {
 
   // Test Case for Error Path (100% Coverage on the .catch block)
   it('onSubmit error path: should handle rejection and prevent success side effects', async () => {
+    attachDummyForm();
     component.isSubmited = false;
     
-    // Arrange: Make requestSession return a rejected promise
-    (mockSessionService.requestSession as jasmine.Spy).and.returnValue(Promise.reject('Network Error'));
+    (mockSessionService.requestSession as jasmine.Spy).and.returnValue({
+      then: () => ({
+        catch: (callback: (error: string) => void) => {
+          callback('Network Error');
+          return Promise.resolve();
+        }
+      })
+    } as any);
 
     component.onSubmit();
-
-    // The .catch block in the component is empty: `.catch((err) => {})`. 
-    // We await to ensure the rejection is processed, even if it does nothing visible.
-    try {
-        await (mockSessionService.requestSession as jasmine.Spy).calls.mostRecent().returnValue;
-    } catch (e) {
-        // Expected to catch the rejection
-    }
     
     // Assertions: only the preparation steps should run
     expect(mockSessionService.requestSession).toHaveBeenCalled();

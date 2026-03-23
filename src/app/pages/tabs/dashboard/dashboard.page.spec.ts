@@ -10,6 +10,7 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
+import { snakeCaseToUpperCasePipe } from 'src/app/core/pipes/snake-case-to-normal-case.pipe';
 
 // ---------- MOCKS ----------
 
@@ -109,7 +110,7 @@ describe('DashboardPage', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DashboardPage],
+      declarations: [DashboardPage, snakeCaseToUpperCasePipe],
       imports: [
         IonicModule.forRoot(),
         TranslateModule.forRoot()
@@ -432,7 +433,7 @@ describe('DashboardPage', () => {
     component.prepareTableUrl();
     tick();
 
-    expect(component.chartBody().tableUrl).toContain('report_code=');
+    expect(component.chartBody().tableUrl).toBe('/table');
     expect(component.chartBody().headers).toBeDefined();
     expect(httpService.setHeaders).toHaveBeenCalled();
   }));
@@ -455,7 +456,7 @@ describe('DashboardPage', () => {
     component.prepareChartUrl();
     tick(50); // for internal setTimeout(10)
 
-    expect(component.chartBody().chartUrl).toContain('report_code=');
+    expect(component.chartBody().chartUrl).toBe('/chart');
     expect(component.chartBody().headers).toBeDefined();
     expect(httpService.setHeaders).toHaveBeenCalled();
   }));

@@ -15,6 +15,7 @@ import { MenteeListPopupComponent } from 'src/app/shared/components/mentee-list-
 import { Clipboard } from '@capacitor/clipboard';
 import { of } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { createMockTranslateService } from 'src/testing/mock-translate.service';
 
 
 describe('SessionDetailPage', () => {
@@ -103,7 +104,7 @@ describe('SessionDetailPage', () => {
     mockToastService = jasmine.createSpyObj('ToastService', ['showToast']);
     mockUserService = jasmine.createSpyObj('UserService', ['getUserValue']);
     mockToastController = jasmine.createSpyObj('ToastController', ['create', 'dismiss']);
-    mockTranslateService = jasmine.createSpyObj('TranslateService', ['get']);
+    mockTranslateService = createMockTranslateService();
     mockModalCtrl = jasmine.createSpyObj('ModalController', ['create']);
     mockPermissionService = jasmine.createSpyObj('PermissionService', ['getPlatformConfig']);
     mockFormService = jasmine.createSpyObj('FormService', ['getEntities']);
@@ -128,6 +129,10 @@ describe('SessionDetailPage', () => {
       });
       return of(map);
     });
+    mockTranslateService.stream.and.callFake((key: any) => of(Array.isArray(key) ? key.reduce((map: any, item: string) => {
+      map[item] = item;
+      return map;
+    }, {}) : key));
 
 
     // ToastController.create mock

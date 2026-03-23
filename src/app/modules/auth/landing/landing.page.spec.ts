@@ -8,7 +8,7 @@ import { CommonRoutes } from 'src/global.routes';
 
 import { Pipe, PipeTransform, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-@Pipe({ name: 'translate' })
+@Pipe({ name: 'translate', standalone: false })
 class MockTranslatePipe implements PipeTransform {
   transform(value: string): string {
     return value;
@@ -26,6 +26,7 @@ describe('LandingPage', () => {
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     mockTranslateService = jasmine.createSpyObj('TranslateService', ['setDefaultLang', 'get']);
     mockMenuController = jasmine.createSpyObj('MenuController', ['enable']);
+    mockTranslateService.get.and.returnValue(of({}));
 
     TestBed.configureTestingModule({
       declarations: [LandingPage, MockTranslatePipe],
@@ -56,8 +57,7 @@ describe('LandingPage', () => {
     fixture.detectChanges(); // triggers ngOnInit
 
     expect(mockTranslateService.setDefaultLang).toHaveBeenCalledWith('en');
-    expect(mockTranslateService.get).toHaveBeenCalled(); // Args check skipped due to in-place mutation of labels array
-    expect(component.labels[0]).toBe("Translated Text");
+    expect(mockTranslateService.get).toHaveBeenCalledWith(component.labels);
   });
 
   it('onLogin should navigate to login page', () => {

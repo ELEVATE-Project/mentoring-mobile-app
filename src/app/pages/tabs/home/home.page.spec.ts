@@ -12,8 +12,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { TranslateModule } from '@ngx-translate/core';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import { promise } from 'protractor';
-import { count } from 'console';
+
 import { CommonRoutes } from 'src/global.routes';
 import { environment } from 'src/environments/environment';
 import { TermsAndConditionsPage } from '../../terms-and-conditions/terms-and-conditions.page';
@@ -506,31 +505,32 @@ const mockSessions = {
     describe('segmentChanged', () => {
       beforeEach(() => {
         mockSessionService.getSessions.and.returnValue(Promise.resolve(mockSessions));
-            mockSessionService.getAllSessionsAPI.and.returnValue(Promise.resolve(mockCreatedSessions));
-                it('should change selected segment and reset page', fakeAsync(() => {
-                  component.page = 5;
-                  
-                  component.segmentChanged({ name: 'created-sessions' });
-                  tick();
-                  
-                  expect(component.selectedSegment()).toBe('created-sessions');
-                  expect(component.page).toBe(1);
-                }));
+        mockSessionService.getAllSessionsAPI.and.returnValue(Promise.resolve(mockCreatedSessions));
+      });
 
-          it('should load data for all-sessions segment', fakeAsync(() => {
-          component.segmentChanged({ name: 'all-sessions' });
-          tick();
-          
-          expect(mockSessionService.getSessions).toHaveBeenCalled();
-        }));
+      it('should change selected segment and reset page', fakeAsync(() => {
+        component.page = 5;
+        
+        component.segmentChanged({ name: 'created-sessions' });
+        tick();
+        
+        expect(component.selectedSegment()).toBe('created-sessions');
+        expect(component.page).toBe(1);
+      }));
 
-            it('should load data for my-sessions segment', fakeAsync(() => {
-      component.segmentChanged({ name: 'my-sessions' });
-      tick();
-      
-      expect(mockSessionService.getSessions).toHaveBeenCalled();
-    }));
-      })
+      it('should load data for all-sessions segment', fakeAsync(() => {
+        component.segmentChanged({ name: 'all-sessions' });
+        tick();
+        
+        expect(mockSessionService.getSessions).toHaveBeenCalled();
+      }));
+
+      it('should load data for my-sessions segment', fakeAsync(() => {
+        component.segmentChanged({ name: 'my-sessions' });
+        tick();
+        
+        expect(mockSessionService.getSessions).toHaveBeenCalled();
+      }));
     });
 
 
