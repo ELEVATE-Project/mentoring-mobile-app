@@ -5,18 +5,25 @@
   @let cardConfig = mentorForm();
   @let messageRequests = data();
   @let sessionRequests = slotRequests();
+  @let canShowMessageRequests = showMessageRequests();
   @let hasNoResults = currentSegment === 'slot-requests' ? !sessionRequests.length : !messageRequests.length;
 
   <div class="d-flex flex-justify-center">
     <ion-header>
-      <ion-segment (ionChange)="segmentChanged($event)" [value]="currentSegment">
+    @if (canShowMessageRequests) {
+      <ion-segment (ionChange)="segmentChanged($event)" [value]="segmentType()">
         <ion-segment-button value="slot-requests" class="normal-case">
           <ion-label>{{ "SLOT_REQUESTS" | translate }}</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="message-requests" class="normal-case">
-          <ion-label>{{ "MESSAGE_REQUESTS" | translate }}</ion-label>
-        </ion-segment-button>
+     
+          <ion-segment-button
+            value="message-requests"
+            class="normal-case"
+          >
+            <ion-label>{{ "MESSAGE_REQUESTS" | translate }}</ion-label>
+          </ion-segment-button>
       </ion-segment>
+      }
     </ion-header>
   </div>
 

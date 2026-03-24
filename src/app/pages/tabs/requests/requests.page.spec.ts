@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync, fakeAsync } from '@angular/core/testing';
 import { RequestsPage } from './requests.page';
-import { HttpService } from 'src/app/core/services';
+import { HttpService, LocalStorageService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,12 +26,15 @@ describe('RequestsPage', () => {
   let formServiceSpy: any;
   let routerSpy: any;
   let activatedRouteStub: any;
+  let localStorageServiceSpy: any;
 
   beforeEach(waitForAsync(() => {
     httpServiceSpy = jasmine.createSpyObj('HttpService', ['get']);
     sessionServiceSpy = jasmine.createSpyObj('SessionService', ['requestSessionList']);
     formServiceSpy = jasmine.createSpyObj('FormService', ['getForm']);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    localStorageServiceSpy = jasmine.createSpyObj('LocalStorageService', ['getLocalData']);
+    localStorageServiceSpy.getLocalData.and.returnValue(Promise.resolve('true'));
 
     activatedRouteStub = {
       data: of({
@@ -47,6 +50,7 @@ describe('RequestsPage', () => {
         { provide: HttpService, useValue: httpServiceSpy },
         { provide: SessionService, useValue: sessionServiceSpy },
         { provide: FormService, useValue: formServiceSpy },
+        { provide: LocalStorageService, useValue: localStorageServiceSpy },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: Router, useValue: routerSpy }
       ],
@@ -72,6 +76,7 @@ describe('RequestsPage', () => {
     await component.ionViewWillEnter();
 
     expect(formServiceSpy.getForm).toHaveBeenCalled();
+    expect(localStorageServiceSpy.getLocalData).toHaveBeenCalled();
     expect(component.mentorForm()).toEqual(_.get(fakeFormResult, 'data.fields.controls'));
     expect(component.buttonConfig()).toBeDefined();
     expect(component.slotBtnConfig()).toBeDefined();
@@ -88,6 +93,19 @@ describe('RequestsPage', () => {
     expect(component.segmentType()).toBe('message-requests');
     expect(component.page).toBe(1);
     expect(component.pendingRequest).toHaveBeenCalled();
+  }));
+
+  it('ionViewWillEnter should force slot requests when chat is disabled', waitForAsync(async () => {
+    const fakeFormResult = { data: { fields: { controls: { title: 'test' } } } };
+    localStorageServiceSpy.getLocalData.and.returnValue(Promise.resolve('false'));
+    formServiceSpy.getForm.and.returnValue(Promise.resolve(fakeFormResult));
+    sessionServiceSpy.requestSessionList.and.returnValue(Promise.resolve({ result: { data: [], count: 0 } }));
+    component.segmentType.set('message-requests');
+
+    await component.ionViewWillEnter();
+
+    expect(component.showMessageRequests()).toBeFalse();
+    expect(component.segmentType()).toBe('slot-requests');
   }));
 
   it('pendingRequest should populate data and set noResult when empty on first page', waitForAsync(async () => {

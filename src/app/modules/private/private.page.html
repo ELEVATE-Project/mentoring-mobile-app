@@ -51,22 +51,24 @@
           </ion-menu-toggle>
           }
           @for (p of privateService.appPages(); track p.pageId) {
-          <ion-menu-toggle auto-hide="false" [class]="p?.class">
-            @if (p.badge) {
-            <span class="badge"></span>
-            }
-            <ion-item [routerLink]="p?.url" lines="none" detail="false" (click)="privateService.menuItemAction(p)"
-              *allowTemplateView="p?.pageId">
-              @if (isCustomIcon(p.icon)) {
-              <img [src]="p.icon" class="side-menu-icon custom-icon" slot="start" alt="{{ p.title }} icon" />
-              } @else {
-              <ion-icon class="side-menu-icon" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'">
-              </ion-icon>
+           @if(p?.showTab !=false) {
+            <ion-menu-toggle auto-hide="false" [class]="p?.class">
+              @if (p.badge) {
+              <span class="badge"></span>
               }
-              <ion-label class="sub-menu-list-label"><strong>{{ p.title | translate}}</strong>
-              </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
+              <ion-item [routerLink]="p?.url" lines="none" detail="false" (click)="privateService.menuItemAction(p)"
+                *allowTemplateView="p?.pageId">
+                @if (isCustomIcon(p.icon)) {
+                <img [src]="p.icon" class="side-menu-icon custom-icon" slot="start" alt="{{ p.title }} icon" />
+                } @else {
+                <ion-icon class="side-menu-icon" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'">
+                </ion-icon>
+                }
+                <ion-label class="sub-menu-list-label"><strong>{{ p.title | translate}}</strong>
+                </ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+            }
           }
         </ion-list>
       </div>
