@@ -42,7 +42,7 @@ export class ProfileService {
     private modal: ModalController,
     private chatService: FrontendChatLibraryService
   ) {}
-  async profileUpdate(formData, showToast = true) {
+  async profileUpdate(formData, showToast = true) { 
     await this.loaderService.startLoader();
     const config = {
       url: urlConstants.API_URLS.PROFILE_UPDATE,
@@ -157,7 +157,16 @@ export class ProfileService {
     }
   }
 
-  async getProfileDetailsFromAPI() {
+  async getProfileDetailsFromAPI(forceRefresh = false) {
+    if (!forceRefresh) {
+      const cachedUserDetails = await this.localStorage.getLocalData(
+        localKeys.USER_DETAILS
+      );
+      if (cachedUserDetails) {
+        return cachedUserDetails;
+      }
+    }
+
     const config = {
       url: urlConstants.API_URLS.PROFILE_READ,
       payload: {},
@@ -165,11 +174,12 @@ export class ProfileService {
     try {
       let data: any = await this.httpService.get(config);
       data = _.get(data, 'result');
+      const userRole = this.getUserRole(data);
       this.getUserRole(data);
       await this.localStorage.setLocalData(localKeys.USER_DETAILS, data);
       await this.localStorage.setLocalData(
         localKeys.USER_ROLES,
-        this.getUserRole(data)
+        userRole
       );
       return data;
     } catch (error) {}
