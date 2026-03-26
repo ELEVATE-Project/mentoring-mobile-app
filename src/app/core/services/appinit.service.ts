@@ -145,7 +145,7 @@ export class PrivateService {
 
     private isChatEnabled(): boolean {
         const isEnabled = String(this.chatConfig) === 'true';
-        return false;
+        return isEnabled;
     }
 
     private syncVisibleAppPages(): void {
