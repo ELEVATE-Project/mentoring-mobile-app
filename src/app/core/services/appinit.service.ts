@@ -150,7 +150,7 @@ export class PrivateService {
 
     private syncVisibleAppPages(): void {
         const isChatEnabled = this.isChatEnabled();
-        const pages = this.allAppPages().map((page: any) => {
+        const pages = this.appPages().map((page: any) => {
             if ([PAGE_IDS.myConnections, PAGE_IDS.messages].includes(page.pageId)) {
                 return {
                     ...page,
@@ -163,7 +163,6 @@ export class PrivateService {
                 showTab: page.showTab ?? true,
             };
         });
-
         this.appPages.set(pages);
     }
 
