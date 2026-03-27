@@ -16,6 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PlatformLocation, Location } from '@angular/common';
 import { of } from 'rxjs';
 import { ChangeDetectorRef, NO_ERRORS_SCHEMA } from '@angular/core';
+import { createMockTranslateService } from 'src/testing/mock-translate.service';
 
 describe('EditProfilePage', () => {
   let component: EditProfilePage;
@@ -77,26 +78,18 @@ describe('EditProfilePage', () => {
     mockLoaderService = jasmine.createSpyObj('LoaderService', ['startLoader']);
     mockAlertController = jasmine.createSpyObj('AlertController', ['create']);
     
-    // Create a proper mock for TranslateService that supports both .get() and the pipe
-    mockTranslateService = {
-      get: jasmine.createSpy('get').and.returnValue(of({
-        'PROFILE_FORM_UNSAVED_DATA': 'Unsaved data',
-        'DONOT_SAVE': 'Don\'t Save',
-        'SAVE': 'Save',
-        'PROFILE_EXIT_HEADER_LABEL': 'Exit?',
-        'SETUP_PROFILE': 'Setup Profile',
-        'SETUP_PROFILE_MESSAGE': 'Please complete your profile',
-        'CONTINUE': 'Continue'
-      })),
-      instant: jasmine.createSpy('instant').and.returnValue('Translated Text'),
-      // Add stream property for TranslatePipe
-      stream: jasmine.createSpy('stream').and.returnValue(of('Translated Text')),
-      onTranslationChange: of({}),
-      onLangChange: of({}),
-      onDefaultLangChange: of({}),
-      currentLang: 'en',
-      defaultLang: 'en'
-    };
+    mockTranslateService = createMockTranslateService();
+    mockTranslateService.get.and.returnValue(of({
+      'PROFILE_FORM_UNSAVED_DATA': 'Unsaved data',
+      'DONOT_SAVE': 'Don\'t Save',
+      'SAVE': 'Save',
+      'PROFILE_EXIT_HEADER_LABEL': 'Exit?',
+      'SETUP_PROFILE': 'Setup Profile',
+      'SETUP_PROFILE_MESSAGE': 'Please complete your profile',
+      'CONTINUE': 'Continue'
+    }));
+    mockTranslateService.instant.and.returnValue('Translated Text');
+    mockTranslateService.stream.and.returnValue(of('Translated Text'));
     
     mockToastService = jasmine.createSpyObj('ToastService', ['showToast']);
     mockUtilService = jasmine.createSpyObj('UtilService', ['profileUpdatePopup']);
