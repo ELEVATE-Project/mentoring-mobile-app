@@ -12,7 +12,9 @@ export const environment = {
 	unauthorizedRedirectUrl: window['env' as any]['unauthorizedRedirectUrl' as string]  as unknown as any,
 	supportEmail: window['env' as any]['supportEmail' as any] as unknown as string,
 	isAuthBypassed: window['env' as any]['isAuthBypassed'] as unknown as any,
-	password: window['env' as any]['password']  as unknown as any
+	password: window['env' as any]['password']  as unknown as any,
+    chatBaseUrl: window['env' as any]['chatBaseUrl']  as unknown as string,
+    chatWebSocketUrl: window['env' as any]['chatWebSocketUrl'] as unknown as string
 }
 
 // export const environment = {
