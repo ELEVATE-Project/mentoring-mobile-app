@@ -1,17 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService, ToastService } from 'src/app/core/services';
 import { languagesList } from 'src/app/core/constants/languageConstant';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
+
+interface LanguageOption {
+  label: string;
+  value: string;
+}
+
 @Component({
-    selector: 'app-language',
-    templateUrl: './language.page.html',
-    styleUrls: ['./language.page.scss'],
-    standalone: false
+  selector: 'app-language',
+  templateUrl: './language.page.html',
+  styleUrls: ['./language.page.scss'],
+  standalone: false
 })
-export class LanguagePage  {
-  public headerConfig: any = {
+export class LanguagePage {
+  private readonly localStorage = inject(LocalStorageService);
+  private readonly translate = inject(TranslateService);
+  private readonly toast = inject(ToastService);
+  private readonly profile = inject(ProfileService);
+
+  public readonly headerConfig: {
+    backButton: boolean;
+    label: string;
+    notification: boolean;
+    signupButton: boolean;
+  } = {
     // backButton: {
     //   label: 'LANGUAGE',
     //   color: 'primary'
@@ -21,34 +37,44 @@ export class LanguagePage  {
     notification: false,
     signupButton: false
   };
-  languagesList=languagesList;
-  selectedLanguage: any;
-  constructor(private localStorage: LocalStorageService,
-              private translate: TranslateService,
-              private toast: ToastService,
-              private profile: ProfileService) { }
-  ionViewWillEnter() {
-    this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE).then(data =>{
-      this.selectedLanguage = data;
-    })
+
+  public readonly languagesList: LanguageOption[] = languagesList as LanguageOption[];
+  public readonly selectedLanguage = signal<LanguageOption | null>(null);
+
+  async ionViewWillEnter(): Promise<void> {
+    this.selectedLanguage.set(
+      await this.localStorage.getLocalData(localKeys.SELECTED_LANGUAGE)
+    );
   }
-  onCardClick(event){
-    this.selectedLanguage=event;
+
+  onCardClick(language: LanguageOption): void {
+    this.selectedLanguage.set(language);
   }
-  onSubmit(){
-    let showProfileUpdateToast = false;
-    this.profile.updateLanguage({preferred_language:this.selectedLanguage.value}, showProfileUpdateToast).then((result)=>{
-      if(result){
-        this.setLanguage(this.selectedLanguage);
-      }
-    })
+
+  async onSubmit(): Promise<void> {
+    const selectedLanguage = this.selectedLanguage();
+    if (!selectedLanguage) {
+      return;
+    }
+
+    const showProfileUpdateToast = false;
+    const result = await this.profile.updateLanguage(
+      { preferred_language: selectedLanguage.value },
+      showProfileUpdateToast
+    );
+
+    if (result) {
+      await this.setLanguage(selectedLanguage);
+    }
   }
-  setLanguage(lang){
-    this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE,lang).then(() =>{
+
+  async setLanguage(lang: LanguageOption): Promise<void> {
+    try {
+      await this.localStorage.setLocalData(localKeys.SELECTED_LANGUAGE, lang);
       this.translate.use(lang.value);
-      this.toast.showToast("LANGUAGE_CHANGED_SUCCESSFULLY","success");
-    }).catch(error => {
-      this.toast.showToast("ERROR_LANGUAGE_CHANGE","danger");
-    })
+      this.toast.showToast('LANGUAGE_CHANGED_SUCCESSFULLY', 'success');
+    } catch {
+      this.toast.showToast('ERROR_LANGUAGE_CHANGE', 'danger');
+    }
   }
 }

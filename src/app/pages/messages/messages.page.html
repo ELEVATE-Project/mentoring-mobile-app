@@ -1,13 +1,13 @@
 <app-page-header [config]="headerConfig"> </app-page-header>
 <ion-content>
-  @if (showChat) {
+  @if (showChat()) {
     <lib-message-listing
       (onSelect)="onSelect($event)"
       (newMessageEvent)="messageBadge($event)"
       (toastMessageEvent)="showToast($event)"
-      [translatedMessages]="translatedMessages"
+      [translatedMessages]="translatedMessages()"
     ></lib-message-listing>
-  } @else if (isLoaded) {
+  } @else if (isLoaded()) {
     <div class="no-data-container">
       <app-no-data-found [messageHeader]="'SEARCH_RESULTS_NOT_FOUND_HEADER'" [messageDescription]="'NO_MESSAGE_DESCRIPTION'"></app-no-data-found>
     </div>

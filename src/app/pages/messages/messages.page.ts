@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { FrontendChatLibraryService } from 'sl-chat-library';
-import { ToastService, UtilService } from 'src/app/core/services';
+import { ToastService } from 'src/app/core/services';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 
@@ -13,43 +13,46 @@ import { CommonRoutes } from 'src/global.routes';
     standalone: false
 })
 export class MessagesPage implements OnInit {
-  showChat: any;
+  private readonly route = inject(Router);
+  private readonly profileService = inject(ProfileService);
+  private readonly chatService = inject(FrontendChatLibraryService);
+  private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
+
+  readonly showChat = signal<boolean | null>(null);
   public headerConfig: any = {
     menu: true,
     headerColor: 'primary',
     notification: false,
     label:'MESSAGES'
   };
-  isLoaded: boolean = false;
-  translatedMessages = {
-    "placeholder": "",
-    "noData":""
+  readonly isLoaded = signal(false);
+  readonly translatedMessages = signal({
+    placeholder: '',
+    noData: ''
+  });
+
+  constructor() {
+    this.translateAllMessages();
   }
-  constructor(
-    private route: Router,
-    private profileService: ProfileService,
-    private chatService: FrontendChatLibraryService,
-    private toast: ToastService,
-    private translate: TranslateService
-  ) {this.translateAllMessages() }
+
   ngOnInit(): void {
-      
   }
 
   async ionViewWillEnter() {
-    this.isLoaded = false;
-    this.translateAllMessages()
-    this.showChat = await this.profileService.getChatToken();
-    this.isLoaded = true;
+    this.isLoaded.set(false);
+    this.translateAllMessages();
+    this.showChat.set(await this.profileService.getChatToken());
+    this.isLoaded.set(true);
   }
 
   translateAllMessages() {
-    const translationKeys = ["MESSAGE_SEARCH_PLACEHOLDER","SEARCH_RESULT_MESSGAGE_NOT_FOUND"];
+    const translationKeys = ['MESSAGE_SEARCH_PLACEHOLDER', 'SEARCH_RESULT_MESSGAGE_NOT_FOUND'];
     this.translate.get(translationKeys).subscribe((translations: any) => {
-    this.translatedMessages = {
-      placeholder: translations['MESSAGE_SEARCH_PLACEHOLDER'],
-      noData: translations['SEARCH_RESULT_MESSGAGE_NOT_FOUND']
-    };
+      this.translatedMessages.set({
+        placeholder: translations['MESSAGE_SEARCH_PLACEHOLDER'],
+        noData: translations['SEARCH_RESULT_MESSGAGE_NOT_FOUND']
+      });
     });
   }
 
@@ -66,7 +69,6 @@ export class MessagesPage implements OnInit {
   }
 
   ionViewWillLeave() {
-    this.showChat = null
- }
+    this.showChat.set(null);
+  }
 }
-

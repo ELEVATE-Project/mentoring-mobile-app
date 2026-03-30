@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync, fakeAsync, tick } from '@angular/core/testing';
 import { GenericListPage } from './generic-list.page';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { HttpService, LocalStorageService, ToastService, UtilService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { PermissionService } from 'src/app/core/services/permission/permission.service';
@@ -9,6 +9,7 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonRoutes } from 'src/global.routes';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('GenericListPage', () => {
   let component: GenericListPage;
@@ -69,6 +70,8 @@ describe('GenericListPage', () => {
 
   beforeEach(waitForAsync(() => {
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    (mockRouter as any).events = of();
+    (mockRouter as any).url = '/';
     mockActivatedRoute = {
       data: of(mockRouteData)
     };
@@ -77,12 +80,13 @@ describe('GenericListPage', () => {
     mockLocalStorage = jasmine.createSpyObj('LocalStorageService', ['getLocalData']);
     mockToastService = jasmine.createSpyObj('ToastService', ['showToast']);
     mockUtilService = jasmine.createSpyObj('UtilService', ['transformToFilterData', 'alertPopup']);
+    mockUtilService.hasBadge$ = of(false);
     mockFormService = jasmine.createSpyObj('FormService', ['getForm', 'filterList']);
     mockPermissionService = jasmine.createSpyObj('PermissionService', ['getPlatformConfig']);
     mockProfileService = jasmine.createSpyObj('ProfileService', ['updateProfile']);
 
     TestBed.configureTestingModule({
-      declarations: [GenericListPage],
+      imports: [IonicModule.forRoot(), TranslateModule.forRoot(), GenericListPage],
       providers: [
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
@@ -97,6 +101,23 @@ describe('GenericListPage', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
+
+    TestBed.overrideComponent(GenericListPage, {
+      set: {
+        providers: [
+          { provide: Router, useValue: mockRouter },
+          { provide: ActivatedRoute, useValue: mockActivatedRoute },
+          { provide: ModalController, useValue: mockModalCtrl },
+          { provide: HttpService, useValue: mockHttpService },
+          { provide: LocalStorageService, useValue: mockLocalStorage },
+          { provide: ToastService, useValue: mockToastService },
+          { provide: UtilService, useValue: mockUtilService },
+          { provide: FormService, useValue: mockFormService },
+          { provide: PermissionService, useValue: mockPermissionService },
+          { provide: ProfileService, useValue: mockProfileService }
+        ]
+      }
+    });
 
     fixture = TestBed.createComponent(GenericListPage);
     component = fixture.componentInstance;
@@ -127,7 +148,7 @@ describe('GenericListPage', () => {
 
       await component.ionViewWillEnter();
 
-      expect(component.isMentor).toBe(true);
+      expect(component.isMentor()).toBe(true);
     });
 
     it('should set isMentor to false when user does not have mentor role', async () => {
@@ -135,31 +156,31 @@ describe('GenericListPage', () => {
 
       await component.ionViewWillEnter();
 
-      expect(component.isMentor).toBe(false);
+      expect(component.isMentor()).toBe(false);
     });
 
     it('should load mentor form data', async () => {
       await component.ionViewWillEnter();
 
       expect(mockFormService.getForm).toHaveBeenCalled();
-      expect(component.mentorForm).toEqual(mockMentorFormData.data.fields.controls);
+      expect(component.mentorForm()).toEqual(mockMentorFormData.data.fields.controls);
     });
 
     it('should subscribe to route data and set routeData', async () => {
       await component.ionViewWillEnter();
 
-      expect(component.routeData).toEqual(mockRouteData);
-      expect(component.buttonConfig).toEqual(mockRouteData.button_config);
+      expect(component.routeData()).toEqual(mockRouteData);
+      expect(component.buttonConfig()).toEqual(mockRouteData.button_config);
     });
 
     it('should set NO_RESULT_FOUND_FOR_MENTOR when mentor has no data', async () => {
       mockHttpService.get.and.returnValue(Promise.resolve({ result: { data: [], count: 0 } }));
-      component.isMentor = true;
-      component.searchText = '';
+      component.isMentor.set(true);
+      component.searchText.set('');
 
       await component.ionViewWillEnter();
 
-      expect(component.enableExploreButton).toBe(false);
+      expect(component.enableExploreButton()).toBe(false);
     });
 
     it('should set NO_RESULT_FOUND_FOR_MENTEE when mentee has no data', async () => {
@@ -168,7 +189,7 @@ describe('GenericListPage', () => {
 
       await component.ionViewWillEnter();
 
-      expect(component.enableExploreButton).toBe(true);
+      expect(component.enableExploreButton()).toBe(true);
     });
 
     it('should call filterListData and getData', async () => {
@@ -191,9 +212,9 @@ describe('GenericListPage', () => {
 
       component.searchResults(event);
 
-      expect(component.searchText).toBe('test search');
-      expect(component.selectedCriteria).toBe('title');
-      expect(component.searchAndCriterias.headerData).toEqual(event);
+      expect(component.searchText()).toBe('test search');
+      expect(component.selectedCriteria()).toBe('title');
+      expect(component.searchAndCriterias().headerData).toEqual(event);
       expect(component.getData).toHaveBeenCalled();
     });
 
@@ -206,14 +227,14 @@ describe('GenericListPage', () => {
 
       component.searchResults(event);
 
-      expect(component.selectedCriteria).toBeUndefined();
+      expect(component.selectedCriteria()).toBeUndefined();
     });
   });
 
   describe('getData', () => {
     beforeEach(() => {
-      component.routeData = mockRouteData;
-      component.page = 1;
+      component.routeData.set(mockRouteData);
+      component.page.set(1);
       component.pageSize = 10;
     });
 
@@ -221,15 +242,15 @@ describe('GenericListPage', () => {
       await component.getData();
 
       expect(mockHttpService.get).toHaveBeenCalled();
-      expect(component.responseData).toEqual(mockApiResponse.result.data);
-      expect(component.totalCount).toBe(2);
-      expect(component.isLoaded).toBe(true);
+      expect(component.responseData()).toEqual(mockApiResponse.result.data);
+      expect(component.totalCount()).toBe(2);
+      expect(component.isLoaded()).toBe(true);
     });
 
     it('should build correct URL with search parameters', async () => {
-      component.searchText = 'test';
-      component.selectedCriteria = 'name';
-      component.urlQueryData = 'filter=value';
+      component.searchText.set('test');
+      component.selectedCriteria.set('name');
+      component.urlQueryData.set('filter=value');
 
       await component.getData();
 
@@ -243,32 +264,36 @@ describe('GenericListPage', () => {
     it('should set filterIcon to true when data is returned', async () => {
       await component.getData();
 
-      expect(component.filterIcon).toBe(true);
+      expect(component.filterIcon()).toBe(true);
     });
 
     it('should set filterIcon to false when no data and no filters', async () => {
       mockHttpService.get.and.returnValue(Promise.resolve({ result: { data: [], count: 0 } }));
-      component.filteredDatas = [];
-      component.selectedCriteria = undefined;
+      component.filteredDatas.set([]);
+      component.selectedCriteria.set(undefined);
 
       await component.getData();
 
-      expect(component.filterIcon).toBe(false);
+      expect(component.filterIcon()).toBe(false);
     });
 
     it('should update noResult when search returns no results', async () => {
-      component.searchText = 'test';
+      component.searchText.set('test');
       mockHttpService.get.and.returnValue(Promise.resolve({ result: { data: [], count: 0 } }));
 
       await component.getData();
 
-      expect(component.noResult).toBe(mockRouteData.noDataFound);
-      expect(component.enableExploreButton).toBe(false);
+      expect(component.noResult()).toBe(mockRouteData.noDataFound);
+      expect(component.enableExploreButton()).toBe(false);
     });
   });
 
   describe('onClickFilter', () => {
-    it('should open filter modal', async () => {
+    beforeEach(() => {
+      component.routeData.set(mockRouteData);
+    });
+
+    it('should open filter modal', fakeAsync(() => {
       const mockModal = {
         present: jasmine.createSpy('present'),
         onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(
@@ -277,13 +302,14 @@ describe('GenericListPage', () => {
       };
       mockModalCtrl.create.and.returnValue(Promise.resolve(mockModal as any));
 
-      await component.onClickFilter();
+      component.onClickFilter();
+      tick();
 
       expect(mockModalCtrl.create).toHaveBeenCalled();
       expect(mockModal.present).toHaveBeenCalled();
-    });
+    }));
 
-    it('should handle modal dismiss with closed role', async () => {
+    it('should handle modal dismiss with closed role', fakeAsync(() => {
       const mockModal = {
         present: jasmine.createSpy('present'),
         onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(
@@ -297,12 +323,13 @@ describe('GenericListPage', () => {
       };
       mockModalCtrl.create.and.returnValue(Promise.resolve(mockModal as any));
 
-      await component.onClickFilter();
+      component.onClickFilter();
+      tick();
 
       expect(component.filterData).toBeDefined();
-    });
+    }));
 
-    it('should clear filters when empty data returned', async () => {
+    it('should clear filters when empty data returned', fakeAsync(() => {
       const mockModal = {
         present: jasmine.createSpy('present'),
         onDidDismiss: jasmine.createSpy('onDidDismiss').and.returnValue(
@@ -311,17 +338,18 @@ describe('GenericListPage', () => {
       };
       mockModalCtrl.create.and.returnValue(Promise.resolve(mockModal as any));
 
-      await component.onClickFilter();
+      component.onClickFilter();
+      tick();
 
-      expect(component.chips).toEqual([]);
-      expect(component.filteredDatas).toEqual([]);
-      expect(component.urlQueryData).toBe('');
-    });
+      expect(component.chips()).toEqual([]);
+      expect(component.filteredDatas()).toEqual([]);
+      expect(component.urlQueryData()).toBe('');
+    }));
 
-    it('should process selected filters and update data', async () => {
-      spyOn(component, 'extractLabels');
-      spyOn(component, 'getUrlQueryData');
-      spyOn(component, 'getData');
+    it('should process selected filters and update data', fakeAsync(() => {
+      spyOn(component, 'extractLabels').and.callThrough();
+      spyOn(component, 'getUrlQueryData').and.callThrough();
+      spyOn(component, 'getData').and.callThrough();
 
       const mockModal = {
         present: jasmine.createSpy('present'),
@@ -340,15 +368,16 @@ describe('GenericListPage', () => {
       };
       mockModalCtrl.create.and.returnValue(Promise.resolve(mockModal as any));
 
-      await component.onClickFilter();
+      component.onClickFilter();
+      tick();
 
       expect(component.extractLabels).toHaveBeenCalled();
       expect(component.getUrlQueryData).toHaveBeenCalled();
       expect(component.getData).toHaveBeenCalled();
-      expect(component.page).toBe(1);
-      expect(component.setPaginatorToFirstpage).toBe(true);
-      expect(component.filterChipsSelected).toBe(true);
-    });
+      expect(component.page()).toBe(1);
+      expect(component.setPaginatorToFirstpage()).toBe(true);
+      expect(component.filterChipsSelected()).toBe(true);
+    }));
 
     it('should set filterChipsSelected to false when roles not selected', async () => {
       const mockModal = {
@@ -369,7 +398,7 @@ describe('GenericListPage', () => {
 
       await component.onClickFilter();
 
-      expect(component.filterChipsSelected).toBe(false);
+      expect(component.filterChipsSelected()).toBe(false);
     });
   });
 
@@ -386,17 +415,17 @@ describe('GenericListPage', () => {
         filterType: filterType,
         org: true
       });
-      expect(component.filterData).toBeDefined();
+      expect(component.filterData()).toBeDefined();
     });
 
     it('should add FILTER_ROLES when user is mentor', async () => {
-      component.isMentor = true;
+      component.isMentor.set(true);
       const mockFilterData = [{ key: 'category', options: [] }];
       mockUtilService.transformToFilterData.and.returnValue(Promise.resolve(mockFilterData));
 
       await component.filterListData('mentor');
 
-      expect(component.filterData.length).toBeGreaterThan(0);
+      expect(component.filterData().length).toBeGreaterThan(0);
     });
   });
 
@@ -409,62 +438,64 @@ describe('GenericListPage', () => {
 
       component.extractLabels(data);
 
-      expect(component.chips.length).toBe(2);
-      expect(component.chips).toContain(data.category[0]);
-      expect(component.chips).toContain(data.level[0]);
+      expect(component.chips().length).toBe(2);
+      expect(component.chips()).toContain(data.category[0]);
+      expect(component.chips()).toContain(data.level[0]);
     });
 
     it('should clear existing chips before extracting', () => {
-      component.chips = [{ value: 'old', label: 'Old' }];
+      component.chips.set([{ value: 'old', label: 'Old' }]);
       const data = {
         category: [{ value: 'tech', label: 'Technology' }]
       };
 
       component.extractLabels(data);
 
-      expect(component.chips.length).toBe(1);
-      expect(component.chips[0]).toEqual(data.category[0]);
+      expect(component.chips().length).toBe(1);
+      expect(component.chips()[0]).toEqual(data.category[0]);
     });
   });
 
   describe('getUrlQueryData', () => {
     it('should generate URL query string from filtered data', () => {
-      component.filteredDatas = [];
-      component.filteredDatas['category'] = 'tech,science';
-      component.filteredDatas['level'] = 'beginner';
+      const fd: any[] = [];
+      fd['category'] = 'tech,science';
+      fd['level'] = 'beginner';
+      component.filteredDatas.set(fd);
 
       component.getUrlQueryData();
 
-      expect(component.urlQueryData).toContain('category=tech,science');
-      expect(component.urlQueryData).toContain('level=beginner');
+      expect(component.urlQueryData()).toContain('category=tech,science');
+      expect(component.urlQueryData()).toContain('level=beginner');
     });
 
     it('should handle empty filtered data', () => {
-      component.filteredDatas = [];
+      component.filteredDatas.set([]);
 
       component.getUrlQueryData();
 
-      expect(component.urlQueryData).toBe('');
+      expect(component.urlQueryData()).toBe('');
     });
 
     it('should filter out boolean values', () => {
-      component.filteredDatas = [];
-      component.filteredDatas['category'] = 'tech';
-      component.filteredDatas['active'] = true;
-      component.filteredDatas['inactive'] = false;
+      const fd: any[] = [];
+      fd['category'] = 'tech';
+      fd['active'] = true;
+      fd['inactive'] = false;
+      component.filteredDatas.set(fd);
 
       component.getUrlQueryData();
 
-      expect(component.urlQueryData).toBe('category=tech');
+      expect(component.urlQueryData()).toBe('category=tech');
     });
   });
 
   describe('removeChip', () => {
     it('should remove chip and update filters', () => {
-      component.chips = [
+      component.chips.set([
         { value: 'tech', label: 'Technology' },
         { value: 'science', label: 'Science' }
-      ];
+      ]);
       spyOn(component, 'removeFilteredData');
       spyOn(component, 'getUrlQueryData');
       spyOn(component, 'getData');
@@ -472,7 +503,7 @@ describe('GenericListPage', () => {
       const event = { index: 0, chipValue: 'tech' };
       component.removeChip(event);
 
-      expect(component.chips.length).toBe(1);
+      expect(component.chips().length).toBe(1);
       expect(component.removeFilteredData).toHaveBeenCalledWith('tech');
       expect(component.getUrlQueryData).toHaveBeenCalled();
       expect(component.getData).toHaveBeenCalled();
@@ -481,42 +512,45 @@ describe('GenericListPage', () => {
 
   describe('removeFilteredData', () => {
     beforeEach(() => {
-      component.filterData = [{
+      component.filterData.set([{
         options: [
           { value: 'tech', selected: true },
           { value: 'science', selected: true }
         ]
-      }];
+      }]);
     });
 
     it('should remove chip from filter data', () => {
-      component.filteredDatas = [];
-      component.filteredDatas['category'] = 'tech,science';
+      const fd: any[] = [];
+      fd['category'] = 'tech,science';
+      component.filteredDatas.set(fd);
 
       component.removeFilteredData('tech');
 
-      expect(component.filterData[0].options[0].selected).toBe(false);
-      expect(component.filteredDatas['category']).toBe('science');
+      expect(component.filterData()[0].options[0].selected).toBe(false);
+      expect(component.filteredDatas()['category']).toBe('science');
     });
 
     it('should delete key when removing last value', () => {
-      component.filteredDatas = [];
-      component.filteredDatas['category'] = 'tech';
+      const fd: any[] = [];
+      fd['category'] = 'tech';
+      component.filteredDatas.set(fd);
 
       component.removeFilteredData('tech');
 
-      expect(component.filteredDatas['category']).toBeUndefined();
+      expect(component.filteredDatas()['category']).toBeUndefined();
     });
 
     it('should handle multiple keys in filteredDatas', () => {
-      component.filteredDatas = [];
-      component.filteredDatas['category'] = 'tech,science';
-      component.filteredDatas['level'] = 'beginner';
+      const fd: any[] = [];
+      fd['category'] = 'tech,science';
+      fd['level'] = 'beginner';
+      component.filteredDatas.set(fd);
 
       component.removeFilteredData('beginner');
 
-      expect(component.filteredDatas['category']).toBe('tech,science');
-      expect(component.filteredDatas['level']).toBeUndefined();
+      expect(component.filteredDatas()['category']).toBe('tech,science');
+      expect(component.filteredDatas()['level']).toBeUndefined();
     });
   });
 
@@ -528,7 +562,7 @@ describe('GenericListPage', () => {
 
       component.onPageChange(event);
 
-      expect(component.page).toBe(2);
+      expect(component.page()).toBe(2);
       expect(component.pageSize).toBe(20);
       expect(component.getData).toHaveBeenCalled();
     });
@@ -608,7 +642,7 @@ describe('GenericListPage', () => {
 
       component.eventHandler(event);
 
-      expect(component.valueFromChipAndFilter).toBe('test value');
+      expect(component.valueFromChipAndFilter()).toBe('test value');
     });
   });
 
@@ -622,22 +656,22 @@ describe('GenericListPage', () => {
 
   describe('onClearSearch', () => {
     it('should clear search and reset data', async () => {
-      component.page = 5;
-      component.searchText = 'test';
-      component.searchAndCriterias = {
+      component.page.set(5);
+      component.searchText.set('test');
+      component.searchAndCriterias.set({
         headerData: {
           searchText: 'test',
           criterias: { name: 'title' }
         }
-      };
+      });
       spyOn(component, 'getData');
 
       await component.onClearSearch('');
 
-      expect(component.page).toBe(1);
-      expect(component.searchText).toBe('');
-      expect(component.searchAndCriterias.headerData.searchText).toBe('');
-      expect(component.searchAndCriterias.headerData.criterias).toBeUndefined();
+      expect(component.page()).toBe(1);
+      expect(component.searchText()).toBe('');
+      expect(component.searchAndCriterias().headerData.searchText).toBe('');
+      expect(component.searchAndCriterias().headerData.criterias).toBeUndefined();
       expect(component.getData).toHaveBeenCalled();
     });
   });

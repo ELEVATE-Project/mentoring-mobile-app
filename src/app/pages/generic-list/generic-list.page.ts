@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, signal, computed, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
@@ -17,51 +17,71 @@ import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { FilterPopupComponent } from 'src/app/shared/components/filter-popup/filter-popup.component';
 import { SearchbarComponent } from 'src/app/shared/components/searchbar/searchbar.component';
 import { CommonRoutes } from 'src/global.routes';
+import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-generic-list',
-    templateUrl: './generic-list.page.html',
-    styleUrls: ['./generic-list.page.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  selector: 'app-generic-list',
+  templateUrl: './generic-list.page.html',
+  styleUrls: ['./generic-list.page.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule,
+    SharedModule,
+    OverlayModule,
+    MatPaginatorModule,
+    TranslateModule,
+  ],
 })
 export class GenericListPage implements OnInit {
 
   @ViewChild('subscribe') searchbarComponent: SearchbarComponent;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   pageSize = paginatorConstants.defaultPageSize;
   pageSizeOptions = paginatorConstants.pageSizeOptions;
 
-  public headerConfig: any = {
+  headerConfig = signal<any>({
     menu: true,
     color: 'primary',
     headerColor: 'primary',
-  };
+  });
 
-  overlayChips: any;
-  routeData: any;
-  searchAndCriterias: any;
-  filteredDatas: any[];
-  filterData: any[];
-  selectedChips: boolean;
-  chips: any[];
-  page: number = 1;
-  setPaginatorToFirstpage: boolean;
-  urlQueryData: string;
-  responseData: any;
-  searchText: any;
-  totalCount: any;
-  isLoaded: boolean;
-  criteriaChipEvent: any;
-  enableExploreButton: boolean = false;
-  valueFromChipAndFilter: any;
-  buttonConfig: any;
-  noResult: any;
-  isMentor: boolean;
-  filterIcon: boolean;
-  filterChipsSelected: boolean = false;
-  selectedCriteria: any;
-  mentorForm: any
+  overlayChips = signal<any>(undefined);
+  routeData = signal<any>(undefined);
+  searchAndCriterias = signal<any>(undefined);
+  filteredDatas = signal<any[]>([]);
+  filterData = signal<any[]>([]);
+  selectedChips = signal<boolean>(false);
+  chips = signal<any[]>([]);
+  page = signal<number>(1);
+  setPaginatorToFirstpage = signal<boolean>(false);
+  urlQueryData = signal<string>('');
+  responseData = signal<any>(undefined);
+  searchText = signal<any>(undefined);
+  totalCount = signal<any>(undefined);
+  isLoaded = signal<boolean>(false);
+  enableExploreButton = signal<boolean>(false);
+  valueFromChipAndFilter = signal<any>(undefined);
+  buttonConfig = signal<any>(undefined);
+  noResult = signal<any>(undefined);
+  isMentor = signal<boolean>(false);
+  filterIcon = signal<boolean>(false);
+  filterChipsSelected = signal<boolean>(false);
+  selectedCriteria = signal<any>(undefined);
+  mentorForm = signal<any>(undefined);
+
+  showSearchRow = computed(() =>
+    (this.responseData()?.length && !this.searchText() && this.routeData()) ||
+    this.searchAndCriterias() ||
+    (!this.filterChipsSelected() && !this.responseData()?.length)
+  );
 
   constructor(
     private route: ActivatedRoute,
@@ -80,65 +100,62 @@ export class GenericListPage implements OnInit {
 
   async ionViewWillEnter() {
     let roles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
-    this.isMentor = roles.includes('mentor')?true:false;
+    this.isMentor.set(roles.includes('mentor') ? true : false);
     const result = await this.formService.getForm(MENTOR_CONNECTION_CARD_FORM);
-    this.mentorForm = _.get(result, 'data.fields.controls');
+    this.mentorForm.set(_.get(result, 'data.fields.controls'));
     this.route.data.subscribe((data) => {
-      this.routeData = data;
-      this.action(this.routeData);
-      this.buttonConfig = this.routeData?.button_config;
+      this.routeData.set(data);
+      this.action(data);
+      this.buttonConfig.set(data?.button_config);
     });
-    this.filterListData(this.routeData.filterType);
+    this.filterListData(this.routeData()?.filterType);
     this.getData();
-    if (!this.searchText && this.isMentor && !this.totalCount) {
-      this.noResult = NO_RESULT_FOUND_FOR_MENTOR;
-      this.enableExploreButton = false;
-    } else if (!this.searchText && !this.isMentor && !this.totalCount) {
-      this.noResult = NO_RESULT_FOUND_FOR_MENTEE;
-      this.enableExploreButton = true;
+    if (!this.searchText() && this.isMentor() && !this.totalCount()) {
+      this.noResult.set(NO_RESULT_FOUND_FOR_MENTOR);
+      this.enableExploreButton.set(false);
+    } else if (!this.searchText() && !this.isMentor() && !this.totalCount()) {
+      this.noResult.set(NO_RESULT_FOUND_FOR_MENTEE);
+      this.enableExploreButton.set(true);
     } else {
-      this.noResult = this.routeData?.noDataFound;
-      this.enableExploreButton = false;
+      this.noResult.set(this.routeData()?.noDataFound);
+      this.enableExploreButton.set(false);
     }
   }
 
   searchResults(event) {
-    this.searchText= event.searchText;
-    this.searchAndCriterias = {
-      headerData: event,
-    };
-
-    this.selectedCriteria = event?.criterias?.name;
+    this.searchText.set(event.searchText);
+    this.searchAndCriterias.set({ headerData: event });
+    this.selectedCriteria.set(event?.criterias?.name);
     this.getData();
   }
+
   async getData() {
     let response = await this.httpService.get({
       url:
-        this.routeData.url +
-        (this.page ? this.page : '') +
+        this.routeData().url +
+        (this.page() ? this.page() : '') +
         '&limit=' +
         (this.pageSize ? this.pageSize : '') +
         '&search=' +
-        (this.searchText ? btoa(this.searchText) : '') +
+        (this.searchText() ? btoa(this.searchText()) : '') +
         '&' +
-        (this.urlQueryData ? this.urlQueryData : '') +
+        (this.urlQueryData() ? this.urlQueryData() : '') +
         '&search_on=' +
-        (this.selectedCriteria ? this.selectedCriteria : ''),
+        (this.selectedCriteria() ? this.selectedCriteria() : ''),
     });
-    this.isLoaded = true;
-    this.responseData = response.result.data;
-    this.totalCount = response?.result?.count;
-    if (this.searchText && !this.responseData.length) {
-      this.noResult = this.routeData?.noDataFound;
-      this.enableExploreButton = false;
-    } 
-    if(this.responseData.length) {
-      this.filterIcon = true;
+    this.isLoaded.set(true);
+    this.responseData.set(response.result.data);
+    this.totalCount.set(response?.result?.count);
+    if (this.searchText() && !this.responseData().length) {
+      this.noResult.set(this.routeData()?.noDataFound);
+      this.enableExploreButton.set(false);
+    }
+    if (this.responseData().length) {
+      this.filterIcon.set(true);
     } else {
-      if(Object.keys(this.filteredDatas || {}).length === 0
-      && !this.selectedCriteria) {
-        this.filterIcon = false;
-      } 
+      if (Object.keys(this.filteredDatas() || {}).length === 0 && !this.selectedCriteria()) {
+        this.filterIcon.set(false);
+      }
     }
   }
 
@@ -146,44 +163,44 @@ export class GenericListPage implements OnInit {
     let modal = await this.modalCtrl.create({
       component: FilterPopupComponent,
       cssClass: 'filter-modal',
-      componentProps: { filterData: this.filterData },
+      componentProps: { filterData: this.filterData() },
     });
 
     modal.onDidDismiss().then(async (dataReturned) => {
-      this.filteredDatas = [];
-        if(dataReturned?.data?.role === 'closed'){
-        this.filterData = dataReturned?.data?.data;
+      this.filteredDatas.set([]);
+      if (dataReturned?.data?.role === 'closed') {
+        this.filterData.set(dataReturned?.data?.data);
         return;
       }
-       if(Object.keys(dataReturned?.data).length === 0){
-            this.chips = [];
-            this.filteredDatas = [];
-            this.urlQueryData = ''; 
+      if (Object.keys(dataReturned?.data).length === 0) {
+        this.chips.set([]);
+        this.filteredDatas.set([]);
+        this.urlQueryData.set('');
       }
       if (dataReturned.data && dataReturned.data.data) {
         if (dataReturned.data.data.selectedFilters) {
+          const updatedFiltered: any[] = [];
           for (let key in dataReturned.data.data.selectedFilters) {
-            this.filteredDatas[key] = dataReturned.data.data.selectedFilters[
-              key
-            ]
+            updatedFiltered[key] = dataReturned.data.data.selectedFilters[key]
               .slice(0, dataReturned.data.data.selectedFilters[key].length)
               .map((obj) => obj.value)
               .join(',')
               .toString();
           }
+          this.filteredDatas.set(updatedFiltered);
           if (dataReturned.data.data.selectedFilters.roles) {
-            this.filterChipsSelected = true;
+            this.filterChipsSelected.set(true);
           } else {
-            this.filterChipsSelected = false;
+            this.filterChipsSelected.set(false);
           }
-          this.selectedChips = true;
+          this.selectedChips.set(true);
         }
         this.extractLabels(dataReturned.data.data.selectedFilters);
         this.getUrlQueryData();
       }
-        this.page = 1;
-        this.setPaginatorToFirstpage = true;
-        this.getData();
+      this.page.set(1);
+      this.setPaginatorToFirstpage.set(true);
+      this.getData();
     });
     modal.present();
   }
@@ -191,37 +208,43 @@ export class GenericListPage implements OnInit {
   async filterListData(filterType) {
     const obj = { filterType: filterType, org: true };
     let data = await this.formService.filterList(obj);
-    this.filterData = await this.utilService.transformToFilterData(data, obj);
-    const filterRoles = this.isMentor ? FILTER_ROLES : '';
-    filterRoles ? this.filterData.unshift(filterRoles) : '';
-  }
-  extractLabels(data) {
-    this.chips = [];
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        this.chips.push(...data[key]);
-      }
+    const transformed = await this.utilService.transformToFilterData(data, obj);
+    this.filterData.set(transformed);
+    const filterRoles = this.isMentor() ? FILTER_ROLES : '';
+    if (filterRoles) {
+      this.filterData.update(fd => [filterRoles, ...fd]);
     }
   }
 
+  extractLabels(data) {
+    const newChips = [];
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        newChips.push(...data[key]);
+      }
+    }
+    this.chips.set(newChips);
+  }
+
   getUrlQueryData() {
-    const params = Object.entries(this.filteredDatas)
+    const params = Object.entries(this.filteredDatas())
       .filter(([_, value]) => value !== true && value !== false)
       .map(([key, value]) => `${key}=${value}`);
-  
-    this.urlQueryData = params.join('&');
+    this.urlQueryData.set(params.join('&'));
   }
-  
 
   removeChip(event) {
-    this.chips.splice(event.index, 1);
+    const updated = [...this.chips()];
+    updated.splice(event.index, 1);
+    this.chips.set(updated);
     this.removeFilteredData(event.chipValue);
     this.getUrlQueryData();
     this.getData();
   }
 
-    removeFilteredData(chip){
-      this.filterData.map((filter) => {
+  removeFilteredData(chip) {
+    this.filterData.update(fd =>
+      fd.map((filter) => {
         filter.options.map((option) => {
           if (option.value === chip) {
             option.selected = false;
@@ -229,43 +252,43 @@ export class GenericListPage implements OnInit {
         });
         return filter;
       })
-    for (let key in this.filteredDatas) {
-      if (this.filteredDatas.hasOwnProperty(key)) {
-
-          let values = this.filteredDatas[key].split(',');
-          let chipIndex = values.indexOf(chip);
-
-          if (chipIndex > -1) {
-              values.splice(chipIndex, 1);
-
-              let newValue = values.join(',');
-
-              if (newValue === '') {
-                delete this.filteredDatas[key];
-            } else {
-                this.filteredDatas[key] = newValue;
-            }
+    );
+    const updatedFiltered = { ...this.filteredDatas() } as any;
+    for (let key in updatedFiltered) {
+      if (updatedFiltered.hasOwnProperty(key)) {
+        let values = updatedFiltered[key].split(',');
+        let chipIndex = values.indexOf(chip);
+        if (chipIndex > -1) {
+          values.splice(chipIndex, 1);
+          let newValue = values.join(',');
+          if (newValue === '') {
+            delete updatedFiltered[key];
+          } else {
+            updatedFiltered[key] = newValue;
           }
+        }
       }
     }
+    this.filteredDatas.set(updatedFiltered);
   }
 
   onPageChange(event) {
-    (this.page = event.pageIndex + 1),
-      (this.pageSize = this.paginator.pageSize);
+    this.page.set(event.pageIndex + 1);
+    this.pageSize = this.paginator.pageSize;
     this.getData();
   }
 
   action(event) {
     if (event && event.filterType) {
       this.permissionService.getPlatformConfig().then((config) => {
-        this.overlayChips =
-          config?.result?.search_config?.search[event.filterType]?.fields;
+        this.overlayChips.set(
+          config?.result?.search_config?.search[event.filterType]?.fields
+        );
       });
     }
   }
 
-  eventAction(event : any) {
+  eventAction(event: any) {
     switch (event.type) {
       case 'cardSelect':
         this.router.navigate([CommonRoutes.MENTOR_DETAILS, event?.data?.id]);
@@ -274,56 +297,54 @@ export class GenericListPage implements OnInit {
         if (!event.rid) {
           return;
         }
-        this.router.navigate([CommonRoutes.CHAT, event.rid],{queryParams:{id:event.data}});
+        this.router.navigate([CommonRoutes.CHAT, event.rid], { queryParams: { id: event.data } });
         break;
       case 'requestSession':
-        this.router.navigate([CommonRoutes.SESSION_REQUEST], {queryParams: {data: event.data}});
+        this.router.navigate([CommonRoutes.SESSION_REQUEST], { queryParams: { data: event.data } });
         break;
-        case 'unblock':
-        this.onUnblock(event)
+      case 'unblock':
+        this.onUnblock(event);
         break;
     }
   }
 
   eventHandler(event: string) {
-    this.valueFromChipAndFilter = event;
+    this.valueFromChipAndFilter.set(event);
   }
 
-  goToHome(){
+  goToHome() {
     this.router.navigate([CommonRoutes.HOME]);
   }
 
-
-    async onClearSearch($event: string) {
-    this.page = 1;
-    this.searchText = '';
-    this.searchAndCriterias.headerData.searchText = '';
-    this.searchAndCriterias.headerData.criterias = undefined;
-    await  this.getData();
+  async onClearSearch($event: string) {
+    this.page.set(1);
+    this.searchText.set('');
+    const sa = this.searchAndCriterias();
+    if (sa?.headerData) {
+      sa.headerData.searchText = '';
+      sa.headerData.criterias = undefined;
+      this.searchAndCriterias.set({ ...sa });
+    }
+    await this.getData();
   }
-  
 
-    async onUnblock(user: any) {
+  async onUnblock(user: any) {
     const userId = user.data;
-    const result = await this.utilService.alertPopup({
-    header: "CONFIRM_UNBLOCK_HEADER",   
-    message: "CONFIRM_UNBLOCK_MESSAGE", 
-    cancel: "CANCEL",
-    submit: "UNBLOCK",
-  },
-   {name: user.name}
-  );
+    const result = await this.utilService.alertPopup(
+      {
+        header: 'CONFIRM_UNBLOCK_HEADER',
+        message: 'CONFIRM_UNBLOCK_MESSAGE',
+        cancel: 'CANCEL',
+        submit: 'UNBLOCK',
+      },
+      { name: user.name }
+    );
 
-  if (result) {
-    // const payload = {
-    //       url:,
-    //       payload: {user_id: userId},
-    //       };
-    //     this.httpService.post(payload)
-        this.toast.showToast("UNBLOCK_TOAST_MESSAGE", "success")
-        this.router.navigate([CommonRoutes.MENTOR_DETAILS, userId]);
-            }  else {
-                    console.log("User cancelled unblock.");
-                    }
-}  
+    if (result) {
+      this.toast.showToast('UNBLOCK_TOAST_MESSAGE', 'success');
+      this.router.navigate([CommonRoutes.MENTOR_DETAILS, userId]);
+    } else {
+      console.log('User cancelled unblock.');
+    }
+  }
 }
