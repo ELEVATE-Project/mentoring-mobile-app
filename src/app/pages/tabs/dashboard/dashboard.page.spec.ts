@@ -96,6 +96,7 @@ class MockFormService {
 
 class MockUtilService {
   downloadFile = jasmine.createSpy('downloadFile').and.returnValue(Promise.resolve());
+  handleScrollOnEnter = jasmine.createSpy('handleScrollOnEnter');
 }
 
 // ---------- TESTS ----------
@@ -158,6 +159,14 @@ describe('DashboardPage', () => {
     });
   });
 
+  it('gotToTop should scroll content to top', () => {
+    component.content = jasmine.createSpyObj('IonContent', ['scrollToTop']) as any;
+
+    component.gotToTop();
+
+    expect((component.content as any).scrollToTop).toHaveBeenCalledWith(1000);
+  });
+
   // ---------- ionViewWillEnter ----------
 
   it('ionViewWillEnter should initialise user, role, cards', fakeAsync(() => {
@@ -181,7 +190,6 @@ describe('DashboardPage', () => {
     const initialDurationSpy = spyOn<any>(component, 'initialDuration').and.returnValue(
       Promise.resolve()
     );
-
     // override getForm result to have both mentor + mentee keys
     formService.getForm.and.returnValue(
       Promise.resolve({
@@ -231,6 +239,7 @@ describe('DashboardPage', () => {
     expect(formService.getForm).toHaveBeenCalled();
     expect(updateFormDataSpy).toHaveBeenCalledWith(jasmine.any(Object));
     expect(initialDurationSpy).toHaveBeenCalled();
+    expect(utilService.handleScrollOnEnter).toHaveBeenCalledWith('dashboard', component.content);
 
     // getUserRole adds "mentee" first if missing
     expect(component.user()[0]).toBe('mentee');

@@ -4,7 +4,7 @@ import { IonContent } from '@ionic/angular';
 import * as _ from 'lodash';
 import { MENTOR_DIR_CARD_FORM } from 'src/app/core/constants/formConstant';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService, LoaderService, ToastService } from 'src/app/core/services';
+import { CacheService, HttpService, LoaderService, ToastService, UtilService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { CommonRoutes } from 'src/global.routes';
 import { LocalStorageService } from 'src/app/core/services';
@@ -18,6 +18,10 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MentorDirectoryPage implements OnInit {
+  private readonly scrollKey = 'mentor-directory';
+  private readonly CACHE_TTL = {
+    mentorsDirectory: 180,
+  };
   @ViewChild(IonContent) content: IonContent;
 
   page = signal(1);
@@ -46,7 +50,10 @@ export class MentorDirectoryPage implements OnInit {
     private route: ActivatedRoute,
     private toast: ToastService,
     private form: FormService,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    private cacheService: CacheService,
+    private utilService: UtilService
+
   ) {}
 
   ngOnInit() {
@@ -57,7 +64,7 @@ export class MentorDirectoryPage implements OnInit {
 
   async ionViewWillEnter() {
     if (this.loading()) {
-      this.gotToTop();
+      this.utilService.handleScrollOnEnter(this.scrollKey, this.content);
       return;
     }
     this.loading.set(true);
@@ -70,15 +77,12 @@ export class MentorDirectoryPage implements OnInit {
     this.isInfiniteScrollDisabled.set(false);
     await this.getMentors();
     this.loading.set(false);
-    this.gotToTop();
-  }
-
-  gotToTop() {
-    this.content.scrollToTop(1000);
+    this.utilService.handleScrollOnEnter(this.scrollKey, this.content);
   }
 
   async getMentors(showLoader = true, isLoadMore: boolean = false) {
     showLoader ? await this.loaderService.startLoader() : '';
+    const searchText = this.searchText();
     const config = {
       url:
         urlConstants.API_URLS.MENTORS_DIRECTORY_LIST +
@@ -86,14 +90,20 @@ export class MentorDirectoryPage implements OnInit {
         '&limit=' +
         this.limit() +
         '&search=' +
-        btoa(this.searchText()) +
+        btoa(searchText) +
         '&directory=true',
       payload: {},
     };
     try {
-      let data: any = await this.httpService.get(config);
+    const cacheKey = `MENTOR_DIRECTORY_CACHE_KEY`;
+
+    let data: any = this.cacheService.get(cacheKey);
+
+    if (!data) {
+      data = await this.httpService.get(config);
+      this.cacheService.set(cacheKey, data, this.CACHE_TTL.mentorsDirectory);
+    }
       const newMentorsData = data.result.data;
-      
       // Map button configurations
       const processedMentors = newMentorsData.map(group => ({
         ...group,
@@ -130,6 +140,7 @@ export class MentorDirectoryPage implements OnInit {
   }
 
   eventAction(event) {
+    this.utilService.setSkipScroll(this.scrollKey);
     switch (event.type) {
       case 'cardSelect':
         this.router.navigate([CommonRoutes.MENTOR_DETAILS, event?.data?.id]);

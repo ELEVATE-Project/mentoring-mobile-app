@@ -11,3 +11,4 @@ export * from './network.service';
 export * from './attachment/attachment.service'
 export * from './file-upload/file-upload.service'
 export * from './session-form/session-form.service'
+export * from './cache/cache.service'

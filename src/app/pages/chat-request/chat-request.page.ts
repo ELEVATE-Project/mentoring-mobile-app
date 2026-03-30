@@ -4,7 +4,7 @@ import { AlertController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { CHAT_MESSAGES } from 'src/app/core/constants/chatConstants';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
-import { HttpService, ToastService, UtilService } from 'src/app/core/services';
+import { CacheService, HttpService, ToastService, UtilService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 
 @Component({
@@ -14,6 +14,7 @@ import { CommonRoutes } from 'src/global.routes';
     standalone: false
 })
 export class ChatRequestPage implements OnInit {
+  private readonly messageRequestCachePrefix = 'messageRequests_';
   readonly headerConfig = {
     menu: false,
     headerColor: 'primary',
@@ -52,6 +53,7 @@ export class ChatRequestPage implements OnInit {
 
   constructor(
     private httpService: HttpService,
+    private cacheService: CacheService,
     private routerParams: ActivatedRoute,
     private toast: ToastService,
     private alert: AlertController,
@@ -66,6 +68,10 @@ export class ChatRequestPage implements OnInit {
 
   ngOnInit() {
     this.getConnectionInfo();
+  }
+
+  private invalidateMessageRequestCache() {
+    this.cacheService.invalidateByPrefix(this.messageRequestCachePrefix);
   }
 
   getConnectionInfo() {
@@ -130,6 +136,7 @@ export class ChatRequestPage implements OnInit {
       },
     };
     this.httpService.post(payload).then((resp) => {
+      this.invalidateMessageRequestCache();
       this.info.update((prev) => ({ ...prev, status: 'REQUESTED' }));
       this.getConnectionInfo();
     });
@@ -144,6 +151,7 @@ export class ChatRequestPage implements OnInit {
     };
     this.httpService.post(payload)
       .then((resp) => {
+        this.invalidateMessageRequestCache();
         const currentInfo = this.info() ?? {};
         const name = currentInfo.user_details?.name ?? 'the user';
         const message = this.translate.instant('ACCEPTED_MESSAGE_REQ', { name });
@@ -192,6 +200,7 @@ export class ChatRequestPage implements OnInit {
       },
     };
     this.httpService.post(payload).then((resp) => {
+      this.invalidateMessageRequestCache();
       this.info.update((prev) => ({ ...prev, status: 'REJECTED' }));
       this.messages.update(() => CHAT_MESSAGES.RECEIVER);
       this.toast.showToast('REJECTED_MESSAGE_REQ', 'danger');

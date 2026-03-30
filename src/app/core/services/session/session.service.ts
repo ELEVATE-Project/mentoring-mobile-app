@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpService, LoaderService, LocalStorageService, ToastService } from '..';
+import { HttpService, LoaderService, LocalStorageService, ToastService, CacheService } from '..';
 import { urlConstants } from '../../constants/urlConstants';
 import * as _ from 'lodash-es';
 import { Browser } from '@capacitor/browser';
@@ -16,13 +16,42 @@ export class SessionService {
 
   private browser = Browser;
 
+
+  private readonly CACHE_PREFIX = {
+    home: 'homeSessions_',
+    created: 'createdSessions_',
+    list: 'sessionsList_',
+  };
+
+  private readonly REQ_CACHE_PREFIX = {
+    requestList: 'requestSessions_',
+  };
+
+  private readonly CACHE_TTL = {
+    createdSessions: 30,
+    sessionsList: 30,
+    homeSessions: 60,
+    requestSessions: 60,
+  };
+
+  invalidateSessionCache(): void {
+    Object.values(this.CACHE_PREFIX).forEach(prefix =>
+      this.cacheService.invalidateByPrefix(prefix)
+    );
+  }
+
+  invalidateRequestSessionCache(): void {
+    this.cacheService.invalidateByPrefix(this.REQ_CACHE_PREFIX.requestList);
+  }
+
   constructor(
     private loaderService: LoaderService,
     private httpService: HttpService,
     private toast: ToastService,
     private router: Router,
     private modalCtrl: ModalController,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    private cacheService: CacheService
   ) { }
 
   async createSession(formData, queryParams?: string) {
@@ -37,6 +66,7 @@ export class SessionService {
       let result = await this.httpService.post(config);
       let msg = result?.message;
       result = _.get(result, 'result');
+      this.invalidateRequestSessionCache();
       this.loaderService.stopLoader();
       this.toast.showToast(msg, "success");
       return result;
@@ -53,6 +83,10 @@ export class SessionService {
     } else {
       params = '&search=' + obj.searchText;
     }
+    const cacheKey = `${this.CACHE_PREFIX.created}${obj.page}_${obj.limit}${params}`;
+    const cached = this.cacheService.get(cacheKey);
+    if (cached) return cached;
+
     const config = {
       url: urlConstants.API_URLS.CREATED_SESSIONS + obj.page + '&limit=' + obj.limit + params,
       payload: {}
@@ -61,18 +95,25 @@ export class SessionService {
       let data = await this.httpService.get(config);
       let result = _.get(data, 'result');
       this.loaderService.stopLoader();
-      return result || [];
+      const resultData = result || [];
+      this.cacheService.set(cacheKey, resultData, this.CACHE_TTL.createdSessions);
+      return resultData;
     } catch (error) {
       return [];
     }
   }
 
   async getSessionsList(obj) {
+    const cacheKey = `${this.CACHE_PREFIX.list}${obj?.page}_${obj?.limit}_${obj?.searchText}_${obj?.selectedChip ?? ''}_${obj?.filterData ?? ''}`;
+    const cached = this.cacheService.get(cacheKey);
+    if (cached) return cached;
+
     const config = {
       url: urlConstants.API_URLS.GET_SESSIONS_LIST + obj?.page + '&limit=' + obj?.limit + '&search=' + btoa(obj?.searchText) + '&search_on=' + (obj?.selectedChip ? obj?.selectedChip : '') + '&' + obj?.filterData,
     };
     try {
       let data: any = await this.httpService.get(config);
+      if (data) this.cacheService.set(cacheKey, data, this.CACHE_TTL.sessionsList);
       return data;
     } catch (error) {
       return null;
@@ -257,11 +298,17 @@ export class SessionService {
   }
 
   async getSessions(obj) {
+    const cacheKey = `${this.CACHE_PREFIX.home}${obj.page}_${obj.limit}_${obj.scope ?? 'all'}`;
+    const cached = this.cacheService.get(cacheKey);
+    if (cached) return cached;
+
     const config = {
       url: urlConstants.API_URLS.HOME_SESSION + obj.page + '&limit=' + obj.limit + (obj.scope ? '&sessionScope=' + obj.scope : ''),
     };
     try {
-      return await this.httpService.get(config);
+      const data = await this.httpService.get(config);
+      if (data) this.cacheService.set(cacheKey, data, this.CACHE_TTL.homeSessions);
+      return data;
     } catch (error) {
       return null;
     }
@@ -273,18 +320,26 @@ export class SessionService {
       payload: obj
     };
     try {
-      return await this.httpService.post(config);
+      const response = await this.httpService.post(config);
+      this.invalidateRequestSessionCache();
+      return response;
     } catch (error) {
       return null;
     }
   }
 
   async requestSessionList(page: number) {
+    const cacheKey = `${this.REQ_CACHE_PREFIX.requestList}${page}`;
+    const cached = this.cacheService.get(cacheKey);
+    if (cached) return cached;
+
     const config = {
       url: urlConstants.API_URLS.REQUEST_SESSION_LIST + '?pageNo=' + page + '&pageSize=100&status=REQUESTED,EXPIRED',
     };
     try {
-      return await this.httpService.get(config);
+      const response = await this.httpService.get(config);
+      if (response) this.cacheService.set(cacheKey, response, this.CACHE_TTL.requestSessions);
+      return response;
     } catch (error) {
       return null;
     }
@@ -319,7 +374,9 @@ export class SessionService {
       payload: { request_session_id: id }
     };
     try {
-      return await this.httpService.post(config);
+      const response = await this.httpService.post(config);
+      this.invalidateRequestSessionCache();
+      return response;
     } catch (error) {
       return null;
     }
@@ -334,7 +391,9 @@ export class SessionService {
       }
     };
     try {
-      return await this.httpService.post(config);
+      const response = await this.httpService.post(config);
+      this.invalidateRequestSessionCache();
+      return response;
     } catch (error) {
       return null;
     }

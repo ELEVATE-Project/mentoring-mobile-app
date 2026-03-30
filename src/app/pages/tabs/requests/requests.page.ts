@@ -1,16 +1,18 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, ViewChild, signal } from '@angular/core';
 import { urlConstants } from 'src/app/core/constants/urlConstants';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { CommonRoutes } from 'src/global.routes';
 import { MENTOR_REQ_CARD_FORM } from 'src/app/core/constants/formConstant';
 import * as _ from 'lodash';
+import { IonContent } from '@ionic/angular';
 //service
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { FormService } from 'src/app/core/services/form/form.service';
-import { HttpService } from 'src/app/core/services';
+import { CacheService, HttpService } from 'src/app/core/services';
 import { LocalStorageService } from 'src/app/core/services';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
+import { UtilService } from 'src/app/core/services';
 
 @Component({
     selector: 'app-requests',
@@ -19,6 +21,12 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
     standalone: false
 })
 export class RequestsPage implements OnInit {
+  private readonly scrollKey = 'requests';
+  private readonly CACHE_TTL = {
+    messageRequests: 60,
+  };
+  @ViewChild(IonContent) content: IonContent;
+  private readonly messageRequestCachePrefix = 'messageRequests_';
   public headerConfig: any = {
     menu: true,
     label: 'REQUESTS',
@@ -52,6 +60,8 @@ export class RequestsPage implements OnInit {
     private sessionService: SessionService,
     private form: FormService,
     private localStorage: LocalStorageService,
+    private cacheService: CacheService,
+    private utilService: UtilService,
   ) {}
 
   async ionViewWillEnter() {
@@ -86,6 +96,7 @@ export class RequestsPage implements OnInit {
       await this.pendingRequest();
     }
     this.isLoading.set(false);
+    this.utilService.handleScrollOnEnter(this.scrollKey, this.content);
   }
 
   ngOnInit() {}
@@ -110,6 +121,7 @@ export class RequestsPage implements OnInit {
   }
 
   async pendingRequest(isLoadMore: boolean = false) {
+    const cacheKey = `${this.messageRequestCachePrefix}${this.page}`;
     const config = {
       url: urlConstants.API_URLS.CONNECTION_REQUEST +
         '?pageNo=' + this.page +
@@ -117,7 +129,11 @@ export class RequestsPage implements OnInit {
     };
 
     try {
-      let response: any = await this.httpService.get(config);
+      let response: any = this.cacheService.get(cacheKey);
+      if (!response) {
+        response = await this.httpService.get(config);
+        if (response) this.cacheService.set(cacheKey, response, this.CACHE_TTL.messageRequests);
+      }
       this.isDataAvailable.set(true);
       const newData = response?.result?.data || [];
 
@@ -203,6 +219,7 @@ export class RequestsPage implements OnInit {
   }
 
   onCardClick(event: any, data?: any) {
+    this.utilService.setSkipScroll(this.scrollKey);
     switch (event.type) {
       case 'viewMessage':
         this.router.navigate([CommonRoutes.CHAT_REQ, event.data]);

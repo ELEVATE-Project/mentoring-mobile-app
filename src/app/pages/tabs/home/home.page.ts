@@ -23,6 +23,7 @@ import { CdkConnectedOverlay } from '@angular/cdk/overlay';
   standalone: false
 })
 export class HomePage {
+  private readonly scrollKey = 'home';
   public formData: JsonFormData;
   user = signal<any>(null);
   public isLoading = signal<boolean>(false);
@@ -80,24 +81,18 @@ export class HomePage {
       link: ['']
     });
   }
-
-
-
-  gotToTop() {
-    this.content.scrollToTop(1000);
-  }
   async ionViewWillEnter() {
     if (this.isLoading()) return;
     this.isLoading.set(true);
     this.isCreatedSessions.set(false);
     this.isEnrolledSession.set(false);
     this.page = 1;
-    this.sessions.set(null);
-    this.createdSessions.set(null);
+    if (!this.sessions()) this.sessions.set(null);
+    if (!this.createdSessions()) this.createdSessions.set(null);
     await this.getUser();
     let roles = await this.localStorage.getLocalData(localKeys.USER_ROLES);
     this.isMentor.set(roles?.includes('mentor') ? true : false);
-    this.gotToTop();
+    this.utilService.handleScrollOnEnter(this.scrollKey, this.content);
     let isRoleRequested = await this.localStorage.getLocalData(localKeys.IS_ROLE_REQUESTED);;
     let isBecomeMentorTileClosed = await this.localStorage.getLocalData(localKeys.IS_BECOME_MENTOR_TILE_CLOSED);
     this.showBecomeMentorCard.set((isRoleRequested || this.isMentor() || isBecomeMentorTileClosed) ? false : true);
@@ -152,8 +147,11 @@ export class HomePage {
   }
   async eventAction(event) {
     if (this.user()?.about || environment['isAuthBypassed']) {
+      if(event.type !== 'cardSelect')
+      this.sessionService.invalidateSessionCache(); 
       switch (event.type) {
         case 'cardSelect':
+          this.utilService.setSkipScroll(this.scrollKey);
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
           break;
 

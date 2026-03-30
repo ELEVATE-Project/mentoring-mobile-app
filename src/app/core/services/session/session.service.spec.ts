@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { SessionService } from './session.service';
-import { HttpService, LoaderService, LocalStorageService, ToastService } from '..';
+import { CacheService, HttpService, LoaderService, LocalStorageService, ToastService } from '..';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Browser } from '@capacitor/browser';
@@ -15,6 +15,7 @@ describe('SessionService', () => {
   let routerMock: jasmine.SpyObj<Router>;
   let modalControllerMock: jasmine.SpyObj<ModalController>;
   let localStorageServiceMock: jasmine.SpyObj<LocalStorageService>;
+  let cacheServiceMock: jasmine.SpyObj<CacheService>;
 
   beforeEach(() => {
     // Create spy objects
@@ -24,6 +25,8 @@ describe('SessionService', () => {
     routerMock = jasmine.createSpyObj('Router', ['navigate']);
     modalControllerMock = jasmine.createSpyObj('ModalController', ['create']);
     localStorageServiceMock = jasmine.createSpyObj('LocalStorageService', ['get', 'set']);
+    cacheServiceMock = jasmine.createSpyObj('CacheService', ['get', 'set', 'delete', 'invalidateByPrefix']);
+    cacheServiceMock.get.and.returnValue(null);
 
     // Configure loader service to return resolved promises
     loaderServiceMock.startLoader.and.returnValue(Promise.resolve());
@@ -37,7 +40,8 @@ describe('SessionService', () => {
         { provide: ToastService, useValue: toastServiceMock },
         { provide: Router, useValue: routerMock },
         { provide: ModalController, useValue: modalControllerMock },
-        { provide: LocalStorageService, useValue: localStorageServiceMock }
+        { provide: LocalStorageService, useValue: localStorageServiceMock },
+        { provide: CacheService, useValue: cacheServiceMock }
       ]
     });
 
@@ -594,6 +598,7 @@ describe('SessionService', () => {
         url: urlConstants.API_URLS.REQUEST_SESSION,
         payload: obj
       });
+      expect(cacheServiceMock.invalidateByPrefix).toHaveBeenCalledWith('requestSessions_');
       expect(result).toEqual(mockResponse);
     });
 
@@ -616,7 +621,18 @@ describe('SessionService', () => {
       expect(httpServiceMock.get).toHaveBeenCalledWith({
         url: urlConstants.API_URLS.REQUEST_SESSION_LIST + '?pageNo=1&pageSize=100&status=REQUESTED,EXPIRED'
       });
+      expect(cacheServiceMock.set).toHaveBeenCalledWith('requestSessions_1', mockResponse, 60);
       expect(result).toEqual(mockResponse);
+    });
+
+    it('should return cached request session list when available', async () => {
+      const cachedResponse = { data: [{ id: 'cached' }] };
+      cacheServiceMock.get.and.returnValue(cachedResponse);
+
+      const result = await service.requestSessionList(1);
+
+      expect(httpServiceMock.get).not.toHaveBeenCalled();
+      expect(result).toEqual(cachedResponse);
     });
 
     it('should return null on error', async () => {
@@ -683,6 +699,7 @@ describe('SessionService', () => {
         url: urlConstants.API_URLS.REQUEST_SESSION_ACCEPT,
         payload: { request_session_id: '123' }
       });
+      expect(cacheServiceMock.invalidateByPrefix).toHaveBeenCalledWith('requestSessions_');
       expect(result).toEqual(mockResponse);
     });
 
@@ -709,6 +726,7 @@ describe('SessionService', () => {
           reason: 'Not available'
         }
       });
+      expect(cacheServiceMock.invalidateByPrefix).toHaveBeenCalledWith('requestSessions_');
       expect(result).toEqual(mockResponse);
     });
 

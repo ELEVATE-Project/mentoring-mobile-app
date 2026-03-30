@@ -60,6 +60,7 @@ export class HomeSearchPage implements OnInit {
   criteriaChipSubscription: Subscription;
   showSelectedCriteria: any;
   searchAndCriterias: any;
+  private readonly scrollKey = 'home';
 
   constructor(private modalCtrl: ModalController, private router: Router, private toast: ToastService,
     private sessionService: SessionService,
@@ -249,8 +250,11 @@ export class HomeSearchPage implements OnInit {
   async eventAction(event) {
     this.user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
     if (this.user.about || environment['isAuthBypassed']) {
+      if(event.type !== 'cardSelect') 
+        this.sessionService.invalidateSessionCache();
       switch (event.type) {
         case 'cardSelect':
+          this.utilService.setSkipScroll(this.scrollKey);
           this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${event.data.id}`]);
           break;
 

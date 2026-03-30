@@ -8,6 +8,7 @@ import { Component, ViewChild, computed, signal } from '@angular/core';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { environment } from 'src/environments/environment';
 import { TranslateService } from '@ngx-translate/core';
+import { IonContent } from '@ionic/angular';
 
 @Component({
     selector: 'app-dashboard',
@@ -16,6 +17,8 @@ import { TranslateService } from '@ngx-translate/core';
     standalone: false
 })
 export class DashboardPage {
+  private readonly scrollKey = 'dashboard';
+  @ViewChild(IonContent) content: IonContent;
   @ViewChild('libTableRef') libTableRef: any;
 
   user = signal<any>(null);
@@ -90,6 +93,7 @@ export class DashboardPage {
       this.initialDuration();
     }
     await this.getTranslatedLabel();
+    this.utilService.handleScrollOnEnter(this.scrollKey, this.content);
   }
 
   async downloadData() {

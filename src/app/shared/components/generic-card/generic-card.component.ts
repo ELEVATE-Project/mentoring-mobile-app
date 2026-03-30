@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
-import { LocalStorageService } from 'src/app/core/services';
+import { LocalStorageService, UtilService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 import { ToastService } from 'src/app/core/services';
 
@@ -33,6 +33,7 @@ export class GenericCardComponent implements OnInit {
     private router: Router,
     private localStorage: LocalStorageService,
     private toast: ToastService,
+    private utilService: UtilService
   ) {}
 
   async ngOnInit() {
@@ -42,6 +43,8 @@ export class GenericCardComponent implements OnInit {
 
   onCardClick(data) {
     if (!this.disableNavigation) {
+      this.utilService.setSkipScroll('mentor-directory');
+      this.utilService.setSkipScroll('requests');
       this.router.navigate([
         CommonRoutes.MENTOR_DETAILS,
         data?.id || data?.user_id,

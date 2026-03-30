@@ -79,7 +79,8 @@ const mockSessions = {
       'getAllSessionsAPI',
       'joinSession',
       'enrollSession',
-      'startSession'
+      'startSession',
+      'invalidateSessionCache'
     ]);
     mockModalController = jasmine.createSpyObj('ModalController', ['create']);
     mockUserService = jasmine.createSpyObj('UserService', [], {
@@ -93,7 +94,9 @@ const mockSessions = {
     mockPermissionService = jasmine.createSpyObj('PermissionService', ['getPlatformConfig']);
     mockUtilService = jasmine.createSpyObj('UtilService', [
       'subscribeSearchText',
-      'subscribeCriteriaChip'
+      'subscribeCriteriaChip',
+      'handleScrollOnEnter',
+      'setSkipScroll'
     ]);
 
     await TestBed.configureTestingModule({
@@ -154,15 +157,6 @@ const mockSessions = {
         headerColor: 'primary'
       });
     });
-
-  it('gotToTop should call scrollToTop on content', () => {
-    component.content = { 
-      scrollToTop: jasmine.createSpy().and.returnValue(Promise.resolve()) 
-    } as any;
-    
-    component.gotToTop();
-    expect(component.content.scrollToTop).toHaveBeenCalledWith(1000);
-  });
 
   describe('ionViewWillEnter', () => {
     beforeEach(() => {
@@ -235,15 +229,20 @@ const mockSessions = {
     }));
 
     it('should call gotToTop', fakeAsync(() => {
-      component.content = { scrollToTop: jasmine.createSpy() } as any;
-      
       component.ionViewWillEnter();
       tick();
       
-      expect(component.content.scrollToTop).toHaveBeenCalledWith(1000);
+      expect(mockUtilService.handleScrollOnEnter).toHaveBeenCalledWith('home', component.content);
     }));
 
-      it('should reset pages and sessions', fakeAsync(async () => {
+    it('should skip scroll once when returning to home', fakeAsync(() => {
+      component.ionViewWillEnter();
+      tick();
+
+      expect(mockUtilService.handleScrollOnEnter).toHaveBeenCalledWith('home', component.content);
+    }));
+
+      it('should reset page and preserve existing session data until reload', fakeAsync(async () => {
 
     component.page = 5;
     component.sessions.set({ all_sessions: [{ id: 999 }] });
@@ -276,8 +275,8 @@ const mockSessions = {
     tick(); 
 
     expect(component.page).toBe(1);
-    expect(component.sessions()).toBeNull();
-    expect(component.createdSessions()).toBeNull();
+    expect(component.sessions()).toEqual({ all_sessions: [{ id: 999 }] });
+    expect(component.createdSessions()).toEqual({ data: [{ id: 888 }] });
   }));
 
   
@@ -401,6 +400,7 @@ const mockSessions = {
       component.eventAction({ type: 'cardSelect', data: { id: 123 } });
       tick();
       
+      expect(mockUtilService.setSkipScroll).toHaveBeenCalledWith('home');
       expect(mockRouter.navigate).toHaveBeenCalledWith([`/${CommonRoutes.SESSIONS_DETAILS}/123`]);
     }));
 
