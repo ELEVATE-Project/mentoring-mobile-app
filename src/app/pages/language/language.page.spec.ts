@@ -31,17 +31,24 @@ describe('LanguagePage', () => {
       'setLocalData'
     ]);
     
-    mockTranslateService = {
-      use: jasmine.createSpy('use').and.returnValue(of({})),
-      get: jasmine.createSpy('get').and.returnValue(of({})),
-      instant: jasmine.createSpy('instant').and.returnValue('Translated Text'),
-      stream: jasmine.createSpy('stream').and.returnValue(of('Translated Text')),
-      onTranslationChange: of({}),
-      onLangChange: of({}),
-      onDefaultLangChange: of({}),
-      currentLang: 'en',
-      defaultLang: 'en'
-    };
+    mockTranslateService = jasmine.createSpyObj('TranslateService', [
+      'use', 'get', 'instant', 'stream', 'getCurrentLang', 'getFallbackLang', 'getParsedResult'
+    ]);
+    mockTranslateService.use.and.returnValue(of({}));
+    mockTranslateService.get.and.returnValue(of({}));
+    mockTranslateService.instant.and.returnValue('Translated Text');
+    mockTranslateService.stream.and.returnValue(of('Translated Text'));
+    mockTranslateService.getCurrentLang.and.returnValue('en');
+    mockTranslateService.getFallbackLang.and.returnValue('en');
+    mockTranslateService.getParsedResult.and.returnValue(of({}));
+    
+    // Observables that the pipe or component might subscribe to
+    mockTranslateService.onTranslationChange = of({ lang: 'en', translations: {} });
+    mockTranslateService.onLangChange = of({ lang: 'en', translations: {} });
+    mockTranslateService.onFallbackLangChange = of({ lang: 'en', translations: {} });
+    mockTranslateService.onDefaultLangChange = of({ lang: 'en', translations: {} });
+    mockTranslateService.currentLang = 'en';
+    mockTranslateService.defaultLang = 'en';
 
     mockToastService = jasmine.createSpyObj('ToastService', ['showToast']);
     mockProfileService = jasmine.createSpyObj('ProfileService', ['updateLanguage']);
@@ -85,7 +92,7 @@ describe('LanguagePage', () => {
       await component.ionViewWillEnter();
 
       expect(mockLocalStorageService.getLocalData).toHaveBeenCalled();
-      expect(component.selectedLanguage).toEqual(mockLanguage);
+      expect(component.selectedLanguage()).toEqual(mockLanguage);
     });
 
     it('should handle when no language is stored', async () => {
@@ -93,7 +100,7 @@ describe('LanguagePage', () => {
 
       await component.ionViewWillEnter();
 
-      expect(component.selectedLanguage).toBeNull();
+      expect(component.selectedLanguage()).toBeNull();
     });
   });
 
@@ -103,7 +110,7 @@ describe('LanguagePage', () => {
 
       component.onCardClick(newLanguage);
 
-      expect(component.selectedLanguage).toEqual(newLanguage);
+      expect(component.selectedLanguage()).toEqual(newLanguage);
     });
 
     it('should update selected language multiple times', () => {
@@ -111,16 +118,16 @@ describe('LanguagePage', () => {
       const language2 = { label: 'Hindi', value: 'hi' };
 
       component.onCardClick(language1);
-      expect(component.selectedLanguage).toEqual(language1);
+      expect(component.selectedLanguage()).toEqual(language1);
 
       component.onCardClick(language2);
-      expect(component.selectedLanguage).toEqual(language2);
+      expect(component.selectedLanguage()).toEqual(language2);
     });
   });
 
   describe('onSubmit', () => {
     beforeEach(() => {
-      component.selectedLanguage = mockLanguage;
+      component.selectedLanguage.set(mockLanguage);
     });
 
     it('should update language successfully and call setLanguage', async () => {
@@ -260,7 +267,7 @@ describe('LanguagePage', () => {
       
       // Simulate user clicking on a language card
       component.onCardClick(newLanguage);
-      expect(component.selectedLanguage).toEqual(newLanguage);
+      expect(component.selectedLanguage()).toEqual(newLanguage);
 
       // Simulate form submission
       mockProfileService.updateLanguage.and.returnValue(Promise.resolve(true));

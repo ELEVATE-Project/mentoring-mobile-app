@@ -1,12 +1,20 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewChild, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import * as _ from 'lodash-es';
 import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { LocalStorageService, ToastService } from 'src/app/core/services';
-import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dynamic-form/dynamic-form.component';
+
+interface FeedbackItem {
+  question_id: number;
+  value: string;
+  label: string;
+}
+
+interface FeedbackPayload {
+  feedbacks: FeedbackItem[];
+  feedback_as: 'mentor' | 'mentee' | null;
+}
 
 @Component({
     selector: 'app-feedback',
@@ -15,26 +23,28 @@ import { DynamicFormComponent, JsonFormData } from 'src/app/shared/components/dy
     standalone: false
 })
 export class FeedbackPage implements OnInit {
+  private readonly sessionService = inject(SessionService);
+  private readonly toast = inject(ToastService);
+  private readonly modalController = inject(ModalController);
+  private readonly navParams = inject(NavParams);
+  private readonly localStorage = inject(LocalStorageService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
   @ViewChild('form1') form1: DynamicFormComponent;
 
-  formData: JsonFormData = {
+  readonly formData = signal<JsonFormData>({
     controls: [],
-  };
-  feedbackData = {
+  });
+  readonly feedbackData = signal<FeedbackPayload>({
     feedbacks: [],
     feedback_as: null
-  };
-  sessionData: any;
-  isMentor: boolean;
-  mentorName: any;
-  sessionTitle: any;
-  constructor(private sessionService: SessionService,
-    private toast: ToastService,
-    private router: Router,
-    private modalController: ModalController,
-    private navParams: NavParams,
-    private localStorage: LocalStorageService,
-    private profileService: ProfileService) {
+  });
+  readonly isMentor = signal(false);
+  readonly mentorName = signal('');
+  readonly sessionTitle = signal('');
+  sessionData: { id: string; form: any[] };
+
+  constructor() {
     this.sessionData = this.navParams?.data?.data;
   }
 
@@ -42,50 +52,84 @@ export class FeedbackPage implements OnInit {
     this.isMentorChecking();
   }
   async isMentorChecking() {
-    var data = await this.sessionService.getSessionDetailsAPI(this.sessionData.id);
-    var response = data.result
-    this.mentorName = response.mentor_name;
-    this.sessionTitle = response.title;
-    let user = await this.localStorage.getLocalData(localKeys.USER_DETAILS)
-    this.isMentor = user.id === response.mentor_id ? true : false;
-    this.formItems()
-    this.formData.controls = this.sessionData.form;
-    this.formData.controls.forEach(element=> element.name = String(element.id))
-    this.feedbackData.feedback_as = this.isMentor ? "mentor" : "mentee";
+    const data = await this.sessionService.getSessionDetailsAPI(this.sessionData.id);
+    const response = data.result;
+    this.mentorName.set(response.mentor_name);
+    this.sessionTitle.set(response.title);
+    const user = await this.localStorage.getLocalData(localKeys.USER_DETAILS);
+    this.isMentor.set(user.id === response.mentor_id);
+
+    this.formItems();
+    const controls = this.sessionData.form;
+    controls.forEach(element => {
+      element.name = String(element.id);
+    });
+    Promise.resolve().then(() => {
+      this.formData.set({ controls });
+      this.cdr.markForCheck();
+    });
+    this.feedbackData.update(current => ({
+      ...current,
+      feedback_as: this.isMentor() ? 'mentor' : 'mentee'
+    }));
   }
 
-  formItems(){
+  formItems(): void {
     for (const formItem of this.sessionData.form) {
-    formItem.validators = formItem.rendering_data.validators;
-    formItem.class = formItem.rendering_data.class;
+      formItem.validators = formItem.rendering_data.validators;
+      formItem.class = formItem.rendering_data.class;
     }
   }
 
-  async submit() {
+  async submit(): Promise<void> {
     this.form1.onSubmit();
-    let feedbackKey = Object.keys(this.form1.myForm.value);
+
+    const feedbacks: FeedbackItem[] = [];
+    const feedbackKey = Object.keys(this.form1.myForm.value);
+
     feedbackKey.forEach((key) => {
-      if (this.form1.myForm.value[key] != "") {
-        let data;
-        this.formData.controls.some((element) => {
+      if (this.form1.myForm.value[key] !== '') {
+        let control: any;
+        this.formData().controls.some((element) => {
           if (element.name === key) {
-            data = element;
+            control = element;
             return element;
           }
+          return false;
         });
-        let feedback = { question_id: data.id, value: this.form1.myForm.value[key], label: data.label };
-        this.feedbackData.feedbacks.push(feedback);
+
+        if (control) {
+          feedbacks.push({
+            question_id: control.id,
+            value: this.form1.myForm.value[key],
+            label: control.label
+          });
+        }
       }
-    })
-    let result = this.feedbackData.feedbacks.length ? await this.sessionService.submitFeedback(this.feedbackData, this.sessionData.id) : await this.sessionService.submitFeedback({ is_feedback_skipped: true, feedback_as: this.feedbackData.feedback_as }, this.sessionData.id);
+    });
+
+    this.feedbackData.update(current => ({ ...current, feedbacks }));
+
+    const payload = this.feedbackData();
+    const result = payload.feedbacks.length
+      ? await this.sessionService.submitFeedback(payload, this.sessionData.id)
+      : await this.sessionService.submitFeedback(
+          { is_feedback_skipped: true, feedback_as: payload.feedback_as },
+          this.sessionData.id
+        );
+
     if (result) {
-      this.toast.showToast(result?.message, "success");
+      this.toast.showToast(result?.message, 'success');
     }
+
     await this.modalController.dismiss(false);
   }
 
-  async closeModal() {
-    await this.sessionService.submitFeedback({ is_feedback_skipped: true, feedback_as: this.feedbackData.feedback_as }, this.sessionData.id);
+  async closeModal(): Promise<void> {
+    await this.sessionService.submitFeedback(
+      { is_feedback_skipped: true, feedback_as: this.feedbackData().feedback_as },
+      this.sessionData.id
+    );
     await this.modalController.dismiss(false);
   }
 }

@@ -29,10 +29,23 @@ describe('MessagesPage', () => {
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     mockProfileService = jasmine.createSpyObj('ProfileService', ['getChatToken']);
     mockToastService = jasmine.createSpyObj('ToastService', ['showToast']);
-    mockTranslateService = jasmine.createSpyObj('TranslateService', ['get', 'use', 'setDefaultLang']);
+    mockTranslateService = jasmine.createSpyObj('TranslateService', ['get', 'use', 'setDefaultLang', 'getCurrentLang', 'getFallbackLang', 'getParsedResult', 'instant']);
 
     // Default mock returns
     mockTranslateService.get.and.returnValue(of(mockTranslations));
+    mockTranslateService.use.and.returnValue(of({}));
+    mockTranslateService.setDefaultLang.and.stub();
+    mockTranslateService.getCurrentLang.and.returnValue('en');
+    mockTranslateService.getFallbackLang.and.returnValue('en');
+    mockTranslateService.getParsedResult.and.returnValue(of({}));
+    mockTranslateService.instant.and.returnValue('Translated Text');
+    
+    // Observables
+    (mockTranslateService as any).onTranslationChange = of({ lang: 'en', translations: {} });
+    (mockTranslateService as any).onLangChange = of({ lang: 'en', translations: {} });
+    (mockTranslateService as any).onFallbackLangChange = of({ lang: 'en', translations: {} });
+    (mockTranslateService as any).onDefaultLangChange = of({ lang: 'en', translations: {} });
+
     mockProfileService.getChatToken.and.returnValue(Promise.resolve(true));
 
     TestBed.configureTestingModule({
@@ -75,7 +88,7 @@ describe('MessagesPage', () => {
     });
 
     it('should initialize isLoaded as false', () => {
-      expect(component.isLoaded).toBe(false);
+      expect(component.isLoaded()).toBe(false);
     });
 
     it('should call translateAllMessages in constructor', () => {
@@ -83,9 +96,9 @@ describe('MessagesPage', () => {
     });
 
     it('should initialize translatedMessages object', () => {
-      expect(component.translatedMessages).toBeDefined();
-      expect(component.translatedMessages.placeholder).toBeDefined();
-      expect(component.translatedMessages.noData).toBeDefined();
+      expect(component.translatedMessages()).toBeDefined();
+      expect(component.translatedMessages().placeholder).toBeDefined();
+      expect(component.translatedMessages().noData).toBeDefined();
     });
   });
 
@@ -106,9 +119,9 @@ describe('MessagesPage', () => {
     });
 
     it('should set isLoaded to false initially then true after loading', async () => {
-      component.isLoaded = true;
+      component.isLoaded.set(true);
       await component.ionViewWillEnter();
-      expect(component.isLoaded).toBe(true);
+      expect(component.isLoaded()).toBe(true);
     });
 
     it('should call translateAllMessages', async () => {
@@ -126,7 +139,7 @@ describe('MessagesPage', () => {
       
       await component.ionViewWillEnter();
       
-      expect(component.showChat).toBe(true);
+      expect(component.showChat()).toBe(true);
     });
 
     it('should set showChat to false when getChatToken returns false', async () => {
@@ -134,13 +147,13 @@ describe('MessagesPage', () => {
       
       await component.ionViewWillEnter();
       
-      expect(component.showChat).toBe(false);
+      expect(component.showChat()).toBe(false);
     });
 
     it('should set isLoaded to true after loading', async () => {
-      component.isLoaded = false;
+      component.isLoaded.set(false);
       await component.ionViewWillEnter();
-      expect(component.isLoaded).toBe(true);
+      expect(component.isLoaded()).toBe(true);
     });
 
     it('should handle getChatToken errors gracefully', async () => {
@@ -178,8 +191,8 @@ describe('MessagesPage', () => {
       
       component.translateAllMessages();
       
-      expect(component.translatedMessages.placeholder).toBe('Custom placeholder');
-      expect(component.translatedMessages.noData).toBe('Custom no data message');
+      expect(component.translatedMessages().placeholder).toBe('Custom placeholder');
+      expect(component.translatedMessages().noData).toBe('Custom no data message');
     });
 
     it('should set placeholder from MESSAGE_SEARCH_PLACEHOLDER translation', () => {
@@ -187,7 +200,7 @@ describe('MessagesPage', () => {
       
       component.translateAllMessages();
       
-      expect(component.translatedMessages.placeholder).toBe(mockTranslations['MESSAGE_SEARCH_PLACEHOLDER']);
+      expect(component.translatedMessages().placeholder).toBe(mockTranslations['MESSAGE_SEARCH_PLACEHOLDER']);
     });
 
     it('should set noData from SEARCH_RESULT_MESSGAGE_NOT_FOUND translation', () => {
@@ -195,7 +208,7 @@ describe('MessagesPage', () => {
       
       component.translateAllMessages();
       
-      expect(component.translatedMessages.noData).toBe(mockTranslations['SEARCH_RESULT_MESSGAGE_NOT_FOUND']);
+      expect(component.translatedMessages().noData).toBe(mockTranslations['SEARCH_RESULT_MESSGAGE_NOT_FOUND']);
     });
 
     it('should subscribe to translation observable', () => {
@@ -351,51 +364,51 @@ describe('MessagesPage', () => {
 
   describe('ionViewWillLeave', () => {
     it('should set showChat to null', () => {
-      component.showChat = true;
+      component.showChat.set(true);
       
       component.ionViewWillLeave();
       
-      expect(component.showChat).toBeNull();
+      expect(component.showChat()).toBeNull();
     });
 
     it('should set showChat to null even if it was already null', () => {
-      component.showChat = null;
+      component.showChat.set(null);
       
       component.ionViewWillLeave();
       
-      expect(component.showChat).toBeNull();
+      expect(component.showChat()).toBeNull();
     });
 
     it('should set showChat to null even if it was undefined', () => {
-      component.showChat = undefined;
+      component.showChat.set(undefined);
       
       component.ionViewWillLeave();
       
-      expect(component.showChat).toBeNull();
+      expect(component.showChat()).toBeNull();
     });
 
     it('should set showChat to null when it contains boolean data', () => {
-      component.showChat = false;
+      component.showChat.set(false);
       
       component.ionViewWillLeave();
       
-      expect(component.showChat).toBeNull();
+      expect(component.showChat()).toBeNull();
     });
   });
 
   describe('Integration Tests', () => {
     it('should properly initialize and handle full lifecycle', async () => {
       // Initial state
-      expect(component.isLoaded).toBe(false);
+      expect(component.isLoaded()).toBe(false);
       
       // Enter view
       await component.ionViewWillEnter();
-      expect(component.showChat).toBeDefined();
-      expect(component.isLoaded).toBe(true);
+      expect(component.showChat()).toBeDefined();
+      expect(component.isLoaded()).toBe(true);
       
       // Leave view
       component.ionViewWillLeave();
-      expect(component.showChat).toBeNull();
+      expect(component.showChat()).toBeNull();
     });
 
     it('should handle message selection flow', async () => {
@@ -438,7 +451,7 @@ describe('MessagesPage', () => {
       await component.ionViewWillEnter();
       component.ionViewWillLeave();
       
-      expect(component.showChat).toBeNull();
+      expect(component.showChat()).toBeNull();
       expect(mockProfileService.getChatToken).toHaveBeenCalledTimes(2);
     });
 
@@ -447,8 +460,8 @@ describe('MessagesPage', () => {
       
       component.translateAllMessages();
       
-      expect(component.translatedMessages.placeholder).toBeUndefined();
-      expect(component.translatedMessages.noData).toBeUndefined();
+      expect(component.translatedMessages().placeholder).toBeUndefined();
+      expect(component.translatedMessages().noData).toBeUndefined();
     });
 
     it('should handle multiple toast calls in sequence', () => {
@@ -470,14 +483,14 @@ describe('MessagesPage', () => {
     it('should handle showChat with different boolean values', async () => {
       mockProfileService.getChatToken.and.returnValue(Promise.resolve(true));
       await component.ionViewWillEnter();
-      expect(component.showChat).toBe(true);
+      expect(component.showChat()).toBe(true);
       
       component.ionViewWillLeave();
-      expect(component.showChat).toBeNull();
+      expect(component.showChat()).toBeNull();
       
       mockProfileService.getChatToken.and.returnValue(Promise.resolve(false));
       await component.ionViewWillEnter();
-      expect(component.showChat).toBe(false);
+      expect(component.showChat()).toBe(false);
     });
   });
 });
