@@ -24,10 +24,24 @@ describe('ChatRequestPage', () => {
 
   beforeEach(waitForAsync(() => {
     const httpServiceSpy = jasmine.createSpyObj('HttpService', ['post']);
+    httpServiceSpy.post.and.returnValue(Promise.resolve({ result: {} }));
     const toastServiceSpy = jasmine.createSpyObj('ToastService', ['showToast']);
     const utilServiceSpy = jasmine.createSpyObj('UtilService', ['alertPopup']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-    const translateServiceSpy = jasmine.createSpyObj('TranslateService', ['instant', 'get']);
+    const translateServiceSpy = jasmine.createSpyObj('TranslateService', [
+      'instant', 'get', 'use', 'getCurrentLang', 'getFallbackLang', 'getParsedResult', 'stream'
+    ]);
+    translateServiceSpy.instant.and.returnValue('Translated Text');
+    translateServiceSpy.get.and.returnValue(of({}));
+    translateServiceSpy.use.and.returnValue(of({}));
+    translateServiceSpy.getCurrentLang.and.returnValue('en');
+    translateServiceSpy.getFallbackLang.and.returnValue('en');
+    translateServiceSpy.getParsedResult.and.returnValue(of({}));
+    translateServiceSpy.stream.and.returnValue(of('Translated Text'));
+    (translateServiceSpy as any).onTranslationChange = of({ lang: 'en', translations: {} });
+    (translateServiceSpy as any).onLangChange = of({ lang: 'en', translations: {} });
+    (translateServiceSpy as any).onFallbackLangChange = of({ lang: 'en', translations: {} });
+    (translateServiceSpy as any).onDefaultLangChange = of({ lang: 'en', translations: {} });
     const navControllerSpy = jasmine.createSpyObj('NavController', ['navigateForward', 'navigateBack']);
 
     activatedRoute = {
@@ -191,6 +205,7 @@ describe('ChatRequestPage', () => {
     beforeEach(() => {
       component.id.set('123');
       component.message.set('Test message');
+      httpService.post.calls.reset();
     });
 
     it('should not send request if message is empty or whitespace', () => {
@@ -392,6 +407,7 @@ describe('ChatRequestPage', () => {
 
     it('should trim whitespace from message before validation', () => {
       component.message.set('  ');
+      httpService.post.calls.reset();
       component.sendRequest();
       expect(httpService.post).not.toHaveBeenCalled();
     });
@@ -456,6 +472,7 @@ describe('ChatRequestPage', () => {
 
     it('should reject message one character over limit', () => {
       component.message.set('a'.repeat(component.messageLimit + 1));
+      httpService.post.calls.reset();
       
       component.sendRequest();
       

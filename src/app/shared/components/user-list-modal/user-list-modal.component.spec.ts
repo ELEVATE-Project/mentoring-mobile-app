@@ -5,7 +5,7 @@ import { UserListModalComponent } from './user-list-modal.component';
 
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'translate' })
+@Pipe({ name: 'translate', standalone: false })
 class MockTranslatePipe implements PipeTransform {
   transform(value: string): string {
     return value;

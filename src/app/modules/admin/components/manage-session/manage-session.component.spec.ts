@@ -67,7 +67,9 @@ describe('ManageSessionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should fetch session list on init', () => {
+  it('should fetch session list on enter', async () => {
+    mockAdminWorkapceService.createdSessionBySessionManager.calls.reset();
+    await component.ionViewWillEnter();
     expect(mockAdminWorkapceService.createdSessionBySessionManager).toHaveBeenCalled();
   });
 
@@ -94,13 +96,14 @@ describe('ManageSessionComponent', () => {
   });
 
   it('should delete session and refresh list', async () => {
+    mockAdminWorkapceService.createdSessionBySessionManager.calls.reset();
     const data = {
       action: 'DELETE',
       element: { id: 'session1' }
     };
     await component.onClickEvent(data);
     expect(mockAdminWorkapceService.deleteSession).toHaveBeenCalledWith('session1');
-    expect(mockAdminWorkapceService.createdSessionBySessionManager).toHaveBeenCalledTimes(2); // Init + Refresh
+    expect(mockAdminWorkapceService.createdSessionBySessionManager).toHaveBeenCalledTimes(1);
   });
 
   it('should navigate to edit session', () => {

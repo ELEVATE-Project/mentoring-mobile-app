@@ -32,6 +32,7 @@ export const APP_PAGES = [
         icon: 'people',
         url: CommonRoutes.MY_CONNECTIONS,
         pageId: PAGE_IDS.myConnections,
+        showTab: false,
     },
     {
         title: 'MESSAGES',
@@ -40,6 +41,7 @@ export const APP_PAGES = [
         url: CommonRoutes.MESSAGES,
         badge: false,
         pageId: PAGE_IDS.messages,
+        showTab: false,
     },
     {
         title: 'DASHBOARD',

@@ -35,8 +35,10 @@ export class PrivateService {
     adminAccess = signal<boolean>(false);
     userRoles = signal<any>(null);
 
+    private readonly allAppPages = signal(_.cloneDeep(APP_PAGES));
     public appPages = signal(_.cloneDeep(APP_PAGES));
     public adminPage = ADMIN_PAGE;
+    chatConfig: any;
 
     actionsArrays: any[] = permissionModule.MODULES;
     userEventSubscription: any;
@@ -85,6 +87,7 @@ export class PrivateService {
                         )
                         : false);
                 }
+                await this.permissionService.getPlatformConfig();
                 await this.profile.getChatToken();
                 this.getUser();
                 resolve();
@@ -92,7 +95,7 @@ export class PrivateService {
         });
 
         this.db.init();
-
+        
         await new Promise<void>((resolve) => {
             setTimeout(async () => {
                 this.userRoles.set(await this.localStorage.getLocalData(
@@ -136,6 +139,31 @@ export class PrivateService {
 
         this.subscribeBackButton();
         await this.checkBadges();
+        this.chatConfig = await this.localStorage.getLocalData(localKeys['CHAT_CONFIG']);
+        this.syncVisibleAppPages();
+    }
+
+    private isChatEnabled(): boolean {
+        const isEnabled = String(this.chatConfig) === 'true';
+        return isEnabled;
+    }
+
+    private syncVisibleAppPages(): void {
+        const isChatEnabled = this.isChatEnabled();
+        const pages = this.appPages().map((page: any) => {
+            if ([PAGE_IDS.myConnections, PAGE_IDS.messages].includes(page.pageId)) {
+                return {
+                    ...page,
+                    showTab: isChatEnabled,
+                };
+            }
+
+            return {
+                ...page,
+                showTab: page.showTab ?? true,
+            };
+        });
+        this.appPages.set(pages);
     }
 
     applyTheme() {

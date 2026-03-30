@@ -5,6 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SearchAndSelectComponent } from './search-and-select.component';
 import { HttpService, ToastService } from 'src/app/core/services';
 import { of, throwError } from 'rxjs';
+import { createMockTranslateService } from 'src/testing/mock-translate.service';
 
 describe('SearchAndSelectComponent', () => {
   let component: SearchAndSelectComponent;
@@ -18,7 +19,8 @@ describe('SearchAndSelectComponent', () => {
   beforeEach(async () => {
     mockAlertController = jasmine.createSpyObj('AlertController', ['create']);
     mockModalController = jasmine.createSpyObj('ModalController', ['create']);
-    mockTranslateService = jasmine.createSpyObj('TranslateService', ['instant']);
+    mockTranslateService = createMockTranslateService();
+    mockTranslateService.instant.and.callFake((key: string | string[]) => Array.isArray(key) ? key : key);
     mockToastService = jasmine.createSpyObj('ToastService', ['showToast']);
     mockHttpService = jasmine.createSpyObj('HttpService', ['get']);
 

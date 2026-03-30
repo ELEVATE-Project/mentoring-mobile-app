@@ -9,6 +9,8 @@ import * as _ from 'lodash';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { HttpService } from 'src/app/core/services';
+import { LocalStorageService } from 'src/app/core/services';
+import { localKeys } from 'src/app/core/constants/localStorage.keys';
 
 @Component({
     selector: 'app-requests',
@@ -35,23 +37,31 @@ export class RequestsPage implements OnInit {
   isInfiniteScrollDisabled = signal<boolean>(false);
   isLoading = signal<boolean>(false);
   isDataAvailable = signal<boolean>(false);
+  showMessageRequests = signal<boolean>(true);
 
   expiryTag = {
     label: 'EXPIRED',
     cssClass: 'expired-tag'
   };
   page = 1;
-
+  
   constructor(
     private httpService: HttpService,
     private route: ActivatedRoute,
     private router: Router,
     private sessionService: SessionService,
     private form: FormService,
+    private localStorage: LocalStorageService,
   ) {}
 
   async ionViewWillEnter() {
     if (this.isLoading()) return;
+    const chatConfig = await this.localStorage.getLocalData(localKeys.CHAT_CONFIG);
+    const isEnabled = String(chatConfig) === 'true';
+    this.showMessageRequests.set(isEnabled);
+    if (!this.showMessageRequests()) {
+      this.segmentType.set('slot-requests');
+    }
 
     this.isDataAvailable.set(false);
     this.isLoading.set(true);
@@ -82,6 +92,9 @@ export class RequestsPage implements OnInit {
 
   async segmentChanged(event: any) {
     this.segmentType.set(event.target.value);
+    if (!this.showMessageRequests() && this.segmentType() === 'message-requests') {
+      this.segmentType.set('slot-requests');
+    }
     this.page = 1;
     this.isInfiniteScrollDisabled.set(false);
     this.noResult.set('');

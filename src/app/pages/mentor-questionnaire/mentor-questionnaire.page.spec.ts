@@ -11,7 +11,7 @@ import { localKeys } from 'src/app/core/constants/localStorage.keys';
 import { CommonRoutes } from 'src/global.routes';
 import { Pipe, PipeTransform, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-@Pipe({ name: 'translate' })
+@Pipe({ name: 'translate', standalone: false })
 class MockTranslatePipe implements PipeTransform {
   transform(value: string): string {
     return value;

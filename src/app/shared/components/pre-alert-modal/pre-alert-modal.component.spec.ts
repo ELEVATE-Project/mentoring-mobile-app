@@ -9,6 +9,7 @@ import { ToastService, UtilService } from 'src/app/core/services';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
+import { createMockTranslateService } from 'src/testing/mock-translate.service';
 
 
 describe('PreAlertModalComponent', () => {
@@ -25,17 +26,9 @@ describe('PreAlertModalComponent', () => {
     utilServiceSpy = jasmine.createSpyObj('UtilService', ['uploadFile']);
     actionSheetControllerSpy = jasmine.createSpyObj('ActionSheetController', ['create']);
 
-    // Keep translate spy in case the component calls TranslateService directly
-    translateServiceSpy = jasmine.createSpyObj(
-      'TranslateService',
-      ['instant', 'get'],
-      {
-        onLangChange: of({}),
-        onTranslationChange: of({}),
-        onDefaultLangChange: of({})
-      }
-    );
-    translateServiceSpy.get.and.returnValue(of('mock translation'));
+    translateServiceSpy = createMockTranslateService();
+    translateServiceSpy.get.and.returnValue(of('mock translation') as any);
+    translateServiceSpy.instant.and.callFake((key: string | string[]) => Array.isArray(key) ? key : key);
 
     toastServiceSpy = jasmine.createSpyObj('ToastService', ['presentToast']);
 
@@ -259,7 +252,7 @@ describe('PreAlertModalComponent', () => {
 
       // verify the create() config and invoke the "File" handler
       const createArgs = actionSheetControllerSpy.create.calls.mostRecent().args[0];
-      const fileButton = createArgs.buttons?.find((b: any) => b.text === 'File') as any;
+      const fileButton = createArgs.buttons?.find((b: any) => b.text === 'FILE') as any;
 
       if (fileButton && fileButton.handler) {
         fileButton.handler();

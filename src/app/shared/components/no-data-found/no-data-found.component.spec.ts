@@ -7,6 +7,7 @@ import { NoDataFoundComponent } from './no-data-found.component';
 import { ProfileService } from 'src/app/core/services/profile/profile.service';
 import { CommonRoutes } from 'src/global.routes';
 import { TranslateModule } from '@ngx-translate/core';
+import { IonicModule } from '@ionic/angular';
 
 // Mock Dependencies
 const mockRouter = {
@@ -25,7 +26,7 @@ describe('NoDataFoundComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
+      imports: [IonicModule.forRoot(), TranslateModule.forRoot()],
       declarations: [NoDataFoundComponent],
       providers: [
         { provide: Router, useValue: mockRouter },
@@ -77,6 +78,8 @@ describe('NoDataFoundComponent', () => {
 
   it('should correctly bind the messageHeader input', () => {
     const testHeader = 'No Items Found';
+    fixture = TestBed.createComponent(NoDataFoundComponent);
+    component = fixture.componentInstance;
     component.messageHeader = testHeader;
     fixture.detectChanges();
     expect(component.messageHeader).toBe(testHeader);
@@ -84,12 +87,16 @@ describe('NoDataFoundComponent', () => {
 
   it('should correctly bind the messageDescription input', () => {
     const testDescription = 'Try adjusting your filters.';
+    fixture = TestBed.createComponent(NoDataFoundComponent);
+    component = fixture.componentInstance;
     component.messageDescription = testDescription;
     fixture.detectChanges();
     expect(component.messageDescription).toBe(testDescription);
   });
   
   it('should correctly bind the exploreButton input', () => {
+    fixture = TestBed.createComponent(NoDataFoundComponent);
+    component = fixture.componentInstance;
     component.exploreButton = true;
     fixture.detectChanges();
     expect(component.exploreButton).toBeTrue();
@@ -97,6 +104,8 @@ describe('NoDataFoundComponent', () => {
 
   it('should allow overriding the default image path', () => {
     const customImage = 'assets/custom/no_favorites.svg';
+    fixture = TestBed.createComponent(NoDataFoundComponent);
+    component = fixture.componentInstance;
     component.image = customImage;
     fixture.detectChanges();
     expect(component.image).toBe(customImage);
