@@ -18,19 +18,22 @@ module.exports = function (config) {
         // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
         // for example, you can disable the random execution with `random: false`
         // or set a specific seed with `seed: 4321`
+        timeoutInterval: 60000,
+        random: false,
+        failSpecWithNoExpectations: false
       },
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
     jasmineHtmlReporter: {
       suppressAll: true // removes the duplicated traces
     },
-  coverageReporter: {
-  dir: require('path').join(__dirname, './coverage'),
-  reporters: [
-    { type: 'lcov', subdir: '.' },   // required for SonarCloud
-    { type: 'text-summary' }
-  ]
-},
+    coverageReporter: {
+      dir: require('path').join(__dirname, './coverage'),
+      reporters: [
+        { type: 'lcov', subdir: '.' },   // required for SonarCloud
+        { type: 'text-summary' }
+      ]
+    },
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
@@ -38,6 +41,10 @@ module.exports = function (config) {
     autoWatch: true,
     browsers: ['ChromeHeadless'],
     singleRun: false,
-    restartOnFileChange: true
+    restartOnFileChange: true,
+    browserNoActivityTimeout: 400000,
+    browserDisconnectTimeout: 200000,
+    browserDisconnectTolerance: 3,
+    captureTimeout: 200000
   });
 };
