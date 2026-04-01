@@ -16,9 +16,9 @@ import * as _ from 'lodash';
 import { IonContent } from '@ionic/angular';
 
 // import service tokens exactly as used in your component
-import { HttpService, LoaderService, ToastService } from 'src/app/core/services';
+import { CacheService, HttpService, LoaderService, ToastService } from 'src/app/core/services';
 import { FormService } from 'src/app/core/services/form/form.service';
-import { LocalStorageService } from 'src/app/core/services';
+import { LocalStorageService, UtilService } from 'src/app/core/services';
 import { CommonRoutes } from 'src/global.routes';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -67,6 +67,27 @@ class MockLocalStorageService {
   });
 }
 
+class MockUtilService {
+  handleScrollOnEnter = jasmine.createSpy('handleScrollOnEnter');
+  setSkipScroll = jasmine.createSpy('setSkipScroll');
+}
+
+class MockCacheService {
+  private store = new Map<string, any>();
+
+  get(key: string) {
+    return this.store.get(key) ?? null;
+  }
+
+  set(key: string, data: any) {
+    this.store.set(key, data);
+  }
+
+  clear() {
+    this.store.clear();
+  }
+}
+
 describe('MentorDirectoryPage', () => {
   let component: MentorDirectoryPage;
   let fixture: ComponentFixture<MentorDirectoryPage>;
@@ -76,6 +97,8 @@ describe('MentorDirectoryPage', () => {
   let toastService: MockToastService;
   let formService: MockFormService;
   let localStorage: MockLocalStorageService;
+  let utilService: MockUtilService;
+  let cacheService: MockCacheService;
 
   beforeEach(waitForAsync(async () => {
     router = new MockRouter();
@@ -84,6 +107,8 @@ describe('MentorDirectoryPage', () => {
     toastService = new MockToastService();
     formService = new MockFormService();
     localStorage = new MockLocalStorageService();
+    utilService = new MockUtilService();
+    cacheService = new MockCacheService();
 
     await TestBed.configureTestingModule({
 
@@ -106,6 +131,8 @@ describe('MentorDirectoryPage', () => {
         { provide: ToastService, useValue: toastService },
         { provide: FormService, useValue: formService },
         { provide: LocalStorageService, useValue: localStorage },
+        { provide: UtilService, useValue: utilService },
+        { provide: CacheService, useValue: cacheService },
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -122,6 +149,7 @@ describe('MentorDirectoryPage', () => {
     component.mentorForm.set({});
     component.mentors.set([]);
     component.loading.set(false);
+    cacheService.clear();
 
     fixture.detectChanges();
     await fixture.whenStable();
@@ -143,18 +171,24 @@ describe('MentorDirectoryPage', () => {
   it('ionViewWillEnter should skip initialization and only scroll if this.loading is true', async () => {
     spyOn(component, 'getMentors').and.returnValue(Promise.resolve());
     component.loading.set(true); // Set state to hit the branch
-    (component as any).content = { scrollToTop: jasmine.createSpy('scrollToTop') } as any;
 
     await component.ionViewWillEnter();
 
-    expect((component as any).content.scrollToTop).toHaveBeenCalled();
+    expect(utilService.handleScrollOnEnter).toHaveBeenCalledWith('mentor-directory', (component as any).content);
     expect(localStorage.getLocalData).not.toHaveBeenCalled();
     expect(component.getMentors).not.toHaveBeenCalled();
   });
 
+  it('ionViewWillEnter should skip scroll once when returning from mentor details', async () => {
+    spyOn(component, 'getMentors').and.returnValue(Promise.resolve());
+
+    await component.ionViewWillEnter();
+
+    expect(utilService.handleScrollOnEnter).toHaveBeenCalledWith('mentor-directory', (component as any).content);
+  });
+
   it('ionViewWillEnter should fetch user, form, initialize and call getMentors and gotToTop (Success Path)', async () => {
     spyOn(component, 'getMentors').and.returnValue(Promise.resolve());
-    (component as any).content = { scrollToTop: jasmine.createSpy('scrollToTop') } as any;
     component.loading.set(false); // Ensure it proceeds
 
     await component.ionViewWillEnter();
@@ -167,7 +201,7 @@ describe('MentorDirectoryPage', () => {
     expect(component.mentors()).toEqual([]);
     expect(component.isInfiniteScrollDisabled()).toBeFalse();
     expect(component.getMentors).toHaveBeenCalled();
-    expect((component as any).content.scrollToTop).toHaveBeenCalled();
+    expect(utilService.handleScrollOnEnter).toHaveBeenCalledWith('mentor-directory', (component as any).content);
   });
 
   it('ionViewWillEnter should handle localStorage error gracefully', async () => {
@@ -293,6 +327,8 @@ describe('MentorDirectoryPage', () => {
     expect(component.mentors().length).toBe(1);
 
     // load more (isLoadMore true)
+    cacheService.clear();
+    component.page.set(2);
     await component.getMentors(false, true);
     expect(component.mentors().length).toBe(2);
     expect(component.mentors().some(g => g.values.some(m => m.id === 2))).toBeTrue();
@@ -324,6 +360,7 @@ describe('MentorDirectoryPage', () => {
 
   it('eventAction should navigate for cardSelect', () => {
     component.eventAction({ type: 'cardSelect', data: { id: 11 } } as any);
+    expect(utilService.setSkipScroll).toHaveBeenCalledWith('mentor-directory');
     expect(router.navigate).toHaveBeenCalledWith([CommonRoutes.MENTOR_DETAILS, 11]);
   });
 

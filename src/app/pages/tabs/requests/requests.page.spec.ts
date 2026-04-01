@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync, fakeAsync } from '@angular/core/testing';
 import { RequestsPage } from './requests.page';
-import { HttpService, LocalStorageService } from 'src/app/core/services';
+import { CacheService, HttpService, LocalStorageService, UtilService } from 'src/app/core/services';
 import { SessionService } from 'src/app/core/services/session/session.service';
 import { FormService } from 'src/app/core/services/form/form.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -27,6 +27,8 @@ describe('RequestsPage', () => {
   let routerSpy: any;
   let activatedRouteStub: any;
   let localStorageServiceSpy: any;
+  let cacheServiceSpy: any;
+  let utilServiceSpy: any;
 
   beforeEach(waitForAsync(() => {
     httpServiceSpy = jasmine.createSpyObj('HttpService', ['get']);
@@ -34,7 +36,10 @@ describe('RequestsPage', () => {
     formServiceSpy = jasmine.createSpyObj('FormService', ['getForm']);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     localStorageServiceSpy = jasmine.createSpyObj('LocalStorageService', ['getLocalData']);
+    cacheServiceSpy = jasmine.createSpyObj('CacheService', ['get', 'set']);
+    utilServiceSpy = jasmine.createSpyObj('UtilService', ['handleScrollOnEnter', 'setSkipScroll']);
     localStorageServiceSpy.getLocalData.and.returnValue(Promise.resolve('true'));
+    cacheServiceSpy.get.and.returnValue(null);
 
     activatedRouteStub = {
       data: of({
@@ -51,6 +56,8 @@ describe('RequestsPage', () => {
         { provide: SessionService, useValue: sessionServiceSpy },
         { provide: FormService, useValue: formServiceSpy },
         { provide: LocalStorageService, useValue: localStorageServiceSpy },
+        { provide: CacheService, useValue: cacheServiceSpy },
+        { provide: UtilService, useValue: utilServiceSpy },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: Router, useValue: routerSpy }
       ],
@@ -82,6 +89,7 @@ describe('RequestsPage', () => {
     expect(component.slotBtnConfig()).toBeDefined();
     expect(sessionServiceSpy.requestSessionList).toHaveBeenCalledWith(1);
     expect(component.isLoading()).toBeFalse();
+    expect(utilServiceSpy.handleScrollOnEnter).toHaveBeenCalledWith('requests', component.content);
   }));
 
   it('segmentChanged should switch to message-requests and call pendingRequest', waitForAsync(async () => {
@@ -108,6 +116,16 @@ describe('RequestsPage', () => {
     expect(component.segmentType()).toBe('slot-requests');
   }));
 
+  it('ionViewWillEnter should skip scroll when returning from a child page', waitForAsync(async () => {
+    const fakeFormResult = { data: { fields: { controls: { title: 'test' } } } };
+    formServiceSpy.getForm.and.returnValue(Promise.resolve(fakeFormResult));
+    sessionServiceSpy.requestSessionList.and.returnValue(Promise.resolve({ result: { data: [], count: 0 } }));
+
+    await component.ionViewWillEnter();
+
+    expect(utilServiceSpy.handleScrollOnEnter).toHaveBeenCalledWith('requests', component.content);
+  }));
+
   it('pendingRequest should populate data and set noResult when empty on first page', waitForAsync(async () => {
     const resp = { result: { data: [], count: 0 } };
     httpServiceSpy.get.and.returnValue(Promise.resolve(resp));
@@ -115,6 +133,7 @@ describe('RequestsPage', () => {
     const result = await component.pendingRequest();
 
     expect(httpServiceSpy.get).toHaveBeenCalled();
+    expect(cacheServiceSpy.set).toHaveBeenCalledWith('messageRequests_1', resp, 60);
     expect(component.data().length).toBe(0);
     expect(component.noResult()).toBe(component.routeData()?.noDataFound?.noMessage);
     // when response count is 0, component.data().length >= totalCount -> true
@@ -153,9 +172,12 @@ describe('RequestsPage', () => {
 
   it('onCardClick should navigate for viewMessage and viewDetails', () => {
     component.onCardClick({ type: 'viewMessage', data: 'chat-id' });
+    expect(utilServiceSpy.setSkipScroll).toHaveBeenCalledWith('requests');
     expect(routerSpy.navigate).toHaveBeenCalledWith(["chat-request", 'chat-id']);
 
+    utilServiceSpy.setSkipScroll.calls.reset();
     component.onCardClick({ type: 'viewDetails' }, 'session-id');
+    expect(utilServiceSpy.setSkipScroll).toHaveBeenCalledWith('requests');
     expect(routerSpy.navigate).toHaveBeenCalledWith(["session-request-details"], { queryParams: { id: 'session-id' } });
   });
 
@@ -180,6 +202,17 @@ describe('RequestsPage', () => {
 
     expect(component.isInfiniteScrollDisabled()).toBeTrue();
     expect(resp).toBe('err');
+  }));
+
+  it('pendingRequest should use cached message requests when available', waitForAsync(async () => {
+    const cachedResp = { result: { data: [{ id: 'cached' }], count: 1 } };
+    cacheServiceSpy.get.and.returnValue(cachedResp);
+
+    const result = await component.pendingRequest();
+
+    expect(httpServiceSpy.get).not.toHaveBeenCalled();
+    expect(component.data()).toEqual([{ id: 'cached' }]);
+    expect(result).toBe(cachedResp);
   }));
 
 });

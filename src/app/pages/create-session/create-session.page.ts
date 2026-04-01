@@ -254,6 +254,7 @@ export class CreateSessionPage implements OnInit, OnDestroy {
       }
       const result = await this.sessionService.createSession(form, this.id);
       if (result) {
+        this.sessionService.invalidateSessionCache();
         this.sessionDetails = _.isEmpty(result) ? this.sessionDetails : result;
         this.isSubmited = true;
         this.firstStepperTitle = this.id ? "EDIT_SESSION_LABEL" : "CREATE_NEW_SESSION";

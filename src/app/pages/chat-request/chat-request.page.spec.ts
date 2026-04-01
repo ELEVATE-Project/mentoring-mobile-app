@@ -6,7 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
 import { ChatRequestPage } from './chat-request.page';
-import { HttpService, ToastService, UtilService } from 'src/app/core/services';
+import { CacheService, HttpService, ToastService, UtilService } from 'src/app/core/services';
 import { CHAT_MESSAGES } from 'src/app/core/constants/chatConstants';
 import { CommonRoutes } from 'src/global.routes';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +19,7 @@ describe('ChatRequestPage', () => {
   let utilService: jasmine.SpyObj<UtilService>;
   let router: jasmine.SpyObj<Router>;
   let translateService: jasmine.SpyObj<TranslateService>;
+  let cacheService: jasmine.SpyObj<CacheService>;
   let activatedRoute: any;
   let navController: jasmine.SpyObj<NavController>;
 
@@ -28,6 +29,7 @@ describe('ChatRequestPage', () => {
     const toastServiceSpy = jasmine.createSpyObj('ToastService', ['showToast']);
     const utilServiceSpy = jasmine.createSpyObj('UtilService', ['alertPopup']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const cacheServiceSpy = jasmine.createSpyObj('CacheService', ['invalidateByPrefix']);
     const translateServiceSpy = jasmine.createSpyObj('TranslateService', [
       'instant', 'get', 'use', 'getCurrentLang', 'getFallbackLang', 'getParsedResult', 'stream'
     ]);
@@ -61,6 +63,7 @@ describe('ChatRequestPage', () => {
       ],
       providers: [
         { provide: HttpService, useValue: httpServiceSpy },
+        { provide: CacheService, useValue: cacheServiceSpy },
         { provide: ToastService, useValue: toastServiceSpy },
         { provide: UtilService, useValue: utilServiceSpy },
         { provide: Router, useValue: routerSpy },
@@ -74,6 +77,7 @@ describe('ChatRequestPage', () => {
     fixture = TestBed.createComponent(ChatRequestPage);
     component = fixture.componentInstance;
     httpService = TestBed.inject(HttpService) as jasmine.SpyObj<HttpService>;
+    cacheService = TestBed.inject(CacheService) as jasmine.SpyObj<CacheService>;
     toastService = TestBed.inject(ToastService) as jasmine.SpyObj<ToastService>;
     utilService = TestBed.inject(UtilService) as jasmine.SpyObj<UtilService>;
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
@@ -230,6 +234,7 @@ describe('ChatRequestPage', () => {
 
       fixture.whenStable().then(() => {
         expect(httpService.post).toHaveBeenCalled();
+        expect(cacheService.invalidateByPrefix).toHaveBeenCalledWith('messageRequests_');
         expect(component.info().status).toBe('REQUESTED');
         expect(component.getConnectionInfo).toHaveBeenCalled();
       });
@@ -271,6 +276,7 @@ describe('ChatRequestPage', () => {
 
       fixture.whenStable().then(() => {
         expect(httpService.post).toHaveBeenCalled();
+        expect(cacheService.invalidateByPrefix).toHaveBeenCalledWith('messageRequests_');
         expect(toastService.showToast).toHaveBeenCalledWith(
           'Accepted message request from Jane Doe',
           'success'
@@ -356,6 +362,7 @@ describe('ChatRequestPage', () => {
 
       fixture.whenStable().then(() => {
         expect(httpService.post).toHaveBeenCalled();
+        expect(cacheService.invalidateByPrefix).toHaveBeenCalledWith('messageRequests_');
         expect(component.info().status).toBe('REJECTED');
         expect(component.messages()).toEqual(CHAT_MESSAGES.RECEIVER);
         expect(toastService.showToast).toHaveBeenCalledWith('REJECTED_MESSAGE_REQ', 'danger');

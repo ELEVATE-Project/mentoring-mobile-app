@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Share } from '@capacitor/share';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, IonContent, ModalController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ISocialSharing } from '../../interface/soical-sharing-interface';
 import { ModelComponent } from 'src/app/shared/components/model/model.component';
@@ -19,6 +19,7 @@ import * as moment from 'moment-timezone';
 })
 export class UtilService {
   modal: any;
+  private skipScrollMap: Record<string, boolean> = {};
   public canIonMenuShow = new Subject<boolean>();
   public messageBadge = new Subject<boolean>();
   private searchTextSource = new BehaviorSubject<string>('');
@@ -30,6 +31,18 @@ export class UtilService {
 
   ionMenuShow(data: boolean) {
     this.canIonMenuShow.next(data);
+  }
+
+  setSkipScroll(key: string): void {
+    this.skipScrollMap[key] = true;
+  }
+
+  handleScrollOnEnter(key: string, content?: IonContent, duration = 1000): void {
+    if (this.skipScrollMap[key]) {
+      this.skipScrollMap[key] = false;
+      return;
+    }
+    content?.scrollToTop(duration);
   }
   constructor(
     private modalCtrl: ModalController,
