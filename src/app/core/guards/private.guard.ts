@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } fro
 import { Router } from '@angular/router';
 import { UserService } from '../services/user/user.service';
 import { ToastService, UtilService } from '../services';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -17,10 +18,14 @@ export class PrivateGuard implements CanActivate {
         this.utilService?.alertClose();
         return true;
       }
-      location.href = window.location.origin;
+
+environment.isAuthBypassed ? location.href = window.location.origin :
+this.router.navigate(['/auth']);
+     
       return false;
     } catch (err) {
-      location.href = window.location.origin;
+      environment.isAuthBypassed ? location.href = window.location.origin :
+this.router.navigate(['/auth']);
       return false;
     }
   }

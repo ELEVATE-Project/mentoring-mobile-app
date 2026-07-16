@@ -97,7 +97,20 @@ export class LoginPage implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       this.id = params.sessionId ? params.sessionId : this.id;
       this.mentorId = params.mentorId? params.mentorId:this.mentorId;
+      if (params.accToken) {
+        this.handleSsoLogin(params.accToken);
+      }
     });
+  }
+
+  redirectToLogin() {
+    const returnUrl = window.location.origin + window.location.pathname + window.location.search +'/sso?flow=saathi';
+    window.location.href = `${environment.ssoLoginUrl}?redirectUrl=${encodeURIComponent(returnUrl)}`;
+  }
+
+  async handleSsoLogin(accToken: string) {
+    localStorage.setItem('accToken', accToken);
+    await this.completeLogin();
   }
 
   async onSubmit() {
@@ -107,22 +120,24 @@ export class LoginPage implements OnInit {
       if(this.userDetails === null && this.captchaToken){
         this.captchaComponent.reset();
       }else if (this.userDetails !== null) {
-        this.utilService.ionMenuShow(true)
-        let user = await this.profileService.getProfileDetailsFromAPI();
-        this.userService.userEvent.next(user);
-        if (this.id) {
-          this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
-          this.menuCtrl.enable(true);
-        }else if(this.mentorId){
-          this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`], { replaceUrl: true });
-          this.menuCtrl.enable(true);
-        } else {
-          this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
-          this.menuCtrl.enable(true);
-        }
+        await this.completeLogin();
       }
-      
+
     }
+  }
+
+  private async completeLogin() {
+    this.utilService.ionMenuShow(true)
+    let user = await this.profileService.getProfileDetailsFromAPI();
+    this.userService.userEvent.next(user);
+    if (this.id) {
+      this.router.navigate([`/${CommonRoutes.SESSIONS_DETAILS}/${this.id}`], { replaceUrl: true });
+    }else if(this.mentorId){
+      this.router.navigate([`/${CommonRoutes.MENTOR_DETAILS}/${this.mentorId}`], { replaceUrl: true });
+    } else {
+      this.router.navigate([`/${CommonRoutes.TABS}/${CommonRoutes.HOME}`], { replaceUrl: true });
+    }
+    this.menuCtrl.enable(true);
   }
 
   action(event) {

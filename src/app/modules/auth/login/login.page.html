@@ -1,10 +1,19 @@
-<app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header>
+<!-- <app-page-header [config]="headerConfig" (actionEvent)="action($event)"></app-page-header> -->
 <ion-content>
 <div>
   <ion-grid>
     <ion-row class="d-flex flex-justify-center">
       <ion-col padding size-xs="12" size-sm="12" size-md="6" size-lg="6" >
-      <div class="mx-10">
+        <div class="mx-10 mt-12">
+          <div class="d-flex flex-justify-center">
+            <img src="assets/icon/favicon.png" alt="MentorED" class="login-logo" />
+          </div>
+          <div class="d-flex flex-justify-center">
+            <ion-button class="mx-0 onboard-button" expand="block" shape="round" (click)="redirectToLogin()" size="large"
+             >{{"LOGIN"|translate}}</ion-button>
+          </div>
+        </div>
+      <!-- <div class="mx-10">
         <app-generic-header [labels]="labels"></app-generic-header>
         <section>
           <app-dynamic-form [jsonFormData]="formData" (onEnter)="onSubmit()" #form1> </app-dynamic-form>
@@ -46,7 +55,7 @@
             </p>
           </div>
         </section>
-      </div>
+      </div> -->
     </ion-col>
     </ion-row>
   </ion-grid>
