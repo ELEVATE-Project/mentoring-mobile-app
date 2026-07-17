@@ -104,8 +104,9 @@ export class LoginPage implements OnInit {
   }
 
   redirectToLogin() {
-    const returnUrl = window.location.origin + window.location.pathname + window.location.search +'/sso?flow=saathi';
-    window.location.href = `${environment.ssoLoginUrl}?redirectUrl=${encodeURIComponent(returnUrl)}`;
+    const returnUrl = new URL(window.location.href);
+    returnUrl.searchParams.set('flow', 'saathi');
+    window.location.href = `${environment.ssoLoginUrl}?redirectUrl=${encodeURIComponent(returnUrl.toString())}`;
   }
 
   async handleSsoLogin(accToken: string) {

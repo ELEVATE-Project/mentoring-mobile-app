@@ -153,9 +153,13 @@ export class AuthService {
     await this.db.clear()
     this.userService.token = null;
     this.userService.userEvent.next(null);
-    this.router.navigate([window.location.origin], {
-      replaceUrl: true
-    });
+    const route = environment.isAuthBypassed
+    ? [window.location.origin]
+    : ['/auth'];
+  
+  this.router.navigate(route, {
+    replaceUrl: true
+  });
     this.translate.use("en")
   }
 }

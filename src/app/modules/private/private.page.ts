@@ -368,7 +368,7 @@ export class PrivatePage implements OnInit {
             'en'
           );
           this.translate.use('en');
-          await this.authService.logoutAccount();
+          await this.authService.logoutAccount(true);
           this.menuCtrl.enable(false);
         }
       })
